@@ -1,3 +1,4 @@
+import { ACCOUNT_SHOW_DATE_OF_BIRTH_AND_PASSWORD_FIELDS } from '@/lib/constants/accountRegistrationUi';
 import type { OnboardingStep2DraftFields } from '@/lib/onboarding/onboardingFlowTypes';
 import { validateBirthDateFields } from '@/lib/validation/birthDateFields';
 import { getPasswordPolicyError } from '@/lib/validation/passwordPolicy';
@@ -68,6 +69,15 @@ export function validateScholarshipOnboardingStep2DraftForGoogleOAuth(
 export function validateScholarshipOnboardingStep2(
   values: Step2FormValues
 ): Step2ValidationResult {
+  if (!ACCOUNT_SHOW_DATE_OF_BIRTH_AND_PASSWORD_FIELDS) {
+    const draftOnly = validateScholarshipOnboardingStep2Draft({
+      firstName: values.firstName,
+      lastName: values.lastName,
+      email: values.email
+    });
+    return draftOnly.ok ? { ok: true } : { ok: false, errors: draftOnly.errors };
+  }
+
   const draft = validateScholarshipOnboardingStep2Draft({
     firstName: values.firstName,
     lastName: values.lastName,

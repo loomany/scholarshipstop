@@ -38,6 +38,7 @@ import { userFacingAuthError } from '@/lib/auth/userFacingAuthError';
 import { SiteBrandLoading } from '@/components/ui/SiteBrandLoading';
 import { toast } from '@/components/ui/Toasts/use-toast';
 import { SCHOLARSHIPS_HUB_BEST_MATCHES_HREF } from '@/app/scholarships/scholarshipListUrl';
+import { ACCOUNT_SHOW_DATE_OF_BIRTH_AND_PASSWORD_FIELDS } from '@/lib/constants/accountRegistrationUi';
 import { normalizeCountryCode } from '@/lib/scholarships/countryEligibility/countries';
 
 /** Default landing after onboarding: scholarship hub, Best recommendation tab. */
@@ -389,7 +390,9 @@ export function ScholarshipOnboardingWizard({
           return true;
         };
 
-        const finishWithSession = async () => {
+        const finishWithSession = async (opts?: {
+          skipRegistrationVerificationEmail?: boolean;
+        }) => {
           if (!session?.user) return false;
           const userId = session.user.id;
           const addr = session.user.email?.trim() ?? null;
@@ -405,7 +408,9 @@ export function ScholarshipOnboardingWizard({
             return false;
           }
           if (addr) {
-            void enqueueRegistrationVerificationEmail(addr, userId);
+            if (!opts?.skipRegistrationVerificationEmail) {
+              void enqueueRegistrationVerificationEmail(addr, userId);
+            }
             void notifyTelegramRegistration(userId, addr);
           }
           clearScholarshipOnboardingDraft();
@@ -421,14 +426,117 @@ export function ScholarshipOnboardingWizard({
           return;
         }
 
+        const scholarshipProfilePayload = JSON.stringify(built.profile);
+        console.info('[onboarding:auth] signUp metadata payload', {
+          builtProfile: built.profile,
+          scholarship_profile_string_length: scholarshipProfilePayload.length
+        });
+
+        /**
+         * Same server path as `/get-scholarships`: creates the auth user with a generated
+         * password, upserts `profiles`, and sends the branded Resend “Welcome / Confirm your
+         * email” message — not Supabase’s default magic-link template.
+         */
+        if (!ACCOUNT_SHOW_DATE_OF_BIRTH_AND_PASSWORD_FIELDS) {
+          const unspecifiedApplicant = base.includeUnspecifiedApplicantCountries === true;
+          const profileCountryCode = unspecifiedApplicant
+            ? null
+            : normalizeCountryCode(built.profile.countryCode);
+          if (!unspecifiedApplicant && !profileCountryCode) {
+            setLoading(false);
+            finalizeInFlight.current = false;
+            notifyDestructive(
+              'Almost there',
+              'We could not determine your applicant country. Go back and choose your country.'
+            );
+            return;
+          }
+
+          type CountrySignupJson = {
+            ok?: boolean;
+            error?: string;
+            sessionPassword?: string | null;
+            createdNewUser?: boolean;
+          };
+
+          let signupJson: CountrySignupJson | null = null;
+          try {
+            const res = await fetch('/api/onboarding/country-signup', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              credentials: 'same-origin',
+              body: JSON.stringify({
+                email,
+                countryCode: profileCountryCode,
+                source: mode === 'embedded' ? 'embedded-onboarding' : 'onboarding',
+                profile: {
+                  ...built.profile,
+                  ...(unspecifiedApplicant
+                    ? { includeUnspecifiedApplicantCountries: true as const }
+                    : {})
+                }
+              })
+            });
+            signupJson = (await res.json().catch(() => null)) as CountrySignupJson | null;
+            if (!res.ok || !signupJson?.ok) {
+              setLoading(false);
+              finalizeInFlight.current = false;
+              notifyDestructive(
+                'Could not create your account',
+                signupJson?.error ?? 'Try again in a moment.'
+              );
+              return;
+            }
+          } catch {
+            setLoading(false);
+            finalizeInFlight.current = false;
+            notifyDestructive(
+              'Something went wrong',
+              'Check your connection and try again.'
+            );
+            return;
+          }
+
+          const sessionPassword = signupJson.sessionPassword ?? null;
+          if (sessionPassword) {
+            const { error: pwErr } = await supabase.auth.signInWithPassword({
+              email: email.trim().toLowerCase(),
+              password: sessionPassword
+            });
+            if (!pwErr) {
+              const {
+                data: { session: nextSession }
+              } = await supabase.auth.getSession();
+              session = nextSession;
+            } else {
+              console.warn('[onboarding:auth] country-signup auto sign-in failed', pwErr.message);
+            }
+          }
+
+          if (session?.user) {
+            const ok = await finishWithSession({
+              skipRegistrationVerificationEmail: signupJson.createdNewUser === true
+            });
+            if (!ok) return;
+            return;
+          }
+
+          toast({
+            title: 'Check your email',
+            description:
+              'We sent a confirmation message to your inbox to secure your ScholarshipTop account.'
+          });
+          clearScholarshipOnboardingDraft();
+          setLoading(false);
+          finalizeInFlight.current = false;
+          router.refresh();
+          router.push(afterAuthPath);
+          return;
+        }
+
         let signUpData: Awaited<ReturnType<typeof supabase.auth.signUp>>['data'];
         let signUpError: Awaited<ReturnType<typeof supabase.auth.signUp>>['error'];
         try {
-          const scholarshipProfilePayload = JSON.stringify(built.profile);
-          console.info('[onboarding:auth] signUp metadata payload', {
-            builtProfile: built.profile,
-            scholarship_profile_string_length: scholarshipProfilePayload.length
-          });
           const result = await supabase.auth.signUp({
             email,
             password,

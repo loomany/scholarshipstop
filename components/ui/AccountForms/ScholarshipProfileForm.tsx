@@ -30,6 +30,7 @@ import {
 } from '@/lib/constants/scholarshipProfileOptions';
 import { UsStateAutocomplete } from '@/components/onboarding/UsStateAutocomplete';
 import { StudyDestinationCountriesField } from '@/components/onboarding/StudyDestinationCountriesField';
+import { ACCOUNT_SHOW_DATE_OF_BIRTH_AND_PASSWORD_FIELDS } from '@/lib/constants/accountRegistrationUi';
 import { SITE_INPUT_FOCUS_CLASS } from '@/lib/constants/siteInputFocus';
 import { US_STATE_AUTOCOMPLETE_PLACEHOLDER } from '@/lib/constants/usStates';
 import { buildScholarshipProfileFormPatch } from '@/lib/account/scholarshipProfileFormPatch';
@@ -191,6 +192,8 @@ const PERSONAL_PATCH_KEYS = [
   'date_of_birth'
 ] as const;
 
+const PERSONAL_PATCH_KEYS_WITHOUT_BIRTH = ['first_name', 'last_name'] as const;
+
 function pickPatchKeys(
   patch: Record<string, unknown>,
   keys: readonly string[]
@@ -202,6 +205,15 @@ function pickPatchKeys(
     }
   }
   return out;
+}
+
+function omitProfileBirthFields(patch: Record<string, unknown>) {
+  const next = { ...patch };
+  delete next.birth_month;
+  delete next.birth_day;
+  delete next.birth_year;
+  delete next.date_of_birth;
+  return next;
 }
 
 function sanitizeProfilesPatch(
@@ -573,6 +585,30 @@ export default function ScholarshipProfileForm({
   const onSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
+      if (ACCOUNT_SHOW_DATE_OF_BIRTH_AND_PASSWORD_FIELDS) {
+        const birthErrors = validateBirthDateFields(
+          {
+            birthMonth,
+            birthDay,
+            birthYear
+          },
+          { requireAll: false }
+        );
+        if (Object.keys(birthErrors).length > 0) {
+          setMessage({ type: 'err', text: 'Please correct your date of birth before saving.' });
+          return;
+        }
+      }
+      const patch = buildScholarshipProfileFormPatch(profile, formValues);
+      await performProfilePatch(
+        ACCOUNT_SHOW_DATE_OF_BIRTH_AND_PASSWORD_FIELDS ? patch : omitProfileBirthFields(patch)
+      );
+    },
+    [birthDay, birthMonth, birthYear, formValues, performProfilePatch, profile]
+  );
+
+  const onSavePersonal = useCallback(async () => {
+    if (ACCOUNT_SHOW_DATE_OF_BIRTH_AND_PASSWORD_FIELDS) {
       const birthErrors = validateBirthDateFields(
         {
           birthMonth,
@@ -582,34 +618,21 @@ export default function ScholarshipProfileForm({
         { requireAll: false }
       );
       if (Object.keys(birthErrors).length > 0) {
-        setMessage({ type: 'err', text: 'Please correct your date of birth before saving.' });
+        setSectionFeedback((prev) => ({
+          ...prev,
+          personal: { type: 'err', text: 'Please correct your date of birth before saving.' }
+        }));
         return;
       }
-      const patch = buildScholarshipProfileFormPatch(profile, formValues);
-      await performProfilePatch(patch);
-    },
-    [birthDay, birthMonth, birthYear, formValues, performProfilePatch, profile]
-  );
-
-  const onSavePersonal = useCallback(async () => {
-    const birthErrors = validateBirthDateFields(
-      {
-        birthMonth,
-        birthDay,
-        birthYear
-      },
-      { requireAll: false }
-    );
-    if (Object.keys(birthErrors).length > 0) {
-      setSectionFeedback((prev) => ({
-        ...prev,
-        personal: { type: 'err', text: 'Please correct your date of birth before saving.' }
-      }));
-      return;
     }
 
     const patch = buildScholarshipProfileFormPatch(profile, formValues);
-    const personalPatch = pickPatchKeys(patch, PERSONAL_PATCH_KEYS);
+    const personalPatch = pickPatchKeys(
+      patch,
+      ACCOUNT_SHOW_DATE_OF_BIRTH_AND_PASSWORD_FIELDS
+        ? PERSONAL_PATCH_KEYS
+        : PERSONAL_PATCH_KEYS_WITHOUT_BIRTH
+    );
     const emailTrimmed = emailInput.trim();
     const currentEmail = (userEmail ?? '').trim();
     const emailChanged = emailTrimmed !== currentEmail;
@@ -910,7 +933,7 @@ export default function ScholarshipProfileForm({
         onChange={(e) => setLastName(e.target.value)}
         autoComplete="family-name"
       />
-      {birthDateFields}
+      {ACCOUNT_SHOW_DATE_OF_BIRTH_AND_PASSWORD_FIELDS ? birthDateFields : null}
 
       <label className={lc} htmlFor="spf-school">
         School level
@@ -1627,7 +1650,7 @@ export default function ScholarshipProfileForm({
                   stay limited until you confirm.
                 </p>
               ) : null}
-              {birthDateFields}
+              {ACCOUNT_SHOW_DATE_OF_BIRTH_AND_PASSWORD_FIELDS ? birthDateFields : null}
             </div>
             {sectionSaveRow('personal', onSavePersonal, {
               middleSlot: showResendConfirmationButton ? (

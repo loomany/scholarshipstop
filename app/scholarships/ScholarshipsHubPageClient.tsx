@@ -3615,7 +3615,7 @@ function ScholarshipsPageInner({
                           </div>
                         ) : null}
                         {showGuestBestOrangeRecommendationCta ? (
-                          <div className="rounded-2xl border border-[#FFD9B3] bg-[#FFF8F1] p-4 text-[#7A3B00] shadow-sm">
+                          <div className="hidden rounded-2xl border border-[#FFD9B3] bg-[#FFF8F1] p-4 text-[#7A3B00] shadow-sm">
                             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                               <div>
                                 <p className="text-sm font-semibold">
@@ -3776,7 +3776,7 @@ function ScholarshipsPageInner({
                 <div className="my-5">{bestRecommendationStartCta}</div>
               ) : null}
               {showGuestBestOrangeRecommendationCta ? (
-                <div className="flex flex-col gap-4">
+                <div className="hidden">
                   <h2 className="text-center text-lg font-semibold tracking-tight text-zinc-900">
                     Recommended scholarships for you
                   </h2>

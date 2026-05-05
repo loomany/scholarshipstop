@@ -11,6 +11,7 @@ import {
 } from '@/lib/constants/scholarshipGpaOptions';
 import type { UserProfile } from '@/lib/onboarding/userProfile';
 import type { StoredOnboardingDraft } from '@/lib/onboarding/scholarshipOnboardingDraft';
+import { ACCOUNT_SHOW_DATE_OF_BIRTH_AND_PASSWORD_FIELDS } from '@/lib/constants/accountRegistrationUi';
 import {
   validateScholarshipOnboarding,
   validateScholarshipOnboardingBasicsWithoutBirth
@@ -109,7 +110,8 @@ export function buildCompleteScholarshipUserProfile(
   }
 
   const s1 =
-    draft.quizVariant === 'landing_no_birth'
+    draft.quizVariant === 'landing_no_birth' ||
+    !ACCOUNT_SHOW_DATE_OF_BIRTH_AND_PASSWORD_FIELDS
       ? validateScholarshipOnboardingBasicsWithoutBirth(draft.step1)
       : validateScholarshipOnboarding(draft.step1);
   if (!s1.ok) return { ok: false };

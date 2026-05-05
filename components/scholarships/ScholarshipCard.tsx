@@ -53,6 +53,7 @@ import {
   resolveScholarshipDetailClickBudgetMode,
   shouldBlockScholarshipDetailNavigation
 } from '@/lib/scholarships/guestScholarshipDetailClickBudget';
+import { dismissRouteProgress } from '@/lib/navigation/dismissRouteProgress';
 import type { ScholarshipListTabId } from '@/app/scholarships/scholarshipTabs';
 import ScholarshipCatalogChipRow from '@/components/scholarships/ScholarshipCatalogChipRow';
 import { ScholarshipExpiredBadge } from '@/components/scholarships/ScholarshipExpiredBadge';
@@ -110,6 +111,15 @@ type ScholarshipCardProps = {
 
 const METRIC_LABEL =
   'mt-1 text-[10px] font-normal leading-snug text-gray-500 sm:text-[11px] sm:normal-case';
+
+/**
+ * `nextjs-toploader` attaches a bubbling `document` click listener that calls `NProgress.start()`
+ * without checking `defaultPrevented`. Blocked `<Link>` navigations still trigger it; flush after
+ * the event stack so the orange bar does not run until route completion times out.
+ */
+function dismissTopLoaderAfterBlockedDetailNavigation(): void {
+  window.setTimeout(() => dismissRouteProgress(), 0);
+}
 
 function AuthNoSubBlurUnlock({
   onUnlock,
@@ -198,6 +208,9 @@ export default function ScholarshipCard({
     params.set('return_to', safeReturnToHref);
     return `${base}?${params.toString()}`;
   }, [scholarship, returnToHref]);
+  /** Avoid RSC prefetch of detail route while confirmation modal blocks navigation. */
+  const blockDetailPrefetchForEmailGate =
+    needsEmailConfirmation && isAuthenticated && !hasSubscription;
   const deadlinePassed = scholarshipDeadlineHasPassed(scholarship);
   const applicantCountryBadge = useMemo(() => {
     const codes = Array.from(
@@ -587,6 +600,7 @@ export default function ScholarshipCard({
       e.preventDefault();
       e.stopPropagation();
       onUnverifiedEmailDetailNavigate?.();
+      dismissTopLoaderAfterBlockedDetailNavigation();
       return;
     }
     if (shouldBlockScholarshipDetailNavigation(budgetMode)) {
@@ -597,6 +611,7 @@ export default function ScholarshipCard({
       } else {
         (onSubscriptionDetailNavigate ?? onGuestDetailNavigate)?.();
       }
+      dismissTopLoaderAfterBlockedDetailNavigation();
       return;
     }
     recordScholarshipDetailFreeNavigation(budgetMode);
@@ -610,6 +625,7 @@ export default function ScholarshipCard({
     if (!hasSubscription) {
       if (needsEmailConfirmation) {
         onUnverifiedEmailDetailNavigate?.();
+        dismissTopLoaderAfterBlockedDetailNavigation();
         return;
       }
       const budgetMode = resolveScholarshipDetailClickBudgetMode({
@@ -623,6 +639,7 @@ export default function ScholarshipCard({
         } else {
           (onSubscriptionDetailNavigate ?? onGuestDetailNavigate)?.();
         }
+        dismissTopLoaderAfterBlockedDetailNavigation();
         return;
       }
       if (budgetMode) {
@@ -667,6 +684,7 @@ export default function ScholarshipCard({
       ) : (
         <Link
           href={detailHref}
+          prefetch={blockDetailPrefetchForEmailGate ? false : undefined}
           onClick={handleDetailLinkClick}
           tabIndex={-1}
           aria-hidden="true"
@@ -821,6 +839,7 @@ export default function ScholarshipCard({
             ) : (
               <Link
                 href={detailHref}
+                prefetch={blockDetailPrefetchForEmailGate ? false : undefined}
                 onClick={handleDetailLinkClick}
                 className="relative z-10 text-inherit no-underline outline-none pointer-events-auto focus-visible:rounded-md focus-visible:ring-2 focus-visible:ring-[#FF7A1A]/50 focus-visible:ring-offset-2"
               >

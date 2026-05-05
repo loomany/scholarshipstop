@@ -17,6 +17,7 @@ import {
   type OnboardingFormValues,
   type OnboardingStep2DraftFields
 } from '@/lib/onboarding/scholarshipOnboardingDraft';
+import { ACCOUNT_SHOW_DATE_OF_BIRTH_AND_PASSWORD_FIELDS } from '@/lib/constants/accountRegistrationUi';
 import { buildBirthMonthSelectOptions } from '@/lib/constants/scholarshipProfileOptions';
 import { SITE_INPUT_FOCUS_CLASS } from '@/lib/constants/siteInputFocus';
 import { ONBOARDING_PRIMARY_BUTTON_CLASS } from '@/lib/onboarding/onboardingPrimaryCta';
@@ -82,6 +83,7 @@ export function ScholarshipOnboardingStep2({
   progressEyebrow,
   visualVariant = 'default'
 }: Props) {
+  const showBirthAndPasswordFields = ACCOUNT_SHOW_DATE_OF_BIRTH_AND_PASSWORD_FIELDS;
   const loadDraft =
     draftStore === 'landing' ? loadLandingQuizDraft : loadStoredOnboardingDraft;
   const saveStep2Fields =
@@ -132,22 +134,24 @@ export function ScholarshipOnboardingStep2({
       return;
     }
 
-    const birthGate = validateBirthDateFields(
-      {
-        birthMonth: values.birthMonth,
-        birthDay: values.birthDay,
-        birthYear: values.birthYear
-      },
-      { requireAll: true }
-    );
-    if (Object.keys(birthGate).length > 0) {
-      setErrors((prev) => ({ ...prev, ...birthGate }));
-      toast({
-        variant: 'destructive',
-        title: 'Add your birthday',
-        description: 'We need your date of birth before you continue with Google.'
-      });
-      return;
+    if (showBirthAndPasswordFields) {
+      const birthGate = validateBirthDateFields(
+        {
+          birthMonth: values.birthMonth,
+          birthDay: values.birthDay,
+          birthYear: values.birthYear
+        },
+        { requireAll: true }
+      );
+      if (Object.keys(birthGate).length > 0) {
+        setErrors((prev) => ({ ...prev, ...birthGate }));
+        toast({
+          variant: 'destructive',
+          title: 'Add your birthday',
+          description: 'We need your date of birth before you continue with Google.'
+        });
+        return;
+      }
     }
 
     /** Merge step 2 in memory + persist — avoids losing steps 1–3 when base was ever null. */
@@ -383,7 +387,7 @@ export function ScholarshipOnboardingStep2({
       </div>
 
       <form className="space-y-5 text-left" onSubmit={handleSubmit} noValidate>
-        <div>
+        <div className={showBirthAndPasswordFields ? undefined : 'hidden'}>
           <p className={sectionLabelClass}>Birthday</p>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-3">
             <div>
@@ -502,7 +506,11 @@ export function ScholarshipOnboardingStep2({
           {errors.email ? <p className={hintClass}>{errors.email}</p> : null}
         </div>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div
+          className={`grid grid-cols-1 gap-4 sm:grid-cols-2${
+            showBirthAndPasswordFields ? '' : ' hidden'
+          }`}
+        >
           <div>
             <label htmlFor="onb-pass" className="sr-only">
               Create password
@@ -540,7 +548,7 @@ export function ScholarshipOnboardingStep2({
             ) : null}
           </div>
         </div>
-        {!errors.password ? (
+        {!errors.password && showBirthAndPasswordFields ? (
           <p className="text-center text-xs text-zinc-500">{PASSWORD_POLICY_HINT}</p>
         ) : null}
 
