@@ -3114,7 +3114,7 @@ export default function ScholarshipDetailPageClient({
                         rel="noopener noreferrer"
                         className={detailApplyPrimaryClass}
                       >
-                        Apply on official site
+                        Apply now
                       </a>
                     ) : (
                       <button
@@ -3128,7 +3128,7 @@ export default function ScholarshipDetailPageClient({
                           strokeWidth={2}
                           aria-hidden
                         />
-                        Apply on official site
+                        Apply now
                       </button>
                     )}
                   </li>
