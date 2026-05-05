@@ -1,4 +1,9 @@
 import type { Scholarship, ScholarshipSeoFaqItem } from '@/app/scholarships/scholarshipsData';
+import {
+  filterRawAiMissingInfoLines,
+  getNormalizedBeforeYouApplySections,
+  softenImportantCheckLine
+} from '@/lib/scholarships/scholarshipCheckSectionsNormalize';
 import { sanitizeRequirementLines } from '@/lib/scholarships/scholarshipText';
 
 /** Below this, on-page FAQ / rich AI guidance / next steps are suppressed or reduced. */
@@ -41,19 +46,10 @@ export function clampBullets(lines: string[], max: number): string[] {
     .slice(0, max);
 }
 
-/** Shown under “Missing or unclear” — suppress low-signal repeats of structured fields. */
-const AI_MISSING_INFO_SUPPRESSED = new Set([
-  'provider url',
-  'payout method details'
-]);
-
 export function filterAiMissingInfoForDisplay(
   items: string[] | null | undefined
 ): string[] {
-  return (items ?? [])
-    .map((s) => s.trim())
-    .filter((s) => s.length > 0)
-    .filter((s) => !AI_MISSING_INFO_SUPPRESSED.has(s.toLowerCase()));
+  return filterRawAiMissingInfoLines(items);
 }
 
 /** Use for tips, next steps, on-page FAQ: only when model reported sufficient confidence. */
@@ -126,14 +122,15 @@ export function isDecisionAndChecksTooSimilar(s: Scholarship): boolean {
     ...(s.aiBestFor ?? []),
     ...(s.aiKeyHighlights ?? []),
     ...(s.aiWhyApply ?? []),
-    ...(s.aiImportantChecks ?? [])
+    ...(s.aiImportantChecks ?? []).map(softenImportantCheckLine)
   ]
     .map((x) => x.trim())
     .filter((x) => x.length > 8);
+  const normalizedBefore = getNormalizedBeforeYouApplySections(s);
   const before = [
-    ...(s.aiImportantChecks ?? []),
-    ...filterAiMissingInfoForDisplay(s.aiMissingInfo),
-    ...(s.aiRedFlags ?? [])
+    ...normalizedBefore.importantChecks,
+    ...normalizedBefore.detailsToConfirm,
+    ...normalizedBefore.redFlags
   ]
     .map((x) => x.trim())
     .filter((x) => x.length > 8);
@@ -165,9 +162,10 @@ export function pickQuickDecisionAndBeforePanels(s: Scholarship): {
   if (!isDecisionAndChecksTooSimilar(s)) {
     return { showQuickDecision: true, showBeforeYouApply: true };
   }
+  const normalizedBefore = getNormalizedBeforeYouApplySections(s);
   const hasExtra =
-    hasNonEmptyArray(filterAiMissingInfoForDisplay(s.aiMissingInfo)) ||
-    hasNonEmptyArray(s.aiRedFlags);
+    hasNonEmptyArray(normalizedBefore.detailsToConfirm) ||
+    hasNonEmptyArray(normalizedBefore.redFlags);
   if (hasExtra) return { showQuickDecision: false, showBeforeYouApply: true };
   return { showQuickDecision: true, showBeforeYouApply: false };
 }
@@ -271,10 +269,11 @@ export function shouldRenderQuickDecision(s: Scholarship): boolean {
 }
 
 export function shouldRenderBeforeYouApply(s: Scholarship): boolean {
+  const n = getNormalizedBeforeYouApplySections(s);
   return (
-    hasNonEmptyArray(s.aiImportantChecks) ||
-    hasNonEmptyArray(filterAiMissingInfoForDisplay(s.aiMissingInfo)) ||
-    hasNonEmptyArray(s.aiRedFlags)
+    hasNonEmptyArray(n.importantChecks) ||
+    hasNonEmptyArray(n.detailsToConfirm) ||
+    hasNonEmptyArray(n.redFlags)
   );
 }
 
@@ -682,7 +681,7 @@ export function normalizeScholarshipForUi(
       ),
       whyApply: clampBullets(s.aiWhyApply ?? [], QUICK_DECISION_MAX_PER_CARD),
       importantChecks: clampBullets(
-        s.aiImportantChecks ?? [],
+        (s.aiImportantChecks ?? []).map(softenImportantCheckLine),
         QUICK_DECISION_MAX_PER_CARD
       )
     },

@@ -9,6 +9,11 @@ import {
   scholarshipDetailCardPrimaryClass,
   scholarshipDetailCardSupportClass
 } from '@/lib/scholarships/scholarshipDetailLayoutClasses';
+import {
+  SCHOLARSHIP_BEFORE_APPLY_DETAILS_TO_CONFIRM_TITLE,
+  SCHOLARSHIP_BEFORE_APPLY_IMPORTANT_CHECKS_TITLE,
+  SCHOLARSHIP_BEFORE_APPLY_RED_FLAGS_TITLE
+} from '@/lib/constants/scholarshipBeforeApplyCopy';
 
 export function AiLowConfidenceNote() {
   return (
@@ -280,19 +285,19 @@ export function ScholarshipNextStepsBlock({
 
 export function ScholarshipBeforeYouApplyBlock({
   checks,
-  missing,
+  detailsToConfirm,
   redFlags,
   renderLine
 }: {
   checks: string[];
-  missing: string[];
+  detailsToConfirm: string[];
   redFlags: string[];
   renderLine?: (text: string) => ReactNode;
 }) {
   const hasChecks = checks.length > 0;
-  const hasMissing = missing.length > 0;
+  const hasDetailsToConfirm = detailsToConfirm.length > 0;
   const hasFlags = redFlags.length > 0;
-  if (!hasChecks && !hasMissing && !hasFlags) return null;
+  if (!hasChecks && !hasDetailsToConfirm && !hasFlags) return null;
 
   return (
     <AiInsightSection
@@ -303,23 +308,23 @@ export function ScholarshipBeforeYouApplyBlock({
         {hasChecks ? (
           <div>
             <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">
-              Important checks
+              {SCHOLARSHIP_BEFORE_APPLY_IMPORTANT_CHECKS_TITLE}
             </p>
             <BulletList items={checks} renderLine={renderLine} />
           </div>
         ) : null}
-        {hasMissing ? (
+        {hasDetailsToConfirm ? (
           <div>
             <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">
-              Missing or unclear on the listing
+              {SCHOLARSHIP_BEFORE_APPLY_DETAILS_TO_CONFIRM_TITLE}
             </p>
-            <BulletList items={missing} renderLine={renderLine} />
+            <BulletList items={detailsToConfirm} renderLine={renderLine} />
           </div>
         ) : null}
         {hasFlags ? (
           <div>
             <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-rose-700">
-              Red flags
+              {SCHOLARSHIP_BEFORE_APPLY_RED_FLAGS_TITLE}
             </p>
             <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-rose-900">
               {redFlags.map((item, i) => (

@@ -138,7 +138,6 @@ import { applyProfileMatchPercentToScholarships } from '@/lib/scholarships/profi
 import { useCurrentUserScholarshipMatchProfile } from '@/app/scholarships/useCurrentUserScholarshipMatchProfile';
 import { createClient } from '@/utils/supabase/client';
 import {
-  filterAiMissingInfoForDisplay,
   filterApplicationTipsForUi,
   filterFaqForOnPageDisplay,
   filterImportantNoteChunks,
@@ -154,6 +153,7 @@ import {
   shouldRenderUsefulFaq
 } from '@/lib/scholarships/scholarshipUiModel';
 import type { ImportantNoteChunk } from '@/lib/scholarships/scholarshipUiModel';
+import { getNormalizedBeforeYouApplySections } from '@/lib/scholarships/scholarshipCheckSectionsNormalize';
 import { sanitizeRequirementLines } from '@/lib/scholarships/scholarshipText';
 import {
   isSimplerGrantsGovScholarship,
@@ -1417,6 +1417,16 @@ export default function ScholarshipDetailPageClient({
       ),
     [similarScholarships, currentMatchProfile]
   );
+  const normalizedBeforeYouApply = useMemo(() => {
+    if (!scholarship) {
+      return {
+        importantChecks: [] as string[],
+        detailsToConfirm: [] as string[],
+        redFlags: [] as string[]
+      };
+    }
+    return getNormalizedBeforeYouApplySections(scholarship);
+  }, [scholarship]);
 
   if (detailLoadState === 'loading') {
     return (
@@ -1932,16 +1942,11 @@ export default function ScholarshipDetailPageClient({
     seoApplicationLength: scholarship.seoApplication?.trim().length ?? 0
   });
 
-  const beforeChecks = scholarship.aiImportantChecks ?? [];
-  const beforeMissing = filterAiMissingInfoForDisplay(
-    scholarship.aiMissingInfo
-  );
-  const beforeFlags = scholarship.aiRedFlags ?? [];
   const hasBeforeYouApplyContent =
     panelPick.showBeforeYouApply &&
-    (beforeChecks.length > 0 ||
-      beforeMissing.length > 0 ||
-      beforeFlags.length > 0);
+    (normalizedBeforeYouApply.importantChecks.length > 0 ||
+      normalizedBeforeYouApply.detailsToConfirm.length > 0 ||
+      normalizedBeforeYouApply.redFlags.length > 0);
 
   /** Guest blur + “Sign in to unlock AI insights” overlay disabled — full detail body stays readable. */
   const showLockedDetailOverlay = false;
@@ -2322,9 +2327,9 @@ export default function ScholarshipDetailPageClient({
 
         {panelPick.showBeforeYouApply ? (
           <ScholarshipBeforeYouApplyBlock
-            checks={scholarship.aiImportantChecks ?? []}
-            missing={filterAiMissingInfoForDisplay(scholarship.aiMissingInfo)}
-            redFlags={scholarship.aiRedFlags ?? []}
+            checks={normalizedBeforeYouApply.importantChecks}
+            detailsToConfirm={normalizedBeforeYouApply.detailsToConfirm}
+            redFlags={normalizedBeforeYouApply.redFlags}
             renderLine={obscureDetailLine}
           />
         ) : null}
