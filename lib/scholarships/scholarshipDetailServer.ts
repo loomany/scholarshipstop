@@ -9,6 +9,8 @@ export function redactPremiumScholarshipFields(
     premiumFieldsRedacted: true,
     applyLink: undefined,
     listingUrl: undefined,
+    hasOfficialApplicationDestination:
+      scholarship.hasOfficialApplicationDestination,
     providerUrl: undefined,
     socialLinks: undefined,
     supportEmailRedacted: Boolean(scholarship.supportEmail?.trim()),

@@ -5,6 +5,7 @@ import {
   useEffect,
   useLayoutEffect,
   useMemo,
+  useRef,
   useState
 } from 'react';
 import type { ReactNode } from 'react';
@@ -70,6 +71,10 @@ import {
   removeIgnoredScholarship
 } from '@/app/scholarships/ignoredScholarships';
 import {
+  hasAuthNoSubSeenScholarshipDetailUnderBudget,
+  hasGuestSeenScholarshipDetailUnderBudget,
+  rememberAuthNoSubScholarshipDetailCountedId,
+  rememberGuestScholarshipDetailCountedId,
   recordScholarshipDetailFreeNavigation,
   resolveScholarshipDetailClickBudgetMode,
   shouldBlockScholarshipDetailNavigation
@@ -842,7 +847,6 @@ function SimilarScholarshipDetailListItem({
             }
             return;
           }
-          recordScholarshipDetailFreeNavigation(budgetMode);
         }}
         className={similarScholarshipCardClassName(highlightPrimary, deadlinePassed)}
       >
@@ -1361,6 +1365,9 @@ export default function ScholarshipDetailPageClient({
     };
   }, [scholarship]);
 
+  /** One increment per successful detail load (guest / no-sub); avoids double-count with Strict Mode. */
+  const detailBudgetRecordedKeyRef = useRef<string | null>(null);
+
   useEffect(() => {
     if (detailLoadState !== 'ok' || !scholarship?.id || !authResolved) return;
     const mode = resolveScholarshipDetailClickBudgetMode({
@@ -1368,16 +1375,64 @@ export default function ScholarshipDetailPageClient({
       hasSubscription,
       authResolved
     });
-    if (mode !== 'guest') return;
+    if (mode === null) return;
+    if (
+      mode === 'signed-in-no-subscription' &&
+      needsEmailConfirmation &&
+      !hasSubscription
+    ) {
+      return;
+    }
+    if (shouldBlockScholarshipDetailNavigation(mode)) return;
+    const dedupeKey = `${mode}::${scholarship.id}`;
+    if (detailBudgetRecordedKeyRef.current === dedupeKey) return;
+    detailBudgetRecordedKeyRef.current = dedupeKey;
+    recordScholarshipDetailFreeNavigation(mode);
+    if (mode === 'guest') {
+      rememberGuestScholarshipDetailCountedId(scholarship.id);
+    } else {
+      rememberAuthNoSubScholarshipDetailCountedId(scholarship.id);
+    }
+  }, [
+    detailLoadState,
+    scholarship?.id,
+    authResolved,
+    isAuthenticated,
+    hasSubscription,
+    needsEmailConfirmation
+  ]);
+
+  useEffect(() => {
+    if (detailLoadState !== 'ok' || !scholarship?.id || !authResolved) return;
+    const mode = resolveScholarshipDetailClickBudgetMode({
+      isAuthenticated,
+      hasSubscription,
+      authResolved
+    });
+    if (mode === null) return;
     if (!shouldBlockScholarshipDetailNavigation(mode)) return;
-    openRegistrationWall('grant-guest');
+    if (mode === 'guest') {
+      if (hasGuestSeenScholarshipDetailUnderBudget(scholarship.id)) return;
+      openRegistrationWall('grant-guest');
+      return;
+    }
+    if (mode === 'signed-in-no-subscription') {
+      if (needsEmailConfirmation && !hasSubscription) {
+        openEmailConfirmModal();
+        return;
+      }
+      if (hasAuthNoSubSeenScholarshipDetailUnderBudget(scholarship.id)) return;
+      openRegistrationWall('card-unlock');
+    }
   }, [
     detailLoadState,
     scholarship?.id,
     isAuthenticated,
     hasSubscription,
     authResolved,
-    openRegistrationWall
+    needsEmailConfirmation,
+    openRegistrationWall,
+    openEmailConfirmModal
   ]);
 
   const premiumPaywallModal = (
@@ -1671,6 +1726,10 @@ export default function ScholarshipDetailPageClient({
 
   const applyHref = scholarship.applyLink?.trim();
   const officialApplicationHref = applyHref || scholarship.listingUrl?.trim();
+  /** Redacted clients lose URLs but keep this flag — still show locked Apply CTA. */
+  const showApplyNowCta =
+    Boolean(officialApplicationHref) ||
+    Boolean(scholarship.hasOfficialApplicationDestination);
   const detailApplyPrimaryClass =
     'inline-flex h-11 min-h-[2.75rem] w-full items-center justify-center gap-2 rounded-xl bg-orange-500 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-orange-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2 sm:px-6 sm:text-base';
   const providerWebsiteCta = providerUrlRaw && !providerProfileHref ? (
@@ -3098,7 +3157,7 @@ export default function ScholarshipDetailPageClient({
         ) : null}
         </ScholarshipDetailGuestLockSection>
 
-        {officialApplicationHref || officialName || lastVerifiedLabel ? (
+        {showApplyNowCta || officialName || lastVerifiedLabel ? (
           <div className="mt-8 pb-0">
             <h2 className="mb-2 text-lg font-semibold tracking-tight text-zinc-900">
               Sponsor & application
@@ -3112,17 +3171,43 @@ export default function ScholarshipDetailPageClient({
                 </p>
               ) : null}
               <ul className="mt-4 flex list-none flex-col gap-3 p-0 sm:flex-row sm:items-stretch sm:gap-3">
-                {officialApplicationHref ? (
+                {showApplyNowCta ? (
                   <li className="min-w-0 flex-1 basis-0">
-                    {hasSubscription ? (
-                      <a
-                        href={officialApplicationHref}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={detailApplyPrimaryClass}
-                      >
-                        Apply now
-                      </a>
+                    {officialApplicationHref ? (
+                      hasSubscription ? (
+                        <a
+                          href={officialApplicationHref}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={detailApplyPrimaryClass}
+                        >
+                          Apply now
+                        </a>
+                      ) : (
+                        <button
+                          type="button"
+                          className={detailApplyPrimaryClass}
+                          onClick={openApplyAccessWall}
+                          title="Premium subscription required to apply on the official site"
+                        >
+                          <Lock
+                            className="h-4 w-4 shrink-0 text-white stroke-white"
+                            strokeWidth={2}
+                            aria-hidden
+                          />
+                          Apply now
+                        </button>
+                      )
+                    ) : hasSubscription ? (
+                      scholarship.premiumFieldsRedacted ? (
+                        <span
+                          className={`${detailApplyPrimaryClass} cursor-wait opacity-75`}
+                          aria-busy="true"
+                          aria-label="Loading apply link"
+                        >
+                          Apply now
+                        </span>
+                      ) : null
                     ) : (
                       <button
                         type="button"

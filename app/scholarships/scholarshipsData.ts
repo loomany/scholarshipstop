@@ -17,6 +17,11 @@ export type ScholarshipDocumentLink = { title?: string | null; url: string };
 
 export type Scholarship = {
   premiumFieldsRedacted?: boolean;
+  /**
+   * True when the row has `apply_url` and/or listing `url`. Kept on redacted payloads so guests
+   * still see a locked “Apply now” without exposing the actual href.
+   */
+  hasOfficialApplicationDestination?: boolean;
   seoTags?: string[];
   id: string;
   title: string;

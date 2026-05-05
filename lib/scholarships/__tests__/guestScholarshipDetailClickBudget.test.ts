@@ -72,19 +72,29 @@ test('resolveScholarshipDetailClickBudgetMode', async () => {
   );
 });
 
-test('guest: no free navigations — blocked immediately', async () => {
+test('guest: allows GUEST_FREE_DETAIL_VIEWS detail loads then blocks', async () => {
   const {
     AUTH_NO_SUB_FREE_DETAIL_VIEWS,
+    GUEST_FREE_DETAIL_VIEWS,
     shouldBlockScholarshipDetailNavigation,
     getScholarshipDetailFreeClicksUsed,
     recordScholarshipDetailFreeNavigation
   } = await import('@/lib/scholarships/guestScholarshipDetailClickBudget');
 
   assert.equal(AUTH_NO_SUB_FREE_DETAIL_VIEWS, 10);
+  assert.equal(GUEST_FREE_DETAIL_VIEWS, 5);
   assert.equal(getScholarshipDetailFreeClicksUsed('guest'), 0);
+  assert.equal(shouldBlockScholarshipDetailNavigation('guest'), false);
+
+  for (let i = 0; i < GUEST_FREE_DETAIL_VIEWS; i += 1) {
+    assert.equal(shouldBlockScholarshipDetailNavigation('guest'), false);
+    recordScholarshipDetailFreeNavigation('guest');
+  }
+  assert.equal(
+    getScholarshipDetailFreeClicksUsed('guest'),
+    GUEST_FREE_DETAIL_VIEWS
+  );
   assert.equal(shouldBlockScholarshipDetailNavigation('guest'), true);
-  recordScholarshipDetailFreeNavigation('guest');
-  assert.equal(getScholarshipDetailFreeClicksUsed('guest'), 0);
 });
 
 test('signed-in no sub: allows AUTH_NO_SUB_FREE_DETAIL_VIEWS navigations before block', async () => {

@@ -1,7 +1,12 @@
 import { getScopedScholarshipStorageKey } from '@/app/scholarships/userScopedStorage';
 
-/** Guests never get free navigations from this counter — the wall opens on first grant click. */
-const GUEST_FREE_DETAIL_NAVIGATIONS = 0;
+/**
+ * Guests may fully load this many scholarship detail pages before the next navigation
+ * shows the registration modal (6th grant → wall). Count increments once per detail load.
+ */
+export const GUEST_FREE_DETAIL_VIEWS = 5;
+
+const GUEST_FREE_DETAIL_NAVIGATIONS = GUEST_FREE_DETAIL_VIEWS;
 
 /** Signed-in users without subscription: scholarship detail previews before subscription wall. */
 export const AUTH_NO_SUB_FREE_DETAIL_VIEWS = 10;
@@ -10,6 +15,75 @@ const GUEST_STORAGE_KEY = 'scholarshipGuestDetailFreeClicksUsed';
 
 /** Separate from guest key so counts never mix. */
 const AUTH_NO_SUBSCRIPTION_STORAGE_BASE = 'scholarshipAuthNoSubDetailViewsUsed';
+
+/**
+ * Scholarship ids that already consumed a budgeted detail view — used so we do not show the
+ * quota modal on refresh/revisit of an allowed grant when `used >= cap`.
+ */
+const GUEST_DETAIL_COUNTED_IDS_KEY = 'scholarshipGuestDetailCountedIds';
+
+const AUTH_NO_SUB_DETAIL_COUNTED_IDS_BASE =
+  'scholarshipAuthNoSubDetailCountedIds';
+
+function parseScholarshipIdSetJson(raw: string | null): Set<string> {
+  if (!raw) return new Set();
+  try {
+    const parsed = JSON.parse(raw) as unknown;
+    if (!Array.isArray(parsed)) return new Set();
+    return new Set(
+      parsed.filter((x): x is string => typeof x === 'string' && x.trim().length > 0).map((x) => x.trim())
+    );
+  } catch {
+    return new Set();
+  }
+}
+
+function persistScholarshipIdSet(key: string, ids: Set<string>): void {
+  const trimmed = [...ids].slice(-120);
+  localStorage.setItem(key, JSON.stringify(trimmed));
+}
+
+/** Call after incrementing the guest detail budget for this scholarship id. */
+export function rememberGuestScholarshipDetailCountedId(id: string): void {
+  if (typeof window === 'undefined') return;
+  const slug = id.trim();
+  if (!slug) return;
+  const next = parseScholarshipIdSetJson(
+    localStorage.getItem(GUEST_DETAIL_COUNTED_IDS_KEY)
+  );
+  next.add(slug);
+  persistScholarshipIdSet(GUEST_DETAIL_COUNTED_IDS_KEY, next);
+}
+
+export function hasGuestSeenScholarshipDetailUnderBudget(id: string): boolean {
+  if (typeof window === 'undefined') return false;
+  const slug = id.trim();
+  if (!slug) return false;
+  return parseScholarshipIdSetJson(
+    localStorage.getItem(GUEST_DETAIL_COUNTED_IDS_KEY)
+  ).has(slug);
+}
+
+/** Call after incrementing the signed-in–no-sub detail budget for this scholarship id. */
+export function rememberAuthNoSubScholarshipDetailCountedId(id: string): void {
+  if (typeof window === 'undefined') return;
+  const slug = id.trim();
+  if (!slug) return;
+  const key = getScopedScholarshipStorageKey(AUTH_NO_SUB_DETAIL_COUNTED_IDS_BASE);
+  const next = parseScholarshipIdSetJson(localStorage.getItem(key));
+  next.add(slug);
+  persistScholarshipIdSet(key, next);
+}
+
+export function hasAuthNoSubSeenScholarshipDetailUnderBudget(
+  id: string
+): boolean {
+  if (typeof window === 'undefined') return false;
+  const slug = id.trim();
+  if (!slug) return false;
+  const key = getScopedScholarshipStorageKey(AUTH_NO_SUB_DETAIL_COUNTED_IDS_BASE);
+  return parseScholarshipIdSetJson(localStorage.getItem(key)).has(slug);
+}
 
 export type ScholarshipDetailClickBudgetMode =
   | 'guest'
@@ -34,7 +108,7 @@ export function resolveScholarshipDetailClickBudgetMode(options: {
   hasSubscription: boolean;
   /**
    * When `false`, subscription/session is still loading on the client — avoid
-   * treating a signed-in user as `guest` (0 free detail opens).
+   * treating a signed-in user as `guest`.
    */
   authResolved?: boolean;
 }): ScholarshipDetailClickBudgetMode | null {
@@ -83,7 +157,7 @@ export function shouldBlockGuestScholarshipDetailNavigation(): boolean {
   return shouldBlockScholarshipDetailNavigation('guest');
 }
 
-/** Call when allowing a guest to follow the detail link (increments toward the wall). */
+/** @deprecated Detail page increments the guest budget on load; avoid duplicate calls from link handlers. */
 export function recordGuestScholarshipDetailFreeNavigation(): void {
   recordScholarshipDetailFreeNavigation('guest');
 }

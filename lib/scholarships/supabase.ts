@@ -445,6 +445,9 @@ export function mapScholarshipRow(row: ScholarshipRow): Scholarship {
     applicants_count_is_estimated: row.applicants_count_is_estimated ?? null
   };
 
+  const applyUrlTrimmed = row.apply_url?.trim();
+  const listingUrlTrimmed = row.url?.trim();
+
   const base: Scholarship = {
     seoTags: row.seo_tags ?? undefined,
     id: row.id,
@@ -456,8 +459,11 @@ export function mapScholarshipRow(row: ScholarshipRow): Scholarship {
     eligibility,
     benefits: '',
     howToApply: [],
-    applyLink: row.apply_url?.trim() || undefined,
-    listingUrl: row.url?.trim() || undefined,
+    applyLink: applyUrlTrimmed || undefined,
+    listingUrl: listingUrlTrimmed || undefined,
+    hasOfficialApplicationDestination: Boolean(
+      applyUrlTrimmed || listingUrlTrimmed
+    ),
     provider: row.provider_name?.trim() || undefined,
     providerUrl: row.provider_url?.trim() || undefined,
     amount: awardText || undefined,

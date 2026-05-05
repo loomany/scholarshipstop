@@ -49,7 +49,6 @@ import {
 } from '@/lib/scholarships/countryEligibility/countries';
 import { scholarshipDeadlineHasPassed } from '@/lib/scholarships/similarScholarships';
 import {
-  recordScholarshipDetailFreeNavigation,
   resolveScholarshipDetailClickBudgetMode,
   shouldBlockScholarshipDetailNavigation
 } from '@/lib/scholarships/guestScholarshipDetailClickBudget';
@@ -96,7 +95,8 @@ type ScholarshipCardProps = {
   onLockedScholarshipNavigate?: () => void;
   onSubscriptionDetailNavigate?: () => void;
   /**
-   * Guests: first detail click is blocked; open parent’s registration wall (`grant-guest` mode).
+   * Guests: after free detail views are used, the next catalog navigation is blocked and the parent
+   * opens the registration wall (`grant-guest` mode). Budget increments on the detail page load.
    */
   onGuestDetailNavigate?: () => void;
   /**
@@ -616,7 +616,6 @@ export default function ScholarshipCard({
       dismissTopLoaderAfterBlockedDetailNavigation();
       return;
     }
-    recordScholarshipDetailFreeNavigation(budgetMode);
   };
 
   const handleLockedScholarshipButtonClick = () => {
@@ -643,9 +642,6 @@ export default function ScholarshipCard({
         }
         dismissTopLoaderAfterBlockedDetailNavigation();
         return;
-      }
-      if (budgetMode) {
-        recordScholarshipDetailFreeNavigation(budgetMode);
       }
       router.push(detailHref);
       return;

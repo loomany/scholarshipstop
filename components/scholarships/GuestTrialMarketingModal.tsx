@@ -145,7 +145,7 @@ export default function GuestTrialMarketingModal({
                 Create a free account to view scholarship details
               </h2>
               <p className="mt-3 text-sm leading-relaxed text-zinc-600 sm:text-[0.9375rem]">
-                To continue, create your free account. It takes less than 1 minute.
+                To continue, create your free account. It takes 10 seconds.
               </p>
               <div className="mt-6">
                 <Link
@@ -160,7 +160,7 @@ export default function GuestTrialMarketingModal({
                 </Link>
               </div>
               <p className="mt-3 text-xs text-zinc-400 sm:text-sm">
-                Free account • Less than 1 minute
+                Free account • 10 seconds
               </p>
             </>
           ) : isSignedInUpsell ? (

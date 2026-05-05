@@ -7,7 +7,6 @@ import { useCallback, useEffect, useState } from 'react';
 import ScholarshipRegistrationWallModal from '@/components/scholarships/ScholarshipRegistrationWallModal';
 import type { ContentPostScholarshipLink } from '@/lib/content-hub/contentPostScholarshipLinks';
 import {
-  recordScholarshipDetailFreeNavigation,
   resolveScholarshipDetailClickBudgetMode,
   shouldBlockScholarshipDetailNavigation
 } from '@/lib/scholarships/guestScholarshipDetailClickBudget';
@@ -115,7 +114,6 @@ function ScholarshipLinkCardCompact({
           onDetailNavigateBlocked();
           return;
         }
-        recordScholarshipDetailFreeNavigation(budgetMode);
       }}
     >
       {inner}
@@ -191,7 +189,6 @@ function ScholarshipLinkCardFeatured({
           onDetailNavigateBlocked();
           return;
         }
-        recordScholarshipDetailFreeNavigation(budgetMode);
       }}
     >
       {body}
