@@ -1,5 +1,5 @@
 /**
- * Single-chat scholarship card for Telegram (HTML + optional provider image).
+ * Single-chat scholarship card for Telegram (plain text + optional provider image).
  * Shared by the bot /testgrant preview.
  */
 
@@ -10,10 +10,7 @@ import {
   TELEGRAM_GRANT_SAVE_CALLBACK_PREFIX,
   TELEGRAM_GRANT_SAVED_ACK_PREFIX
 } from '@/lib/account/userSavedScholarships';
-import {
-  buildResourceSnippet,
-  escapeTelegramHtml
-} from '@/lib/telegram/resourceNotifyCore';
+import { buildResourceSnippet } from '@/lib/telegram/resourceNotifyCore';
 
 export type GrantCardInlineReplyMarkup = {
   inline_keyboard: { text: string; url?: string; callback_data?: string }[][];
@@ -111,9 +108,7 @@ export async function sendScholarshipTelegramCardToChat(
   const url = `${site}${path}`;
   const title = scholarship.title?.trim() || 'Scholarship';
   const cat = opts?.categoryLabel?.trim();
-  const titleLine = cat
-    ? `<b>${escapeTelegramHtml(title)} | ${escapeTelegramHtml(cat)}</b>`
-    : `<b>${escapeTelegramHtml(title)}</b>`;
+  const titleLine = cat ? `${title} | ${cat}` : title;
   const snippet = buildResourceSnippet(scholarship.description, title);
   const deadline = scholarship.deadline?.trim() || 'See listing';
   const amount = scholarship.awardAmount?.trim() || scholarship.amount?.trim() || 'Varies';
@@ -121,10 +116,10 @@ export async function sendScholarshipTelegramCardToChat(
   const caption = [
     titleLine,
     '',
-    `<b>Deadline</b>: ${escapeTelegramHtml(deadline)}`,
-    `<b>Award</b>: ${escapeTelegramHtml(amount)}`,
+    `Deadline: ${deadline}`,
+    `Award: ${amount}`,
     '',
-    escapeTelegramHtml(snippet)
+    snippet
   ].join('\n');
 
   const safeCaption = caption.length > 1024 ? `${caption.slice(0, 1020)}…` : caption;
@@ -144,7 +139,6 @@ export async function sendScholarshipTelegramCardToChat(
       chat_id: chatId,
       photo: photoUrl,
       caption: safeCaption,
-      parse_mode: 'HTML',
       reply_markup: replyMarkup
     });
     if (r != null) return true;
@@ -153,7 +147,6 @@ export async function sendScholarshipTelegramCardToChat(
   const r2 = await telegramBotApi<unknown>('sendMessage', {
     chat_id: chatId,
     text: safeCaption,
-    parse_mode: 'HTML',
     reply_markup: replyMarkup,
     disable_web_page_preview: false
   });

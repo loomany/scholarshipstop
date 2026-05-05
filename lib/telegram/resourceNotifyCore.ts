@@ -1,5 +1,5 @@
 /**
- * Telegram resource card (photo + HTML caption + Read more button).
+ * Telegram resource card (photo + plain text caption + Read more button).
  * No `server-only` — safe for scripts (tsx) and server code.
  */
 
@@ -79,8 +79,8 @@ export type ResourceNotifyPayload = {
   slug: string;
 };
 
-function buildCaptionHtml(title: string, snippet: string): string {
-  return `<b>${escapeTelegramHtml(title)}</b>\n\n${escapeTelegramHtml(snippet)}`;
+function buildCaptionText(title: string, snippet: string): string {
+  return `${title}\n\n${snippet}`;
 }
 
 function isProbablyHttpUrl(s: string | null | undefined): boolean {
@@ -113,7 +113,7 @@ export async function sendResourceNotifyToChats(
   const title = input.title?.trim() || 'New article';
   const snippet = buildResourceSnippet(input.description, title);
   const url = resourceArticlePublicUrl(slug);
-  const caption = buildCaptionHtml(title, snippet);
+  const caption = buildCaptionText(title, snippet);
   const safeCaption =
     caption.length > 1024 ? `${caption.slice(0, 1020)}...` : caption;
 
@@ -139,7 +139,6 @@ export async function sendResourceNotifyToChats(
         chat_id,
         photo: photoUrl,
         caption: safeCaption,
-        parse_mode: 'HTML',
         reply_markup: replyMarkup
       });
       if (r != null) anyOk = true;
@@ -147,7 +146,6 @@ export async function sendResourceNotifyToChats(
         const r2 = await telegramBotApi<unknown>('sendMessage', {
           chat_id,
           text: safeCaption,
-          parse_mode: 'HTML',
           reply_markup: replyMarkup,
           disable_web_page_preview: false
         });
@@ -157,7 +155,6 @@ export async function sendResourceNotifyToChats(
       const r = await telegramBotApi<unknown>('sendMessage', {
         chat_id,
         text: safeCaption,
-        parse_mode: 'HTML',
         reply_markup: replyMarkup,
         disable_web_page_preview: false
       });
