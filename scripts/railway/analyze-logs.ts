@@ -51,6 +51,7 @@ const REPORTS_DIR = join(process.cwd(), "reports");
 const LOG_ANALYSIS_REPORT = join(REPORTS_DIR, "log-analysis.md");
 const CONFIRMED_REPORT = join(REPORTS_DIR, "confirmed-incidents.md");
 const CURRENT_ISSUES_REPORT = join(REPORTS_DIR, "railway-current-issues.md");
+const HISTORICAL_REPORT = join(REPORTS_DIR, "historical-incidents.md");
 
 const EXCLUSIONS = {
   email: /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i,
@@ -123,6 +124,51 @@ const INCIDENT_META: Record<
     fix: "Add input guards and structured parser error handling.",
   },
 };
+
+type CliOptions = {
+  sinceMs: number;
+  sinceLabel: string;
+};
+
+function parseSinceArg(value: string): number {
+  const relative = value.trim().match(/^(\d+)\s*([smhdw])$/i);
+  if (relative) {
+    const amount = Number.parseInt(relative[1], 10);
+    const unit = relative[2].toLowerCase();
+    const multipliers: Record<string, number> = {
+      s: 1000,
+      m: 60_000,
+      h: 3_600_000,
+      d: 86_400_000,
+      w: 604_800_000,
+    };
+    return Date.now() - amount * multipliers[unit];
+  }
+
+  const absolute = Date.parse(value);
+  if (Number.isFinite(absolute)) return absolute;
+  throw new Error(`Invalid --since value "${value}". Use formats like 30m, 2h, 1d, or ISO timestamp.`);
+}
+
+function parseArgs(argv: string[]): CliOptions {
+  let sinceRaw = "2h";
+  for (let i = 0; i < argv.length; i += 1) {
+    const arg = argv[i];
+    if (arg === "--since") {
+      const next = argv[i + 1];
+      if (!next) throw new Error("Missing value for --since");
+      sinceRaw = next;
+      i += 1;
+      continue;
+    }
+    if (arg === "--help" || arg === "-h") {
+      console.log("Usage: npx tsx scripts/railway/analyze-logs.ts [--since 2h|30m|ISO]");
+      process.exit(0);
+    }
+    throw new Error(`Unknown argument: ${arg}`);
+  }
+  return { sinceMs: parseSinceArg(sinceRaw), sinceLabel: sinceRaw };
+}
 
 function listLogFiles(dir: string): string[] {
   const out: string[] = [];
@@ -347,6 +393,8 @@ function buildConfirmedIncidentsReport(
   incidents: Incident[],
   noise: NoiseRecord[],
   ranking: Array<{ service: string; score: number }>,
+  windowStartMs: number,
+  windowEndMs: number,
 ): string {
   const byConfidence = (c: Confidence) => incidents.filter((i) => i.confidence === c);
   const section = (confidence: Confidence): string[] => {
@@ -385,6 +433,8 @@ function buildConfirmedIncidentsReport(
     "# Confirmed incidents analysis",
     "",
     `Generated: ${new Date().toISOString()}`,
+    `Analysis window start: ${new Date(windowStartMs).toISOString()}`,
+    `Analysis window end: ${new Date(windowEndMs).toISOString()}`,
     "",
     "## Top unstable services ranking",
     "",
@@ -397,7 +447,13 @@ function buildConfirmedIncidentsReport(
   ].join("\n");
 }
 
-function buildLogAnalysisReport(incidents: Incident[], noise: NoiseRecord[]): string {
+function buildLogAnalysisReport(
+  incidents: Incident[],
+  noise: NoiseRecord[],
+  historicalIncidents: Incident[],
+  windowStartMs: number,
+  windowEndMs: number,
+): string {
   const byType = new Map<string, number>();
   for (const incident of incidents) {
     byType.set(incident.title, (byType.get(incident.title) ?? 0) + 1);
@@ -411,6 +467,7 @@ function buildLogAnalysisReport(incidents: Incident[], noise: NoiseRecord[]): st
     `| likely | ${incidents.filter((i) => i.confidence === "LIKELY").length} |`,
     `| possible | ${incidents.filter((i) => i.confidence === "POSSIBLE").length} |`,
     `| noise ignored | ${noise.length} |`,
+    `| historical incidents (outside window) | ${historicalIncidents.length} |`,
   ];
 
   const typeRows = [...byType.entries()]
@@ -421,6 +478,8 @@ function buildLogAnalysisReport(incidents: Incident[], noise: NoiseRecord[]): st
     "# Railway Log Analysis",
     "",
     `Generated: ${new Date().toISOString()}`,
+    `Analysis window start: ${new Date(windowStartMs).toISOString()}`,
+    `Analysis window end: ${new Date(windowEndMs).toISOString()}`,
     "",
     "## Summary",
     "",
@@ -439,6 +498,8 @@ function buildCurrentIssuesReport(
   incidents: Incident[],
   noise: NoiseRecord[],
   ranking: Array<{ service: string; score: number }>,
+  windowStartMs: number,
+  windowEndMs: number,
 ): string {
   const confirmed = incidents.filter((i) => i.confidence === "CONFIRMED");
   const likely = incidents.filter((i) => i.confidence === "LIKELY");
@@ -463,6 +524,8 @@ function buildCurrentIssuesReport(
     "# Railway Current Issues",
     "",
     `Generated: ${new Date().toISOString()}`,
+    `Analysis window start: ${new Date(windowStartMs).toISOString()}`,
+    `Analysis window end: ${new Date(windowEndMs).toISOString()}`,
     "",
     "## Top unstable services ranking",
     "",
@@ -494,31 +557,93 @@ function buildCurrentIssuesReport(
   ].join("\n");
 }
 
+function buildHistoricalIncidentsReport(
+  incidents: Incident[],
+  noise: NoiseRecord[],
+  windowStartMs: number,
+): string {
+  const byConfidence = (c: Confidence) => incidents.filter((i) => i.confidence === c);
+  const render = (confidence: Confidence): string[] => {
+    const rows = byConfidence(confidence);
+    const title = confidence === "NOISE" ? "Noise / ignored matches" : confidence;
+    const out = [`## ${title}`, ""];
+    if (confidence === "NOISE") {
+      if (noise.length === 0) return [...out, "No historical ignored matches.", ""];
+      for (const n of noise.slice(0, 25)) {
+        out.push(`- \`${n.token}\` from \`${n.source}\`: ${n.reason}`);
+        out.push(`  - ${n.message}`);
+      }
+      out.push("");
+      return out;
+    }
+    if (rows.length === 0) return [...out, "No incidents.", ""];
+    for (const incident of rows) {
+      out.push(`- **${incident.title}** | service: \`${incident.service}\` | severity: ${incident.severity}`);
+      for (const ev of incident.evidence) {
+        out.push(`  - [${ev.timestamp ?? "n/a"}] \`${ev.source}\` -> ${ev.message}`);
+      }
+    }
+    out.push("");
+    return out;
+  };
+
+  return [
+    "# Historical incidents",
+    "",
+    `Generated: ${new Date().toISOString()}`,
+    `Contains evidence older than window start: ${new Date(windowStartMs).toISOString()}`,
+    "",
+    ...render("CONFIRMED"),
+    ...render("LIKELY"),
+    ...render("POSSIBLE"),
+    ...render("NOISE"),
+  ].join("\n");
+}
+
 function main(): void {
+  const args = parseArgs(process.argv.slice(2));
   const files = listLogFiles(LOGS_DIR);
   if (files.length === 0) {
     throw new Error("No .log files found in /logs. Run logs:fetch or logs:collector first.");
   }
 
   const lines = files.flatMap((file) => parseLines(file));
-  const { incidents, noise } = collectIncidents(lines);
+  const now = Date.now();
+  const currentLines = lines.filter(
+    (line) => typeof line.timestampMs === "number" && line.timestampMs >= args.sinceMs && line.timestampMs <= now,
+  );
+  const historicalLines = lines.filter(
+    (line) => typeof line.timestampMs !== "number" || line.timestampMs < args.sinceMs,
+  );
+
+  const { incidents, noise } = collectIncidents(currentLines);
+  const { incidents: historicalIncidents, noise: historicalNoise } = collectIncidents(historicalLines);
   const ranking = buildUnstableRanking(incidents);
 
   mkdirSync(REPORTS_DIR, { recursive: true });
-  writeFileSync(LOG_ANALYSIS_REPORT, buildLogAnalysisReport(incidents, noise), "utf8");
+  writeFileSync(
+    LOG_ANALYSIS_REPORT,
+    buildLogAnalysisReport(incidents, noise, historicalIncidents, args.sinceMs, now),
+    "utf8",
+  );
   writeFileSync(
     CONFIRMED_REPORT,
-    buildConfirmedIncidentsReport(incidents, noise, ranking),
+    buildConfirmedIncidentsReport(incidents, noise, ranking, args.sinceMs, now),
     "utf8",
   );
   writeFileSync(
     CURRENT_ISSUES_REPORT,
-    buildCurrentIssuesReport(incidents, noise, ranking),
+    buildCurrentIssuesReport(incidents, noise, ranking, args.sinceMs, now),
+    "utf8",
+  );
+  writeFileSync(
+    HISTORICAL_REPORT,
+    buildHistoricalIncidentsReport(historicalIncidents, historicalNoise, args.sinceMs),
     "utf8",
   );
 
   console.log(
-    `Analysis complete: reports/log-analysis.md, reports/confirmed-incidents.md, reports/railway-current-issues.md`,
+    `Analysis complete: reports/log-analysis.md, reports/confirmed-incidents.md, reports/railway-current-issues.md, reports/historical-incidents.md (since=${args.sinceLabel})`,
   );
 }
 

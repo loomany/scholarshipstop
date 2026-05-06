@@ -34,6 +34,43 @@ import {
 import { buildProviderEnrichmentWritePatch } from '../lib/providers/providerEnrichmentStorageUpdate';
 import { enqueueProviderUrlsForScript } from './lib/googleIndexing';
 import type { Database } from '../types_db';
+import {
+  createRunId,
+  emitJobDone,
+  emitJobFailed,
+  emitJobProgress,
+  emitJobStart,
+  type JobCounters
+} from './job-markers';
+
+const SERVICE_NAME = 'Скрипты';
+const JOB_NAME = 'enrich-all-providers';
+const RUN_ID = createRunId();
+const STARTED_AT_MS = Date.now();
+let terminalEmitted = false;
+let lastFailure: unknown = null;
+const markerCounters: JobCounters = { processed: 0, success: 0, failed: 0, skipped: 0 };
+
+function emitTerminalMarker(exitCode: number): void {
+  if (terminalEmitted) return;
+  terminalEmitted = true;
+  const durationMs = Date.now() - STARTED_AT_MS;
+  emitJobProgress({ service: SERVICE_NAME, job: JOB_NAME, runId: RUN_ID }, markerCounters);
+  if (exitCode === 0) {
+    emitJobDone({ service: SERVICE_NAME, job: JOB_NAME, runId: RUN_ID }, durationMs, markerCounters);
+    return;
+  }
+  emitJobFailed(
+    { service: SERVICE_NAME, job: JOB_NAME, runId: RUN_ID },
+    durationMs,
+    markerCounters,
+    lastFailure ?? `process exited with code ${exitCode}`
+  );
+}
+
+process.on('exit', (code) => {
+  emitTerminalMarker(code ?? 0);
+});
 
 function loadEnvFiles() {
   const root = path.resolve(__dirname, '..');
@@ -241,6 +278,7 @@ function isGoodDescription(text: string | null | undefined): boolean {
 }
 
 async function main() {
+  emitJobStart({ service: SERVICE_NAME, job: JOB_NAME, runId: RUN_ID });
   const dryRun = process.argv.includes('--dry-run');
   const enrichLimit = parseLimitArg();
   const onlySlugs = parseOnlySlugList();
@@ -542,6 +580,8 @@ async function main() {
         `[${done + 1}/${queue.length}] FAIL display name is missing; provider left pending.`
       );
       done += 1;
+      markerCounters.processed += 1;
+      markerCounters.skipped += 1;
       continue;
     }
 
@@ -560,6 +600,8 @@ async function main() {
         `[${done + 1}/${queue.length}] FAIL OpenAI returned incomplete enrichment (missing description or sources); provider left pending.`
       );
       done += 1;
+      markerCounters.processed += 1;
+      markerCounters.skipped += 1;
       continue;
     }
 
@@ -568,6 +610,8 @@ async function main() {
         `[${done + 1}/${queue.length}] SKIP postQualityPassed=false; provider left pending.`
       );
       done += 1;
+      markerCounters.processed += 1;
+      markerCounters.skipped += 1;
       continue;
     }
 
@@ -587,6 +631,7 @@ async function main() {
 
     if (upErr) {
       console.log(`[${done + 1}/${queue.length}] FAIL ${upErr.message}`);
+      markerCounters.failed += 1;
     } else {
       const { data: updated } = await supabase
         .from('providers')
@@ -597,8 +642,10 @@ async function main() {
         enrichedProviderSlugs.push(updated.slug.trim());
       }
       console.log(`[${done + 1}/${queue.length}] DONE`);
+      markerCounters.success += 1;
     }
     done += 1;
+    markerCounters.processed += 1;
     await sleep(450);
   }
 
@@ -618,6 +665,7 @@ async function main() {
 }
 
 main().catch((e) => {
+  lastFailure = e;
   console.error(e);
   process.exit(1);
 });

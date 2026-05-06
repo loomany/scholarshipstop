@@ -2,12 +2,24 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 
 import { createClient } from '@supabase/supabase-js';
+import {
+  createRunId,
+  emitJobDone,
+  emitJobFailed,
+  emitJobProgress,
+  emitJobStart,
+  type JobCounters
+} from './job-markers';
 
 import type { Database } from '@/types_db';
 
 const DEFAULT_TOPICS_PATH = 'data/manual-essay-guides/international-students-topics.txt';
 const CATEGORY_SLUG = 'international-students';
 const CATEGORY_LABEL = 'International students';
+const SERVICE_NAME = 'Скрипты';
+const JOB_NAME = 'enqueue-manual-essay-guides';
+const RUN_ID = createRunId();
+const STARTED_AT_MS = Date.now();
 
 type ManualTopicInput = {
   topic: string;
@@ -86,6 +98,7 @@ function parseTopics(raw: string, range: TopicRange): ManualTopicInput[] {
 }
 
 async function main() {
+  emitJobStart({ service: SERVICE_NAME, job: JOB_NAME, runId: RUN_ID });
   const fileArg = process.argv.find((arg) => arg.startsWith('--file='));
   const fromLine = optionalPositiveIntArg('from-line') ?? 1;
   const toLine = optionalPositiveIntArg('to-line');
@@ -147,9 +160,28 @@ async function main() {
       2
     )
   );
+  const counters: JobCounters = {
+    processed: topics.length,
+    success: inserted,
+    failed: 0,
+    skipped
+  };
+  emitJobProgress({ service: SERVICE_NAME, job: JOB_NAME, runId: RUN_ID }, counters);
+  emitJobDone(
+    { service: SERVICE_NAME, job: JOB_NAME, runId: RUN_ID },
+    Date.now() - STARTED_AT_MS,
+    counters
+  );
 }
 
 main().catch((error) => {
+  const counters: JobCounters = { processed: 0, success: 0, failed: 0, skipped: 0 };
+  emitJobFailed(
+    { service: SERVICE_NAME, job: JOB_NAME, runId: RUN_ID },
+    Date.now() - STARTED_AT_MS,
+    counters,
+    error
+  );
   console.error(error);
   process.exit(1);
 });

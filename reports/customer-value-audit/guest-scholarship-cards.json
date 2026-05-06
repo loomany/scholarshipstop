@@ -1,0 +1,725 @@
+{
+  "generatedAt": "2026-05-05T23:15:44.784Z",
+  "cards": [
+    {
+      "pagePath": "/scholarships",
+      "cardIndex": 0,
+      "titleText": "Climate Stripes Scholarship",
+      "providerText": "University of Reading",
+      "deadlineText": "",
+      "awardText": "is 10000 GBP. Plan to apply by 29 May 2026.",
+      "requirementsText": "",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 137
+    },
+    {
+      "pagePath": "/scholarships",
+      "cardIndex": 1,
+      "titleText": "Fintech Innovation Scholarship",
+      "providerText": "For a Bright Future Foundation",
+      "deadlineText": "",
+      "awardText": "is 10000 USD. Plan to apply by 30 Jun 2026.",
+      "requirementsText": "",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 146
+    },
+    {
+      "pagePath": "/scholarships",
+      "cardIndex": 2,
+      "titleText": "Vice-Chancellor’s Scholarship",
+      "providerText": "Bangor University",
+      "deadlineText": "",
+      "awardText": "is 10000 GBP. Plan to apply by 29 May 2026.",
+      "requirementsText": "",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 133
+    },
+    {
+      "pagePath": "/scholarships",
+      "cardIndex": 3,
+      "titleText": "Creative Arts Scholarship",
+      "providerText": "For a Bright Future Foundation",
+      "deadlineText": "",
+      "awardText": "is 10000 USD. Plan to apply by 30 Jun 2026.",
+      "requirementsText": "",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 146
+    },
+    {
+      "pagePath": "/scholarships",
+      "cardIndex": 4,
+      "titleText": "China University of Petroleum Scholarship",
+      "providerText": "China University of Petroleum-Beijing",
+      "deadlineText": "",
+      "awardText": "is 25000 CNY. Plan to apply by 30 May 2026.",
+      "requirementsText": "",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 153
+    },
+    {
+      "pagePath": "/scholarships",
+      "cardIndex": 5,
+      "titleText": "Single Parent Household Scholarship",
+      "providerText": "For a Bright Future Foundation",
+      "deadlineText": "",
+      "awardText": "is 10000 USD. Plan to apply by 30 Jun 2026.",
+      "requirementsText": "",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 146
+    },
+    {
+      "pagePath": "/scholarships",
+      "cardIndex": 6,
+      "titleText": "The Sekforde House Trust Scholarship",
+      "providerText": "City St George's, University of London",
+      "deadlineText": "",
+      "awardText": "is 22000 GBP. Plan to apply by 30 May 2026.",
+      "requirementsText": "",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 154
+    },
+    {
+      "pagePath": "/scholarships",
+      "cardIndex": 7,
+      "titleText": "Healthcare Scholarship",
+      "providerText": "For a Bright Future Foundation",
+      "deadlineText": "",
+      "awardText": "is 10000 USD. Plan to apply by 30 Jun 2026.",
+      "requirementsText": "",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 146
+    },
+    {
+      "pagePath": "/scholarships",
+      "cardIndex": 8,
+      "titleText": "International Masters Scholarship",
+      "providerText": "The Glasgow School of Art",
+      "deadlineText": "",
+      "awardText": "is 25000 GBP. Plan to apply by 30 May 2026.",
+      "requirementsText": "",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 141
+    },
+    {
+      "pagePath": "/scholarships/hub/best-matches",
+      "cardIndex": 0,
+      "titleText": "Climate Stripes Scholarship",
+      "providerText": "University of Reading",
+      "deadlineText": "",
+      "awardText": "is 10000 GBP. Plan to apply by 29 May 2026.",
+      "requirementsText": "",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 137
+    },
+    {
+      "pagePath": "/scholarships/hub/best-matches",
+      "cardIndex": 1,
+      "titleText": "Fintech Innovation Scholarship",
+      "providerText": "For a Bright Future Foundation",
+      "deadlineText": "",
+      "awardText": "is 10000 USD. Plan to apply by 30 Jun 2026.",
+      "requirementsText": "",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 146
+    },
+    {
+      "pagePath": "/scholarships/hub/best-matches",
+      "cardIndex": 2,
+      "titleText": "Vice-Chancellor’s Scholarship",
+      "providerText": "Bangor University",
+      "deadlineText": "",
+      "awardText": "is 10000 GBP. Plan to apply by 29 May 2026.",
+      "requirementsText": "",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 133
+    },
+    {
+      "pagePath": "/scholarships/hub/best-matches",
+      "cardIndex": 3,
+      "titleText": "Creative Arts Scholarship",
+      "providerText": "For a Bright Future Foundation",
+      "deadlineText": "",
+      "awardText": "is 10000 USD. Plan to apply by 30 Jun 2026.",
+      "requirementsText": "",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 146
+    },
+    {
+      "pagePath": "/scholarships/hub/best-matches",
+      "cardIndex": 4,
+      "titleText": "China University of Petroleum Scholarship",
+      "providerText": "China University of Petroleum-Beijing",
+      "deadlineText": "",
+      "awardText": "is 25000 CNY. Plan to apply by 30 May 2026.",
+      "requirementsText": "",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 153
+    },
+    {
+      "pagePath": "/scholarships/hub/best-matches",
+      "cardIndex": 5,
+      "titleText": "Single Parent Household Scholarship",
+      "providerText": "For a Bright Future Foundation",
+      "deadlineText": "",
+      "awardText": "is 10000 USD. Plan to apply by 30 Jun 2026.",
+      "requirementsText": "",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 146
+    },
+    {
+      "pagePath": "/scholarships/hub/best-matches",
+      "cardIndex": 6,
+      "titleText": "The Sekforde House Trust Scholarship",
+      "providerText": "City St George's, University of London",
+      "deadlineText": "",
+      "awardText": "is 22000 GBP. Plan to apply by 30 May 2026.",
+      "requirementsText": "",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 154
+    },
+    {
+      "pagePath": "/scholarships/hub/best-matches",
+      "cardIndex": 7,
+      "titleText": "Healthcare Scholarship",
+      "providerText": "For a Bright Future Foundation",
+      "deadlineText": "",
+      "awardText": "is 10000 USD. Plan to apply by 30 Jun 2026.",
+      "requirementsText": "",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 146
+    },
+    {
+      "pagePath": "/scholarships/hub/best-matches",
+      "cardIndex": 8,
+      "titleText": "International Masters Scholarship",
+      "providerText": "The Glasgow School of Art",
+      "deadlineText": "",
+      "awardText": "is 25000 GBP. Plan to apply by 30 May 2026.",
+      "requirementsText": "",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 141
+    },
+    {
+      "pagePath": "/scholarships/hub/easy-apply",
+      "cardIndex": 0,
+      "titleText": "Owen Hart Foundation Award",
+      "providerText": "Calgary Foundation",
+      "deadlineText": "",
+      "awardText": "Calgary Foundation",
+      "requirementsText": "1 requirement",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 145
+    },
+    {
+      "pagePath": "/scholarships/hub/easy-apply",
+      "cardIndex": 1,
+      "titleText": "$10,000 \"No Essay\" Scholarship",
+      "providerText": "Scholarships360",
+      "deadlineText": "",
+      "awardText": "is award worth $10,000. Plan to apply by May 31, 2026.",
+      "requirementsText": "2 requirements",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 142
+    },
+    {
+      "pagePath": "/scholarships/hub/easy-apply",
+      "cardIndex": 2,
+      "titleText": "The There’s Space For Everyone Scholarship",
+      "providerText": "Extra Space Storage",
+      "deadlineText": "",
+      "awardText": "is award worth $10,000. Plan to apply by May 31, 2026.",
+      "requirementsText": "2 requirements",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 146
+    },
+    {
+      "pagePath": "/scholarships/hub/easy-apply",
+      "cardIndex": 3,
+      "titleText": "CGCS-Bernard Harris Scholarship Program",
+      "providerText": "Council of the Great City Schools",
+      "deadlineText": "",
+      "awardText": "is award worth $10,000. Plan to apply by May 31, 2026.",
+      "requirementsText": "3 requirements",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 160
+    },
+    {
+      "pagePath": "/scholarships/hub/easy-apply",
+      "cardIndex": 4,
+      "titleText": "Pamfil and Maria Bujea Family Orthodox Christian Seminarian Scholarship",
+      "providerText": "Romanian Orthodox Episcopate of America",
+      "deadlineText": "",
+      "awardText": "is award worth $10,000. Plan to apply by May 31, 2026.",
+      "requirementsText": "4 requirements",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 166
+    },
+    {
+      "pagePath": "/scholarships/hub/easy-apply",
+      "cardIndex": 5,
+      "titleText": "Epilepsy Foundation of San Diego County College Scholarship",
+      "providerText": "Epilepsy Foundation of San Diego County",
+      "deadlineText": "",
+      "awardText": "is award worth $10,000. Plan to apply by May 31, 2026.",
+      "requirementsText": "4 requirements",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 166
+    },
+    {
+      "pagePath": "/scholarships/hub/easy-apply",
+      "cardIndex": 6,
+      "titleText": "Chapman Urban Scholars Program (CUSP)",
+      "providerText": "POISE Foundation",
+      "deadlineText": "",
+      "awardText": "is award worth $10,000. Plan to apply by May 31, 2026.",
+      "requirementsText": "4 requirements",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 143
+    },
+    {
+      "pagePath": "/scholarships/hub/easy-apply",
+      "cardIndex": 7,
+      "titleText": "Asian American Architects/Engineers Association Student Scholarship",
+      "providerText": "Asian American Architects/Engineers Association",
+      "deadlineText": "",
+      "awardText": "is award worth $7,000. Plan to apply by May 31, 2026.",
+      "requirementsText": "2 requirements",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 173
+    },
+    {
+      "pagePath": "/scholarships/hub/easy-apply",
+      "cardIndex": 8,
+      "titleText": "Maestro Cares Foundation Individual Scholarship Application (U.S. Undergraduate)",
+      "providerText": "Maestro Cares Foundation",
+      "deadlineText": "",
+      "awardText": "is award worth $10,000. Plan to apply by May 25, 2026.",
+      "requirementsText": "4 requirements",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 151
+    },
+    {
+      "pagePath": "/scholarships/hub/international-friendly",
+      "cardIndex": 0,
+      "titleText": "Academic Performance Scholarship at Chinese University of Hong Kong 2026",
+      "providerText": "Chinese University of Hong Kong (CUHK)",
+      "deadlineText": "",
+      "awardText": "is Partial Funding, 20,000 CNY per year - 80,000 CNY per year. Plan to apply by 31 May, 2026.",
+      "requirementsText": "",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 204
+    },
+    {
+      "pagePath": "/scholarships/hub/international-friendly",
+      "cardIndex": 1,
+      "titleText": "Global Excellence Scholarship at The University of Western Australia 2026",
+      "providerText": "The University of Western Australia (UWA), Perth",
+      "deadlineText": "",
+      "awardText": "is Only tuition fees, up to AUD 48,000. Plan to apply by 31 May, 2026.",
+      "requirementsText": "",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 191
+    },
+    {
+      "pagePath": "/scholarships/hub/international-friendly",
+      "cardIndex": 2,
+      "titleText": "University of Calgary Award for International Student Athletes 2026",
+      "providerText": "University of Calgary, Canada",
+      "deadlineText": "",
+      "awardText": "for International Student Athletes 2026",
+      "requirementsText": "",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 206
+    },
+    {
+      "pagePath": "/scholarships/hub/international-friendly",
+      "cardIndex": 3,
+      "titleText": "Monash Graduate Scholarship at Monash University 2026",
+      "providerText": "Monash University, Australia",
+      "deadlineText": "",
+      "awardText": "is Partial Funding, AUD 37,145 per annum. Plan to apply by 31 May, 2026.",
+      "requirementsText": "",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 173
+    },
+    {
+      "pagePath": "/scholarships/hub/international-friendly",
+      "cardIndex": 4,
+      "titleText": "Morris Family Foundation PhD Scholarship at Central Queensland University 2025",
+      "providerText": "Central Queensland University (CQ University), Australia",
+      "deadlineText": "",
+      "awardText": "is Partial Funding, AUD 92,318 + up to AUD 10,000 research support grant. Plan to apply by 31 May, 2026.",
+      "requirementsText": "",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 233
+    },
+    {
+      "pagePath": "/scholarships/hub/international-friendly",
+      "cardIndex": 5,
+      "titleText": "Sri Lanka $10,000 Early Acceptance Scholarship at Macquarie University 2026",
+      "providerText": "Macquarie University",
+      "deadlineText": "",
+      "awardText": "is Partial Funding, AUD Partial Funding, AUD $10.…per year. Plan to apply by 31 May, 2026.",
+      "requirementsText": "",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 183
+    },
+    {
+      "pagePath": "/scholarships/hub/international-friendly",
+      "cardIndex": 6,
+      "titleText": "Kazakhstan Early Acceptance Scholarship at Macquarie University 2026",
+      "providerText": "Macquarie University",
+      "deadlineText": "",
+      "awardText": "is Only tuition fees, AUD Only tuition fees, AUD $1…per year. Plan to apply by 31 May, 2026.",
+      "requirementsText": "",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 185
+    },
+    {
+      "pagePath": "/scholarships/hub/international-friendly",
+      "cardIndex": 7,
+      "titleText": "ASEAN Early Acceptance Scholarship at Macquarie University 2026",
+      "providerText": "Macquarie University",
+      "deadlineText": "",
+      "awardText": "is Only tuition fees, AUD Only tuition fees, AUD $1…per year. Plan to apply by 31 May, 2026.",
+      "requirementsText": "",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 185
+    },
+    {
+      "pagePath": "/scholarships/hub/international-friendly",
+      "cardIndex": 8,
+      "titleText": "University of Otago International Master's Research Scholarship, 2026",
+      "providerText": "University of Otago",
+      "deadlineText": "",
+      "awardText": "is Partial Funding, NZD 18,204 stipend + Tuition fee waiver. Plan to apply by 31 May, 2026.",
+      "requirementsText": "",
+      "visibleChips": [],
+      "visibleButtons": [
+        "Save",
+        "Not relevant",
+        "Save",
+        "Not relevant"
+      ],
+      "hasSaveButton": true,
+      "hasNotRelevantButton": true,
+      "hasLockOrBlurVisual": false,
+      "snippetLength": 183
+    }
+  ]
+}

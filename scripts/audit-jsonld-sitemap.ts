@@ -20,6 +20,14 @@
  */
 
 import { escapeTelegramHtml } from '../lib/telegram/resourceNotifyCore';
+import {
+  createRunId,
+  emitJobDone,
+  emitJobFailed,
+  emitJobProgress,
+  emitJobStart,
+  type JobCounters
+} from './job-markers';
 
 const UA =
   'ScholarshipTopJsonLdAudit/1.0 (+https://scholarshiptop.com; internal SEO script)';
@@ -30,6 +38,11 @@ const FETCH_TIMEOUT_MS = 45_000;
 const TELEGRAM_MAX = 3900;
 
 type AuditFailure = { url: string; issues: string[] };
+const SERVICE_NAME = 'Сео Аудит';
+const JOB_NAME = 'audit-jsonld-sitemap';
+const RUN_ID = createRunId();
+const STARTED_AT_MS = Date.now();
+const counters: JobCounters = { processed: 0, success: 0, failed: 0, skipped: 0 };
 
 function getBaseUrl(): string {
   const raw =
@@ -418,6 +431,7 @@ function chunkTelegramMessages(lines: string[]): string[] {
 }
 
 async function main() {
+  emitJobStart({ service: SERVICE_NAME, job: JOB_NAME, runId: RUN_ID });
   const { dryRun } = parseArgs();
   const base = getBaseUrl();
   const seed =
@@ -508,6 +522,11 @@ async function main() {
 
   const total = targets.length;
   const failCount = failures.length;
+  counters.processed = total;
+  counters.success = ok;
+  counters.failed = failCount;
+  counters.skipped = Math.max(0, total - ok - failCount);
+  emitJobProgress({ service: SERVICE_NAME, job: JOB_NAME, runId: RUN_ID }, counters);
 
   const invSum = sitemapInventorySum(inventory);
   const summaryLines: string[] = [
@@ -567,15 +586,13 @@ async function main() {
   if (!dryRun) {
     const token = process.env.TELEGRAM_BOT_TOKEN?.trim();
     if (!token) {
-      console.error('[audit-jsonld] TELEGRAM_BOT_TOKEN missing; set it or use --dry-run');
-      process.exit(1);
+      throw new Error('[audit-jsonld] TELEGRAM_BOT_TOKEN missing; set it or use --dry-run');
     }
     const chats = parseTelegramChatIds();
     if (chats.length === 0) {
-      console.error(
+      throw new Error(
         '[audit-jsonld] No Telegram chat: set JSONLD_AUDIT_TELEGRAM_CHAT_ID or TELEGRAM_ADMIN_IDS'
       );
-      process.exit(1);
     }
     let telegramOk = true;
     for (const chatId of chats) {
@@ -584,7 +601,7 @@ async function main() {
         if (!sent) telegramOk = false;
       }
     }
-    if (!telegramOk) process.exit(1);
+    if (!telegramOk) throw new Error('[audit-jsonld] Telegram send failed');
   } else {
     console.log('\n[audit-jsonld] --dry-run: skipping Telegram.');
   }
@@ -592,10 +609,31 @@ async function main() {
   const nonzero =
     process.env.JSONLD_AUDIT_EXIT_NONZERO?.trim() === '1' ||
     process.env.JSONLD_AUDIT_EXIT_NONZERO?.toLowerCase() === 'true';
-  process.exit(nonzero && failCount > 0 ? 2 : 0);
+  if (nonzero && failCount > 0) {
+    emitJobFailed(
+      { service: SERVICE_NAME, job: JOB_NAME, runId: RUN_ID },
+      Date.now() - STARTED_AT_MS,
+      counters,
+      `Audit failures detected: failCount=${failCount}`
+    );
+    process.exit(1);
+  }
+
+  emitJobDone(
+    { service: SERVICE_NAME, job: JOB_NAME, runId: RUN_ID },
+    Date.now() - STARTED_AT_MS,
+    counters
+  );
+  process.exit(0);
 }
 
 main().catch((e) => {
+  emitJobFailed(
+    { service: SERVICE_NAME, job: JOB_NAME, runId: RUN_ID },
+    Date.now() - STARTED_AT_MS,
+    counters,
+    e
+  );
   console.error(e);
   process.exit(1);
 });

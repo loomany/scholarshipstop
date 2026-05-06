@@ -1,0 +1,172 @@
+{
+  "generatedAt": "2026-05-05T23:54:36.650Z",
+  "baseUrl": "http://localhost:3001",
+  "subscriptionPage": {
+    "path": "/subscription",
+    "httpStatus": 200,
+    "pageTitle": "ScholarshipTop | Unlock Premium Precision",
+    "h1": "Unlock Premium Precision",
+    "subscriptionSectionTextLength": 970,
+    "visiblePricing": [
+      "$14.99",
+      "$9.66",
+      "$29",
+      "$7.40",
+      "$89"
+    ],
+    "billingPhrases": [
+      "Billed $14.99 every month.",
+      "Billed $29 every 3 months.",
+      "Billed $89 every year."
+    ],
+    "trialGuaranteeWording": [],
+    "ctaButtons": [
+      "Start Plan"
+    ],
+    "planTitles": [
+      "Monthly",
+      "Quarterly",
+      "Yearly"
+    ],
+    "benefitsList": [
+      "Unlock Premium Scholarships",
+      "Unlock IQ Strategy Report",
+      "Access \"Easy Apply\" & \"International\"",
+      "Unblur all grant names & links",
+      "Unlimited Smart Filters",
+      "Everything in Monthly, plus:",
+      "Unlock AI Essay Mentor",
+      "IQ-based grant strategy + essay next steps",
+      "Smart Interview & Voice Input",
+      "Unlimited essay generations",
+      "Instant email alerts for new matches",
+      "Save 35% compared to monthly",
+      "Everything in Quarterly, plus:",
+      "Full IQ report with matched grants, awards, and deadlines",
+      "Best price per month",
+      "Priority AI processing",
+      "Priority email alerts for new matches",
+      "Full access for the entire application season",
+      "Save 50% compared to monthly"
+    ],
+    "faqItems": [],
+    "trustElements": [
+      "Payments processed by Lemon Squeezy / Merchant of Record copy present."
+    ],
+    "cancellationWording": [],
+    "afterPaymentVisibleHints": [],
+    "unclearOrMissingPromises": [
+      "No explicit trial length, money-back, or guarantee wording visible in the pricing section (guest view).",
+      "No dedicated “what happens immediately after checkout” paragraph beyond feature bullets.",
+      "No FAQ section detected in visible subscription copy."
+    ],
+    "issues": [],
+    "screenshotPath": "reports/customer-value-audit/screenshots/subscription-page.png"
+  },
+  "listingPages": [
+    {
+      "path": "/scholarships",
+      "httpStatus": 200,
+      "pageTitle": "ScholarshipTop | Find Scholarships That Match Your Profile",
+      "subscriptionLinks": [
+        {
+          "href": "http://localhost:3001/subscription",
+          "text": "Pricing"
+        }
+      ],
+      "unlockPremiumSnippetSamples": [
+        "Scholarship strategy unlocked\n\nStart IQ test\nFintech Innovation Scholarship\nFor a Bright Future Foundation\nNEW\nFintech Innovation Scholarship\n\nFor a Bright Future Foundation offers this scholarship to help cover educatio",
+        "Scholarship strategy unlocked\n\nStart IQ test\nSingle Parent Household Scholarship\nFor a Bright Future Foundation\nNEW\nSingle Parent Household Scholarship\n\nFor a Bright Future Foundation offers this scholarship to help cove",
+        "Scholarship strategy unlocked\n\nStart IQ test\n\nPage 1 of 1915\n\nPrevious\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n…\n1915\nNext\nFAQ\nHow are scholarship matches selected?"
+      ],
+      "lockRelatedTokenCount": 3,
+      "bodyTextLength": 6222,
+      "screenshotPath": "reports/customer-value-audit/screenshots/subscription-hub-scholarships.png"
+    },
+    {
+      "path": "/scholarships/hub/best-matches",
+      "httpStatus": 200,
+      "pageTitle": "ScholarshipTop | Find Scholarships",
+      "subscriptionLinks": [
+        {
+          "href": "http://localhost:3001/subscription",
+          "text": "Pricing"
+        }
+      ],
+      "unlockPremiumSnippetSamples": [
+        "Scholarship strategy unlocked\n\nStart IQ test\nFintech Innovation Scholarship\nFor a Bright Future Foundation\nNEW\nFintech Innovation Scholarship\n\nFor a Bright Future Foundation offers this scholarship to help cover educatio",
+        "Scholarship strategy unlocked\n\nStart IQ test\nSingle Parent Household Scholarship\nFor a Bright Future Foundation\nNEW\nSingle Parent Household Scholarship\n\nFor a Bright Future Foundation offers this scholarship to help cove",
+        "Scholarship strategy unlocked\n\nStart IQ test\n\nPage 1 of 1915\n\nPrevious\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n…\n1915\nNext\nMy scholarships\nBest recommendation\nLoading scholarship count\nEasy apply\nLoading scholarship count\nHot Deadlines\nLoa"
+      ],
+      "lockRelatedTokenCount": 3,
+      "bodyTextLength": 5273,
+      "screenshotPath": "reports/customer-value-audit/screenshots/subscription-hub-best-matches.png"
+    },
+    {
+      "path": "/scholarships/hub/easy-apply",
+      "httpStatus": 200,
+      "pageTitle": "ScholarshipTop | Easy Apply Scholarships",
+      "subscriptionLinks": [
+        {
+          "href": "http://localhost:3001/subscription",
+          "text": "Pricing"
+        }
+      ],
+      "unlockPremiumSnippetSamples": [
+        "Scholarship strategy unlocked\n\nStart IQ test\n$10,000 \"No Essay\" Scholarship\nScholarships360\nVERIFIED\nNEW\n$10,000 \"No Essay\" Scholarship\n\nScholarships360 offers this scholarship to help cover education costs.",
+        "Scholarship strategy unlocked\n\nStart IQ test\nEpilepsy Foundation of San Diego County College Scholarship\nEpilepsy Foundation of San Diego County\nNEW\nEpilepsy Foundation of San Diego County College Scholarship\n\nEpilepsy F",
+        "Scholarship strategy unlocked\n\nStart IQ test\n\nPage 1 of 43\n\nPrevious\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n…\n43\nNext\nFAQ\nWhat does easy apply mean for scholarships?"
+      ],
+      "lockRelatedTokenCount": 3,
+      "bodyTextLength": 7061,
+      "screenshotPath": "reports/customer-value-audit/screenshots/subscription-hub-easy-apply.png"
+    },
+    {
+      "path": "/scholarships/hub/recommended",
+      "httpStatus": 200,
+      "pageTitle": "ScholarshipTop | Find Scholarships",
+      "subscriptionLinks": [
+        {
+          "href": "http://localhost:3001/subscription",
+          "text": "Pricing"
+        }
+      ],
+      "unlockPremiumSnippetSamples": [],
+      "lockRelatedTokenCount": 0,
+      "bodyTextLength": 770,
+      "screenshotPath": "reports/customer-value-audit/screenshots/subscription-hub-recommended.png"
+    }
+  ],
+  "signinPage": {
+    "path": "/signin",
+    "httpStatus": 200,
+    "pageTitle": "ScholarshipTop | Sign in",
+    "subscriptionLinks": [
+      {
+        "href": "http://localhost:3001/subscription",
+        "text": "Pricing"
+      }
+    ],
+    "unlockPremiumSnippetSamples": [],
+    "lockRelatedTokenCount": 0,
+    "bodyTextLength": 490,
+    "screenshotPath": "reports/customer-value-audit/screenshots/subscription-signin.png"
+  },
+  "scorecard": {
+    "offerClarityScore": 100,
+    "paidValueClarityScore": 90,
+    "trustScore": 65,
+    "ctaStrengthScore": 66,
+    "freeVsPaidBalanceScore": 72,
+    "conversionReadinessScore": 80
+  },
+  "valueModel": "balanced",
+  "scoreRationale": {
+    "offerClarityScore": "Based on H1 presence, number of plan headings, visible currency amounts, and billing cadence copy.",
+    "paidValueClarityScore": "Weighted by concrete benefit lines (unlock/unblur/IQ/essay/alerts) vs vague wording only.",
+    "trustScore": "MoR/payment processor mention, billing clarity, visible cancel/resume hooks, any trial/guarantee wording.",
+    "ctaStrengthScore": "Primary plan CTAs on /subscription plus density of subscription destinations on hub listings and sign-in.",
+    "freeVsPaidBalanceScore": "Combines paywall-related word density (unlock/premium/subscribe/locked, incl. “unlocked”) with presence of /subscription links on listings and sign-in.",
+    "conversionReadinessScore": "Weighted blend of clarity, paid-value articulation, trust, CTA visibility, and free/paid balance."
+  }
+}

@@ -1,0 +1,1742 @@
+{
+  "generatedAt": "2026-05-05T23:25:50.883Z",
+  "baseUrl": "http://localhost:3001",
+  "overallVerdict": "safe",
+  "networkVerdict": "safe",
+  "domVerdictWorst": "safe",
+  "pathsVisited": [
+    "/",
+    "/scholarships",
+    "/scholarships/hub/matches",
+    "/scholarships/hub/best-matches",
+    "/scholarships/hub/easy-apply",
+    "/scholarships/hub/international-friendly",
+    "/scholarships/hub/recommended"
+  ],
+  "detailPathsVisited": [
+    "/scholarships/climate-stripes-scholarship-14487",
+    "/scholarships/fintech-innovation-scholarship-8931",
+    "/scholarships/vice-chancellor-s-scholarship-2905",
+    "/scholarships/creative-arts-scholarship-8932",
+    "/scholarships/china-university-of-petroleum-scholarship-1461"
+  ],
+  "networkCaptures": [
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships",
+      "responseUrl": "http://localhost:3001/api/scholarships",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"scholarships\":[{\"seoTags\":[],\"id\":\"99145773-6fc4-41c7-95a3-dcaafde5637b\",\"title\":\"Climate Stripes Scholarship\",\"country\":\"USA\",\"deadline\":\"29 May 2026\",\"deadlineAt\":\"2026-05-29T23:59:59.999Z\",\"description\":\"\",\"eligibility\":[],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":false,\"provider\":\"University of Reading\",\"amount\":\"10000 GBP\",\"awardAmount\":\"10000 GBP\",\"verified\":false,\"recurring\":false,\"categories\":[\"education\"],\"categorySlug\":\"miscellaneous\",\"source\":\"mastersportal\",\"updatedAt\":\"2026-05-04T19:55:48.097241+00:00\",\"createdAt\":\"2026-05-01T14:12:57.368786+00:00\",\"slug\"",
+      "parsedSummary": {
+        "leakPaths": [],
+        "scholarshipCount": 9,
+        "topLevelKeys": [
+          "scholarships",
+          "results",
+          "total",
+          "page",
+          "limit",
+          "isProSubscriber"
+        ]
+      }
+    },
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships",
+      "responseUrl": "http://localhost:3001/api/scholarships",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"meta\":{\"filterBounds\":{\"amountMin\":0,\"amountMax\":57649740,\"applicantsMin\":0,\"applicantsMax\":542729},\"sidebarCounts\":{\"bestRecommendation\":0,\"recommended\":0,\"easyApply\":381,\"hotDeadlines\":45,\"internationalFriendly\":1010,\"matches\":17181,\"saved\":0,\"started\":0,\"submitted\":0,\"ignored\":0},\"categoryCounts\":{\"arts\":1116,\"education\":3277,\"humanities\":539,\"stem\":2971,\"medical\":1578,\"law\":644,\"community\":1366,\"biology\":271,\"safety\":223,\"music\":545,\"disability\":761,\"hobbies\":72,\"miscellaneous\":8371},\"countryCounts\":[{\"code\":\"US\",\"label\":\"United States\",\"count\":9306},{\"code\":\"CA\",\"label\":\"Canada\",\"count\"",
+      "parsedSummary": {
+        "leakPaths": [],
+        "topLevelKeys": [
+          "meta",
+          "page",
+          "limit"
+        ]
+      }
+    },
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships",
+      "responseUrl": "http://localhost:3001/api/scholarships",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"scholarships\":[{\"seoTags\":[\"award_signal_high_value\"],\"id\":\"e07b0a0f-02a0-4d84-b554-ef353b76404e\",\"title\":\"Latino Pilots Association Scholarship Program\",\"country\":\"USA\",\"deadline\":\"5/5/2026\",\"deadlineAt\":\"2026-05-05T23:59:59.999Z\",\"description\":\"\",\"eligibility\":[],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":false,\"provider\":\"Latino Pilots Association\",\"amount\":\"Amount Varies\",\"awardAmount\":\"Amount Varies\",\"verified\":false,\"recurring\":false,\"categories\":[\"education\"],\"categorySlug\":\"miscellaneous\",\"source\":\"bigfuture\",\"updatedAt\":\"2026-05-04T22:07:40.670939+00:00\",\"crea",
+      "parsedSummary": {
+        "leakPaths": [],
+        "scholarshipCount": 4,
+        "topLevelKeys": [
+          "scholarships",
+          "results",
+          "total",
+          "page",
+          "limit",
+          "isProSubscriber"
+        ]
+      }
+    },
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships",
+      "responseUrl": "http://localhost:3001/api/scholarships",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"scholarships\":[{\"seoTags\":[\"award_signal_high_value\"],\"id\":\"e07b0a0f-02a0-4d84-b554-ef353b76404e\",\"title\":\"Latino Pilots Association Scholarship Program\",\"country\":\"USA\",\"deadline\":\"5/5/2026\",\"deadlineAt\":\"2026-05-05T23:59:59.999Z\",\"description\":\"\",\"eligibility\":[],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":false,\"provider\":\"Latino Pilots Association\",\"amount\":\"Amount Varies\",\"awardAmount\":\"Amount Varies\",\"verified\":false,\"recurring\":false,\"categories\":[\"education\"],\"categorySlug\":\"miscellaneous\",\"source\":\"bigfuture\",\"updatedAt\":\"2026-05-04T22:07:40.670939+00:00\",\"crea",
+      "parsedSummary": {
+        "leakPaths": [],
+        "scholarshipCount": 4,
+        "topLevelKeys": [
+          "scholarships",
+          "results",
+          "total",
+          "page",
+          "limit",
+          "isProSubscriber"
+        ]
+      }
+    },
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships",
+      "responseUrl": "http://localhost:3001/api/scholarships",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"scholarships\":[{\"seoTags\":[\"award_signal_high_value\"],\"id\":\"e07b0a0f-02a0-4d84-b554-ef353b76404e\",\"title\":\"Latino Pilots Association Scholarship Program\",\"country\":\"USA\",\"deadline\":\"5/5/2026\",\"deadlineAt\":\"2026-05-05T23:59:59.999Z\",\"description\":\"\",\"eligibility\":[],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":false,\"provider\":\"Latino Pilots Association\",\"amount\":\"Amount Varies\",\"awardAmount\":\"Amount Varies\",\"verified\":false,\"recurring\":false,\"categories\":[\"education\"],\"categorySlug\":\"miscellaneous\",\"source\":\"bigfuture\",\"updatedAt\":\"2026-05-04T22:07:40.670939+00:00\",\"crea",
+      "parsedSummary": {
+        "leakPaths": [],
+        "scholarshipCount": 4,
+        "topLevelKeys": [
+          "scholarships",
+          "results",
+          "total",
+          "page",
+          "limit",
+          "isProSubscriber"
+        ]
+      }
+    },
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships",
+      "responseUrl": "http://localhost:3001/api/scholarships",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"scholarships\":[{\"seoTags\":[\"award_signal_high_value\"],\"id\":\"e07b0a0f-02a0-4d84-b554-ef353b76404e\",\"title\":\"Latino Pilots Association Scholarship Program\",\"country\":\"USA\",\"deadline\":\"5/5/2026\",\"deadlineAt\":\"2026-05-05T23:59:59.999Z\",\"description\":\"\",\"eligibility\":[],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":false,\"provider\":\"Latino Pilots Association\",\"amount\":\"Amount Varies\",\"awardAmount\":\"Amount Varies\",\"verified\":false,\"recurring\":false,\"categories\":[\"education\"],\"categorySlug\":\"miscellaneous\",\"source\":\"bigfuture\",\"updatedAt\":\"2026-05-04T22:07:40.670939+00:00\",\"crea",
+      "parsedSummary": {
+        "leakPaths": [],
+        "scholarshipCount": 4,
+        "topLevelKeys": [
+          "scholarships",
+          "results",
+          "total",
+          "page",
+          "limit",
+          "isProSubscriber"
+        ]
+      }
+    },
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships/climate-stripes-scholarship-14487",
+      "responseUrl": "http://localhost:3001/api/scholarships/climate-stripes-scholarship-14487",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"seoTags\":[],\"id\":\"99145773-6fc4-41c7-95a3-dcaafde5637b\",\"title\":\"Climate Stripes Scholarship\",\"country\":\"USA\",\"deadline\":\"29 May 2026\",\"deadlineAt\":\"2026-05-29T23:59:59.999Z\",\"description\":\"Provided by university Grant 13,604 USD Deadline 29 May 2026 Climate Stripes Scholarship Merit-based Read more about eligibility University of Reading Reading, United Kingdom\",\"eligibility\":[\"Merit-based\",\"Reading, United Kingdom\"],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":true,\"provider\":\"University of Reading\",\"amount\":\"10000 GBP\",\"awardAmount\":\"10000 GBP\",\"verified\":false,\"recur",
+      "parsedSummary": {
+        "premiumFieldsRedacted": true,
+        "leakPaths": [],
+        "topLevelKeys": [
+          "seoTags",
+          "id",
+          "title",
+          "country",
+          "deadline",
+          "deadlineAt",
+          "description",
+          "eligibility",
+          "benefits",
+          "howToApply",
+          "hasOfficialApplicationDestination",
+          "provider",
+          "amount",
+          "awardAmount",
+          "verified",
+          "recurring",
+          "listRequirementsSummary",
+          "categories",
+          "categorySlug",
+          "source",
+          "updatedAt",
+          "createdAt",
+          "statusText",
+          "supportEmail",
+          "supportPhone",
+          "eligibilityText",
+          "slug",
+          "providerSlug",
+          "internationalFriendlyListing",
+          "scholarshipStatus",
+          "daysUntilDeadline",
+          "deadlineBucket",
+          "awardAmountNumericSort",
+          "awardCurrency",
+          "payoutMethod",
+          "credibilityScore",
+          "credibilityBucket",
+          "rankingScore",
+          "requirementTypes",
+          "requirementSignalsCount"
+        ]
+      }
+    },
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships",
+      "responseUrl": "http://localhost:3001/api/scholarships",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"scholarships\":[{\"seoTags\":[\"award_signal_high_value\"],\"id\":\"e07b0a0f-02a0-4d84-b554-ef353b76404e\",\"title\":\"Latino Pilots Association Scholarship Program\",\"country\":\"USA\",\"deadline\":\"5/5/2026\",\"deadlineAt\":\"2026-05-05T23:59:59.999Z\",\"description\":\"\",\"eligibility\":[],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":false,\"provider\":\"Latino Pilots Association\",\"amount\":\"Amount Varies\",\"awardAmount\":\"Amount Varies\",\"verified\":false,\"recurring\":false,\"categories\":[\"education\"],\"categorySlug\":\"miscellaneous\",\"source\":\"bigfuture\",\"updatedAt\":\"2026-05-04T22:07:40.670939+00:00\",\"crea",
+      "parsedSummary": {
+        "leakPaths": [],
+        "scholarshipCount": 4,
+        "topLevelKeys": [
+          "scholarships",
+          "results",
+          "total",
+          "page",
+          "limit",
+          "isProSubscriber"
+        ]
+      }
+    },
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships",
+      "responseUrl": "http://localhost:3001/api/scholarships",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"scholarships\":[{\"seoTags\":[\"award_signal_high_value\"],\"id\":\"e07b0a0f-02a0-4d84-b554-ef353b76404e\",\"title\":\"Latino Pilots Association Scholarship Program\",\"country\":\"USA\",\"deadline\":\"5/5/2026\",\"deadlineAt\":\"2026-05-05T23:59:59.999Z\",\"description\":\"\",\"eligibility\":[],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":false,\"provider\":\"Latino Pilots Association\",\"amount\":\"Amount Varies\",\"awardAmount\":\"Amount Varies\",\"verified\":false,\"recurring\":false,\"categories\":[\"education\"],\"categorySlug\":\"miscellaneous\",\"source\":\"bigfuture\",\"updatedAt\":\"2026-05-04T22:07:40.670939+00:00\",\"crea",
+      "parsedSummary": {
+        "leakPaths": [],
+        "scholarshipCount": 4,
+        "topLevelKeys": [
+          "scholarships",
+          "results",
+          "total",
+          "page",
+          "limit",
+          "isProSubscriber"
+        ]
+      }
+    },
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships",
+      "responseUrl": "http://localhost:3001/api/scholarships",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"scholarships\":[{\"seoTags\":[\"award_signal_high_value\"],\"id\":\"e07b0a0f-02a0-4d84-b554-ef353b76404e\",\"title\":\"Latino Pilots Association Scholarship Program\",\"country\":\"USA\",\"deadline\":\"5/5/2026\",\"deadlineAt\":\"2026-05-05T23:59:59.999Z\",\"description\":\"\",\"eligibility\":[],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":false,\"provider\":\"Latino Pilots Association\",\"amount\":\"Amount Varies\",\"awardAmount\":\"Amount Varies\",\"verified\":false,\"recurring\":false,\"categories\":[\"education\"],\"categorySlug\":\"miscellaneous\",\"source\":\"bigfuture\",\"updatedAt\":\"2026-05-04T22:07:40.670939+00:00\",\"crea",
+      "parsedSummary": {
+        "leakPaths": [],
+        "scholarshipCount": 4,
+        "topLevelKeys": [
+          "scholarships",
+          "results",
+          "total",
+          "page",
+          "limit",
+          "isProSubscriber"
+        ]
+      }
+    },
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships",
+      "responseUrl": "http://localhost:3001/api/scholarships",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"scholarships\":[{\"seoTags\":[\"award_signal_high_value\"],\"id\":\"e07b0a0f-02a0-4d84-b554-ef353b76404e\",\"title\":\"Latino Pilots Association Scholarship Program\",\"country\":\"USA\",\"deadline\":\"5/5/2026\",\"deadlineAt\":\"2026-05-05T23:59:59.999Z\",\"description\":\"\",\"eligibility\":[],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":false,\"provider\":\"Latino Pilots Association\",\"amount\":\"Amount Varies\",\"awardAmount\":\"Amount Varies\",\"verified\":false,\"recurring\":false,\"categories\":[\"education\"],\"categorySlug\":\"miscellaneous\",\"source\":\"bigfuture\",\"updatedAt\":\"2026-05-04T22:07:40.670939+00:00\",\"crea",
+      "parsedSummary": {
+        "leakPaths": [],
+        "scholarshipCount": 4,
+        "topLevelKeys": [
+          "scholarships",
+          "results",
+          "total",
+          "page",
+          "limit",
+          "isProSubscriber"
+        ]
+      }
+    },
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships/fintech-innovation-scholarship-8931",
+      "responseUrl": "http://localhost:3001/api/scholarships/fintech-innovation-scholarship-8931",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"seoTags\":[],\"id\":\"32a15d95-0f3f-4cf7-b1c2-8e047c2a363f\",\"title\":\"Fintech Innovation Scholarship\",\"country\":\"USA\",\"deadline\":\"30 Jun 2026\",\"deadlineAt\":\"2026-06-30T23:59:59.999Z\",\"description\":\"Independent provider Grant 10,000 USD Deadline 30 Jun 2026 Fintech Innovation Scholarship Merit-based Read more about eligibility For a Bright Future Foundation Location not available\",\"eligibility\":[\"Merit-based\",\"Location not available\"],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":true,\"provider\":\"For a Bright Future Foundation\",\"amount\":\"10000 USD\",\"awardAmount\":\"10000 USD\",\"ve",
+      "parsedSummary": {
+        "premiumFieldsRedacted": true,
+        "leakPaths": [],
+        "topLevelKeys": [
+          "seoTags",
+          "id",
+          "title",
+          "country",
+          "deadline",
+          "deadlineAt",
+          "description",
+          "eligibility",
+          "benefits",
+          "howToApply",
+          "hasOfficialApplicationDestination",
+          "provider",
+          "amount",
+          "awardAmount",
+          "verified",
+          "recurring",
+          "listRequirementsSummary",
+          "categories",
+          "categorySlug",
+          "source",
+          "updatedAt",
+          "createdAt",
+          "statusText",
+          "supportEmail",
+          "supportPhone",
+          "eligibilityText",
+          "slug",
+          "providerSlug",
+          "internationalFriendlyListing",
+          "scholarshipStatus",
+          "daysUntilDeadline",
+          "deadlineBucket",
+          "awardAmountNumericSort",
+          "awardCurrency",
+          "payoutMethod",
+          "credibilityScore",
+          "credibilityBucket",
+          "rankingScore",
+          "requirementTypes",
+          "requirementSignalsCount"
+        ]
+      }
+    },
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships",
+      "responseUrl": "http://localhost:3001/api/scholarships",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"scholarships\":[{\"seoTags\":[\"award_signal_high_value\"],\"id\":\"e07b0a0f-02a0-4d84-b554-ef353b76404e\",\"title\":\"Latino Pilots Association Scholarship Program\",\"country\":\"USA\",\"deadline\":\"5/5/2026\",\"deadlineAt\":\"2026-05-05T23:59:59.999Z\",\"description\":\"\",\"eligibility\":[],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":false,\"provider\":\"Latino Pilots Association\",\"amount\":\"Amount Varies\",\"awardAmount\":\"Amount Varies\",\"verified\":false,\"recurring\":false,\"categories\":[\"education\"],\"categorySlug\":\"miscellaneous\",\"source\":\"bigfuture\",\"updatedAt\":\"2026-05-04T22:07:40.670939+00:00\",\"crea",
+      "parsedSummary": {
+        "leakPaths": [],
+        "scholarshipCount": 4,
+        "topLevelKeys": [
+          "scholarships",
+          "results",
+          "total",
+          "page",
+          "limit",
+          "isProSubscriber"
+        ]
+      }
+    },
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships",
+      "responseUrl": "http://localhost:3001/api/scholarships",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"scholarships\":[{\"seoTags\":[\"award_signal_high_value\"],\"id\":\"e07b0a0f-02a0-4d84-b554-ef353b76404e\",\"title\":\"Latino Pilots Association Scholarship Program\",\"country\":\"USA\",\"deadline\":\"5/5/2026\",\"deadlineAt\":\"2026-05-05T23:59:59.999Z\",\"description\":\"\",\"eligibility\":[],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":false,\"provider\":\"Latino Pilots Association\",\"amount\":\"Amount Varies\",\"awardAmount\":\"Amount Varies\",\"verified\":false,\"recurring\":false,\"categories\":[\"education\"],\"categorySlug\":\"miscellaneous\",\"source\":\"bigfuture\",\"updatedAt\":\"2026-05-04T22:07:40.670939+00:00\",\"crea",
+      "parsedSummary": {
+        "leakPaths": [],
+        "scholarshipCount": 4,
+        "topLevelKeys": [
+          "scholarships",
+          "results",
+          "total",
+          "page",
+          "limit",
+          "isProSubscriber"
+        ]
+      }
+    },
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships",
+      "responseUrl": "http://localhost:3001/api/scholarships",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"scholarships\":[{\"seoTags\":[\"award_signal_high_value\"],\"id\":\"e07b0a0f-02a0-4d84-b554-ef353b76404e\",\"title\":\"Latino Pilots Association Scholarship Program\",\"country\":\"USA\",\"deadline\":\"5/5/2026\",\"deadlineAt\":\"2026-05-05T23:59:59.999Z\",\"description\":\"\",\"eligibility\":[],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":false,\"provider\":\"Latino Pilots Association\",\"amount\":\"Amount Varies\",\"awardAmount\":\"Amount Varies\",\"verified\":false,\"recurring\":false,\"categories\":[\"education\"],\"categorySlug\":\"miscellaneous\",\"source\":\"bigfuture\",\"updatedAt\":\"2026-05-04T22:07:40.670939+00:00\",\"crea",
+      "parsedSummary": {
+        "leakPaths": [],
+        "scholarshipCount": 4,
+        "topLevelKeys": [
+          "scholarships",
+          "results",
+          "total",
+          "page",
+          "limit",
+          "isProSubscriber"
+        ]
+      }
+    },
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships",
+      "responseUrl": "http://localhost:3001/api/scholarships",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"scholarships\":[{\"seoTags\":[\"award_signal_high_value\"],\"id\":\"e07b0a0f-02a0-4d84-b554-ef353b76404e\",\"title\":\"Latino Pilots Association Scholarship Program\",\"country\":\"USA\",\"deadline\":\"5/5/2026\",\"deadlineAt\":\"2026-05-05T23:59:59.999Z\",\"description\":\"\",\"eligibility\":[],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":false,\"provider\":\"Latino Pilots Association\",\"amount\":\"Amount Varies\",\"awardAmount\":\"Amount Varies\",\"verified\":false,\"recurring\":false,\"categories\":[\"education\"],\"categorySlug\":\"miscellaneous\",\"source\":\"bigfuture\",\"updatedAt\":\"2026-05-04T22:07:40.670939+00:00\",\"crea",
+      "parsedSummary": {
+        "leakPaths": [],
+        "scholarshipCount": 4,
+        "topLevelKeys": [
+          "scholarships",
+          "results",
+          "total",
+          "page",
+          "limit",
+          "isProSubscriber"
+        ]
+      }
+    },
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships/vice-chancellor-s-scholarship-2905",
+      "responseUrl": "http://localhost:3001/api/scholarships/vice-chancellor-s-scholarship-2905",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"seoTags\":[],\"id\":\"f8246610-59ff-4e22-9dc9-9e11a7dc1c5e\",\"title\":\"Vice-Chancellor’s Scholarship\",\"country\":\"USA\",\"deadline\":\"29 May 2026\",\"deadlineAt\":\"2026-05-29T23:59:59.999Z\",\"description\":\"Provided by university Grant 13,604 USD Deadline 29 May 2026 Vice-Chancellor’s Scholarship Merit-based Read more about eligibility Bangor University Bangor, United Kingdom\",\"eligibility\":[\"Merit-based\",\"Bangor, United Kingdom\"],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":true,\"provider\":\"Bangor University\",\"amount\":\"10000 GBP\",\"awardAmount\":\"10000 GBP\",\"verified\":false,\"recurring\":",
+      "parsedSummary": {
+        "premiumFieldsRedacted": true,
+        "leakPaths": [],
+        "topLevelKeys": [
+          "seoTags",
+          "id",
+          "title",
+          "country",
+          "deadline",
+          "deadlineAt",
+          "description",
+          "eligibility",
+          "benefits",
+          "howToApply",
+          "hasOfficialApplicationDestination",
+          "provider",
+          "amount",
+          "awardAmount",
+          "verified",
+          "recurring",
+          "listRequirementsSummary",
+          "categories",
+          "categorySlug",
+          "source",
+          "updatedAt",
+          "createdAt",
+          "statusText",
+          "supportEmail",
+          "supportPhone",
+          "eligibilityText",
+          "slug",
+          "providerSlug",
+          "internationalFriendlyListing",
+          "scholarshipStatus",
+          "daysUntilDeadline",
+          "deadlineBucket",
+          "awardAmountNumericSort",
+          "awardCurrency",
+          "payoutMethod",
+          "credibilityScore",
+          "credibilityBucket",
+          "rankingScore",
+          "requirementTypes",
+          "requirementSignalsCount"
+        ]
+      }
+    },
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships",
+      "responseUrl": "http://localhost:3001/api/scholarships",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"scholarships\":[{\"seoTags\":[],\"id\":\"4ffb152a-f157-4b6f-9ae9-070485395af4\",\"title\":\"Arts Scholarships\",\"country\":\"USA\",\"deadline\":\"05 May 2026\",\"deadlineAt\":\"2026-05-05T23:59:59.999Z\",\"description\":\"\",\"eligibility\":[],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":false,\"provider\":\"University of Bath\",\"amount\":\"1000 GBP\",\"awardAmount\":\"1000 GBP\",\"verified\":false,\"recurring\":false,\"categories\":[\"arts\"],\"categorySlug\":\"arts\",\"source\":\"mastersportal\",\"updatedAt\":\"2026-05-04T17:39:24.077673+00:00\",\"createdAt\":\"2026-05-01T14:28:08.159879+00:00\",\"slug\":\"arts-scholarships-8191\",\"in",
+      "parsedSummary": {
+        "leakPaths": [],
+        "scholarshipCount": 4,
+        "topLevelKeys": [
+          "scholarships",
+          "results",
+          "total",
+          "page",
+          "limit",
+          "isProSubscriber"
+        ]
+      }
+    },
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships",
+      "responseUrl": "http://localhost:3001/api/scholarships",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"scholarships\":[{\"seoTags\":[],\"id\":\"4ffb152a-f157-4b6f-9ae9-070485395af4\",\"title\":\"Arts Scholarships\",\"country\":\"USA\",\"deadline\":\"05 May 2026\",\"deadlineAt\":\"2026-05-05T23:59:59.999Z\",\"description\":\"\",\"eligibility\":[],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":false,\"provider\":\"University of Bath\",\"amount\":\"1000 GBP\",\"awardAmount\":\"1000 GBP\",\"verified\":false,\"recurring\":false,\"categories\":[\"arts\"],\"categorySlug\":\"arts\",\"source\":\"mastersportal\",\"updatedAt\":\"2026-05-04T17:39:24.077673+00:00\",\"createdAt\":\"2026-05-01T14:28:08.159879+00:00\",\"slug\":\"arts-scholarships-8191\",\"in",
+      "parsedSummary": {
+        "leakPaths": [],
+        "scholarshipCount": 4,
+        "topLevelKeys": [
+          "scholarships",
+          "results",
+          "total",
+          "page",
+          "limit",
+          "isProSubscriber"
+        ]
+      }
+    },
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships",
+      "responseUrl": "http://localhost:3001/api/scholarships",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"scholarships\":[{\"seoTags\":[],\"id\":\"4ffb152a-f157-4b6f-9ae9-070485395af4\",\"title\":\"Arts Scholarships\",\"country\":\"USA\",\"deadline\":\"05 May 2026\",\"deadlineAt\":\"2026-05-05T23:59:59.999Z\",\"description\":\"\",\"eligibility\":[],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":false,\"provider\":\"University of Bath\",\"amount\":\"1000 GBP\",\"awardAmount\":\"1000 GBP\",\"verified\":false,\"recurring\":false,\"categories\":[\"arts\"],\"categorySlug\":\"arts\",\"source\":\"mastersportal\",\"updatedAt\":\"2026-05-04T17:39:24.077673+00:00\",\"createdAt\":\"2026-05-01T14:28:08.159879+00:00\",\"slug\":\"arts-scholarships-8191\",\"in",
+      "parsedSummary": {
+        "leakPaths": [],
+        "scholarshipCount": 4,
+        "topLevelKeys": [
+          "scholarships",
+          "results",
+          "total",
+          "page",
+          "limit",
+          "isProSubscriber"
+        ]
+      }
+    },
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships",
+      "responseUrl": "http://localhost:3001/api/scholarships",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"scholarships\":[{\"seoTags\":[],\"id\":\"4ffb152a-f157-4b6f-9ae9-070485395af4\",\"title\":\"Arts Scholarships\",\"country\":\"USA\",\"deadline\":\"05 May 2026\",\"deadlineAt\":\"2026-05-05T23:59:59.999Z\",\"description\":\"\",\"eligibility\":[],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":false,\"provider\":\"University of Bath\",\"amount\":\"1000 GBP\",\"awardAmount\":\"1000 GBP\",\"verified\":false,\"recurring\":false,\"categories\":[\"arts\"],\"categorySlug\":\"arts\",\"source\":\"mastersportal\",\"updatedAt\":\"2026-05-04T17:39:24.077673+00:00\",\"createdAt\":\"2026-05-01T14:28:08.159879+00:00\",\"slug\":\"arts-scholarships-8191\",\"in",
+      "parsedSummary": {
+        "leakPaths": [],
+        "scholarshipCount": 4,
+        "topLevelKeys": [
+          "scholarships",
+          "results",
+          "total",
+          "page",
+          "limit",
+          "isProSubscriber"
+        ]
+      }
+    },
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships/creative-arts-scholarship-8932",
+      "responseUrl": "http://localhost:3001/api/scholarships/creative-arts-scholarship-8932",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"seoTags\":[],\"id\":\"7f58a469-34b8-49b3-9c89-75ae9e7c9ea1\",\"title\":\"Creative Arts Scholarship\",\"country\":\"USA\",\"deadline\":\"30 Jun 2026\",\"deadlineAt\":\"2026-06-30T23:59:59.999Z\",\"description\":\"Independent provider Grant 10,000 USD Deadline 30 Jun 2026 Creative Arts Scholarship Merit-based Read more about eligibility For a Bright Future Foundation Location not available\",\"eligibility\":[\"Merit-based\",\"Location not available\"],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":true,\"provider\":\"For a Bright Future Foundation\",\"amount\":\"10000 USD\",\"awardAmount\":\"10000 USD\",\"verified\":fa",
+      "parsedSummary": {
+        "premiumFieldsRedacted": true,
+        "leakPaths": [],
+        "topLevelKeys": [
+          "seoTags",
+          "id",
+          "title",
+          "country",
+          "deadline",
+          "deadlineAt",
+          "description",
+          "eligibility",
+          "benefits",
+          "howToApply",
+          "hasOfficialApplicationDestination",
+          "provider",
+          "amount",
+          "awardAmount",
+          "verified",
+          "recurring",
+          "listRequirementsSummary",
+          "categories",
+          "categorySlug",
+          "source",
+          "updatedAt",
+          "createdAt",
+          "statusText",
+          "supportEmail",
+          "supportPhone",
+          "eligibilityText",
+          "slug",
+          "providerSlug",
+          "internationalFriendlyListing",
+          "scholarshipStatus",
+          "daysUntilDeadline",
+          "deadlineBucket",
+          "awardAmountNumericSort",
+          "awardCurrency",
+          "payoutMethod",
+          "credibilityScore",
+          "credibilityBucket",
+          "rankingScore",
+          "requirementTypes",
+          "requirementSignalsCount"
+        ]
+      }
+    },
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships",
+      "responseUrl": "http://localhost:3001/api/scholarships",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"scholarships\":[{\"seoTags\":[\"award_signal_high_value\"],\"id\":\"e07b0a0f-02a0-4d84-b554-ef353b76404e\",\"title\":\"Latino Pilots Association Scholarship Program\",\"country\":\"USA\",\"deadline\":\"5/5/2026\",\"deadlineAt\":\"2026-05-05T23:59:59.999Z\",\"description\":\"\",\"eligibility\":[],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":false,\"provider\":\"Latino Pilots Association\",\"amount\":\"Amount Varies\",\"awardAmount\":\"Amount Varies\",\"verified\":false,\"recurring\":false,\"categories\":[\"education\"],\"categorySlug\":\"miscellaneous\",\"source\":\"bigfuture\",\"updatedAt\":\"2026-05-04T22:07:40.670939+00:00\",\"crea",
+      "parsedSummary": {
+        "leakPaths": [],
+        "scholarshipCount": 4,
+        "topLevelKeys": [
+          "scholarships",
+          "results",
+          "total",
+          "page",
+          "limit",
+          "isProSubscriber"
+        ]
+      }
+    },
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships",
+      "responseUrl": "http://localhost:3001/api/scholarships",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"scholarships\":[{\"seoTags\":[\"award_signal_high_value\"],\"id\":\"e07b0a0f-02a0-4d84-b554-ef353b76404e\",\"title\":\"Latino Pilots Association Scholarship Program\",\"country\":\"USA\",\"deadline\":\"5/5/2026\",\"deadlineAt\":\"2026-05-05T23:59:59.999Z\",\"description\":\"\",\"eligibility\":[],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":false,\"provider\":\"Latino Pilots Association\",\"amount\":\"Amount Varies\",\"awardAmount\":\"Amount Varies\",\"verified\":false,\"recurring\":false,\"categories\":[\"education\"],\"categorySlug\":\"miscellaneous\",\"source\":\"bigfuture\",\"updatedAt\":\"2026-05-04T22:07:40.670939+00:00\",\"crea",
+      "parsedSummary": {
+        "leakPaths": [],
+        "scholarshipCount": 4,
+        "topLevelKeys": [
+          "scholarships",
+          "results",
+          "total",
+          "page",
+          "limit",
+          "isProSubscriber"
+        ]
+      }
+    },
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships",
+      "responseUrl": "http://localhost:3001/api/scholarships",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"scholarships\":[{\"seoTags\":[\"award_signal_high_value\"],\"id\":\"e07b0a0f-02a0-4d84-b554-ef353b76404e\",\"title\":\"Latino Pilots Association Scholarship Program\",\"country\":\"USA\",\"deadline\":\"5/5/2026\",\"deadlineAt\":\"2026-05-05T23:59:59.999Z\",\"description\":\"\",\"eligibility\":[],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":false,\"provider\":\"Latino Pilots Association\",\"amount\":\"Amount Varies\",\"awardAmount\":\"Amount Varies\",\"verified\":false,\"recurring\":false,\"categories\":[\"education\"],\"categorySlug\":\"miscellaneous\",\"source\":\"bigfuture\",\"updatedAt\":\"2026-05-04T22:07:40.670939+00:00\",\"crea",
+      "parsedSummary": {
+        "leakPaths": [],
+        "scholarshipCount": 4,
+        "topLevelKeys": [
+          "scholarships",
+          "results",
+          "total",
+          "page",
+          "limit",
+          "isProSubscriber"
+        ]
+      }
+    },
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships",
+      "responseUrl": "http://localhost:3001/api/scholarships",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"scholarships\":[{\"seoTags\":[\"award_signal_high_value\"],\"id\":\"e07b0a0f-02a0-4d84-b554-ef353b76404e\",\"title\":\"Latino Pilots Association Scholarship Program\",\"country\":\"USA\",\"deadline\":\"5/5/2026\",\"deadlineAt\":\"2026-05-05T23:59:59.999Z\",\"description\":\"\",\"eligibility\":[],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":false,\"provider\":\"Latino Pilots Association\",\"amount\":\"Amount Varies\",\"awardAmount\":\"Amount Varies\",\"verified\":false,\"recurring\":false,\"categories\":[\"education\"],\"categorySlug\":\"miscellaneous\",\"source\":\"bigfuture\",\"updatedAt\":\"2026-05-04T22:07:40.670939+00:00\",\"crea",
+      "parsedSummary": {
+        "leakPaths": [],
+        "scholarshipCount": 4,
+        "topLevelKeys": [
+          "scholarships",
+          "results",
+          "total",
+          "page",
+          "limit",
+          "isProSubscriber"
+        ]
+      }
+    },
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships/china-university-of-petroleum-scholarship-1461",
+      "responseUrl": "http://localhost:3001/api/scholarships/china-university-of-petroleum-scholarship-1461",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"seoTags\":[],\"id\":\"3b7d5037-fc7a-4edf-881c-2c4c5fd303f6\",\"title\":\"China University of Petroleum Scholarship\",\"country\":\"USA\",\"deadline\":\"30 May 2026\",\"deadlineAt\":\"2026-05-30T23:59:59.999Z\",\"description\":\"Provided by university Grant 3,661 USD Deadline 30 May 2026 China University of Petroleum Scholarship Merit-based Read more about eligibility China University of Petroleum-Beijing Changping, China\",\"eligibility\":[\"Merit-based\",\"Changping, China\"],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":true,\"provider\":\"China University of Petroleum-Beijing\",\"amount\":\"25000 CNY\",\"awa",
+      "parsedSummary": {
+        "premiumFieldsRedacted": true,
+        "leakPaths": [],
+        "topLevelKeys": [
+          "seoTags",
+          "id",
+          "title",
+          "country",
+          "deadline",
+          "deadlineAt",
+          "description",
+          "eligibility",
+          "benefits",
+          "howToApply",
+          "hasOfficialApplicationDestination",
+          "provider",
+          "amount",
+          "awardAmount",
+          "verified",
+          "recurring",
+          "listRequirementsSummary",
+          "categories",
+          "categorySlug",
+          "source",
+          "updatedAt",
+          "createdAt",
+          "statusText",
+          "supportEmail",
+          "supportPhone",
+          "eligibilityText",
+          "slug",
+          "providerSlug",
+          "internationalFriendlyListing",
+          "scholarshipStatus",
+          "daysUntilDeadline",
+          "deadlineBucket",
+          "awardAmountNumericSort",
+          "awardCurrency",
+          "payoutMethod",
+          "credibilityScore",
+          "credibilityBucket",
+          "rankingScore",
+          "requirementTypes",
+          "requirementSignalsCount"
+        ]
+      }
+    },
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships/climate-stripes-scholarship-14487",
+      "responseUrl": "http://localhost:3001/api/scholarships/climate-stripes-scholarship-14487",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"seoTags\":[],\"id\":\"99145773-6fc4-41c7-95a3-dcaafde5637b\",\"title\":\"Climate Stripes Scholarship\",\"country\":\"USA\",\"deadline\":\"29 May 2026\",\"deadlineAt\":\"2026-05-29T23:59:59.999Z\",\"description\":\"Provided by university Grant 13,604 USD Deadline 29 May 2026 Climate Stripes Scholarship Merit-based Read more about eligibility University of Reading Reading, United Kingdom\",\"eligibility\":[\"Merit-based\",\"Reading, United Kingdom\"],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":true,\"provider\":\"University of Reading\",\"amount\":\"10000 GBP\",\"awardAmount\":\"10000 GBP\",\"verified\":false,\"recurring\":false,\"listRequirementsSummary\":\"2 requirements: Listed in detail\",\"categories\":[\"education\"],\"categorySlug\":\"miscellaneous\",\"source\":\"mastersportal\",\"updatedAt\":\"2026-05-04T19:55:48.097241+00:0",
+      "parsedSummary": {
+        "premiumFieldsRedacted": true,
+        "leakPaths": [],
+        "topLevelKeys": [
+          "seoTags",
+          "id",
+          "title",
+          "country",
+          "deadline",
+          "deadlineAt",
+          "description",
+          "eligibility",
+          "benefits",
+          "howToApply",
+          "hasOfficialApplicationDestination",
+          "provider",
+          "amount",
+          "awardAmount",
+          "verified",
+          "recurring",
+          "listRequirementsSummary",
+          "categories",
+          "categorySlug",
+          "source",
+          "updatedAt",
+          "createdAt",
+          "statusText",
+          "supportEmail",
+          "supportPhone",
+          "eligibilityText",
+          "slug",
+          "providerSlug",
+          "internationalFriendlyListing",
+          "scholarshipStatus",
+          "daysUntilDeadline",
+          "deadlineBucket",
+          "awardAmountNumericSort",
+          "awardCurrency",
+          "payoutMethod",
+          "credibilityScore",
+          "credibilityBucket",
+          "rankingScore",
+          "requirementTypes",
+          "requirementSignalsCount"
+        ]
+      }
+    },
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships/fintech-innovation-scholarship-8931",
+      "responseUrl": "http://localhost:3001/api/scholarships/fintech-innovation-scholarship-8931",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"seoTags\":[],\"id\":\"32a15d95-0f3f-4cf7-b1c2-8e047c2a363f\",\"title\":\"Fintech Innovation Scholarship\",\"country\":\"USA\",\"deadline\":\"30 Jun 2026\",\"deadlineAt\":\"2026-06-30T23:59:59.999Z\",\"description\":\"Independent provider Grant 10,000 USD Deadline 30 Jun 2026 Fintech Innovation Scholarship Merit-based Read more about eligibility For a Bright Future Foundation Location not available\",\"eligibility\":[\"Merit-based\",\"Location not available\"],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":true,\"provider\":\"For a Bright Future Foundation\",\"amount\":\"10000 USD\",\"awardAmount\":\"10000 USD\",\"verified\":false,\"recurring\":false,\"listRequirementsSummary\":\"2 requirements: Listed in detail\",\"categories\":[\"education\"],\"categorySlug\":\"miscellaneous\",\"source\":\"mastersportal\",\"updatedAt\":\"2026-05-04T",
+      "parsedSummary": {
+        "premiumFieldsRedacted": true,
+        "leakPaths": [],
+        "topLevelKeys": [
+          "seoTags",
+          "id",
+          "title",
+          "country",
+          "deadline",
+          "deadlineAt",
+          "description",
+          "eligibility",
+          "benefits",
+          "howToApply",
+          "hasOfficialApplicationDestination",
+          "provider",
+          "amount",
+          "awardAmount",
+          "verified",
+          "recurring",
+          "listRequirementsSummary",
+          "categories",
+          "categorySlug",
+          "source",
+          "updatedAt",
+          "createdAt",
+          "statusText",
+          "supportEmail",
+          "supportPhone",
+          "eligibilityText",
+          "slug",
+          "providerSlug",
+          "internationalFriendlyListing",
+          "scholarshipStatus",
+          "daysUntilDeadline",
+          "deadlineBucket",
+          "awardAmountNumericSort",
+          "awardCurrency",
+          "payoutMethod",
+          "credibilityScore",
+          "credibilityBucket",
+          "rankingScore",
+          "requirementTypes",
+          "requirementSignalsCount"
+        ]
+      }
+    },
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships/vice-chancellor-s-scholarship-2905",
+      "responseUrl": "http://localhost:3001/api/scholarships/vice-chancellor-s-scholarship-2905",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"seoTags\":[],\"id\":\"f8246610-59ff-4e22-9dc9-9e11a7dc1c5e\",\"title\":\"Vice-Chancellor’s Scholarship\",\"country\":\"USA\",\"deadline\":\"29 May 2026\",\"deadlineAt\":\"2026-05-29T23:59:59.999Z\",\"description\":\"Provided by university Grant 13,604 USD Deadline 29 May 2026 Vice-Chancellor’s Scholarship Merit-based Read more about eligibility Bangor University Bangor, United Kingdom\",\"eligibility\":[\"Merit-based\",\"Bangor, United Kingdom\"],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":true,\"provider\":\"Bangor University\",\"amount\":\"10000 GBP\",\"awardAmount\":\"10000 GBP\",\"verified\":false,\"recurring\":false,\"listRequirementsSummary\":\"2 requirements: Listed in detail\",\"categories\":[\"education\"],\"categorySlug\":\"miscellaneous\",\"source\":\"mastersportal\",\"updatedAt\":\"2026-05-04T22:49:56.016188+00:00\",\"cr",
+      "parsedSummary": {
+        "premiumFieldsRedacted": true,
+        "leakPaths": [],
+        "topLevelKeys": [
+          "seoTags",
+          "id",
+          "title",
+          "country",
+          "deadline",
+          "deadlineAt",
+          "description",
+          "eligibility",
+          "benefits",
+          "howToApply",
+          "hasOfficialApplicationDestination",
+          "provider",
+          "amount",
+          "awardAmount",
+          "verified",
+          "recurring",
+          "listRequirementsSummary",
+          "categories",
+          "categorySlug",
+          "source",
+          "updatedAt",
+          "createdAt",
+          "statusText",
+          "supportEmail",
+          "supportPhone",
+          "eligibilityText",
+          "slug",
+          "providerSlug",
+          "internationalFriendlyListing",
+          "scholarshipStatus",
+          "daysUntilDeadline",
+          "deadlineBucket",
+          "awardAmountNumericSort",
+          "awardCurrency",
+          "payoutMethod",
+          "credibilityScore",
+          "credibilityBucket",
+          "rankingScore",
+          "requirementTypes",
+          "requirementSignalsCount"
+        ]
+      }
+    },
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships/creative-arts-scholarship-8932",
+      "responseUrl": "http://localhost:3001/api/scholarships/creative-arts-scholarship-8932",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"seoTags\":[],\"id\":\"7f58a469-34b8-49b3-9c89-75ae9e7c9ea1\",\"title\":\"Creative Arts Scholarship\",\"country\":\"USA\",\"deadline\":\"30 Jun 2026\",\"deadlineAt\":\"2026-06-30T23:59:59.999Z\",\"description\":\"Independent provider Grant 10,000 USD Deadline 30 Jun 2026 Creative Arts Scholarship Merit-based Read more about eligibility For a Bright Future Foundation Location not available\",\"eligibility\":[\"Merit-based\",\"Location not available\"],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":true,\"provider\":\"For a Bright Future Foundation\",\"amount\":\"10000 USD\",\"awardAmount\":\"10000 USD\",\"verified\":false,\"recurring\":false,\"listRequirementsSummary\":\"2 requirements: Listed in detail\",\"categories\":[\"arts\"],\"categorySlug\":\"arts\",\"source\":\"mastersportal\",\"updatedAt\":\"2026-05-04T19:08:24.093822+00:00\",\"",
+      "parsedSummary": {
+        "premiumFieldsRedacted": true,
+        "leakPaths": [],
+        "topLevelKeys": [
+          "seoTags",
+          "id",
+          "title",
+          "country",
+          "deadline",
+          "deadlineAt",
+          "description",
+          "eligibility",
+          "benefits",
+          "howToApply",
+          "hasOfficialApplicationDestination",
+          "provider",
+          "amount",
+          "awardAmount",
+          "verified",
+          "recurring",
+          "listRequirementsSummary",
+          "categories",
+          "categorySlug",
+          "source",
+          "updatedAt",
+          "createdAt",
+          "statusText",
+          "supportEmail",
+          "supportPhone",
+          "eligibilityText",
+          "slug",
+          "providerSlug",
+          "internationalFriendlyListing",
+          "scholarshipStatus",
+          "daysUntilDeadline",
+          "deadlineBucket",
+          "awardAmountNumericSort",
+          "awardCurrency",
+          "payoutMethod",
+          "credibilityScore",
+          "credibilityBucket",
+          "rankingScore",
+          "requirementTypes",
+          "requirementSignalsCount"
+        ]
+      }
+    },
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships/china-university-of-petroleum-scholarship-1461",
+      "responseUrl": "http://localhost:3001/api/scholarships/china-university-of-petroleum-scholarship-1461",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"seoTags\":[],\"id\":\"3b7d5037-fc7a-4edf-881c-2c4c5fd303f6\",\"title\":\"China University of Petroleum Scholarship\",\"country\":\"USA\",\"deadline\":\"30 May 2026\",\"deadlineAt\":\"2026-05-30T23:59:59.999Z\",\"description\":\"Provided by university Grant 3,661 USD Deadline 30 May 2026 China University of Petroleum Scholarship Merit-based Read more about eligibility China University of Petroleum-Beijing Changping, China\",\"eligibility\":[\"Merit-based\",\"Changping, China\"],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":true,\"provider\":\"China University of Petroleum-Beijing\",\"amount\":\"25000 CNY\",\"awardAmount\":\"25000 CNY\",\"verified\":false,\"recurring\":false,\"listRequirementsSummary\":\"2 requirements: Listed in detail\",\"categories\":[\"education\"],\"categorySlug\":\"miscellaneous\",\"source\":\"mastersportal\"",
+      "parsedSummary": {
+        "premiumFieldsRedacted": true,
+        "leakPaths": [],
+        "topLevelKeys": [
+          "seoTags",
+          "id",
+          "title",
+          "country",
+          "deadline",
+          "deadlineAt",
+          "description",
+          "eligibility",
+          "benefits",
+          "howToApply",
+          "hasOfficialApplicationDestination",
+          "provider",
+          "amount",
+          "awardAmount",
+          "verified",
+          "recurring",
+          "listRequirementsSummary",
+          "categories",
+          "categorySlug",
+          "source",
+          "updatedAt",
+          "createdAt",
+          "statusText",
+          "supportEmail",
+          "supportPhone",
+          "eligibilityText",
+          "slug",
+          "providerSlug",
+          "internationalFriendlyListing",
+          "scholarshipStatus",
+          "daysUntilDeadline",
+          "deadlineBucket",
+          "awardAmountNumericSort",
+          "awardCurrency",
+          "payoutMethod",
+          "credibilityScore",
+          "credibilityBucket",
+          "rankingScore",
+          "requirementTypes",
+          "requirementSignalsCount"
+        ]
+      }
+    }
+  ],
+  "detailApiProbesOnly": [
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships/climate-stripes-scholarship-14487",
+      "responseUrl": "http://localhost:3001/api/scholarships/climate-stripes-scholarship-14487",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"seoTags\":[],\"id\":\"99145773-6fc4-41c7-95a3-dcaafde5637b\",\"title\":\"Climate Stripes Scholarship\",\"country\":\"USA\",\"deadline\":\"29 May 2026\",\"deadlineAt\":\"2026-05-29T23:59:59.999Z\",\"description\":\"Provided by university Grant 13,604 USD Deadline 29 May 2026 Climate Stripes Scholarship Merit-based Read more about eligibility University of Reading Reading, United Kingdom\",\"eligibility\":[\"Merit-based\",\"Reading, United Kingdom\"],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":true,\"provider\":\"University of Reading\",\"amount\":\"10000 GBP\",\"awardAmount\":\"10000 GBP\",\"verified\":false,\"recurring\":false,\"listRequirementsSummary\":\"2 requirements: Listed in detail\",\"categories\":[\"education\"],\"categorySlug\":\"miscellaneous\",\"source\":\"mastersportal\",\"updatedAt\":\"2026-05-04T19:55:48.097241+00:0",
+      "parsedSummary": {
+        "premiumFieldsRedacted": true,
+        "leakPaths": [],
+        "topLevelKeys": [
+          "seoTags",
+          "id",
+          "title",
+          "country",
+          "deadline",
+          "deadlineAt",
+          "description",
+          "eligibility",
+          "benefits",
+          "howToApply",
+          "hasOfficialApplicationDestination",
+          "provider",
+          "amount",
+          "awardAmount",
+          "verified",
+          "recurring",
+          "listRequirementsSummary",
+          "categories",
+          "categorySlug",
+          "source",
+          "updatedAt",
+          "createdAt",
+          "statusText",
+          "supportEmail",
+          "supportPhone",
+          "eligibilityText",
+          "slug",
+          "providerSlug",
+          "internationalFriendlyListing",
+          "scholarshipStatus",
+          "daysUntilDeadline",
+          "deadlineBucket",
+          "awardAmountNumericSort",
+          "awardCurrency",
+          "payoutMethod",
+          "credibilityScore",
+          "credibilityBucket",
+          "rankingScore",
+          "requirementTypes",
+          "requirementSignalsCount"
+        ]
+      }
+    },
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships/fintech-innovation-scholarship-8931",
+      "responseUrl": "http://localhost:3001/api/scholarships/fintech-innovation-scholarship-8931",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"seoTags\":[],\"id\":\"32a15d95-0f3f-4cf7-b1c2-8e047c2a363f\",\"title\":\"Fintech Innovation Scholarship\",\"country\":\"USA\",\"deadline\":\"30 Jun 2026\",\"deadlineAt\":\"2026-06-30T23:59:59.999Z\",\"description\":\"Independent provider Grant 10,000 USD Deadline 30 Jun 2026 Fintech Innovation Scholarship Merit-based Read more about eligibility For a Bright Future Foundation Location not available\",\"eligibility\":[\"Merit-based\",\"Location not available\"],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":true,\"provider\":\"For a Bright Future Foundation\",\"amount\":\"10000 USD\",\"awardAmount\":\"10000 USD\",\"verified\":false,\"recurring\":false,\"listRequirementsSummary\":\"2 requirements: Listed in detail\",\"categories\":[\"education\"],\"categorySlug\":\"miscellaneous\",\"source\":\"mastersportal\",\"updatedAt\":\"2026-05-04T",
+      "parsedSummary": {
+        "premiumFieldsRedacted": true,
+        "leakPaths": [],
+        "topLevelKeys": [
+          "seoTags",
+          "id",
+          "title",
+          "country",
+          "deadline",
+          "deadlineAt",
+          "description",
+          "eligibility",
+          "benefits",
+          "howToApply",
+          "hasOfficialApplicationDestination",
+          "provider",
+          "amount",
+          "awardAmount",
+          "verified",
+          "recurring",
+          "listRequirementsSummary",
+          "categories",
+          "categorySlug",
+          "source",
+          "updatedAt",
+          "createdAt",
+          "statusText",
+          "supportEmail",
+          "supportPhone",
+          "eligibilityText",
+          "slug",
+          "providerSlug",
+          "internationalFriendlyListing",
+          "scholarshipStatus",
+          "daysUntilDeadline",
+          "deadlineBucket",
+          "awardAmountNumericSort",
+          "awardCurrency",
+          "payoutMethod",
+          "credibilityScore",
+          "credibilityBucket",
+          "rankingScore",
+          "requirementTypes",
+          "requirementSignalsCount"
+        ]
+      }
+    },
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships/vice-chancellor-s-scholarship-2905",
+      "responseUrl": "http://localhost:3001/api/scholarships/vice-chancellor-s-scholarship-2905",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"seoTags\":[],\"id\":\"f8246610-59ff-4e22-9dc9-9e11a7dc1c5e\",\"title\":\"Vice-Chancellor’s Scholarship\",\"country\":\"USA\",\"deadline\":\"29 May 2026\",\"deadlineAt\":\"2026-05-29T23:59:59.999Z\",\"description\":\"Provided by university Grant 13,604 USD Deadline 29 May 2026 Vice-Chancellor’s Scholarship Merit-based Read more about eligibility Bangor University Bangor, United Kingdom\",\"eligibility\":[\"Merit-based\",\"Bangor, United Kingdom\"],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":true,\"provider\":\"Bangor University\",\"amount\":\"10000 GBP\",\"awardAmount\":\"10000 GBP\",\"verified\":false,\"recurring\":false,\"listRequirementsSummary\":\"2 requirements: Listed in detail\",\"categories\":[\"education\"],\"categorySlug\":\"miscellaneous\",\"source\":\"mastersportal\",\"updatedAt\":\"2026-05-04T22:49:56.016188+00:00\",\"cr",
+      "parsedSummary": {
+        "premiumFieldsRedacted": true,
+        "leakPaths": [],
+        "topLevelKeys": [
+          "seoTags",
+          "id",
+          "title",
+          "country",
+          "deadline",
+          "deadlineAt",
+          "description",
+          "eligibility",
+          "benefits",
+          "howToApply",
+          "hasOfficialApplicationDestination",
+          "provider",
+          "amount",
+          "awardAmount",
+          "verified",
+          "recurring",
+          "listRequirementsSummary",
+          "categories",
+          "categorySlug",
+          "source",
+          "updatedAt",
+          "createdAt",
+          "statusText",
+          "supportEmail",
+          "supportPhone",
+          "eligibilityText",
+          "slug",
+          "providerSlug",
+          "internationalFriendlyListing",
+          "scholarshipStatus",
+          "daysUntilDeadline",
+          "deadlineBucket",
+          "awardAmountNumericSort",
+          "awardCurrency",
+          "payoutMethod",
+          "credibilityScore",
+          "credibilityBucket",
+          "rankingScore",
+          "requirementTypes",
+          "requirementSignalsCount"
+        ]
+      }
+    },
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships/creative-arts-scholarship-8932",
+      "responseUrl": "http://localhost:3001/api/scholarships/creative-arts-scholarship-8932",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"seoTags\":[],\"id\":\"7f58a469-34b8-49b3-9c89-75ae9e7c9ea1\",\"title\":\"Creative Arts Scholarship\",\"country\":\"USA\",\"deadline\":\"30 Jun 2026\",\"deadlineAt\":\"2026-06-30T23:59:59.999Z\",\"description\":\"Independent provider Grant 10,000 USD Deadline 30 Jun 2026 Creative Arts Scholarship Merit-based Read more about eligibility For a Bright Future Foundation Location not available\",\"eligibility\":[\"Merit-based\",\"Location not available\"],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":true,\"provider\":\"For a Bright Future Foundation\",\"amount\":\"10000 USD\",\"awardAmount\":\"10000 USD\",\"verified\":false,\"recurring\":false,\"listRequirementsSummary\":\"2 requirements: Listed in detail\",\"categories\":[\"arts\"],\"categorySlug\":\"arts\",\"source\":\"mastersportal\",\"updatedAt\":\"2026-05-04T19:08:24.093822+00:00\",\"",
+      "parsedSummary": {
+        "premiumFieldsRedacted": true,
+        "leakPaths": [],
+        "topLevelKeys": [
+          "seoTags",
+          "id",
+          "title",
+          "country",
+          "deadline",
+          "deadlineAt",
+          "description",
+          "eligibility",
+          "benefits",
+          "howToApply",
+          "hasOfficialApplicationDestination",
+          "provider",
+          "amount",
+          "awardAmount",
+          "verified",
+          "recurring",
+          "listRequirementsSummary",
+          "categories",
+          "categorySlug",
+          "source",
+          "updatedAt",
+          "createdAt",
+          "statusText",
+          "supportEmail",
+          "supportPhone",
+          "eligibilityText",
+          "slug",
+          "providerSlug",
+          "internationalFriendlyListing",
+          "scholarshipStatus",
+          "daysUntilDeadline",
+          "deadlineBucket",
+          "awardAmountNumericSort",
+          "awardCurrency",
+          "payoutMethod",
+          "credibilityScore",
+          "credibilityBucket",
+          "rankingScore",
+          "requirementTypes",
+          "requirementSignalsCount"
+        ]
+      }
+    },
+    {
+      "requestUrl": "http://localhost:3001/api/scholarships/china-university-of-petroleum-scholarship-1461",
+      "responseUrl": "http://localhost:3001/api/scholarships/china-university-of-petroleum-scholarship-1461",
+      "status": 200,
+      "contentType": "application/json",
+      "bodySnippet": "{\"seoTags\":[],\"id\":\"3b7d5037-fc7a-4edf-881c-2c4c5fd303f6\",\"title\":\"China University of Petroleum Scholarship\",\"country\":\"USA\",\"deadline\":\"30 May 2026\",\"deadlineAt\":\"2026-05-30T23:59:59.999Z\",\"description\":\"Provided by university Grant 3,661 USD Deadline 30 May 2026 China University of Petroleum Scholarship Merit-based Read more about eligibility China University of Petroleum-Beijing Changping, China\",\"eligibility\":[\"Merit-based\",\"Changping, China\"],\"benefits\":\"\",\"howToApply\":[],\"hasOfficialApplicationDestination\":true,\"provider\":\"China University of Petroleum-Beijing\",\"amount\":\"25000 CNY\",\"awardAmount\":\"25000 CNY\",\"verified\":false,\"recurring\":false,\"listRequirementsSummary\":\"2 requirements: Listed in detail\",\"categories\":[\"education\"],\"categorySlug\":\"miscellaneous\",\"source\":\"mastersportal\"",
+      "parsedSummary": {
+        "premiumFieldsRedacted": true,
+        "leakPaths": [],
+        "topLevelKeys": [
+          "seoTags",
+          "id",
+          "title",
+          "country",
+          "deadline",
+          "deadlineAt",
+          "description",
+          "eligibility",
+          "benefits",
+          "howToApply",
+          "hasOfficialApplicationDestination",
+          "provider",
+          "amount",
+          "awardAmount",
+          "verified",
+          "recurring",
+          "listRequirementsSummary",
+          "categories",
+          "categorySlug",
+          "source",
+          "updatedAt",
+          "createdAt",
+          "statusText",
+          "supportEmail",
+          "supportPhone",
+          "eligibilityText",
+          "slug",
+          "providerSlug",
+          "internationalFriendlyListing",
+          "scholarshipStatus",
+          "daysUntilDeadline",
+          "deadlineBucket",
+          "awardAmountNumericSort",
+          "awardCurrency",
+          "payoutMethod",
+          "credibilityScore",
+          "credibilityBucket",
+          "rankingScore",
+          "requirementTypes",
+          "requirementSignalsCount"
+        ]
+      }
+    }
+  ],
+  "pageDomAudits": [
+    {
+      "path": "/",
+      "fullUrl": "http://localhost:3001/",
+      "htmlLength": 659823,
+      "innerTextLength": "26858",
+      "nextDataPresent": true,
+      "nextDataSnippetHits": [],
+      "jsonLdScripts": 2,
+      "jsonLdHits": [],
+      "htmlRegexHits": [],
+      "blurElements": [
+        {
+          "selectorHint": "BUTTON",
+          "className": "pointer-events-auto absolute top-1/2 z-[30] flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200/70 bg-white/80 p-0 t",
+          "innerTextLength": 0,
+          "computedFilter": "none"
+        },
+        {
+          "selectorHint": "BUTTON",
+          "className": "pointer-events-auto absolute top-1/2 z-[30] flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200/70 bg-white/80 p-0 t",
+          "innerTextLength": 0,
+          "computedFilter": "none"
+        },
+        {
+          "selectorHint": "BUTTON",
+          "className": "absolute bottom-3 left-3 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-black/55 text-white shadow-lg ring-1 ring-white/15 backdrop-blur-sm tra",
+          "innerTextLength": 0,
+          "computedFilter": "none"
+        },
+        {
+          "selectorHint": "BUTTON",
+          "className": "pointer-events-auto absolute top-1/2 z-[30] flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200/70 bg-white/80 p-0 t",
+          "innerTextLength": 0,
+          "computedFilter": "none"
+        },
+        {
+          "selectorHint": "BUTTON",
+          "className": "pointer-events-auto absolute top-1/2 z-[30] flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-gray-200/70 bg-white/80 p-0 t",
+          "innerTextLength": 0,
+          "computedFilter": "none"
+        },
+        {
+          "selectorHint": "DIV",
+          "className": "pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center px-1",
+          "innerTextLength": 26,
+          "computedFilter": "none"
+        }
+      ],
+      "articleCardsSampleInnerTextLen": [
+        158
+      ],
+      "verdict": "safe",
+      "verdictReasons": []
+    },
+    {
+      "path": "/scholarships",
+      "fullUrl": "http://localhost:3001/scholarships/hub/matches",
+      "htmlLength": 267816,
+      "innerTextLength": "6222",
+      "nextDataPresent": true,
+      "nextDataSnippetHits": [],
+      "jsonLdScripts": 3,
+      "jsonLdHits": [],
+      "htmlRegexHits": [],
+      "blurElements": [
+        {
+          "selectorHint": "DIV",
+          "className": "w-full min-w-0 rounded-2xl border border-white/80 bg-white/70 p-3 shadow-sm backdrop-blur xl:w-[140px] xl:shrink-0",
+          "innerTextLength": 26,
+          "computedFilter": "none"
+        },
+        {
+          "selectorHint": "DIV",
+          "className": "w-full min-w-0 rounded-2xl border border-white/80 bg-white/70 p-3 shadow-sm backdrop-blur xl:w-[140px] xl:shrink-0",
+          "innerTextLength": 26,
+          "computedFilter": "none"
+        },
+        {
+          "selectorHint": "DIV",
+          "className": "w-full min-w-0 rounded-2xl border border-white/80 bg-white/70 p-3 shadow-sm backdrop-blur xl:w-[140px] xl:shrink-0",
+          "innerTextLength": 26,
+          "computedFilter": "none"
+        },
+        {
+          "selectorHint": "BUTTON",
+          "className": "absolute bottom-3 left-3 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-black/55 text-white shadow-lg ring-1 ring-white/15 backdrop-blur-sm tra",
+          "innerTextLength": 0,
+          "computedFilter": "none"
+        },
+        {
+          "selectorHint": "DIV",
+          "className": "pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center px-1",
+          "innerTextLength": 26,
+          "computedFilter": "none"
+        }
+      ],
+      "articleCardsSampleInnerTextLen": [
+        374,
+        393,
+        370,
+        378,
+        441,
+        417
+      ],
+      "verdict": "safe",
+      "verdictReasons": []
+    },
+    {
+      "path": "/scholarships/hub/matches",
+      "fullUrl": "http://localhost:3001/scholarships/hub/matches",
+      "htmlLength": 270699,
+      "innerTextLength": "6222",
+      "nextDataPresent": true,
+      "nextDataSnippetHits": [],
+      "jsonLdScripts": 3,
+      "jsonLdHits": [],
+      "htmlRegexHits": [],
+      "blurElements": [
+        {
+          "selectorHint": "DIV",
+          "className": "w-full min-w-0 rounded-2xl border border-white/80 bg-white/70 p-3 shadow-sm backdrop-blur xl:w-[140px] xl:shrink-0",
+          "innerTextLength": 26,
+          "computedFilter": "none"
+        },
+        {
+          "selectorHint": "DIV",
+          "className": "w-full min-w-0 rounded-2xl border border-white/80 bg-white/70 p-3 shadow-sm backdrop-blur xl:w-[140px] xl:shrink-0",
+          "innerTextLength": 26,
+          "computedFilter": "none"
+        },
+        {
+          "selectorHint": "DIV",
+          "className": "w-full min-w-0 rounded-2xl border border-white/80 bg-white/70 p-3 shadow-sm backdrop-blur xl:w-[140px] xl:shrink-0",
+          "innerTextLength": 26,
+          "computedFilter": "none"
+        },
+        {
+          "selectorHint": "BUTTON",
+          "className": "absolute bottom-3 left-3 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-black/55 text-white shadow-lg ring-1 ring-white/15 backdrop-blur-sm tra",
+          "innerTextLength": 0,
+          "computedFilter": "none"
+        },
+        {
+          "selectorHint": "DIV",
+          "className": "pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center px-1",
+          "innerTextLength": 26,
+          "computedFilter": "none"
+        }
+      ],
+      "articleCardsSampleInnerTextLen": [
+        374,
+        393,
+        370,
+        378,
+        441,
+        417
+      ],
+      "verdict": "safe",
+      "verdictReasons": []
+    },
+    {
+      "path": "/scholarships/hub/best-matches",
+      "fullUrl": "http://localhost:3001/scholarships/hub/best-matches",
+      "htmlLength": 204626,
+      "innerTextLength": "5273",
+      "nextDataPresent": true,
+      "nextDataSnippetHits": [],
+      "jsonLdScripts": 1,
+      "jsonLdHits": [],
+      "htmlRegexHits": [],
+      "blurElements": [
+        {
+          "selectorHint": "DIV",
+          "className": "w-full min-w-0 rounded-2xl border border-white/80 bg-white/70 p-3 shadow-sm backdrop-blur xl:w-[140px] xl:shrink-0",
+          "innerTextLength": 26,
+          "computedFilter": "none"
+        },
+        {
+          "selectorHint": "DIV",
+          "className": "w-full min-w-0 rounded-2xl border border-white/80 bg-white/70 p-3 shadow-sm backdrop-blur xl:w-[140px] xl:shrink-0",
+          "innerTextLength": 26,
+          "computedFilter": "none"
+        },
+        {
+          "selectorHint": "DIV",
+          "className": "w-full min-w-0 rounded-2xl border border-white/80 bg-white/70 p-3 shadow-sm backdrop-blur xl:w-[140px] xl:shrink-0",
+          "innerTextLength": 26,
+          "computedFilter": "none"
+        },
+        {
+          "selectorHint": "BUTTON",
+          "className": "absolute bottom-3 left-3 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-black/55 text-white shadow-lg ring-1 ring-white/15 backdrop-blur-sm tra",
+          "innerTextLength": 0,
+          "computedFilter": "none"
+        },
+        {
+          "selectorHint": "DIV",
+          "className": "pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center px-1",
+          "innerTextLength": 26,
+          "computedFilter": "none"
+        }
+      ],
+      "articleCardsSampleInnerTextLen": [
+        374,
+        393,
+        370,
+        378,
+        441,
+        417
+      ],
+      "verdict": "safe",
+      "verdictReasons": []
+    },
+    {
+      "path": "/scholarships/hub/easy-apply",
+      "fullUrl": "http://localhost:3001/scholarships/hub/easy-apply",
+      "htmlLength": 306574,
+      "innerTextLength": "7061",
+      "nextDataPresent": true,
+      "nextDataSnippetHits": [],
+      "jsonLdScripts": 3,
+      "jsonLdHits": [],
+      "htmlRegexHits": [],
+      "blurElements": [
+        {
+          "selectorHint": "DIV",
+          "className": "w-full min-w-0 rounded-2xl border border-white/80 bg-white/70 p-3 shadow-sm backdrop-blur xl:w-[140px] xl:shrink-0",
+          "innerTextLength": 26,
+          "computedFilter": "none"
+        },
+        {
+          "selectorHint": "DIV",
+          "className": "w-full min-w-0 rounded-2xl border border-white/80 bg-white/70 p-3 shadow-sm backdrop-blur xl:w-[140px] xl:shrink-0",
+          "innerTextLength": 26,
+          "computedFilter": "none"
+        },
+        {
+          "selectorHint": "DIV",
+          "className": "w-full min-w-0 rounded-2xl border border-white/80 bg-white/70 p-3 shadow-sm backdrop-blur xl:w-[140px] xl:shrink-0",
+          "innerTextLength": 26,
+          "computedFilter": "none"
+        },
+        {
+          "selectorHint": "BUTTON",
+          "className": "absolute bottom-3 left-3 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-black/55 text-white shadow-lg ring-1 ring-white/15 backdrop-blur-sm tra",
+          "innerTextLength": 0,
+          "computedFilter": "none"
+        },
+        {
+          "selectorHint": "DIV",
+          "className": "pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center px-1",
+          "innerTextLength": 26,
+          "computedFilter": "none"
+        }
+      ],
+      "articleCardsSampleInnerTextLen": [
+        416,
+        410,
+        428,
+        455,
+        565,
+        528
+      ],
+      "verdict": "safe",
+      "verdictReasons": []
+    },
+    {
+      "path": "/scholarships/hub/international-friendly",
+      "fullUrl": "http://localhost:3001/scholarships/hub/international-friendly",
+      "htmlLength": 312996,
+      "innerTextLength": "7888",
+      "nextDataPresent": true,
+      "nextDataSnippetHits": [],
+      "jsonLdScripts": 3,
+      "jsonLdHits": [],
+      "htmlRegexHits": [],
+      "blurElements": [
+        {
+          "selectorHint": "DIV",
+          "className": "w-full min-w-0 rounded-2xl border border-white/80 bg-white/70 p-3 shadow-sm backdrop-blur xl:w-[140px] xl:shrink-0",
+          "innerTextLength": 26,
+          "computedFilter": "none"
+        },
+        {
+          "selectorHint": "DIV",
+          "className": "w-full min-w-0 rounded-2xl border border-white/80 bg-white/70 p-3 shadow-sm backdrop-blur xl:w-[140px] xl:shrink-0",
+          "innerTextLength": 26,
+          "computedFilter": "none"
+        },
+        {
+          "selectorHint": "DIV",
+          "className": "w-full min-w-0 rounded-2xl border border-white/80 bg-white/70 p-3 shadow-sm backdrop-blur xl:w-[140px] xl:shrink-0",
+          "innerTextLength": 26,
+          "computedFilter": "none"
+        },
+        {
+          "selectorHint": "BUTTON",
+          "className": "absolute bottom-3 left-3 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-black/55 text-white shadow-lg ring-1 ring-white/15 backdrop-blur-sm tra",
+          "innerTextLength": 0,
+          "computedFilter": "none"
+        },
+        {
+          "selectorHint": "DIV",
+          "className": "pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center px-1",
+          "innerTextLength": 26,
+          "computedFilter": "none"
+        }
+      ],
+      "articleCardsSampleInnerTextLen": [
+        554,
+        597,
+        549,
+        495,
+        613,
+        564
+      ],
+      "verdict": "safe",
+      "verdictReasons": []
+    },
+    {
+      "path": "/scholarships/hub/recommended",
+      "fullUrl": "http://localhost:3001/scholarships/hub/recommended",
+      "htmlLength": 112719,
+      "innerTextLength": "626",
+      "nextDataPresent": true,
+      "nextDataSnippetHits": [],
+      "jsonLdScripts": 2,
+      "jsonLdHits": [],
+      "htmlRegexHits": [],
+      "blurElements": [
+        {
+          "selectorHint": "BUTTON",
+          "className": "absolute bottom-3 left-3 z-10 flex h-11 w-11 items-center justify-center rounded-full bg-black/55 text-white shadow-lg ring-1 ring-white/15 backdrop-blur-sm tra",
+          "innerTextLength": 0,
+          "computedFilter": "none"
+        },
+        {
+          "selectorHint": "DIV",
+          "className": "pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center px-1",
+          "innerTextLength": 26,
+          "computedFilter": "none"
+        }
+      ],
+      "articleCardsSampleInnerTextLen": [],
+      "verdict": "safe",
+      "verdictReasons": []
+    }
+  ],
+  "detailDomAudits": [
+    {
+      "path": "/scholarships/climate-stripes-scholarship-14487",
+      "fullUrl": "http://localhost:3001/scholarships/climate-stripes-scholarship-14487",
+      "htmlLength": 102165,
+      "innerTextLength": "2849",
+      "nextDataPresent": true,
+      "nextDataSnippetHits": [],
+      "jsonLdScripts": 2,
+      "jsonLdHits": [],
+      "htmlRegexHits": [],
+      "blurElements": [
+        {
+          "selectorHint": "DIV",
+          "className": "rounded-2xl border border-white/80 bg-white/75 p-4 shadow-sm backdrop-blur",
+          "innerTextLength": 51,
+          "computedFilter": "none"
+        },
+        {
+          "selectorHint": "DIV",
+          "className": "pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center px-1",
+          "innerTextLength": 26,
+          "computedFilter": "none"
+        }
+      ],
+      "articleCardsSampleInnerTextLen": [],
+      "verdict": "safe",
+      "verdictReasons": []
+    },
+    {
+      "path": "/scholarships/fintech-innovation-scholarship-8931",
+      "fullUrl": "http://localhost:3001/scholarships/fintech-innovation-scholarship-8931",
+      "htmlLength": 101739,
+      "innerTextLength": "2856",
+      "nextDataPresent": true,
+      "nextDataSnippetHits": [],
+      "jsonLdScripts": 2,
+      "jsonLdHits": [],
+      "htmlRegexHits": [],
+      "blurElements": [
+        {
+          "selectorHint": "DIV",
+          "className": "rounded-2xl border border-white/80 bg-white/75 p-4 shadow-sm backdrop-blur",
+          "innerTextLength": 51,
+          "computedFilter": "none"
+        },
+        {
+          "selectorHint": "DIV",
+          "className": "pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center px-1",
+          "innerTextLength": 26,
+          "computedFilter": "none"
+        }
+      ],
+      "articleCardsSampleInnerTextLen": [],
+      "verdict": "safe",
+      "verdictReasons": []
+    },
+    {
+      "path": "/scholarships/vice-chancellor-s-scholarship-2905",
+      "fullUrl": "http://localhost:3001/scholarships/vice-chancellor-s-scholarship-2905",
+      "htmlLength": 102152,
+      "innerTextLength": "2841",
+      "nextDataPresent": true,
+      "nextDataSnippetHits": [],
+      "jsonLdScripts": 2,
+      "jsonLdHits": [],
+      "htmlRegexHits": [],
+      "blurElements": [
+        {
+          "selectorHint": "DIV",
+          "className": "rounded-2xl border border-white/80 bg-white/75 p-4 shadow-sm backdrop-blur",
+          "innerTextLength": 51,
+          "computedFilter": "none"
+        },
+        {
+          "selectorHint": "DIV",
+          "className": "pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center px-1",
+          "innerTextLength": 26,
+          "computedFilter": "none"
+        }
+      ],
+      "articleCardsSampleInnerTextLen": [],
+      "verdict": "safe",
+      "verdictReasons": []
+    },
+    {
+      "path": "/scholarships/creative-arts-scholarship-8932",
+      "fullUrl": "http://localhost:3001/scholarships/creative-arts-scholarship-8932",
+      "htmlLength": 103811,
+      "innerTextLength": "2907",
+      "nextDataPresent": true,
+      "nextDataSnippetHits": [],
+      "jsonLdScripts": 2,
+      "jsonLdHits": [],
+      "htmlRegexHits": [],
+      "blurElements": [
+        {
+          "selectorHint": "DIV",
+          "className": "rounded-2xl border border-white/80 bg-white/75 p-4 shadow-sm backdrop-blur",
+          "innerTextLength": 51,
+          "computedFilter": "none"
+        },
+        {
+          "selectorHint": "BUTTON",
+          "className": "absolute inset-0 bg-zinc-900/45 backdrop-blur-[2px]",
+          "innerTextLength": 0,
+          "computedFilter": "none"
+        },
+        {
+          "selectorHint": "DIV",
+          "className": "pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center px-1",
+          "innerTextLength": 26,
+          "computedFilter": "none"
+        }
+      ],
+      "articleCardsSampleInnerTextLen": [],
+      "verdict": "safe",
+      "verdictReasons": []
+    },
+    {
+      "path": "/scholarships/china-university-of-petroleum-scholarship-1461",
+      "fullUrl": "http://localhost:3001/scholarships/china-university-of-petroleum-scholarship-1461",
+      "htmlLength": 109638,
+      "innerTextLength": "3097",
+      "nextDataPresent": true,
+      "nextDataSnippetHits": [],
+      "jsonLdScripts": 2,
+      "jsonLdHits": [],
+      "htmlRegexHits": [],
+      "blurElements": [
+        {
+          "selectorHint": "DIV",
+          "className": "rounded-2xl border border-white/80 bg-white/75 p-4 shadow-sm backdrop-blur",
+          "innerTextLength": 51,
+          "computedFilter": "none"
+        },
+        {
+          "selectorHint": "BUTTON",
+          "className": "absolute inset-0 bg-zinc-900/45 backdrop-blur-[2px]",
+          "innerTextLength": 0,
+          "computedFilter": "none"
+        },
+        {
+          "selectorHint": "DIV",
+          "className": "pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center px-1",
+          "innerTextLength": 26,
+          "computedFilter": "none"
+        }
+      ],
+      "articleCardsSampleInnerTextLen": [],
+      "verdict": "safe",
+      "verdictReasons": []
+    }
+  ],
+  "recommendations": [
+    "Detail responses include premiumFieldsRedacted — ensure all sensitive keys are nulled consistently."
+  ]
+}

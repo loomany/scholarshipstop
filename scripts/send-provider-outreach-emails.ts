@@ -52,8 +52,44 @@ import {
   loadProviderOutreachEmailMap,
   type ProviderOutreachLookup
 } from './provider-outreach-lookup';
+import {
+  createRunId,
+  emitJobDone,
+  emitJobFailed,
+  emitJobProgress,
+  emitJobStart,
+  type JobCounters
+} from './job-markers';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const SERVICE_NAME = 'Рассылка провайдеры';
+const JOB_NAME = 'provider-outreach-mailing';
+const RUN_ID = createRunId();
+const STARTED_AT_MS = Date.now();
+const jobCounters: JobCounters = { processed: 0, success: 0, failed: 0, skipped: 0 };
+let terminalEmitted = false;
+let lastFailure: unknown = null;
+
+function emitTerminalMarker(exitCode: number): void {
+  if (terminalEmitted) return;
+  terminalEmitted = true;
+  const durationMs = Date.now() - STARTED_AT_MS;
+  emitJobProgress({ service: SERVICE_NAME, job: JOB_NAME, runId: RUN_ID }, jobCounters);
+  if (exitCode === 0) {
+    emitJobDone({ service: SERVICE_NAME, job: JOB_NAME, runId: RUN_ID }, durationMs, jobCounters);
+    return;
+  }
+  emitJobFailed(
+    { service: SERVICE_NAME, job: JOB_NAME, runId: RUN_ID },
+    durationMs,
+    jobCounters,
+    lastFailure ?? `provider outreach exited with code ${exitCode}`
+  );
+}
+
+process.on('exit', (code) => {
+  emitTerminalMarker(code ?? 0);
+});
 
 const PROVIDER_OUTREACH_FROM_DEFAULT = 'Daur <daur@mail.scholarshiptop.com>';
 const PROVIDER_OUTREACH_REPLY_TO_DEFAULT = 'support@scholarshiptop.com';
@@ -517,6 +553,10 @@ function outreachSubjectForRecipient(
 }
 
 async function main() {
+  emitJobStart(
+    { service: SERVICE_NAME, job: JOB_NAME, runId: RUN_ID },
+    new Date(STARTED_AT_MS).toISOString()
+  );
   const { test, dryRun, limit, testSamples } = parseArgs(process.argv);
   const listPath =
     process.env.PROVIDER_OUTREACH_LIST?.trim() || DEFAULT_LIST;
@@ -588,6 +628,10 @@ async function main() {
         limit: null,
         exitCode: 0
       });
+      jobCounters.processed = samples.length;
+      jobCounters.success = 0;
+      jobCounters.failed = 0;
+      jobCounters.skipped = samples.length;
       return;
     }
     let sentResend = 0;
@@ -632,6 +676,10 @@ async function main() {
       limit: null,
       exitCode
     });
+    jobCounters.processed = samples.length;
+    jobCounters.success = sentResend;
+    jobCounters.failed = fail;
+    jobCounters.skipped = skippedUnsub;
     process.exit(exitCode);
   }
 
@@ -742,6 +790,10 @@ async function main() {
         limit: null,
         exitCode: 0
       });
+      jobCounters.processed = 1;
+      jobCounters.success = 0;
+      jobCounters.failed = 0;
+      jobCounters.skipped = 1;
       return;
     }
     const r = await sendOne({
@@ -767,6 +819,10 @@ async function main() {
       limit: null,
       exitCode
     });
+    jobCounters.processed = 1;
+    jobCounters.success = tally === 'sent' ? 1 : 0;
+    jobCounters.failed = tally === 'failed' ? 1 : 0;
+    jobCounters.skipped = tally === 'skipped_unsubscribed' ? 1 : 0;
     process.exit(exitCode);
   }
 
@@ -871,6 +927,7 @@ async function main() {
     if (logSb) {
       const ex = await providerOutreachLogExists(logSb, to, campaignKey);
       if (!ex.ok) {
+        lastFailure = `[provider-outreach-log] lookup failed: ${ex.message}`;
         console.error(
           '[provider-outreach-log] lookup failed (aborting):',
           ex.message
@@ -916,6 +973,7 @@ async function main() {
           campaignKey
         );
         if (!ins.ok) {
+          lastFailure = `[provider-outreach-log] insert failed for ${to}: ${ins.message}`;
           console.error(
             '[provider-outreach-log] CRITICAL: Resend 200 but log insert failed:',
             to,
@@ -971,10 +1029,15 @@ async function main() {
     limit: limit ?? null,
     exitCode
   });
+  jobCounters.processed = slice.length;
+  jobCounters.success = dryRun ? 0 : sentResend;
+  jobCounters.failed = dryRun ? 0 : fail;
+  jobCounters.skipped = dryRun ? slice.length : skippedUnsub + skippedCampaign;
   process.exit(exitCode);
 }
 
 main().catch((e) => {
+  lastFailure = e;
   console.error(e);
   process.exit(1);
 });

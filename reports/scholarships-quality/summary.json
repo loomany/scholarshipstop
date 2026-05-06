@@ -1,0 +1,737 @@
+{
+  "generatedAt": "2026-05-05T22:45:12.920Z",
+  "total_scholarships": 17211,
+  "active_is_active_true": 17209,
+  "unique_normalized_titles": 16920,
+  "exact_duplicate_title_groups_over_1": 256,
+  "exact_duplicate_title_rows_affected": 547,
+  "exact_duplicate_metric_any_key_rows": 5494,
+  "near_duplicate_pairs_reported": 271,
+  "near_duplicate_rows_touched": 312,
+  "missing_primary_url": 0,
+  "missing_deadline": 82,
+  "expired_deadline_date": 3896,
+  "quality_distribution": {
+    "good_80_plus": 10069,
+    "ok_60_79": 6144,
+    "needs_review_40_59": 652,
+    "likely_trash_0_39": 346,
+    "pct_good": 58.5,
+    "pct_ok": 35.7,
+    "pct_review": 3.8,
+    "pct_trash": 2
+  },
+  "duplicate_keys_multi_kind": 803,
+  "top_20_worst_sources": [
+    {
+      "source": "opportunitydesk",
+      "total": 9,
+      "suspicious_pct": 100,
+      "weak_pct": 66.7,
+      "avg_score": 41.11
+    },
+    {
+      "source": "unigo",
+      "total": 32,
+      "suspicious_pct": 100,
+      "weak_pct": 0,
+      "avg_score": 45
+    },
+    {
+      "source": "armacad",
+      "total": 5,
+      "suspicious_pct": 100,
+      "weak_pct": 0,
+      "avg_score": 55
+    },
+    {
+      "source": "daad",
+      "total": 165,
+      "suspicious_pct": 41.2,
+      "weak_pct": 0,
+      "avg_score": 85.45
+    },
+    {
+      "source": "scholars4dev",
+      "total": 52,
+      "suspicious_pct": 17.3,
+      "weak_pct": 0,
+      "avg_score": 91.63
+    },
+    {
+      "source": "oneyoungworld",
+      "total": 8,
+      "suspicious_pct": 12.5,
+      "weak_pct": 0,
+      "avg_score": 94.38
+    },
+    {
+      "source": "mina7portal",
+      "total": 10,
+      "suspicious_pct": 10,
+      "weak_pct": 0,
+      "avg_score": 97
+    },
+    {
+      "source": "wemakescholars",
+      "total": 945,
+      "suspicious_pct": 8,
+      "weak_pct": 0,
+      "avg_score": 91.76
+    },
+    {
+      "source": "iefa",
+      "total": 1470,
+      "suspicious_pct": 6.1,
+      "weak_pct": 6.5,
+      "avg_score": 95.98
+    },
+    {
+      "source": "bold_org",
+      "total": 795,
+      "suspicious_pct": 5.8,
+      "weak_pct": 0.1,
+      "avg_score": 92.72
+    },
+    {
+      "source": "scholarships360",
+      "total": 207,
+      "suspicious_pct": 1.9,
+      "weak_pct": 1,
+      "avg_score": 58.96
+    },
+    {
+      "source": "bigfuture",
+      "total": 9894,
+      "suspicious_pct": 1.5,
+      "weak_pct": 0,
+      "avg_score": 74.13
+    },
+    {
+      "source": "mastersportal",
+      "total": 968,
+      "suspicious_pct": 0.7,
+      "weak_pct": 99.1,
+      "avg_score": 65.59
+    },
+    {
+      "source": "scholarships_com",
+      "total": 2528,
+      "suspicious_pct": 0.5,
+      "weak_pct": 75.9,
+      "avg_score": 89.29
+    },
+    {
+      "source": "scholarship_america",
+      "total": 117,
+      "suspicious_pct": 0,
+      "weak_pct": 18.8,
+      "avg_score": 89.36
+    }
+  ],
+  "top_50_manual_review": [
+    {
+      "id": "4411b57a-71d7-4936-9565-1542a0c37124",
+      "title": "Australia Awards Scholarships",
+      "provider": "RMIT University",
+      "url": "https://www.mastersportal.com/scholarships/3248/australia-awards-scholarships.html",
+      "quality_score": 0,
+      "reasons": [
+        "expired_deadline",
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "598d757e-2109-4841-9dc9-776432a21e90",
+      "title": "Australia Awards Scholarships",
+      "provider": "The University of Sydney",
+      "url": "https://www.mastersportal.com/scholarships/14273/australia-awards-scholarships.html",
+      "quality_score": 0,
+      "reasons": [
+        "expired_deadline",
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "06b87aa3-0a15-4c5c-bc9d-4cd1dd6993eb",
+      "title": "Scholarship for degree and exchange study in Estonia",
+      "provider": "University of Tartu",
+      "url": "https://www.mastersportal.com/scholarships/7605/scholarship-for-degree-and-exchange-study-in-estonia.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "0ba3075b-c6a0-46e4-9802-8fac21c564d4",
+      "title": "British Chevening Scholarship",
+      "provider": "The University of Manchester",
+      "url": "https://www.mastersportal.com/scholarships/1902/british-chevening-scholarship.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "0d543c49-0446-4316-bf43-e36a253fa900",
+      "title": "Sport Scholarships",
+      "provider": "Canterbury Christ Church University",
+      "url": "https://www.mastersportal.com/scholarships/3066/sport-scholarships.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "1a53ce92-a19f-440d-ab34-ed3da5e5f2c1",
+      "title": "Global Excellence Scholarship",
+      "provider": "Loughborough University",
+      "url": "https://www.mastersportal.com/scholarships/8436/global-excellence-scholarship.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "225dbe22-9117-4b7f-b26f-6b92ee42b0a6",
+      "title": "Vice-Chancellor's International Scholarship",
+      "provider": "Hartpury University",
+      "url": "https://www.mastersportal.com/scholarships/8227/vice-chancellors-international-scholarship.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "22aa3f7d-07ee-4b1a-94a7-6cb106418997",
+      "title": "International Masters Scholarship",
+      "provider": "The Glasgow School of Art",
+      "url": "https://www.mastersportal.com/scholarships/9919/international-masters-scholarship.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "28c9f39e-e205-4cde-9f41-772dabc86c7d",
+      "title": "Chevening Scholarships",
+      "provider": "Durham University",
+      "url": "https://www.mastersportal.com/scholarships/7893/chevening-scholarships.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "32a2b46b-b7a0-4e9c-9823-d7bcf8bee04c",
+      "title": "Chevening Scholarship",
+      "provider": "City St George's, University of London",
+      "url": "https://www.mastersportal.com/scholarships/3554/chevening-scholarship.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "399d2754-fafd-41c2-ad10-a7dc535503c6",
+      "title": "School of Health & Psychological Sciences Dean's Scholarship for Academic and Clinical Excellence",
+      "provider": "City St George's, University of London",
+      "url": "https://www.mastersportal.com/scholarships/1556/school-of-health-psychological-sciences-deans-scholarship-for-academic-and-clinical-excellence.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "3c2f55be-197e-44f1-aae3-acb2925fc54b",
+      "title": "Amberscholar Scholarship",
+      "provider": "Amber Scholar",
+      "url": "https://www.mastersportal.com/scholarships/14122/amberscholar-scholarship.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "3c76c32a-0d0a-48be-a926-c44da5018125",
+      "title": "NL Scholarship",
+      "provider": "Near East University",
+      "url": "https://www.mastersportal.com/scholarships/10293/nl-scholarship.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "3da67cc6-4527-4e94-b4d7-14f3aa5b79b6",
+      "title": "Chevening Scholarships",
+      "provider": "King's College London",
+      "url": "https://www.mastersportal.com/scholarships/7946/chevening-scholarships.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "3e0a441c-93e7-4888-9268-577222251bc7",
+      "title": "Sanctuary Scholarship",
+      "provider": "Canterbury Christ Church University",
+      "url": "https://www.mastersportal.com/scholarships/9587/sanctuary-scholarship.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "492480f6-6421-4d14-9c32-cbc8cc7c7700",
+      "title": "Chevening Scholarships",
+      "provider": "University of Bath",
+      "url": "https://www.mastersportal.com/scholarships/1883/chevening-scholarships.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "49c6a8f9-b4d6-40af-a8f1-c1aa6800dbde",
+      "title": "Music Scholarship",
+      "provider": "University of Leicester",
+      "url": "https://www.mastersportal.com/scholarships/3935/music-scholarship.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "4d5be39d-daef-46bb-b108-7c676dc511b0",
+      "title": "Amberscholar Scholarship",
+      "provider": "Amber Student",
+      "url": "https://www.mastersportal.com/scholarships/8849/amberscholar-scholarship.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "5dd95ea3-6ed9-4635-94cb-dd3183fedfb2",
+      "title": "CouponBirds' \"Help to Save\" Scholarship",
+      "provider": "CouponBirds",
+      "url": "https://www.iefa.org/scholarships/3460/CouponBirds'_%22Help_to_Save%22_Scholarship",
+      "quality_score": 5,
+      "reasons": [
+        "anti_keywords",
+        "exact_duplicate_group",
+        "near_duplicate"
+      ]
+    },
+    {
+      "id": "61f5122c-09ea-4eaa-8b7d-0ea4ceef7e21",
+      "title": "Sport Scholarships",
+      "provider": "Canterbury Christ Church University",
+      "url": "https://www.mastersportal.com/scholarships/9572/sport-scholarships.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "64b98132-e9b9-4f54-bc89-a0847735902f",
+      "title": "NL Scholarship",
+      "provider": "Radboud University",
+      "url": "https://www.mastersportal.com/scholarships/11647/nl-scholarship.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "6532a9ec-b436-4a68-93f5-ac71154cd628",
+      "title": "Sports Scholarships",
+      "provider": "Dundalk Institute of Technology",
+      "url": "https://www.mastersportal.com/scholarships/10256/sports-scholarships.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "748ee3ed-a862-474b-b226-322f5607c335",
+      "title": "Chevening Scholarships",
+      "provider": "Birkbeck, University of London",
+      "url": "https://www.mastersportal.com/scholarships/3197/chevening-scholarships.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "77ad2100-3368-4b5f-ac0d-6fca99d1f625",
+      "title": "Vice Chancellor's International Scholarship",
+      "provider": "Griffith University",
+      "url": "https://www.mastersportal.com/scholarships/8269/vice-chancellors-international-scholarship.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "7eaf699b-ac95-44f3-83cd-b421921d7176",
+      "title": "Sanctuary Scholarship",
+      "provider": "University of Southampton",
+      "url": "https://www.mastersportal.com/scholarships/9474/sanctuary-scholarship.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "7f5c75c5-0c1d-4568-a559-1f9715a74b08",
+      "title": "Chevening Scholarships",
+      "provider": "University of Kent",
+      "url": "https://www.mastersportal.com/scholarships/11185/chevening-scholarships.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "833adc37-2190-441b-b949-dfc10fc2d817",
+      "title": "Chevening Scholarships",
+      "provider": "University of Salford",
+      "url": "https://www.mastersportal.com/scholarships/2325/chevening-scholarships.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "84aeb811-b554-4752-83bc-e79be2e3ec5e",
+      "title": "Vice-Chancellor's Scholarship",
+      "provider": "UWE Bristol (University of the West of England)",
+      "url": "https://www.mastersportal.com/scholarships/7809/vice-chancellors-scholarship.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "8599cf63-743d-485f-ab4e-bd97b27f0f41",
+      "title": "School of Health & Psychological Sciences Dean's Scholarship for Academic and Clinical Excellence",
+      "provider": "City St George's, University of London",
+      "url": "https://www.mastersportal.com/scholarships/9403/school-of-health-psychological-sciences-deans-scholarship-for-academic-and-clinical-excellence.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "8c8bb946-4d52-49f9-9d21-740425434b1b",
+      "title": "NL Scholarship",
+      "provider": "University of Twente (UT)",
+      "url": "https://www.mastersportal.com/scholarships/3540/nl-scholarship.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "9365cbd1-b3ef-4159-9a7f-5f7d38db92c3",
+      "title": "Scholarship for degree and exchange study in Estonia",
+      "provider": "The Education and Youth Board",
+      "url": "https://www.mastersportal.com/scholarships/8747/scholarship-for-degree-and-exchange-study-in-estonia.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "9e2ce08e-b8f4-434e-946f-309fbae148e0",
+      "title": "Vice-Chancellor's Postgraduate International Scholarship",
+      "provider": "Cardiff University",
+      "url": "https://www.mastersportal.com/scholarships/7921/vice-chancellors-postgraduate-international-scholarship.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "a05aafbd-4d6a-4178-aad4-c90b0123e1e0",
+      "title": "Vice Chancellor's Postgraduate International Scholarship",
+      "provider": "University of Stirling",
+      "url": "https://www.mastersportal.com/scholarships/1199/vice-chancellors-postgraduate-international-scholarship.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "a9bf9a90-499f-4bd7-8a9a-2a62b07f9136",
+      "title": "International Summer School, 2018",
+      "provider": "University of East Anglia Summer School",
+      "url": "https://www.iefa.org/scholarships/3065/International_Summer_School,_2018",
+      "quality_score": 5,
+      "reasons": [
+        "anti_keywords",
+        "exact_duplicate_group",
+        "near_duplicate"
+      ]
+    },
+    {
+      "id": "ad35c98b-270d-4d7b-a81b-dd8ae01a7938",
+      "title": "International Student Scholarships",
+      "provider": "Colorado State University",
+      "url": "https://www.mastersportal.com/scholarships/778/international-student-scholarships.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "b1a1bbf3-3fd5-4595-ad39-3516f436bf29",
+      "title": "NL Scholarship",
+      "provider": "University of Groningen",
+      "url": "https://www.mastersportal.com/scholarships/1316/nl-scholarship.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "b2d8d938-a9a9-4cfa-9f4c-1e4287a1d777",
+      "title": "International Masters Scholarship",
+      "provider": "Edith Cowan University",
+      "url": "https://www.mastersportal.com/scholarships/10945/international-masters-scholarship.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "b982cf8f-cc8d-4c59-a798-d23944a02812",
+      "title": "Global Excellence Scholarship",
+      "provider": "University College Dublin",
+      "url": "https://www.mastersportal.com/scholarships/4159/global-excellence-scholarship.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "c4ba05c3-1a14-4eec-9dae-ff98f1e07218",
+      "title": "NL Scholarship",
+      "provider": "IHS, Institute for Housing and Urban Development Studies of Erasmus University Rotterdam",
+      "url": "https://www.mastersportal.com/scholarships/8383/nl-scholarship.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "c6a73bbe-fa59-442d-b403-12269b6abaf8",
+      "title": "Sports Scholarships",
+      "provider": "University of Leicester",
+      "url": "https://www.mastersportal.com/scholarships/2750/sports-scholarships.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "cb04a78d-2bff-42a2-906b-ff98f63a2169",
+      "title": "Chevening Scholarships",
+      "provider": "Goldsmiths, University of London",
+      "url": "https://www.mastersportal.com/scholarships/9682/chevening-scholarships.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "d12947bd-7a72-435e-bab8-d40317ae9615",
+      "title": "Marshall Scholarship",
+      "provider": "London School of Economics and Political Science",
+      "url": "https://www.mastersportal.com/scholarships/14134/marshall-scholarship.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "db18d46a-f494-4ea6-b6ec-a6feaa7a724c",
+      "title": "Chevening Scholarship",
+      "provider": "University of Hertfordshire",
+      "url": "https://www.mastersportal.com/scholarships/9554/chevening-scholarship.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "dbe03ad0-2e34-49de-a4b6-d81ca13b4a9c",
+      "title": "Chevening Scholarships",
+      "provider": "The Association of Commonwealth Universities",
+      "url": "https://www.mastersportal.com/scholarships/6769/chevening-scholarships.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "df99f7e5-11a0-40d8-a4f7-4a5cf63d1d12",
+      "title": "Chevening Scholarship",
+      "provider": "The University for the Creative Arts",
+      "url": "https://www.mastersportal.com/scholarships/14572/chevening-scholarship.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "e75c1381-e1cf-41aa-ae03-473281682cd7",
+      "title": "Office of Special Education and Rehabilitative Services (OSERS): Rehabilitation Services Administration (RSA): Parent Information and Training Program ALN 84.235F",
+      "provider": "",
+      "url": "https://wiki.simpler.grants.gov/",
+      "quality_score": 5,
+      "reasons": [
+        "missing_provider",
+        "expired_deadline",
+        "exact_duplicate_group",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "f00346ab-f87d-46f9-b4e9-e5da9b4d831a",
+      "title": "British Chevening Scholarship",
+      "provider": "UWE Bristol (University of the West of England)",
+      "url": "https://www.mastersportal.com/scholarships/7787/british-chevening-scholarship.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "f8246610-59ff-4e22-9dc9-9e11a7dc1c5e",
+      "title": "Vice-Chancellor’s Scholarship",
+      "provider": "Bangor University",
+      "url": "https://www.mastersportal.com/scholarships/2905/vice-chancellors-scholarship.html",
+      "quality_score": 5,
+      "reasons": [
+        "exact_duplicate_group",
+        "near_duplicate",
+        "parser_garbage"
+      ]
+    },
+    {
+      "id": "12944f52-b9f2-4ab5-97a8-558f8c69a704",
+      "title": "Dr. Scott Greenberg Scholarship",
+      "provider": "Framingham State University",
+      "url": "https://www.framingham.edu/admissions-aid/cost-aid/types-aid/scholarships",
+      "quality_score": 15,
+      "reasons": [
+        "expired_deadline",
+        "anti_keywords",
+        "exact_duplicate_group"
+      ]
+    },
+    {
+      "id": "253536c3-decd-4f3c-830f-645c565d9297",
+      "title": "ISL Midwest Senior Scholarship",
+      "provider": "Iowa Student Loan",
+      "url": "https://bigfuture.collegeboard.org/scholarships/isl-midwest-senior-scholarship",
+      "quality_score": 15,
+      "reasons": [
+        "expired_deadline",
+        "anti_keywords",
+        "exact_duplicate_group"
+      ]
+    }
+  ]
+}

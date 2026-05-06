@@ -18,6 +18,14 @@ import { createClient } from '@supabase/supabase-js';
 import { enqueueNextEssayQueueJob } from '@/lib/essays/enqueueNextEssayQueueJob';
 import { resetStaleProcessingEssayQueueRows } from '@/lib/essays/runEssayGenerationJob';
 import type { Database } from '@/types_db';
+import {
+  createRunId,
+  emitJobDone,
+  emitJobFailed,
+  emitJobProgress,
+  emitJobStart,
+  type JobCounters
+} from './job-markers';
 
 function serviceSupabase() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
@@ -45,8 +53,15 @@ function cronBaseUrl(): string {
 }
 
 const MAX_ROUNDS = 5000;
+const SERVICE_NAME = 'Скрипты';
+const JOB_NAME = 'run-essay-pipeline-full';
+const RUN_ID = createRunId();
+const STARTED_AT_MS = Date.now();
+let roundCounter = 0;
+let totalCompletedCounter = 0;
 
 async function main() {
+  emitJobStart({ service: SERVICE_NAME, job: JOB_NAME, runId: RUN_ID });
   const supabase = serviceSupabase();
   const staleReset = await resetStaleProcessingEssayQueueRows(supabase);
   if (staleReset > 0) {
@@ -67,6 +82,7 @@ async function main() {
 
   for (;;) {
     round += 1;
+    roundCounter = round;
     if (round > MAX_ROUNDS) {
       console.error(
         JSON.stringify(
@@ -78,7 +94,7 @@ async function main() {
           2
         )
       );
-      process.exit(1);
+      throw new Error(`Stopped after ${MAX_ROUNDS} rounds (safety cap).`);
     }
     const enq = await enqueueNextEssayQueueJob(supabase);
     if (enq.ok) {
@@ -111,7 +127,7 @@ async function main() {
       const res = await fetch(url, { method: 'GET' });
       const body = (await res.json().catch(() => ({}))) as unknown;
       console.log(JSON.stringify({ round, http: res.status, body }, null, 2));
-      if (!res.ok) process.exit(1);
+      if (!res.ok) throw new Error(`Essay queue cron HTTP failed with status ${res.status}`);
 
       const b = body as {
         ok?: boolean;
@@ -161,6 +177,7 @@ async function main() {
         (b.phase === 'published' || b.phase === 'resume_published')
       ) {
         totalCompleted += 1;
+        totalCompletedCounter = totalCompleted;
       }
       continue;
     }
@@ -172,7 +189,7 @@ async function main() {
     console.log(JSON.stringify({ round, process: result }, null, 2));
 
     if (!result.ok) {
-      process.exit(1);
+      throw new Error('processOneEssayQueueItem returned ok=false');
     }
 
     if (result.ok && 'skipped' in result && result.skipped === 'generation_paused') {
@@ -223,11 +240,40 @@ async function main() {
       (result.phase === 'published' || result.phase === 'resume_published')
     ) {
       totalCompleted += 1;
+      totalCompletedCounter = totalCompleted;
     }
   }
 }
 
-main().catch((e) => {
-  console.error(e);
-  process.exit(1);
-});
+main()
+  .then(() => {
+    const counters: JobCounters = {
+      processed: roundCounter,
+      success: totalCompletedCounter,
+      failed: 0,
+      skipped: Math.max(0, roundCounter - totalCompletedCounter)
+    };
+    emitJobProgress({ service: SERVICE_NAME, job: JOB_NAME, runId: RUN_ID }, counters);
+    emitJobDone(
+      { service: SERVICE_NAME, job: JOB_NAME, runId: RUN_ID },
+      Date.now() - STARTED_AT_MS,
+      counters
+    );
+  })
+  .catch((e) => {
+    const counters: JobCounters = {
+      processed: roundCounter,
+      success: totalCompletedCounter,
+      failed: 1,
+      skipped: Math.max(0, roundCounter - totalCompletedCounter)
+    };
+    emitJobProgress({ service: SERVICE_NAME, job: JOB_NAME, runId: RUN_ID }, counters);
+    emitJobFailed(
+      { service: SERVICE_NAME, job: JOB_NAME, runId: RUN_ID },
+      Date.now() - STARTED_AT_MS,
+      counters,
+      e
+    );
+    console.error(e);
+    process.exit(1);
+  });

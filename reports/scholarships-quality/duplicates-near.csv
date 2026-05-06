@@ -1,0 +1,272 @@
+id,title,provider,similarity_score,matched_id,matched_title,reason
+013fc88e-51c8-425f-854b-e127cab2e4d9,NAHMA Educational Foundation Scholarship,National Affordable Housing Management Association,1,89d991b9-057f-40f1-b9c2-cfa8ba1259b7,NAHMA Educational Foundation Scholarship Program,jaccard_words:1.000
+68a1396f-5b17-48e0-8fb2-ad013af46b3c,Combined study and practical stays for engineers from developing countries (KOSPIE) with Mexican universities,DAAD,0.846,793c294c-a48f-4344-a12a-8c57305c6ad9,Combined study and practical stays for engineers from developing countries (KOSPIE) with Colombian universities,jaccard_words:0.846
+02c1b63f-ce0e-492e-91d0-0b86ee419c1a,Music Scholarship,Tarleton State University,1,2bb8dc5c-10d4-4630-a3af-89a3ffa497f2,Music Scholarship,jaccard_words:1.000
+02c1b63f-ce0e-492e-91d0-0b86ee419c1a,Music Scholarship,Tarleton State University,1,5590bdda-ceeb-44dd-89d8-cadd05271eba,Music Scholarship,jaccard_words:1.000
+2bb8dc5c-10d4-4630-a3af-89a3ffa497f2,Music Scholarship,Stetson University,1,5590bdda-ceeb-44dd-89d8-cadd05271eba,Music Scholarship,jaccard_words:1.000
+4990181c-0042-48a0-893c-430cab9900a7,American Planning Association California Chapter Northern Section Scholarship,American Planning Association-California Chapter,0.888,655a9513-8b6d-4dd5-9515-35c321b6f0b1,American Planning Association California Chapter Los Angeles Section Scholarship,levenshtein:0.887
+acdf0497-0a2f-4726-b016-0b8266dcca03,Country-related cooperation programme with Colombia (COLFUTURO - Fundación para el Futuro de Colombia) Master,DAAD,0.867,da8b7392-c23c-47ed-8228-b9d22ca1c8e5,Country-related cooperation programme with Colombia (COLFUTURO - Fundación para el Futuro de Colombia) Promotion,jaccard_words:0.867
+056d7a1e-8c48-4217-a6db-16eb52a657fb,Kennedy Scholarships,Kennedy Memorial Trust,1,879743a0-752a-4035-ace8-b8e1113e4af2,Kennedy Scholarship,jaccard_words:1.000
+059f7d29-5d3e-420c-b439-31f00609e9c2,Theodore R. and Vivian M. Johnson Scholarship,Johnson Scholarship Foundation,1,4eef4f3c-55a1-4c3e-afb8-f2f090cfd62e,Theodore R. & Vivian M. Johnson Scholarship,jaccard_words:1.000
+05afd7d1-1f13-48c2-96cb-05b2eaeddedf,Open Door Grant,The College of the Florida Keys,1,15fdda62-64d2-4cb0-9446-a5339e89be55,Open Door Grant Program,jaccard_words:1.000
+05afd7d1-1f13-48c2-96cb-05b2eaeddedf,Open Door Grant,The College of the Florida Keys,1,bfa559c8-95e5-49aa-b910-d53ee74bda72,Open Door Grant Program,jaccard_words:1.000
+15fdda62-64d2-4cb0-9446-a5339e89be55,Open Door Grant Program,Daytona State College,1,bfa559c8-95e5-49aa-b910-d53ee74bda72,Open Door Grant Program,jaccard_words:1.000
+06b87aa3-0a15-4c5c-bc9d-4cd1dd6993eb,Scholarship for degree and exchange study in Estonia,University of Tartu,1,9365cbd1-b3ef-4159-9a7f-5f7d38db92c3,Scholarship for degree and exchange study in Estonia,jaccard_words:1.000
+06c26437-1e53-4562-9944-416aa39b182c,The Vice Chancellor’s Postgraduate International Excellence Award,Brunel University of London,0.833,9e2ce08e-b8f4-434e-946f-309fbae148e0,Vice-Chancellor's Postgraduate International Scholarship,jaccard_words:0.833
+06c26437-1e53-4562-9944-416aa39b182c,The Vice Chancellor’s Postgraduate International Excellence Award,Brunel University of London,0.833,a05aafbd-4d6a-4178-aad4-c90b0123e1e0,Vice Chancellor's Postgraduate International Scholarship,jaccard_words:0.833
+9e2ce08e-b8f4-434e-946f-309fbae148e0,Vice-Chancellor's Postgraduate International Scholarship,Cardiff University,1,a05aafbd-4d6a-4178-aad4-c90b0123e1e0,Vice Chancellor's Postgraduate International Scholarship,jaccard_words:1.000
+0836997b-6d85-4dd8-861e-264d4dbd5c76,M.S. & Meek Lane Doss Scholarship,Tarleton State University,0.833,e1ad3ce6-40a5-4150-ad66-b627513ec836,M.S. and Meek Lane Doss Endowed Scholarship,jaccard_words:0.833
+09fa8d22-1bd9-4c3f-ade6-eb93a8a34306,Sanctuary Scholarships,University of Sheffield,1,3e0a441c-93e7-4888-9268-577222251bc7,Sanctuary Scholarship,jaccard_words:1.000
+09fa8d22-1bd9-4c3f-ade6-eb93a8a34306,Sanctuary Scholarships,University of Sheffield,1,7eaf699b-ac95-44f3-83cd-b421921d7176,Sanctuary Scholarship,jaccard_words:1.000
+3e0a441c-93e7-4888-9268-577222251bc7,Sanctuary Scholarship,Canterbury Christ Church University,1,7eaf699b-ac95-44f3-83cd-b421921d7176,Sanctuary Scholarship,jaccard_words:1.000
+0a00ac56-a5b6-433e-afba-ec0b016fc7b8,Honors Program Scholarship,Framingham State University,1,31c645e0-2395-458c-9173-f58dfea2b08f,Honors Program Scholarship,jaccard_words:1.000
+0a068114-f7fc-48e0-8cef-691c67309dbe,The Lubrizol Foundation Scholarship,San Jacinto College,1,4c2518db-b57f-415d-b9ff-2c4e80d5daff,Lubrizol Foundation Scholarship,jaccard_words:1.000
+0b0b506e-cc03-43c1-8b34-f7ca7fca2532,College of Arts & Sciences Scholarship,Stetson University,1,a1dd9ae1-41cd-4089-9b60-13cd1cb8ba1d,College of Arts & Sciences Scholarship,jaccard_words:1.000
+0ba3075b-c6a0-46e4-9802-8fac21c564d4,British Chevening Scholarship,The University of Manchester,1,f00346ab-f87d-46f9-b4e9-e5da9b4d831a,British Chevening Scholarship,jaccard_words:1.000
+0c89f83d-14c9-40eb-b5e9-babf50ff887f,Florida Blue Nursing Scholarship,Seminole State College of Florida,1,696353ba-6361-481c-9495-92d3cd1eac25,Florida Blue Nursing Scholarship,jaccard_words:1.000
+0c89f83d-14c9-40eb-b5e9-babf50ff887f,Florida Blue Nursing Scholarship,Seminole State College of Florida,1,92c8273f-e43a-426f-a0dc-0d06b05cc90a,Florida Blue Nursing Scholarship,jaccard_words:1.000
+696353ba-6361-481c-9495-92d3cd1eac25,Florida Blue Nursing Scholarship,Broward College,1,92c8273f-e43a-426f-a0dc-0d06b05cc90a,Florida Blue Nursing Scholarship,jaccard_words:1.000
+0cdb5d4e-b30c-43d1-bdaa-24aa02dbb83c,Helios Education Foundation First Generation Scholarship,Pensacola State College,1,b52c899a-1b2e-415c-96d1-f44218e63a70,Helios Education Foundation First Generation Scholarship,jaccard_words:1.000
+0cdb5d4e-b30c-43d1-bdaa-24aa02dbb83c,Helios Education Foundation First Generation Scholarship,Pensacola State College,1,d154eac0-ab88-4143-8e90-93ab2e3339dc,Helios Education Foundation First Generation Scholarship,jaccard_words:1.000
+b52c899a-1b2e-415c-96d1-f44218e63a70,Helios Education Foundation First Generation Scholarship,Broward College,1,d154eac0-ab88-4143-8e90-93ab2e3339dc,Helios Education Foundation First Generation Scholarship,jaccard_words:1.000
+0d543c49-0446-4316-bf43-e36a253fa900,Sport Scholarships,Canterbury Christ Church University,1,61f5122c-09ea-4eaa-8b7d-0ea4ceef7e21,Sport Scholarships,jaccard_words:1.000
+0d543c49-0446-4316-bf43-e36a253fa900,Sport Scholarships,Canterbury Christ Church University,1,e6152812-c8af-415e-bdb7-d7e3578b4775,Sport Scholarship,jaccard_words:1.000
+61f5122c-09ea-4eaa-8b7d-0ea4ceef7e21,Sport Scholarships,Canterbury Christ Church University,1,e6152812-c8af-415e-bdb7-d7e3578b4775,Sport Scholarship,jaccard_words:1.000
+0ebf1601-4803-40e8-b504-aadb990847a0,Navy Federal Credit Union Scholarship,Pensacola State College,1,8b0ba702-77e6-48f6-9486-f21d16b020cd,Navy Federal Credit Union Scholarship,jaccard_words:1.000
+0f8db542-e365-495b-8ac3-825a723908fa,Marshall Scholarships,The University of Edinburgh,1,d12947bd-7a72-435e-bab8-d40317ae9615,Marshall Scholarship,jaccard_words:1.000
+0fd509b6-3c80-4e84-8c6a-7aef6bed44f9,Presidential Scholarship,University of Fort Lauderdale,1,e6ed5559-6075-47e3-b36a-e573b1d04e49,Presidential Scholarship,jaccard_words:1.000
+10d6009a-9cbc-4969-9d69-f254b879e05c,San Jacinto College South Campus - Drama Scholarship,San Jacinto College,0.92,bf81264b-b5c8-496e-ba24-6491fef13ca2,San Jacinto College South Campus - Dance Scholarship,levenshtein:0.920
+1157abfb-ab4b-4564-9450-aa3a0b3de9db,Hospitality Management Scholarship,Johnson County Community College,1,e4b8d11a-3094-42d8-8a46-5a3c98a66d5c,Hospitality Management Scholarship,jaccard_words:1.000
+124f4587-d58e-4714-ad0a-41075a2a8f52,Joy Tong Women in Business Scholarship for Study Abroad Fall,University of Massachusetts Lowell,0.903,393e930f-d7e9-4eef-b4b1-7e9b86609e8c,Joy Tong Women in Business Scholarship for Study Abroad Summer,levenshtein:0.903
+124f4587-d58e-4714-ad0a-41075a2a8f52,Joy Tong Women in Business Scholarship for Study Abroad Fall,University of Massachusetts Lowell,0.933,8b964303-08ee-4871-9feb-e299ea3e6686,Joy Tong Women in Business Scholarship for Study Abroad W/Sp,levenshtein:0.933
+393e930f-d7e9-4eef-b4b1-7e9b86609e8c,Joy Tong Women in Business Scholarship for Study Abroad Summer,University of Massachusetts Lowell,0.903,8b964303-08ee-4871-9feb-e299ea3e6686,Joy Tong Women in Business Scholarship for Study Abroad W/Sp,levenshtein:0.903
+12e0195e-44d8-4789-a8db-d1ab881b1113,Alfred I. duPont Foundation Endowed Scholarship,University of North Florida,1,6ba328e7-9117-4ade-9c5f-f6ddfa5b6a2a,Alfred I. duPont Foundation Endowed Scholarship,jaccard_words:1.000
+12e0195e-44d8-4789-a8db-d1ab881b1113,Alfred I. duPont Foundation Endowed Scholarship,University of North Florida,1,f118f0fe-de2b-4050-bedd-e8a2fc3c43fa,Alfred I. duPont Foundation Endowed Scholarship,jaccard_words:1.000
+6ba328e7-9117-4ade-9c5f-f6ddfa5b6a2a,Alfred I. duPont Foundation Endowed Scholarship,Pensacola State College,1,f118f0fe-de2b-4050-bedd-e8a2fc3c43fa,Alfred I. duPont Foundation Endowed Scholarship,jaccard_words:1.000
+989f678b-86be-4a74-a895-ff0c56e27ba2,"Mr. & Mrs. W.K. Gordon, Jr. Endowed Scholarship",Tarleton State University,0.875,e3ebbb28-b6fd-4f61-84aa-59babe96c4b2,"Mr. & Mrs. W.K. Gordon, Jr. Endowed Engineering Scholarship",jaccard_words:0.875
+18a0e250-92a9-4642-af74-b7001c6dfae2,Nursing Scholarship,Broward College,1,18fa7017-a931-4efd-80d4-e9ab542d7626,Nursing Scholarship,jaccard_words:1.000
+18a0e250-92a9-4642-af74-b7001c6dfae2,Nursing Scholarship,Broward College,1,a65f73af-da8a-491f-a455-ca8c7109108f,Nursing Scholarship,jaccard_words:1.000
+18a0e250-92a9-4642-af74-b7001c6dfae2,Nursing Scholarship,Broward College,1,bc8e06aa-3405-4189-8173-2aa37c5c9887,Nursing Scholarship,jaccard_words:1.000
+18fa7017-a931-4efd-80d4-e9ab542d7626,Nursing Scholarship,Chipola College,1,a65f73af-da8a-491f-a455-ca8c7109108f,Nursing Scholarship,jaccard_words:1.000
+18fa7017-a931-4efd-80d4-e9ab542d7626,Nursing Scholarship,Chipola College,1,bc8e06aa-3405-4189-8173-2aa37c5c9887,Nursing Scholarship,jaccard_words:1.000
+a65f73af-da8a-491f-a455-ca8c7109108f,Nursing Scholarship,Johnson County Community College,1,bc8e06aa-3405-4189-8173-2aa37c5c9887,Nursing Scholarship,jaccard_words:1.000
+190eab10-dbdb-4021-8469-9b5418861a69,In-Country/In Region Scholarships Programme at SEARCA NRM (Scholarship for Master's Studies),DAAD,0.933,3bc81763-c202-4d0f-b2f0-d3e68fb8e8f4,In-Country/In Region Scholarships Programme at SEARCA NRM (Scholarship for PhD’s Studies),levenshtein:0.933
+1997dc3a-11a0-4188-be1d-f6c95c193256,School of Theatre and Dance Tuition Program for Current Students (Theatre BA),Northern Illinois University,0.88,ac89309d-5a69-4f4d-862e-2926f471e23a,School of Theatre and Dance Tuition Program for Current Students (Acting),levenshtein:0.880
+7ad2f9e3-6c79-46db-ae63-94b3155b11c3,School of Theatre and Dance Tuition Program for Current Students (Design/Tech),Northern Illinois University,0.882,ac89309d-5a69-4f4d-862e-2926f471e23a,School of Theatre and Dance Tuition Program for Current Students (Acting),levenshtein:0.882
+1a0d91aa-9325-4f5a-b251-30cbabafa2c7,Study Abroad and International Experience Department Scholarships Fall,University of Massachusetts Lowell,0.833,4687d323-f6ad-4d06-bb8e-f033723fe42c,Study Abroad and International Experience Department Scholarships,jaccard_words:0.833
+1a0d91aa-9325-4f5a-b251-30cbabafa2c7,Study Abroad and International Experience Department Scholarships Fall,University of Massachusetts Lowell,0.833,c9a2de12-5af8-4161-8a3b-9ede6b25c09b,Study Abroad and International Experience Department Scholarship…,jaccard_words:0.833
+4687d323-f6ad-4d06-bb8e-f033723fe42c,Study Abroad and International Experience Department Scholarships,University of Massachusetts Lowell,1,c9a2de12-5af8-4161-8a3b-9ede6b25c09b,Study Abroad and International Experience Department Scholarship…,jaccard_words:1.000
+1a53ce92-a19f-440d-ab34-ed3da5e5f2c1,Global Excellence Scholarship,Loughborough University,1,b982cf8f-cc8d-4c59-a798-d23944a02812,Global Excellence Scholarship,jaccard_words:1.000
+1a611dcb-7df9-44af-a9f6-50c5f8161a31,Phi Theta Kappa Scholarship,Tarleton State University,1,451221ff-8822-499c-a613-2dbb40ffd782,Phi Theta Kappa Scholarship,jaccard_words:1.000
+1a611dcb-7df9-44af-a9f6-50c5f8161a31,Phi Theta Kappa Scholarship,Tarleton State University,1,5058d7b7-9a9d-4f07-a85d-5a7b277887de,Phi Theta Kappa Scholarship,jaccard_words:1.000
+1a611dcb-7df9-44af-a9f6-50c5f8161a31,Phi Theta Kappa Scholarship,Tarleton State University,1,f55c1d01-f54e-4c9c-aa8f-52e6e914050f,Phi Theta Kappa Scholarship,jaccard_words:1.000
+1a611dcb-7df9-44af-a9f6-50c5f8161a31,Phi Theta Kappa Scholarship,Tarleton State University,1,f903ba1b-b395-4457-9dfb-cae1b2a99a05,Phi Theta Kappa Scholarship,jaccard_words:1.000
+451221ff-8822-499c-a613-2dbb40ffd782,Phi Theta Kappa Scholarship,Mississippi State University,1,5058d7b7-9a9d-4f07-a85d-5a7b277887de,Phi Theta Kappa Scholarship,jaccard_words:1.000
+451221ff-8822-499c-a613-2dbb40ffd782,Phi Theta Kappa Scholarship,Mississippi State University,1,f55c1d01-f54e-4c9c-aa8f-52e6e914050f,Phi Theta Kappa Scholarship,jaccard_words:1.000
+451221ff-8822-499c-a613-2dbb40ffd782,Phi Theta Kappa Scholarship,Mississippi State University,1,f903ba1b-b395-4457-9dfb-cae1b2a99a05,Phi Theta Kappa Scholarship,jaccard_words:1.000
+5058d7b7-9a9d-4f07-a85d-5a7b277887de,Phi Theta Kappa Scholarship,Eastern Florida State College,1,f55c1d01-f54e-4c9c-aa8f-52e6e914050f,Phi Theta Kappa Scholarship,jaccard_words:1.000
+5058d7b7-9a9d-4f07-a85d-5a7b277887de,Phi Theta Kappa Scholarship,Eastern Florida State College,1,f903ba1b-b395-4457-9dfb-cae1b2a99a05,Phi Theta Kappa Scholarship,jaccard_words:1.000
+f55c1d01-f54e-4c9c-aa8f-52e6e914050f,Phi Theta Kappa Scholarship,Indiana State University,1,f903ba1b-b395-4457-9dfb-cae1b2a99a05,Phi Theta Kappa Scholarship,jaccard_words:1.000
+1a69ca4e-f042-45a5-8ec2-43d70d8aeceb,North Dade Medical Foundation Endowed Education Scholarship,Barry University,0.881,62ac0435-f4a4-4091-8793-1ae371dd3b2c,North Dade Medical Foundation Endowed Nursing Scholarship,levenshtein:0.881
+1b2d3d7e-b993-4010-a5bc-890a0f186086,Minnesota Academy of Nutrition and Dietetics Foundation Diversit…,Minnesota Academy of Nutrition and Dietetics,0.891,20c8569a-15be-4bc9-ad6e-41b9343cf0a9,Minnesota Academy of Nutrition and Dietetics Foundation Presiden…,levenshtein:0.891
+1b7db4ea-7c87-4b5a-ab40-8382a01885ee,Thomas and Alice Kymalainen Scholarship,Mount Wachusett Community College,1,27c0c269-9e3a-418a-b383-655599e25b80,Thomas and Alice Kymalainen Scholarship,jaccard_words:1.000
+1c4a68b4-278e-45b3-93d5-71b504b3fd68,Parkinson SHSPH Initiatives Scholarship,Loyola University Chicago,1,e14fe5fd-c4d1-404b-a202-4374c46c84cf,Parkinson SHSPH Initiatives Scholarship,jaccard_words:1.000
+1c7545be-871c-4d57-a659-c7d552cd96fd,Reva Daniels Metzinger Endowed Scholarship,Broward College,1,f3d05c86-d37d-49e7-9464-f5215f2a7f68,Reva Daniels Metzinger Endowed Scholarship,jaccard_words:1.000
+1d056d06-99ed-47e1-a890-c222239692a2,National Board of Respiratory Care Scholarship,Johnson County Community College,1,44167a24-1bd6-4608-b947-ddec14c39763,National Board of Respiratory Care Scholarship,jaccard_words:1.000
+1d056d06-99ed-47e1-a890-c222239692a2,National Board of Respiratory Care Scholarship,Johnson County Community College,1,cc4720f7-5210-4f91-80a2-f91ca78c19b4,National Board for Respiratory Care Scholarship,jaccard_words:1.000
+44167a24-1bd6-4608-b947-ddec14c39763,National Board of Respiratory Care Scholarship,San Jacinto College,1,cc4720f7-5210-4f91-80a2-f91ca78c19b4,National Board for Respiratory Care Scholarship,jaccard_words:1.000
+2220a68d-0bb1-47b3-82be-8733d1a28aa4,Shawn Carter Scholarship,The Shawn Carter Scholarship Foundation,1,90fc4ed1-d2d3-4755-be02-0e20eaa48894,The Shawn Carter Scholarship,jaccard_words:1.000
+225dbe22-9117-4b7f-b26f-6b92ee42b0a6,Vice-Chancellor's International Scholarship,Hartpury University,1,77ad2100-3368-4b5f-ac0d-6fca99d1f625,Vice Chancellor's International Scholarship,jaccard_words:1.000
+22aa3f7d-07ee-4b1a-94a7-6cb106418997,International Masters Scholarship,The Glasgow School of Art,1,b2d8d938-a9a9-4cfa-9f4c-1e4287a1d777,International Masters Scholarship,jaccard_words:1.000
+238043ad-c035-4197-a0e0-0288c4a9091f,Engineering Technology Scholarship,Midlands Technical College,1,64cb162d-ac6a-4bfa-94f9-0a39bcd85ff9,Engineering Technology Scholarship,jaccard_words:1.000
+245b4472-c303-4abe-bff2-4a4c926de424,Alumni Scholarship,Cuyahoga Community College,1,4ce4f005-7ca9-4245-a823-7a6dc2f7e3b6,Alumni Scholarship,jaccard_words:1.000
+264274ca-c355-49b8-ad5a-ceb5c49f38bf,Carl R. Safford  and Dorothy Croft (Fitch) Scholarship,Community Foundation of Eastern Connecticut,0.9,a81446dc-23f4-4e6a-b92c-8bd77b0d2b5b,Carl R. Safford and Dorothy Croft (UConn) Scholarship,levenshtein:0.900
+26df14dd-989b-4c71-80b6-7ab12d956e13,Martin Luther King Jr. Scholarship Awards,American Correctional Association,1,47ab227a-7f97-40f4-bda8-4b7ffaa947ab,"Martin Luther King, Jr. Scholarship",jaccard_words:1.000
+27554250-6632-4aa4-8fe7-3aafd5d09dea,International Student Award,Suny Cortland,1,ad35c98b-270d-4d7b-a81b-dd8ae01a7938,International Student Scholarships,jaccard_words:1.000
+276adf32-154f-4923-b0f6-3c044d201bb9,Richard W. and Karen B. Moore Veterans Scholarship,Tallahassee State College,0.833,62a9efd4-bf6e-4f42-b48b-8cad2aff8bb0,Richard W. and Karen B. Moore Scholarship,jaccard_words:0.833
+27877636-354e-46a7-bfa9-7b3ffa324303,The Frank P. Cihlar Endowed Scholarship,Loyola University Chicago,1,9483faf7-3544-4839-8e38-b4e5a10e28ea,Frank P. Cihlar Endowed Scholarship,jaccard_words:1.000
+28c9f39e-e205-4cde-9f41-772dabc86c7d,Chevening Scholarships,Durham University,1,32a2b46b-b7a0-4e9c-9823-d7bcf8bee04c,Chevening Scholarship,jaccard_words:1.000
+28c9f39e-e205-4cde-9f41-772dabc86c7d,Chevening Scholarships,Durham University,1,3da67cc6-4527-4e94-b4d7-14f3aa5b79b6,Chevening Scholarships,jaccard_words:1.000
+28c9f39e-e205-4cde-9f41-772dabc86c7d,Chevening Scholarships,Durham University,1,492480f6-6421-4d14-9c32-cbc8cc7c7700,Chevening Scholarships,jaccard_words:1.000
+28c9f39e-e205-4cde-9f41-772dabc86c7d,Chevening Scholarships,Durham University,1,748ee3ed-a862-474b-b226-322f5607c335,Chevening Scholarships,jaccard_words:1.000
+28c9f39e-e205-4cde-9f41-772dabc86c7d,Chevening Scholarships,Durham University,1,7f5c75c5-0c1d-4568-a559-1f9715a74b08,Chevening Scholarships,jaccard_words:1.000
+28c9f39e-e205-4cde-9f41-772dabc86c7d,Chevening Scholarships,Durham University,1,833adc37-2190-441b-b949-dfc10fc2d817,Chevening Scholarships,jaccard_words:1.000
+28c9f39e-e205-4cde-9f41-772dabc86c7d,Chevening Scholarships,Durham University,1,cb04a78d-2bff-42a2-906b-ff98f63a2169,Chevening Scholarships,jaccard_words:1.000
+28c9f39e-e205-4cde-9f41-772dabc86c7d,Chevening Scholarships,Durham University,1,db18d46a-f494-4ea6-b6ec-a6feaa7a724c,Chevening Scholarship,jaccard_words:1.000
+28c9f39e-e205-4cde-9f41-772dabc86c7d,Chevening Scholarships,Durham University,1,dbe03ad0-2e34-49de-a4b6-d81ca13b4a9c,Chevening Scholarships,jaccard_words:1.000
+28c9f39e-e205-4cde-9f41-772dabc86c7d,Chevening Scholarships,Durham University,1,df99f7e5-11a0-40d8-a4f7-4a5cf63d1d12,Chevening Scholarship,jaccard_words:1.000
+28c9f39e-e205-4cde-9f41-772dabc86c7d,Chevening Scholarships,Durham University,1,f86d59c8-5f5d-4f92-917e-84cd73002f67,Chevening Awards,jaccard_words:1.000
+32a2b46b-b7a0-4e9c-9823-d7bcf8bee04c,Chevening Scholarship,"City St George's, University of London",1,3da67cc6-4527-4e94-b4d7-14f3aa5b79b6,Chevening Scholarships,jaccard_words:1.000
+32a2b46b-b7a0-4e9c-9823-d7bcf8bee04c,Chevening Scholarship,"City St George's, University of London",1,492480f6-6421-4d14-9c32-cbc8cc7c7700,Chevening Scholarships,jaccard_words:1.000
+32a2b46b-b7a0-4e9c-9823-d7bcf8bee04c,Chevening Scholarship,"City St George's, University of London",1,748ee3ed-a862-474b-b226-322f5607c335,Chevening Scholarships,jaccard_words:1.000
+32a2b46b-b7a0-4e9c-9823-d7bcf8bee04c,Chevening Scholarship,"City St George's, University of London",1,7f5c75c5-0c1d-4568-a559-1f9715a74b08,Chevening Scholarships,jaccard_words:1.000
+32a2b46b-b7a0-4e9c-9823-d7bcf8bee04c,Chevening Scholarship,"City St George's, University of London",1,833adc37-2190-441b-b949-dfc10fc2d817,Chevening Scholarships,jaccard_words:1.000
+32a2b46b-b7a0-4e9c-9823-d7bcf8bee04c,Chevening Scholarship,"City St George's, University of London",1,cb04a78d-2bff-42a2-906b-ff98f63a2169,Chevening Scholarships,jaccard_words:1.000
+32a2b46b-b7a0-4e9c-9823-d7bcf8bee04c,Chevening Scholarship,"City St George's, University of London",1,db18d46a-f494-4ea6-b6ec-a6feaa7a724c,Chevening Scholarship,jaccard_words:1.000
+32a2b46b-b7a0-4e9c-9823-d7bcf8bee04c,Chevening Scholarship,"City St George's, University of London",1,dbe03ad0-2e34-49de-a4b6-d81ca13b4a9c,Chevening Scholarships,jaccard_words:1.000
+32a2b46b-b7a0-4e9c-9823-d7bcf8bee04c,Chevening Scholarship,"City St George's, University of London",1,df99f7e5-11a0-40d8-a4f7-4a5cf63d1d12,Chevening Scholarship,jaccard_words:1.000
+32a2b46b-b7a0-4e9c-9823-d7bcf8bee04c,Chevening Scholarship,"City St George's, University of London",1,f86d59c8-5f5d-4f92-917e-84cd73002f67,Chevening Awards,jaccard_words:1.000
+3da67cc6-4527-4e94-b4d7-14f3aa5b79b6,Chevening Scholarships,King's College London,1,492480f6-6421-4d14-9c32-cbc8cc7c7700,Chevening Scholarships,jaccard_words:1.000
+3da67cc6-4527-4e94-b4d7-14f3aa5b79b6,Chevening Scholarships,King's College London,1,748ee3ed-a862-474b-b226-322f5607c335,Chevening Scholarships,jaccard_words:1.000
+3da67cc6-4527-4e94-b4d7-14f3aa5b79b6,Chevening Scholarships,King's College London,1,7f5c75c5-0c1d-4568-a559-1f9715a74b08,Chevening Scholarships,jaccard_words:1.000
+3da67cc6-4527-4e94-b4d7-14f3aa5b79b6,Chevening Scholarships,King's College London,1,833adc37-2190-441b-b949-dfc10fc2d817,Chevening Scholarships,jaccard_words:1.000
+3da67cc6-4527-4e94-b4d7-14f3aa5b79b6,Chevening Scholarships,King's College London,1,cb04a78d-2bff-42a2-906b-ff98f63a2169,Chevening Scholarships,jaccard_words:1.000
+3da67cc6-4527-4e94-b4d7-14f3aa5b79b6,Chevening Scholarships,King's College London,1,db18d46a-f494-4ea6-b6ec-a6feaa7a724c,Chevening Scholarship,jaccard_words:1.000
+3da67cc6-4527-4e94-b4d7-14f3aa5b79b6,Chevening Scholarships,King's College London,1,dbe03ad0-2e34-49de-a4b6-d81ca13b4a9c,Chevening Scholarships,jaccard_words:1.000
+3da67cc6-4527-4e94-b4d7-14f3aa5b79b6,Chevening Scholarships,King's College London,1,df99f7e5-11a0-40d8-a4f7-4a5cf63d1d12,Chevening Scholarship,jaccard_words:1.000
+3da67cc6-4527-4e94-b4d7-14f3aa5b79b6,Chevening Scholarships,King's College London,1,f86d59c8-5f5d-4f92-917e-84cd73002f67,Chevening Awards,jaccard_words:1.000
+492480f6-6421-4d14-9c32-cbc8cc7c7700,Chevening Scholarships,University of Bath,1,748ee3ed-a862-474b-b226-322f5607c335,Chevening Scholarships,jaccard_words:1.000
+492480f6-6421-4d14-9c32-cbc8cc7c7700,Chevening Scholarships,University of Bath,1,7f5c75c5-0c1d-4568-a559-1f9715a74b08,Chevening Scholarships,jaccard_words:1.000
+492480f6-6421-4d14-9c32-cbc8cc7c7700,Chevening Scholarships,University of Bath,1,833adc37-2190-441b-b949-dfc10fc2d817,Chevening Scholarships,jaccard_words:1.000
+492480f6-6421-4d14-9c32-cbc8cc7c7700,Chevening Scholarships,University of Bath,1,cb04a78d-2bff-42a2-906b-ff98f63a2169,Chevening Scholarships,jaccard_words:1.000
+492480f6-6421-4d14-9c32-cbc8cc7c7700,Chevening Scholarships,University of Bath,1,db18d46a-f494-4ea6-b6ec-a6feaa7a724c,Chevening Scholarship,jaccard_words:1.000
+492480f6-6421-4d14-9c32-cbc8cc7c7700,Chevening Scholarships,University of Bath,1,dbe03ad0-2e34-49de-a4b6-d81ca13b4a9c,Chevening Scholarships,jaccard_words:1.000
+492480f6-6421-4d14-9c32-cbc8cc7c7700,Chevening Scholarships,University of Bath,1,df99f7e5-11a0-40d8-a4f7-4a5cf63d1d12,Chevening Scholarship,jaccard_words:1.000
+492480f6-6421-4d14-9c32-cbc8cc7c7700,Chevening Scholarships,University of Bath,1,f86d59c8-5f5d-4f92-917e-84cd73002f67,Chevening Awards,jaccard_words:1.000
+748ee3ed-a862-474b-b226-322f5607c335,Chevening Scholarships,"Birkbeck, University of London",1,7f5c75c5-0c1d-4568-a559-1f9715a74b08,Chevening Scholarships,jaccard_words:1.000
+748ee3ed-a862-474b-b226-322f5607c335,Chevening Scholarships,"Birkbeck, University of London",1,833adc37-2190-441b-b949-dfc10fc2d817,Chevening Scholarships,jaccard_words:1.000
+748ee3ed-a862-474b-b226-322f5607c335,Chevening Scholarships,"Birkbeck, University of London",1,cb04a78d-2bff-42a2-906b-ff98f63a2169,Chevening Scholarships,jaccard_words:1.000
+748ee3ed-a862-474b-b226-322f5607c335,Chevening Scholarships,"Birkbeck, University of London",1,db18d46a-f494-4ea6-b6ec-a6feaa7a724c,Chevening Scholarship,jaccard_words:1.000
+748ee3ed-a862-474b-b226-322f5607c335,Chevening Scholarships,"Birkbeck, University of London",1,dbe03ad0-2e34-49de-a4b6-d81ca13b4a9c,Chevening Scholarships,jaccard_words:1.000
+748ee3ed-a862-474b-b226-322f5607c335,Chevening Scholarships,"Birkbeck, University of London",1,df99f7e5-11a0-40d8-a4f7-4a5cf63d1d12,Chevening Scholarship,jaccard_words:1.000
+748ee3ed-a862-474b-b226-322f5607c335,Chevening Scholarships,"Birkbeck, University of London",1,f86d59c8-5f5d-4f92-917e-84cd73002f67,Chevening Awards,jaccard_words:1.000
+7f5c75c5-0c1d-4568-a559-1f9715a74b08,Chevening Scholarships,University of Kent,1,833adc37-2190-441b-b949-dfc10fc2d817,Chevening Scholarships,jaccard_words:1.000
+7f5c75c5-0c1d-4568-a559-1f9715a74b08,Chevening Scholarships,University of Kent,1,cb04a78d-2bff-42a2-906b-ff98f63a2169,Chevening Scholarships,jaccard_words:1.000
+7f5c75c5-0c1d-4568-a559-1f9715a74b08,Chevening Scholarships,University of Kent,1,db18d46a-f494-4ea6-b6ec-a6feaa7a724c,Chevening Scholarship,jaccard_words:1.000
+7f5c75c5-0c1d-4568-a559-1f9715a74b08,Chevening Scholarships,University of Kent,1,dbe03ad0-2e34-49de-a4b6-d81ca13b4a9c,Chevening Scholarships,jaccard_words:1.000
+7f5c75c5-0c1d-4568-a559-1f9715a74b08,Chevening Scholarships,University of Kent,1,df99f7e5-11a0-40d8-a4f7-4a5cf63d1d12,Chevening Scholarship,jaccard_words:1.000
+7f5c75c5-0c1d-4568-a559-1f9715a74b08,Chevening Scholarships,University of Kent,1,f86d59c8-5f5d-4f92-917e-84cd73002f67,Chevening Awards,jaccard_words:1.000
+833adc37-2190-441b-b949-dfc10fc2d817,Chevening Scholarships,University of Salford,1,cb04a78d-2bff-42a2-906b-ff98f63a2169,Chevening Scholarships,jaccard_words:1.000
+833adc37-2190-441b-b949-dfc10fc2d817,Chevening Scholarships,University of Salford,1,db18d46a-f494-4ea6-b6ec-a6feaa7a724c,Chevening Scholarship,jaccard_words:1.000
+833adc37-2190-441b-b949-dfc10fc2d817,Chevening Scholarships,University of Salford,1,dbe03ad0-2e34-49de-a4b6-d81ca13b4a9c,Chevening Scholarships,jaccard_words:1.000
+833adc37-2190-441b-b949-dfc10fc2d817,Chevening Scholarships,University of Salford,1,df99f7e5-11a0-40d8-a4f7-4a5cf63d1d12,Chevening Scholarship,jaccard_words:1.000
+833adc37-2190-441b-b949-dfc10fc2d817,Chevening Scholarships,University of Salford,1,f86d59c8-5f5d-4f92-917e-84cd73002f67,Chevening Awards,jaccard_words:1.000
+cb04a78d-2bff-42a2-906b-ff98f63a2169,Chevening Scholarships,"Goldsmiths, University of London",1,db18d46a-f494-4ea6-b6ec-a6feaa7a724c,Chevening Scholarship,jaccard_words:1.000
+cb04a78d-2bff-42a2-906b-ff98f63a2169,Chevening Scholarships,"Goldsmiths, University of London",1,dbe03ad0-2e34-49de-a4b6-d81ca13b4a9c,Chevening Scholarships,jaccard_words:1.000
+cb04a78d-2bff-42a2-906b-ff98f63a2169,Chevening Scholarships,"Goldsmiths, University of London",1,df99f7e5-11a0-40d8-a4f7-4a5cf63d1d12,Chevening Scholarship,jaccard_words:1.000
+cb04a78d-2bff-42a2-906b-ff98f63a2169,Chevening Scholarships,"Goldsmiths, University of London",1,f86d59c8-5f5d-4f92-917e-84cd73002f67,Chevening Awards,jaccard_words:1.000
+db18d46a-f494-4ea6-b6ec-a6feaa7a724c,Chevening Scholarship,University of Hertfordshire,1,dbe03ad0-2e34-49de-a4b6-d81ca13b4a9c,Chevening Scholarships,jaccard_words:1.000
+db18d46a-f494-4ea6-b6ec-a6feaa7a724c,Chevening Scholarship,University of Hertfordshire,1,df99f7e5-11a0-40d8-a4f7-4a5cf63d1d12,Chevening Scholarship,jaccard_words:1.000
+db18d46a-f494-4ea6-b6ec-a6feaa7a724c,Chevening Scholarship,University of Hertfordshire,1,f86d59c8-5f5d-4f92-917e-84cd73002f67,Chevening Awards,jaccard_words:1.000
+dbe03ad0-2e34-49de-a4b6-d81ca13b4a9c,Chevening Scholarships,The Association of Commonwealth Universities,1,df99f7e5-11a0-40d8-a4f7-4a5cf63d1d12,Chevening Scholarship,jaccard_words:1.000
+dbe03ad0-2e34-49de-a4b6-d81ca13b4a9c,Chevening Scholarships,The Association of Commonwealth Universities,1,f86d59c8-5f5d-4f92-917e-84cd73002f67,Chevening Awards,jaccard_words:1.000
+df99f7e5-11a0-40d8-a4f7-4a5cf63d1d12,Chevening Scholarship,The University for the Creative Arts,1,f86d59c8-5f5d-4f92-917e-84cd73002f67,Chevening Awards,jaccard_words:1.000
+2bc99ee6-d135-4670-8e59-15a9af10fc4d,Dick Smith College of Liberal & Fine Arts Graduate Scholarship,Tarleton State University,0.883,e996ab2b-19c7-4b5d-bdd2-51d0032a50cb,Dick Smith College of Liberal & Fine Arts Premier Scholarship,levenshtein:0.883
+2c0111e2-304a-476c-8917-670540bdf1bc,Class of 1954 Scholarship,University of Massachusetts Amherst,1,ed79bf49-6ac0-472e-b1b4-0751e3780eb2,Class of 1954 Scholarship,jaccard_words:1.000
+2c50c5f1-02fb-4836-bfd5-f166e6ee7b8f,Blue Cross & Blue Shield of Florida Nursing Scholarship - Undergraduate,University of West Florida,0.925,5a179c7e-0ba4-4507-9693-b1f877a2c7ef,Blue Cross & Blue Shield of Florida Nursing Scholarship- Graduate,levenshtein:0.925
+2e92e29b-ca75-48aa-9065-456e1f9f8f60,The Sekforde House Trust Scholarship,"City St George's, University of London",1,5c741414-ddb8-4579-b1d2-fa00802326a4,Sekforde House Trust Scholarship,jaccard_words:1.000
+30bdbfd2-a9cd-4253-990d-e44a8d0c9f61,Empowerment Center EC GED Scholarship,Alamo Colleges Foundation,1,ef6aa173-cae4-478e-9d0a-752937b792fd,Empowerment Center EC GED Scholarship,jaccard_words:1.000
+34c6317f-0bae-4b53-8700-04b5fd7a1122,The Honors College Scholarship,Miami Dade College,1,fb71e07f-3da8-4d02-a161-5a0892f58a47,Honors College Scholarship,jaccard_words:1.000
+380d4469-c5e2-4efb-b2a7-7345d49eab92,The Hundred Club of Broward County Endowed Scholarship,University of North Florida,1,51fa6c93-c75e-4905-b411-cd9735359368,Hundred Club of Broward County Endowed Scholarship,jaccard_words:1.000
+380d4469-c5e2-4efb-b2a7-7345d49eab92,The Hundred Club of Broward County Endowed Scholarship,University of North Florida,1,a5deedb7-ec85-42f0-9a31-bb18f6c61bf0,Hundred Club of Broward County Endowed Scholarship,jaccard_words:1.000
+51fa6c93-c75e-4905-b411-cd9735359368,Hundred Club of Broward County Endowed Scholarship,University of Central Florida,1,a5deedb7-ec85-42f0-9a31-bb18f6c61bf0,Hundred Club of Broward County Endowed Scholarship,jaccard_words:1.000
+399d2754-fafd-41c2-ad10-a7dc535503c6,School of Health & Psychological Sciences Dean's Scholarship for Academic and Clinical Excellence,"City St George's, University of London",1,8599cf63-743d-485f-ab4e-bd97b27f0f41,School of Health & Psychological Sciences Dean's Scholarship for Academic and Clinical Excellence,jaccard_words:1.000
+3b018f70-6615-41bc-86cc-9a1b79bb0e9f,The Barnes & Noble Book Award,Broward College,1,6872d8c8-a211-46f5-a8f2-82c104ff91c0,Barnes & Noble Book Scholarship,jaccard_words:1.000
+3bb74ef0-6490-4f7a-a04d-45e71476d223,International Scholarships Award,University of Greenwich,1,fdaaebba-71cd-480e-a504-a80a30edde63,International Scholarships,jaccard_words:1.000
+3bf38949-5433-4cd8-bb2a-8a03d4b80b76,"Marshall E. Rinker, Sr. Foundation Endowed Scholarship",Stetson University,0.833,be3ac978-e10c-4680-80fb-617821da4223,"Marshall E. Rinker, Sr. Foundation Scholarship",jaccard_words:0.833
+3c2f55be-197e-44f1-aae3-acb2925fc54b,Amberscholar Scholarship,Amber Scholar,1,4d5be39d-daef-46bb-b108-7c676dc511b0,Amberscholar Scholarship,jaccard_words:1.000
+3c3bdc0a-7c26-4dc4-b502-27f8d96d07b5,A Hand Up Endowed Scholarship,Tarleton State University,1,41c6d8ee-5c06-4e22-aa19-b29c9d87129d,Hand Up Endowed Scholarship,jaccard_words:1.000
+3c76c32a-0d0a-48be-a926-c44da5018125,NL Scholarship,Near East University,1,64b98132-e9b9-4f54-bc89-a0847735902f,NL Scholarship,jaccard_words:1.000
+3c76c32a-0d0a-48be-a926-c44da5018125,NL Scholarship,Near East University,1,8c8bb946-4d52-49f9-9d21-740425434b1b,NL Scholarship,jaccard_words:1.000
+3c76c32a-0d0a-48be-a926-c44da5018125,NL Scholarship,Near East University,1,b1a1bbf3-3fd5-4595-ad39-3516f436bf29,NL Scholarship,jaccard_words:1.000
+3c76c32a-0d0a-48be-a926-c44da5018125,NL Scholarship,Near East University,1,c4ba05c3-1a14-4eec-9dae-ff98f1e07218,NL Scholarship,jaccard_words:1.000
+64b98132-e9b9-4f54-bc89-a0847735902f,NL Scholarship,Radboud University,1,8c8bb946-4d52-49f9-9d21-740425434b1b,NL Scholarship,jaccard_words:1.000
+64b98132-e9b9-4f54-bc89-a0847735902f,NL Scholarship,Radboud University,1,b1a1bbf3-3fd5-4595-ad39-3516f436bf29,NL Scholarship,jaccard_words:1.000
+64b98132-e9b9-4f54-bc89-a0847735902f,NL Scholarship,Radboud University,1,c4ba05c3-1a14-4eec-9dae-ff98f1e07218,NL Scholarship,jaccard_words:1.000
+8c8bb946-4d52-49f9-9d21-740425434b1b,NL Scholarship,University of Twente (UT),1,b1a1bbf3-3fd5-4595-ad39-3516f436bf29,NL Scholarship,jaccard_words:1.000
+8c8bb946-4d52-49f9-9d21-740425434b1b,NL Scholarship,University of Twente (UT),1,c4ba05c3-1a14-4eec-9dae-ff98f1e07218,NL Scholarship,jaccard_words:1.000
+b1a1bbf3-3fd5-4595-ad39-3516f436bf29,NL Scholarship,University of Groningen,1,c4ba05c3-1a14-4eec-9dae-ff98f1e07218,NL Scholarship,jaccard_words:1.000
+3e5aa7cf-7391-46d1-962e-82718068162c,AYA Scholarships,Appaloosa Horse Club - Appaloosa Youth Program,1,f4fe593a-6a6e-44dd-8c20-6282b96edd15,AYA Scholarship,jaccard_words:1.000
+41d60a50-b600-4647-adf8-56bb3585cf8d,Thomas M. Spencer Memorial Endowed Scholarship Central,San Jacinto College,0.906,b9bd4040-1073-4e39-a955-10370cf942ce,Thomas M. Spencer Memorial Endowed Scholarship North,levenshtein:0.906
+41d60a50-b600-4647-adf8-56bb3585cf8d,Thomas M. Spencer Memorial Endowed Scholarship Central,San Jacinto College,0.887,e95b4c54-0112-4dcd-8d87-19305c7507ba,Thomas M. Spencer Memorial Endowed Scholarship South,levenshtein:0.887
+b9bd4040-1073-4e39-a955-10370cf942ce,Thomas M. Spencer Memorial Endowed Scholarship North,San Jacinto College,0.961,e95b4c54-0112-4dcd-8d87-19305c7507ba,Thomas M. Spencer Memorial Endowed Scholarship South,levenshtein:0.961
+41db53b2-e5e0-4058-a9bd-b892b8ab9497,International Summer School 2018,University of Sussex,1,a9bf9a90-499f-4bd7-8a9a-2a62b07f9136,"International Summer School, 2018",jaccard_words:1.000
+4411b57a-71d7-4936-9565-1542a0c37124,Australia Awards Scholarships,RMIT University,1,598d757e-2109-4841-9dc9-776432a21e90,Australia Awards Scholarships,jaccard_words:1.000
+4603f734-4119-445a-a1a0-e728fe11885b,Randall Silcock Grant,University of Queensland,1,f4b4fa66-30f0-411c-9cd0-0f21eb15b951,Randall Silcock Scholarship,jaccard_words:1.000
+48da379b-0d7d-496b-99ee-37403d6a7cbf,Deloitte & Touche Scholarship,Loyola University Chicago,1,a57321b7-9732-42a5-bbf8-0da3c5446702,Deloitte & Touche Scholarship Program,jaccard_words:1.000
+49c6a8f9-b4d6-40af-a8f1-c1aa6800dbde,Music Scholarship,University of Leicester,1,82f83d39-f38b-405e-aaa0-39a71b844d5d,Music Scholarships,jaccard_words:1.000
+4ab27c51-b0c5-4def-9635-186b8d4ce662,Charles E. & Frances M. Osterman Memorial Scholarship,Florida Gateway College,0.833,6a9d3b9d-7963-429a-a2a4-7e07e12d0fc5,Charles E. and Frances M. Osterman Scholarship,jaccard_words:0.833
+4f45aa29-6a3f-4c47-a8f5-99a4321936ce,MWCC Alumni Association Continuing Student Scholarship,Mount Wachusett Community College,1,a4658a70-5ed2-46c7-9f33-3dd20fd0dcb1,MWCC Alumni Association Continuing Student Scholarship,jaccard_words:1.000
+522de147-3e07-4cc3-b078-f17f8cb65918,Overland Park Regional Medical Center Scholarship - EMS,Johnson County Community College,0.895,a89c0fb2-151b-42be-8918-1026e80deab3,Overland Park Regional Medical Center Scholarship - Nursing,levenshtein:0.895
+5291fdf2-1e5c-43d2-a28d-ae70c16e1b6a,Study Abroad Manning School of Business RIST Scholarship Summer,University of Massachusetts Lowell,0.905,a8ce349f-4ccf-4e93-9a9b-5e54f2822f19,Study Abroad Manning School of Business RIST Scholarship Fall,levenshtein:0.905
+53895e63-3390-478e-8d82-81692af010c6,The Bruce L. and Sally K. Rogers Pi Kappa Phi Restricted Scholarship,Stetson University,0.894,f948629f-fdea-42b4-9e2e-2b8ad0387105,The Bruce L. and Sally K. Rogers Pi Kappa Phi Endowed Scholarship,levenshtein:0.894
+546467a0-c63a-4e17-a2ef-b7288c3bea96,Wells Fargo Endowed Scholarship,University of North Florida,1,d0f7e8da-da2e-4b2c-bbd2-0c0dd3a603fd,Wells Fargo Endowed Scholarship,jaccard_words:1.000
+57d2cec0-cfb5-431f-8c0c-78b13c939f97,Arabian Horse Association Region 4 Youth Scholarship,Arabian Horse Association-Region 4,0.923,d174678e-c0d2-4d8d-93c0-08e54eac9ef2,Arabian Horse Association Region 4 Adult Scholarship,levenshtein:0.923
+58258601-a198-4a25-9627-ef1fe12fb05d,Colorado Opportunity Scholarship Initiative (COSI),Morgan Community College Foundation,1,eab71d25-040f-45c4-b027-d6854834208d,Colorado Opportunity Scholarship Initiative (COSI),jaccard_words:1.000
+5a9784f6-dcfb-4e91-819c-da0d8ba50e63,Waubonsee Community College Faculty Council Awards Endowed Scholarship,Waubonsee Community College,0.857,cf74b8c1-0335-42c3-9e74-70bcdc143592,Waubonsee Community College Faculty Council Awards Endowed Academic Scholarship,jaccard_words:0.857
+5bd8b04c-48ea-4076-bd97-32fc45d67139,The Peter J. Trainor Leadership Award,Mount Wachusett Community College,1,e2cb6919-bc43-41e2-8018-0eb58bde4bb6,Peter J. Trainor Leadership Award,jaccard_words:1.000
+5be186f9-6e66-4cb6-915b-f7b9bfd10218,Rotary Club of Playa Venice Sunrise STEM Scholarship,Rotary Club of Playa Venice Sunrise,0.893,e7b16d84-803b-4954-8e8e-729facfb2654,Rotary Club of Playa Venice Sunrise Interact Scholarship,levenshtein:0.893
+5dd95ea3-6ed9-4635-94cb-dd3183fedfb2,"CouponBirds' ""Help to Save"" Scholarship",CouponBirds,1,7d14071f-33bc-489a-b254-1f22baf75aa8,CouponBirds Help To Save Scholarship,jaccard_words:1.000
+5dd95ea3-6ed9-4635-94cb-dd3183fedfb2,"CouponBirds' ""Help to Save"" Scholarship",CouponBirds,1,ad244de9-3916-4010-b566-13a5df04f074,"CouponBirds ""Help to Save"" Scholarship",jaccard_words:1.000
+5dd95ea3-6ed9-4635-94cb-dd3183fedfb2,"CouponBirds' ""Help to Save"" Scholarship",CouponBirds,1,f61033d1-969e-4911-b585-09d4b9740c04,"COUPONBIRDS ""HELP TO SAVE"" SCHOLARSHIP",jaccard_words:1.000
+7d14071f-33bc-489a-b254-1f22baf75aa8,CouponBirds Help To Save Scholarship,CouponBirds,1,ad244de9-3916-4010-b566-13a5df04f074,"CouponBirds ""Help to Save"" Scholarship",jaccard_words:1.000
+7d14071f-33bc-489a-b254-1f22baf75aa8,CouponBirds Help To Save Scholarship,CouponBirds,1,f61033d1-969e-4911-b585-09d4b9740c04,"COUPONBIRDS ""HELP TO SAVE"" SCHOLARSHIP",jaccard_words:1.000
+ad244de9-3916-4010-b566-13a5df04f074,"CouponBirds ""Help to Save"" Scholarship",CouponBirds,1,f61033d1-969e-4911-b585-09d4b9740c04,"COUPONBIRDS ""HELP TO SAVE"" SCHOLARSHIP",jaccard_words:1.000
+61b4f365-5305-43a7-ba5b-1b0417089477,STEM Scholarships,Massachusetts Bay Community College (MassBay),1,ea366a08-33c0-4faf-95fe-1131cb53d831,STEM Scholarship,jaccard_words:1.000
+61fa38b3-2014-4d64-805c-387dacfd89e3,ASA Grants,Society of Actuaries,1,726df737-ea08-4a62-aba6-bde5a0c0058a,ASA Scholarships,jaccard_words:1.000
+64bc0f2b-2014-41a4-9e29-3f6ee8c30d42,Midland States Bank Scholarship,Waubonsee Community College,1,ccc1ce45-c9d3-4d4e-b79d-300565cb6e47,Midland States Bank Scholarship,jaccard_words:1.000
+64f7dfa0-daf7-4a56-a388-0518dc5c80c7,Western Australian Premier’s University Scholarships 2026,The University of Notre Dame Australia,1,ea597fa1-a286-43a7-ae3b-ca24c0e95f7f,Western Australian Premier’s University Scholarships Program 2026,jaccard_words:1.000
+6532a9ec-b436-4a68-93f5-ac71154cd628,Sports Scholarships,Dundalk Institute of Technology,1,a113f5a8-43c0-441f-9fe0-e6e34e651c73,Sports Grant,jaccard_words:1.000
+6532a9ec-b436-4a68-93f5-ac71154cd628,Sports Scholarships,Dundalk Institute of Technology,1,c6a73bbe-fa59-442d-b403-12269b6abaf8,Sports Scholarships,jaccard_words:1.000
+6532a9ec-b436-4a68-93f5-ac71154cd628,Sports Scholarships,Dundalk Institute of Technology,1,fe29929f-6dc0-4476-9fcd-f6e8744fdbd8,Sports Scholarships and Funding,jaccard_words:1.000
+a113f5a8-43c0-441f-9fe0-e6e34e651c73,Sports Grant,Eastern Mediterranean University,1,c6a73bbe-fa59-442d-b403-12269b6abaf8,Sports Scholarships,jaccard_words:1.000
+a113f5a8-43c0-441f-9fe0-e6e34e651c73,Sports Grant,Eastern Mediterranean University,1,fe29929f-6dc0-4476-9fcd-f6e8744fdbd8,Sports Scholarships and Funding,jaccard_words:1.000
+c6a73bbe-fa59-442d-b403-12269b6abaf8,Sports Scholarships,University of Leicester,1,fe29929f-6dc0-4476-9fcd-f6e8744fdbd8,Sports Scholarships and Funding,jaccard_words:1.000
+b01e6dff-ec07-474a-96ff-26031b740b6b,Fellowship: Global Peace On The Move,Peace Revolution,1,b0c86e1c-13a4-419f-9db4-b4d3aa30c317,Fellowship: Global Peace On The Move Fellowship,jaccard_words:1.000
+b9b3cf08-0a40-4469-80a6-24da741829db,Fellowship: Global Peace On The Move 18 in Thailand,Peace Revolution,0.941,ce19f776-1666-4b8c-b3e2-2f4783e29a8a,Fellowship: Global Peace On The Move XIV in Thailand,levenshtein:0.941
+67cd6beb-e9e0-439d-81da-4e2558215241,Freshman Designation-Based Boys/Girls State Scholarship,The University of Southern Mississippi,0.911,a742189a-5a98-4513-b372-9489a9c50962,Freshman Designation-Based Boys/Girls Nation Scholarship,levenshtein:0.911
+6821a8d2-53bb-460e-ae90-94b76dfa0f8e,American Institute Of Architects/ American Architectural Foundation Scholarship,American Institute of Architects/ American Architectural Foundation,1,bec3d0b1-9fba-49a4-a35a-98b4e699d93f,American Institute Of Architects/ American Architectural Foundation Scholarships,jaccard_words:1.000
+6a7bfce3-70db-4204-8b6c-01b79910d718,Dick Smith College of Science and Mathematics Scholarship,Tarleton State University,0.833,a990d8ef-b568-45f4-ad0d-bdc6f192ca6d,Dick Smith College of Science & Mathematics Graduate Scholarship,jaccard_words:0.833
+6a7bfce3-70db-4204-8b6c-01b79910d718,Dick Smith College of Science and Mathematics Scholarship,Tarleton State University,0.833,f75cc752-f180-4d0a-b162-f8d477099001,Dick Smith College of Science & Mathematics Premier Scholarship,jaccard_words:0.833
+a990d8ef-b568-45f4-ad0d-bdc6f192ca6d,Dick Smith College of Science & Mathematics Graduate Scholarship,Tarleton State University,0.887,f75cc752-f180-4d0a-b162-f8d477099001,Dick Smith College of Science & Mathematics Premier Scholarship,levenshtein:0.887
+6df690a0-2e90-4493-a3c1-3da35b4e58f5,College Access Program Grant,Kentucky Higher Education Assistance Authority,1,da9ee5bb-daa7-499d-99ba-107b83638b1f,College Access Scholarship,jaccard_words:1.000
+71d503f8-684a-4f8e-a6de-3cc6ce9e711a,Rees Scholarship Foundation HVACR and Water Heating Technician - Spring Program,Rees Scholarship Foundation,0.922,a0f12435-df66-4e24-8627-f51065d3072a,Rees Scholarship Foundation HVACR and Water Heating Technician - Fall Program,levenshtein:0.922
+71f9a1cb-fdc8-499f-88aa-1c41d03a33d9,University of Denver Merit Scholarships,University of Denver,1,8c3191ab-3778-4e2a-8689-d153c3ed4c83,University Of Denver Merit Scholarship,jaccard_words:1.000
+750af8c8-9c2f-4250-9f4b-335253fb586e,Ashland Hercules Water Technologies Sciences Scholarship - Biology,University of North Florida,0.891,9fdc22f5-9bdd-471d-9ddb-45c29de24eb9,Ashland Hercules Water Technologies Sciences Scholarship - Physics,levenshtein:0.891
+85c59383-d1d6-4f19-8fbb-2bc8c4867d9c,Ashland Hercules Water Technologies Sciences Scholarship - Chemistry,University of North Florida,0.894,9fdc22f5-9bdd-471d-9ddb-45c29de24eb9,Ashland Hercules Water Technologies Sciences Scholarship - Physics,levenshtein:0.894
+7a692db1-2d8c-44fc-8e34-31b275310e1b,Michael Greenwood Business Scholarship,Mount Wachusett Community College,1,edb6136f-71f1-42c9-90b3-e81f272df206,Michael Greenwood Business Scholarship,jaccard_words:1.000
+7c444a03-2681-4b78-b07d-4a6d56b0b84b,Firehouse Subs Public Safety Foundation Scholarship,Cuyahoga Community College,1,a12545d3-c572-48cd-8907-61ee7ec5f299,Firehouse Subs Public Safety Foundation Scholarship,jaccard_words:1.000
+7db098f8-4ec2-42c9-bf89-bb4760b0ec40,Pepsi-Cola Bottling Co. Endowed Athletic Scholarship,Broward College,0.833,9a60f068-b03d-44a6-b21e-e3ca17632d87,Pepsi-Cola Bottling Co. Endowed Scholarship,jaccard_words:0.833
+7e49b603-ee7f-4013-bc00-8d4cd1f77155,Minority Women in STEM,martha bode,1,a42dfdbf-2779-4837-96ad-56c5ec0c77d6,Minority Women in STEM Scholarship,jaccard_words:1.000
+80189b9b-43a5-42da-bc46-73e46a7870e9,George Washington University Freeman Fellowship Program For Asian Mid-career Pro,Freeman Foundation,1,ac697059-8a5a-4e9f-beb1-04b47c6fa3fb,George Washington University Freeman Fellowship Program for Asian Mid-career Pro,jaccard_words:1.000
+8362fc5c-8f9d-4d6e-ae57-259effb90aa4,Bank of America Scholarship,Eastern Florida State College,1,8842a715-fb49-41e8-8b29-9fcdb3587c12,Bank of America Scholarship,jaccard_words:1.000
+8362fc5c-8f9d-4d6e-ae57-259effb90aa4,Bank of America Scholarship,Eastern Florida State College,1,94f9bfad-0da1-41c0-a672-8af7bdc5736d,Bank of America Scholarship,jaccard_words:1.000
+8842a715-fb49-41e8-8b29-9fcdb3587c12,Bank of America Scholarship,University of West Florida,1,94f9bfad-0da1-41c0-a672-8af7bdc5736d,Bank of America Scholarship,jaccard_words:1.000
+84aeb811-b554-4752-83bc-e79be2e3ec5e,Vice-Chancellor's Scholarship,UWE Bristol (University of the West of England),1,f8246610-59ff-4e22-9dc9-9e11a7dc1c5e,Vice-Chancellor’s Scholarship,jaccard_words:1.000
+853daea4-dd3b-4a31-ad6c-d44c8a7596ac,San Diego County Farm Bureau Scholarship,Farm Bureau of San Diego County,1,f29b526d-d099-46d0-86db-4e7e8d7ab007,San Diego County Farm Bureau Scholarship,jaccard_words:1.000
+8808e80a-e2da-44e4-8d06-ad778fb3d678,South Texas Women's Hospital Endowed Scholarship SAC,Alamo Colleges Foundation,0.981,88dc6471-d576-4ffe-a676-8b3900c6857b,South Texas Women's Hospital Endowed Scholarship SPC,levenshtein:0.981
+8880521f-2358-40f4-8b57-14daed93391c,Transfer Scholarship,Stetson University,1,96730efb-9cdc-42da-b695-0d0d901e8195,Transfer Scholarship,jaccard_words:1.000
+8c81358b-b604-4d85-a5a2-30fcfd03da9a,Higher Education Scholarship,Academy of Medical-Surgical Nurses,1,d212d96e-2881-499c-b92d-a50465931692,Higher Education Scholarship,jaccard_words:1.000
+8f9ea71c-5961-4be2-a250-b29f0131d400,PFLAG of Jacksonville Scholarship,"Parents, Families and Friends of Lesbians and Gays-Jacksonville Chapter",1,d235cb7d-a33d-43a9-bb00-785108803674,PFLAG Jacksonville Scholarship,jaccard_words:1.000
+91edaaa0-cacc-47db-a75f-8f5c2509f88f,UICC Yamagiwa-Yoshida Memorial International Cancer Study Grants,Union for International Cancer Control (UICC),0.857,fe4fbca7-1caa-4b1b-8f08-ee4c91201dd1,UICC Yamagiwa-yoshida Memorial International Study Grants,jaccard_words:0.857
+94c3725b-fb00-437f-a33b-63cbd76192a2,School of Theatre and Dance Tuition Program for Incoming Students (Theatre BA),Northern Illinois University,0.882,cb34e3f8-062c-4226-9626-14d5c56655df,School of Theatre and Dance Tuition Program for Incoming Students (Acting),levenshtein:0.882
+cb34e3f8-062c-4226-9626-14d5c56655df,School of Theatre and Dance Tuition Program for Incoming Students (Acting),Northern Illinois University,0.883,d758da8c-8b0e-4b27-8faf-84f2caabc105,School of Theatre and Dance Tuition Program for Incoming Students (Design/Tech),levenshtein:0.883
+9910b0ee-a535-4cde-9e78-68259649e2c5,Heartland Bank Community Enhancement Award Scholarship,Waubonsee Community College,1,e78aa125-f308-4d09-b784-542fadcef1a2,Heartland Bank Community Enhancement Scholarship,jaccard_words:1.000
+9a99ab30-4067-414b-82be-0c1a3450bf9a,International Academic Achievement Scholarship,Ohio Dominican University,1,f15c0dea-67ba-4d6b-82f3-a6f182457fb2,International Academic Achievement Award,jaccard_words:1.000
+9ab1fcbb-3722-47a7-b807-7bac08c2f73a,Rinker Scholarship for Travel Courses in Religious Studies,Stetson University,1,ebfab5c1-6aee-4ea5-8f7e-8bfa495c311b,Rinker Scholarship for Travel Courses in Religious Studies,jaccard_words:1.000
+9cb2fe5b-438e-489f-8bb7-e30dc93d7af4,Computer Science Scholarship,The College of the Florida Keys,1,e8286ca7-ed66-483d-a215-f14a2c693752,Computer Science Scholarship,jaccard_words:1.000
+9f92be95-561a-4104-8e1b-851193ae3f2c,Idaho Golf Course Superintendents Association Legacy Scholarship,Idaho Golf Course Superintendents Association,0.906,f2494ef7-3788-493c-b818-ff079fb02031,Idaho Golf Course Superintendents Association Turf Scholarship,levenshtein:0.906
+a1320717-0ad5-4d6d-b3ca-8e3a31d064f3,Josh Gibson MD Grant,Josh Gibson MD,1,ec660940-2b38-4240-b64d-41532ed67d77,Josh Gibson MD Scholarship,jaccard_words:1.000
+a1439591-611c-4636-b199-b783e1fe7f55,NCITD International Trade Scholarship Program,National Council on International Trade Development (NCITD),1,dd7e1ad7-23d7-495b-be53-c0b4184561b8,NCITD International Trade Scholarship,jaccard_words:1.000
+a1ca8c49-23f9-4e74-9ec3-0e913461090a,Global Scholarship,Tulane University,1,b8619af4-88b8-4d5a-8d20-4fe5070959b3,Global Scholarships,jaccard_words:1.000
+a5e1f92a-a7e4-4dd4-99a6-c9a968d64b39,Bank of America Dream Makers Scholarship,Tallahassee State College,1,d88496fb-1c55-48cc-8d9d-1429527e1908,Bank of America Dream Makers Scholarship,jaccard_words:1.000
+a5e1f92a-a7e4-4dd4-99a6-c9a968d64b39,Bank of America Dream Makers Scholarship,Tallahassee State College,1,e4270b68-8c86-4ff7-be83-dd550d191247,Bank of America Dream Makers Scholarship,jaccard_words:1.000
+a5e1f92a-a7e4-4dd4-99a6-c9a968d64b39,Bank of America Dream Makers Scholarship,Tallahassee State College,1,eb09bf0e-3038-4e75-aadc-9a2953704871,"Bank of America ""Dream Makers"" Scholarship",jaccard_words:1.000
+d88496fb-1c55-48cc-8d9d-1429527e1908,Bank of America Dream Makers Scholarship,Pensacola State College,1,e4270b68-8c86-4ff7-be83-dd550d191247,Bank of America Dream Makers Scholarship,jaccard_words:1.000
+d88496fb-1c55-48cc-8d9d-1429527e1908,Bank of America Dream Makers Scholarship,Pensacola State College,1,eb09bf0e-3038-4e75-aadc-9a2953704871,"Bank of America ""Dream Makers"" Scholarship",jaccard_words:1.000
+e4270b68-8c86-4ff7-be83-dd550d191247,Bank of America Dream Makers Scholarship,Broward College,1,eb09bf0e-3038-4e75-aadc-9a2953704871,"Bank of America ""Dream Makers"" Scholarship",jaccard_words:1.000
+a661d0e5-61e1-41e2-be3b-8706de406d87,Performing Arts Scholarship,Waubonsee Community College,1,bdacf0d5-94a4-42c8-8084-f91aa18bea6e,Performing Arts Scholarship,jaccard_words:1.000
+a70131b4-6edc-4011-9e2f-6a859f8e59ed,Study Abroad Scholarship,Johnson County Community College,1,fe7686b1-5c97-4f52-bd22-37a435c6cd29,Study Abroad Scholarship,jaccard_words:1.000
+a762d9d4-fae4-44cb-9cff-b77b18cdb8f7,Washington State Opportunity Scholarship -Career and Technical Scholarship (Spring),Washington State Opportunity Scholarship,0.925,d1d347c7-5b49-4f3a-90ce-9d4ec406aa5f,Washington State Opportunity Scholarship - Career and Technical Scholarship (Fall),levenshtein:0.925
+b571391d-e229-469c-8a50-cd282700a6a3,Bank of America Endowed Scholarship,Seminole State College of Florida,1,eef4ced0-c899-4db1-96d2-82468158f4a0,Bank of America Endowed Scholarship,jaccard_words:1.000
+b5d05627-bca5-40da-9b54-71aed109b810,Florida Blue Nursing and Allied Health Scholarship,Florida State College at Jacksonville,1,d03b6ca0-692d-409e-99c4-3ef9733a5dca,Florida Blue Nursing and Allied Health Scholarship,jaccard_words:1.000
+b9cc8c6f-538a-4444-918f-5391f0052d4b,General Scholarship,Broward College,1,cf8b53c4-777e-4dfc-9580-d94db44de1c7,General Scholarship,jaccard_words:1.000
+c3d28df0-30f6-4298-9c1c-2cfb02466686,Millie McGuire Foundation,Mount Wachusett Community College,1,e45d3ca5-4f82-437d-a8ac-9427f8284b7c,Millie McGuire Foundation Scholarship,jaccard_words:1.000
+c3d92f6a-4662-4d34-b642-99ba54b79163,MWCC Veteran’s Memorial Scholarship,Mount Wachusett Community College,1,f448f019-0973-423b-9c67-6779272a3f2d,MWCC Veteran’s Memorial Scholarship,jaccard_words:1.000
+c80cf082-937c-4af4-a5ed-9d7331966fd5,"Dr. James T. Anderson and John F. Root, Jr. Scholarship",Community Foundation of Eastern Connecticut,1,da1ef44b-f2b0-4a5e-9c7c-e3b5611a7b75,"Dr. James T. Anderson and John F. Root, Jr. Scholarship",jaccard_words:1.000
+c9c23d7b-2b11-4bfb-bc37-6cb3552ed1a7,"Joseph B. Ruth, Jr. and Mary I. Ruth Scholarship",Mount Wachusett Community College,1,f5d481b7-292b-4f45-88ea-78fdcf63fc63,"Joseph B. Ruth, Jr. and Mary I. Ruth Scholarship",jaccard_words:1.000
+d3285882-3bd3-48c0-82a3-6aca92f60c01,In-Country/In Region Scholarships Programme at SEARCA FS (Scholarship for Master’s Studies),DAAD,0.933,e93f9e6b-f58a-4d71-a4f9-9efc54a4c641,In-Country/In Region Scholarships Programme at SEARCA FS (Scholarship for PhD’s Studies),levenshtein:0.933
+dd8e0a86-6678-424b-906f-21d52a17bf97,Idaho Legion Auxiliary General Studies Non-Traditional Scholarship,American Legion Auxiliary,0.857,f3d3edaa-3dda-44fd-838a-1506db7f9de3,Idaho Legion Auxiliary General Studies Traditional Scholarship,jaccard_words:0.857
+dfc66c3d-18ba-4cff-ac2d-5d0fea4cb50a,Jeffrey M. Jarczyk Scholarship for Accounting,Loyola University Chicago,1,fab6c371-f039-4659-bf75-8757b19f1f70,Jeffrey M. Jarczyk Accounting Scholarship,jaccard_words:1.000
+e15f658b-2f14-4e06-a8b6-c22eac750e4d,Psychology Scholarship,Kankakee Community College Foundation,1,f27db2e8-483d-4dd3-b0c3-430e7f3a4cb4,Psychology Scholarship,jaccard_words:1.000
+f949b175-401f-4b31-8cd8-2fc5e21a2fbb,Educational Testing Service Postdoctoral Fellowship Program,Educational Testing Service,1,fc4acc08-71bf-4fc2-99ff-05cb1e29ef70,Educational Testing Service Postdoctoral Fellowship Award Program,jaccard_words:1.000

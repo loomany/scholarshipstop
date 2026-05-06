@@ -38,6 +38,29 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+SHELL_MARKER_SERVICE="railway-cron"
+SHELL_MARKER_JOB="shell-orchestrator"
+SHELL_MARKER_RUN_ID="$(date +%s)-$$"
+SHELL_MARKER_STARTED_AT_S="$(date +%s)"
+SHELL_MARKER_EMITTED="0"
+
+emit_shell_terminal_marker() {
+  if [ "$SHELL_MARKER_EMITTED" = "1" ]; then
+    return
+  fi
+  SHELL_MARKER_EMITTED="1"
+  local ec="$1"
+  local now_s
+  now_s="$(date +%s)"
+  local duration_ms="$(( (now_s - SHELL_MARKER_STARTED_AT_S) * 1000 ))"
+  if [ "$ec" -eq 0 ]; then
+    echo "JOB_DONE service=\"${SHELL_MARKER_SERVICE}\" job=\"${SHELL_MARKER_JOB}\" runId=\"${SHELL_MARKER_RUN_ID}\" durationMs=${duration_ms} processed=0 success=0 failed=0 skipped=0 exit=0"
+  else
+    echo "JOB_FAILED service=\"${SHELL_MARKER_SERVICE}\" job=\"${SHELL_MARKER_JOB}\" runId=\"${SHELL_MARKER_RUN_ID}\" durationMs=${duration_ms} processed=0 success=0 failed=0 skipped=0 error=\"shell_exit_${ec}\""
+  fi
+}
+
+trap 'ec=$?; emit_shell_terminal_marker "$ec"' EXIT
 
 resolve_base_url() {
   local u
@@ -60,6 +83,7 @@ BASE_URL="$(resolve_base_url)"
 run_tsx_cron() {
   local name="$1"
   local rel="$2"
+  local strict="${3:-0}"
   echo "[railway-cron] $(date -u +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || echo '') tsx START ${name} (${rel})"
   set +e
   (cd "$PROJECT_ROOT" && npx tsx "$rel")
@@ -69,6 +93,9 @@ run_tsx_cron() {
     echo "[railway-cron] $(date -u +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || echo '') tsx OK ${name}"
   else
     echo "[railway-cron] $(date -u +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || echo '') tsx WARN ${name} exit=${ec} (continuing)"
+    if [ "$strict" -eq 1 ]; then
+      return "$ec"
+    fi
   fi
 }
 
@@ -207,17 +234,7 @@ task_seo_meta_generate() {
 }
 
 task_seo_generation_http() {
-  local secret="${GOOGLE_INDEXING_SECRET:-}"
-  if [ -z "$secret" ]; then
-    echo "[railway-cron] ERROR: Set GOOGLE_INDEXING_SECRET for seo-generation-http" >&2
-    exit 1
-  fi
-  local gen_limit="${SEO_WORKER_GENERATE_LIMIT:-175}"
-  local meta_limit="${SEO_AI_META_BATCH:-20}"
-  http_post_json "SEO worker generate (HTTP)" \
-    "/api/internal/seo/worker-generate" "$secret" "{\"limit\":${gen_limit}}"
-  http_post_json "SEO AI meta generate (HTTP)" \
-    "/api/internal/seo/meta-generate" "$secret" "{\"limit\":${meta_limit}}"
+  run_tsx_cron "cron-seo-generation-http" "scripts/cron-seo-generation-http.ts" 1
 }
 
 task_all() {
@@ -234,6 +251,7 @@ usage() {
 }
 
 main() {
+  echo "JOB_START service=\"${SHELL_MARKER_SERVICE}\" job=\"${SHELL_MARKER_JOB}\" runId=\"${SHELL_MARKER_RUN_ID}\" timestamp=\"$(date -u +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || echo '')\""
   echo "[railway-cron] $(date -u +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || echo '') run start task=${1:-all} base=${BASE_URL}"
   local cmd="${1:-all}"
   case "$cmd" in

@@ -1,4 +1,5 @@
 import slugify from "slugify";
+import { randomUUID } from "node:crypto";
 import { env } from "../config/env.js";
 import { FalTimeoutError, generateImage } from "../lib/fal.js";
 import { markdownToHtml } from "../lib/html.js";
@@ -38,6 +39,52 @@ import type { AnchorSuggestion } from "../lib/types.js";
 import type { TopicFailureClass, UploadedImageResult } from "../lib/supabase.js";
 import { countWords } from "../lib/markdown.js";
 import { runSeoPublishGuardWarnOnlyLocal } from "../seo/prePublishSeoGuard.js";
+
+type JobCounters = {
+  processed: number;
+  success: number;
+  failed: number;
+  skipped: number;
+};
+
+const JOB_SERVICE = "Контент Хаб";
+const JOB_NAME = "content:run-once";
+const JOB_RUN_ID = randomUUID();
+const JOB_STARTED_AT_MS = Date.now();
+const jobCounters: JobCounters = { processed: 0, success: 0, failed: 0, skipped: 0 };
+
+function escapeMarkerValue(value: string): string {
+  return value.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+}
+
+function markerBase(): string {
+  return `service="${escapeMarkerValue(JOB_SERVICE)}" job="${escapeMarkerValue(JOB_NAME)}" runId="${escapeMarkerValue(JOB_RUN_ID)}"`;
+}
+
+function emitJobStart(): void {
+  console.log(`JOB_START ${markerBase()} timestamp="${new Date(JOB_STARTED_AT_MS).toISOString()}"`);
+}
+
+function emitJobProgress(): void {
+  console.log(
+    `JOB_PROGRESS ${markerBase()} processed=${jobCounters.processed} success=${jobCounters.success} failed=${jobCounters.failed} skipped=${jobCounters.skipped}`
+  );
+}
+
+function emitJobDone(): void {
+  const durationMs = Math.max(0, Date.now() - JOB_STARTED_AT_MS);
+  console.log(
+    `JOB_DONE ${markerBase()} durationMs=${durationMs} processed=${jobCounters.processed} success=${jobCounters.success} failed=${jobCounters.failed} skipped=${jobCounters.skipped} exit=0`
+  );
+}
+
+function emitJobFailed(error: unknown): void {
+  const durationMs = Math.max(0, Date.now() - JOB_STARTED_AT_MS);
+  const message = error instanceof Error ? error.message : String(error);
+  console.error(
+    `JOB_FAILED ${markerBase()} durationMs=${durationMs} processed=${jobCounters.processed} success=${jobCounters.success} failed=${jobCounters.failed} skipped=${jobCounters.skipped} error="${escapeMarkerValue(message)}"`
+  );
+}
 
 type JobStage =
   | "picking_topic"
@@ -1312,6 +1359,7 @@ async function processOneTopic(): Promise<"published" | "deferred" | "empty"> {
 }
 
 async function main() {
+  emitJobStart();
   if (env.RUN_REPROCESS_ON_START) {
     await runStartupReprocess();
   }
@@ -1322,29 +1370,57 @@ async function main() {
       try {
         result = await processOneTopic();
       } catch (error) {
+        jobCounters.failed += 1;
+        emitJobProgress();
         logUnknownError("[Cycle] uncaught loop error", error);
         continue;
       }
       if (result === "empty") {
+        jobCounters.skipped += 1;
+        emitJobProgress();
         logger.info("[Cycle] Queue fully drained. Exiting continuous run.");
         break;
       }
       if (result === "published") {
+        jobCounters.processed += 1;
+        jobCounters.success += 1;
+        emitJobProgress();
         logger.info("[Cycle] Article published successfully. Continuing immediately without pause.");
       } else {
+        jobCounters.processed += 1;
+        jobCounters.skipped += 1;
+        emitJobProgress();
         logger.info("[Cycle] Publication failed/deferred. Retrying next topic immediately...", { result });
       }
     }
+    emitJobDone();
     return;
   }
 
   for (let i = 0; i < env.CONTENT_HUB_POSTS_PER_RUN; i += 1) {
     const result = await processOneTopic();
-    if (result === "empty") break;
+    if (result === "empty") {
+      jobCounters.skipped += 1;
+      emitJobProgress();
+      break;
+    }
+    if (result === "published") {
+      jobCounters.processed += 1;
+      jobCounters.success += 1;
+      emitJobProgress();
+      continue;
+    }
+    jobCounters.processed += 1;
+    jobCounters.skipped += 1;
+    emitJobProgress();
   }
+  emitJobDone();
 }
 
 main().catch((error) => {
+  jobCounters.failed += 1;
+  emitJobProgress();
+  emitJobFailed(error);
   logUnknownError("fatal", error);
-  process.exitCode = 1;
+  process.exit(1);
 });

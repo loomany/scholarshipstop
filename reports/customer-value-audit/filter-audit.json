@@ -1,0 +1,164 @@
+{
+  "generatedAt": "2026-05-05T23:47:15.332Z",
+  "baseUrl": "http://localhost:3001",
+  "overallVerdict": "warnings",
+  "scenarios": [
+    {
+      "scenario": "A — Keyword search (STEM)",
+      "status": "pass",
+      "startingUrl": "http://localhost:3001/scholarships/hub/matches",
+      "finalUrl": "http://localhost:3001/scholarships/hub/matches?q=STEM",
+      "cardCountBefore": 9,
+      "cardCountAfter": 9,
+      "firstFiveTitles": [
+        "EIT Innoenergy Masters Scholarship for Indians 2025",
+        "Monash High Achiever Award (for new students) at Monash University Malaysia 2025",
+        "EPSRC Doctoral Landscape Scholarships at University of Glasgow 2025",
+        "SARAO Masters Scholarship 2026",
+        "Clinical PhD Scholarship - Promoting Equity in Stroke Rehabilitation at University of Auckland Technology 2026"
+      ],
+      "firstFiveChips": [
+        "Eligible: India",
+        "Study in: Spain",
+        "Eligible: India",
+        "Study in: Spain"
+      ],
+      "relevanceNotes": [],
+      "screenshotPath": "reports/customer-value-audit/screenshots/filter-a-keyword-stem.png"
+    },
+    {
+      "scenario": "B — Categories",
+      "status": "pass",
+      "startingUrl": "http://localhost:3001/scholarships/hub/matches",
+      "finalUrl": "http://localhost:3001/scholarships/hub/matches?category=education",
+      "cardCountBefore": 9,
+      "cardCountAfter": 9,
+      "firstFiveTitles": [
+        "EIT Innoenergy Masters Scholarship for Indians 2025",
+        "Migrant Farmworker Baccalaureate Scholarship",
+        "University of Calgary Award for International Student Athletes 2026",
+        "Yavapai-Apache Nation Higher Education Scholarship",
+        "Korean Studies Association of South East Asia Scholarships at UNSW Canberra 2026"
+      ],
+      "firstFiveChips": [
+        "Eligible: India",
+        "Study in: Spain",
+        "Eligible: India",
+        "Study in: Spain"
+      ],
+      "relevanceNotes": [
+        "STEM had no listings; used fallback category: Education."
+      ],
+      "screenshotPath": "reports/customer-value-audit/screenshots/filter-b-categories.png"
+    },
+    {
+      "scenario": "C — Study in (United States)",
+      "status": "pass",
+      "startingUrl": "http://localhost:3001/scholarships/hub/matches",
+      "finalUrl": "http://localhost:3001/scholarships/hub/matches?host_cc=US",
+      "cardCountBefore": 9,
+      "cardCountAfter": 9,
+      "firstFiveTitles": [
+        "Transfer Scholarship at Taylor University 2026",
+        "Wagner-Torizuka Fellowship by Society of Nuclear Medicine and Molecular Imaging (SNMMI) 2026",
+        "OAS Scholarship and Training Programs 2026",
+        "International Dean’s Scholarship",
+        "GGU Worldwide Scholarship (UHUB)"
+      ],
+      "firstFiveChips": [
+        "Study in: United States",
+        "Study in: United States"
+      ],
+      "relevanceNotes": [],
+      "screenshotPath": "reports/customer-value-audit/screenshots/filter-c-study-in-us.png"
+    },
+    {
+      "scenario": "D — I'm from (Canada)",
+      "status": "pass",
+      "startingUrl": "http://localhost:3001/scholarships/hub/matches",
+      "finalUrl": "http://localhost:3001/scholarships/hub/matches?app_cc=CA",
+      "cardCountBefore": 9,
+      "cardCountAfter": 9,
+      "firstFiveTitles": [
+        "Peter F. Bronfman Award at Schulich School of Business 2026",
+        "Walter and Laura Scott Horticulture Scholarship",
+        "Margaret and Angus Hamilton Apple Research Scholarship",
+        "Dr. H. A. Logan Scholarship",
+        "Janice and Earle O’Born Family Foundation Graduate Scholarship"
+      ],
+      "firstFiveChips": [
+        "Eligible: Canada",
+        "Study in: Canada",
+        "Eligible: Canada",
+        "Study in: Canada"
+      ],
+      "relevanceNotes": [],
+      "screenshotPath": "reports/customer-value-audit/screenshots/filter-d-from-canada.png"
+    },
+    {
+      "scenario": "E — Sort without clearing category",
+      "status": "pass",
+      "startingUrl": "http://localhost:3001/scholarships/hub/matches?category=education",
+      "finalUrl": "http://localhost:3001/scholarships/hub/matches?category=education&sort=most_recent",
+      "cardCountBefore": 9,
+      "cardCountAfter": 9,
+      "firstFiveTitles": [
+        "DeSalvo Family Library Education Endowed Scholarship",
+        "Minnesota State Fair Scholarship",
+        "Ohio GFOA Continuing Education Scholarship",
+        "Out to Innovate Scholarship",
+        "Yankton Sioux Tribe Higher Education Scholarship"
+      ],
+      "firstFiveChips": [
+        "Study in: United States",
+        "Study in: United States"
+      ],
+      "relevanceNotes": [],
+      "screenshotPath": "reports/customer-value-audit/screenshots/filter-e-sort.png"
+    },
+    {
+      "scenario": "F — More filters (deadline > 4 weeks)",
+      "status": "warn",
+      "startingUrl": "http://localhost:3001/scholarships",
+      "finalUrl": "http://localhost:3001/scholarships/hub/matches",
+      "cardCountBefore": 9,
+      "cardCountAfter": 9,
+      "firstFiveTitles": [
+        "Climate Stripes Scholarship",
+        "Fintech Innovation Scholarship",
+        "Vice-Chancellor’s Scholarship",
+        "Creative Arts Scholarship",
+        "China University of Petroleum Scholarship"
+      ],
+      "firstFiveChips": [
+        "Study in: United Kingdom",
+        "Study in: United Kingdom"
+      ],
+      "relevanceNotes": [
+        "Expected `deadline=gt4w` in URL; may use alias or client-only state."
+      ],
+      "screenshotPath": "reports/customer-value-audit/screenshots/filter-f-more-filters.png"
+    },
+    {
+      "scenario": "G — Combined (category + Study in US)",
+      "status": "pass",
+      "startingUrl": "http://localhost:3001/scholarships/hub/matches",
+      "finalUrl": "http://localhost:3001/scholarships/hub/matches?category=education&host_cc=US",
+      "cardCountBefore": 9,
+      "cardCountAfter": 9,
+      "firstFiveTitles": [
+        "OAS Scholarship and Training Programs 2026",
+        "Provost’s Postdoctoral Fellowship at University of Pennsylvania 2025-26",
+        "Duke Law India Masters scholarship 2026",
+        "Brad Evans Scholarship application deadline 2026 USA",
+        "$10,000 \"No Essay\" Scholarship"
+      ],
+      "firstFiveChips": [
+        "Study in: United States",
+        "Study in: United States"
+      ],
+      "relevanceNotes": [],
+      "screenshotPath": "reports/customer-value-audit/screenshots/filter-g-combined.png"
+    }
+  ]
+}

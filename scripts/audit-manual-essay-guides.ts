@@ -2,6 +2,19 @@ import { createClient } from '@supabase/supabase-js';
 
 import { addToIndexingQueue, essayIndexingUrl } from '@/lib/seo/googleIndexingQueue';
 import type { Database } from '@/types_db';
+import {
+  createRunId,
+  emitJobDone,
+  emitJobFailed,
+  emitJobProgress,
+  emitJobStart,
+  type JobCounters
+} from './job-markers';
+
+const SERVICE_NAME = 'Скрипты';
+const JOB_NAME = 'audit-manual-essay-guides';
+const RUN_ID = createRunId();
+const STARTED_AT_MS = Date.now();
 
 function requiredEnv(name: string): string {
   const primary = process.env[name]?.trim();
@@ -37,6 +50,7 @@ async function fetchAllPublishedEssaySitemapRows(
 }
 
 async function main() {
+  emitJobStart({ service: SERVICE_NAME, job: JOB_NAME, runId: RUN_ID });
   const enqueueMissed = process.argv.includes('--enqueue-missed-indexing');
   const supabase = createClient<Database>(
     requiredEnv('NEXT_PUBLIC_SUPABASE_URL'),
@@ -64,6 +78,13 @@ async function main() {
   const missingFromSitemap = manualPublished.filter(
     (row) => !sitemapSlugs.has(row.slug.trim())
   );
+  const queueStatusCounts = (queueRows ?? []).reduce<Record<string, number>>(
+    (acc, row) => {
+      acc[row.status] = (acc[row.status] ?? 0) + 1;
+      return acc;
+    },
+    {}
+  );
 
   if (enqueueMissed) {
     for (const row of manualPublished) {
@@ -77,13 +98,7 @@ async function main() {
   console.log(
     JSON.stringify(
       {
-        queue_status_counts: (queueRows ?? []).reduce<Record<string, number>>(
-          (acc, row) => {
-            acc[row.status] = (acc[row.status] ?? 0) + 1;
-            return acc;
-          },
-          {}
-        ),
+        queue_status_counts: queueStatusCounts,
         manual_published: manualPublished.length,
         missing_from_sitemap: missingFromSitemap.map((row) => row.slug),
         enqueue_missed_indexing: enqueueMissed,
@@ -99,9 +114,31 @@ async function main() {
       2
     )
   );
+  const processed = Object.values(queueStatusCounts).reduce((sum, value) => sum + value, 0);
+  const failed = queueStatusCounts.failed ?? 0;
+  const skipped = queueStatusCounts.pending ?? 0;
+  const counters: JobCounters = {
+    processed,
+    success: Math.max(0, processed - failed - skipped),
+    failed,
+    skipped
+  };
+  emitJobProgress({ service: SERVICE_NAME, job: JOB_NAME, runId: RUN_ID }, counters);
+  emitJobDone(
+    { service: SERVICE_NAME, job: JOB_NAME, runId: RUN_ID },
+    Date.now() - STARTED_AT_MS,
+    counters
+  );
 }
 
 main().catch((error) => {
+  const counters: JobCounters = { processed: 0, success: 0, failed: 0, skipped: 0 };
+  emitJobFailed(
+    { service: SERVICE_NAME, job: JOB_NAME, runId: RUN_ID },
+    Date.now() - STARTED_AT_MS,
+    counters,
+    error
+  );
   console.error(error);
   process.exit(1);
 });

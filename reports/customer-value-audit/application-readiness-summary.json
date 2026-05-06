@@ -1,0 +1,456 @@
+{
+  "generatedAt": "2026-05-06T00:05:14.645Z",
+  "totalSampled": 2500,
+  "readyToApply": {
+    "count": 1959,
+    "pct": 78.4
+  },
+  "usableButNeedsCheck": {
+    "count": 415,
+    "pct": 16.6
+  },
+  "weakPaidValue": {
+    "count": 126,
+    "pct": 5
+  },
+  "notSubscriptionWorthy": {
+    "count": 0,
+    "pct": 0
+  },
+  "missingApplyUrl": {
+    "count": 0,
+    "pct": 0
+  },
+  "missingOfficialOrProviderUrl": {
+    "count": 1756,
+    "pct": 70.2
+  },
+  "missingDeadline": {
+    "count": 12,
+    "pct": 0.5
+  },
+  "missingAmount": {
+    "count": 9,
+    "pct": 0.4
+  },
+  "missingEligibility": {
+    "count": 478,
+    "pct": 19.1
+  },
+  "missingCountryLocationStudy": {
+    "count": 187,
+    "pct": 7.5
+  },
+  "expired": {
+    "count": 618,
+    "pct": 24.7
+  },
+  "expiredOver12Months": {
+    "count": 0,
+    "pct": 0
+  },
+  "weakDescriptionUnder100Chars": {
+    "count": 0,
+    "pct": 0
+  },
+  "duplicateFlagged": {
+    "count": 258,
+    "pct": 10.3
+  },
+  "likelyTrashFlagged": {
+    "count": 330,
+    "pct": 13.2
+  },
+  "top10StrongestSources": [
+    {
+      "source": "wemakescholars",
+      "count": 67,
+      "avgScore": 98.4,
+      "readyPct": 100,
+      "weakOrWorsePct": 0
+    },
+    {
+      "source": "daad",
+      "count": 100,
+      "avgScore": 97.3,
+      "readyPct": 100,
+      "weakOrWorsePct": 0
+    },
+    {
+      "source": "bigfuture",
+      "count": 1005,
+      "avgScore": 94,
+      "readyPct": 93.5,
+      "weakOrWorsePct": 2.1
+    },
+    {
+      "source": "scholars4dev",
+      "count": 51,
+      "avgScore": 92.4,
+      "readyPct": 84.3,
+      "weakOrWorsePct": 0
+    },
+    {
+      "source": "bold_org",
+      "count": 158,
+      "avgScore": 91.3,
+      "readyPct": 88,
+      "weakOrWorsePct": 3.8
+    },
+    {
+      "source": "iefa",
+      "count": 213,
+      "avgScore": 91.2,
+      "readyPct": 81.7,
+      "weakOrWorsePct": 5.6
+    },
+    {
+      "source": "scholarships360",
+      "count": 112,
+      "avgScore": 90.2,
+      "readyPct": 94.6,
+      "weakOrWorsePct": 0
+    },
+    {
+      "source": "scholarship_america",
+      "count": 97,
+      "avgScore": 85.6,
+      "readyPct": 87.6,
+      "weakOrWorsePct": 1
+    },
+    {
+      "source": "unigo",
+      "count": 5,
+      "avgScore": 80,
+      "readyPct": 100,
+      "weakOrWorsePct": 0
+    },
+    {
+      "source": "scholarships_com",
+      "count": 451,
+      "avgScore": 73.1,
+      "readyPct": 45.2,
+      "weakOrWorsePct": 17.1
+    }
+  ],
+  "top10WeakestSources": [
+    {
+      "source": "mastersportal",
+      "count": 230,
+      "avgScore": 72.9,
+      "readyPct": 37,
+      "weakOrWorsePct": 3.9
+    },
+    {
+      "source": "scholarships_com",
+      "count": 451,
+      "avgScore": 73.1,
+      "readyPct": 45.2,
+      "weakOrWorsePct": 17.1
+    },
+    {
+      "source": "unigo",
+      "count": 5,
+      "avgScore": 80,
+      "readyPct": 100,
+      "weakOrWorsePct": 0
+    },
+    {
+      "source": "scholarship_america",
+      "count": 97,
+      "avgScore": 85.6,
+      "readyPct": 87.6,
+      "weakOrWorsePct": 1
+    },
+    {
+      "source": "scholarships360",
+      "count": 112,
+      "avgScore": 90.2,
+      "readyPct": 94.6,
+      "weakOrWorsePct": 0
+    },
+    {
+      "source": "iefa",
+      "count": 213,
+      "avgScore": 91.2,
+      "readyPct": 81.7,
+      "weakOrWorsePct": 5.6
+    },
+    {
+      "source": "bold_org",
+      "count": 158,
+      "avgScore": 91.3,
+      "readyPct": 88,
+      "weakOrWorsePct": 3.8
+    },
+    {
+      "source": "scholars4dev",
+      "count": 51,
+      "avgScore": 92.4,
+      "readyPct": 84.3,
+      "weakOrWorsePct": 0
+    },
+    {
+      "source": "bigfuture",
+      "count": 1005,
+      "avgScore": 94,
+      "readyPct": 93.5,
+      "weakOrWorsePct": 2.1
+    },
+    {
+      "source": "daad",
+      "count": 100,
+      "avgScore": 97.3,
+      "readyPct": 100,
+      "weakOrWorsePct": 0
+    }
+  ],
+  "examplesReadyToApply": [
+    {
+      "id": "013fc88e-51c8-425f-854b-e127cab2e4d9",
+      "title": "NAHMA Educational Foundation Scholarship",
+      "source": "bigfuture",
+      "score": 100
+    },
+    {
+      "id": "02c1b63f-ce0e-492e-91d0-0b86ee419c1a",
+      "title": "Music Scholarship",
+      "source": "bigfuture",
+      "score": 100
+    },
+    {
+      "id": "0fd509b6-3c80-4e84-8c6a-7aef6bed44f9",
+      "title": "Presidential Scholarship",
+      "source": "bigfuture",
+      "score": 100
+    },
+    {
+      "id": "14bc5eee-ac63-4638-a32d-b1aef4e148ae",
+      "title": "Amy Rose Grabina Leadership Scholarship",
+      "source": "bigfuture",
+      "score": 100
+    },
+    {
+      "id": "16e76b5c-43b2-4bf9-a024-1dc1a1436e57",
+      "title": "Dr. Terri Stahlman Endowed Fellowship",
+      "source": "bigfuture",
+      "score": 100
+    },
+    {
+      "id": "197575ae-aa08-4bc6-9142-8a948ec915da",
+      "title": "Last Mile Scholarship",
+      "source": "bigfuture",
+      "score": 100
+    },
+    {
+      "id": "1ccde318-9022-4109-8209-d1f11ce764de",
+      "title": "South Austin Medical Center Auxiliary Endowed Scholarship",
+      "source": "bigfuture",
+      "score": 100
+    },
+    {
+      "id": "1ee426c9-49ee-41e5-800c-0c07bba7493a",
+      "title": "Fort Worth Stock Show Syndicate-Jim Bob Norman Memorial Scholarship",
+      "source": "bigfuture",
+      "score": 100
+    },
+    {
+      "id": "1fae8d88-c941-49ca-a309-0a5f78e5f68c",
+      "title": "Odom, Moses & Company Endowed Scholarship",
+      "source": "bigfuture",
+      "score": 100
+    },
+    {
+      "id": "2a75c370-5858-4940-8439-fad11707f1b4",
+      "title": "CenTex MOAA Chapter Scholarship",
+      "source": "bigfuture",
+      "score": 100
+    },
+    {
+      "id": "2c50c5f1-02fb-4836-bfd5-f166e6ee7b8f",
+      "title": "Blue Cross & Blue Shield of Florida Nursing Scholarship - Undergraduate",
+      "source": "bigfuture",
+      "score": 100
+    },
+    {
+      "id": "30460dae-0ffd-4eb5-a125-ba33661d35b7",
+      "title": "Frances Kayo Bowman GLO Endowed Scholarship",
+      "source": "bigfuture",
+      "score": 100
+    },
+    {
+      "id": "30d9b74f-1773-4cdc-95f2-e450668d87ba",
+      "title": "Mike Matthews Endowed Fine Arts Scholarship",
+      "source": "bigfuture",
+      "score": 100
+    },
+    {
+      "id": "33daf466-c9a6-47d0-af23-373a8daad882",
+      "title": "Holly Burnette Memorial Scholarship",
+      "source": "bigfuture",
+      "score": 100
+    },
+    {
+      "id": "36b4e459-a8e0-4232-b5cf-89ced9c70870",
+      "title": "Kansas Association of Broadcasters Broadcast Scholarship",
+      "source": "bigfuture",
+      "score": 100
+    },
+    {
+      "id": "37424697-cec6-413a-90d7-407da6544a2f",
+      "title": "Susan Eason Scholarship for Students with Disabilities",
+      "source": "bigfuture",
+      "score": 100
+    },
+    {
+      "id": "41d60a50-b600-4647-adf8-56bb3585cf8d",
+      "title": "Thomas M. Spencer Memorial Endowed Scholarship Central",
+      "source": "bigfuture",
+      "score": 100
+    },
+    {
+      "id": "5bd8b04c-48ea-4076-bd97-32fc45d67139",
+      "title": "The Peter J. Trainor Leadership Award",
+      "source": "bigfuture",
+      "score": 100
+    },
+    {
+      "id": "91aa9afe-dbf2-401a-b02a-ff618f1f3cd6",
+      "title": "Edwards Scholarship",
+      "source": "bigfuture",
+      "score": 100
+    },
+    {
+      "id": "a990d8ef-b568-45f4-ad0d-bdc6f192ca6d",
+      "title": "Dick Smith College of Science & Mathematics Graduate Scholarship",
+      "source": "bigfuture",
+      "score": 100
+    }
+  ],
+  "examplesWeakPaidValue": [
+    {
+      "id": "14620074-17cf-4594-8905-9c21ca320320",
+      "title": "Chadron State College International Transfer Tuition Waiver",
+      "source": "iefa",
+      "score": 55
+    },
+    {
+      "id": "22ce1f2f-901f-4f03-b72b-148a65c24649",
+      "title": "AFCEA San Diego County Scholarship Program Guide",
+      "source": "scholarships_com",
+      "score": 55
+    },
+    {
+      "id": "0eaf006e-e742-4b3b-bab6-40389cfd8a84",
+      "title": "Junior Service Club Scholarship 2027 Guide",
+      "source": "scholarships_com",
+      "score": 55
+    },
+    {
+      "id": "1622e0ca-0d4b-40d3-8f11-f3aea57b026b",
+      "title": "Kids' Chance of Florida Scholarship Guide",
+      "source": "scholarships_com",
+      "score": 55
+    },
+    {
+      "id": "290aa779-a153-41ff-abf8-01c9c1b84554",
+      "title": "Mount Laurel Garden Club Scholarship Guide",
+      "source": "scholarships_com",
+      "score": 55
+    },
+    {
+      "id": "40587851-cdf5-4784-af0f-06671603106d",
+      "title": "Mary Fran Carroll Traditional Scholarship Guide",
+      "source": "scholarships_com",
+      "score": 55
+    },
+    {
+      "id": "4939eae9-06d3-429e-9bb8-8de5e2e38cb2",
+      "title": "Canyon Institute Arizona Resident Scholarship Guide",
+      "source": "scholarships_com",
+      "score": 55
+    },
+    {
+      "id": "58bc3bae-a4fa-4de7-a953-db27299bc343",
+      "title": "Nissin Foods Good Neighbor Scholarship Guide",
+      "source": "scholarships_com",
+      "score": 55
+    },
+    {
+      "id": "6473f8d5-1d49-4d34-ae4f-3629c6284338",
+      "title": "Tuition-Free Business Administration and Computer Science",
+      "source": "iefa",
+      "score": 55
+    },
+    {
+      "id": "0349358b-af0b-4c4e-9a43-496e54bb086a",
+      "title": "York Trade Scholarship for the Disabled",
+      "source": "bold_org",
+      "score": 55
+    },
+    {
+      "id": "1a5aa765-413e-43e3-8697-9d43a38415bc",
+      "title": "Arnold W. Fritz Scholarship Eligibility and Deadline",
+      "source": "scholarships_com",
+      "score": 55
+    },
+    {
+      "id": "3e9cd545-2685-4c4f-9cb4-1d311ef6acbf",
+      "title": "TEXAS Grant Program: Eligibility, Deadline, Application",
+      "source": "scholarships_com",
+      "score": 55
+    },
+    {
+      "id": "07a658f4-3e9b-4421-a23e-c9d823923315",
+      "title": "Dallas Hispanic Law Foundation Scholarship Guide",
+      "source": "scholarships_com",
+      "score": 55
+    },
+    {
+      "id": "07b15229-e7f6-4460-8bb5-f4c1339f3e04",
+      "title": "Palumbo Family Foundation Scholarships Guide",
+      "source": "scholarships_com",
+      "score": 55
+    },
+    {
+      "id": "0a2693ee-a1ad-4f75-b7c3-050ebecb5b7b",
+      "title": "Texas Women in Public Finance Scholarship Guide",
+      "source": "scholarships_com",
+      "score": 55
+    },
+    {
+      "id": "2f82fa3f-1a45-4a33-b472-708d1e72a500",
+      "title": "International Partnership Scholarship",
+      "source": "iefa",
+      "score": 55
+    },
+    {
+      "id": "4dd4fe07-fd5d-4eb7-a178-b301ce4d02a7",
+      "title": "LEADS! Scholarship Eligibility, Deadline & How to Apply",
+      "source": "scholarships_com",
+      "score": 55
+    },
+    {
+      "id": "a863c015-debb-4c3d-8712-15186cd57bd9",
+      "title": "Central Coast Greenhouse Growers Association Scholarship",
+      "source": "scholarships_com",
+      "score": 55
+    },
+    {
+      "id": "0fd603d5-21e8-46d6-b273-1c113bb8185b",
+      "title": "Volunteer of the Year",
+      "source": "iefa",
+      "score": 55
+    },
+    {
+      "id": "1ef97be7-b802-43d3-bbe8-8317565bda50",
+      "title": "Nat Moore Scholarship: Eligibility, Deadline & How to Apply",
+      "source": "scholarships_com",
+      "score": 55
+    }
+  ],
+  "examplesNotWorthy": [],
+  "verdict": "strong_paid_content",
+  "pctReadyPlusUsable": 95,
+  "avgScore": 87.5
+}

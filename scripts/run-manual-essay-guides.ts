@@ -2,6 +2,14 @@ import { randomBytes } from 'node:crypto';
 
 import OpenAI from 'openai';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import {
+  createRunId,
+  emitJobDone,
+  emitJobFailed,
+  emitJobProgress,
+  emitJobStart,
+  type JobCounters
+} from './job-markers';
 
 import {
   enqueueGoogleIndexingUrls,
@@ -19,6 +27,10 @@ import type { Database, Json } from '@/types_db';
 type ManualQueueRow =
   Database['public']['Tables']['manual_essay_generation_queue']['Row'];
 type EssayInsertRow = Database['public']['Tables']['essays']['Insert'];
+const SERVICE_NAME = 'Скрипты';
+const JOB_NAME = 'run-manual-essay-guides';
+const RUN_ID = createRunId();
+const STARTED_AT_MS = Date.now();
 
 type GeneratedPayload = {
   title: string;
@@ -389,6 +401,7 @@ async function processOne(supabase: SupabaseClient<Database>): Promise<'publishe
 }
 
 async function main() {
+  emitJobStart({ service: SERVICE_NAME, job: JOB_NAME, runId: RUN_ID });
   const supabase = createClient<Database>(
     requiredEnv('NEXT_PUBLIC_SUPABASE_URL'),
     requiredEnv('SUPABASE_SERVICE_ROLE_KEY'),
@@ -412,9 +425,28 @@ async function main() {
     }
   }
   console.log(JSON.stringify({ processed: published }, null, 2));
+  const counters: JobCounters = {
+    processed: published,
+    success: published,
+    failed: 0,
+    skipped: 0
+  };
+  emitJobProgress({ service: SERVICE_NAME, job: JOB_NAME, runId: RUN_ID }, counters);
+  emitJobDone(
+    { service: SERVICE_NAME, job: JOB_NAME, runId: RUN_ID },
+    Date.now() - STARTED_AT_MS,
+    counters
+  );
 }
 
 main().catch((error) => {
+  const counters: JobCounters = { processed: 0, success: 0, failed: 0, skipped: 0 };
+  emitJobFailed(
+    { service: SERVICE_NAME, job: JOB_NAME, runId: RUN_ID },
+    Date.now() - STARTED_AT_MS,
+    counters,
+    error
+  );
   console.error(error);
   process.exit(1);
 });
