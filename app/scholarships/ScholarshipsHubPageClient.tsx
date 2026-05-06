@@ -2085,6 +2085,12 @@ function ScholarshipsPageInner({
         landingQuiz: transientBestRecommendationProfileSeed,
         tab: activeTab,
         auth: isAuthenticated,
+        ...(isAuthenticated && activeTab === 'best-recommendation'
+          ? {
+              profileResolved: profileInitResolved,
+              profileInitialized
+            }
+          : {}),
         ...(hubTreatAsGuest && activeTab === 'best-recommendation'
           ? { bestWizardFp: guestBestWizardFingerprint }
           : {})
@@ -2094,6 +2100,8 @@ function ScholarshipsPageInner({
       transientBestRecommendationProfileSeed,
       activeTab,
       isAuthenticated,
+      profileInitResolved,
+      profileInitialized,
       hubTreatAsGuest,
       guestBestWizardFingerprint
     ]
@@ -2503,6 +2511,32 @@ function ScholarshipsPageInner({
     staleTime: 300_000,
     refetchOnMount: false
   });
+  const signedInBestProfileRefetchDoneRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!authResolved || !isAuthenticated) return;
+    if (activeTab !== 'best-recommendation') return;
+    if (!profileInitResolved || !profileInitialized) return;
+    if (listMeta?.personalizedMatchReady !== false) return;
+    const key = `${hubListDataRequestKey}|${profileInitResolved ? 1 : 0}|${
+      profileInitialized ? 1 : 0
+    }`;
+    if (signedInBestProfileRefetchDoneRef.current === key) return;
+    signedInBestProfileRefetchDoneRef.current = key;
+    console.info('[ScholarshipsHub] refetching best recommendations after profile ready');
+    void listQuery.refetch();
+    void sidebarMetaQuery.refetch();
+  }, [
+    authResolved,
+    isAuthenticated,
+    activeTab,
+    profileInitResolved,
+    profileInitialized,
+    listMeta?.personalizedMatchReady,
+    hubListDataRequestKey,
+    listQuery,
+    sidebarMetaQuery
+  ]);
 
   useEffect(() => {
     if (activeTab === 'recommended' && !savedFiltersForHub) {
@@ -3227,9 +3261,18 @@ function ScholarshipsPageInner({
   const bestLandingSeedPending =
     activeTab === 'best-recommendation' &&
     !landingQuizSeedHydrated;
+  const authBestRecommendationBootstrapPending =
+    Boolean(authResolved) &&
+    isAuthenticated &&
+    activeTab === 'best-recommendation' &&
+    totalCount === 0 &&
+    !hasError &&
+    (!profileInitResolved ||
+      (!profileInitialized && listMeta?.personalizedMatchReady === false));
   const blockingInitialLoad =
     (isLoading && !hasInitialLoadCompleted) ||
     bestLandingSeedPending ||
+    authBestRecommendationBootstrapPending ||
     seededBestCurrentListResponsePending ||
     guestBestSeededListPending;
   const blockingApplyLoad = isApplyingMoreFilters || isApplyingListControls;

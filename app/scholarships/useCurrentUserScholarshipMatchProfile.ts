@@ -15,6 +15,8 @@ type Result = {
 
 const PROFILE_MATCH_FIELDS =
   'field_of_study, field_of_study_label, school_level, citizenship_status, state_region, country_code, city, gpa, saved_filters_snapshot, onboarding_completed';
+const PROFILE_RETRY_ATTEMPTS = 6;
+const PROFILE_RETRY_DELAY_MS = 700;
 
 export function useCurrentUserScholarshipMatchProfile(
   enabled: boolean
@@ -37,36 +39,58 @@ export function useCurrentUserScholarshipMatchProfile(
     setResolved(false);
 
     void (async () => {
-      const {
-        data: { user }
-      } = await supabase.auth.getUser();
-      if (!user || cancelled) {
-        if (!cancelled) {
-          setProfile(null);
-          setProfileInitialized(false);
-          setResolved(true);
+      for (let attempt = 0; attempt <= PROFILE_RETRY_ATTEMPTS; attempt += 1) {
+        const {
+          data: { user }
+        } = await supabase.auth.getUser();
+        if (!user || cancelled) {
+          if (!cancelled) {
+            setProfile(null);
+            setProfileInitialized(false);
+            setResolved(true);
+          }
+          return;
         }
-        return;
-      }
 
-      const { data: row } = await supabase
-        .from('profiles')
-        .select(PROFILE_MATCH_FIELDS)
-        .eq('id', user.id)
-        .maybeSingle();
+        const { data: row } = await supabase
+          .from('profiles')
+          .select(PROFILE_MATCH_FIELDS)
+          .eq('id', user.id)
+          .maybeSingle();
 
-      if (cancelled) return;
+        if (cancelled) return;
 
-      const next = (row ?? null) as CurrentUserScholarshipMatchProfile | null;
-      setProfileInitialized(Boolean((row as { onboarding_completed?: boolean } | null)?.onboarding_completed));
-      if (!next || !buildScholarshipProfileFilterSeed(next as ProfilesRow)) {
+        const next = (row ?? null) as CurrentUserScholarshipMatchProfile | null;
+        const initialized = Boolean(
+          (row as { onboarding_completed?: boolean } | null)?.onboarding_completed
+        );
+        const seedReady = Boolean(next && buildScholarshipProfileFilterSeed(next as ProfilesRow));
+        setProfileInitialized(initialized);
+        if (initialized && seedReady && next) {
+          setProfile(next);
+          setResolved(true);
+          return;
+        }
+
         setProfile(null);
-        setResolved(true);
-        return;
+        if (attempt >= PROFILE_RETRY_ATTEMPTS) {
+          setResolved(true);
+          return;
+        }
+        // After onboarding redirect, profile sync can lag behind auth by ~1-3s.
+        console.info('[scholarships:profile] waiting for initialized profile', {
+          attempt: attempt + 1,
+          initialized,
+          seedReady
+        });
+        await new Promise((resolve) => {
+          window.setTimeout(resolve, PROFILE_RETRY_DELAY_MS);
+        });
+        if (cancelled) return;
       }
-
-      setProfile(next);
-      setResolved(true);
+      if (!cancelled) {
+        setResolved(true);
+      }
     })();
 
     return () => {
