@@ -1176,11 +1176,25 @@ export async function notifyTelegramAdminsVisitorFirstTouch(
       utm_medium: payload.utm_medium,
       utm_campaign: payload.utm_campaign
     });
-    const chatIds = await collectTelegramAdminAlertChatIdsForTrafficSource(sourceKey);
+    let chatIds = await collectTelegramAdminAlertChatIdsForTrafficSource(sourceKey);
+    if (chatIds.length === 0) {
+      /**
+       * Per-source routing (`traffic_sources.google_ads`, etc.) can exclude everyone
+       * while category `traffic` is still on. Fall back to the same audience as other
+       * traffic alerts so paid visits are not silently dropped.
+       */
+      console.warn(
+        '[telegram] notifyTelegramAdminsVisitorFirstTouch: no recipients for per-source key',
+        sourceKey,
+        '- falling back to category traffic'
+      );
+      chatIds = await collectTelegramAdminAlertChatIdsForCategory('traffic');
+    }
     if (chatIds.length === 0) {
       console.warn(
         '[telegram] notifyTelegramAdminsVisitorFirstTouch: no recipient chat IDs for source',
-        sourceKey
+        sourceKey,
+        '(per-source and traffic category empty — check TELEGRAM_ADMIN_IDS / telegram_users prefs)'
       );
       return;
     }
