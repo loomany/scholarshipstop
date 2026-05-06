@@ -131,7 +131,7 @@ export const SCHOLARSHIP_HUB_CANONICAL_SEO: Record<
   },
   'best-recommendation': {
     introText:
-      'Answer a few questions to get scholarship recommendations based on your school level, field of study, citizenship, GPA, and location.',
+      'Complete your scholarship profile to get better recommendations and receive alerts when new matching grants are added.',
     faq: [
       {
         question: 'How do best recommendations work?',

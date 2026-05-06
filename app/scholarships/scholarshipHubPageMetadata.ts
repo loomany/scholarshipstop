@@ -33,7 +33,7 @@ export const SCHOLARSHIP_HUB_SEGMENT_SEO: Record<string, HubSeoCopy> = {
   'best-recommendation': {
     title: 'Best recommendations',
     description:
-      'Answer a few questions to get scholarship recommendations based on your school level, field of study, citizenship, GPA, and location.'
+      'Complete your scholarship profile to get better recommendations and receive alerts when new matching grants are added.'
   },
   saved: {
     title: 'Saved Scholarships',
