@@ -93,7 +93,7 @@ export function ScholarshipHubCanonicalIntro({
         introMarginTopClassName ?? 'mt-5 sm:mt-6'
       )}
     >
-      <p className={bestHubLayout ? 'text-center text-pretty' : undefined}>
+      <p className={bestHubLayout ? 'text-left text-pretty' : undefined}>
         {pack.introText}
       </p>
     </div>
