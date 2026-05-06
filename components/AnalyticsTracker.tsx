@@ -5,12 +5,19 @@ import { useCallback, useEffect, useRef } from 'react';
 
 const VISITOR_COOKIE = 'st_visitor_id';
 const SESSION_KEY = 'st_first_touch_session';
-const ATTRIBUTION_UTM_KEY = 'st_attribution_utm_source';
+const ATTRIBUTION_UTM_SOURCE_KEY = 'st_attribution_utm_source';
+const ATTRIBUTION_UTM_MEDIUM_KEY = 'st_attribution_utm_medium';
+const ATTRIBUTION_UTM_CAMPAIGN_KEY = 'st_attribution_utm_campaign';
 const ATTRIBUTION_UTM_CONTENT_KEY = 'st_attribution_utm_content';
+const ATTRIBUTION_UTM_TERM_KEY = 'st_attribution_utm_term';
+const ATTRIBUTION_COUNTRY_TARGET_KEY = 'st_attribution_country_target';
+const FIRST_LANDING_HREF_KEY = 'st_attribution_first_landing_href';
 const COOKIE_MAX_AGE_SEC = 60 * 60 * 24 * 365; // 1 year
 /** Wait for SPA navigations to settle so Landing + persisted UTM match the final page. */
 const FIRST_TOUCH_DEBOUNCE_MS = 320;
 const VISITOR_PING_INTERVAL_MS = 50_000;
+const ATTR_MAX_LEN = 500;
+const HREF_MAX_LEN = 4000;
 type VisitorPingSource = 'navigation' | 'heartbeat' | 'visibility' | 'leave';
 
 function readCookie(name: string): string {
@@ -36,20 +43,82 @@ function randomUuidV4(): string {
   });
 }
 
-function readPersistedUtm(): string {
+function readPersistedAttribution(key: string): string {
   try {
-    return (sessionStorage.getItem(ATTRIBUTION_UTM_KEY) || '').trim();
+    return (sessionStorage.getItem(key) || '').trim();
   } catch {
     return '';
   }
 }
 
-function readPersistedUtmContent(): string {
+/** Persist only non-empty URL params — never clear stored values with empties. */
+function persistAttributionParamFromUrl(storageKey: string, urlValue: string | null) {
+  const v = (urlValue || '').trim().slice(0, ATTR_MAX_LEN);
+  if (!v) return;
   try {
-    return (sessionStorage.getItem(ATTRIBUTION_UTM_CONTENT_KEY) || '').trim();
+    sessionStorage.setItem(storageKey, v);
   } catch {
-    return '';
+    /* sessionStorage may be blocked */
   }
+}
+
+/** First full href for this tab — set once (first page load in session). */
+function ensureFirstLandingHrefRecorded() {
+  try {
+    if (sessionStorage.getItem(FIRST_LANDING_HREF_KEY)) return;
+    const href = (typeof window !== 'undefined' ? window.location.href : '').slice(0, HREF_MAX_LEN);
+    if (href) sessionStorage.setItem(FIRST_LANDING_HREF_KEY, href);
+  } catch {
+    /* ignore */
+  }
+}
+
+function readFirstLandingHref(): string {
+  return readPersistedAttribution(FIRST_LANDING_HREF_KEY).slice(0, HREF_MAX_LEN);
+}
+
+/**
+ * Prefer current URL param; otherwise last non-empty value from sessionStorage.
+ */
+function mergeAttributionParam(params: URLSearchParams, queryKey: string, storageKey: string): string {
+  const fromUrl = (params.get(queryKey) || '').trim().slice(0, ATTR_MAX_LEN);
+  if (fromUrl) return fromUrl;
+  return readPersistedAttribution(storageKey).slice(0, ATTR_MAX_LEN);
+}
+
+function persistAllAttributionParamsFromSearchParams(searchParams: {
+  get: (key: string) => string | null;
+}) {
+  persistAttributionParamFromUrl(ATTRIBUTION_UTM_SOURCE_KEY, searchParams.get('utm_source'));
+  persistAttributionParamFromUrl(ATTRIBUTION_UTM_MEDIUM_KEY, searchParams.get('utm_medium'));
+  persistAttributionParamFromUrl(ATTRIBUTION_UTM_CAMPAIGN_KEY, searchParams.get('utm_campaign'));
+  persistAttributionParamFromUrl(ATTRIBUTION_UTM_CONTENT_KEY, searchParams.get('utm_content'));
+  persistAttributionParamFromUrl(ATTRIBUTION_UTM_TERM_KEY, searchParams.get('utm_term'));
+  persistAttributionParamFromUrl(
+    ATTRIBUTION_COUNTRY_TARGET_KEY,
+    searchParams.get('country_target')
+  );
+}
+
+function buildAttributionFieldsFromWindow(): {
+  utm_source: string;
+  utm_medium: string;
+  utm_campaign: string;
+  utm_content: string;
+  utm_term: string;
+  country_target: string;
+} {
+  const params = new URLSearchParams(
+    typeof window !== 'undefined' ? window.location.search : ''
+  );
+  return {
+    utm_source: mergeAttributionParam(params, 'utm_source', ATTRIBUTION_UTM_SOURCE_KEY),
+    utm_medium: mergeAttributionParam(params, 'utm_medium', ATTRIBUTION_UTM_MEDIUM_KEY),
+    utm_campaign: mergeAttributionParam(params, 'utm_campaign', ATTRIBUTION_UTM_CAMPAIGN_KEY),
+    utm_content: mergeAttributionParam(params, 'utm_content', ATTRIBUTION_UTM_CONTENT_KEY),
+    utm_term: mergeAttributionParam(params, 'utm_term', ATTRIBUTION_UTM_TERM_KEY),
+    country_target: mergeAttributionParam(params, 'country_target', ATTRIBUTION_COUNTRY_TARGET_KEY)
+  };
 }
 
 function isFirstTouchDone(): boolean {
@@ -62,10 +131,10 @@ function isFirstTouchDone(): boolean {
 
 /**
  * First-touch + UTM attribution (sessionStorage «первое касание»):
- * - On each navigation, if `utm_source` is in the URL → save under `st_attribution_utm_source` for this tab.
- * - If the URL has no `utm_source` → use the value from sessionStorage (survives client-side route changes).
- * - `utm_content` is stored the same way under `st_attribution_utm_content` for Meta creatives.
- * - First-touch POST uses priority: current URL → sessionStorage → empty (server shows Organic/Direct).
+ * - Non-empty URL params are saved per tab; empty params do not overwrite stored values.
+ * - Reads merge: current URL → sessionStorage → empty.
+ * - `st_attribution_first_landing_href` is set once (first URL in this tab).
+ * - First-touch POST uses first landing href when present so UTMs on the initial URL stay tied to the visit.
  * - After first-touch succeeds, `visitor-ping` keeps `last_seen_at` + page trail for admin card.
  */
 export default function AnalyticsTracker() {
@@ -76,61 +145,55 @@ export default function AnalyticsTracker() {
 
   const sendVisitorPing = useCallback(
     async (kind: 'view' | 'leave', source: VisitorPingSource = 'navigation') => {
-    if (typeof window === 'undefined') return;
-    if (!isFirstTouchDone() && kind === 'view') return;
+      if (typeof window === 'undefined') return;
+      if (!isFirstTouchDone() && kind === 'view') return;
 
-    const visitorId = readCookie(VISITOR_COOKIE);
-    if (!visitorId) return;
+      const visitorId = readCookie(VISITOR_COOKIE);
+      if (!visitorId) return;
 
-    const href = (window.location.href || '').slice(0, 4000);
-    const params = new URLSearchParams(window.location.search);
-    const utmFromCurrent = (params.get('utm_source') || '').trim().slice(0, 500);
-    const utm_source = utmFromCurrent || readPersistedUtm();
-    const utmFromCurrentContent = (params.get('utm_content') || '').trim().slice(0, 500);
-    const utm_content = utmFromCurrentContent || readPersistedUtmContent();
-    const utm_medium = (params.get('utm_medium') || '').trim().slice(0, 500);
-    const utm_campaign = (params.get('utm_campaign') || '').trim().slice(0, 500);
-    const referrer = (document.referrer || '').slice(0, 4000);
-    const user_agent =
-      typeof navigator !== 'undefined' && navigator.userAgent
-        ? navigator.userAgent.slice(0, 800)
-        : '';
+      const href = (window.location.href || '').slice(0, HREF_MAX_LEN);
+      const attr = buildAttributionFieldsFromWindow();
+      const referrer = (document.referrer || '').slice(0, 4000);
+      const user_agent =
+        typeof navigator !== 'undefined' && navigator.userAgent
+          ? navigator.userAgent.slice(0, 800)
+          : '';
 
-    const event_source: VisitorPingSource = kind === 'leave' ? 'leave' : source;
-    const payload = {
-      visitor_id: visitorId,
-      landing_url: href,
-      full_url: href,
-      referrer,
-      utm_source,
-      utm_medium,
-      utm_campaign,
-      utm_content,
-      user_agent,
-      event_source,
-      ...(kind === 'leave' ? { kind: 'leave' as const } : {})
-    };
+      const event_source: VisitorPingSource = kind === 'leave' ? 'leave' : source;
+      const payload = {
+        visitor_id: visitorId,
+        landing_url: href,
+        full_url: href,
+        referrer,
+        utm_source: attr.utm_source,
+        utm_medium: attr.utm_medium,
+        utm_campaign: attr.utm_campaign,
+        utm_content: attr.utm_content,
+        user_agent,
+        event_source,
+        ...(kind === 'leave' ? { kind: 'leave' as const } : {})
+      };
 
-    try {
-      if (kind === 'leave' && typeof navigator.sendBeacon === 'function') {
-        const ok = navigator.sendBeacon(
-          '/api/analytics/visitor-ping',
-          new Blob([JSON.stringify(payload)], { type: 'application/json' })
-        );
-        if (ok) return;
+      try {
+        if (kind === 'leave' && typeof navigator.sendBeacon === 'function') {
+          const ok = navigator.sendBeacon(
+            '/api/analytics/visitor-ping',
+            new Blob([JSON.stringify(payload)], { type: 'application/json' })
+          );
+          if (ok) return;
+        }
+      } catch {
+        /* ignore */
       }
-    } catch {
-      /* ignore */
-    }
 
-    void fetch('/api/analytics/visitor-ping', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-      keepalive: kind === 'leave'
-    }).catch(() => {
-      /* non-fatal */
-    });
+      void fetch('/api/analytics/visitor-ping', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        keepalive: kind === 'leave'
+      }).catch(() => {
+        /* non-fatal */
+      });
     },
     []
   );
@@ -140,18 +203,8 @@ export default function AnalyticsTracker() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    const utmFromUrl = (searchParams.get('utm_source') || '').trim().slice(0, 500);
-    const utmContentFromUrl = (searchParams.get('utm_content') || '').trim().slice(0, 500);
-    try {
-      if (utmFromUrl) {
-        sessionStorage.setItem(ATTRIBUTION_UTM_KEY, utmFromUrl);
-      }
-      if (utmContentFromUrl) {
-        sessionStorage.setItem(ATTRIBUTION_UTM_CONTENT_KEY, utmContentFromUrl);
-      }
-    } catch {
-      /* sessionStorage may be blocked */
-    }
+    ensureFirstLandingHrefRecorded();
+    persistAllAttributionParamsFromSearchParams(searchParams);
 
     if (!isFirstTouchDone()) {
       let visitorId = readCookie(VISITOR_COOKIE);
@@ -172,14 +225,9 @@ export default function AnalyticsTracker() {
           /* ignore */
         }
 
-        const href = (window.location.href || '').slice(0, 4000);
-        const params = new URLSearchParams(window.location.search);
-        const utmFromCurrent = (params.get('utm_source') || '').trim().slice(0, 500);
-        const utm_source = utmFromCurrent || readPersistedUtm();
-        const utmFromCurrentContent = (params.get('utm_content') || '').trim().slice(0, 500);
-        const utm_content = utmFromCurrentContent || readPersistedUtmContent();
-        const utm_medium = (params.get('utm_medium') || '').trim().slice(0, 500);
-        const utm_campaign = (params.get('utm_campaign') || '').trim().slice(0, 500);
+        const href = (window.location.href || '').slice(0, HREF_MAX_LEN);
+        const attr = buildAttributionFieldsFromWindow();
+        const firstLanding = readFirstLandingHref();
         const referrer = (document.referrer || '').slice(0, 4000);
         const user_agent =
           typeof navigator !== 'undefined' && navigator.userAgent
@@ -189,11 +237,14 @@ export default function AnalyticsTracker() {
         const payload = {
           visitor_id: visitorId,
           landing_url: href,
+          ...(firstLanding ? { first_landing_url: firstLanding } : {}),
           referrer,
-          utm_source,
-          utm_medium,
-          utm_campaign,
-          utm_content,
+          utm_source: attr.utm_source,
+          utm_medium: attr.utm_medium,
+          utm_campaign: attr.utm_campaign,
+          utm_content: attr.utm_content,
+          utm_term: attr.utm_term,
+          country_target: attr.country_target,
           user_agent
         };
 

@@ -18,12 +18,19 @@ const UUID_V4_RE =
 
 type Body = {
   visitor_id?: unknown;
+  /** Current page URL (fallback). */
   landing_url?: unknown;
+  /** First URL in tab when set by client — preferred for attribution + Telegram. */
+  first_landing_url?: unknown;
   referrer?: unknown;
   utm_source?: unknown;
   utm_medium?: unknown;
   utm_campaign?: unknown;
   utm_content?: unknown;
+  /** Not stored in DB (no column); forwarded to Telegram only. */
+  utm_term?: unknown;
+  /** Custom ads geo label; not stored in DB; Telegram only. */
+  country_target?: unknown;
   user_agent?: unknown;
 };
 
@@ -41,8 +48,14 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Invalid visitor_id' }, { status: 400 });
   }
 
-  const landing_url_raw =
+  const landing_fallback =
     typeof body.landing_url === 'string' ? body.landing_url.trim() : '';
+  const first_landing_candidate =
+    typeof body.first_landing_url === 'string' ? body.first_landing_url.trim() : '';
+  const landing_url_raw =
+    first_landing_candidate && first_landing_candidate.length <= 4000
+      ? first_landing_candidate
+      : landing_fallback;
   if (!landing_url_raw || landing_url_raw.length > 4000) {
     return NextResponse.json({ error: 'Invalid landing_url' }, { status: 400 });
   }
@@ -65,6 +78,12 @@ export async function POST(request: Request) {
       : '';
   const utm_content =
     typeof body.utm_content === 'string' ? body.utm_content.trim().slice(0, 500) : '';
+  const utm_term =
+    typeof body.utm_term === 'string' ? body.utm_term.trim().slice(0, 500) : '';
+  const country_target =
+    typeof body.country_target === 'string'
+      ? body.country_target.trim().slice(0, 500)
+      : '';
 
   const uaFromBody =
     typeof body.user_agent === 'string' ? body.user_agent.trim() : '';
@@ -162,6 +181,9 @@ export async function POST(request: Request) {
       utm_source: utm_source || null,
       utm_medium: utm_medium || null,
       utm_campaign: utm_campaign || null,
+      utm_content: utm_content || null,
+      utm_term: utm_term || null,
+      country_target: country_target || null,
       clickId: click_id,
       clickIdParam
     }).catch((e) => {

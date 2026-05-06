@@ -25,6 +25,7 @@ import {
 import { getURL } from '@/utils/helpers';
 import { tabToHubPath } from '@/app/scholarships/scholarshipHubPath';
 import { allScholarshipCountrySeoRoutes } from '@/app/scholarships/scholarshipCountrySeo';
+import { buildCrossCountrySeoSitemapEntries } from '@/lib/seo/crossCountrySitemapEntries';
 import { isCompareHubSeoGenerationCanonicalPath } from '@/lib/seo/sitemapProgrammaticHubPath';
 
 export { isSeoDripFeedActive } from '@/lib/seo/seoDripFeed';
@@ -493,13 +494,16 @@ export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
       lastModified: new Date()
     }));
 
+  const crossCountrySeoPages = buildCrossCountrySeoSitemapEntries(base);
+
   const seo = dedupeSitemapEntries([
     ...manifestSeoPages,
     ...longTailPages,
     ...stateListingPages,
     ...programmaticHubPages,
     ...universityHubPages,
-    ...countrySeoPages
+    ...countrySeoPages,
+    ...crossCountrySeoPages
   ]);
 
   const [scholarships, providers, compareRows, stateCompareRows] = await Promise.all([

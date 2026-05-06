@@ -933,9 +933,42 @@ type VisitorFirstTouchAdminPayload = {
   utm_source?: string | null;
   utm_medium?: string | null;
   utm_campaign?: string | null;
+  utm_content?: string | null;
+  utm_term?: string | null;
+  country_target?: string | null;
   clickId?: string | null;
   clickIdParam?: 'gclid' | 'fbclid' | null;
 };
+
+/** Keep first-touch alerts within Telegram comfort; long keywords stay truncated. */
+const FIRST_TOUCH_ATTR_DISPLAY_MAX = 280;
+
+function truncateFirstTouchAttrDisplay(value: string, max = FIRST_TOUCH_ATTR_DISPLAY_MAX): string {
+  const t = value.trim();
+  if (!t.length) return '';
+  if (t.length <= max) return t;
+  return `${t.slice(0, Math.max(0, max - 1))}…`;
+}
+
+function buildVisitorFirstTouchAdsAttributionLines(payload: VisitorFirstTouchAdminPayload): string[] {
+  const src = truncateFirstTouchAttrDisplay(payload.utm_source ?? '');
+  const med = truncateFirstTouchAttrDisplay(payload.utm_medium ?? '');
+  const camp = truncateFirstTouchAttrDisplay(payload.utm_campaign ?? '');
+  const term = truncateFirstTouchAttrDisplay(payload.utm_term ?? '');
+  const content = truncateFirstTouchAttrDisplay(payload.utm_content ?? '');
+  const country = truncateFirstTouchAttrDisplay(payload.country_target ?? '');
+  if (!src && !med && !camp && !term && !content && !country) {
+    return [];
+  }
+  const lines: string[] = ['', '<b>Ads attribution:</b>'];
+  if (src) lines.push(`Source: ${escapeTelegramHtml(src)}`);
+  if (med) lines.push(`Medium: ${escapeTelegramHtml(med)}`);
+  if (camp) lines.push(`Campaign: ${escapeTelegramHtml(camp)}`);
+  if (term) lines.push(`Keyword: ${escapeTelegramHtml(term)}`);
+  if (content) lines.push(`Ad content: ${escapeTelegramHtml(content)}`);
+  if (country) lines.push(`Country target: ${escapeTelegramHtml(country)}`);
+  return lines;
+}
 
 function buildVisitorFirstTouchMessageHtml(
   payload: VisitorFirstTouchAdminPayload,
@@ -979,18 +1012,28 @@ function buildVisitorFirstTouchMessageHtml(
     utm_source: payload.utm_source
   });
 
-  lines.push(
-    '',
-    channelLine,
-    '',
+  const landingBlock =
     view === 'short'
       ? formatVisitorFirstTouchLandingTelegramHtmlCompact(payload.landingUrl, {
           pathnameOnlyDisplay: pathnameOnly
         })
       : formatVisitorFirstTouchLandingTelegramHtml(payload.landingUrl, {
           pathnameOnlyDisplay: pathnameOnly
-        })
-  );
+        });
+
+  const referrerTrimmed = truncateFirstTouchAttrDisplay(payload.referrer ?? '', 400);
+  const referrerLine = referrerTrimmed
+    ? `<b>Referrer:</b> ${escapeTelegramHtml(referrerTrimmed)}`
+    : '';
+
+  const clickTrimmed = truncateFirstTouchAttrDisplay(payload.clickId ?? '', 220);
+  const clickLine = clickTrimmed
+    ? `<b>Click ID:</b> <code>${escapeTelegramHtml(clickTrimmed)}</code>`
+    : '';
+
+  lines.push('', channelLine, ...buildVisitorFirstTouchAdsAttributionLines(payload), '', landingBlock);
+  if (referrerLine) lines.push(referrerLine);
+  if (clickLine) lines.push(clickLine);
   return lines.join('\n');
 }
 
@@ -1067,7 +1110,7 @@ async function applyAdminFirstTouchFoldToMessage(
   const { data: row, error } = await admin
     .from('anonymous_visitor_first_touch')
     .select(
-      'visitor_id, landing_url, traffic_channel, referrer, utm_source, utm_medium, utm_campaign, click_id, id'
+      'visitor_id, landing_url, traffic_channel, referrer, utm_source, utm_medium, utm_campaign, utm_content, click_id, id'
     )
     .eq('visitor_id', args.visitorId)
     .maybeSingle();
@@ -1088,6 +1131,9 @@ async function applyAdminFirstTouchFoldToMessage(
     utm_source: row.utm_source,
     utm_medium: row.utm_medium,
     utm_campaign: row.utm_campaign,
+    utm_content: row.utm_content,
+    utm_term: null,
+    country_target: null,
     clickId: row.click_id
   };
 

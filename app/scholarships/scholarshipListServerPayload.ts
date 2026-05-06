@@ -32,6 +32,7 @@ import { parseHubScholarshipTabParam } from '@/app/scholarships/scholarshipTabs'
 import type { ProfilesRow } from '@/lib/scholarships/scholarshipMatch';
 import type { createClient } from '@/utils/supabase/server';
 import type { ScholarshipCountrySeoRoute } from '@/app/scholarships/scholarshipCountrySeo';
+import type { CrossCountryManifestEntry } from '@/lib/scholarships/seoCrossCountryManifest';
 import {
   moreFiltersFromJson,
   moreFiltersToJson,
@@ -392,6 +393,96 @@ export async function fetchInitialCountryScholarshipsPayload(
       slugOnlyMoreFilters: moreFiltersToJson(moreFilters),
       seoListingFallback: false,
       hostCountryCodes: route.kind === 'host' ? [route.code] : []
+    }
+  };
+}
+
+/** Cross-country SEO: applicant country (More filters) + study host (`host_cc` scope), same query path as country SEO. */
+export async function fetchInitialCrossCountryScholarshipsPayload(
+  supabase: ServerSupabaseClient | null,
+  entry: CrossCountryManifestEntry
+): Promise<{
+  result: ScholarshipListResult;
+  routeScope: LongTailRouteScopePayload;
+}> {
+  const offlineBounds = {
+    amountMin: 0,
+    amountMax: 50000,
+    applicantsMin: 0,
+    applicantsMax: 200000
+  } as Awaited<ReturnType<typeof fetchGlobalFilterBounds>>;
+
+  const makeMoreFilters = (
+    bounds: Awaited<ReturnType<typeof fetchGlobalFilterBounds>>
+  ) => {
+    const moreFilters = defaultMoreFiltersFromBounds(bounds);
+    moreFilters.includeApplicantCountryCodes.add(
+      entry.applicantCode.trim().toUpperCase()
+    );
+    return moreFilters;
+  };
+
+  if (!supabase) {
+    const moreFilters = makeMoreFilters(offlineBounds);
+    return {
+      result: {
+        scholarships: [],
+        total: 0,
+        page: 1,
+        limit: SCHOLARSHIPS_PAGE_SIZE
+      },
+      routeScope: {
+        longTailLegacySlugs: [],
+        requiredSeoTags: [],
+        baseMoreFilters: moreFiltersToJson(moreFilters),
+        slugOnlyMoreFilters: moreFiltersToJson(moreFilters),
+        seoListingFallback: false,
+        hostCountryCodes: [entry.hostCode.trim().toUpperCase()]
+      }
+    };
+  }
+
+  const bounds = await fetchGlobalFilterBounds(supabase);
+  const moreFilters = makeMoreFilters(bounds);
+  const hostCode = entry.hostCode.trim().toUpperCase();
+  const req = scholarshipListRequestFromParts({
+    page: 1,
+    limit: SCHOLARSHIPS_PAGE_SIZE,
+    sort: 'magic',
+    tab: 'matches',
+    q: '',
+    category: null,
+    categoryPageSlug: null,
+    catalogSubjectCategoryId: null,
+    deadline: 'any',
+    state: null,
+    ignored: null,
+    saved: null,
+    started: null,
+    submitted: null,
+    moreFilters,
+    hostCountryCodesFromUrl: [hostCode],
+    longTailLegacySlugs: [],
+    similarTo: null,
+    similarCategorySlug: null,
+    listScope: 'catalog',
+    requiredSeoTags: []
+  });
+  const result = await executeScholarshipListQuery(supabase, req, {
+    countOnly: false,
+    includeMeta: true,
+    includeCategoryCounts: true,
+    isProSubscriber: false
+  });
+  return {
+    result,
+    routeScope: {
+      longTailLegacySlugs: [],
+      requiredSeoTags: [],
+      baseMoreFilters: moreFiltersToJson(moreFilters),
+      slugOnlyMoreFilters: moreFiltersToJson(moreFilters),
+      seoListingFallback: false,
+      hostCountryCodes: [hostCode]
     }
   };
 }

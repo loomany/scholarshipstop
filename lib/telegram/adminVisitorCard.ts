@@ -452,7 +452,11 @@ function buildVisitorAdminCardLines(input: {
     `<b>Referrer:</b> ${referrerLineHtml(touch.referrer)}`,
     `<b>UTM:</b> source=${escapeTelegramHtml(touch.utm_source ?? '-')} medium=${escapeTelegramHtml(
       touch.utm_medium ?? '-'
-    )} campaign=${escapeTelegramHtml(touch.utm_campaign ?? '-')}`,
+    )} campaign=${escapeTelegramHtml(touch.utm_campaign ?? '-')}${
+      touch.utm_content?.trim()
+        ? ` content=${escapeTelegramHtml(touch.utm_content.trim())}`
+        : ''
+    }`,
     `<b>Click ID:</b> ${escapeTelegramHtml(touch.click_id ?? '-')}`,
     '',
     '<b>Качество сигнала</b>',

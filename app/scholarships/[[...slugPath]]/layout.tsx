@@ -313,6 +313,7 @@ export default async function ScholarshipsSlugPathLayout({
   const resolved = resolveScholarshipSlugPath(segments);
   if (
     resolved.kind === 'country_seo' ||
+    resolved.kind === 'cross_country_seo' ||
     resolved.kind === 'legacy_long_tail' ||
     resolved.kind === 'manifest_seo' ||
     resolved.kind === 'redirect_canonical' ||

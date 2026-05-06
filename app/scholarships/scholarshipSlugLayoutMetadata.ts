@@ -14,6 +14,7 @@ import {
   getSeoListingEntry,
   resolveScholarshipSlugPath
 } from '@/lib/scholarships/seoScholarshipResolve';
+import { crossCountryListingRobotsFromManifest } from '@/lib/scholarships/seoCrossCountryManifest';
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import { scholarshipPublicPath } from '@/app/scholarships/scholarshipsData';
 import { getScholarshipDetailServer } from '@/lib/scholarships/scholarshipDetailServer';
@@ -171,6 +172,32 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
       alternates: {
         canonical
       }
+    };
+    return withExplicitIndexFollowWhenUnset(meta);
+  }
+
+  if (resolved.kind === 'cross_country_seo') {
+    const { entry } = resolved;
+    const canonical = getCanonical(entry.href);
+    const robots = crossCountryListingRobotsFromManifest(entry);
+    const meta: Metadata = {
+      title: entry.metaTitle,
+      description: entry.metaDescription,
+      openGraph: {
+        title: entry.metaTitle,
+        description: entry.metaDescription,
+        url: canonical,
+        type: 'website'
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: entry.metaTitle,
+        description: entry.metaDescription
+      },
+      alternates: {
+        canonical
+      },
+      robots
     };
     return withExplicitIndexFollowWhenUnset(meta);
   }

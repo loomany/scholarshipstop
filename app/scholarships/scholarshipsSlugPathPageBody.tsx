@@ -23,6 +23,7 @@ import {
   buildInitialListRequestKey,
   createInitialScholarshipsPayload,
   fetchInitialCountryScholarshipsPayload,
+  fetchInitialCrossCountryScholarshipsPayload,
   fetchInitialHubScholarshipsPayload,
   fetchInitialLongTailScholarshipsPayload
 } from '@/app/scholarships/scholarshipListServerPayload';
@@ -85,6 +86,19 @@ function normalizeSeoTextLines(
   const text = value.trim();
   if (!text) return undefined;
   return [text];
+}
+
+const CROSS_COUNTRY_SEO_FAQ_ANSWER =
+  'Eligibility, deadlines, and award amounts depend on each scholarship’s official rules. Compare the listing for applicant country, study destination, requirements, GPA, essays, and deadlines—then confirm details on the provider’s application page. ScholarshipTop does not guarantee selection or awards.';
+
+function crossCountryFaqItemsFromManifest(
+  questions: string[] | undefined
+): { question: string; answer: string }[] {
+  if (!questions?.length) return [];
+  return questions
+    .map((q) => q.trim())
+    .filter(Boolean)
+    .map((question) => ({ question, answer: CROSS_COUNTRY_SEO_FAQ_ANSWER }));
 }
 
 function safeScholarshipReturnToHref(searchParamsString: string): string {
@@ -460,6 +474,86 @@ export default async function ScholarshipsSlugPathPageBody({
                 supportingParagraph={route.supporting}
                 relatedIntroParagraph={null}
                 faqItems={route.faq}
+                pageData={null}
+                qualityBucket={initialListPayload.total >= 4 ? 'GOOD' : 'THIN'}
+                updatedAt={null}
+              />
+            }
+          />
+        </Suspense>
+      </>
+    );
+  }
+
+  if (resolved.kind === 'cross_country_seo') {
+    const supabase = createPublicClient();
+    const { entry } = resolved;
+    const { result: initialListPayload, routeScope } =
+      await fetchInitialCrossCountryScholarshipsPayload(supabase, entry);
+
+    if (initialListPayload.seoFallback?.used) {
+      // eslint-disable-next-line no-console -- Step 2B: surface relax-tier listings until metadata (2C) applies robots
+      console.info('[cross_country_seo] seo_fallback_used', {
+        canonicalPath: entry.canonicalPath,
+        tier: initialListPayload.seoFallback.tier,
+        exactTotal: initialListPayload.seoFallback.exactTotal,
+        thinListing: initialListPayload.seoFallback.thinListing
+      });
+    }
+
+    const listingJsonLd = buildScholarshipListingJsonLd({
+      name: entry.h1,
+      description: entry.metaDescription,
+      path: entry.href,
+      result: initialListPayload
+    });
+
+    const crossCountryFaq = crossCountryFaqItemsFromManifest(entry.faqQuestions);
+
+    return (
+      <>
+        {listingJsonLd ? (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(listingJsonLd) }}
+          />
+        ) : null}
+        <h1 className="sr-only">{entry.h1}</h1>
+        <Suspense fallback={<ScholarshipsHubShellSkeleton pageTitle={entry.h1} />}>
+          <ScholarshipsHubPageAuthBridge
+            initialPayload={createInitialScholarshipsPayload(
+              buildInitialListRequestKey({
+                kind: 'long_tail',
+                routeKey: entry.canonicalPath,
+                searchParamsString: ''
+              }),
+              initialListPayload
+            )}
+            routeScope={routeScope}
+            currentPathname={entry.href}
+            leadContent={
+              <SeoScholarshipHero
+                heading={entry.h1}
+                scholarshipCount={initialListPayload.total}
+                listLoading={false}
+                introHtml={entry.intro}
+                introFromSeoBundle={false}
+                fallbackUsed={initialListPayload.seoFallback?.used === true}
+                thinListing={initialListPayload.total < 4}
+                exactFilterMatchTotal={initialListPayload.total}
+                qualityBucket={initialListPayload.total >= 4 ? 'GOOD' : 'THIN'}
+                pageData={null}
+                updatedAt={null}
+                canonicalTarget={null}
+                publicSeoPage
+              />
+            }
+            postListingContent={
+              <SeoScholarshipPostListingSeo
+                heading={entry.h1}
+                supportingParagraph={null}
+                relatedIntroParagraph={null}
+                faqItems={crossCountryFaq}
                 pageData={null}
                 qualityBucket={initialListPayload.total >= 4 ? 'GOOD' : 'THIN'}
                 updatedAt={null}

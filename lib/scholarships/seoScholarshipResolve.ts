@@ -14,6 +14,10 @@ import {
   resolveScholarshipCountrySeoRoute,
   type ScholarshipCountrySeoRoute
 } from '@/app/scholarships/scholarshipCountrySeo';
+import {
+  getCrossCountryManifestEntryBySegments,
+  type CrossCountryManifestEntry
+} from '@/lib/scholarships/seoCrossCountryManifest';
 
 /** US state segments first so filters and canonical URLs prioritize location (e.g. nursing/california → california/nursing). */
 function prioritizeUsStateSegmentsNorm(norm: string[]): string[] {
@@ -31,6 +35,7 @@ export type ResolvedScholarshipSlugPath =
   | { kind: 'scholarship_detail' }
   | { kind: 'legacy_long_tail'; slug: string }
   | { kind: 'country_seo'; route: ScholarshipCountrySeoRoute }
+  | { kind: 'cross_country_seo'; entry: CrossCountryManifestEntry }
   | {
       kind: 'manifest_seo';
       entry: SeoScholarshipRouteManifestEntry;
@@ -141,6 +146,11 @@ export function resolveScholarshipSlugPath(
 
   if (norm.length === 1 && getLongTailPreset(norm[0]!)) {
     return { kind: 'legacy_long_tail', slug: norm[0]! };
+  }
+
+  const crossCountry = getCrossCountryManifestEntryBySegments(norm);
+  if (crossCountry) {
+    return { kind: 'cross_country_seo', entry: crossCountry };
   }
 
   const canon = canonicalizeSegments(prioritizeUsStateSegmentsNorm(norm));
