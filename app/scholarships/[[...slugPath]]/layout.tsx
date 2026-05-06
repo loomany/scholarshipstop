@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import { breadcrumbCategoryLabel } from '@/app/scholarships/scholarshipCategories';
 import { normalizeScholarshipDynamicParam } from '@/app/scholarships/scholarshipLongTailPresets';
+import { hubPathToTab } from '@/app/scholarships/scholarshipHubPath';
 import { resolveScholarshipSlugPath } from '@/lib/scholarships/seoScholarshipResolve';
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import {
@@ -310,14 +312,29 @@ export default async function ScholarshipsSlugPathLayout({
     return <>{children}</>;
   }
 
+  /**
+   * Valid `/scholarships/hub/...` paths still resolve as `not_found` in the SEO resolver.
+   * Skip — the page body validates tab segments and calls `notFound()` for invalid hubs.
+   */
+  if (hubPathToTab(segments)) {
+    return <>{children}</>;
+  }
+
   const resolved = resolveScholarshipSlugPath(segments);
+  /**
+   * Issue A: `loading.tsx` Suspense-streams a 200 shell before the page runs. Calling
+   * `notFound()` here (layout, above that boundary) yields HTTP 404 for unknown routes.
+   */
+  if (resolved.kind === 'not_found') {
+    notFound();
+  }
+
   if (
     resolved.kind === 'country_seo' ||
     resolved.kind === 'cross_country_seo' ||
     resolved.kind === 'legacy_long_tail' ||
     resolved.kind === 'manifest_seo' ||
-    resolved.kind === 'redirect_canonical' ||
-    resolved.kind === 'not_found'
+    resolved.kind === 'redirect_canonical'
   ) {
     return <>{children}</>;
   }

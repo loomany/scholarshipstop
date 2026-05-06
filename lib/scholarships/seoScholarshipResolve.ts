@@ -16,6 +16,7 @@ import {
 } from '@/app/scholarships/scholarshipCountrySeo';
 import {
   getCrossCountryManifestEntryBySegments,
+  isCrossCountrySeoPathShape,
   type CrossCountryManifestEntry
 } from '@/lib/scholarships/seoCrossCountryManifest';
 
@@ -151,6 +152,14 @@ export function resolveScholarshipSlugPath(
   const crossCountry = getCrossCountryManifestEntryBySegments(norm);
   if (crossCountry) {
     return { kind: 'cross_country_seo', entry: crossCountry };
+  }
+
+  /**
+   * Cross-country-shaped URLs must be backed by an enabled manifest row only.
+   * Otherwise never fall through to generic canonical listing resolution (Issue A: 200 + NEXT_NOT_FOUND).
+   */
+  if (isCrossCountrySeoPathShape(norm)) {
+    return { kind: 'not_found' };
   }
 
   const canon = canonicalizeSegments(prioritizeUsStateSegmentsNorm(norm));

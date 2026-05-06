@@ -5,6 +5,7 @@ import { normalizeScholarshipDynamicParam } from '@/app/scholarships/scholarship
 import {
   getCrossCountryManifestEntryByCanonicalPath,
   getCrossCountryManifestEntryBySegments,
+  isCrossCountrySeoPathShape,
   listCrossCountrySitemapEntries
 } from '@/lib/scholarships/seoCrossCountryManifest';
 import { resolveScholarshipSlugPath } from '@/lib/scholarships/seoScholarshipResolve';
@@ -44,6 +45,22 @@ test('cross-country: manual_review + noindex + enabled still resolves for SSR la
   }
 });
 
+test('cross-country: published_noindex enabled pair still resolves cross_country_seo', () => {
+  const segments = normSegments([
+    'for-students-from',
+    'united-states',
+    'study-in',
+    'congo-kinshasa'
+  ]);
+  const r = resolveScholarshipSlugPath(segments);
+  assert.equal(r.kind, 'cross_country_seo');
+  if (r.kind === 'cross_country_seo') {
+    assert.equal(r.entry.status, 'published_noindex');
+    assert.equal(r.entry.enabled, true);
+    assert.equal(r.entry.robots, 'noindex,follow');
+  }
+});
+
 test('cross-country: unknown pair falls through to not_found', () => {
   const segments = normSegments([
     'for-students-from',
@@ -73,6 +90,42 @@ test('getCrossCountryManifestEntryBySegments requires 4 segments and literals', 
       normSegments(['for-students-from', 'india', 'study-in'])
     ),
     null
+  );
+});
+
+test('isCrossCountrySeoPathShape: true only for 4-segment cross-country pattern', () => {
+  assert.equal(isCrossCountrySeoPathShape(normSegments([])), false);
+  assert.equal(
+    isCrossCountrySeoPathShape(normSegments(['for-students-from', 'india'])),
+    false
+  );
+  assert.equal(
+    isCrossCountrySeoPathShape(
+      normSegments(['for-students-from', 'india', 'study-in'])
+    ),
+    false
+  );
+  assert.equal(
+    isCrossCountrySeoPathShape(
+      normSegments([
+        'for-students-from',
+        'india',
+        'study-in',
+        'united-states'
+      ])
+    ),
+    true
+  );
+  assert.equal(
+    isCrossCountrySeoPathShape(
+      normSegments([
+        'for-students-from',
+        'not-a-real-country',
+        'study-in',
+        'fake-country'
+      ])
+    ),
+    true
   );
 });
 

@@ -45,6 +45,15 @@ export function normalizeCrossCountryCanonicalPath(canonicalPath: string): strin
   return canonicalPath.replace(/^\/+|\/+$/g, '').trim();
 }
 
+/** URL shape for cross-country SEO listings (manifest-backed when enabled). */
+export function isCrossCountrySeoPathShape(norm: string[]): boolean {
+  return (
+    norm.length === 4 &&
+    norm[0] === 'for-students-from' &&
+    norm[2] === 'study-in'
+  );
+}
+
 /**
  * Four segments: for-students-from / {applicant} / study-in / {host}.
  * Returns the manifest row only when `enabled === true`.
