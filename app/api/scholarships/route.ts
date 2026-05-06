@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { unstable_cache } from 'next/cache';
 import { createClient } from '@/utils/supabase/server';
 import { createPublicClient } from '@/utils/supabase/public';
 import {
@@ -84,11 +83,9 @@ function scholarshipsApiTimingDebugEnabled(): boolean {
   return process.env.SCHOLARSHIPS_API_TIMING_DEBUG === '1';
 }
 
-const SCHOLARSHIPS_API_PROFILE_CACHE_SEC = 20;
-
 /**
- * One `profiles` row: short `unstable_cache` with direct fallback (avoids 500 on cache hiccup;
- * also avoids a second `profiles` SELECT that `getUserSubscriptionStatus` would do).
+ * Request-scoped profile read for personalized scholarships paths.
+ * Keep this outside unstable_cache to avoid dynamic cookies() within cached closures.
  */
 async function loadProfileForScholarshipsList(
   userId: string,
@@ -106,14 +103,8 @@ async function loadProfileForScholarshipsList(
     return data;
   };
 
-  const cached = unstable_cache(
-    async () => selectProfile(createClient() as any),
-    ['api-scholarships-profile', userId],
-    { revalidate: SCHOLARSHIPS_API_PROFILE_CACHE_SEC }
-  );
-
   try {
-    return await cached();
+    return await selectProfile(requestSupabase);
   } catch (e) {
     // eslint-disable-next-line no-console
     console.warn('[scholarships api] profile cache path failed, direct read', {

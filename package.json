@@ -141,7 +141,13 @@
     "audit:production-site": "npx tsx scripts/audit-production-site.ts",
     "audit:final-check": "npx tsx scripts/final-check.ts",
     "generate:gpt-knowledge": "npx tsx scripts/generate-scholarshiptop-knowledge.ts",
-    "smoke:scholarship-funnel": "npx tsx scripts/smoke-scholarship-funnel.ts"
+    "smoke:scholarship-funnel": "npx tsx scripts/smoke-scholarship-funnel.ts",
+    "logs:fetch": "npx tsx scripts/railway/fetch-logs.ts",
+    "logs:analyze": "npx tsx scripts/railway/analyze-logs.ts",
+    "logs:tail": "npx tsx scripts/railway/fetch-logs.ts --follow",
+    "logs:collector": "npx tsx scripts/railway/collector.ts",
+    "logs:collector:site": "npx tsx scripts/railway/collector.ts --service \"Сайт\"",
+    "logs:collector:scripts": "npx tsx scripts/railway/collector.ts --service \"Скрипты\""
   },
   "dependencies": {
     "@lemonsqueezy/lemonsqueezy.js": "^4.0.0",
