@@ -7,7 +7,6 @@ import {
 } from '@/lib/seo/sitemaps';
 
 export const revalidate = SITEMAP_REVALIDATE_SECONDS;
-export const dynamic = 'force-dynamic';
 
 const XML_UTF8 = 'text/xml; charset=utf-8';
 
