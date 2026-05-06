@@ -774,6 +774,9 @@ function ScholarshipsPageInner({
     authResolved &&
     (hubTreatAsGuest ||
       (isAuthenticated && profileInitResolved && !profileInitialized));
+  const signedInBestHasLandingSeed =
+    activeTab === 'best-recommendation' &&
+    transientBestRecommendationProfileSeed != null;
 
   const signedInBestProfileBootstrapBlocked =
     Boolean(authResolved) &&
@@ -782,6 +785,10 @@ function ScholarshipsPageInner({
     !profileInitialized;
 
   useEffect(() => {
+    if (signedInBestHasLandingSeed) {
+      setSignedInBestBootstrapFallbackUnlocked(false);
+      return;
+    }
     if (!signedInBestProfileBootstrapBlocked) {
       setSignedInBestBootstrapFallbackUnlocked(false);
       return;
@@ -794,7 +801,11 @@ function ScholarshipsPageInner({
       setSignedInBestBootstrapFallbackUnlocked(true);
     }, SIGNED_IN_BEST_BOOTSTRAP_TIMEOUT_MS);
     return () => window.clearTimeout(timer);
-  }, [signedInBestProfileBootstrapBlocked, profileBootstrapExhausted]);
+  }, [
+    signedInBestHasLandingSeed,
+    signedInBestProfileBootstrapBlocked,
+    profileBootstrapExhausted
+  ]);
 
   useEffect(() => {
     if (!authResolved || !isAuthenticated) return;
@@ -812,6 +823,7 @@ function ScholarshipsPageInner({
   }, [activeTab, authResolved, isAuthenticated, router]);
 
   useEffect(() => {
+    if (signedInBestHasLandingSeed) return;
     if (!authResolved || !isAuthenticated) return;
     if (activeTab !== 'best-recommendation') return;
     if (!signedInBestBootstrapFallbackUnlocked) return;
@@ -832,6 +844,7 @@ function ScholarshipsPageInner({
     listMeta?.personalizedMatchReady,
     profileInitialized,
     router,
+    signedInBestHasLandingSeed,
     signedInBestBootstrapFallbackUnlocked
   ]);
   const guestCompletedScholarshipQuiz =
@@ -2334,7 +2347,9 @@ function ScholarshipsPageInner({
     (activeTab !== 'recommended' || hasPresets) &&
     (activeTab !== 'best-recommendation' || landingQuizSeedHydrated);
   const signedInBestProfileBootstrapReadyForList =
-    !signedInBestProfileBootstrapBlocked || signedInBestBootstrapFallbackUnlocked;
+    signedInBestHasLandingSeed ||
+    !signedInBestProfileBootstrapBlocked ||
+    signedInBestBootstrapFallbackUnlocked;
   const signedInBestPersonalizationPending =
     Boolean(authResolved) &&
     isAuthenticated &&
@@ -2344,9 +2359,13 @@ function ScholarshipsPageInner({
     listMeta?.personalizedMatchReady === false;
   const signedInBestPersonalizationRetryExhausted =
     signedInBestPersonalizationRetryCount >= SIGNED_IN_BEST_PERSONALIZATION_MAX_RETRIES;
+  const signedInBestFallbackSuppressedByLandingSeed =
+    signedInBestHasLandingSeed;
   const signedInBestCatalogFallbackActive =
-    (signedInBestProfileBootstrapBlocked && signedInBestBootstrapFallbackUnlocked) ||
-    (signedInBestPersonalizationPending && signedInBestPersonalizationRetryExhausted);
+    !signedInBestFallbackSuppressedByLandingSeed &&
+    ((signedInBestProfileBootstrapBlocked && signedInBestBootstrapFallbackUnlocked) ||
+      (signedInBestPersonalizationPending &&
+        signedInBestPersonalizationRetryExhausted));
   const forceFreshSeededBestList =
     activeTab === 'best-recommendation' &&
     transientBestRecommendationProfileSeed != null;
@@ -3418,6 +3437,7 @@ function ScholarshipsPageInner({
     activeTab === 'best-recommendation' &&
     totalCount === 0 &&
     !hasError &&
+    !signedInBestHasLandingSeed &&
     (!(signedInBestBootstrapFallbackUnlocked || signedInBestPersonalizationRetryExhausted) &&
       (!profileInitResolved ||
         (!profileInitialized && listMeta?.personalizedMatchReady === false)));
