@@ -3,7 +3,7 @@
 import { Check, X } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 
-import { GRANT_NOTIFY_CHANNELS, getTelegramBotLink } from '@/lib/notifications/grantNotificationPrefs';
+import { GRANT_NOTIFY_CHANNELS } from '@/lib/notifications/grantNotificationPrefs';
 import type { Database } from '@/types_db';
 
 type Prefs = Pick<
@@ -15,6 +15,7 @@ type Prefs = Pick<
 >;
 
 const PREVIEW_TEST_EMAIL = 'loomany.self@gmail.com';
+const SHOW_TELEGRAM_BOT_CARD = false;
 
 export default function GrantNotificationToggles({
   profile,
@@ -146,21 +147,11 @@ export default function GrantNotificationToggles({
         })}
       </div>
 
-      <div className="rounded-xl border border-zinc-100 bg-zinc-50/80 px-4 py-3">
-        <p className="text-sm font-medium text-zinc-800">Telegram bot</p>
-        <p className="mt-1 text-sm text-zinc-600">
-          Prefer Telegram? Connect the bot and get the same grant alerts in chat — plus quick links
-          when new opportunities match what you follow.
-        </p>
-        <a
-          href={getTelegramBotLink()}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-3 inline-flex items-center justify-center rounded-xl bg-emerald-500 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-600"
-        >
-          Open Telegram bot
-        </a>
-      </div>
+      {SHOW_TELEGRAM_BOT_CARD ? (
+        <div className="rounded-xl border border-zinc-100 bg-zinc-50/80 px-4 py-3">
+          <p className="text-sm font-medium text-zinc-800">Telegram bot</p>
+        </div>
+      ) : null}
 
       {showTest ? (
         <div className="flex flex-wrap items-center gap-3">
