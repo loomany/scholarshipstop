@@ -104,7 +104,7 @@ export function CountryEmailSignupStep({
           aria-busy={submitting}
           className={ONBOARDING_PRIMARY_BUTTON_CLASS}
         >
-          {submitting ? 'Saving...' : submitLabel}
+          {submitLabel}
           {!submitting ? <ArrowRight className="ml-2 h-4 w-4" aria-hidden /> : null}
         </button>
         {onGoogleSignIn ? (

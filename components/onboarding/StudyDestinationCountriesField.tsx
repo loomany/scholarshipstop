@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { ChevronDown, Globe2 } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 
 import { SITE_INPUT_FOCUS_CLASS } from '@/lib/constants/siteInputFocus';
 import {
@@ -121,17 +121,9 @@ export function StudyDestinationCountriesField({
             : 'border border-zinc-200 bg-white hover:border-zinc-300 hover:bg-zinc-50'
         )}
       >
-        <span className="flex min-w-0 flex-1 items-center gap-2 text-left">
-          <Globe2
-            className={cn(
-              'h-4 w-4 shrink-0 transition-colors',
-              open ? 'text-orange-600/80' : 'text-orange-700/55'
-            )}
-            strokeWidth={2}
-            aria-hidden
-          />
+        <span className="flex min-w-0 flex-1 items-center text-left">
           {selected.length === 0 ? (
-            <span className="min-w-0 truncate font-normal text-zinc-400">
+            <span className="min-w-0 truncate font-normal text-zinc-900">
               {triggerSummary(selected)}
             </span>
           ) : (

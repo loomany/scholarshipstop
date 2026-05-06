@@ -849,6 +849,8 @@ export default function ScholarshipProfileForm({
   const ic = isSaas ? inputClassSaaS : inputClass;
   const lc = isSaas ? labelClassSaaS : labelClass;
   const selectWrapClass = isSaas ? 'mt-2 w-full' : 'mt-2 w-full max-w-xl';
+  const eligibilityFieldBlockClass = 'mt-4';
+  const eligibilityLabelClass = `${lc} !mt-0`;
   const selectedCountryCode = includeUnspecifiedApplicantCountries
     ? null
     : normalizeCountryCode(countryCodeInput);
@@ -1034,83 +1036,87 @@ export default function ScholarshipProfileForm({
         />
       </div>
 
-      <label className={lc} htmlFor="spf-citizenship">
-        Citizenship
-      </label>
-      <div className={selectWrapClass}>
-        <DarkSelect
-          id="spf-citizenship"
-          ariaLabel="Citizenship"
-          options={citizenshipSelectOptions}
-          value={citizenshipStatus}
-          onChange={setCitizenshipStatus}
-          disabled={submitting}
-        />
+      <div className={eligibilityFieldBlockClass}>
+        <label className={eligibilityLabelClass} htmlFor="spf-citizenship">
+          Citizenship
+        </label>
+        <div className={selectWrapClass}>
+          <DarkSelect
+            id="spf-citizenship"
+            ariaLabel="Citizenship"
+            options={citizenshipSelectOptions}
+            value={citizenshipStatus}
+            onChange={setCitizenshipStatus}
+            disabled={submitting}
+          />
+        </div>
       </div>
 
-      <label className={lc} htmlFor="spf-country">
-        Applicant country
-      </label>
-      <div ref={applicantCountryRef} className={`${selectWrapClass} relative`}>
-        <input
-          id="spf-country"
-          type="text"
-          value={applicantCountryInput}
-          onFocus={() => !submitting && setApplicantCountryOpen(true)}
-          onChange={(event) => {
-            const next = event.target.value;
-            if (
-              includeUnspecifiedApplicantCountries &&
-              next.trim().toLowerCase() !== 'citizenship not specified'
-            ) {
-              setIncludeUnspecifiedApplicantCountries(false);
-            }
-            setApplicantCountryInput(next);
-            if (!submitting) setApplicantCountryOpen(true);
-            const upper = next.trim().toUpperCase();
-            const byCode = SCHOLARSHIP_COUNTRY_OPTIONS.find((c) => c.code === upper)?.code;
-            if (byCode) handleCountryCodeChange(byCode);
-          }}
-          placeholder="Select or type applicant country"
-          disabled={submitting}
-          autoComplete="off"
-          className={`${ic} pr-10`}
-        />
-        <ChevronDown
-          className={`pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500 transition ${
-            applicantCountryOpen ? 'rotate-180' : ''
-          }`}
-          aria-hidden
-        />
-        {applicantCountryOpen && !submitting ? (
-          <ul className="absolute left-0 right-0 top-[calc(100%+0.35rem)] z-[70] max-h-72 overflow-y-auto rounded-xl border border-zinc-200 bg-white py-1 shadow-lg ring-1 ring-black/5">
-            {applicantCountrySuggestions.length === 0 ? (
-              <li className="px-4 py-2.5 text-sm text-zinc-500">No matches found.</li>
-            ) : (
-              applicantCountrySuggestions.map((option) => (
-                <li key={option.value}>
-                  <button
-                    type="button"
-                    className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm text-zinc-900 transition hover:bg-zinc-50"
-                    onClick={() => {
-                      handleCountryCodeChange(option.value);
-                      setApplicantCountryInput(option.label);
-                      setApplicantCountryOpen(false);
-                    }}
-                  >
-                    <span>{option.label}</span>
-                    {option.value !== 'CITIZENSHIP_NOT_SPECIFIED' ? (
-                      <span className="text-xs font-semibold text-zinc-500">{option.value}</span>
-                    ) : null}
-                  </button>
-                </li>
-              ))
-            )}
-          </ul>
-        ) : null}
+      <div className={eligibilityFieldBlockClass}>
+        <label className={eligibilityLabelClass} htmlFor="spf-country">
+          Applicant country
+        </label>
+        <div ref={applicantCountryRef} className={`${isSaas ? 'mt-0 w-full' : 'mt-0 w-full max-w-xl'} relative`}>
+          <input
+            id="spf-country"
+            type="text"
+            value={applicantCountryInput}
+            onFocus={() => !submitting && setApplicantCountryOpen(true)}
+            onChange={(event) => {
+              const next = event.target.value;
+              if (
+                includeUnspecifiedApplicantCountries &&
+                next.trim().toLowerCase() !== 'citizenship not specified'
+              ) {
+                setIncludeUnspecifiedApplicantCountries(false);
+              }
+              setApplicantCountryInput(next);
+              if (!submitting) setApplicantCountryOpen(true);
+              const upper = next.trim().toUpperCase();
+              const byCode = SCHOLARSHIP_COUNTRY_OPTIONS.find((c) => c.code === upper)?.code;
+              if (byCode) handleCountryCodeChange(byCode);
+            }}
+            placeholder="Select or type applicant country"
+            disabled={submitting}
+            autoComplete="off"
+            className={`${ic} pr-10`}
+          />
+          <ChevronDown
+            className={`pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500 transition ${
+              applicantCountryOpen ? 'rotate-180' : ''
+            }`}
+            aria-hidden
+          />
+          {applicantCountryOpen && !submitting ? (
+            <ul className="absolute left-0 right-0 top-[calc(100%+0.35rem)] z-[70] max-h-72 overflow-y-auto rounded-xl border border-zinc-200 bg-white py-1 shadow-lg ring-1 ring-black/5">
+              {applicantCountrySuggestions.length === 0 ? (
+                <li className="px-4 py-2.5 text-sm text-zinc-500">No matches found.</li>
+              ) : (
+                applicantCountrySuggestions.map((option) => (
+                  <li key={option.value}>
+                    <button
+                      type="button"
+                      className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm text-zinc-900 transition hover:bg-zinc-50"
+                      onClick={() => {
+                        handleCountryCodeChange(option.value);
+                        setApplicantCountryInput(option.label);
+                        setApplicantCountryOpen(false);
+                      }}
+                    >
+                      <span>{option.label}</span>
+                      {option.value !== 'CITIZENSHIP_NOT_SPECIFIED' ? (
+                        <span className="text-xs font-semibold text-zinc-500">{option.value}</span>
+                      ) : null}
+                    </button>
+                  </li>
+                ))
+              )}
+            </ul>
+          ) : null}
+        </div>
       </div>
-      <div className="mt-4">
-        <label className={lc} htmlFor="spf-study-dest-trigger">
+      <div className={eligibilityFieldBlockClass}>
+        <label className={eligibilityLabelClass} htmlFor="spf-study-dest-trigger">
           Study in
         </label>
         <StudyDestinationCountriesField
@@ -1142,19 +1148,21 @@ export default function ScholarshipProfileForm({
         </div>
       ) : null}
 
-      <label className={lc} htmlFor="spf-gpa">
-        GPA
-      </label>
-      <div className={selectWrapClass}>
-        <DarkSelect
-          id="spf-gpa"
-          ariaLabel="GPA"
-          options={gpaProfileSelectOptions}
-          value={gpaChoice}
-          onChange={setGpaChoice}
-          menuClassName="max-h-72"
-          disabled={submitting}
-        />
+      <div className={eligibilityFieldBlockClass}>
+        <label className={eligibilityLabelClass} htmlFor="spf-gpa">
+          GPA
+        </label>
+        <div className={selectWrapClass}>
+          <DarkSelect
+            id="spf-gpa"
+            ariaLabel="GPA"
+            options={gpaProfileSelectOptions}
+            value={gpaChoice}
+            onChange={setGpaChoice}
+            menuClassName="max-h-72"
+            disabled={submitting}
+          />
+        </div>
       </div>
     </>
   );
@@ -1838,84 +1846,88 @@ export default function ScholarshipProfileForm({
           <div className="rounded-2xl border border-zinc-100 bg-white p-6 shadow-[0_2px_24px_-8px_rgba(15,23,42,0.08)]">
             <h3 className="text-base font-semibold text-zinc-900">Eligibility</h3>
             <div className="mt-4 space-y-1">
-              <label className={lc} htmlFor="spf-citizenship">
-                Citizenship
-              </label>
-              <div className={selectWrapClass}>
-                <DarkSelect
-                  id="spf-citizenship"
-                  ariaLabel="Citizenship"
-                  options={citizenshipSelectOptions}
-                  value={citizenshipStatus}
-                  onChange={setCitizenshipStatus}
-                  disabled={submitting}
-                />
+              <div className={eligibilityFieldBlockClass}>
+                <label className={eligibilityLabelClass} htmlFor="spf-citizenship">
+                  Citizenship
+                </label>
+                <div className={selectWrapClass}>
+                  <DarkSelect
+                    id="spf-citizenship"
+                    ariaLabel="Citizenship"
+                    options={citizenshipSelectOptions}
+                    value={citizenshipStatus}
+                    onChange={setCitizenshipStatus}
+                    disabled={submitting}
+                  />
+                </div>
               </div>
-              <label className={lc} htmlFor="spf-country-saas">
-                Applicant country
-              </label>
-              <div ref={applicantCountryRef} className={`${selectWrapClass} relative`}>
-                <input
-                  id="spf-country-saas"
-                  type="text"
-                  value={applicantCountryInput}
-                  onFocus={() => !submitting && setApplicantCountryOpen(true)}
-                  onChange={(event) => {
-                    const next = event.target.value;
-                    if (
-                      includeUnspecifiedApplicantCountries &&
-                      next.trim().toLowerCase() !== 'citizenship not specified'
-                    ) {
-                      setIncludeUnspecifiedApplicantCountries(false);
-                    }
-                    setApplicantCountryInput(next);
-                    if (!submitting) setApplicantCountryOpen(true);
-                    const upper = next.trim().toUpperCase();
-                    const byCode = SCHOLARSHIP_COUNTRY_OPTIONS.find((c) => c.code === upper)?.code;
-                    if (byCode) handleCountryCodeChange(byCode);
-                  }}
-                  placeholder="Select or type applicant country"
-                  disabled={submitting}
-                  autoComplete="off"
-                  className={`${ic} pr-10`}
-                />
-                <ChevronDown
-                  className={`pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500 transition ${
-                    applicantCountryOpen ? 'rotate-180' : ''
-                  }`}
-                  aria-hidden
-                />
-                {applicantCountryOpen && !submitting ? (
-                  <ul className="absolute left-0 right-0 top-[calc(100%+0.35rem)] z-[70] max-h-72 overflow-y-auto rounded-xl border border-zinc-200 bg-white py-1 shadow-lg ring-1 ring-black/5">
-                    {applicantCountrySuggestions.length === 0 ? (
-                      <li className="px-4 py-2.5 text-sm text-zinc-500">No matches found.</li>
-                    ) : (
-                      applicantCountrySuggestions.map((option) => (
-                        <li key={option.value}>
-                          <button
-                            type="button"
-                            className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm text-zinc-900 transition hover:bg-zinc-50"
-                            onClick={() => {
-                              handleCountryCodeChange(option.value);
-                              setApplicantCountryInput(option.label);
-                              setApplicantCountryOpen(false);
-                            }}
-                          >
-                            <span>{option.label}</span>
-                            {option.value !== 'CITIZENSHIP_NOT_SPECIFIED' ? (
-                              <span className="text-xs font-semibold text-zinc-500">
-                                {option.value}
-                              </span>
-                            ) : null}
-                          </button>
-                        </li>
-                      ))
-                    )}
-                  </ul>
-                ) : null}
+              <div className={eligibilityFieldBlockClass}>
+                <label className={eligibilityLabelClass} htmlFor="spf-country-saas">
+                  Applicant country
+                </label>
+                <div ref={applicantCountryRef} className="relative mt-0 w-full">
+                  <input
+                    id="spf-country-saas"
+                    type="text"
+                    value={applicantCountryInput}
+                    onFocus={() => !submitting && setApplicantCountryOpen(true)}
+                    onChange={(event) => {
+                      const next = event.target.value;
+                      if (
+                        includeUnspecifiedApplicantCountries &&
+                        next.trim().toLowerCase() !== 'citizenship not specified'
+                      ) {
+                        setIncludeUnspecifiedApplicantCountries(false);
+                      }
+                      setApplicantCountryInput(next);
+                      if (!submitting) setApplicantCountryOpen(true);
+                      const upper = next.trim().toUpperCase();
+                      const byCode = SCHOLARSHIP_COUNTRY_OPTIONS.find((c) => c.code === upper)?.code;
+                      if (byCode) handleCountryCodeChange(byCode);
+                    }}
+                    placeholder="Select or type applicant country"
+                    disabled={submitting}
+                    autoComplete="off"
+                    className={`${ic} pr-10`}
+                  />
+                  <ChevronDown
+                    className={`pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500 transition ${
+                      applicantCountryOpen ? 'rotate-180' : ''
+                    }`}
+                    aria-hidden
+                  />
+                  {applicantCountryOpen && !submitting ? (
+                    <ul className="absolute left-0 right-0 top-[calc(100%+0.35rem)] z-[70] max-h-72 overflow-y-auto rounded-xl border border-zinc-200 bg-white py-1 shadow-lg ring-1 ring-black/5">
+                      {applicantCountrySuggestions.length === 0 ? (
+                        <li className="px-4 py-2.5 text-sm text-zinc-500">No matches found.</li>
+                      ) : (
+                        applicantCountrySuggestions.map((option) => (
+                          <li key={option.value}>
+                            <button
+                              type="button"
+                              className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm text-zinc-900 transition hover:bg-zinc-50"
+                              onClick={() => {
+                                handleCountryCodeChange(option.value);
+                                setApplicantCountryInput(option.label);
+                                setApplicantCountryOpen(false);
+                              }}
+                            >
+                              <span>{option.label}</span>
+                              {option.value !== 'CITIZENSHIP_NOT_SPECIFIED' ? (
+                                <span className="text-xs font-semibold text-zinc-500">
+                                  {option.value}
+                                </span>
+                              ) : null}
+                            </button>
+                          </li>
+                        ))
+                      )}
+                    </ul>
+                  ) : null}
+                </div>
               </div>
-              <div className="mt-6">
-                <label className={lc} htmlFor="spf-study-dest-saas-trigger">
+              <div className={eligibilityFieldBlockClass}>
+                <label className={eligibilityLabelClass} htmlFor="spf-study-dest-saas-trigger">
                   Study in
                 </label>
                 <StudyDestinationCountriesField
@@ -1946,19 +1958,21 @@ export default function ScholarshipProfileForm({
                   </p>
                 </div>
               ) : null}
-              <label className={lc} htmlFor="spf-gpa">
-                GPA
-              </label>
-              <div className={selectWrapClass}>
-                <DarkSelect
-                  id="spf-gpa"
-                  ariaLabel="GPA"
-                  options={gpaProfileSelectOptions}
-                  value={gpaChoice}
-                  onChange={setGpaChoice}
-                  menuClassName="max-h-72"
-                  disabled={submitting}
-                />
+              <div className={eligibilityFieldBlockClass}>
+                <label className={eligibilityLabelClass} htmlFor="spf-gpa">
+                  GPA
+                </label>
+                <div className={selectWrapClass}>
+                  <DarkSelect
+                    id="spf-gpa"
+                    ariaLabel="GPA"
+                    options={gpaProfileSelectOptions}
+                    value={gpaChoice}
+                    onChange={setGpaChoice}
+                    menuClassName="max-h-72"
+                    disabled={submitting}
+                  />
+                </div>
               </div>
             </div>
             {sectionSaveRow('eligibility', onSaveEligibility)}
