@@ -2261,6 +2261,12 @@ function ScholarshipsPageInner({
   const listQueryEnabled =
     (activeTab !== 'recommended' || hasPresets) &&
     (activeTab !== 'best-recommendation' || landingQuizSeedHydrated);
+  const signedInBestProfileBootstrapReadyForList =
+    !(
+      Boolean(authResolved) &&
+      isAuthenticated &&
+      activeTab === 'best-recommendation'
+    ) || (profileInitResolved && profileInitialized);
   const forceFreshSeededBestList =
     activeTab === 'best-recommendation' &&
     transientBestRecommendationProfileSeed != null;
@@ -2342,7 +2348,9 @@ function ScholarshipsPageInner({
       };
     },
     enabled:
-      listQueryEnabled && !guestBestSkipHubBestListUntilPreview,
+      listQueryEnabled &&
+      signedInBestProfileBootstrapReadyForList &&
+      !guestBestSkipHubBestListUntilPreview,
     initialData: initialListData as ClientScholarshipsListResponse | undefined,
     staleTime: forceFreshSeededBestList ? 0 : 300_000,
     refetchOnMount: forceFreshSeededBestList ? 'always' : false
@@ -2511,33 +2519,6 @@ function ScholarshipsPageInner({
     staleTime: 300_000,
     refetchOnMount: false
   });
-  const signedInBestProfileRefetchDoneRef = useRef<string | null>(null);
-
-  useEffect(() => {
-    if (!authResolved || !isAuthenticated) return;
-    if (activeTab !== 'best-recommendation') return;
-    if (!profileInitResolved || !profileInitialized) return;
-    if (listMeta?.personalizedMatchReady !== false) return;
-    const key = `${hubListDataRequestKey}|${profileInitResolved ? 1 : 0}|${
-      profileInitialized ? 1 : 0
-    }`;
-    if (signedInBestProfileRefetchDoneRef.current === key) return;
-    signedInBestProfileRefetchDoneRef.current = key;
-    console.info('[ScholarshipsHub] refetching best recommendations after profile ready');
-    void listQuery.refetch();
-    void sidebarMetaQuery.refetch();
-  }, [
-    authResolved,
-    isAuthenticated,
-    activeTab,
-    profileInitResolved,
-    profileInitialized,
-    listMeta?.personalizedMatchReady,
-    hubListDataRequestKey,
-    listQuery,
-    sidebarMetaQuery
-  ]);
-
   useEffect(() => {
     if (activeTab === 'recommended' && !savedFiltersForHub) {
       setScholarships([]);
@@ -3279,8 +3260,22 @@ function ScholarshipsPageInner({
   const blockingListLoad = blockingInitialLoad || blockingApplyLoad;
   const effectiveHeaderTotalCount =
     guestBestTopExploreTotal != null ? guestBestTopExploreTotal : headerTotalCount;
+  const signedInBestHeaderCountPending =
+    Boolean(authResolved) &&
+    isAuthenticated &&
+    activeTab === 'best-recommendation' &&
+    totalCount === 0 &&
+    !hasError &&
+    (!profileInitResolved ||
+      !profileInitialized ||
+      listMeta?.personalizedMatchReady === false ||
+      listQuery.isPending ||
+      listQuery.isFetching ||
+      !listQuery.isFetched ||
+      (listQuery.data != null &&
+        listQuery.data.__clientRequestKey !== hubListDataRequestKey));
   const resultCountForHeader =
-    blockingListLoad
+    blockingListLoad || signedInBestHeaderCountPending
       ? null
       : effectiveHeaderTotalCount === null
         ? null
@@ -3543,7 +3538,11 @@ function ScholarshipsPageInner({
                 onOpenMoreFilters={openMoreFilters}
                 pageTitle={hubListingPageTitle}
                 omitHeadlineBlock
-                loadingCountText={scholarshipListLoadingText(activeTab)}
+                loadingCountText={
+                  activeTab === 'best-recommendation' && isAuthenticated
+                    ? 'Loading best recommendations...'
+                    : scholarshipListLoadingText(activeTab)
+                }
                 listTab={activeTab}
                 categoriesDisabled={!isLoading && totalCount === 0}
                 moreFiltersActiveCount={moreFiltersActiveCount}
