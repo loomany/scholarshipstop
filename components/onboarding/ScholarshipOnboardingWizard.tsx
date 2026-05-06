@@ -36,6 +36,7 @@ import { toast } from '@/components/ui/Toasts/use-toast';
 import { SCHOLARSHIPS_HUB_BEST_MATCHES_HREF } from '@/app/scholarships/scholarshipListUrl';
 import { ACCOUNT_SHOW_DATE_OF_BIRTH_AND_PASSWORD_FIELDS } from '@/lib/constants/accountRegistrationUi';
 import { normalizeCountryCode } from '@/lib/scholarships/countryEligibility/countries';
+import { ONBOARDING_HUB_BOOTSTRAP_KEY } from '@/lib/scholarships/landingQuizHubSession';
 
 /** Default landing after onboarding: scholarship hub, Best recommendation tab. */
 const POST_ONBOARDING_PATH = SCHOLARSHIPS_HUB_BEST_MATCHES_HREF;
@@ -46,6 +47,14 @@ function notifyDestructive(title: string, description?: string) {
     title,
     description
   });
+}
+
+function markOnboardingHubBootstrap() {
+  try {
+    sessionStorage.setItem(ONBOARDING_HUB_BOOTSTRAP_KEY, '1');
+  } catch {
+    /* ignore */
+  }
 }
 
 function emptyDraft(): StoredOnboardingDraft {
@@ -351,6 +360,7 @@ export function ScholarshipOnboardingWizard({
           finalizeInFlight.current = false;
           setLoading(false);
           router.refresh();
+          markOnboardingHubBootstrap();
           router.push(afterAuthPath);
           return true;
         };
@@ -464,6 +474,7 @@ export function ScholarshipOnboardingWizard({
           setLoading(false);
           finalizeInFlight.current = false;
           router.refresh();
+          markOnboardingHubBootstrap();
           router.push(afterAuthPath);
           return;
         }
@@ -535,6 +546,7 @@ export function ScholarshipOnboardingWizard({
         setLoading(false);
         finalizeInFlight.current = false;
         router.refresh();
+        markOnboardingHubBootstrap();
         router.push(afterAuthPath);
       } catch (error) {
         console.error('[onboarding:auth] finalize failed unexpectedly', error);

@@ -137,6 +137,7 @@ import { buildHubTabPresetMoreFilters } from '@/lib/scholarships/hubTabPresetMor
 import { mergeMoreFilterStates } from '@/lib/scholarships/seoScholarshipListing';
 import {
   LANDING_QUIZ_HUB_SEED_KEY,
+  ONBOARDING_HUB_BOOTSTRAP_KEY,
   SCHOLARSHIP_HUB_SKIP_AUTO_LANDING_SEED_ONCE_KEY
 } from '@/lib/scholarships/landingQuizHubSession';
 import {
@@ -201,6 +202,9 @@ const HUB_TABS_SSR_NEVER_SEEDS_ID_LIST: readonly ScholarshipListTabId[] = [
 ];
 const EMPTY_LOCATION_OPTIONS: string[] = [];
 const PREVIEW_COUNT_CACHE_TTL_MS = 30_000;
+const SIGNED_IN_BEST_BOOTSTRAP_TIMEOUT_MS = 6_500;
+const SIGNED_IN_BEST_PERSONALIZATION_RETRY_DELAY_MS = 1_200;
+const SIGNED_IN_BEST_PERSONALIZATION_MAX_RETRIES = 5;
 
 function shouldShowIqInlineCard(index: number): boolean {
   return index % 4 === 0;
@@ -493,9 +497,17 @@ function ScholarshipsPageInner({
   const {
     profile: currentMatchProfile,
     profileInitialized,
-    resolved: profileInitResolved
+    resolved: profileInitResolved,
+    bootstrapExhausted: profileBootstrapExhausted
   } =
     useCurrentUserScholarshipMatchProfile(isAuthenticated && authResolved);
+  const [signedInBestBootstrapFallbackUnlocked, setSignedInBestBootstrapFallbackUnlocked] =
+    useState(false);
+  const onboardingHubRefreshTriggeredRef = useRef(false);
+  const signedInBestDelayedRefreshCountRef = useRef(0);
+  const [signedInBestPersonalizationRetryCount, setSignedInBestPersonalizationRetryCount] =
+    useState(0);
+  const signedInBestRefetchInFlightRef = useRef(false);
   /** Merge server-backed saves (Telegram, heart on site) with localStorage for guests→login edge cases. */
   const refreshSavedIdsFromApi = useCallback(async () => {
     const fromStorage = getSavedScholarshipIds();
@@ -762,6 +774,66 @@ function ScholarshipsPageInner({
     authResolved &&
     (hubTreatAsGuest ||
       (isAuthenticated && profileInitResolved && !profileInitialized));
+
+  const signedInBestProfileBootstrapBlocked =
+    Boolean(authResolved) &&
+    isAuthenticated &&
+    activeTab === 'best-recommendation' &&
+    !profileInitialized;
+
+  useEffect(() => {
+    if (!signedInBestProfileBootstrapBlocked) {
+      setSignedInBestBootstrapFallbackUnlocked(false);
+      return;
+    }
+    if (profileBootstrapExhausted) {
+      setSignedInBestBootstrapFallbackUnlocked(true);
+      return;
+    }
+    const timer = window.setTimeout(() => {
+      setSignedInBestBootstrapFallbackUnlocked(true);
+    }, SIGNED_IN_BEST_BOOTSTRAP_TIMEOUT_MS);
+    return () => window.clearTimeout(timer);
+  }, [signedInBestProfileBootstrapBlocked, profileBootstrapExhausted]);
+
+  useEffect(() => {
+    if (!authResolved || !isAuthenticated) return;
+    if (activeTab !== 'best-recommendation') return;
+    if (onboardingHubRefreshTriggeredRef.current) return;
+    try {
+      const bootstrapKey = sessionStorage.getItem(ONBOARDING_HUB_BOOTSTRAP_KEY);
+      if (bootstrapKey !== '1') return;
+      sessionStorage.removeItem(ONBOARDING_HUB_BOOTSTRAP_KEY);
+      onboardingHubRefreshTriggeredRef.current = true;
+      router.refresh();
+    } catch {
+      /* ignore */
+    }
+  }, [activeTab, authResolved, isAuthenticated, router]);
+
+  useEffect(() => {
+    if (!authResolved || !isAuthenticated) return;
+    if (activeTab !== 'best-recommendation') return;
+    if (!signedInBestBootstrapFallbackUnlocked) return;
+    if (profileInitialized) return;
+    if (listMeta?.personalizedMatchReady !== false) return;
+    if (signedInBestDelayedRefreshCountRef.current >= 2) return;
+
+    const timer = window.setTimeout(() => {
+      if (signedInBestDelayedRefreshCountRef.current >= 2) return;
+      signedInBestDelayedRefreshCountRef.current += 1;
+      router.refresh();
+    }, 2200);
+    return () => window.clearTimeout(timer);
+  }, [
+    activeTab,
+    authResolved,
+    isAuthenticated,
+    listMeta?.personalizedMatchReady,
+    profileInitialized,
+    router,
+    signedInBestBootstrapFallbackUnlocked
+  ]);
   const guestCompletedScholarshipQuiz =
     landingQuizProfileSeed != null ||
     bestRecommendationWizardStore?.submitted === true;
@@ -2262,11 +2334,19 @@ function ScholarshipsPageInner({
     (activeTab !== 'recommended' || hasPresets) &&
     (activeTab !== 'best-recommendation' || landingQuizSeedHydrated);
   const signedInBestProfileBootstrapReadyForList =
-    !(
-      Boolean(authResolved) &&
-      isAuthenticated &&
-      activeTab === 'best-recommendation'
-    ) || (profileInitResolved && profileInitialized);
+    !signedInBestProfileBootstrapBlocked || signedInBestBootstrapFallbackUnlocked;
+  const signedInBestPersonalizationPending =
+    Boolean(authResolved) &&
+    isAuthenticated &&
+    activeTab === 'best-recommendation' &&
+    totalCount === 0 &&
+    !hasError &&
+    listMeta?.personalizedMatchReady === false;
+  const signedInBestPersonalizationRetryExhausted =
+    signedInBestPersonalizationRetryCount >= SIGNED_IN_BEST_PERSONALIZATION_MAX_RETRIES;
+  const signedInBestCatalogFallbackActive =
+    (signedInBestProfileBootstrapBlocked && signedInBestBootstrapFallbackUnlocked) ||
+    (signedInBestPersonalizationPending && signedInBestPersonalizationRetryExhausted);
   const forceFreshSeededBestList =
     activeTab === 'best-recommendation' &&
     transientBestRecommendationProfileSeed != null;
@@ -2354,6 +2434,80 @@ function ScholarshipsPageInner({
     initialData: initialListData as ClientScholarshipsListResponse | undefined,
     staleTime: forceFreshSeededBestList ? 0 : 300_000,
     refetchOnMount: forceFreshSeededBestList ? 'always' : false
+  });
+  useEffect(() => {
+    if (!signedInBestPersonalizationPending) {
+      setSignedInBestPersonalizationRetryCount(0);
+      signedInBestRefetchInFlightRef.current = false;
+      return;
+    }
+    if (signedInBestPersonalizationRetryExhausted) return;
+    if (listQuery.isFetching) return;
+    if (signedInBestRefetchInFlightRef.current) return;
+
+    const timer = window.setTimeout(() => {
+      if (signedInBestRefetchInFlightRef.current) return;
+      signedInBestRefetchInFlightRef.current = true;
+      void listQuery
+        .refetch()
+        .finally(() => {
+          signedInBestRefetchInFlightRef.current = false;
+          setSignedInBestPersonalizationRetryCount((prev) => prev + 1);
+        });
+    }, SIGNED_IN_BEST_PERSONALIZATION_RETRY_DELAY_MS);
+    return () => window.clearTimeout(timer);
+  }, [
+    listQuery,
+    signedInBestPersonalizationPending,
+    signedInBestPersonalizationRetryExhausted
+  ]);
+  const signedInBestFallbackQuery = useQuery({
+    queryKey: [
+      'scholarships',
+      'hub',
+      'signed-in-best-fallback',
+      searchParamsString,
+      hubListingPage,
+      listingRequestFingerprint,
+      userCollectionsFingerprint,
+      routeScopeKey
+    ] as const,
+    queryFn: ({ signal }) => {
+      const ids = userListIdsRef.current;
+      const sp = buildHubListingSearchParams({
+        base: new URLSearchParams(searchParamsString),
+        page: hubListingPage,
+        tab: 'matches',
+        meta: false,
+        saved: ids.saved,
+        ignored: ids.ignored,
+        started: ids.started,
+        submitted: ids.submitted,
+        scope: catalogListScope
+      });
+      return postScholarshipsList(
+        {
+          searchParams: sp.toString(),
+          guestBestRecommendationPreviewEnabled: false,
+          longTailLegacySlugs: routeScope?.longTailLegacySlugs ?? [],
+          requiredSeoTags: routeScope?.requiredSeoTags ?? [],
+          seoListingFallback: routeScope?.seoListingFallback,
+          slugOnlyMoreFilters: routeScope?.slugOnlyMoreFilters,
+          providerSlug: appliedProviderSlug,
+          hostCountryCodes: hubListingHostPosting.hostCountryCodes,
+          bestRecommendationRelaxableQuizHostCountries:
+            hubListingHostPosting.bestRecommendationRelaxableQuizHostCountries
+        },
+        { signal }
+      );
+    },
+    enabled:
+      signedInBestCatalogFallbackActive &&
+      isAuthenticated &&
+      authResolved &&
+      activeTab === 'best-recommendation',
+    staleTime: 60_000,
+    refetchOnMount: true
   });
 
   const guestBestTopExploreListingMoreFilters = useMemo(() => {
@@ -2477,6 +2631,22 @@ function ScholarshipsPageInner({
     setIsLoading(false);
     setHasInitialLoadCompleted(true);
   }, [guestBestCatalogFallbackActive, guestBestTopExploreQuery.data]);
+  useEffect(() => {
+    if (!signedInBestCatalogFallbackActive) return;
+    if (activeTab !== 'best-recommendation') return;
+    const data = signedInBestFallbackQuery.data;
+    if (!data) return;
+    setScholarships(data.scholarships);
+    setTotalCount(data.total);
+    setHasError(Boolean(data.errorMessage));
+    setErrorMessage(data.errorMessage ?? '');
+    setIsLoading(false);
+    setHasInitialLoadCompleted(true);
+  }, [
+    activeTab,
+    signedInBestCatalogFallbackActive,
+    signedInBestFallbackQuery.data
+  ]);
 
   const sidebarMetaQuery = useQuery({
     queryKey: hubMetaQueryKey,
@@ -3248,8 +3418,9 @@ function ScholarshipsPageInner({
     activeTab === 'best-recommendation' &&
     totalCount === 0 &&
     !hasError &&
-    (!profileInitResolved ||
-      (!profileInitialized && listMeta?.personalizedMatchReady === false));
+    (!(signedInBestBootstrapFallbackUnlocked || signedInBestPersonalizationRetryExhausted) &&
+      (!profileInitResolved ||
+        (!profileInitialized && listMeta?.personalizedMatchReady === false)));
   const blockingInitialLoad =
     (isLoading && !hasInitialLoadCompleted) ||
     bestLandingSeedPending ||

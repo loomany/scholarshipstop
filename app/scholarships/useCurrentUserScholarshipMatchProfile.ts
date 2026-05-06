@@ -11,6 +11,7 @@ type Result = {
   profile: CurrentUserScholarshipMatchProfile | null;
   profileInitialized: boolean;
   resolved: boolean;
+  bootstrapExhausted: boolean;
 };
 
 const PROFILE_MATCH_FIELDS =
@@ -25,18 +26,21 @@ export function useCurrentUserScholarshipMatchProfile(
     useState<CurrentUserScholarshipMatchProfile | null>(null);
   const [profileInitialized, setProfileInitialized] = useState(false);
   const [resolved, setResolved] = useState(!enabled);
+  const [bootstrapExhausted, setBootstrapExhausted] = useState(false);
 
   useEffect(() => {
     if (!enabled) {
       setProfile(null);
       setProfileInitialized(false);
       setResolved(true);
+      setBootstrapExhausted(false);
       return;
     }
 
     const supabase = createClient();
     let cancelled = false;
     setResolved(false);
+    setBootstrapExhausted(false);
 
     void (async () => {
       for (let attempt = 0; attempt <= PROFILE_RETRY_ATTEMPTS; attempt += 1) {
@@ -74,6 +78,7 @@ export function useCurrentUserScholarshipMatchProfile(
 
         setProfile(null);
         if (attempt >= PROFILE_RETRY_ATTEMPTS) {
+          setBootstrapExhausted(true);
           setResolved(true);
           return;
         }
@@ -98,5 +103,5 @@ export function useCurrentUserScholarshipMatchProfile(
     };
   }, [enabled]);
 
-  return { profile, profileInitialized, resolved };
+  return { profile, profileInitialized, resolved, bootstrapExhausted };
 }
