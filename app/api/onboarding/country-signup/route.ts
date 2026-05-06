@@ -49,26 +49,21 @@ function nonEmptyString(value: unknown): string | undefined {
 const EXISTING_EMAIL_MESSAGE =
   'This email already has an account. Please sign in with that email to continue.';
 
-async function findAuthUserIdByEmail(
-  admin: NonNullable<ReturnType<typeof createServiceRoleSupabaseClient>>,
-  email: string
-): Promise<string | null> {
-  const target = email.toLowerCase();
-  for (let page = 1; page <= 10; page += 1) {
-    const { data, error } = await admin.auth.admin.listUsers({
-      page,
-      perPage: 1000
-    });
-    if (error) {
-      console.warn('[country-signup] listUsers failed', error.message);
-      return null;
-    }
-    const users = data.users ?? [];
-    const match = users.find((user) => user.email?.trim().toLowerCase() === target);
-    if (match?.id) return match.id;
-    if (users.length < 1000) return null;
-  }
-  return null;
+function isCreateUserDuplicateEmailError(error: { message?: string; code?: string } | null): boolean {
+  const message = error?.message?.toLowerCase() ?? '';
+  return (
+    message.includes('already') ||
+    message.includes('exists') ||
+    message.includes('registered') ||
+    error?.code === 'email_exists'
+  );
+}
+
+function maskEmail(email: string): string {
+  const [local, domain] = email.split('@');
+  if (!local || !domain) return '[invalid-email]';
+  const prefix = local.slice(0, 2);
+  return `${prefix}***@${domain}`;
 }
 
 function normalizeStudyDestinationCodes(raw: unknown): string[] | undefined {
@@ -217,8 +212,39 @@ async function upsertProfileWithSchemaFallback(
 }
 
 export async function POST(request: Request) {
+  const reqId = randomUUID().slice(0, 8);
+  const requestStart = Date.now();
+  const phaseMs = {
+    find: 0,
+    create: 0,
+    upsert: 0
+  };
+  const phaseStart = {
+    find: 0,
+    create: 0,
+    upsert: 0
+  };
+  const beginPhase = (name: keyof typeof phaseMs) => {
+    phaseStart[name] = Date.now();
+  };
+  const endPhase = (name: keyof typeof phaseMs) => {
+    phaseMs[name] = Date.now() - phaseStart[name];
+  };
+
+  const logResponseEnd = (status: number, details?: Record<string, unknown>) => {
+    const country_signup_total_ms = Date.now() - requestStart;
+    console.info('[country-signup] response_end', {
+      reqId,
+      status,
+      country_signup_total_ms,
+      phase_ms: phaseMs,
+      ...(details ?? {})
+    });
+  };
+
   const payload = (await request.json().catch(() => null)) as CountrySignupPayload | null;
   const email = payload?.email?.trim().toLowerCase() ?? '';
+  const maskedEmail = maskEmail(email);
   const source = payload?.source?.trim() || 'country-signup';
   const profile = payload?.profile ?? {};
   const unspecifiedApplicant =
@@ -235,14 +261,17 @@ export async function POST(request: Request) {
       );
 
   if (!isValidEmail(email)) {
+    logResponseEnd(400, { reason: 'invalid_email' });
     return Response.json({ ok: false, error: 'Enter a valid email address.' }, { status: 400 });
   }
   if (!countryCode && !unspecifiedApplicant) {
+    logResponseEnd(400, { reason: 'invalid_country', email: maskedEmail });
     return Response.json({ ok: false, error: 'Choose a valid country.' }, { status: 400 });
   }
 
   const admin = createServiceRoleSupabaseClient();
   if (!admin) {
+    logResponseEnd(500, { reason: 'missing_admin_client', email: maskedEmail });
     return Response.json(
       { ok: false, error: 'Server signup is not configured.' },
       { status: 500 }
@@ -254,26 +283,54 @@ export async function POST(request: Request) {
   // surface as a vague Supabase "Internal Server Error".
   const generatedPassword = `${randomUUID()}A1!`;
   let createdNewUser = false;
-  let userId = await findAuthUserIdByEmail(admin, email);
+  let userId: string | null = null;
   let canUsePasswordForSession = false;
 
-  if (!userId) {
-    const { data: created, error: createError } = await admin.auth.admin.createUser({
-      email,
-      password: generatedPassword,
-      email_confirm: true,
-      user_metadata: {
-        signup_source: source,
-        scholarship_profile: JSON.stringify(metadata)
-      }
-    });
+  console.info('[country-signup] request_start', { reqId, email: maskedEmail });
+  console.info('[country-signup] before_find_user', {
+    reqId,
+    strategy: 'create_first_duplicate_handling'
+  });
+  beginPhase('find');
+  // find phase intentionally avoids scanning Auth users list for performance.
+  endPhase('find');
+  console.info('[country-signup] after_find_user', {
+    reqId,
+    strategy: 'create_first_duplicate_handling',
+    scanned: false
+  });
 
-    if (created.user?.id) {
-      createdNewUser = true;
-      canUsePasswordForSession = true;
-      userId = created.user.id;
-    } else if (createError) {
-      console.error('[country-signup] createUser failed', createError.message);
+  console.info('[country-signup] before_create_user', { reqId, email: maskedEmail });
+  beginPhase('create');
+  const { data: created, error: createError } = await admin.auth.admin.createUser({
+    email,
+    password: generatedPassword,
+    email_confirm: true,
+    user_metadata: {
+      signup_source: source,
+      scholarship_profile: JSON.stringify(metadata)
+    }
+  });
+  endPhase('create');
+  console.info('[country-signup] after_create_user', {
+    reqId,
+    created: Boolean(created.user?.id),
+    error: createError?.message ?? null
+  });
+
+  if (created.user?.id) {
+    createdNewUser = true;
+    canUsePasswordForSession = true;
+    userId = created.user.id;
+  } else if (createError) {
+    if (!isCreateUserDuplicateEmailError(createError)) {
+      console.error('[country-signup] createUser failed', {
+        reqId,
+        message: createError.message,
+        code: createError.code ?? null
+      });
+      const status = createError.message === 'Internal Server Error' ? 409 : 400;
+      logResponseEnd(status, { reason: 'create_user_failed', email: maskedEmail });
       return Response.json(
         {
           ok: false,
@@ -282,20 +339,19 @@ export async function POST(request: Request) {
               ? 'This email may already have an account. Please sign in with that email or try another email.'
               : createError.message || 'Could not create account.'
         },
-        { status: createError.message === 'Internal Server Error' ? 409 : 400 }
+        { status }
       );
     }
-  }
-
-  if (!userId) {
-    return Response.json({ ok: false, error: 'Could not create account.' }, { status: 500 });
-  }
-
-  if (!createdNewUser) {
     const {
       data: { user: sessionUser }
     } = await createServerSupabaseClient().auth.getUser();
-    if (sessionUser?.id !== userId) {
+    if (
+      sessionUser?.id &&
+      sessionUser.email?.trim().toLowerCase() === email
+    ) {
+      userId = sessionUser.id;
+    } else {
+      logResponseEnd(409, { reason: 'duplicate_email', email: maskedEmail });
       return Response.json(
         { ok: false, error: EXISTING_EMAIL_MESSAGE },
         { status: 409 }
@@ -303,11 +359,28 @@ export async function POST(request: Request) {
     }
   }
 
+  if (!userId) {
+    logResponseEnd(500, { reason: 'missing_user_id', email: maskedEmail });
+    return Response.json({ ok: false, error: 'Could not create account.' }, { status: 500 });
+  }
+
   const row = buildProfilesUpsert(userId, profile, countryCode, createdNewUser);
+  console.info('[country-signup] before_profile_upsert', { reqId, createdNewUser });
+  beginPhase('upsert');
   const { error: profileError } = await upsertProfileWithSchemaFallback(admin, row);
+  endPhase('upsert');
+  console.info('[country-signup] after_profile_upsert', {
+    reqId,
+    ok: !profileError,
+    error: profileError?.message ?? null
+  });
 
   if (profileError) {
-    console.error('[country-signup] profiles upsert failed', profileError.message);
+    console.error('[country-signup] profiles upsert failed', {
+      reqId,
+      message: profileError.message
+    });
+    logResponseEnd(500, { reason: 'profile_upsert_failed', email: maskedEmail });
     return Response.json(
       { ok: false, error: profileError.message || 'Could not save profile.' },
       { status: 500 }
@@ -326,6 +399,10 @@ export async function POST(request: Request) {
     });
   }
 
+  logResponseEnd(200, {
+    email: maskedEmail,
+    createdNewUser
+  });
   return Response.json({
     ok: true,
     userId,

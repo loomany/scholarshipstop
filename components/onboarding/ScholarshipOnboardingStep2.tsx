@@ -592,7 +592,7 @@ export function ScholarshipOnboardingStep2({
           aria-busy={isSubmitting}
           className={ONBOARDING_PRIMARY_BUTTON_CLASS}
         >
-          {isSubmitting ? 'Creating account...' : 'Create account & find scholarships'}
+          {isSubmitting ? 'Creating your account…' : 'Create account & find scholarships'}
           {!isSubmitting && isSaas ? (
             <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
           ) : !isSubmitting ? (

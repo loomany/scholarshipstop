@@ -3338,6 +3338,15 @@ function ScholarshipsPageInner({
     !isLoading &&
     listMeta != null &&
     listMeta.personalizedMatchReady === false;
+  const authBestRecommendationProfileBuilding =
+    Boolean(authResolved) &&
+    isAuthenticated &&
+    activeTab === 'best-recommendation' &&
+    totalCount === 0 &&
+    !isLoading &&
+    !hasError &&
+    listMeta != null &&
+    listMeta.personalizedMatchReady === false;
 
   const headerSavedFilterPresetButtons = useMemo(
     () =>
@@ -3739,6 +3748,15 @@ function ScholarshipsPageInner({
               {guestBestRecommendationEmptyHidden ? null : (
                 guestBestRecommendationSeededZeroResults ? (
                   guestBestRecommendationSeededEmptyState
+                ) : authBestRecommendationProfileBuilding ? (
+                  <div className="rounded-xl border border-zinc-200 bg-white px-5 py-10 text-center text-slate-600 shadow-sm">
+                    <p className="text-base font-semibold text-zinc-900">
+                      Building your recommendations…
+                    </p>
+                    <p className="mt-2 text-sm text-zinc-600">
+                      We’re matching your profile with available scholarships.
+                    </p>
+                  </div>
                 ) : guestPersonalizedEmpty &&
                   shouldShowScholarshipQuestionsCta &&
                   bestRecommendationStartCta ? (
