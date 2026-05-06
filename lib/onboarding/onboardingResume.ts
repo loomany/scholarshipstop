@@ -1,13 +1,12 @@
 import type { OnboardingStep } from '@/lib/onboarding/onboardingFlowTypes';
 import type { StoredOnboardingDraft } from '@/lib/onboarding/scholarshipOnboardingDraft';
 
-/** Last onboarding screen in the wizard (account creation). */
-const UI_MAX_STEP = 7 as OnboardingStep;
-
 /**
- * Furthest URL step: basics are split into 3 screens, then steps 4-6 open by progress.
- * Account fields are not required until step 6.
+ * Country-first flow: step 1 = applicant country, step 2 = account.
+ * Also caps legacy `?step=` values (3–7) down to the furthest allowed step.
  */
+const UI_MAX_STEP = 2 as OnboardingStep;
+
 export function getMaxAllowedOnboardingStep(
   draft: StoredOnboardingDraft
 ): OnboardingStep {
@@ -19,19 +18,7 @@ export function getMaxAllowedOnboardingStep(
     return UI_MAX_STEP;
   }
   if (draft.activeStep === 1) return 1;
-  if (countryCode !== 'US') return UI_MAX_STEP;
-
-  const schoolLevelReady = draft.step1.schoolLevel.trim().length > 0;
-  if (!schoolLevelReady) return 2;
-
-  const fieldOfStudyReady = draft.step1.fieldOfStudy.trim().length > 0;
-  if (!fieldOfStudyReady) return 3;
-
-  const citizenshipReady = draft.step1.citizenship.trim().length > 0;
-  if (!citizenshipReady) return 4;
-
-  const furthest = Math.min(draft.activeStep, UI_MAX_STEP) as OnboardingStep;
-  return Math.min(UI_MAX_STEP, Math.max(5, furthest)) as OnboardingStep;
+  return UI_MAX_STEP;
 }
 
 export function onboardingStepHref(

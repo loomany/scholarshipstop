@@ -480,6 +480,10 @@ export function mergeBestRecommendationFiltersFromProfile(
   const bestRecommendationUsesCountryAsPrimaryFilter =
     tab === 'best-recommendation' &&
     prof.includeApplicantCountryCodes.size > 0;
+  /** US registrants: Best recommendation still narrows by profile state + onboarding facets; non‑US: country-only hard filter (matches “I’m from”). */
+  const applicantIsoSorted = Array.from(prof.includeApplicantCountryCodes).sort();
+  const bestRecommendationUsApplicantPrimary =
+    applicantIsoSorted.length === 1 && applicantIsoSorted[0] === 'US';
   const autoProfileCitizenshipSqlNarrowAllowed = tab !== 'best-recommendation';
 
   if (
@@ -496,7 +500,10 @@ export function mergeBestRecommendationFiltersFromProfile(
   ) {
     out.includeUnspecifiedApplicantCountries = true;
   }
-  if (bestRecommendationUsesCountryAsPrimaryFilter) {
+  if (
+    bestRecommendationUsesCountryAsPrimaryFilter &&
+    !bestRecommendationUsApplicantPrimary
+  ) {
     return out;
   }
 

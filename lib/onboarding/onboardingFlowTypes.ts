@@ -1,4 +1,4 @@
-/** Onboarding: country → US basics/state/GPA → account. */
+/** Onboarding URL/local step index (country-first: 1 = country, 2 = account; 3–7 = legacy URLs/drafts). */
 export type OnboardingStep = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 
 export type OnboardingStep2DraftFields = {

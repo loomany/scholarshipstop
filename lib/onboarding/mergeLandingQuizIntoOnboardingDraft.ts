@@ -20,10 +20,8 @@ import {
   type OnboardingFormValues,
   type StoredOnboardingDraft
 } from '@/lib/onboarding/scholarshipOnboardingDraft';
-import { validateScholarshipOnboardingBasicsWithoutBirth } from '@/lib/validation/scholarshipOnboardingSchema';
-import { validateScholarshipOnboardingStep3Gpa } from '@/lib/validation/scholarshipOnboardingStep3Schema';
-import { validateScholarshipOnboardingStep4Draft } from '@/lib/validation/scholarshipOnboardingStep4Schema';
 import type { OnboardingStep } from '@/lib/onboarding/onboardingFlowTypes';
+import { normalizeCountryCode } from '@/lib/scholarships/countryEligibility/countries';
 import {
   buildScholarshipProfileFilterSeedFromDraftWithoutBirth,
   buildScholarshipProfileFilterSeedFromQuizDraft,
@@ -278,17 +276,14 @@ function mergeSourceIntoBase(
   };
 }
 
-/**
- * First incomplete step after merge (basics without DOB; DOB on account step).
- * Wizard order: 1 basics → 2 state → 3 GPA → 4 account.
- */
+/** Country-first `/onboarding`: step 1 = country, step 2 = account (DOB + signup fields). */
 export function computeResumeStepAfterLandingMerge(
   d: StoredOnboardingDraft
 ): OnboardingStep {
-  if (!validateScholarshipOnboardingBasicsWithoutBirth(d.step1).ok) return 1;
-  if (!validateScholarshipOnboardingStep4Draft(d.step4).ok) return 2;
-  if (!validateScholarshipOnboardingStep3Gpa(d.step3).ok) return 3;
-  return 4;
+  if (d.includeUnspecifiedApplicantCountries === true) return 2;
+  const countryCode = normalizeCountryCode(d.step4.countryCode);
+  if (!countryCode) return 1;
+  return 2;
 }
 
 /**

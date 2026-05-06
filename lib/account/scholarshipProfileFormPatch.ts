@@ -25,6 +25,8 @@ import {
 import type { Database, Json } from '@/types_db';
 
 type ProfilesRow = Database['public']['Tables']['profiles']['Row'];
+const INCLUDE_UNSPECIFIED_APPLICANT_COUNTRIES_SNAPSHOT_KEY =
+  'includeUnspecifiedApplicantCountries' as const;
 
 function birthPartsFromProfile(p: ProfilesRow | null): {
   month: string;
@@ -107,6 +109,7 @@ export type ScholarshipProfileFormValues = {
   fieldOfStudy: string;
   citizenshipStatus: string;
   countryCode: string;
+  includeUnspecifiedApplicantCountries: boolean;
   /** ISO2 host / study-destination preferences (`profiles.preferred_host_country_codes`). */
   preferredStudyHostCountries: string[];
   gpaChoice: string;
@@ -157,7 +160,9 @@ export function buildScholarshipProfileFormPatch(
   patch.citizenship_status = citizenship_status;
   patch.citizenship_status_label = citizenship_status_label;
 
-  const countryCode = normalizeCountryCode(v.countryCode);
+  const countryCode = v.includeUnspecifiedApplicantCountries
+    ? null
+    : normalizeCountryCode(v.countryCode);
   patch.country_code = countryCode;
 
   const formGpa = gpaForProfileDb(v.gpaChoice);
@@ -167,11 +172,30 @@ export function buildScholarshipProfileFormPatch(
     profile?.saved_filters_snapshot
   );
   const nextGpaSelection = isGpaBucketChoice(v.gpaChoice) ? v.gpaChoice.trim() : null;
-  if (currentGpaSelection !== nextGpaSelection) {
-    patch.saved_filters_snapshot = withProfileGpaSelectionSnapshot(
+  const currentIncludeUnspecifiedApplicantCountries =
+    Boolean(
+      profile?.saved_filters_snapshot &&
+      typeof profile.saved_filters_snapshot === 'object' &&
+      !Array.isArray(profile.saved_filters_snapshot) &&
+      (
+        profile.saved_filters_snapshot as Record<string, unknown>
+      )[INCLUDE_UNSPECIFIED_APPLICANT_COUNTRIES_SNAPSHOT_KEY] === true
+    );
+  if (
+    currentGpaSelection !== nextGpaSelection ||
+    currentIncludeUnspecifiedApplicantCountries !== v.includeUnspecifiedApplicantCountries
+  ) {
+    const snapshot = withProfileGpaSelectionSnapshot(
       profile?.saved_filters_snapshot,
       v.gpaChoice
     );
+    const merged = snapshot ? { ...snapshot } : {};
+    if (v.includeUnspecifiedApplicantCountries) {
+      merged[INCLUDE_UNSPECIFIED_APPLICANT_COUNTRIES_SNAPSHOT_KEY] = true;
+    } else {
+      delete merged[INCLUDE_UNSPECIFIED_APPLICANT_COUNTRIES_SNAPSHOT_KEY];
+    }
+    patch.saved_filters_snapshot = Object.keys(merged).length > 0 ? merged : null;
   }
 
   const formState =

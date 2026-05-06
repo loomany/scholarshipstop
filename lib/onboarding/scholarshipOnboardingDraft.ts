@@ -96,7 +96,8 @@ function sanitizePreferredHostsFromStored(raw: unknown): string[] {
 }
 
 function normalizeActiveStep(n: unknown): OnboardingStep {
-  if (n === 2 || n === 3 || n === 4 || n === 5 || n === 6 || n === 7) return n;
+  if (n === 7) return 2;
+  if (n === 2 || n === 3 || n === 4 || n === 5 || n === 6) return n;
   return 1;
 }
 

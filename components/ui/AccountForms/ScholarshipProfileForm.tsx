@@ -9,7 +9,7 @@ import {
   useState,
   type ReactNode
 } from 'react';
-import { ArrowRight, Check } from 'lucide-react';
+import { ArrowRight, Check, ChevronDown } from 'lucide-react';
 
 import PremiumLockedDuringPastDueCard from '@/components/billing/PremiumLockedDuringPastDueCard';
 import GrantNotificationToggles from '@/components/account/GrantNotificationToggles';
@@ -144,13 +144,14 @@ const citizenshipSelectOptions = [
   ...CITIZENSHIP_OPTIONS.map((o) => ({ value: o.value, label: o.label }))
 ];
 
-const countrySelectOptions = [
-  { value: '', label: 'Select applicant country' },
-  ...SCHOLARSHIP_COUNTRY_OPTIONS.map((country) => ({
-    value: country.code,
-    label: country.code === 'US' ? 'United States (America)' : country.label
-  }))
-];
+function snapshotIncludeUnspecifiedApplicantCountries(raw: unknown): boolean {
+  return Boolean(
+    raw &&
+      typeof raw === 'object' &&
+      !Array.isArray(raw) &&
+      (raw as Record<string, unknown>).includeUnspecifiedApplicantCountries === true
+  );
+}
 
 const birthMonthOptions = buildBirthMonthSelectOptions();
 
@@ -176,6 +177,7 @@ const EDUCATION_PATCH_KEYS = [
 const ELIGIBILITY_PATCH_KEYS = [
   'citizenship_status',
   'citizenship_status_label',
+  'preferred_host_country_codes',
   'country_code',
   'state_region',
   'gpa',
@@ -356,6 +358,8 @@ export default function ScholarshipProfileForm({
   const [countryCodeInput, setCountryCodeInput] = useState(
     () => normalizeCountryCode(profile?.country_code) ?? ''
   );
+  const [includeUnspecifiedApplicantCountries, setIncludeUnspecifiedApplicantCountries] =
+    useState(() => snapshotIncludeUnspecifiedApplicantCountries(profile?.saved_filters_snapshot));
   const [preferredStudyHostCountries, setPreferredStudyHostCountries] = useState(
     () =>
       preferredHostCountryCodesFromProfileJson(profile?.preferred_host_country_codes)
@@ -398,6 +402,9 @@ export default function ScholarshipProfileForm({
     setGpaChoice(resolveStoredProfileGpaChoice(profile.gpa, profile.saved_filters_snapshot));
     setStateRegionInput(profile.state_region?.trim() ?? '');
     setCountryCodeInput(normalizeCountryCode(profile.country_code) ?? '');
+    setIncludeUnspecifiedApplicantCountries(
+      snapshotIncludeUnspecifiedApplicantCountries(profile.saved_filters_snapshot)
+    );
     setPreferredStudyHostCountries(
       preferredHostCountryCodesFromProfileJson(profile.preferred_host_country_codes)
     );
@@ -445,6 +452,7 @@ export default function ScholarshipProfileForm({
       fieldOfStudy,
       citizenshipStatus,
       countryCode: countryCodeInput,
+      includeUnspecifiedApplicantCountries,
       preferredStudyHostCountries,
       gpaChoice,
       stateRegionInput
@@ -455,6 +463,7 @@ export default function ScholarshipProfileForm({
       birthYear,
       citizenshipStatus,
       countryCodeInput,
+      includeUnspecifiedApplicantCountries,
       fieldOfStudy,
       firstName,
       lastName,
@@ -840,19 +849,82 @@ export default function ScholarshipProfileForm({
   const ic = isSaas ? inputClassSaaS : inputClass;
   const lc = isSaas ? labelClassSaaS : labelClass;
   const selectWrapClass = isSaas ? 'mt-2 w-full' : 'mt-2 w-full max-w-xl';
-  const profileCountryCode = normalizeCountryCode(profile?.country_code);
-  const selectedCountryCode = normalizeCountryCode(countryCodeInput);
+  const selectedCountryCode = includeUnspecifiedApplicantCountries
+    ? null
+    : normalizeCountryCode(countryCodeInput);
+  const [applicantCountryInput, setApplicantCountryInput] = useState('');
+  const [applicantCountryOpen, setApplicantCountryOpen] = useState(false);
+  const applicantCountryRef = useRef<HTMLDivElement>(null);
   const showStateField = selectedCountryCode === 'US';
-  const selectedCountryLabel = selectedCountryCode
-    ? countryLabelFromCode(selectedCountryCode)
-    : null;
   const handleCountryCodeChange = useCallback((value: string) => {
+    if (value === 'CITIZENSHIP_NOT_SPECIFIED') {
+      setIncludeUnspecifiedApplicantCountries(true);
+      setCountryCodeInput('');
+      setStateRegionInput('');
+      return;
+    }
     const normalized = normalizeCountryCode(value) ?? '';
+    setIncludeUnspecifiedApplicantCountries(false);
     setCountryCodeInput(normalized);
     if (normalized !== 'US') {
       setStateRegionInput('');
     }
   }, []);
+  useEffect(() => {
+    if (includeUnspecifiedApplicantCountries) {
+      setApplicantCountryInput('Citizenship not specified');
+      return;
+    }
+    if (selectedCountryCode) {
+      setApplicantCountryInput(
+        selectedCountryCode === 'US'
+          ? 'United States (America)'
+          : countryLabelFromCode(selectedCountryCode)
+      );
+      return;
+    }
+    setApplicantCountryInput('');
+  }, [includeUnspecifiedApplicantCountries, selectedCountryCode]);
+
+  useEffect(() => {
+    if (!applicantCountryOpen) return;
+    const onDoc = (event: MouseEvent) => {
+      if (!applicantCountryRef.current?.contains(event.target as Node)) {
+        setApplicantCountryOpen(false);
+      }
+    };
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setApplicantCountryOpen(false);
+    };
+    document.addEventListener('mousedown', onDoc);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onDoc);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [applicantCountryOpen]);
+
+  const applicantCountrySuggestions = useMemo(() => {
+    const raw = applicantCountryInput.trim().toLowerCase();
+    /** While this mode is on, the input shows a fixed label — do not treat it as a search query or only "Citizenship not specified" matches. */
+    const q =
+      includeUnspecifiedApplicantCountries || raw === 'citizenship not specified'
+        ? ''
+        : raw;
+    const rows = [
+      { value: 'CITIZENSHIP_NOT_SPECIFIED', label: 'Citizenship not specified' },
+      ...SCHOLARSHIP_COUNTRY_OPTIONS.map((country) => ({
+        value: country.code,
+        label: country.code === 'US' ? 'United States (America)' : country.label
+      }))
+    ];
+    if (!q) return rows;
+    return rows.filter((row) => {
+      const label = row.label.toLowerCase();
+      const code = row.value.toLowerCase();
+      return label.includes(q) || code.includes(q);
+    });
+  }, [applicantCountryInput, includeUnspecifiedApplicantCountries]);
   const birthGridClass = `mt-2 grid w-full grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-3${
     isSaas ? '' : ' max-w-xl'
   }`;
@@ -976,28 +1048,77 @@ export default function ScholarshipProfileForm({
         />
       </div>
 
+      <label className={lc} htmlFor="spf-country">
+        Applicant country
+      </label>
+      <div ref={applicantCountryRef} className={`${selectWrapClass} relative`}>
+        <input
+          id="spf-country"
+          type="text"
+          value={applicantCountryInput}
+          onFocus={() => !submitting && setApplicantCountryOpen(true)}
+          onChange={(event) => {
+            const next = event.target.value;
+            if (
+              includeUnspecifiedApplicantCountries &&
+              next.trim().toLowerCase() !== 'citizenship not specified'
+            ) {
+              setIncludeUnspecifiedApplicantCountries(false);
+            }
+            setApplicantCountryInput(next);
+            if (!submitting) setApplicantCountryOpen(true);
+            const upper = next.trim().toUpperCase();
+            const byCode = SCHOLARSHIP_COUNTRY_OPTIONS.find((c) => c.code === upper)?.code;
+            if (byCode) handleCountryCodeChange(byCode);
+          }}
+          placeholder="Select or type applicant country"
+          disabled={submitting}
+          autoComplete="off"
+          className={`${ic} pr-10`}
+        />
+        <ChevronDown
+          className={`pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500 transition ${
+            applicantCountryOpen ? 'rotate-180' : ''
+          }`}
+          aria-hidden
+        />
+        {applicantCountryOpen && !submitting ? (
+          <ul className="absolute left-0 right-0 top-[calc(100%+0.35rem)] z-[70] max-h-72 overflow-y-auto rounded-xl border border-zinc-200 bg-white py-1 shadow-lg ring-1 ring-black/5">
+            {applicantCountrySuggestions.length === 0 ? (
+              <li className="px-4 py-2.5 text-sm text-zinc-500">No matches found.</li>
+            ) : (
+              applicantCountrySuggestions.map((option) => (
+                <li key={option.value}>
+                  <button
+                    type="button"
+                    className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm text-zinc-900 transition hover:bg-zinc-50"
+                    onClick={() => {
+                      handleCountryCodeChange(option.value);
+                      setApplicantCountryInput(option.label);
+                      setApplicantCountryOpen(false);
+                    }}
+                  >
+                    <span>{option.label}</span>
+                    {option.value !== 'CITIZENSHIP_NOT_SPECIFIED' ? (
+                      <span className="text-xs font-semibold text-zinc-500">{option.value}</span>
+                    ) : null}
+                  </button>
+                </li>
+              ))
+            )}
+          </ul>
+        ) : null}
+      </div>
       <div className="mt-4">
-        <p className={lc}>Target country / destination</p>
+        <label className={lc} htmlFor="spf-study-dest-trigger">
+          Study in
+        </label>
         <StudyDestinationCountriesField
           idPrefix="spf-study-dest"
           disabled={submitting}
           selected={preferredStudyHostCountries}
           onChange={setPreferredStudyHostCountries}
-        />
-      </div>
-
-      <label className={lc} htmlFor="spf-country">
-        Applicant country
-      </label>
-      <div className={selectWrapClass}>
-        <DarkSelect
-          id="spf-country"
-          ariaLabel="Applicant country"
-          options={countrySelectOptions}
-          value={countryCodeInput}
-          onChange={handleCountryCodeChange}
-          menuClassName="max-h-72"
-          disabled={submitting}
+          onSave={onSaveEligibility}
         />
       </div>
       {showStateField ? (
@@ -1730,27 +1851,79 @@ export default function ScholarshipProfileForm({
                   disabled={submitting}
                 />
               </div>
+              <label className={lc} htmlFor="spf-country-saas">
+                Applicant country
+              </label>
+              <div ref={applicantCountryRef} className={`${selectWrapClass} relative`}>
+                <input
+                  id="spf-country-saas"
+                  type="text"
+                  value={applicantCountryInput}
+                  onFocus={() => !submitting && setApplicantCountryOpen(true)}
+                  onChange={(event) => {
+                    const next = event.target.value;
+                    if (
+                      includeUnspecifiedApplicantCountries &&
+                      next.trim().toLowerCase() !== 'citizenship not specified'
+                    ) {
+                      setIncludeUnspecifiedApplicantCountries(false);
+                    }
+                    setApplicantCountryInput(next);
+                    if (!submitting) setApplicantCountryOpen(true);
+                    const upper = next.trim().toUpperCase();
+                    const byCode = SCHOLARSHIP_COUNTRY_OPTIONS.find((c) => c.code === upper)?.code;
+                    if (byCode) handleCountryCodeChange(byCode);
+                  }}
+                  placeholder="Select or type applicant country"
+                  disabled={submitting}
+                  autoComplete="off"
+                  className={`${ic} pr-10`}
+                />
+                <ChevronDown
+                  className={`pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500 transition ${
+                    applicantCountryOpen ? 'rotate-180' : ''
+                  }`}
+                  aria-hidden
+                />
+                {applicantCountryOpen && !submitting ? (
+                  <ul className="absolute left-0 right-0 top-[calc(100%+0.35rem)] z-[70] max-h-72 overflow-y-auto rounded-xl border border-zinc-200 bg-white py-1 shadow-lg ring-1 ring-black/5">
+                    {applicantCountrySuggestions.length === 0 ? (
+                      <li className="px-4 py-2.5 text-sm text-zinc-500">No matches found.</li>
+                    ) : (
+                      applicantCountrySuggestions.map((option) => (
+                        <li key={option.value}>
+                          <button
+                            type="button"
+                            className="flex w-full items-center justify-between px-4 py-2.5 text-left text-sm text-zinc-900 transition hover:bg-zinc-50"
+                            onClick={() => {
+                              handleCountryCodeChange(option.value);
+                              setApplicantCountryInput(option.label);
+                              setApplicantCountryOpen(false);
+                            }}
+                          >
+                            <span>{option.label}</span>
+                            {option.value !== 'CITIZENSHIP_NOT_SPECIFIED' ? (
+                              <span className="text-xs font-semibold text-zinc-500">
+                                {option.value}
+                              </span>
+                            ) : null}
+                          </button>
+                        </li>
+                      ))
+                    )}
+                  </ul>
+                ) : null}
+              </div>
               <div className="mt-6">
-                <p className={lc}>Target country / destination</p>
+                <label className={lc} htmlFor="spf-study-dest-saas-trigger">
+                  Study in
+                </label>
                 <StudyDestinationCountriesField
                   idPrefix="spf-study-dest-saas"
                   disabled={submitting}
                   selected={preferredStudyHostCountries}
                   onChange={setPreferredStudyHostCountries}
-                />
-              </div>
-              <label className={lc} htmlFor="spf-country-saas">
-                Applicant country
-              </label>
-              <div className={selectWrapClass}>
-                <DarkSelect
-                  id="spf-country-saas"
-                  ariaLabel="Applicant country"
-                  options={countrySelectOptions}
-                  value={countryCodeInput}
-                  onChange={handleCountryCodeChange}
-                  menuClassName="max-h-72"
-                  disabled={submitting}
+                  onSave={onSaveEligibility}
                 />
               </div>
               {showStateField ? (

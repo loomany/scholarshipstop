@@ -2575,11 +2575,15 @@ function bestRecommendationRequest(
   const pref = preferredHostCountryCodesFromProfileJson(
     nextReq.personalizedProfile?.preferred_host_country_codes
   );
-  if (nextReq.hostCountryCodesFilter.length === 0 && pref.length > 0) {
+  if (
+    nextReq.hostCountryCodesFilter.length === 0 &&
+    pref.length > 0
+  ) {
     nextReq = {
       ...nextReq,
       hostCountryCodesFilter: sanitizeScholarshipListingIso2List(pref),
-      bestRecommendationRelaxableQuizHostCountries: true
+      /** Profile `Study in`: enforce same strict behavior as hub `host_cc` filter. */
+      bestRecommendationRelaxableQuizHostCountries: false
     };
   }
   const moreFilters = mergeBestRecommendationFiltersFromProfile(

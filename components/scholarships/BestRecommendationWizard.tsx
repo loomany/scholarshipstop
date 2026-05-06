@@ -317,7 +317,9 @@ export default function BestRecommendationWizard({
 
           {currentStep === 4 ? (
             <div>
-              <p className={labelClass}>Target country / destination</p>
+              <label className={labelClass} htmlFor="hub-best-wizard-dest-trigger">
+                Study in
+              </label>
               <StudyDestinationCountriesField
                 idPrefix="hub-best-wizard-dest"
                 disabled={saving}

@@ -1,33 +1,20 @@
-import { normalizeUsStateToCanonical } from '@/lib/constants/usStates';
 import {
   composeBirthDateValue,
   parseBirthDayValue,
   parseBirthMonthValue,
   parseBirthYearValue
 } from '@/lib/validation/birthDateFields';
-import {
-  gpaForProfile,
-  withProfileGpaSelectionSnapshot
-} from '@/lib/constants/scholarshipGpaOptions';
 import type { UserProfile } from '@/lib/onboarding/userProfile';
 import type { StoredOnboardingDraft } from '@/lib/onboarding/scholarshipOnboardingDraft';
-import { ACCOUNT_SHOW_DATE_OF_BIRTH_AND_PASSWORD_FIELDS } from '@/lib/constants/accountRegistrationUi';
-import {
-  validateScholarshipOnboarding,
-  validateScholarshipOnboardingBasicsWithoutBirth
-} from '@/lib/validation/scholarshipOnboardingSchema';
 import {
   validateScholarshipOnboardingStep2Draft,
   validateScholarshipOnboardingStep2DraftForGoogleOAuth
 } from '@/lib/validation/scholarshipOnboardingStep2Schema';
-import { validateScholarshipOnboardingStep3Gpa } from '@/lib/validation/scholarshipOnboardingStep3Schema';
-import { validateScholarshipOnboardingStep4Draft } from '@/lib/validation/scholarshipOnboardingStep4Schema';
 import { normalizeCountryCode } from '@/lib/scholarships/countryEligibility/countries';
 
 export type BuildCompleteScholarshipUserProfileOptions = {
   /**
    * When true, step 2 does not require email or names (Google supplies them).
-   * Still validates demographics (step 1), GPA, and U.S. state.
    */
   forGoogleOAuth?: boolean;
 };
@@ -79,61 +66,29 @@ export function buildCompleteScholarshipUserProfile(
     };
   }
 
-  if (countryCode !== 'US') {
-    const monthValue = parseBirthMonthValue(draft.step1.birthMonth);
-    const dayValue = parseBirthDayValue(draft.step1.birthDay);
-    const yearValue = parseBirthYearValue(draft.step1.birthYear);
-    return {
-      ok: true,
-      profile: {
-        firstName: draft.step2.firstName.trim() || null,
-        lastName: draft.step2.lastName.trim() || null,
-        birthMonth: monthValue,
-        birthDay: dayValue,
-        birthYear: yearValue,
-        dateOfBirth: composeBirthDateValue(monthValue, dayValue, yearValue),
-        schoolLevel: null,
-        schoolLevelLabel: null,
-        fieldOfStudy: null,
-        fieldOfStudyLabel: null,
-        citizenshipStatus: null,
-        citizenshipStatusLabel: null,
-        countryCode,
-        stateRegion: null,
-        city: null,
-        gpa: null,
-        savedFiltersSnapshot: null,
-        onboardingCompleted: true,
-        emailVerified: false
-      }
-    };
-  }
-
-  const s1 =
-    draft.quizVariant === 'landing_no_birth' ||
-    !ACCOUNT_SHOW_DATE_OF_BIRTH_AND_PASSWORD_FIELDS
-      ? validateScholarshipOnboardingBasicsWithoutBirth(draft.step1)
-      : validateScholarshipOnboarding(draft.step1);
-  if (!s1.ok) return { ok: false };
-  if (!validateScholarshipOnboardingStep3Gpa(draft.step3).ok) return { ok: false };
-  if (!validateScholarshipOnboardingStep4Draft(draft.step4).ok) return { ok: false };
-
-  const p = s1.profile;
-  const fn = draft.step2.firstName.trim() || null;
-  const ln = draft.step2.lastName.trim() || null;
-  const stateRegion = normalizeUsStateToCanonical(draft.step4.state);
-  const gpaChoice = draft.step3.gpa.trim();
+  const monthValue = parseBirthMonthValue(draft.step1.birthMonth);
+  const dayValue = parseBirthDayValue(draft.step1.birthDay);
+  const yearValue = parseBirthYearValue(draft.step1.birthYear);
   return {
     ok: true,
     profile: {
-      ...p,
-      firstName: fn,
-      lastName: ln,
+      firstName: draft.step2.firstName.trim() || null,
+      lastName: draft.step2.lastName.trim() || null,
+      birthMonth: monthValue,
+      birthDay: dayValue,
+      birthYear: yearValue,
+      dateOfBirth: composeBirthDateValue(monthValue, dayValue, yearValue),
+      schoolLevel: null,
+      schoolLevelLabel: null,
+      fieldOfStudy: null,
+      fieldOfStudyLabel: null,
+      citizenshipStatus: null,
+      citizenshipStatusLabel: null,
       countryCode,
-      stateRegion,
+      stateRegion: null,
       city: null,
-      gpa: gpaForProfile(gpaChoice),
-      savedFiltersSnapshot: withProfileGpaSelectionSnapshot(null, gpaChoice),
+      gpa: null,
+      savedFiltersSnapshot: null,
       onboardingCompleted: true,
       emailVerified: false
     }

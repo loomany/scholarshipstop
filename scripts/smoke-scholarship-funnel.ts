@@ -177,27 +177,6 @@ async function runUsMultiStepRegistrationSmoke(browser: Browser): Promise<CheckR
     await selectDarkSelectOption(page, /Applicant country/i, /United States/i);
     await page.getByRole('button', { name: /^Continue/i }).click();
 
-    await waitForVisibleBodyText(page, 'Tell us about you');
-    await selectDarkSelectOption(page, /School level/i, /^High school senior$/i);
-    await page.getByRole('button', { name: /^Continue/i }).click();
-
-    await waitForVisibleBodyText(page, 'What do you want to study?');
-    await selectDarkSelectOption(page, /Field of study/i, /^Engineering$/i);
-    await page.getByRole('button', { name: /^Continue/i }).click();
-
-    await waitForVisibleBodyText(page, 'What is your citizenship status?');
-    await selectDarkSelectOption(page, /Citizenship status/i, /^U\.S\. Citizen$/i);
-    await page.getByRole('button', { name: /^Continue/i }).click();
-
-    await waitForVisibleBodyText(page, 'What U.S. state are you in?');
-    await page.locator('#onb-state').fill('California');
-    await page.getByRole('option', { name: /^California$/i }).click();
-    await page.getByRole('button', { name: /^Continue/i }).click();
-
-    await waitForVisibleBodyText(page, "What's your GPA?");
-    await selectDarkSelectOption(page, /^GPA$/i, /^GPA 3\.5\+$/i);
-    await page.getByRole('button', { name: /^Continue/i }).click();
-
     await waitForVisibleBodyText(page, 'Where should we send your scholarship matches?');
     await page.locator('#country-email').fill(email);
     await page.getByRole('button', { name: /See scholarship matches/i }).click();
@@ -216,14 +195,14 @@ async function runUsMultiStepRegistrationSmoke(browser: Browser): Promise<CheckR
     );
 
     return {
-      name: 'US multi-step quiz creates recommendations with profile fields',
+      name: 'US landing quiz (country → email) creates recommendations',
       ok: true,
       detail: `email=${email}`
     };
   } catch (error) {
     const text = await bodyText(page).catch(() => '');
     return {
-      name: 'US multi-step quiz creates recommendations with profile fields',
+      name: 'US landing quiz (country → email) creates recommendations',
       ok: false,
       detail: `${error instanceof Error ? error.message : String(error)} text=${text
         .replace(/\s+/g, ' ')
