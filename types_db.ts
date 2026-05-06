@@ -68,6 +68,7 @@ export interface Database {
           source: string | null
           attempt_count: number
           last_error: string | null
+          lane: string | null
         }
         Insert: {
           id?: string
@@ -79,6 +80,7 @@ export interface Database {
           source?: string | null
           attempt_count?: number
           last_error?: string | null
+          lane?: string | null
         }
         Update: {
           id?: string
@@ -90,6 +92,7 @@ export interface Database {
           source?: string | null
           attempt_count?: number
           last_error?: string | null
+          lane?: string | null
         }
         Relationships: []
       },

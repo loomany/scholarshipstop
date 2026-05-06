@@ -601,6 +601,56 @@ export async function enqueueGoogleIndexingUrls(input: {
   };
 }
 
+const FIFO_FRONT_ADDED_AT_MS_AGO = 365 * 24 * 60 * 60 * 1000;
+
+/**
+ * Moves URLs to the front of `flushGoogleIndexingQueue` FIFO order by setting `added_at`
+ * well in the past. Only rows matching the normalized URLs are updated (does not touch other pending URLs).
+ */
+export async function prioritizeGoogleIndexingQueueUrls(input: {
+  urls: string[];
+  source: string;
+  /** ISO timestamp for `added_at`; default ≈365 days ago */
+  addedAt?: string;
+}): Promise<{ ok: true; updated: number; normalizedUrls: string[] } | { ok: false; error: string }> {
+  const admin = createServiceRoleSupabaseClient();
+  if (!admin) {
+    return { ok: false, error: 'Server missing Supabase service role for indexing queue' };
+  }
+
+  const normalizedUrls = dedupeCanonicalIndexingUrls(
+    input.urls.map(normalizeIndexingUrl).filter((value): value is string => Boolean(value))
+  );
+  if (normalizedUrls.length === 0) {
+    return { ok: true, updated: 0, normalizedUrls: [] };
+  }
+
+  const added_at =
+    input.addedAt ??
+    new Date(Date.now() - FIFO_FRONT_ADDED_AT_MS_AGO).toISOString();
+
+  const { data, error } = await admin
+    .from('google_indexing_queue')
+    .update({
+      added_at,
+      status: 'pending',
+      source: input.source,
+      lane: 'queue'
+    })
+    .in('url', normalizedUrls)
+    .select('url');
+
+  if (error) {
+    return { ok: false, error: error.message };
+  }
+
+  return {
+    ok: true,
+    updated: data?.length ?? 0,
+    normalizedUrls
+  };
+}
+
 export async function markGoogleIndexingUrlsProcessed(
   urls: string[],
   input?: { lastError?: string | null }
