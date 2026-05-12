@@ -64,6 +64,7 @@
     "content:backfill-related-from-links": "npx dotenv-cli -e .env.local -- npx tsx scripts/backfill-related-scholarships-from-links.ts",
     "test:webhooks": "npx tsx --test lib/payments/__tests__/lemonWebhookSignature.test.ts lib/payments/__tests__/lemonSubscriptionState.test.ts lib/payments/__tests__/subscriptionAccess.test.ts",
     "test:seo-lib": "npx tsx --test lib/seo/__tests__/*.test.ts",
+    "test:essays-lib": "npx tsx --test lib/essays/__tests__/*.test.ts",
     "seo:measure-urls": "npx tsx scripts/seo-measure-urls.ts",
     "seo:audit": "tsx scripts/audit-seo-pages.ts",
     "seo:audit:full": "dotenv -e .env.local -- npm run seo:audit",

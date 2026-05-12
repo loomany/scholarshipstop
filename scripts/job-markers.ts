@@ -51,6 +51,13 @@ export function emitJobDone(base: MarkerBase, durationMs: number, counters: JobC
   console.log(`JOB_DONE ${formatBase(base)} durationMs=${duration} ${formatCounters(counters)} exit=0`);
 }
 
+/** Billing / provider cap — job stopped intentionally; use with `JOB_DONE exit=0` (not `JOB_FAILED`). */
+export function emitJobSkipped(base: MarkerBase, reason: string, detail?: string): void {
+  const r = escapeValue(reason);
+  const d = detail != null && detail !== '' ? ` detail="${escapeValue(detail)}"` : '';
+  console.log(`JOB_SKIPPED ${formatBase(base)} reason="${r}"${d}`);
+}
+
 export function emitJobFailed(base: MarkerBase, durationMs: number, counters: JobCounters, error: unknown): void {
   const duration = toNonNegativeInt(durationMs);
   const message = error instanceof Error ? error.message : String(error);

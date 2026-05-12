@@ -99,6 +99,26 @@ async function main() {
       return;
     }
 
+    if (result.ok === true && 'skipped' in result && result.skipped === 'openai_quota_exceeded') {
+      console.log(
+        JSON.stringify(
+          {
+            stopped: true,
+            reason: 'OPENAI_QUOTA_EXCEEDED',
+            queueId: 'queueId' in result ? result.queueId : undefined,
+            upstreamOpenAiMessage:
+              'upstreamOpenAiMessage' in result ? result.upstreamOpenAiMessage : undefined,
+            completedJobs: completed,
+            message:
+              'OpenAI quota or billing limit — drain stopped without marking items failed. Item requeued as pending; check billing, then run again.'
+          },
+          null,
+          2
+        )
+      );
+      return;
+    }
+
     if (result.ok === true && 'skipped' in result && result.skipped === 'queue_empty') {
       console.log(
         JSON.stringify(

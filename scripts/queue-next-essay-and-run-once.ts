@@ -112,6 +112,21 @@ async function main() {
   if (!('ok' in result) || result.ok === false) {
     process.exit(1);
   }
+  if (result.ok && 'skipped' in result && result.skipped === 'openai_quota_exceeded') {
+    console.log(
+      JSON.stringify(
+        {
+          stopped: true,
+          reason: 'OPENAI_QUOTA_EXCEEDED',
+          message:
+            'OpenAI quota or billing limit — item requeued as pending. Check billing before running again.'
+        },
+        null,
+        2
+      )
+    );
+    return;
+  }
 }
 
 main().catch((e) => {

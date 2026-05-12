@@ -28,6 +28,10 @@ import type { FalImageAttemptResult } from '@/lib/fal/falAttemptTypes';
 import { postFluxDevImageOnce } from '@/lib/fal/postFluxDevImageOnce';
 import { notifyEnvTelegramAdminsPlainText } from '@/lib/telegram/bot';
 import { runSeoPublishGuardWarnOnly } from '@/lib/seo/publishGuardRunner';
+import {
+  isOpenAiQuotaBilling429Error,
+  OPENAI_QUOTA_EXCEEDED_LOG_MARK
+} from '@/lib/essays/openAiQuotaBillingError';
 
 const FIRST_THREE_ESSAYS_PAGES_WINDOW = 36;
 const SHORTAGE_ALERT_COOLDOWN_MINUTES = 180;
@@ -864,8 +868,14 @@ export async function processOneEssayQueueItem(
 ): Promise<
   | {
       ok: true;
-      skipped: 'queue_empty' | 'generation_paused' | 'hero_retry_deferred';
+      skipped:
+        | 'queue_empty'
+        | 'generation_paused'
+        | 'hero_retry_deferred'
+        | 'openai_quota_exceeded';
       queueId?: string;
+      /** Short upstream message for logs / HTTP JSON (quota path only). */
+      upstreamOpenAiMessage?: string;
     }
   | {
       ok: true;
@@ -1204,6 +1214,92 @@ Do not promise admission, awards, or outcomes. No placeholder brackets like [ins
     return { ok: true, essaySlug: slug, queueId, phase: 'published' };
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
+    if (queueId && isOpenAiQuotaBilling429Error(e)) {
+      const note = `${OPENAI_QUOTA_EXCEEDED_LOG_MARK}: OpenAI quota/billing — check plan and billing. ${msg}`.slice(
+        0,
+        2000
+      );
+      const { error: requeueErr, data: requeued } = await supabase
+        .from('essay_generation_queue')
+        .update({
+          status: 'pending',
+          error_message: note,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', queueId)
+        .eq('status', 'processing')
+        .select('id')
+        .maybeSingle();
+
+      if (requeueErr || !requeued?.id) {
+        console.error(
+          JSON.stringify(
+            {
+              [OPENAI_QUOTA_EXCEEDED_LOG_MARK]: true,
+              severity: 'requeue_guarded_failed',
+              queueId,
+              message:
+                'Quota detected; guarded processing→pending update did not apply — retrying update by id only.',
+              supabaseError: requeueErr?.message ?? null
+            },
+            null,
+            2
+          )
+        );
+        const { error: fbErr, data: fbRow } = await supabase
+          .from('essay_generation_queue')
+          .update({
+            status: 'pending',
+            error_message: note,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', queueId)
+          .select('id')
+          .maybeSingle();
+        if (fbErr || !fbRow?.id) {
+          console.error(
+            JSON.stringify(
+              {
+                [OPENAI_QUOTA_EXCEEDED_LOG_MARK]: true,
+                severity: 'requeue_failed',
+                queueId,
+                message:
+                  'Quota detected but could not requeue row to pending; check DB/RLS and row status manually.',
+                supabaseError: fbErr?.message ?? null
+              },
+              null,
+              2
+            )
+          );
+          return {
+            ok: false,
+            error: `${OPENAI_QUOTA_EXCEEDED_LOG_MARK}: OpenAI quota hit; requeue to pending failed — ${fbErr?.message ?? requeueErr?.message ?? 'unknown DB error'}`
+          };
+        }
+      }
+
+      console.error(
+        JSON.stringify(
+          {
+            [OPENAI_QUOTA_EXCEEDED_LOG_MARK]: true,
+            message:
+              'OpenAI account quota or billing limit hit — essay queue item was not marked failed; requeued as pending. Top up billing or switch keys, then rerun.',
+            queueId,
+            upstream: msg
+          },
+          null,
+          2
+        )
+      );
+
+      return {
+        ok: true,
+        skipped: 'openai_quota_exceeded',
+        queueId,
+        upstreamOpenAiMessage: msg.slice(0, 500)
+      };
+    }
+
     if (queueId) {
       await supabase
         .from('essay_generation_queue')

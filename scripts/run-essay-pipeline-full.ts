@@ -16,6 +16,7 @@
 import { createClient } from '@supabase/supabase-js';
 
 import { enqueueNextEssayQueueJob } from '@/lib/essays/enqueueNextEssayQueueJob';
+import { OPENAI_QUOTA_EXCEEDED_LOG_MARK } from '@/lib/essays/openAiQuotaBillingError';
 import { resetStaleProcessingEssayQueueRows } from '@/lib/essays/runEssayGenerationJob';
 import type { Database } from '@/types_db';
 import {
@@ -23,6 +24,7 @@ import {
   emitJobDone,
   emitJobFailed,
   emitJobProgress,
+  emitJobSkipped,
   emitJobStart,
   type JobCounters
 } from './job-markers';
@@ -135,6 +137,7 @@ async function main() {
         essaySlug?: string;
         phase?: string;
         queueId?: string;
+        upstreamOpenAiMessage?: string;
       };
       if (b?.skipped === 'generation_paused') {
         console.log(
@@ -145,6 +148,29 @@ async function main() {
               totalCompletedEssays: totalCompleted,
               message:
                 'Generation paused via env. Pending queue rows unchanged. Remove ESSAY_GENERATION_DISABLED to resume.'
+            },
+            null,
+            2
+          )
+        );
+        return;
+      }
+      if (b?.skipped === 'openai_quota_exceeded') {
+        emitJobSkipped(
+          { service: SERVICE_NAME, job: JOB_NAME, runId: RUN_ID },
+          OPENAI_QUOTA_EXCEEDED_LOG_MARK,
+          typeof b?.upstreamOpenAiMessage === 'string' ? b.upstreamOpenAiMessage : undefined
+        );
+        console.log(
+          JSON.stringify(
+            {
+              stopped: true,
+              reason: OPENAI_QUOTA_EXCEEDED_LOG_MARK,
+              totalCompletedEssays: totalCompleted,
+              queueId: b?.queueId,
+              message:
+                'OpenAI quota or billing limit — pipeline stopped gracefully. Item requeued as pending; check OpenAI billing.',
+              upstreamOpenAiMessage: b?.upstreamOpenAiMessage
             },
             null,
             2
@@ -201,6 +227,30 @@ async function main() {
             totalCompletedEssays: totalCompleted,
             message:
               'Generation paused via env. Pending queue rows unchanged. Remove ESSAY_GENERATION_DISABLED to resume.'
+          },
+          null,
+          2
+        )
+      );
+      return;
+    }
+
+    if (result.ok && 'skipped' in result && result.skipped === 'openai_quota_exceeded') {
+      emitJobSkipped(
+        { service: SERVICE_NAME, job: JOB_NAME, runId: RUN_ID },
+        OPENAI_QUOTA_EXCEEDED_LOG_MARK,
+        result.upstreamOpenAiMessage
+      );
+      console.log(
+        JSON.stringify(
+          {
+            stopped: true,
+            reason: OPENAI_QUOTA_EXCEEDED_LOG_MARK,
+            totalCompletedEssays: totalCompleted,
+            queueId: result.queueId,
+            upstreamOpenAiMessage: result.upstreamOpenAiMessage,
+            message:
+              'OpenAI quota or billing limit — pipeline stopped gracefully. Item requeued as pending; check OpenAI billing.'
           },
           null,
           2
