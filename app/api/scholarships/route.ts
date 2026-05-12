@@ -220,6 +220,8 @@ async function handleList(
   guestBestRecommendationPreviewEnabled = false,
   sidebarOnlyMeta = false
 ) {
+  const scholarshipsSeoApiVerboseDebug =
+    process.env.SCHOLARSHIPS_SEO_API_DEBUG === '1';
   const cookieSupabase = createClient() as any;
   const publicSupabase = createPublicClient() as any;
   const {
@@ -717,15 +719,15 @@ async function handleList(
     });
   }
 
-  if (seoFallbackEnabled && !countOnly) {
-    // eslint-disable-next-line no-console -- temporary SEO list diagnostics
+  if (scholarshipsSeoApiVerboseDebug && seoFallbackEnabled && !countOnly) {
+    // eslint-disable-next-line no-console -- SCHOLARSHIPS_SEO_API_DEBUG
     console.log('SEO FINAL REQUEST', {
       moreFilters: moreFiltersToJson(req.moreFilters),
       longTailLegacySlugs: req.longTailLegacySlugs,
       categoryPageSlug: req.categoryPageSlug,
       catalogSubjectCategoryId: req.catalogSubjectCategoryId
     });
-    // eslint-disable-next-line no-console -- temporary SEO list diagnostics
+    // eslint-disable-next-line no-console -- SCHOLARSHIPS_SEO_API_DEBUG
     console.log(
       'SEO FILTER DEBUG',
       JSON.stringify(moreFiltersToJson(req.moreFilters), null, 2)
@@ -776,8 +778,8 @@ async function handleList(
     throw new Error(`Scholarship ${phase} query failed for tab "${req.tab}": ${message}`);
   }
 
-  if (seoFallbackEnabled && !countOnly) {
-    // eslint-disable-next-line no-console -- temporary SEO list diagnostics
+  if (scholarshipsSeoApiVerboseDebug && seoFallbackEnabled && !countOnly) {
+    // eslint-disable-next-line no-console -- SCHOLARSHIPS_SEO_API_DEBUG
     console.log('SEO SQL RESULT', {
       rows: result.scholarships?.length ?? 0,
       total: result.total
@@ -817,14 +819,16 @@ async function handleList(
   }
 
   if (countOnly) {
-    // eslint-disable-next-line no-console -- temporary SEO list diagnostics
-    console.log('SEO DEBUG RESPONSE', {
-      countOnly: true,
-      resultsLength: 0,
-      total: result.total,
-      fallbackUsed: result.seoFallback?.used,
-      tier: result.seoFallback?.tier
-    });
+    if (scholarshipsSeoApiVerboseDebug) {
+      // eslint-disable-next-line no-console -- SCHOLARSHIPS_SEO_API_DEBUG
+      console.log('SEO DEBUG RESPONSE', {
+        countOnly: true,
+        resultsLength: 0,
+        total: result.total,
+        fallbackUsed: result.seoFallback?.used,
+        tier: result.seoFallback?.tier
+      });
+    }
     return withRuntimePathDebugHeaders(
       NextResponse.json({
         total: result.total,

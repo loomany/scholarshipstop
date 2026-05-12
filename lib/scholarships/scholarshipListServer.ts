@@ -273,13 +273,58 @@ let homeCatalogStatsCache:
       expiresAt: number;
     }
   | null = null;
-const listMetaCache = new Map<
-  string,
-  {
-    value: ScholarshipListMeta;
-    expiresAt: number;
+/** LRU-ish cap: bump on read moves entry to Map end; evict from start when over limit. */
+const LIST_META_CACHE_MAX_ENTRIES = 400;
+
+type ListMetaCacheEntry = {
+  value: ScholarshipListMeta;
+  expiresAt: number;
+};
+
+const listMetaCache = new Map<string, ListMetaCacheEntry>();
+
+function pruneExpiredListMetaCacheEntries(now = Date.now()): void {
+  for (const [key, row] of listMetaCache) {
+    if (row.expiresAt <= now) listMetaCache.delete(key);
   }
->();
+}
+
+function enforceListMetaCacheMaxSize(): void {
+  while (listMetaCache.size > LIST_META_CACHE_MAX_ENTRIES) {
+    const oldestKey = listMetaCache.keys().next().value as string | undefined;
+    if (oldestKey === undefined) break;
+    listMetaCache.delete(oldestKey);
+  }
+}
+
+/** Cache hit: returns stored meta (caller clones). Updates LRU order. */
+function listMetaCacheGet(key: string): ScholarshipListMeta | null {
+  const row = listMetaCache.get(key);
+  if (!row) return null;
+  const now = Date.now();
+  if (row.expiresAt <= now) {
+    listMetaCache.delete(key);
+    return null;
+  }
+  listMetaCache.delete(key);
+  listMetaCache.set(key, row);
+  return row.value;
+}
+
+function listMetaCacheSet(
+  key: string,
+  value: ScholarshipListMeta,
+  ttlMs: number
+): void {
+  const now = Date.now();
+  pruneExpiredListMetaCacheEntries(now);
+  listMetaCache.delete(key);
+  listMetaCache.set(key, {
+    value,
+    expiresAt: now + ttlMs
+  });
+  enforceListMetaCacheMaxSize();
+}
 
 const EMPTY_SCHOLARSHIP_SIDEBAR_COUNTS: ScholarshipSidebarCounts = {
   bestRecommendation: 0,
@@ -2167,6 +2212,11 @@ export async function executeScholarshipListQuery(
   req: ScholarshipListRequest,
   opts: ScholarshipListQueryOpts
 ): Promise<ScholarshipListResult> {
+  const scholarshipsMetaTimingExecuteListQuery =
+    process.env.SCHOLARSHIPS_META_TIMING_DEBUG === '1';
+  const scholarshipsMetaTimingExecuteListQueryT0 =
+    scholarshipsMetaTimingExecuteListQuery ? performance.now() : 0;
+  try {
   /**
    * Catalog “similar scholarships” must bypass personalized match ordering.
    * Otherwise `similar_to` is ignored whenever a match bundle exists.
@@ -2551,6 +2601,14 @@ export async function executeScholarshipListQuery(
     limit: req.limit,
     meta
   };
+  } finally {
+    if (scholarshipsMetaTimingExecuteListQuery) {
+      // eslint-disable-next-line no-console -- opt-in SCHOLARSHIPS_META_TIMING_DEBUG
+      console.log('[scholarships-meta-timing]', 'executeScholarshipListQuery', {
+        ms: Math.round(performance.now() - scholarshipsMetaTimingExecuteListQueryT0)
+      });
+    }
+  }
 }
 
 async function countFor(
@@ -3153,20 +3211,43 @@ export async function fetchScholarshipListMeta(
   bounds?: ScholarshipListMeta['filterBounds'],
   opts?: ScholarshipListMetaOpts
 ): Promise<ScholarshipListMeta> {
+  const scholarshipsMetaTimingDebug =
+    process.env.SCHOLARSHIPS_META_TIMING_DEBUG === '1';
+  const scholarshipsMetaTimingFetchMetaT0 = scholarshipsMetaTimingDebug
+    ? performance.now()
+    : 0;
+
   const b = bounds ?? (await fetchGlobalFilterBounds(supabase));
   const includeCategoryCounts = opts?.includeCategoryCounts !== false;
   const effectiveReq = sidebarGlobalCountsBasisRequest(req, b);
   const crossCcKey = buildCountryCrossFilterMetaCacheKey(req);
   const cacheKey = `${buildListMetaCacheKey(effectiveReq, b, includeCategoryCounts, opts)}|catMc:v13-hostUnspecifiedMeta|${crossCcKey}`;
-  const cached = readTtlValue(listMetaCache.get(cacheKey));
+  const cached = listMetaCacheGet(cacheKey);
   if (cached) {
+    if (scholarshipsMetaTimingDebug) {
+      // eslint-disable-next-line no-console -- opt-in SCHOLARSHIPS_META_TIMING_DEBUG
+      console.log('[scholarships-meta-timing]', 'fetchScholarshipListMeta', {
+        phase: 'total',
+        cacheHit: true,
+        ms: Math.round(performance.now() - scholarshipsMetaTimingFetchMetaT0)
+      });
+    }
     return cloneScholarshipListMeta(cached);
   }
 
   const categoryReq = categoryDropdownCountsRequest(req, b);
+
+  const tSidebar = scholarshipsMetaTimingDebug ? performance.now() : 0;
   const sidebarCounts = await fetchScholarshipSidebarCounts(supabase, req, b, opts);
+  if (scholarshipsMetaTimingDebug) {
+    // eslint-disable-next-line no-console -- opt-in SCHOLARSHIPS_META_TIMING_DEBUG
+    console.log('[scholarships-meta-timing]', 'fetchScholarshipSidebarCounts', {
+      ms: Math.round(performance.now() - tSidebar)
+    });
+  }
 
   const categoryCounts = {} as Record<ScholarshipCategoryId, number>;
+  const tCategory = scholarshipsMetaTimingDebug ? performance.now() : 0;
   if (includeCategoryCounts) {
     const categoryParts = await Promise.allSettled(
       SCHOLARSHIP_CATEGORY_ORDER.map(async (id) => ({
@@ -3191,13 +3272,40 @@ export async function fetchScholarshipListMeta(
   } else {
     for (const id of SCHOLARSHIP_CATEGORY_ORDER) categoryCounts[id] = 0;
   }
+  if (scholarshipsMetaTimingDebug) {
+    // eslint-disable-next-line no-console -- opt-in SCHOLARSHIPS_META_TIMING_DEBUG
+    console.log('[scholarships-meta-timing]', 'categoryCounts', {
+      ms: Math.round(performance.now() - tCategory),
+      includeCategoryCounts
+    });
+  }
 
+  const tApplicantParallel = scholarshipsMetaTimingDebug ? performance.now() : 0;
+  const tHostParallel = scholarshipsMetaTimingDebug ? performance.now() : 0;
   const [
     { countryCounts, unspecifiedApplicantCountryCount },
     { hostCountryCounts, unspecifiedHostCountryCount }
   ] = await Promise.all([
-    fetchApplicantCountryCounts(supabase, req),
-    fetchHostCountryCounts(supabase, req)
+    (async () => {
+      const out = await fetchApplicantCountryCounts(supabase, req);
+      if (scholarshipsMetaTimingDebug) {
+        // eslint-disable-next-line no-console -- opt-in SCHOLARSHIPS_META_TIMING_DEBUG
+        console.log('[scholarships-meta-timing]', 'fetchApplicantCountryCounts', {
+          ms: Math.round(performance.now() - tApplicantParallel)
+        });
+      }
+      return out;
+    })(),
+    (async () => {
+      const out = await fetchHostCountryCounts(supabase, req);
+      if (scholarshipsMetaTimingDebug) {
+        // eslint-disable-next-line no-console -- opt-in SCHOLARSHIPS_META_TIMING_DEBUG
+        console.log('[scholarships-meta-timing]', 'fetchHostCountryCounts', {
+          ms: Math.round(performance.now() - tHostParallel)
+        });
+      }
+      return out;
+    })()
   ]);
 
   const meta: ScholarshipListMeta = {
@@ -3212,7 +3320,15 @@ export async function fetchScholarshipListMeta(
       buildScholarshipProfileFilterSeed(req.personalizedProfile ?? null)
     )
   };
-  writeTtlValue(listMetaCache, cacheKey, cloneScholarshipListMeta(meta), LIST_META_CACHE_TTL_MS);
+  listMetaCacheSet(cacheKey, cloneScholarshipListMeta(meta), LIST_META_CACHE_TTL_MS);
+  if (scholarshipsMetaTimingDebug) {
+    // eslint-disable-next-line no-console -- opt-in SCHOLARSHIPS_META_TIMING_DEBUG
+    console.log('[scholarships-meta-timing]', 'fetchScholarshipListMeta', {
+      phase: 'total',
+      cacheHit: false,
+      ms: Math.round(performance.now() - scholarshipsMetaTimingFetchMetaT0)
+    });
+  }
   return meta;
 }
 
