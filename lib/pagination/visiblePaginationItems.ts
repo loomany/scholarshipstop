@@ -3,6 +3,12 @@ export const paginationControlsRowClassName =
   'flex max-w-full min-w-0 flex-nowrap items-center justify-center gap-1 overflow-x-auto [-webkit-overflow-scrolling:touch] pb-0.5 sm:gap-2 sm:pb-0';
 
 /**
+ * When total pages exceed this, omit a dedicated “last page” chip from the numeric list.
+ * Deep pages (e.g. `?page=2017`) stay reachable via sequential Next. Keeps SSR lean for crawlers.
+ */
+export const MAX_TOTAL_PAGES_FOR_EXPLICIT_LAST_PAGE_CHIP = 100;
+
+/**
  * Page index chips for pagination UIs. Above `maxFullList`, uses ellipses so
  * narrow viewports keep Previous / numbers / Next on one row.
  */
@@ -18,7 +24,9 @@ export function visiblePaginationItems(
   const delta = 1;
   const set = new Set<number>();
   set.add(1);
-  set.add(total);
+  if (total <= MAX_TOTAL_PAGES_FOR_EXPLICIT_LAST_PAGE_CHIP) {
+    set.add(total);
+  }
   for (let i = current - delta; i <= current + delta; i++) {
     if (i >= 1 && i <= total) set.add(i);
   }
@@ -38,9 +46,10 @@ export function visiblePaginationItems(
 const DESKTOP_FIRST_BLOCK = 10;
 
 /**
- * Desktop: always include pages `1 … DESKTOP_FIRST_BLOCK`, the last page, and a ±1 window
- * around `current` so middle pages stay reachable. Gaps collapse to `ellipsis`.
- * Example (total 380, current 1): `1–10 … 380`.
+ * Desktop: always include pages `1 … DESKTOP_FIRST_BLOCK`, optionally the last page (when
+ * `total` ≤ {@link MAX_TOTAL_PAGES_FOR_EXPLICIT_LAST_PAGE_CHIP}), and a ±1 window around
+ * `current`. Gaps collapse to `ellipsis`.
+ * Example (`total` ≤ 100, `current` 1): `1–10 … total`. When `total` > 100, the standalone last chip is omitted.
  */
 export function visiblePaginationItemsDesktop(
   current: number,
@@ -54,7 +63,9 @@ export function visiblePaginationItemsDesktop(
   for (let p = 1; p <= DESKTOP_FIRST_BLOCK; p++) {
     set.add(p);
   }
-  set.add(total);
+  if (total <= MAX_TOTAL_PAGES_FOR_EXPLICIT_LAST_PAGE_CHIP) {
+    set.add(total);
+  }
   set.add(current);
   for (let p = current - 1; p <= current + 1; p++) {
     if (p >= 1 && p <= total) {
