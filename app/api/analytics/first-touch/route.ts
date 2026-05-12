@@ -7,6 +7,13 @@ import {
 import { deriveAttribution } from '@/lib/analytics/deriveAttribution';
 import { normalizeFirstTouchLandingUrl } from '@/lib/analytics/firstTouchLandingNormalization';
 import { resolveTrafficChannel } from '@/lib/analytics/resolveTrafficChannel';
+import {
+  explainTrafficReason,
+  getClientIpFromHeaders,
+  getCountryFromHeaders,
+  maskIp,
+  summarizeUserAgent
+} from '@/lib/analytics/visitorDiagnostics';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
 import { notifyTelegramAdminsVisitorFirstTouch } from '@/lib/telegram/bot';
 
@@ -90,6 +97,10 @@ export async function POST(request: Request) {
   const uaHeader = request.headers.get('user-agent')?.trim() ?? '';
   const user_agent_snapshot = normalizeClientUserAgent(uaFromBody || uaHeader);
   const is_likely_bot = isLikelyAutomatedUserAgent(user_agent_snapshot);
+  const uaSummary = summarizeUserAgent(user_agent_snapshot || null);
+  const clientIp = getClientIpFromHeaders(request.headers);
+  const ipMasked = maskIp(clientIp);
+  const countryCode = getCountryFromHeaders(request.headers);
 
   const traffic_channel = resolveTrafficChannel({
     landingUrl: landing_url_raw,
@@ -97,6 +108,14 @@ export async function POST(request: Request) {
     utm_source,
     utm_medium,
     utm_campaign
+  });
+  const trafficReason = explainTrafficReason({
+    landingUrl: landing_url_raw,
+    referrer,
+    utm_source,
+    utm_medium,
+    utm_campaign,
+    userAgentSummary: uaSummary
   });
   const attribution = deriveAttribution({
     landingUrl: landing_url_raw,
@@ -185,7 +204,17 @@ export async function POST(request: Request) {
       utm_term: utm_term || null,
       country_target: country_target || null,
       clickId: click_id,
-      clickIdParam
+      clickIdParam,
+      userAgent: user_agent_snapshot || null,
+      userAgentShort: uaSummary.short,
+      deviceType: uaSummary.deviceType,
+      os: uaSummary.os,
+      browser: uaSummary.browser,
+      botName: uaSummary.botName,
+      isLikelyBot: is_likely_bot,
+      ipMasked,
+      countryCode,
+      trafficReason
     }).catch((e) => {
       console.error('[analytics/first-touch] telegram async error', e);
     });

@@ -41,20 +41,16 @@ function isSameSiteLanding(landingUrl: string, referrer: string): boolean {
   }
 }
 
-/** Search / discover surfaces that imply organic-style discovery (not paid click ids). */
-function isSearchEngineReferrer(referrer: string): boolean {
-  const r = referrer.toLowerCase();
-  return (
-    r.includes('google.com') ||
-    r.includes('bing.com') ||
-    r.includes('duckduckgo.com') ||
-    r.includes('yahoo.com') ||
-    r.includes('yandex.ru') ||
-    r.includes('yandex.com') ||
-    r.includes('yandex.by') ||
-    r.includes('yandex.kz') ||
-    r.includes('syndicatedsearch.goog')
-  );
+function isBraveSearchReferrer(referrer: string): boolean {
+  try {
+    const u = new URL(referrer.trim());
+    const h = normalizeHost(u.hostname);
+    if (h === 'search.brave.com') return true;
+    if (h === 'brave.com' && u.pathname.toLowerCase().startsWith('/search')) return true;
+    return false;
+  } catch {
+    return false;
+  }
 }
 
 function referrerHost(referrer: string): string | null {
@@ -63,6 +59,39 @@ function referrerHost(referrer: string): string | null {
   } catch {
     return null;
   }
+}
+
+/** Classic Bing web SERP — organic search, not Copilot AI. */
+function isBingWebSearchReferrer(referrer: string): boolean {
+  try {
+    const u = new URL(referrer.trim());
+    const h = normalizeHost(u.hostname);
+    if (h !== 'bing.com' && !h.endsWith('.bing.com')) return false;
+    return u.pathname.toLowerCase().startsWith('/search');
+  } catch {
+    return false;
+  }
+}
+
+/** Search / discover surfaces — hostname-based (covers google.de / google.ca, etc.). */
+function isSearchEngineReferrer(referrer: string): boolean {
+  const r = referrer.trim();
+  if (!r) return false;
+  const lower = r.toLowerCase();
+  if (lower.includes('syndicatedsearch.goog')) return true;
+
+  const host = referrerHost(r);
+  if (!host) return false;
+
+  if (/^google\./.test(host) || host === 'google.com') return true;
+  if (host === 'bing.com' || host.endsWith('.bing.com')) return true;
+  if (host.startsWith('search.yahoo.') || host.includes('.search.yahoo.')) return true;
+  if (host === 'duckduckgo.com' || host.endsWith('.duckduckgo.com')) return true;
+  if (host.includes('yandex.')) return true;
+  if (host === 'baidu.com' || host.endsWith('.baidu.com')) return true;
+  if (isBraveSearchReferrer(r)) return true;
+
+  return false;
 }
 
 /**
@@ -113,12 +142,15 @@ function matchAiOrBrandedSearchFromSignals(merged: {
     return 'ai_claude';
   }
 
+  const bingRefSignalsCopilot =
+    (refMentions('bing.com') || refMentions('www.bing.com')) &&
+    !isBingWebSearchReferrer(merged.referrer);
+
   if (
     srcMentions('copilot') ||
     (srcMentions('bing') && !srcMentions('shopping')) ||
     refMentions('copilot.microsoft') ||
-    refMentions('bing.com') ||
-    refMentions('www.bing.com')
+    bingRefSignalsCopilot
   ) {
     return 'ai_bing_copilot';
   }
@@ -292,14 +324,8 @@ export function resolveTrafficChannel(raw: ResolveTrafficChannelInput): TrafficC
   // 5: Organic search (referrer from a search / discover surface)
   if (referrer && isSearchEngineReferrer(referrer)) {
     const host = referrerHost(referrer);
-    if (host?.includes('google.')) {
-      return 'search_google';
-    }
     if (host?.includes('yandex.')) {
       return 'search_yandex';
-    }
-    if (host?.includes('bing.')) {
-      return 'ai_bing_copilot';
     }
     return 'organic_search';
   }

@@ -24,6 +24,7 @@ import {
 import { SCHOLARSHIPS_HUB_SAVED_TAB_HREF } from '@/app/scholarships/scholarshipListUrl';
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import { scholarshipPublicPath } from '@/app/scholarships/scholarshipsData';
+import { normalizeFirstTouchLandingUrl } from '@/lib/analytics/firstTouchLandingNormalization';
 import {
   getFirstTouchNotifySourceKey,
   labelForVisitorRow,
@@ -34,6 +35,7 @@ import {
   isDiscoveryHighlightChannel,
   shouldStripMarketingParamsFromLandingDisplay
 } from '@/lib/analytics/resolveTrafficChannel';
+import { explainTrafficReason, summarizeUserAgent } from '@/lib/analytics/visitorDiagnostics';
 import { logRegistrationPipeline } from '@/lib/auth/registrationPipelineLog';
 import { escapeTelegramHtml } from '@/lib/telegram/resourceNotifyCore';
 import {
@@ -938,7 +940,23 @@ type VisitorFirstTouchAdminPayload = {
   country_target?: string | null;
   clickId?: string | null;
   clickIdParam?: 'gclid' | 'fbclid' | null;
+  userAgent?: string | null;
+  userAgentShort?: string | null;
+  deviceType?: string | null;
+  os?: string | null;
+  browser?: string | null;
+  botName?: string | null;
+  isLikelyBot?: boolean;
+  ipMasked?: string | null;
+  countryCode?: string | null;
+  trafficReason?: string | null;
 };
+
+function capitalizeWord(s: string): string {
+  const t = s.trim();
+  if (!t.length) return t;
+  return t.charAt(0).toUpperCase() + t.slice(1).toLowerCase();
+}
 
 /** Keep first-touch alerts within Telegram comfort; long keywords stay truncated. */
 const FIRST_TOUCH_ATTR_DISPLAY_MAX = 280;
@@ -948,6 +966,60 @@ function truncateFirstTouchAttrDisplay(value: string, max = FIRST_TOUCH_ATTR_DIS
   if (!t.length) return '';
   if (t.length <= max) return t;
   return `${t.slice(0, Math.max(0, max - 1))}…`;
+}
+
+function buildFirstTouchClientDiagnosticsHtml(payload: VisitorFirstTouchAdminPayload): string[] {
+  const dt = escapeTelegramHtml(capitalizeWord(payload.deviceType ?? 'unknown'));
+  const os = escapeTelegramHtml(payload.os ?? 'unknown');
+  const browser = escapeTelegramHtml(payload.browser ?? 'unknown');
+  const botYesNo = payload.isLikelyBot ? 'yes' : 'no';
+  const botName = escapeTelegramHtml(payload.botName?.trim() || '—');
+  const country = escapeTelegramHtml(payload.countryCode?.trim() || 'unknown');
+  const ip = escapeTelegramHtml(payload.ipMasked ?? 'unknown');
+
+  const ref = (payload.referrer ?? '').trim();
+  const refDisplay = ref
+    ? escapeTelegramHtml(truncateFirstTouchAttrDisplay(ref, 220))
+    : 'none';
+
+  const uS = (payload.utm_source ?? '').trim();
+  const uM = (payload.utm_medium ?? '').trim();
+  const uC = (payload.utm_campaign ?? '').trim();
+  let utmDisplay: string;
+  if (!uS && !uM && !uC) {
+    utmDisplay = 'none';
+  } else {
+    utmDisplay = escapeTelegramHtml(
+      truncateFirstTouchAttrDisplay(
+        [uS && `src=${uS}`, uM && `med=${uM}`, uC && `camp=${uC}`].filter(Boolean).join(' '),
+        220
+      )
+    );
+  }
+
+  const reason = escapeTelegramHtml(payload.trafficReason ?? '');
+
+  const rawUa = payload.userAgent?.trim() ?? '';
+  const uaLine = !rawUa.length
+    ? '<b>UA:</b> —'
+    : rawUa.length > 160
+      ? `<b>UA:</b> ${escapeTelegramHtml(rawUa.slice(0, 160))}…`
+      : `<b>UA:</b> ${escapeTelegramHtml(rawUa)}`;
+
+  return [
+    '<b>Клиент</b>',
+    `Device: ${dt} / ${os}`,
+    `Browser: ${browser}`,
+    `Bot: ${botYesNo}`,
+    `Bot name: ${botName}`,
+    `Country: ${country}`,
+    `IP: ${ip}`,
+    `Referrer: ${refDisplay}`,
+    `UTM: ${utmDisplay}`,
+    `Reason: ${reason}`,
+    '',
+    uaLine
+  ];
 }
 
 function buildVisitorFirstTouchAdsAttributionLines(payload: VisitorFirstTouchAdminPayload): string[] {
@@ -994,7 +1066,8 @@ function buildVisitorFirstTouchMessageHtml(
   const title = isAiVisitorChannel(resolved)
     ? '<b>⚡️ 🤖 НОВЫЙ ИИ-ВИЗИТ НА SCHOLARSHIPTOP!</b>'
     : '<b>Новый визит на ScholarshipTop</b>';
-  const lines: string[] = [title, '<b>Статус:</b> Успешно'];
+  const statusLabel = payload.isLikelyBot ? 'Likely bot' : 'Human-like visit';
+  const lines: string[] = [title, `<b>Статус:</b> ${escapeTelegramHtml(statusLabel)}`];
   const showGoogleAdsTag = payload.clickIdParam === 'gclid';
   const showPaidTag = payload.clickIdParam === 'fbclid';
   if (showGoogleAdsTag) {
@@ -1031,8 +1104,18 @@ function buildVisitorFirstTouchMessageHtml(
     ? `<b>Click ID:</b> <code>${escapeTelegramHtml(clickTrimmed)}</code>`
     : '';
 
+  const showClientBlock =
+    view === 'short' &&
+    (payload.trafficReason != null ||
+      (!!payload.userAgent && payload.userAgent.length > 0));
+
   lines.push('', channelLine, ...buildVisitorFirstTouchAdsAttributionLines(payload), '', landingBlock);
-  if (referrerLine) lines.push(referrerLine);
+
+  if (showClientBlock) {
+    lines.push('', ...buildFirstTouchClientDiagnosticsHtml(payload));
+  }
+
+  if (!showClientBlock && referrerLine) lines.push(referrerLine);
   if (clickLine) lines.push(clickLine);
   return lines.join('\n');
 }
@@ -1110,7 +1193,7 @@ async function applyAdminFirstTouchFoldToMessage(
   const { data: row, error } = await admin
     .from('anonymous_visitor_first_touch')
     .select(
-      'visitor_id, landing_url, traffic_channel, referrer, utm_source, utm_medium, utm_campaign, utm_content, click_id, id'
+      'visitor_id, landing_url, traffic_channel, referrer, utm_source, utm_medium, utm_campaign, utm_content, click_id, id, is_likely_bot, user_agent_snapshot'
     )
     .eq('visitor_id', args.visitorId)
     .maybeSingle();
@@ -1124,6 +1207,18 @@ async function applyAdminFirstTouchFoldToMessage(
     return;
   }
 
+  const ua = typeof row.user_agent_snapshot === 'string' ? row.user_agent_snapshot : '';
+  const uaSummary = summarizeUserAgent(ua || null);
+  const { clickIdParam } = normalizeFirstTouchLandingUrl(row.landing_url);
+  const trafficReason = explainTrafficReason({
+    landingUrl: row.landing_url,
+    referrer: row.referrer ?? '',
+    utm_source: row.utm_source ?? '',
+    utm_medium: row.utm_medium ?? '',
+    utm_campaign: row.utm_campaign ?? '',
+    userAgentSummary: uaSummary
+  });
+
   const payload: VisitorFirstTouchAdminPayload = {
     trafficChannel: (row.traffic_channel as TrafficChannel) ?? 'direct_unknown',
     landingUrl: row.landing_url,
@@ -1134,7 +1229,18 @@ async function applyAdminFirstTouchFoldToMessage(
     utm_content: row.utm_content,
     utm_term: null,
     country_target: null,
-    clickId: row.click_id
+    clickId: row.click_id,
+    clickIdParam,
+    userAgent: ua || null,
+    userAgentShort: uaSummary.short,
+    deviceType: uaSummary.deviceType,
+    os: uaSummary.os,
+    browser: uaSummary.browser,
+    botName: uaSummary.botName,
+    isLikelyBot: Boolean(row.is_likely_bot),
+    ipMasked: null,
+    countryCode: null,
+    trafficReason
   };
 
   const text = buildVisitorFirstTouchMessageHtml(
