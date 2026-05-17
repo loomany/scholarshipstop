@@ -56,7 +56,6 @@ import {
   buildScholarshipCardSnippet,
   getScholarshipApplicationDifficulty,
   getScholarshipBestForLabel,
-  getScholarshipDeadlineUrgency,
   getScholarshipSourceStatus
 } from '@/lib/seo/scholarshipSeoQualityPolicy';
 import { SHOW_SCHOLARSHIP_APPLICANT_COUNT_UI } from '@/lib/constants/scholarshipApplicantCountUi';
@@ -450,7 +449,6 @@ export default function ScholarshipCard({
 
   const cardSourceStatus = getScholarshipSourceStatus(scholarship);
   const cardDifficulty = getScholarshipApplicationDifficulty(scholarship);
-  const cardUrgency = getScholarshipDeadlineUrgency(scholarship);
   const cardBestFor = getScholarshipBestForLabel(scholarship);
   const intelligenceBadges = [
     {
@@ -464,16 +462,28 @@ export default function ScholarshipCard({
       title: cardDifficulty.reason
     },
     {
-      key: 'deadline',
-      label: `Deadline: ${cardUrgency.label}`,
-      title: cardUrgency.description
-    },
-    {
       key: 'source',
       label: `Source: ${cardSourceStatus.shortLabel}`,
       title: cardSourceStatus.description
     }
   ] as const;
+
+  const intelligenceBadgesRow = (
+    <div
+      className="mt-2 flex w-full min-w-0 flex-nowrap items-center gap-x-1.5 max-[380px]:flex-wrap max-[380px]:gap-y-1"
+      aria-label="ScholarshipTop listing intelligence"
+    >
+      {intelligenceBadges.map((badge) => (
+        <span
+          key={badge.key}
+          title={badge.title}
+          className="inline-flex shrink-0 items-center whitespace-nowrap rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[10px] font-semibold leading-5 text-slate-700"
+        >
+          {badge.label}
+        </span>
+      ))}
+    </div>
+  );
 
   const summaryLine = replaceSummaryDollarAwardWithSourceCurrency(
     buildScholarshipCardSnippet(scholarship, awardCell, hasAwardContent) ||
@@ -879,7 +889,7 @@ export default function ScholarshipCard({
               </Link>
             )}
           </h2>
-          <div className="relative">
+          <div className="relative w-full min-w-0">
             <p
               className="mt-1 min-w-0 overflow-hidden text-[0.8125rem] leading-relaxed text-gray-400 sm:text-sm [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]"
               title={
@@ -903,20 +913,7 @@ export default function ScholarshipCard({
                   )
                 : summaryLine}
             </p>
-            <div
-              className="mt-2 flex min-w-0 flex-wrap gap-1.5"
-              aria-label="ScholarshipTop listing intelligence"
-            >
-              {intelligenceBadges.map((badge) => (
-                <span
-                  key={badge.key}
-                  title={badge.title}
-                  className="inline-flex max-w-full items-center rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[10px] font-semibold leading-5 text-slate-700"
-                >
-                  <span className="truncate">{badge.label}</span>
-                </span>
-              ))}
-            </div>
+            {intelligenceBadgesRow}
             {authNoSubPreviewBlur && openAuthNoSubPaywall ? (
               <AuthNoSubBlurUnlock
                 onUnlock={openAuthNoSubPaywall}

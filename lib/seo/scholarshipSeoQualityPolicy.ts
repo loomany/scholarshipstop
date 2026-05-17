@@ -1,4 +1,10 @@
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
+import {
+  fieldOfStudyDisplayList,
+  studyLevelsDisplayList
+} from '@/app/scholarships/scholarshipsData';
+import { fieldOfStudyLabelForValue } from '@/lib/constants/scholarshipFieldOfStudyOptions';
+import { schoolLevelLabelForValue } from '@/lib/constants/scholarshipProfileOptions';
 import { parseScholarshipDeadlineAnchor } from '@/lib/scholarships/scholarshipDeadlineTrust';
 
 export type ScholarshipSourceStatusCode =
@@ -409,10 +415,28 @@ export function getScholarshipDeadlineUrgency(
   };
 }
 
+/** Turn catalog slug/token into readable copy (no underscores). */
+export function formatScholarshipCatalogTokenForDisplay(raw: string): string {
+  const t = raw.trim();
+  if (!t) return t;
+  return (
+    fieldOfStudyLabelForValue(t) ??
+    schoolLevelLabelForValue(t) ??
+    t.replace(/_/g, ' ').replace(/\s+/g, ' ').trim()
+  );
+}
+
+function formatBestForStudentsPhrase(token: string): string {
+  const label = formatScholarshipCatalogTokenForDisplay(token);
+  if (/\bstudents$/i.test(label) || /\bstudent$/i.test(label)) return label;
+  return `${label} students`;
+}
+
 export function getScholarshipBestForLabel(
   s: Pick<
     Scholarship,
     | 'aiBestFor'
+    | 'catalogUi'
     | 'studyLevels'
     | 'fieldOfStudy'
     | 'internationalFriendlyListing'
@@ -420,11 +444,14 @@ export function getScholarshipBestForLabel(
   >
 ): string {
   const ai = s.aiBestFor?.map((item) => item.trim()).find(Boolean);
-  if (ai) return ai;
-  const field = s.fieldOfStudy?.map((item) => item.trim()).find(Boolean);
-  if (field) return `${field} students`;
-  const level = s.studyLevels?.map((item) => item.trim()).find(Boolean);
-  if (level) return `${level} students`;
+  if (ai) {
+    const head = ai.replace(/\s+students\s*$/i, '').trim();
+    return formatBestForStudentsPhrase(head || ai);
+  }
+  const field = fieldOfStudyDisplayList(s)[0];
+  if (field) return formatBestForStudentsPhrase(field);
+  const level = studyLevelsDisplayList(s)[0];
+  if (level) return formatBestForStudentsPhrase(level);
   if (s.internationalFriendlyListing === true) return 'International students';
   if ((s.applicantCountryCodes?.length ?? 0) > 0) {
     return 'Students matching country rules';
