@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "cloudflare-api": {
+      "url": "https://mcp.cloudflare.com/mcp"
+    },
+    "cloudflare-docs": {
+      "url": "https://docs.mcp.cloudflare.com/mcp"
+    },
+    "cloudflare-browser": {
+      "url": "https://browser.mcp.cloudflare.com/mcp"
+    }
+  }
+}

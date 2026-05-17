@@ -17,6 +17,24 @@ const nextConfig = {
    * Old site / CMS paths that still appear in Search Console.
    * Legacy WP `/pay-for-college/*` has no App Router pages — was returning 404.
    */
+  /**
+   * Yandex (and similar) HTML-file verification requires an exact body match.
+   * Cloudflare Web Analytics skips auto-injecting beacon.min.js when no-transform is set.
+   * @see https://developers.cloudflare.com/web-analytics/get-started/
+   */
+  async headers() {
+    return [
+      {
+        source: '/yandex_a42f95878903e0dc.html',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, no-transform, max-age=0'
+          }
+        ]
+      }
+    ];
+  },
   async redirects() {
     return [
       { source: '/home', destination: '/', permanent: true },
