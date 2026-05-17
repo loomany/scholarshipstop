@@ -174,6 +174,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
           name="impact-site-verification"
           content="1c28c304-5034-41b3-b4c0-4cf9063f3cb3"
         />
+        <meta name="yandex-verification" content="a42f95878903e0dc" />
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000000" />
       </head>
       <body
