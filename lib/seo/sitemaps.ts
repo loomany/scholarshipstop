@@ -2,6 +2,7 @@ import { cache } from 'react';
 import type { MetadataRoute } from 'next';
 
 import { fetchAllPublishedContentPostsForSitemap } from '@/lib/content-hub/contentPostsServer';
+import { STATIC_SCHOLARSHIP_GUIDES } from '@/lib/resources/staticScholarshipGuides';
 import { fetchAllPublishedEssaySitemapRows } from '@/lib/essays/essaysServer';
 import { essayHubArticlePath } from '@/lib/essays/essayHubSection';
 import { resourcesArticlePath } from '@/lib/content-hub/resourcesSection';
@@ -81,6 +82,19 @@ const IQ_SEO_SITEMAP_PATHS = [
   '/terms',
   '/refund-policy',
   '/faq'
+] as const;
+
+const TRUST_SEO_CORE_PATHS = [
+  '/about',
+  '/editorial-policy',
+  '/scholarship-verification-methodology',
+  '/how-we-rank-scholarships',
+  '/how-scholarshiptop-works',
+  '/contact',
+  '/financial-aid-disclaimer',
+  '/corrections',
+  '/scholarship-scam-warning',
+  '/how-we-make-money'
 ] as const;
 
 /**
@@ -372,6 +386,10 @@ export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
       url: `${IQ_SEO_BASE_URL}${path === '/' ? '' : path}`,
       lastModified: new Date()
     })),
+    ...TRUST_SEO_CORE_PATHS.map((path) => ({
+      url: `${base}${path}`,
+      lastModified: new Date()
+    })),
     { url: `${base}/scholarships`, lastModified: new Date() },
     { url: `${base}/compare`, lastModified: new Date() },
     { url: `${base}/compare/universities`, lastModified: new Date() },
@@ -398,7 +416,13 @@ export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
     .map((post) => ({
       url: `${base}${resourcesArticlePath(post.slug!.trim())}`,
       lastModified: post.published_at || new Date()
-    }));
+    }))
+    .concat(
+      STATIC_SCHOLARSHIP_GUIDES.map((guide) => ({
+        url: `${base}${resourcesArticlePath(guide.slug)}`,
+        lastModified: new Date('2026-05-16T00:00:00.000Z')
+      }))
+    );
 
   const essayRows = await fetchAllPublishedEssaySitemapRows().catch(() => []);
   const essays: MetadataRoute.Sitemap = essayRows

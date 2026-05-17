@@ -15,7 +15,6 @@ import {
 } from '@/components/home/homeMarketingCtaClasses';
 import HomeTrustStrip from '@/components/home/HomeTrustStrip';
 import HomeWhatWeVerify from '@/components/home/HomeWhatWeVerify';
-import SuccessStoriesCarousel from '@/components/home/SuccessStoriesCarousel';
 import ScrollRevealWrapper from '@/components/ScrollRevealWrapper';
 import { FeaturedBrandScholarshipsSection } from '@/components/home/FeaturedBrandScholarshipsSection';
 import ScholarshipPreviewList from '@/components/scholarships/ScholarshipPreviewList';
@@ -86,6 +85,94 @@ const homeY = {
 } as const;
 
 const worksListIconClass = 'mt-1 h-6 w-6 shrink-0 text-orange-500';
+
+const dataStandardItems = [
+  'Official source status',
+  'Last reviewed or review status',
+  'Deadline clarity',
+  'Eligibility clarity',
+  'Application effort',
+  'Missing-data flags'
+] as const;
+
+const audienceItems = [
+  'International students comparing country rules',
+  'High school seniors building a realistic shortlist',
+  'Undergraduate and graduate students checking fit',
+  'Students who want to avoid unclear or outdated listings',
+  'Applicants who need deadlines, documents, and next steps in one place'
+] as const;
+
+function HomeScholarshipIntelligenceSection() {
+  return (
+    <section
+      className={`border-b border-gray-100 bg-gray-50 ${homeY.block} ${homeSectionPadX}`}
+      aria-labelledby="home-intelligence-heading"
+    >
+      <div className={`${container} grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] lg:gap-8`}>
+        <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-orange-600">
+            Scholarship intelligence
+          </p>
+          <h2
+            id="home-intelligence-heading"
+            className="mt-3 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl"
+          >
+            What ScholarshipTop adds on top of raw listings
+          </h2>
+          <p className="mt-4 text-base leading-relaxed text-gray-600">
+            We organize scholarships by fit, deadline, requirements, award value,
+            source status, and application effort so students can decide what is
+            worth checking before they apply.
+          </p>
+          <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <Link
+              href="/scholarship-verification-methodology"
+              className="inline-flex min-h-10 items-center justify-center rounded-xl bg-gray-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2"
+            >
+              How we verify scholarships
+            </Link>
+            <Link
+              href="/how-we-rank-scholarships"
+              className="inline-flex min-h-10 items-center justify-center rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-800 transition hover:border-gray-300 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2"
+            >
+              How recommendations work
+            </Link>
+          </div>
+        </div>
+
+        <div className="grid gap-6">
+          <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+            <h3 className="text-lg font-semibold tracking-tight text-gray-900">
+              Scholarship data standards
+            </h3>
+            <ul className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+              {dataStandardItems.map((item) => (
+                <li key={item} className="flex items-start gap-2 text-sm leading-6 text-gray-600">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-orange-500" aria-hidden />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+            <h3 className="text-lg font-semibold tracking-tight text-gray-900">
+              Who ScholarshipTop is for
+            </h3>
+            <ul className="mt-4 space-y-2">
+              {audienceItems.map((item) => (
+                <li key={item} className="flex items-start gap-2 text-sm leading-6 text-gray-600">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-orange-500" aria-hidden />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 function HomeStatsSkeleton({
   sectionPadX,
@@ -227,6 +314,8 @@ export default function HomePage() {
 
         <HomeWhatWeVerify sectionPadX={homeSectionPadX} sectionY={homeY.block} />
 
+        <HomeScholarshipIntelligenceSection />
+
         <section
           className={`border-b border-gray-100 bg-gray-50 ${homeY.block} ${homeSectionPadX}`}
         >
@@ -367,14 +456,6 @@ export default function HomePage() {
         >
           <div className={container}>
             <FeaturedBrandScholarshipsSection />
-          </div>
-        </section>
-
-        <section
-          className={`border-b border-gray-100 bg-gray-50 ${homeY.block} ${homeSectionPadX}`}
-        >
-          <div className={container}>
-            <SuccessStoriesCarousel shortTestimonials />
           </div>
         </section>
 

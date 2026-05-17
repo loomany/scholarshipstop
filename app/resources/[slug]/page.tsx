@@ -6,6 +6,7 @@ import { ArrowRight, BrainCircuit } from 'lucide-react';
 import ContentHubArticleMatchedScholarships from '@/components/content-hub/ContentHubArticleMatchedScholarships';
 import { SiteFaqAccordion } from '@/components/ui/SiteFaqAccordion';
 import ContentHubScholarshipCta from '@/components/content-hub/ContentHubScholarshipCta';
+import StaticScholarshipGuidePage from '@/components/content-hub/StaticScholarshipGuidePage';
 import ResourceGuidesContinueSection from '@/components/content-hub/resourceGuides/ResourceGuidesContinueSection';
 import ResourceArticleTableOfContents from '@/components/content-hub/ResourceArticleTableOfContents';
 import SafeContentPostBody from '@/components/content-hub/SafeContentPostBody';
@@ -31,6 +32,7 @@ import {
 } from '@/lib/content-hub/splitContentPostHtml';
 import { fetchPublishedContentPostBySlug } from '@/lib/content-hub/contentPostsServer';
 import { fetchScholarshipsBySlugsOrIdsOrdered } from '@/lib/scholarships/supabase';
+import { getStaticScholarshipGuide } from '@/lib/resources/staticScholarshipGuides';
 
 export const revalidate = 300;
 
@@ -78,6 +80,20 @@ export async function generateMetadata({
   params
 }: PageProps): Promise<Metadata> {
   const slug = decodeURIComponent(params.slug).trim();
+  const staticGuide = getStaticScholarshipGuide(slug);
+  if (staticGuide) {
+    const canonical = getCanonical(resourcesArticlePath(staticGuide.slug));
+    return {
+      title: staticGuide.title,
+      description: staticGuide.description,
+      alternates: { canonical },
+      openGraph: {
+        title: staticGuide.title,
+        description: staticGuide.description,
+        url: canonical
+      }
+    };
+  }
   const post = await fetchPublishedContentPostBySlug(slug);
   if (!post) {
     return { title: 'Article' };
@@ -103,6 +119,11 @@ export async function generateMetadata({
 }
 
 export default async function ResourcesArticlePage({ params }: PageProps) {
+  const staticGuide = getStaticScholarshipGuide(params.slug);
+  if (staticGuide) {
+    return <StaticScholarshipGuidePage guide={staticGuide} />;
+  }
+
   const post = await fetchPublishedContentPostBySlug(params.slug);
   if (!post || !post.slug?.trim()) notFound();
 

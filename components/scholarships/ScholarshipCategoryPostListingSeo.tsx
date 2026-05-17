@@ -154,6 +154,42 @@ export default function ScholarshipCategoryPostListingSeo({
       ) : null}
 
       <section
+        className="mt-6 grid max-w-5xl gap-3 sm:grid-cols-3 lg:mx-auto"
+        aria-label="ScholarshipTop trust resources"
+      >
+        {[
+          {
+            href: '/scholarship-verification-methodology',
+            label: 'Verification methodology',
+            body: 'How we check source, deadline, eligibility, and application-path signals.'
+          },
+          {
+            href: '/financial-aid-disclaimer',
+            label: 'Financial aid disclaimer',
+            body: 'Why final provider rules control eligibility, selection, and award payment.'
+          },
+          {
+            href: '/scholarship-scam-warning',
+            label: 'Scam warning signs',
+            body: 'What to verify before paying fees or sharing sensitive information.'
+          }
+        ].map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/70 focus-visible:ring-offset-2"
+          >
+            <span className="text-sm font-semibold text-slate-950">
+              {item.label}
+            </span>
+            <span className="mt-1 block text-xs leading-5 text-slate-600">
+              {item.body}
+            </span>
+          </Link>
+        ))}
+      </section>
+
+      <section
         className="mt-8 max-w-5xl lg:mx-auto"
         aria-labelledby={`${idPrefix}-heading`}
       >

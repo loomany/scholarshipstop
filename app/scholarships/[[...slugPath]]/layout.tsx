@@ -205,6 +205,11 @@ function jsonLdDocument(s: Scholarship) {
     program.applicationDeadline = deadlineIso;
   }
 
+  const modifiedIso = s.lastVerifiedAt?.trim() || s.updatedAt?.trim();
+  if (modifiedIso) {
+    program.dateModified = modifiedIso;
+  }
+
   const providerName = s.provider?.trim();
   if (providerName) {
     const provider: Record<string, unknown> = {
@@ -348,7 +353,7 @@ export default async function ScholarshipsSlugPathLayout({
   const record = await getScholarshipDetailServer(raw);
 
   if (!record) {
-    return <>{children}</>;
+    notFound();
   }
 
   const json = JSON.stringify(jsonLdDocument(record));

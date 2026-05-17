@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import type { LongTailSlug } from '@/app/scholarships/scholarshipLongTailPresets';
 import ContinueScholarshipSearchCardGrid from '@/components/scholarships/ContinueScholarshipSearchCardGrid';
 import SeoListingFaqExpandable from '@/components/scholarships/SeoListingFaqExpandable';
@@ -651,6 +652,39 @@ export function SeoScholarshipPostListingSeo({
       </div>
 
       <SeoAdditionalResourceGuidesLinks />
+
+      <div className="grid gap-3 sm:grid-cols-3">
+        {[
+          {
+            href: '/scholarship-verification-methodology',
+            label: 'Verification methodology',
+            body: 'How ScholarshipTop checks source, deadline, award, and eligibility signals.'
+          },
+          {
+            href: '/how-we-rank-scholarships',
+            label: 'How recommendations work',
+            body: 'How fit, urgency, effort, and source clarity influence scholarship shortlists.'
+          },
+          {
+            href: '/financial-aid-disclaimer',
+            label: 'Financial aid disclaimer',
+            body: 'ScholarshipTop does not provide scholarships or guarantee award results.'
+          }
+        ].map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm transition hover:border-slate-300 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/70 focus-visible:ring-offset-2"
+          >
+            <span className="text-sm font-semibold text-slate-950">
+              {item.label}
+            </span>
+            <span className="mt-1 block text-xs leading-5 text-slate-600">
+              {item.body}
+            </span>
+          </Link>
+        ))}
+      </div>
 
       {showLegacyBlock ? (
         <div className={`${SNAP_CARD_COMPACT}`}>

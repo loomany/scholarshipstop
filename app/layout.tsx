@@ -139,7 +139,13 @@ export default async function RootLayout({ children }: PropsWithChildren) {
         url: siteUrl,
         email: 'support@scholarshiptop.com',
         description:
-          'Scholarship search and application platform helping students find verified scholarships and financial aid opportunities.',
+          'Scholarship search and application-planning platform that helps students find relevant scholarships, compare eligibility and deadlines, understand application requirements, save opportunities, and apply through official provider sources.',
+        contactPoint: {
+          '@type': 'ContactPoint',
+          email: 'support@scholarshiptop.com',
+          contactType: 'customer support',
+          availableLanguage: ['English']
+        },
         logo: {
           '@type': 'ImageObject',
           url: `${siteUrl}/icon-192x192.png`

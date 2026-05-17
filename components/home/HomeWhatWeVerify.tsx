@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { FileCheck2, Link2, UserCheck } from 'lucide-react';
 
 const h2Class =
@@ -67,6 +68,14 @@ export default function HomeWhatWeVerify({ sectionPadX, sectionY }: HomeWhatWeVe
             </li>
           ))}
         </ul>
+        <div className="mt-8 flex justify-center">
+          <Link
+            href="/how-scholarshiptop-works"
+            className="inline-flex min-h-10 items-center justify-center rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-800 shadow-sm transition hover:border-gray-300 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/60 focus-visible:ring-offset-2"
+          >
+            See how ScholarshipTop works
+          </Link>
+        </div>
       </div>
     </section>
   );

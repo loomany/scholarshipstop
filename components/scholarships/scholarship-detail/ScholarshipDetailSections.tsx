@@ -1,10 +1,17 @@
 'use client';
 
+import Link from 'next/link';
 import { Sparkles } from 'lucide-react';
 import type { ReactNode } from 'react';
 import type { ScholarshipSeoFaqItem } from '@/app/scholarships/scholarshipsData';
 import { SiteFaqAccordion } from '@/components/ui/SiteFaqAccordion';
 import ai from './aiInsightsLocked.module.css';
+import type {
+  ScholarshipDeadlineUrgency,
+  ScholarshipDifficulty,
+  ScholarshipMissingDataFlag,
+  ScholarshipSourceStatus
+} from '@/lib/seo/scholarshipSeoQualityPolicy';
 import {
   scholarshipDetailCardPrimaryClass,
   scholarshipDetailCardSupportClass
@@ -165,6 +172,129 @@ export function ScholarshipQuickDecisionGrid({
         />
       </div>
     </div>
+  );
+}
+
+export function ScholarshipTrustSignalsBlock({
+  sourceStatus,
+  difficulty,
+  urgency,
+  missingDataFlags,
+  lastReviewedLabel
+}: {
+  sourceStatus: ScholarshipSourceStatus;
+  difficulty: ScholarshipDifficulty;
+  urgency: ScholarshipDeadlineUrgency;
+  missingDataFlags: ScholarshipMissingDataFlag[];
+  lastReviewedLabel: string | null;
+}) {
+  const cards = [
+    {
+      label: 'Official source status',
+      value: sourceStatus.label,
+      body: sourceStatus.description
+    },
+    {
+      label: 'Review status',
+      value: lastReviewedLabel ?? 'Last reviewed date unavailable',
+      body: lastReviewedLabel
+        ? 'ScholarshipTop has a review timestamp for this listing.'
+        : 'This listing has not exposed a manual review date yet.'
+    },
+    {
+      label: 'Deadline urgency',
+      value: urgency.label,
+      body: urgency.description
+    },
+    {
+      label: 'Application difficulty',
+      value: difficulty.level,
+      body: difficulty.reason
+    }
+  ];
+
+  return (
+    <section
+      className="mt-10 rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm ring-1 ring-zinc-100/50 sm:p-6"
+      aria-labelledby="scholarshiptop-trust-signals-heading"
+    >
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wide text-orange-700">
+            ScholarshipTop notes
+          </p>
+          <h2
+            id="scholarshiptop-trust-signals-heading"
+            className="mt-1 text-lg font-semibold tracking-tight text-zinc-900"
+          >
+            What to verify before applying
+          </h2>
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-zinc-600">
+            Use these signals to decide whether this scholarship is worth your
+            time. The official provider page controls final rules.
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-2 text-xs font-semibold">
+          <Link
+            href="/scholarship-verification-methodology"
+            className="rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1.5 text-zinc-700 transition hover:border-zinc-300 hover:bg-white"
+          >
+            Methodology
+          </Link>
+          <Link
+            href="/financial-aid-disclaimer"
+            className="rounded-full border border-orange-200 bg-orange-50 px-3 py-1.5 text-orange-800 transition hover:border-orange-300 hover:bg-orange-100"
+          >
+            Disclaimer
+          </Link>
+        </div>
+      </div>
+
+      <div className="mt-5 grid gap-3 sm:grid-cols-2">
+        {cards.map((card) => (
+          <div
+            key={card.label}
+            className="rounded-xl border border-zinc-200 bg-zinc-50/70 p-4"
+          >
+            <p className="text-[11px] font-semibold uppercase tracking-wide text-zinc-500">
+              {card.label}
+            </p>
+            <p className="mt-1 text-sm font-semibold text-zinc-950">
+              {card.value}
+            </p>
+            <p className="mt-2 text-xs leading-5 text-zinc-600">{card.body}</p>
+          </div>
+        ))}
+      </div>
+
+      {missingDataFlags.length > 0 ? (
+        <div className="mt-5 rounded-xl border border-amber-200 bg-amber-50/75 p-4">
+          <p className="text-xs font-semibold uppercase tracking-wide text-amber-900">
+            Missing or unclear details
+          </p>
+          <ul className="mt-3 grid gap-2 text-sm leading-6 text-amber-950 sm:grid-cols-2">
+            {missingDataFlags.slice(0, 6).map((flag) => (
+              <li key={flag.key} className="flex gap-2">
+                <span
+                  className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-600"
+                  aria-hidden
+                />
+                <span>
+                  <span className="font-semibold">{flag.label}:</span>{' '}
+                  {flag.description}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : (
+        <p className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50/80 px-4 py-3 text-sm leading-6 text-emerald-950">
+          Core listing fields look reasonably complete, but you should still
+          confirm final eligibility, deadline, payout, and application steps on
+          the official source.
+        </p>
+      )}
+    </section>
   );
 }
 

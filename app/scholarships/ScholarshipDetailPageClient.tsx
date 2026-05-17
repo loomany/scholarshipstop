@@ -177,7 +177,8 @@ import {
   ScholarshipFaqAccordion,
   ScholarshipNextStepsBlock,
   ScholarshipQuickDecisionGrid,
-  ScholarshipSeoApplicationBlock
+  ScholarshipSeoApplicationBlock,
+  ScholarshipTrustSignalsBlock
 } from '@/components/scholarships/scholarship-detail/ScholarshipDetailSections';
 import {
   scholarshipDetailCardCompactClass,
@@ -188,6 +189,12 @@ import {
   scholarshipDetailPageBgClass,
   scholarshipDetailShellClass
 } from '@/lib/scholarships/scholarshipDetailLayoutClasses';
+import {
+  getScholarshipApplicationDifficulty,
+  getScholarshipDeadlineUrgency,
+  getScholarshipMissingDataFlags,
+  getScholarshipSourceStatus
+} from '@/lib/seo/scholarshipSeoQualityPolicy';
 
 const detailOfficialSavePillClass =
   scholarshipSaveButtonClass.replace('rounded-xl', 'rounded-full');
@@ -1552,6 +1559,10 @@ export default function ScholarshipDetailPageClient({
   const summaryShort = scholarship.summaryShort?.trim() ?? '';
   const summaryLong = scholarship.summaryLong?.trim() ?? '';
   const lastVerifiedLabel = formatLastVerified(scholarship.lastVerifiedAt);
+  const detailSourceStatus = getScholarshipSourceStatus(scholarship);
+  const detailDifficulty = getScholarshipApplicationDifficulty(scholarship);
+  const detailUrgency = getScholarshipDeadlineUrgency(scholarship);
+  const detailMissingDataFlags = getScholarshipMissingDataFlags(scholarship);
   const isSimplerGov = isSimplerGrantsGovScholarship(scholarship);
   const simplerOverviewBase = simplerGrantsGovOverviewText(scholarship);
   const ui = normalizeScholarshipForUi(scholarship, {
@@ -2185,6 +2196,13 @@ export default function ScholarshipDetailPageClient({
             <AiLowConfidenceNote />
           </div>
         ) : null}
+        <ScholarshipTrustSignalsBlock
+          sourceStatus={detailSourceStatus}
+          difficulty={detailDifficulty}
+          urgency={detailUrgency}
+          missingDataFlags={detailMissingDataFlags}
+          lastReviewedLabel={lastVerifiedLabel}
+        />
         <ScholarshipDetailIqDecisionCard />
         {whoLines.length > 0 ? (
           <div className="mt-10">

@@ -1,5 +1,6 @@
 import { Suspense, type ReactNode } from 'react';
 import { notFound, permanentRedirect } from 'next/navigation';
+import Link from 'next/link';
 
 import ScholarshipsHubShellSkeleton from '@/components/scholarships/ScholarshipsHubShellSkeleton';
 import ScholarshipDetailPageAuthBridge from '@/app/scholarships/ScholarshipDetailPageAuthBridge';
@@ -151,14 +152,78 @@ const SCHOLARSHIPS_ROOT_SCHEMA_DESCRIPTION =
   'Browse the ScholarshipTop catalog to find scholarships by deadline, award amount, eligibility, field of study, GPA, and student background.';
 
 function ScholarshipCatalogRootIntro() {
+  const tips = [
+    'Check eligibility first',
+    'Sort by deadline urgency',
+    'Compare effort vs award',
+    'Confirm the official source',
+    'Save realistic options'
+  ] as const;
+  const mistakes = [
+    'Applying from the title alone',
+    'Ignoring citizenship or residency rules',
+    'Missing deadline timezone details',
+    'Not checking payout or renewal terms',
+    'Submitting before documents are ready',
+    'Trusting unclear sources'
+  ] as const;
+
   return (
     <div className="mt-5 max-w-5xl rounded-2xl border border-slate-200/90 bg-gradient-to-b from-white to-slate-50/90 p-5 text-sm leading-relaxed text-slate-600 shadow-sm sm:mt-6 sm:p-6 sm:text-[0.9375rem] lg:mx-auto">
-      <p>
-        Browse the ScholarshipTop catalog to compare scholarships by deadline,
-        award amount, eligibility, field of study, GPA, and student background.
-        Use the filters to narrow the full catalog and open each listing to
-        review requirements before you apply.
-      </p>
+      <div className="grid gap-5 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+        <div>
+          <h2 className="text-lg font-bold tracking-tight text-slate-950">
+            How to use this scholarship catalog
+          </h2>
+          <p className="mt-2">
+            Start broad, then narrow by eligibility, deadline, award value,
+            documents, location, and application effort. Prioritize scholarships
+            where your profile clearly matches the provider rules and where the
+            deadline and application path are clear.
+          </p>
+          <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+            {tips.map((tip) => (
+              <li key={tip} className="flex items-start gap-2">
+                <span
+                  className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-orange-500"
+                  aria-hidden
+                />
+                <span>{tip}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+          <h2 className="text-base font-bold tracking-tight text-slate-950">
+            Common scholarship search mistakes
+          </h2>
+          <ul className="mt-3 space-y-2">
+            {mistakes.map((mistake) => (
+              <li key={mistake} className="flex items-start gap-2">
+                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-slate-400" />
+                <span>{mistake}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <div className="mt-5 flex flex-wrap gap-2 border-t border-slate-200 pt-4">
+        {[
+          ['No essay scholarships', '/scholarships/no-essay'],
+          ['Easy apply scholarships', '/scholarships/hub/easy-apply'],
+          ['International students', '/scholarships/hub/international-friendly'],
+          ['Verification methodology', '/scholarship-verification-methodology'],
+          ['Scam warning signs', '/scholarship-scam-warning']
+        ].map(([label, href]) => (
+          <Link
+            key={href}
+            href={href}
+            className="inline-flex rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/60 focus-visible:ring-offset-2"
+          >
+            {label}
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }

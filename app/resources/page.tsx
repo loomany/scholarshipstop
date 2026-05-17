@@ -28,6 +28,7 @@ import {
 } from '@/lib/content-hub/resourcesSection';
 import { getURL } from '@/utils/helpers';
 import { getCanonical } from '@/lib/seo/canonical';
+import { STATIC_SCHOLARSHIP_GUIDES } from '@/lib/resources/staticScholarshipGuides';
 
 export const revalidate = 300;
 
@@ -80,6 +81,52 @@ function ResourcesIqAssessmentCard() {
         </div>
       </div>
     </Link>
+  );
+}
+
+function StaticScholarshipGuidesSection() {
+  const featured = STATIC_SCHOLARSHIP_GUIDES.slice(0, 6);
+  return (
+    <section
+      className="mt-10 rounded-3xl border border-gray-200 bg-gray-50/80 p-5 sm:p-6"
+      aria-labelledby="static-scholarship-guides-heading"
+    >
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-orange-600">
+            Scholarship search guides
+          </p>
+          <h2
+            id="static-scholarship-guides-heading"
+            className="mt-2 text-2xl font-bold tracking-tight text-gray-950"
+          >
+            Start with practical scholarship strategy
+          </h2>
+        </div>
+        <Link
+          href="/scholarship-scam-warning"
+          className="text-sm font-semibold text-orange-700 underline-offset-4 hover:underline"
+        >
+          Scam warning signs
+        </Link>
+      </div>
+      <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+        {featured.map((guide) => (
+          <Link
+            key={guide.slug}
+            href={resourcesArticlePath(guide.slug)}
+            className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition hover:border-gray-300 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/70 focus-visible:ring-offset-2"
+          >
+            <span className="text-sm font-semibold text-gray-950">
+              {guide.title}
+            </span>
+            <span className="mt-2 block text-xs leading-5 text-gray-600">
+              {guide.description}
+            </span>
+          </Link>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -465,24 +512,36 @@ export default async function ResourcesIndexPage({
     ]
   };
 
+  const staticGuideItemListElements = STATIC_SCHOLARSHIP_GUIDES.map(
+    (guide, index) => ({
+      '@type': 'ListItem',
+      position: withSlug.length + index + 1,
+      name: guide.title,
+      item: getURL(resourcesArticlePath(guide.slug).replace(/^\/+/, ''))
+    })
+  );
+
   const itemListSchema =
-    withSlug.length > 0
+    withSlug.length > 0 || staticGuideItemListElements.length > 0
       ? {
           '@context': 'https://schema.org',
           '@type': 'ItemList',
           name: RESOURCES_PAGE_TITLE,
           description: baseDescription,
-          numberOfItems: withSlug.length,
-          itemListElement: withSlug.map((post, index) => {
-            const slug = post.slug!.trim();
-            const path = resourcesArticlePath(slug).replace(/^\/+/, '');
-            return {
-              '@type': 'ListItem',
-              position: index + 1,
-              name: post.title?.trim() || 'Untitled',
-              item: getURL(path)
-            };
-          })
+          numberOfItems: withSlug.length + staticGuideItemListElements.length,
+          itemListElement: [
+            ...withSlug.map((post, index) => {
+              const slug = post.slug!.trim();
+              const path = resourcesArticlePath(slug).replace(/^\/+/, '');
+              return {
+                '@type': 'ListItem',
+                position: index + 1,
+                name: post.title?.trim() || 'Untitled',
+                item: getURL(path)
+              };
+            }),
+            ...staticGuideItemListElements
+          ]
         }
       : null;
 
@@ -555,6 +614,8 @@ export default async function ResourcesIndexPage({
             <ResourcesIqAssessmentCard />
           </aside>
         </div>
+
+        <StaticScholarshipGuidesSection />
 
         {!hasAnyPublished ? (
           <p className="mt-12 text-center text-gray-600">
