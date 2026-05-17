@@ -33,6 +33,14 @@ import {
   PROVIDER_PROFILE_SCHOLARSHIPS_PAGE_SIZE
 } from '@/lib/providers/providerProfilePagination';
 import { getCanonical } from '@/lib/seo/canonical';
+import {
+  getProviderSeoQualityPolicy,
+  type ProviderDataCompleteness,
+  type ProviderSourceStatus,
+  providerDataCompletenessLabel,
+  providerSourceStatusLabel
+} from '@/lib/seo/providerSeoQualityPolicy';
+import type { ProviderFaqItem } from '@/lib/providers/providerProfileTypes';
 
 export const revalidate = 60;
 
@@ -123,6 +131,50 @@ function providerProfileSourceLabel(href: string, index: number): string {
   }
 }
 
+function providerHostLabel(href: string | null): string | null {
+  if (!href) return null;
+  try {
+    return new URL(href).hostname.replace(/^www\./i, '');
+  } catch {
+    return null;
+  }
+}
+
+function mergeProviderFaqItems(
+  primary: ProviderFaqItem[],
+  fallback: ProviderFaqItem[]
+): ProviderFaqItem[] {
+  const seen = new Set<string>();
+  const out: ProviderFaqItem[] = [];
+  for (const item of [...primary, ...fallback]) {
+    const key = item.question.trim().toLowerCase();
+    if (!key || seen.has(key)) continue;
+    seen.add(key);
+    out.push(item);
+  }
+  return out;
+}
+
+function buildProviderTrustFaq(providerName: string): ProviderFaqItem[] {
+  return [
+    {
+      question: 'Is ScholarshipTop the scholarship provider?',
+      answer:
+        `No. ScholarshipTop is not ${providerName} and does not provide scholarships directly. Use the provider profile to review connected listings, then confirm final rules on the official provider page when available.`
+    },
+    {
+      question: 'What should I verify before applying?',
+      answer:
+        'Confirm the official source, eligibility rules, deadline, required documents, award amount, payout terms, renewal rules, and application route before submitting.'
+    },
+    {
+      question: 'Why might a provider profile have incomplete data?',
+      answer:
+        'Provider profiles are based on available ScholarshipTop listing data. Some listings do not expose a clear official URL, current deadline, or full eligibility details, so ScholarshipTop flags incomplete data instead of inventing it.'
+    }
+  ];
+}
+
 type PageProps = {
   params: { id: string };
   searchParams?: ProvidersHubSearchParams;
@@ -173,11 +225,21 @@ export async function generateMetadata({
     data.aiDescription,
     data.displayName
   );
+  const quality = getProviderSeoQualityPolicy({
+    slug: data.slug,
+    displayName: data.displayName,
+    activeScholarshipCount: data.totalScholarshipCount,
+    officialUrl: data.officialUrl,
+    hasDescription: Boolean(data.aiDescription?.trim()),
+    hasPublicScholarshipList: data.totalScholarshipCount > 0,
+    hasSourceTrustContext: true,
+    routeResolves: true
+  });
   return {
     title: pageTitleMeta,
     description,
     alternates: { canonical: canonicalUrl },
-    ...(isPaginatedListing
+    ...(isPaginatedListing || !quality.indexable
       ? { robots: { index: false, follow: true } }
       : {}),
     openGraph: {
@@ -260,6 +322,16 @@ export default async function ProviderProfilePage({
   const officialHrefNormalized = data.officialUrl?.trim()
     ? normalizeAiSourceHref(data.officialUrl)
     : null;
+  const providerQuality = getProviderSeoQualityPolicy({
+    slug: data.slug,
+    displayName: data.displayName,
+    activeScholarshipCount: data.totalScholarshipCount,
+    officialUrl: officialHrefNormalized,
+    hasDescription: aboutParas.length > 0,
+    hasPublicScholarshipList: data.totalScholarshipCount > 0,
+    hasSourceTrustContext: true,
+    routeResolves: true
+  });
 
   const providerPath = `/providers/${encodeURIComponent(data.slug)}`;
   const providerUrl = getURL(providerPath);
@@ -268,15 +340,18 @@ export default async function ProviderProfilePage({
     data.displayName
   );
   const pageTitleMeta = `${data.displayName} | Scholarship Provider`;
-  const providerSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: data.displayName,
-    url: data.officialUrl?.trim() || providerUrl,
-    mainEntityOfPage: providerUrl,
-    description: resolvedDescription,
-    ...(data.officialUrl?.trim() ? { sameAs: [data.officialUrl.trim()] } : {})
-  };
+  const providerSchema =
+    providerQuality.sourceStatus === 'official_source_available'
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'Organization',
+          name: data.displayName,
+          url: officialHrefNormalized || providerUrl,
+          mainEntityOfPage: providerUrl,
+          description: resolvedDescription,
+          ...(officialHrefNormalized ? { sameAs: [officialHrefNormalized] } : {})
+        }
+      : null;
 
   const breadcrumbsLd = {
     '@context': 'https://schema.org',
@@ -311,6 +386,7 @@ export default async function ProviderProfilePage({
 
   tocItems.push(
     { id: 'provider-about', label: 'About Provider' },
+    { id: 'provider-source-status', label: 'Source status' },
     { id: 'provider-explore-scholarships', label: 'Explore scholarships and guides' }
   );
   if (officialHrefNormalized || sourceLinks.length > 0) {
@@ -321,7 +397,10 @@ export default async function ProviderProfilePage({
         : 'Sources'
     });
   }
-  if (data.aiFaq.length > 0) {
+  const providerTrustFaq = buildProviderTrustFaq(data.displayName);
+  const faqItems = mergeProviderFaqItems(data.aiFaq, providerTrustFaq);
+
+  if (faqItems.length > 0) {
     tocItems.push({ id: 'provider-faq-heading', label: 'FAQ' });
   }
   tocItems.push({ id: 'provider-scholarships', label: 'Scholarships from this provider' });
@@ -333,11 +412,11 @@ export default async function ProviderProfilePage({
   }
 
   const faqLd =
-    data.aiFaq.length > 0
+    faqItems.length > 0
       ? {
           '@context': 'https://schema.org',
           '@type': 'FAQPage',
-          mainEntity: data.aiFaq.map((item) => ({
+          mainEntity: faqItems.map((item) => ({
             '@type': 'Question',
             name: item.question,
             acceptedAnswer: {
@@ -363,10 +442,12 @@ export default async function ProviderProfilePage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageLd) }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(providerSchema) }}
-      />
+      {providerSchema ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(providerSchema) }}
+        />
+      ) : null}
       {faqLd ? (
         <script
           type="application/ld+json"
@@ -382,7 +463,7 @@ export default async function ProviderProfilePage({
               </h1>
               <span className="inline-flex w-fit shrink-0 items-center gap-1.5 self-start rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold uppercase tracking-wide text-emerald-800 ring-1 ring-emerald-200/80 sm:self-center">
                 <Check className="h-3.5 w-3.5 text-emerald-600" strokeWidth={2.5} aria-hidden />
-                Verified Provider
+                {providerSourceStatusLabel(providerQuality.sourceStatus)}
               </span>
             </div>
             <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
@@ -417,6 +498,14 @@ export default async function ProviderProfilePage({
                   </p>
                 </div>
               ) : null}
+              <div className="rounded-2xl border border-gray-100 bg-gray-50/80 px-4 py-3">
+                <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-gray-500">
+                  Data completeness
+                </p>
+                <p className="mt-1 text-xl font-bold leading-snug text-gray-900">
+                  {providerDataCompletenessLabel(providerQuality.dataCompleteness)}
+                </p>
+              </div>
               {profileLocationLine ? (
                 <div className="rounded-2xl border border-gray-100 bg-gray-50/80 px-4 py-3">
                   <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-gray-500">
@@ -451,6 +540,14 @@ export default async function ProviderProfilePage({
             </p>
           )}
         </section>
+
+        <ProviderSourceStatusBlock
+          providerName={data.displayName}
+          sourceStatus={providerQuality.sourceStatus}
+          dataCompleteness={providerQuality.dataCompleteness}
+          officialHref={officialHrefNormalized}
+          reasons={providerQuality.reasons}
+        />
 
         <ProviderProfileIqCta providerName={data.displayName} />
 
@@ -508,7 +605,7 @@ export default async function ProviderProfilePage({
           </section>
         ) : null}
 
-        <ProviderProfileFaqAccordion items={data.aiFaq} />
+        <ProviderProfileFaqAccordion items={faqItems} />
 
         <section
           id="provider-scholarships"
@@ -603,6 +700,124 @@ export default async function ProviderProfilePage({
 
       </div>
     </div>
+  );
+}
+
+function ProviderSourceStatusBlock({
+  providerName,
+  sourceStatus,
+  dataCompleteness,
+  officialHref,
+  reasons
+}: {
+  providerName: string;
+  sourceStatus: ProviderSourceStatus;
+  dataCompleteness: ProviderDataCompleteness;
+  officialHref: string | null;
+  reasons: string[];
+}) {
+  const host = providerHostLabel(officialHref);
+  const verifyItems = [
+    'Final eligibility rules and student profile requirements.',
+    'Current deadline, timezone, and application route.',
+    'Award amount, payout method, renewal rules, and required documents.'
+  ];
+
+  return (
+    <section
+      id="provider-source-status"
+      className="scroll-mt-24 mt-6 rounded-2xl border border-emerald-100 bg-white p-6 shadow-sm sm:p-8"
+      aria-labelledby="provider-source-status-heading"
+    >
+      <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+        <div className="max-w-2xl">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-emerald-700">
+            Provider source status
+          </p>
+          <h2
+            id="provider-source-status-heading"
+            className="mt-2 text-xl font-bold tracking-tight text-gray-900"
+          >
+            What ScholarshipTop knows about {providerName}
+          </h2>
+          <p className="mt-3 text-sm leading-relaxed text-gray-600 sm:text-[0.9375rem]">
+            This provider profile is based on ScholarshipTop listing data. If an
+            official provider URL is available, students should use it to confirm
+            application details directly. If source information is incomplete,
+            this page marks what still needs verification before applying.
+          </p>
+        </div>
+        <div className="grid min-w-0 gap-3 sm:grid-cols-2 lg:w-80 lg:grid-cols-1">
+          <div className="rounded-2xl border border-gray-100 bg-gray-50/80 p-4">
+            <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-gray-500">
+              Source
+            </p>
+            <p className="mt-1 text-sm font-bold text-gray-950">
+              {providerSourceStatusLabel(sourceStatus)}
+            </p>
+            {host ? (
+              <p className="mt-1 break-words text-xs text-gray-500">{host}</p>
+            ) : null}
+          </div>
+          <div className="rounded-2xl border border-gray-100 bg-gray-50/80 p-4">
+            <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-gray-500">
+              Completeness
+            </p>
+            <p className="mt-1 text-sm font-bold text-gray-950">
+              {providerDataCompletenessLabel(dataCompleteness)}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-6 grid gap-5 lg:grid-cols-2">
+        <div className="rounded-2xl border border-gray-100 bg-gray-50/70 p-5">
+          <h3 className="text-sm font-bold text-gray-950">
+            What to verify before applying
+          </h3>
+          <ul className="mt-3 space-y-2 text-sm leading-6 text-gray-700">
+            {verifyItems.map((item) => (
+              <li key={item} className="flex gap-2">
+                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="rounded-2xl border border-gray-100 bg-gray-50/70 p-5">
+          <h3 className="text-sm font-bold text-gray-950">Quality notes</h3>
+          <ul className="mt-3 space-y-2 text-sm leading-6 text-gray-700">
+            {reasons.slice(0, 4).map((reason) => (
+              <li key={reason} className="flex gap-2">
+                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-orange-500" />
+                <span>{reason}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <div className="mt-5 flex flex-wrap gap-2">
+        <Link
+          href="/scholarship-verification-methodology"
+          className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-900 transition hover:border-emerald-300 hover:bg-white"
+        >
+          Verification methodology
+        </Link>
+        <Link
+          href="/corrections"
+          className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-900 transition hover:border-emerald-300 hover:bg-white"
+        >
+          Report a correction
+        </Link>
+        <Link
+          href="/financial-aid-disclaimer"
+          className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-900 transition hover:border-emerald-300 hover:bg-white"
+        >
+          Financial aid disclaimer
+        </Link>
+      </div>
+    </section>
   );
 }
 

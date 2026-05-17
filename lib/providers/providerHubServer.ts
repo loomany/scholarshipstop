@@ -32,6 +32,13 @@ export type ProviderHubFetchResult = {
   total: number;
 };
 
+type ProviderHubEnrichmentRow = {
+  slug: string;
+  official_url: string | null;
+  is_enriched: boolean | null;
+  updated_at: string | null;
+};
+
 const fetchProviderHubListingCached = unstable_cache(
   async (
     token: string,
@@ -76,9 +83,37 @@ const fetchProviderHubListingCached = unstable_cache(
       Boolean(r.slug?.trim())
     );
 
-    return { rows, total: count ?? 0 };
+    const slugs = [...new Set(rows.map((row) => row.slug.trim()).filter(Boolean))];
+    if (slugs.length === 0) return { rows, total: count ?? 0 };
+
+    const { data: providerRows } = await supabase
+      .from('providers')
+      .select('slug, official_url, is_enriched, updated_at')
+      .in('slug', slugs);
+
+    const bySlug = new Map(
+      ((providerRows ?? []) as ProviderHubEnrichmentRow[]).map((row) => [
+        row.slug,
+        row
+      ])
+    );
+
+    return {
+      rows: rows.map((row) => {
+        const provider = bySlug.get(row.slug.trim());
+        return provider
+          ? {
+              ...row,
+              official_url: provider.official_url,
+              is_enriched: provider.is_enriched,
+              updated_at: provider.updated_at
+            }
+          : row;
+      }),
+      total: count ?? 0
+    };
   },
-  ['provider-hub-listing-v3'],
+  ['provider-hub-listing-v4'],
   { revalidate: 300 }
 );
 

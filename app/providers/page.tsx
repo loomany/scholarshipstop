@@ -21,7 +21,7 @@ export type { ProvidersHubSearchParams };
 export const revalidate = 300;
 
 const baseDescription =
-  'Explore organizations and foundations offering financial aid across the United States.';
+  'Explore scholarship provider profiles with linked scholarships, source status, data completeness, and verification guidance.';
 const baseTitle = 'Scholarship Providers';
 
 export async function generateMetadata({

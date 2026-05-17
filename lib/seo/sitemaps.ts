@@ -3,6 +3,8 @@ import type { MetadataRoute } from 'next';
 
 import { fetchAllPublishedContentPostsForSitemap } from '@/lib/content-hub/contentPostsServer';
 import { STATIC_SCHOLARSHIP_GUIDES } from '@/lib/resources/staticScholarshipGuides';
+import { STATIC_ESSAY_GUIDES } from '@/lib/essays/staticEssayGuides';
+import { STATIC_COMPARE_GUIDES } from '@/lib/compare/staticCompareGuides';
 import { fetchAllPublishedEssaySitemapRows } from '@/lib/essays/essaysServer';
 import { essayHubArticlePath } from '@/lib/essays/essayHubSection';
 import { resourcesArticlePath } from '@/lib/content-hub/resourcesSection';
@@ -28,6 +30,8 @@ import { tabToHubPath } from '@/app/scholarships/scholarshipHubPath';
 import { allScholarshipCountrySeoRoutes } from '@/app/scholarships/scholarshipCountrySeo';
 import { buildCrossCountrySeoSitemapEntries } from '@/lib/seo/crossCountrySitemapEntries';
 import { isCompareHubSeoGenerationCanonicalPath } from '@/lib/seo/sitemapProgrammaticHubPath';
+import { getProviderSeoQualityPolicy } from '@/lib/seo/providerSeoQualityPolicy';
+import { getCompareSeoQualityPolicy } from '@/lib/seo/compareSeoQualityPolicy';
 
 export { isSeoDripFeedActive } from '@/lib/seo/seoDripFeed';
 
@@ -46,10 +50,12 @@ type ScholarshipSitemapRow = Pick<
   'id' | 'slug' | 'updated_at' | 'is_indexable'
 >;
 
-type ProviderSitemapRow = Pick<
-  Database['public']['Tables']['providers']['Row'],
-  'slug' | 'updated_at' | 'created_at'
->;
+type ProviderHubSitemapRow = {
+  slug: string;
+  display_name: string | null;
+  scholarship_count: number | string | null;
+  ai_description: string | null;
+};
 
 export type SitemapBuckets = Record<SitemapBucket, MetadataRoute.Sitemap>;
 export type SitemapDocument = {
@@ -334,29 +340,40 @@ async function fetchProviderSitemapEntries(
 ): Promise<MetadataRoute.Sitemap> {
   const supabase = createSitemapReadClient();
   if (!supabase) return [];
-  const rows: ProviderSitemapRow[] = [];
+  const rows: ProviderHubSitemapRow[] = [];
   let offset = 0;
 
   for (;;) {
     const { data, error } = await supabase
-      .from('providers')
-      .select('slug, updated_at, created_at')
-      .order('updated_at', { ascending: false, nullsFirst: false })
-      .order('created_at', { ascending: false })
+      .from('provider_hub_listing' as unknown as 'scholarships')
+      .select('slug, display_name, scholarship_count, ai_description')
+      .order('scholarship_count', { ascending: false })
       .range(offset, offset + SITEMAP_DB_PAGE_SIZE - 1);
 
     if (error) throw new Error(error.message);
-    const batch = (data ?? []) as ProviderSitemapRow[];
+    const batch = (data ?? []) as unknown as ProviderHubSitemapRow[];
     rows.push(...batch);
     if (batch.length < SITEMAP_DB_PAGE_SIZE) break;
     offset += SITEMAP_DB_PAGE_SIZE;
   }
 
   return rows
-    .filter((row) => Boolean(row.slug?.trim()))
+    .filter((row) => {
+      const count = Number(row.scholarship_count ?? 0);
+      const quality = getProviderSeoQualityPolicy({
+        slug: row.slug,
+        displayName: row.display_name,
+        activeScholarshipCount: Number.isFinite(count) ? count : 0,
+        hasDescription: Boolean(row.ai_description?.trim()),
+        hasPublicScholarshipList: count > 0,
+        hasSourceTrustContext: true,
+        routeResolves: true
+      });
+      return quality.includeInSitemap;
+    })
     .map((row) => ({
       url: `${base}/providers/${encodeURIComponent(row.slug.trim())}`,
-      lastModified: row.updated_at || row.created_at
+      lastModified: new Date()
     }));
 }
 
@@ -430,7 +447,13 @@ export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
     .map((row) => ({
       url: `${base}${essayHubArticlePath(row.slug.trim())}`,
       lastModified: row.updated_at ? new Date(row.updated_at) : new Date()
-    }));
+    }))
+    .concat(
+      STATIC_ESSAY_GUIDES.map((guide) => ({
+        url: `${base}${essayHubArticlePath(guide.slug)}`,
+        lastModified: new Date(guide.updatedAt)
+      }))
+    );
 
   const promotedCategorySlugs = new Set(getPromotedSeoCategorySlugs());
   const categories: MetadataRoute.Sitemap = SCHOLARSHIP_CATEGORY_ORDER.filter((id) =>
@@ -550,6 +573,21 @@ export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
   ]);
 
   const compare: MetadataRoute.Sitemap = [
+    ...STATIC_COMPARE_GUIDES.filter((guide) => {
+      const quality = getCompareSeoQualityPolicy({
+        stablePublicRoute: true,
+        hasQueryParams: false,
+        hasSearchIntent: true,
+        hasUniqueComparisonTable: guide.rows.length > 0,
+        hasVisibleFaq: guide.faq.length > 0,
+        hasRelatedInternalLinks: guide.links.length > 0,
+        meaningfulFactCount: guide.rows.length
+      });
+      return quality.includeInSitemap;
+    }).map((guide) => ({
+      url: `${base}/compare/${encodeURIComponent(guide.slug)}`,
+      lastModified: new Date(guide.updatedAt)
+    })),
     ...compareRows
       .filter((row) => Boolean(row.slug?.trim()))
       .map((row) => ({

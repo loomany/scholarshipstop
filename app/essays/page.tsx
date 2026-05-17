@@ -2,8 +2,9 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { Suspense, type CSSProperties } from 'react';
-import { ArrowRight, BrainCircuit } from 'lucide-react';
+import { ArrowRight, BrainCircuit, CheckCircle2, ClipboardCheck } from 'lucide-react';
 
+import { EssayGuideCardImage } from '@/components/essays/EssayGuideCardImage';
 import { EssaysIndexHeroMedia } from '@/components/essays/EssaysIndexHeroMedia';
 import { EssaysIndexResultSummary } from '@/components/essays/EssaysIndexResultSummary';
 import EssaysIndexToolbar from '@/components/essays/EssaysIndexToolbar';
@@ -22,6 +23,7 @@ import {
   ESSAYS_SECTION_PATH,
   essayHubArticlePath
 } from '@/lib/essays/essayHubSection';
+import { STATIC_ESSAY_GUIDES } from '@/lib/essays/staticEssayGuides';
 import { getURL } from '@/utils/helpers';
 import { getCanonical } from '@/lib/seo/canonical';
 
@@ -29,7 +31,40 @@ export const revalidate = 300;
 
 const baseTitle = 'Scholarship Essay Guides & Examples (2026)';
 const baseDescription =
-  'Explore scholarship essay examples and step-by-step writing guides. Learn how to structure your essay and improve your chances of winning scholarships.';
+  'Use ScholarshipTop essay guides, examples, outlines, checklists, and prompt-specific advice to plan stronger scholarship applications.';
+
+const commandCenterGroups = [
+  {
+    title: 'Start here',
+    body: 'Build the foundation before drafting: examples, outline, checklist, and mistakes.',
+    links: [
+      ['Examples', '/essays/examples'],
+      ['Outline', '/essays/outline'],
+      ['Checklist', '/essays/checklist'],
+      ['Mistakes', '/essays/mistakes']
+    ]
+  },
+  {
+    title: 'Prompt guides',
+    body: 'Use these when a scholarship asks about need, goals, leadership, or personal background.',
+    links: [
+      ['Financial Need', '/essays/financial-need'],
+      ['Career Goals', '/essays/career-goals'],
+      ['Leadership', '/essays/leadership'],
+      ['Personal Statement', '/essays/personal-statement']
+    ]
+  },
+  {
+    title: 'Applicant profiles',
+    body: 'Match your writing strategy to the type of award or student profile you are targeting.',
+    links: [
+      ['STEM Essay', '/essays/stem'],
+      ['No-Essay Scholarships', '/essays/no-essay-scholarships'],
+      ['No Essay Hub', '/scholarships/no-essay'],
+      ['International Students', '/scholarships/international-students']
+    ]
+  }
+] as const;
 
 export function generateMetadata({
   searchParams
@@ -264,6 +299,7 @@ export default async function EssaysIndexPage({
           </p>
         ) : (
           <>
+            <EssayCommandCenter />
             <EssaysGrid posts={displayRows} />
             {total > 0 && displayRows.length > 0 ? (
               <ResourcesPagination
@@ -286,6 +322,97 @@ export default async function EssaysIndexPage({
         )}
       </div>
     </div>
+  );
+}
+
+function EssayCommandCenter() {
+  const featuredStaticGuides = STATIC_ESSAY_GUIDES.filter((guide) =>
+    ['examples', 'checklist', 'financial-need', 'career-goals'].includes(
+      guide.slug
+    )
+  );
+
+  return (
+    <section
+      className="mt-8 rounded-3xl border border-orange-100 bg-orange-50/40 p-5 shadow-sm sm:mt-10 sm:p-6 lg:p-8"
+      aria-labelledby="essay-command-center-heading"
+    >
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+        <div className="max-w-3xl">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-orange-700">
+            Scholarship essay command center
+          </p>
+          <h2
+            id="essay-command-center-heading"
+            className="mt-2 text-2xl font-bold tracking-tight text-gray-950 sm:text-3xl"
+          >
+            Plan the essay before you write the essay
+          </h2>
+          <p className="mt-3 text-sm leading-7 text-gray-700 sm:text-base">
+            Start with the prompt, choose the right evidence, revise against a
+            checklist, and confirm provider instructions before submitting.
+            Writing guidance can improve clarity, but it does not guarantee an
+            award.
+          </p>
+        </div>
+        <Link
+          href="/essay"
+          className="inline-flex min-h-11 w-fit items-center justify-center gap-2 rounded-xl bg-orange-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-orange-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2"
+        >
+          Open Essay Mentor
+          <ArrowRight className="h-4 w-4" aria-hidden />
+        </Link>
+      </div>
+
+      <div className="mt-6 grid gap-4 lg:grid-cols-3">
+        {commandCenterGroups.map((group) => (
+          <div
+            key={group.title}
+            className="rounded-2xl border border-white/80 bg-white p-5 shadow-sm"
+          >
+            <div className="flex items-center gap-2">
+              <ClipboardCheck className="h-5 w-5 text-orange-600" aria-hidden />
+              <h3 className="text-base font-bold text-gray-950">{group.title}</h3>
+            </div>
+            <p className="mt-2 text-sm leading-6 text-gray-600">{group.body}</p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {group.links.map(([label, href]) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className="rounded-full border border-orange-100 bg-orange-50 px-3 py-1.5 text-xs font-semibold text-orange-800 transition hover:border-orange-200 hover:bg-orange-100"
+                >
+                  {label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {featuredStaticGuides.map((guide) => (
+          <Link
+            key={guide.slug}
+            href={essayHubArticlePath(guide.slug)}
+            className="group rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-orange-200 hover:shadow-md"
+          >
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="h-4 w-4 text-orange-500" aria-hidden />
+              <span className="text-xs font-bold uppercase tracking-[0.14em] text-gray-500">
+                Curated guide
+              </span>
+            </div>
+            <h3 className="mt-3 line-clamp-2 text-sm font-bold leading-snug text-gray-950">
+              {guide.h1}
+            </h3>
+            <p className="mt-2 line-clamp-3 text-xs leading-5 text-gray-600">
+              {guide.oneSentence}
+            </p>
+          </Link>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -324,23 +451,11 @@ function EssaysGrid({ posts }: { posts: EssayListFields[] }) {
               href={href}
               className={essaysHubCardLinkClassName}
             >
-              <div className="relative aspect-[16/10] w-full overflow-hidden bg-gray-100">
-                {post.hero_image_url?.trim() ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={post.hero_image_url.trim()}
-                    alt={title ? `Cover for ${title}` : 'Essay guide cover'}
-                    className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
-                  />
-                ) : (
-                  <div
-                    className="flex h-full w-full items-center justify-center bg-gradient-to-br from-sky-50 to-indigo-100 text-sm font-medium text-sky-700/80"
-                    aria-hidden
-                  >
-                    Essay guide
-                  </div>
-                )}
-              </div>
+              <EssayGuideCardImage
+                src={post.hero_image_url}
+                alt={title ? `Cover for ${title}` : 'Essay guide cover'}
+                placeholderLabel="Essay guide"
+              />
               <div className="flex flex-1 flex-col p-5 sm:p-6">
                 <h2 className="text-lg font-bold leading-snug tracking-tight text-gray-900 group-hover:text-gray-800 sm:text-xl">
                   {title}

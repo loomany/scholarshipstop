@@ -1,0 +1,62 @@
+[
+  {
+    "name": "homepage-desktop-net",
+    "url": "/",
+    "status": 200,
+    "file": "C:\\dev\\scholarshipstop\\reports\\seo\\screenshots\\homepage-desktop-net.png",
+    "title": "Get Matched With Scholarships in 2 Minutes",
+    "h1": "Get matched with scholarships in 2 minutes",
+    "cards": 1,
+    "horizontalOverflow": false,
+    "width": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "catalog-desktop-net",
+    "url": "/scholarships",
+    "status": 200,
+    "file": "C:\\dev\\scholarshipstop\\reports\\seo\\screenshots\\catalog-desktop-net.png",
+    "title": "ScholarshipTop | Find Scholarships",
+    "h1": "Scholarship matches",
+    "cards": 9,
+    "horizontalOverflow": false,
+    "width": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "category-stem-desktop-net",
+    "url": "/scholarships/category/stem",
+    "status": 200,
+    "file": "C:\\dev\\scholarshipstop\\reports\\seo\\screenshots\\category-stem-desktop-net.png",
+    "title": "ScholarshipTop | STEM Scholarships 2026 – Apply Online",
+    "h1": "STEM Scholarships",
+    "cards": 0,
+    "horizontalOverflow": false,
+    "width": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "country-us-desktop-net",
+    "url": "/scholarships/study-in/united-states",
+    "status": 200,
+    "file": "C:\\dev\\scholarshipstop\\reports\\seo\\screenshots\\country-us-desktop-net.png",
+    "title": "ScholarshipTop | Scholarships to Study in United States",
+    "h1": "Scholarships to study in United States",
+    "cards": 9,
+    "horizontalOverflow": false,
+    "width": 1440,
+    "scrollWidth": 1440
+  },
+  {
+    "name": "resource-guide-mobile-net",
+    "url": "/resources/how-to-find-scholarships",
+    "status": 200,
+    "file": "C:\\dev\\scholarshipstop\\reports\\seo\\screenshots\\resource-guide-mobile-net.png",
+    "title": "How to Find Scholarships That Are Worth Your Time",
+    "h1": "How to Find Scholarships That Are Worth Your Time",
+    "cards": 0,
+    "horizontalOverflow": false,
+    "width": 390,
+    "scrollWidth": 390
+  }
+]

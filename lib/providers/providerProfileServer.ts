@@ -169,6 +169,12 @@ type ProviderScholarshipStatRow = {
   scholarship_count: number;
 };
 
+type ProviderHubListingFallbackRow = {
+  slug: string;
+  display_name: string | null;
+  scholarship_count: number;
+};
+
 type ProviderScholarshipAggregateRow = {
   award_amount_numeric_sort: number | string | null;
   updated_at: string | null;
@@ -187,6 +193,8 @@ type ProviderProfileAggregateRpcRow = {
 };
 
 const PROVIDER_STATS = 'provider_scholarship_stats' as unknown as 'scholarships';
+const PROVIDER_HUB_LISTING =
+  'provider_hub_listing' as unknown as 'scholarships';
 
 function numberFromDb(value: number | string | null | undefined): number | null {
   if (value == null) return null;
@@ -326,9 +334,26 @@ export async function loadProviderProfilePage(
     .eq('slug', slugForScholarships)
     .maybeSingle();
 
-  const statRow = statRowRaw as unknown as ProviderScholarshipStatRow | null;
+  let statRow = statRowRaw as unknown as ProviderScholarshipStatRow | null;
 
-  if (statError || !statRow) return null;
+  if (statError || !statRow) {
+    const { data: hubFallbackRaw } = await supabase
+      .from(PROVIDER_HUB_LISTING)
+      .select('slug, display_name, scholarship_count')
+      .eq('slug', slugForScholarships)
+      .maybeSingle();
+    const hubFallback =
+      hubFallbackRaw as unknown as ProviderHubListingFallbackRow | null;
+    statRow = hubFallback
+      ? {
+          slug: hubFallback.slug,
+          display_name: hubFallback.display_name,
+          scholarship_count: hubFallback.scholarship_count
+        }
+      : null;
+  }
+
+  if (!statRow) return null;
 
   const totalScholarshipCount = Number(statRow.scholarship_count) || 0;
 
@@ -438,7 +463,7 @@ export async function loadProviderProfilePage(
 
 const getProviderProfilePageCachedAcrossRequests = unstable_cache(
   loadProviderProfilePage,
-  ['provider-profile-page-v2'],
+  ['provider-profile-page-v3'],
   { revalidate: 60 }
 );
 

@@ -2263,19 +2263,8 @@ function ScholarshipsPageInner({
   const rawPageParam = new URLSearchParams(searchParamsString).get('page');
   const pageFromUrl = Math.max(1, Number.parseInt(rawPageParam ?? '1', 10));
   const currentPage = clampScholarshipListPage(rawPageParam, totalPages);
-  /** Guests on Best recommendation only load page 1 unless country filters come from More filters or toolbar `app_cc`. */
-  const hubListingPage =
-    catalogFreeTier &&
-    activeTab === 'best-recommendation' &&
-    !guestBestEffectiveManualCountryFilter
-      ? 1
-      : pageFromUrl;
-  const listPageForUi =
-    catalogFreeTier &&
-    activeTab === 'best-recommendation' &&
-    !guestBestEffectiveManualCountryFilter
-      ? 1
-      : currentPage;
+  const hubListingPage = currentPage;
+  const listPageForUi = currentPage;
 
   const hasClientAppliedDeltaMoreFilters = useMemo(() => {
     if (!moreFiltersApplied) return false;
@@ -2579,7 +2568,7 @@ function ScholarshipsPageInner({
       const ids = userListIdsRef.current;
       const sp = buildHubListingSearchParams({
         base: new URLSearchParams(searchParamsString),
-        page: guestBestEffectiveManualCountryFilter ? pageFromUrl : 1,
+        page: currentPage,
         tab: 'matches',
         meta: false,
         saved: ids.saved,
@@ -2820,23 +2809,6 @@ function ScholarshipsPageInner({
       replaceListingParams({ page: valid, resetPage: false });
     }
   }, [isLoading, totalCount, totalPages, rawPageParam, replaceListingParams]);
-
-  /** Guests on Best recommendation only see page 1; strip `page` from URL if they land with page>1. */
-  useEffect(() => {
-    if (isAuthenticated) return;
-    if (activeTab !== 'best-recommendation') return;
-    if (guestBestEffectiveManualCountryFilter) return;
-    const n = Math.max(1, Number.parseInt(rawPageParam ?? '1', 10));
-    if (n > 1) {
-      replaceListingParams({ page: 1, resetPage: false });
-    }
-  }, [
-    isAuthenticated,
-    activeTab,
-    rawPageParam,
-    replaceListingParams,
-    guestBestEffectiveManualCountryFilter
-  ]);
 
   const moreFiltersPanelContextNotices = useMemo((): ScholarshipsMoreFiltersContextNotice[] => {
     const out: ScholarshipsMoreFiltersContextNotice[] = [];

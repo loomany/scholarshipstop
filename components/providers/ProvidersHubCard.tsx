@@ -4,6 +4,11 @@ import Link from 'next/link';
 
 import type { ProviderHubRow } from '@/lib/providers/providerHubTypes';
 import { formatProviderHqLocationLine } from '@/lib/providers/providerHubRegionLabel';
+import {
+  getProviderSeoQualityPolicy,
+  providerDataCompletenessLabel,
+  providerSourceStatusLabel
+} from '@/lib/seo/providerSeoQualityPolicy';
 
 function cardTitle(row: ProviderHubRow): string {
   const n = row.display_name?.trim();
@@ -28,6 +33,16 @@ export function ProvidersHubCard({ row }: Props) {
   const locationLine = formatProviderHqLocationLine(row.state);
   const snippet = descriptionSnippet(row.ai_description);
   const headingId = `provider-hub-card-title-${row.slug}`;
+  const quality = getProviderSeoQualityPolicy({
+    slug: row.slug,
+    displayName: title,
+    activeScholarshipCount: count,
+    officialUrl: row.official_url,
+    hasDescription: Boolean(snippet),
+    hasPublicScholarshipList: count > 0,
+    hasSourceTrustContext: true,
+    routeResolves: true
+  });
 
   const activeScholarshipsBadge = (
     <span className="inline-flex shrink-0 items-center rounded-full bg-emerald-50 px-2.5 py-1 text-right text-[10px] font-semibold leading-none text-emerald-600 ring-1 ring-emerald-100 sm:px-3 sm:text-xs sm:text-left">
@@ -68,6 +83,17 @@ export function ProvidersHubCard({ row }: Props) {
               Profile details will appear after enrichment.
             </p>
           )}
+          <div className="mt-5 flex flex-wrap gap-2">
+            <span className="rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-zinc-600">
+              {providerSourceStatusLabel(quality.sourceStatus)}
+            </span>
+            <span className="rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-zinc-600">
+              {providerDataCompletenessLabel(quality.dataCompleteness)}
+            </span>
+            <span className="rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-zinc-600">
+              {row.is_enriched ? 'Profile enriched' : 'Not manually reviewed'}
+            </span>
+          </div>
           <span className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-white py-2.5 text-sm font-semibold text-orange-600 transition group-hover:border-zinc-300 group-hover:bg-zinc-50 group-hover:text-orange-700">
             View Profile
           </span>

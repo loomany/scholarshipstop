@@ -207,6 +207,32 @@ export async function ProvidersHubPageContent({
     ]
   };
 
+  const collectionSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: stateName ? `Scholarship providers in ${stateName}` : 'Scholarship Providers',
+    description: stateName
+      ? `Organizations and foundations with active scholarship listings tied to ${stateName}.`
+      : 'Scholarship provider directory based on ScholarshipTop listing data.',
+    url: getURL(listingBasePath.replace(/^\/+/, ''))
+  };
+
+  const itemListSchema =
+    rows.length > 0
+      ? {
+          '@context': 'https://schema.org',
+          '@type': 'ItemList',
+          name: stateName ? `Providers in ${stateName}` : 'Scholarship providers',
+          numberOfItems: rows.length,
+          itemListElement: rows.map((row, index) => ({
+            '@type': 'ListItem',
+            position: index + 1,
+            name: row.display_name?.trim() || row.slug.replace(/-/g, ' '),
+            item: getURL(`providers/${encodeURIComponent(row.slug)}`)
+          }))
+        }
+      : null;
+
   const h1 =
     stateName && stateSlug
       ? `Scholarship providers in ${stateName}`
@@ -222,6 +248,16 @@ export async function ProvidersHubPageContent({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsSchema) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
+      />
+      {itemListSchema ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+        />
+      ) : null}
       <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 sm:py-12 lg:py-14">
         <nav className="text-sm text-zinc-500" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
@@ -297,6 +333,8 @@ export async function ProvidersHubPageContent({
           </aside>
         </div>
 
+        <ProviderDirectoryTrustSection stateName={stateName} />
+
         {rows.length === 0 ? (
           <div className="mt-8 rounded-2xl border border-zinc-200 bg-white p-10 text-center shadow-sm">
             <p className="text-zinc-700">
@@ -332,5 +370,64 @@ export async function ProvidersHubPageContent({
         )}
       </div>
     </div>
+  );
+}
+
+function ProviderDirectoryTrustSection({ stateName }: { stateName: string | null }) {
+  const directoryLabel = stateName
+    ? `provider profiles in ${stateName}`
+    : 'provider profiles';
+
+  return (
+    <section
+      className="mt-8 grid gap-4 rounded-3xl border border-emerald-100 bg-emerald-50/40 p-5 shadow-sm sm:p-6 lg:grid-cols-[1.1fr_0.9fr]"
+      aria-labelledby="provider-directory-trust-heading"
+    >
+      <div>
+        <p className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-700">
+          Scholarship provider directory
+        </p>
+        <h2
+          id="provider-directory-trust-heading"
+          className="mt-2 text-2xl font-bold tracking-tight text-zinc-950"
+        >
+          Use providers to verify source context, not just names
+        </h2>
+        <p className="mt-3 text-sm leading-7 text-zinc-700 sm:text-base">
+          ScholarshipTop builds {directoryLabel} from live listing data. When an
+          official source is missing or unclear, the profile should show that
+          status instead of treating the provider as fully verified.
+        </p>
+        <div className="mt-4 flex flex-wrap gap-2">
+          {[
+            ['Verification methodology', '/scholarship-verification-methodology'],
+            ['Corrections', '/corrections'],
+            ['Financial aid disclaimer', '/financial-aid-disclaimer'],
+            ['How recommendations work', '/how-we-rank-scholarships']
+          ].map(([label, href]) => (
+            <Link
+              key={href}
+              href={href}
+              className="rounded-full border border-emerald-200 bg-white px-3 py-1.5 text-xs font-semibold text-emerald-900 transition hover:border-emerald-300 hover:bg-emerald-50"
+            >
+              {label}
+            </Link>
+          ))}
+        </div>
+      </div>
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+        {[
+          ['Active scholarships', 'How many live listings are connected to the provider.'],
+          ['Source status', 'Whether an official URL is available or needs confirmation.'],
+          ['Data completeness', 'How much public context the profile can safely show.'],
+          ['Corrections path', 'Students can report broken links or inaccurate eligibility.']
+        ].map(([title, body]) => (
+          <div key={title} className="rounded-2xl border border-white/80 bg-white p-4 shadow-sm">
+            <p className="text-sm font-bold text-zinc-950">{title}</p>
+            <p className="mt-1 text-xs leading-5 text-zinc-600">{body}</p>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }

@@ -167,7 +167,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
   };
 
   return (
-    <html lang="en" className={fontSans.variable}>
+    <html lang="en" className={`${fontSans.variable} font-sans`}>
       <head>
         <meta name="fo-verify" content="5b534bf7-226a-4032-8ba7-1ce652711bd1" />
         <meta
@@ -176,7 +176,9 @@ export default async function RootLayout({ children }: PropsWithChildren) {
         />
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000000" />
       </head>
-      <body className={`${fontSans.className} bg-zinc-50 text-zinc-900`}>
+      <body
+        className={`${fontSans.className} font-sans bg-zinc-50 text-zinc-900 antialiased`}
+      >
         <GoogleTagManagerNoScript />
         <GoogleTagManager />
         <Script

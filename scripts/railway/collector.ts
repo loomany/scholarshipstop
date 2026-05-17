@@ -1,4 +1,4 @@
-import { mkdirSync, existsSync, statSync, appendFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, existsSync, statSync, appendFileSync, writeFileSync, renameSync } from "node:fs";
 import { join } from "node:path";
 import { spawn, spawnSync, type ChildProcessWithoutNullStreams } from "node:child_process";
 
@@ -42,9 +42,13 @@ const ANOMALIES = [
   { key: "parser_crash", label: "parser crash", pattern: /parser/i, extra: /crash|failed|exception|error/i, windowMs: 300_000, threshold: 2 },
 ] as const;
 
+const COLLECTOR_STATUS_LINE_RE =
+  /\b(stream disconnected|reconnect\s*#|stream active|connecting)\b/i;
+
 let stopping = false;
 const states = new Map<string, ServiceState>();
 let healthTimer: NodeJS.Timeout | undefined;
+let logsFollowSupported = true;
 
 function printHelp(): void {
   console.log(
@@ -101,6 +105,16 @@ function listServices(): Service[] {
   const output = runRailway(["service", "list", "--json"]);
   const parsed = JSON.parse(output) as Array<{ id: string; name: string }>;
   return parsed.map((s) => ({ id: s.id, name: s.name }));
+}
+
+function detectLogsFollowSupport(): boolean {
+  const result = spawnSync(RAILWAY_BIN, ["logs", "--help"], {
+    cwd: process.cwd(),
+    encoding: "utf8",
+    shell: true,
+  });
+  const output = `${result.stdout ?? ""}\n${result.stderr ?? ""}`;
+  return /\B--follow\b/i.test(output);
 }
 
 function safeName(serviceName: string): string {
@@ -233,6 +247,11 @@ function compactAnomalyWindow(state: ServiceState, key: string, windowMs: number
 }
 
 function inspectAnomalies(state: ServiceState, line: string): void {
+  // Ignore collector-style transport/status chatter if it appears in payload lines.
+  if (COLLECTOR_STATUS_LINE_RE.test(line)) {
+    return;
+  }
+
   const now = Date.now();
   for (const anomaly of ANOMALIES) {
     const primary = anomaly.pattern.test(line);
@@ -306,9 +325,12 @@ function startStream(state: ServiceState): void {
   if (stopping) return;
 
   state.status = "connecting";
+  const logsArgs = logsFollowSupported
+    ? ["logs", "--service", state.service.id, "--json", "--follow"]
+    : ["logs", "--service", state.service.id, "--json"];
   const child = spawn(
     RAILWAY_BIN,
-    ["logs", "--service", state.service.id, "--json"],
+    logsArgs,
     {
       cwd: process.cwd(),
       shell: true,
@@ -356,10 +378,12 @@ function writeHealthReport(): void {
   const rows: string[] = [];
   const now = Date.now();
   let active = 0;
+  let connecting = 0;
   let disconnected = 0;
 
   for (const state of states.values()) {
     if (state.status === "active") active += 1;
+    if (state.status === "connecting") connecting += 1;
     if (state.status === "disconnected") disconnected += 1;
 
     const uptime = formatDuration(now - state.startedAt);
@@ -374,6 +398,7 @@ function writeHealthReport(): void {
     "",
     `Generated: ${new Date(now).toISOString()}`,
     `Active streams: ${active}`,
+    `Connecting streams: ${connecting}`,
     `Disconnected streams: ${disconnected}`,
     "",
     "| service | state | reconnect count | last log timestamp | stream uptime |",
@@ -383,7 +408,9 @@ function writeHealthReport(): void {
   ].join("\n");
 
   mkdirSync(join(process.cwd(), "reports"), { recursive: true });
-  writeFileSync(HEALTH_REPORT_PATH, body, "utf8");
+  const tmpPath = `${HEALTH_REPORT_PATH}.tmp`;
+  writeFileSync(tmpPath, body, "utf8");
+  renameSync(tmpPath, HEALTH_REPORT_PATH);
 }
 
 function initState(service: Service): ServiceState {
@@ -420,6 +447,7 @@ function main(): void {
   const args = parseArgs(process.argv.slice(2));
   mkdirSync(LOGS_ROOT, { recursive: true });
   mkdirSync(join(process.cwd(), "reports"), { recursive: true });
+  logsFollowSupported = detectLogsFollowSupport();
 
   const allServices = listServices();
   const services = args.service
@@ -437,6 +465,9 @@ function main(): void {
 
   for (const service of services) {
     const state = initState(service);
+    if (!logsFollowSupported) {
+      appendCollectorEvent(state, "warn", "railway logs --follow is not supported by current CLI; using default follow mode without flag");
+    }
     states.set(service.id, state);
     startStream(state);
   }

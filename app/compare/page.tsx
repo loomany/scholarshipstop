@@ -1,11 +1,11 @@
 ﻿import type { Metadata } from 'next';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 import { ArrowRight, BrainCircuit } from 'lucide-react';
 
 import CompareCardGrid from '@/components/compare/CompareCardGrid';
-import CompareIndexToolbar from '@/components/compare/CompareIndexToolbar';
 import ResourcesPagination from '@/components/content-hub/ResourcesPagination';
 import {
   buildCompareIndexHref,
@@ -19,6 +19,7 @@ import {
   buildCombinedCompareItems,
   buildCompareSuggestionSeedItems
 } from '@/lib/seo/compareIndexData';
+import { STATIC_COMPARE_GUIDES } from '@/lib/compare/staticCompareGuides';
 import { fetchAllPublishedStateComparePages } from '@/lib/seo/stateCompareServer';
 import { fetchAllPublishedUniversityComparePages } from '@/lib/seo/universityCompareServer';
 import { getURL } from '@/utils/helpers';
@@ -28,7 +29,20 @@ export const revalidate = 3600;
 
 const baseTitle = 'Scholarship Comparisons';
 const baseDescription =
-  'Browse published state and university scholarship comparisons with searchable filters, categories, and fresh matchup cards.';
+  'Compare scholarships, grants, award types, state scholarship markets, and university scholarship matchups with practical decision guides.';
+
+const CompareIndexToolbarClient = dynamic(
+  () => import('@/components/compare/CompareIndexToolbar'),
+  {
+    ssr: false,
+    loading: () => (
+      <div
+        className="mt-6 h-24 max-w-3xl animate-pulse rounded-2xl bg-gray-100"
+        aria-hidden
+      />
+    )
+  }
+);
 
 function CompareIqAssessmentCard() {
   return (
@@ -78,6 +92,55 @@ function CompareIqAssessmentCard() {
   );
 }
 
+function EvergreenCompareGuides() {
+  return (
+    <section
+      className="mt-8 rounded-3xl border border-orange-100 bg-orange-50/40 p-5 shadow-sm sm:mt-10 sm:p-6 lg:p-8"
+      aria-labelledby="evergreen-compare-heading"
+    >
+      <div className="max-w-3xl">
+        <p className="text-xs font-bold uppercase tracking-[0.18em] text-orange-700">
+          Compare scholarship types
+        </p>
+        <h2
+          id="evergreen-compare-heading"
+          className="mt-2 text-2xl font-bold tracking-tight text-gray-950 sm:text-3xl"
+        >
+          Start with evergreen decisions before comparing matchups
+        </h2>
+        <p className="mt-3 text-sm leading-7 text-gray-700 sm:text-base">
+          These guides explain common scholarship choices in plain English:
+          grant versus scholarship, merit versus need, no-essay versus essay,
+          and local versus national opportunities.
+        </p>
+      </div>
+      <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {STATIC_COMPARE_GUIDES.map((guide) => (
+          <Link
+            key={guide.slug}
+            href={`/compare/${encodeURIComponent(guide.slug)}`}
+            className="group flex h-full flex-col rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-orange-200 hover:shadow-md"
+          >
+            <span className="w-fit rounded-full bg-orange-100 px-2.5 py-1 text-xs font-semibold text-orange-800">
+              Evergreen guide
+            </span>
+            <h3 className="mt-3 line-clamp-2 text-base font-bold leading-snug text-gray-950">
+              {guide.h1}
+            </h3>
+            <p className="mt-2 line-clamp-4 flex-1 text-sm leading-6 text-gray-600">
+              {guide.shortAnswer}
+            </p>
+            <span className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-orange-600 transition group-hover:text-orange-700">
+              Read comparison
+              <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+            </span>
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export function generateMetadata({
   searchParams
 }: {
@@ -92,10 +155,10 @@ export function generateMetadata({
   const canonical = getCanonical('/compare');
 
   return {
-    title: `${baseTitle} | ScholarshipTop`,
+    title: 'Compare Scholarships, Grants, and Award Types',
     description: baseDescription,
     openGraph: {
-      title: `${baseTitle} | ScholarshipTop`,
+      title: 'Compare Scholarships, Grants, and Award Types | ScholarshipTop',
       description: baseDescription,
       url: canonical
     },
@@ -193,7 +256,7 @@ export default async function CompareHubPage({
       : null;
 
   return (
-    <div className="bg-white text-gray-900 antialiased">
+    <div className="bg-white font-sans text-gray-900">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsSchema) }}
@@ -246,7 +309,7 @@ export default async function CompareHubPage({
                   />
                 }
               >
-                <CompareIndexToolbar
+                <CompareIndexToolbarClient
                   categoryCounts={categoryCounts}
                   resultCount={total}
                   showingFrom={showingFrom}
@@ -261,6 +324,8 @@ export default async function CompareHubPage({
             <CompareIqAssessmentCard />
           </aside>
         </div>
+
+        <EvergreenCompareGuides />
 
         {!hasAnyPublished ? (
           <p className="mt-12 text-center text-gray-600">

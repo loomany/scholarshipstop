@@ -2,35 +2,12 @@
 export const paginationControlsRowClassName =
   'flex max-w-full min-w-0 flex-nowrap items-center justify-center gap-1 overflow-x-auto [-webkit-overflow-scrolling:touch] pb-0.5 sm:gap-2 sm:pb-0';
 
-/**
- * When total pages exceed this, omit a dedicated “last page” chip from the numeric list.
- * Deep pages (e.g. `?page=2017`) stay reachable via sequential Next. Keeps SSR lean for crawlers.
- */
-export const MAX_TOTAL_PAGES_FOR_EXPLICIT_LAST_PAGE_CHIP = 100;
+/** Mobile: always show the first N page chips, then ellipsis, then the last page. */
+const MOBILE_LEADING_BLOCK = 4;
 
-/**
- * Page index chips for pagination UIs. Above `maxFullList`, uses ellipses so
- * narrow viewports keep Previous / numbers / Next on one row.
- */
-export function visiblePaginationItems(
-  current: number,
-  total: number,
-  maxFullList = 5
+function collapsePageNumbersWithEllipsis(
+  sorted: number[]
 ): (number | 'ellipsis')[] {
-  if (total <= maxFullList) {
-    return Array.from({ length: total }, (_, i) => i + 1);
-  }
-
-  const delta = 1;
-  const set = new Set<number>();
-  set.add(1);
-  if (total <= MAX_TOTAL_PAGES_FOR_EXPLICIT_LAST_PAGE_CHIP) {
-    set.add(total);
-  }
-  for (let i = current - delta; i <= current + delta; i++) {
-    if (i >= 1 && i <= total) set.add(i);
-  }
-  const sorted = Array.from(set).sort((a, b) => a - b);
   const out: (number | 'ellipsis')[] = [];
   let prev = 0;
   for (const n of sorted) {
@@ -43,45 +20,69 @@ export function visiblePaginationItems(
   return out;
 }
 
-const DESKTOP_FIRST_BLOCK = 10;
+/**
+ * Mobile/narrow pagination: `1 … 4 … last` so users see scale (e.g. page 2158).
+ * When `current` is past the leading block, also shows `current ± 1`.
+ */
+export function visiblePaginationItems(
+  current: number,
+  total: number
+): (number | 'ellipsis')[] {
+  if (total <= 1) {
+    return [1];
+  }
+  if (total <= MOBILE_LEADING_BLOCK + 1) {
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
+
+  const set = new Set<number>();
+  for (let p = 1; p <= MOBILE_LEADING_BLOCK; p++) {
+    set.add(p);
+  }
+  set.add(total);
+
+  if (current > MOBILE_LEADING_BLOCK && current < total) {
+    set.add(current);
+    if (current > 1) set.add(current - 1);
+    if (current < total) set.add(current + 1);
+  }
+
+  return collapsePageNumbersWithEllipsis(
+    Array.from(set).sort((a, b) => a - b)
+  );
+}
+
+/** Desktop: first N page chips, then ellipsis, then the last page (e.g. `1–6 … 2158`). */
+const DESKTOP_LEADING_BLOCK = 6;
 
 /**
- * Desktop: always include pages `1 … DESKTOP_FIRST_BLOCK`, optionally the last page (when
- * `total` ≤ {@link MAX_TOTAL_PAGES_FOR_EXPLICIT_LAST_PAGE_CHIP}), and a ±1 window around
- * `current`. Gaps collapse to `ellipsis`.
- * Example (`total` ≤ 100, `current` 1): `1–10 … total`. When `total` > 100, the standalone last chip is omitted.
+ * Desktop: `1 … 6 … last` at the start; when `current` is past the leading block, also
+ * `current ± 1`. Gaps collapse to `ellipsis`.
  */
 export function visiblePaginationItemsDesktop(
   current: number,
   total: number
 ): (number | 'ellipsis')[] {
-  if (total <= DESKTOP_FIRST_BLOCK) {
+  if (total <= 1) {
+    return [1];
+  }
+  if (total <= DESKTOP_LEADING_BLOCK) {
     return Array.from({ length: total }, (_, i) => i + 1);
   }
 
   const set = new Set<number>();
-  for (let p = 1; p <= DESKTOP_FIRST_BLOCK; p++) {
+  for (let p = 1; p <= DESKTOP_LEADING_BLOCK; p++) {
     set.add(p);
   }
-  if (total <= MAX_TOTAL_PAGES_FOR_EXPLICIT_LAST_PAGE_CHIP) {
-    set.add(total);
-  }
-  set.add(current);
-  for (let p = current - 1; p <= current + 1; p++) {
-    if (p >= 1 && p <= total) {
-      set.add(p);
-    }
+  set.add(total);
+
+  if (current > DESKTOP_LEADING_BLOCK && current < total) {
+    set.add(current);
+    if (current > 1) set.add(current - 1);
+    if (current < total) set.add(current + 1);
   }
 
-  const sorted = Array.from(set).sort((a, b) => a - b);
-  const out: (number | 'ellipsis')[] = [];
-  let prev = 0;
-  for (const n of sorted) {
-    if (prev && n - prev > 1) {
-      out.push('ellipsis');
-    }
-    out.push(n);
-    prev = n;
-  }
-  return out;
+  return collapsePageNumbersWithEllipsis(
+    Array.from(set).sort((a, b) => a - b)
+  );
 }

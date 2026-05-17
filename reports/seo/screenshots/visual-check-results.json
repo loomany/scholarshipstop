@@ -1,0 +1,74 @@
+[
+  {
+    "name": "homepage-desktop",
+    "url": "/",
+    "status": 200,
+    "file": "C:\\dev\\scholarshipstop\\reports\\seo\\screenshots\\homepage-desktop.png",
+    "title": "Get Matched With Scholarships in 2 Minutes",
+    "h1": "Get matched with scholarships in 2 minutes",
+    "horizontalOverflow": false,
+    "width": 1440,
+    "scrollWidth": 1440,
+    "trustMethodology": false
+  },
+  {
+    "name": "homepage-mobile",
+    "url": "/",
+    "status": 200,
+    "file": "C:\\dev\\scholarshipstop\\reports\\seo\\screenshots\\homepage-mobile.png",
+    "title": "Get Matched With Scholarships in 2 Minutes",
+    "h1": "Get matched with scholarships in 2 minutes",
+    "horizontalOverflow": false,
+    "width": 390,
+    "scrollWidth": 390,
+    "trustMethodology": false
+  },
+  {
+    "name": "catalog-desktop",
+    "url": "/scholarships",
+    "status": 200,
+    "file": "C:\\dev\\scholarshipstop\\reports\\seo\\screenshots\\catalog-desktop.png",
+    "title": "ScholarshipTop | Find Scholarships",
+    "h1": "Scholarship matches",
+    "horizontalOverflow": false,
+    "width": 1440,
+    "scrollWidth": 1440,
+    "trustMethodology": true
+  },
+  {
+    "name": "trust-methodology-desktop",
+    "url": "/scholarship-verification-methodology",
+    "status": 200,
+    "file": "C:\\dev\\scholarshipstop\\reports\\seo\\screenshots\\trust-methodology-desktop.png",
+    "title": "ScholarshipTop | Scholarship Verification Methodology",
+    "h1": "How ScholarshipTop verifies scholarship listings",
+    "horizontalOverflow": false,
+    "width": 1440,
+    "scrollWidth": 1440,
+    "trustMethodology": true
+  },
+  {
+    "name": "resources-guide-desktop",
+    "url": "/resources/how-to-find-scholarships",
+    "status": 200,
+    "file": "C:\\dev\\scholarshipstop\\reports\\seo\\screenshots\\resources-guide-desktop.png",
+    "title": "How to Find Scholarships That Are Worth Your Time",
+    "h1": "How to Find Scholarships That Are Worth Your Time",
+    "horizontalOverflow": false,
+    "width": 1440,
+    "scrollWidth": 1440,
+    "trustMethodology": true
+  },
+  {
+    "name": "resources-guide-mobile",
+    "url": "/resources/how-to-find-scholarships",
+    "status": 200,
+    "file": "C:\\dev\\scholarshipstop\\reports\\seo\\screenshots\\resources-guide-mobile.png",
+    "title": "How to Find Scholarships That Are Worth Your Time",
+    "h1": "How to Find Scholarships That Are Worth Your Time",
+    "horizontalOverflow": false,
+    "width": 390,
+    "scrollWidth": 390,
+    "trustMethodology": true
+  }
+]

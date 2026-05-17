@@ -6,6 +6,8 @@ import { ArrowRight, BrainCircuit } from 'lucide-react';
 import { scholarshipPublicPath } from '@/app/scholarships/scholarshipsData';
 import ContentHubArticleMatchedScholarships from '@/components/content-hub/ContentHubArticleMatchedScholarships';
 import SafeContentPostBody from '@/components/content-hub/SafeContentPostBody';
+import { EssayGuideCardImage } from '@/components/essays/EssayGuideCardImage';
+import { StaticEssayGuidePage } from '@/components/essays/StaticEssayGuidePage';
 import { SiteFaqAccordion } from '@/components/ui/SiteFaqAccordion';
 import HomePrimaryCtaClient from '@/components/home/HomePrimaryCtaClient';
 import { fetchRelatedPublishedContentPosts } from '@/lib/content-hub/contentPostsServer';
@@ -24,6 +26,7 @@ import {
   ESSAYS_SECTION_PATH,
   essayHubArticlePath
 } from '@/lib/essays/essayHubSection';
+import { getStaticEssayGuide } from '@/lib/essays/staticEssayGuides';
 import {
   fetchPublishedEssayBySlug,
   fetchScholarshipRowsForEssay
@@ -179,6 +182,29 @@ export async function generateMetadata({
   params
 }: PageProps): Promise<Metadata> {
   const slug = decodeURIComponent(params.slug).trim();
+  const staticGuide = getStaticEssayGuide(slug);
+  if (staticGuide) {
+    const canonical = getCanonical(essayHubArticlePath(staticGuide.slug));
+    return {
+      title: staticGuide.title,
+      description: staticGuide.description,
+      alternates: { canonical },
+      openGraph: {
+        type: 'article',
+        url: canonical,
+        title: staticGuide.title,
+        description: staticGuide.description,
+        publishedTime: staticGuide.updatedAt,
+        modifiedTime: staticGuide.updatedAt
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: staticGuide.title,
+        description: staticGuide.description
+      }
+    };
+  }
+
   const essay = await fetchPublishedEssayBySlug(slug);
   if (!essay) {
     return { title: 'Essay guide' };
@@ -217,6 +243,11 @@ export async function generateMetadata({
 
 export default async function EssayGuidePage({ params }: PageProps) {
   const slug = decodeURIComponent(params.slug).trim();
+  const staticGuide = getStaticEssayGuide(slug);
+  if (staticGuide) {
+    return <StaticEssayGuidePage guide={staticGuide} />;
+  }
+
   const essay = await fetchPublishedEssayBySlug(slug);
   if (!essay || !essay.slug?.trim()) notFound();
 
@@ -424,18 +455,19 @@ export default async function EssayGuidePage({ params }: PageProps) {
               </p>
             ) : null}
             <p className="max-w-2xl border-l-2 border-indigo-200 pl-3 text-xs leading-relaxed text-gray-600">
-              Written by {ORG_NAME} AI • Reviewed by Editorial Team
+              ScholarshipTop editorial guide. Writing guidance does not
+              guarantee eligibility, selection, or award payment.
             </p>
           </div>
         </header>
 
         {essay.hero_image_url?.trim() ? (
           <div className="mt-8 overflow-hidden rounded-2xl border border-gray-200 bg-gray-100 shadow-sm">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <EssayGuideCardImage
               src={essay.hero_image_url.trim()}
               alt={`How to write a scholarship essay for ${essay.title?.trim() || 'this program'} — illustrative candid photo of students in a modern university or study environment`}
-              className="aspect-[16/9] w-full object-cover"
+              aspectClassName="aspect-[16/9]"
+              placeholderLabel="Scholarship essay guide"
             />
           </div>
         ) : null}

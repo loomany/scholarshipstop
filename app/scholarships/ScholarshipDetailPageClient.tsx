@@ -2576,6 +2576,34 @@ export default function ScholarshipDetailPageClient({
                     time. Browse all essay guides from the hub.
                   </p>
                 )}
+                {scholarship?.essayRequired ? (
+                  <div className="rounded-2xl border border-indigo-100 bg-indigo-50/60 p-4">
+                    <p className="text-sm font-semibold text-indigo-950">
+                      Need an essay for this scholarship?
+                    </p>
+                    <p className="mt-1 text-xs leading-relaxed text-indigo-900/75">
+                      Start with a checklist, study examples for structure, and
+                      choose a prompt guide that matches the application.
+                    </p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {[
+                        ['Essay checklist', '/essays/checklist'],
+                        ['Essay examples', '/essays/examples'],
+                        ['Financial need essay', '/essays/financial-need'],
+                        ['Career goals essay', '/essays/career-goals'],
+                        ['Leadership essay', '/essays/leadership']
+                      ].map(([label, href]) => (
+                        <Link
+                          key={href}
+                          href={href}
+                          className="rounded-full border border-indigo-200 bg-white px-3 py-1.5 text-xs font-semibold text-indigo-800 transition hover:border-indigo-300 hover:bg-indigo-50"
+                        >
+                          {label}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
                 <div className="rounded-2xl border border-indigo-200 bg-gradient-to-br from-indigo-50 to-white p-4">
                   <p className="text-sm font-semibold text-indigo-950">
                     Need to write an essay for this grant? Use our AI Essay
