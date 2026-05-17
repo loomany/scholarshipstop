@@ -13,6 +13,8 @@ export const ADMIN_NOTIFY_TRAFFIC_SRC_PREFIX = 'tg:an:tss:';
 export const FIRST_TOUCH_NOTIFY_SOURCE_KEYS: readonly FirstTouchNotifySourceKey[] = [
   'google_ads',
   'facebook_paid',
+  'google_search',
+  'yandex_search',
   'organic_search',
   'other_paid',
   'referral',
@@ -24,13 +26,32 @@ export const FIRST_TOUCH_NOTIFY_SOURCE_KEYS: readonly FirstTouchNotifySourceKey[
 export const FIRST_TOUCH_NOTIFY_LABEL_RU: Record<FirstTouchNotifySourceKey, string> = {
   google_ads: 'Google Ads',
   facebook_paid: 'Facebook Ads',
-  organic_search: 'Органика (поиск)',
+  google_search: '🔍 Google (поиск)',
+  yandex_search: '🔴 Яндекс (поиск)',
+  organic_search: 'Органика (прочие поисковики)',
   other_paid: 'Другая реклама',
   referral: 'Переходы с сайтов',
   direct_unknown: 'Прямой / неизвестный',
   tiktok: 'TikTok',
   reddit: 'Reddit'
 };
+
+const BRANDED_SEARCH_NOTIFY_KEYS: readonly FirstTouchNotifySourceKey[] = [
+  'google_search',
+  'yandex_search'
+] as const;
+
+/** Legacy prefs: `organic_search: true` still delivers Google/Yandex branded search pings. */
+function isBrandedSearchNotifyGrantedByOrganicLegacy(
+  ts: Record<string, unknown>,
+  source: FirstTouchNotifySourceKey
+): boolean {
+  if (!(BRANDED_SEARCH_NOTIFY_KEYS as readonly string[]).includes(source)) {
+    return false;
+  }
+  if (ts[source] === false) return false;
+  return ts.organic_search === true;
+}
 
 /** Keys stored in `telegram_users.admin_notification_prefs` (JSON). */
 export const ADMIN_NOTIFY_KEYS = [
@@ -111,7 +132,8 @@ export function isTrafficNotifySourceEnabled(
   if (typeof raw !== 'object' || Array.isArray(raw)) return true;
   const ts = raw as Record<string, unknown>;
   if (Object.keys(ts).length === 0) return true;
-  return ts[source] === true;
+  if (ts[source] === true) return true;
+  return isBrandedSearchNotifyGrantedByOrganicLegacy(ts, source);
 }
 
 function seedAllTrafficSourcesOn(): Record<string, boolean> {

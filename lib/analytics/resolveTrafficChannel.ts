@@ -327,6 +327,9 @@ export function resolveTrafficChannel(raw: ResolveTrafficChannelInput): TrafficC
     if (host?.includes('yandex.')) {
       return 'search_yandex';
     }
+    if (host && (/^google\./.test(host) || host === 'google.com')) {
+      return 'search_google';
+    }
     return 'organic_search';
   }
 
@@ -451,6 +454,8 @@ export function formatFirstTouchVisitorAlertLabel(args: {
  */
 export type FirstTouchNotifySourceKey =
   | NotifyRoutingTrafficChannel
+  | 'google_search'
+  | 'yandex_search'
   | 'tiktok'
   | 'reddit';
 
@@ -489,9 +494,8 @@ export function getFirstTouchNotifySourceKey(args: {
   ) {
     return 'direct_unknown';
   }
-  if (resolved === 'search_google' || resolved === 'search_yandex') {
-    return 'organic_search';
-  }
+  if (resolved === 'search_google') return 'google_search';
+  if (resolved === 'search_yandex') return 'yandex_search';
   return resolved;
 }
 

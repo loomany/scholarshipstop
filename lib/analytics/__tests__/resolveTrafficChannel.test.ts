@@ -1,9 +1,12 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { resolveTrafficChannel } from '@/lib/analytics/resolveTrafficChannel';
+import {
+  getFirstTouchNotifySourceKey,
+  resolveTrafficChannel
+} from '@/lib/analytics/resolveTrafficChannel';
 
-test('google.com search referrer -> organic_search', () => {
+test('google.com search referrer -> search_google', () => {
   assert.equal(
     resolveTrafficChannel({
       landingUrl: 'https://example.com/page',
@@ -12,11 +15,11 @@ test('google.com search referrer -> organic_search', () => {
       utm_medium: '',
       utm_campaign: ''
     }),
-    'organic_search'
+    'search_google'
   );
 });
 
-test('google.ca search referrer -> organic_search', () => {
+test('google.ca search referrer -> search_google', () => {
   assert.equal(
     resolveTrafficChannel({
       landingUrl: 'https://example.com/page',
@@ -25,11 +28,11 @@ test('google.ca search referrer -> organic_search', () => {
       utm_medium: '',
       utm_campaign: ''
     }),
-    'organic_search'
+    'search_google'
   );
 });
 
-test('google.de search referrer -> organic_search', () => {
+test('google.de search referrer -> search_google', () => {
   assert.equal(
     resolveTrafficChannel({
       landingUrl: 'https://example.com/page',
@@ -38,7 +41,42 @@ test('google.de search referrer -> organic_search', () => {
       utm_medium: '',
       utm_campaign: ''
     }),
-    'organic_search'
+    'search_google'
+  );
+});
+
+test('yandex.ru search referrer -> search_yandex', () => {
+  assert.equal(
+    resolveTrafficChannel({
+      landingUrl: 'https://example.com/page',
+      referrer: 'https://yandex.ru/search/?text=scholarships',
+      utm_source: '',
+      utm_medium: '',
+      utm_campaign: ''
+    }),
+    'search_yandex'
+  );
+});
+
+test('yandex search maps to yandex_search notify key', () => {
+  assert.equal(
+    getFirstTouchNotifySourceKey({
+      traffic_channel: 'search_yandex',
+      landing_url: 'https://scholarshiptop.com/',
+      referrer: 'https://yandex.ru/search/?text=x'
+    }),
+    'yandex_search'
+  );
+});
+
+test('google search maps to google_search notify key', () => {
+  assert.equal(
+    getFirstTouchNotifySourceKey({
+      traffic_channel: 'search_google',
+      landing_url: 'https://scholarshiptop.com/',
+      referrer: 'https://www.google.com/search?q=x'
+    }),
+    'google_search'
   );
 });
 
