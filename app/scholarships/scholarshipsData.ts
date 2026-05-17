@@ -433,7 +433,9 @@ export function isScholarshipDeadlineDateOnlyIso(iso: string | undefined): boole
   );
 }
 
-function scholarshipDeadlineAnchorDate(s: Scholarship): Date | null {
+export type ScholarshipDeadlineFields = Pick<Scholarship, 'deadline' | 'deadlineAt'>;
+
+function scholarshipDeadlineAnchorDate(s: ScholarshipDeadlineFields): Date | null {
   return parseScholarshipDeadlineAnchor(s.deadlineAt, s.deadline);
 }
 
@@ -461,7 +463,9 @@ export function parseTimeFragmentFromDeadlineText(
  * Calendar date line: "May 14, 2026". Deadline times are intentionally hidden
  * across the product because most catalog rows only provide date-level precision.
  */
-export function formatScholarshipDeadlineAbsoluteLine(s: Scholarship): string | null {
+export function formatScholarshipDeadlineAbsoluteLine(
+  s: ScholarshipDeadlineFields
+): string | null {
   const d = scholarshipDeadlineAnchorDate(s);
   if (!d) return null;
   return formatDeadlineDateOnly(d);
@@ -492,7 +496,7 @@ export function formatScholarshipDeadlineRelativePrimary(d: Date): string {
  * Hero / card: main line = absolute date when known; subtitle = "X days left".
  * If no calendar date, main line stays relative (in X days) and subtitle is null.
  */
-export function getScholarshipDeadlineDisplayParts(s: Scholarship): {
+export function getScholarshipDeadlineDisplayParts(s: ScholarshipDeadlineFields): {
   primary: string;
   secondary: string | null;
 } {

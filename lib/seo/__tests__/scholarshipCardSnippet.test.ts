@@ -5,6 +5,7 @@ import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import { buildScholarshipCardSnippet } from '@/lib/seo/scholarshipSeoQualityPolicy';
 
 const snippetBase = {
+  description: 'Test scholarship description.',
   fieldOfStudy: ['agriculture_and_related_sciences'],
   studyLevels: [],
   amount: '$3,165',
@@ -14,6 +15,7 @@ const snippetBase = {
   payoutMethod: 'direct'
 } satisfies Pick<
   Scholarship,
+  | 'description'
   | 'fieldOfStudy'
   | 'studyLevels'
   | 'amount'

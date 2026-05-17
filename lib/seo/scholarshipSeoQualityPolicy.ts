@@ -2,7 +2,8 @@ import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import {
   fieldOfStudyDisplayList,
   getScholarshipDeadlineDisplayParts,
-  studyLevelsDisplayList
+  studyLevelsDisplayList,
+  type ScholarshipDeadlineFields
 } from '@/app/scholarships/scholarshipsData';
 import { fieldOfStudyLabelForValue } from '@/lib/constants/scholarshipFieldOfStudyOptions';
 import { schoolLevelLabelForValue } from '@/lib/constants/scholarshipProfileOptions';
@@ -461,9 +462,7 @@ export function getScholarshipBestForLabel(
 }
 
 /** Same calendar/relative deadline copy as the card metric column (never raw ISO). */
-function deadlinePhraseForCardSnippet(
-  s: Pick<Scholarship, 'deadline' | 'deadlineAt'>
-): string | null {
+function deadlinePhraseForCardSnippet(s: ScholarshipDeadlineFields): string | null {
   const { primary } = getScholarshipDeadlineDisplayParts(s);
   return primary && primary !== '—' ? primary : null;
 }
