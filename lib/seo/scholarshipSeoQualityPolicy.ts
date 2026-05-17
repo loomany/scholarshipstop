@@ -1,6 +1,7 @@
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import {
   fieldOfStudyDisplayList,
+  getScholarshipDeadlineDisplayParts,
   studyLevelsDisplayList
 } from '@/app/scholarships/scholarshipsData';
 import { fieldOfStudyLabelForValue } from '@/lib/constants/scholarshipFieldOfStudyOptions';
@@ -459,6 +460,14 @@ export function getScholarshipBestForLabel(
   return 'Students who match the official eligibility rules';
 }
 
+/** Same calendar/relative deadline copy as the card metric column (never raw ISO). */
+function deadlinePhraseForCardSnippet(
+  s: Pick<Scholarship, 'deadline' | 'deadlineAt'>
+): string | null {
+  const { primary } = getScholarshipDeadlineDisplayParts(s);
+  return primary && primary !== '—' ? primary : null;
+}
+
 export function buildScholarshipCardSnippet(
   s: Pick<
     Scholarship,
@@ -497,7 +506,7 @@ export function buildScholarshipCardSnippet(
   }
 
   const bestFor = getScholarshipBestForLabel(s);
-  const deadline = s.deadline?.trim();
+  const deadline = deadlinePhraseForCardSnippet(s);
   const amount = hasAwardContent ? awardDisplay : null;
   if (amount && deadline) {
     return `${bestFor} can compare this scholarship with a listed award of ${amount} and a ${deadline} deadline. Confirm eligibility and required materials before applying.`;
