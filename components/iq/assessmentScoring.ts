@@ -4,10 +4,17 @@ import {
   type CognitiveQuestionDomain,
   type CognitiveAssessmentQuestion
 } from '@/lib/cognitiveAssessmentQuestions';
+import {
+  formatIqArchetypeResult,
+  getIqDomainLabel,
+  type ArchetypeKey
+} from '@/lib/iq/i18n/iqAssessmentLabels';
+import type { IqLocale } from '@/lib/iq/i18n/iqLocales';
 import type { DomainScore } from '@/lib/iqAssessmentTypes';
 
 export type AnswerMap = Record<string, CognitiveOptionKey>;
 
+/** @deprecated Use getIqDomainLabel(locale, domain) */
 export const domainLabels: Record<CognitiveQuestionDomain, string> = {
   pattern_abstract: 'Abstract Reasoning',
   numeric_reasoning: 'Numerical Logic',
@@ -65,7 +72,8 @@ export function percentileFromIq(iqScore: number) {
 
 export function calculateDomainScores(
   questions: CognitiveAssessmentQuestion[],
-  answers: AnswerMap
+  answers: AnswerMap,
+  locale: IqLocale = 'en'
 ): DomainScore[] {
   return domainOrder.map((domain) => {
     const domainQuestions = questions.filter(
@@ -78,13 +86,17 @@ export function calculateDomainScores(
     const earned = scoreQuestionBank(domainQuestions, answers);
     return {
       domain,
-      label: domainLabels[domain],
+      label: getIqDomainLabel(locale, domain),
       score: max > 0 ? Math.round((earned / max) * 100) : 0
     };
   });
 }
 
-export function lockedArchetype(scores: DomainScore[]) {
+function resolveArchetypeKeys(scores: DomainScore[]): {
+  primary: ArchetypeKey;
+  secondary: ArchetypeKey;
+  margin: number;
+} {
   const byDomain = Object.fromEntries(
     scores.map((item) => [item.domain, item.score])
   ) as Record<CognitiveQuestionDomain, number>;
@@ -96,14 +108,22 @@ export function lockedArchetype(scores: DomainScore[]) {
     byDomain.prioritization_decision * 0.55 + byDomain.verbal_logic * 0.45;
 
   const sorted = [
-    { label: 'Spatial Architect', value: architect },
-    { label: 'Quantitative Analyst', value: analyst },
-    { label: 'Strategic Reasoner', value: strategist }
+    { key: 'spatial_architect' as const, value: architect },
+    { key: 'quantitative_analyst' as const, value: analyst },
+    { key: 'strategic_reasoner' as const, value: strategist }
   ].sort((a, b) => b.value - a.value);
 
-  if (sorted[0]!.value - sorted[1]!.value < 7) {
-    return `${sorted[0]!.label} / ${sorted[1]!.label}`;
-  }
+  return {
+    primary: sorted[0]!.key,
+    secondary: sorted[1]!.key,
+    margin: sorted[0]!.value - sorted[1]!.value
+  };
+}
 
-  return sorted[0]!.label;
+export function lockedArchetype(
+  scores: DomainScore[],
+  locale: IqLocale = 'en'
+): string {
+  const { primary, secondary, margin } = resolveArchetypeKeys(scores);
+  return formatIqArchetypeResult(locale, primary, secondary, margin);
 }

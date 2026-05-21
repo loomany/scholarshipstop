@@ -88,7 +88,7 @@ type ProfileQualificationRow = Pick<
 
 const INTENT_STORAGE_KEY = 'iq_contextual_intent:v1';
 const QUALIFICATION_STORAGE_KEY = 'iq_qualification_data:v1';
-const ASSESSMENT_STORAGE_KEY = 'iq_contextual_assessment:v1';
+const ASSESSMENT_STORAGE_KEY = 'iq_contextual_assessment:v2';
 const FUNNEL_PHASE_STORAGE_KEY = 'iq_contextual_funnel_phase:v1';
 const RESULT_STORAGE_KEY = 'iq_contextual_result:v1';
 const RECOMMENDED_GRANTS_STORAGE_KEY = 'iq_contextual_recommended_grants:v1';

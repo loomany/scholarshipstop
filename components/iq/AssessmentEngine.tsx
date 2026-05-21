@@ -1,21 +1,27 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowRight, BrainCircuit, Clock3, RotateCcw, Timer } from 'lucide-react';
 
-import {
-  cognitiveAssessmentQuestions,
-  type CognitiveAssessmentQuestion,
-  type CognitiveOptionKey,
-  type CognitiveVisualKind
+import { useOptionalIqLocale } from '@/components/iq/IqLocaleProvider';
+import type {
+  CognitiveAssessmentQuestion,
+  CognitiveOptionKey,
+  CognitiveVisualKind
 } from '@/lib/cognitiveAssessmentQuestions';
+import {
+  getIqDifficultyLabel,
+  getIqDomainLabel
+} from '@/lib/iq/i18n/iqAssessmentLabels';
+import { getIqAssessmentUiCopy } from '@/lib/iq/i18n/iqAssessmentUiCopy';
+import { getLocalizedIqQuestions } from '@/lib/iq/i18n/getLocalizedIqQuestions';
+import type { IqLocale } from '@/lib/iq/i18n/iqLocales';
 import type { AssessmentResult } from '@/lib/iqAssessmentTypes';
 import { cn } from '@/utils/cn';
 
 import {
   calculateDomainScores,
-  domainLabels,
   iqScoreFromWeightedScore,
   lockedArchetype,
   optionKeys,
@@ -27,6 +33,7 @@ import {
 type AssessmentPhase = 'intro' | 'assessment' | 'analyzing';
 
 type AssessmentDraft = {
+  locale: IqLocale;
   phase: AssessmentPhase;
   currentIndex: number;
   answers: AnswerMap;
@@ -38,28 +45,28 @@ type AssessmentDraft = {
 
 type AssessmentEngineProps = {
   storageKey: string;
+  locale?: IqLocale;
   intro?: (onStart: () => void) => ReactNode;
   startImmediately?: boolean;
   onComplete: (result: AssessmentResult) => void;
 };
 
-const TOTAL_QUESTIONS = cognitiveAssessmentQuestions.length;
 const ASSESSMENT_TIME_LIMIT_SECONDS = 30 * 60;
-const analyzerMessages = [
-  'Scoring weighted IQ items...',
-  'Calculating IQ percentile...',
-  'Mapping Brain Archetype...'
-];
 
 function isOptionKey(value: unknown): value is CognitiveOptionKey {
   return typeof value === 'string' && optionKeys.includes(value as CognitiveOptionKey);
 }
 
-function readAssessmentDraft(storageKey: string): AssessmentDraft | null {
+function readAssessmentDraft(
+  storageKey: string,
+  questions: CognitiveAssessmentQuestion[],
+  activeLocale: IqLocale
+): { draft: AssessmentDraft | null; localeSwitched: boolean } {
   try {
     const raw = window.localStorage.getItem(storageKey);
-    if (!raw) return null;
+    if (!raw) return { draft: null, localeSwitched: false };
     const parsed = JSON.parse(raw) as Partial<AssessmentDraft> & {
+      locale?: unknown;
       phase?: unknown;
       currentIndex?: unknown;
       answers?: unknown;
@@ -77,9 +84,15 @@ function readAssessmentDraft(storageKey: string): AssessmentDraft | null {
     ) {
       phase = parsed.phase;
     }
-    if (!phase) return null;
+    if (!phase) return { draft: null, localeSwitched: false };
 
-    const validQuestionIds = new Set(cognitiveAssessmentQuestions.map((q) => q.id));
+    const draftLocale: IqLocale =
+      parsed.locale === 'es' || parsed.locale === 'fr' ? parsed.locale : 'en';
+    const localeSwitched =
+      draftLocale !== activeLocale &&
+      (phase === 'assessment' || Object.keys(parsed.answers ?? {}).length > 0);
+
+    const validQuestionIds = new Set(questions.map((q) => q.id));
     const answers: AnswerMap = {};
     if (parsed.answers && typeof parsed.answers === 'object') {
       for (const [questionId, value] of Object.entries(parsed.answers)) {
@@ -96,50 +109,57 @@ function readAssessmentDraft(storageKey: string): AssessmentDraft | null {
         )
       : [];
 
+    const questionCount = questions.length;
     let currentIndex =
       typeof parsed.currentIndex === 'number' && Number.isFinite(parsed.currentIndex)
-        ? Math.max(0, Math.min(TOTAL_QUESTIONS - 1, Math.floor(parsed.currentIndex)))
-        : Math.min(Object.keys(answers).length, TOTAL_QUESTIONS - 1);
+        ? Math.max(0, Math.min(questionCount - 1, Math.floor(parsed.currentIndex)))
+        : Math.min(Object.keys(answers).length, questionCount - 1);
 
     if (phase === 'assessment') {
       while (
-        currentIndex < TOTAL_QUESTIONS - 1 &&
-        answers[cognitiveAssessmentQuestions[currentIndex]?.id ?? '']
+        currentIndex < questions.length - 1 &&
+        answers[questions[currentIndex]?.id ?? '']
       ) {
         currentIndex += 1;
       }
       if (
-        currentIndex >= TOTAL_QUESTIONS - 1 &&
-        answers[cognitiveAssessmentQuestions[currentIndex]?.id ?? '']
+        currentIndex >= questions.length - 1 &&
+        answers[questions[currentIndex]?.id ?? '']
       ) {
         phase = 'analyzing';
       }
     }
 
     return {
-      phase,
-      currentIndex,
-      answers,
-      timedOutQuestionIds,
-      assessmentStartedAt:
-        typeof parsed.assessmentStartedAt === 'number' &&
-        Number.isFinite(parsed.assessmentStartedAt)
-          ? parsed.assessmentStartedAt
-          : phase === 'assessment' || phase === 'analyzing'
-            ? Date.now()
-            : null,
-      questionStartedAt:
-        typeof parsed.questionStartedAt === 'number' &&
-        Number.isFinite(parsed.questionStartedAt)
-          ? parsed.questionStartedAt
-          : phase === 'assessment'
-            ? Date.now()
-            : null,
-      updatedAt:
-        typeof parsed.updatedAt === 'string' ? parsed.updatedAt : new Date().toISOString()
+      draft: {
+        locale: activeLocale,
+        phase,
+        currentIndex,
+        answers,
+        timedOutQuestionIds,
+        assessmentStartedAt:
+          typeof parsed.assessmentStartedAt === 'number' &&
+          Number.isFinite(parsed.assessmentStartedAt)
+            ? parsed.assessmentStartedAt
+            : phase === 'assessment' || phase === 'analyzing'
+              ? Date.now()
+              : null,
+        questionStartedAt:
+          typeof parsed.questionStartedAt === 'number' &&
+          Number.isFinite(parsed.questionStartedAt)
+            ? parsed.questionStartedAt
+            : phase === 'assessment'
+              ? Date.now()
+              : null,
+        updatedAt:
+          typeof parsed.updatedAt === 'string'
+            ? parsed.updatedAt
+            : new Date().toISOString()
+      },
+      localeSwitched
     };
   } catch {
-    return null;
+    return { draft: null, localeSwitched: false };
   }
 }
 
@@ -152,14 +172,16 @@ function writeAssessmentDraft(storageKey: string, draft: AssessmentDraft) {
 }
 
 function buildAssessmentResult(
+  questions: CognitiveAssessmentQuestion[],
   answers: AnswerMap,
   timedOutQuestionIds: string[],
+  locale: IqLocale,
   totalDurationSeconds?: number
 ): AssessmentResult {
-  const weightedScore = scoreQuestionBank(cognitiveAssessmentQuestions, answers);
+  const weightedScore = scoreQuestionBank(questions, answers);
   const iqScore = iqScoreFromWeightedScore(weightedScore);
   const percentile = percentileFromIq(iqScore);
-  const domainScores = calculateDomainScores(cognitiveAssessmentQuestions, answers);
+  const domainScores = calculateDomainScores(questions, answers, locale);
 
   return {
     answers,
@@ -168,20 +190,31 @@ function buildAssessmentResult(
     weightedScore,
     iqScore,
     percentile,
-    archetype: lockedArchetype(domainScores),
+    archetype: lockedArchetype(domainScores, locale),
     domainScores
   };
 }
 
 export default function AssessmentEngine({
   storageKey,
+  locale: localeProp,
   intro,
   startImmediately = false,
   onComplete
 }: AssessmentEngineProps) {
+  const iqContext = useOptionalIqLocale();
+  const locale = localeProp ?? iqContext?.locale ?? 'en';
+  const questions = useMemo(
+    () => getLocalizedIqQuestions(locale),
+    [locale]
+  );
+  const ui = useMemo(() => getIqAssessmentUiCopy(locale), [locale]);
+  const totalQuestions = questions.length;
+
   const [phase, setPhase] = useState<AssessmentPhase>(
     startImmediately ? 'assessment' : 'intro'
   );
+  const [localeSwitchNotice, setLocaleSwitchNotice] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<AnswerMap>({});
   const [timedOutQuestionIds, setTimedOutQuestionIds] = useState<string[]>([]);
@@ -201,17 +234,20 @@ export default function AssessmentEngine({
   const completedRef = useRef(false);
   const advanceTimeoutRef = useRef<number | null>(null);
 
-  const currentQuestion =
-    cognitiveAssessmentQuestions[currentIndex] ?? cognitiveAssessmentQuestions[0];
+  const currentQuestion = questions[currentIndex] ?? questions[0];
   const step = currentIndex + 1;
-  const progress = Math.round((step / TOTAL_QUESTIONS) * 100);
+  const progress = Math.round((step / totalQuestions) * 100);
   const totalRemainingSeconds = Math.max(
     0,
     ASSESSMENT_TIME_LIMIT_SECONDS - totalElapsedSeconds
   );
 
   useEffect(() => {
-    const draft = readAssessmentDraft(storageKey);
+    const { draft, localeSwitched } = readAssessmentDraft(
+      storageKey,
+      questions,
+      locale
+    );
     if (draft) {
       setPhase(draft.phase);
       setCurrentIndex(draft.currentIndex);
@@ -225,6 +261,7 @@ export default function AssessmentEngine({
       );
       setQuestionStartedAt(draft.questionStartedAt);
       setSelectedOption(null);
+      setLocaleSwitchNotice(localeSwitched);
     } else if (startImmediately) {
       const startedAt = Date.now();
       setAssessmentStartedAt(startedAt);
@@ -232,11 +269,12 @@ export default function AssessmentEngine({
       setQuestionStartedAt(startedAt);
     }
     setDraftHydrated(true);
-  }, [startImmediately, storageKey]);
+  }, [locale, questions, startImmediately, storageKey]);
 
   useEffect(() => {
     if (!draftHydrated) return;
     writeAssessmentDraft(storageKey, {
+      locale,
       phase,
       currentIndex,
       answers,
@@ -250,6 +288,7 @@ export default function AssessmentEngine({
     assessmentStartedAt,
     currentIndex,
     draftHydrated,
+    locale,
     phase,
     questionStartedAt,
     storageKey,
@@ -262,7 +301,7 @@ export default function AssessmentEngine({
     setMessageIndex(0);
     const interval = window.setInterval(() => {
       setMessageIndex((index) =>
-        Math.min(index + 1, analyzerMessages.length - 1)
+        Math.min(index + 1, ui.analyzerMessages.length - 1)
       );
     }, 900);
     const done = window.setTimeout(() => {
@@ -275,8 +314,10 @@ export default function AssessmentEngine({
       }
       onComplete(
         buildAssessmentResult(
+          questions,
           answers,
           timedOutQuestionIds,
+          locale,
           assessmentStartedAt
             ? Math.max(1, Math.round((Date.now() - assessmentStartedAt) / 1000))
             : undefined
@@ -294,7 +335,10 @@ export default function AssessmentEngine({
     onComplete,
     phase,
     storageKey,
-    timedOutQuestionIds
+    timedOutQuestionIds,
+    questions,
+    locale,
+    ui.analyzerMessages
   ]);
 
   useEffect(() => {
@@ -327,7 +371,7 @@ export default function AssessmentEngine({
         setTimedOutQuestionIds((previous) => [
           ...new Set([
             ...previous,
-            ...cognitiveAssessmentQuestions
+            ...questions
               .filter((question) => !answered.has(question.id))
               .map((question) => question.id)
           ])
@@ -341,7 +385,7 @@ export default function AssessmentEngine({
     updateElapsed();
     const interval = window.setInterval(updateElapsed, 1000);
     return () => window.clearInterval(interval);
-  }, [answers, assessmentStartedAt, draftHydrated, phase]);
+  }, [answers, assessmentStartedAt, draftHydrated, phase, questions]);
 
   const finishCurrentQuestion = useCallback(
     (delayMs = 0) => {
@@ -349,7 +393,7 @@ export default function AssessmentEngine({
       advancingRef.current = true;
 
       advanceTimeoutRef.current = window.setTimeout(() => {
-        if (currentIndex >= TOTAL_QUESTIONS - 1) {
+        if (currentIndex >= totalQuestions - 1) {
           setQuestionStartedAt(null);
           setPhase('analyzing');
           advancingRef.current = false;
@@ -364,7 +408,7 @@ export default function AssessmentEngine({
         advancingRef.current = false;
       }, delayMs);
     },
-    [currentIndex]
+    [currentIndex, totalQuestions]
   );
 
   const answerQuestion = (optionKey: CognitiveOptionKey) => {
@@ -407,6 +451,15 @@ export default function AssessmentEngine({
 
   return (
     <main className="fixed inset-0 z-[200] overflow-y-auto bg-[#F8FAFC] text-slate-950">
+      {localeSwitchNotice ? (
+        <p
+          role="status"
+          data-iq-assessment-locale-notice="true"
+          className="border-b border-amber-200 bg-amber-50 px-4 py-2 text-center text-xs font-medium text-amber-950 sm:text-sm"
+        >
+          {ui.localeSwitchNotice}
+        </p>
+      ) : null}
       <div className="mx-auto flex min-h-[calc(100dvh-4rem)] w-full max-w-6xl flex-col px-4 pb-2.5 pt-[calc(4rem+env(safe-area-inset-top,0px)+0.75rem)] sm:px-6 sm:pb-5 sm:pt-[calc(4rem+env(safe-area-inset-top,0px)+1rem)] md:min-h-[calc(100dvh-5rem)] md:pt-[calc(5rem+env(safe-area-inset-top,0px)+1rem)] lg:px-8">
         <ProgressHeader
           progress={
@@ -418,7 +471,9 @@ export default function AssessmentEngine({
                   ? 100
                   : progress
           }
-          step={phase === 'intro' ? 0 : Math.min(step, TOTAL_QUESTIONS)}
+          step={phase === 'intro' ? 0 : Math.min(step, totalQuestions)}
+          stepLabel={ui.stepOf}
+          totalQuestions={totalQuestions}
         />
 
         <div
@@ -432,23 +487,30 @@ export default function AssessmentEngine({
           )}
         >
           {draftHydrated && phase === 'intro'
-            ? intro?.(startAssessment) ?? <AssessmentIntro onStart={startAssessment} />
+            ? intro?.(startAssessment) ?? (
+                <AssessmentIntro locale={locale} onStart={startAssessment} />
+              )
             : null}
 
           {draftHydrated && phase === 'assessment' && currentQuestion ? (
             <QuestionScreen
-              key={`${currentQuestion.id}-${restartNonce}`}
+              key={`${currentQuestion.id}-${restartNonce}-${locale}`}
+              locale={locale}
               question={currentQuestion}
               step={step}
               totalRemainingSeconds={totalRemainingSeconds}
               selectedOption={selectedOption}
               onAnswer={answerQuestion}
               onRestart={startAssessment}
+              ui={ui}
             />
           ) : null}
 
           {draftHydrated && phase === 'analyzing' ? (
-            <AnalyzerScreen message={analyzerMessages[messageIndex]} />
+            <AnalyzerScreen
+              title={ui.analyzerTitle}
+              message={ui.analyzerMessages[messageIndex] ?? ui.analyzerMessages[0]!}
+            />
           ) : null}
         </div>
       </div>
@@ -456,38 +518,31 @@ export default function AssessmentEngine({
   );
 }
 
-export function AssessmentIntro({ onStart }: { onStart: () => void }) {
+export function AssessmentIntro({
+  locale,
+  onStart
+}: {
+  locale: IqLocale;
+  onStart: () => void;
+}) {
+  const ui = getIqAssessmentUiCopy(locale);
   const summaryCards = [
-    {
-      title: '30 items',
-      description:
-        'Carefully calibrated questions designed to assess your true cognitive baseline.'
-    },
-    {
-      title: '5 domains',
-      description:
-        'A comprehensive analysis of logic, spatial reasoning, and processing speed.'
-    },
-    {
-      title: 'IQ score',
-      description:
-        'Get a detailed performance breakdown and discover your unique Brain Archetype.'
-    }
+    { title: ui.introCardItems, description: ui.introCardItemsDesc },
+    { title: ui.introCardDomains, description: ui.introCardDomainsDesc },
+    { title: ui.introCardScore, description: ui.introCardScoreDesc }
   ];
 
   return (
     <section className="w-full max-w-3xl rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_24px_70px_-34px_rgba(15,23,42,0.42)] sm:p-8">
       <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-slate-600">
         <BrainCircuit className="h-4 w-4" aria-hidden />
-        30-question IQ test
+        {ui.introBadge}
       </div>
       <h1 className="mt-6 text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
-        Measure your IQ score and cognitive pattern.
+        {ui.introTitle}
       </h1>
       <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">
-        Complete a timed, multi-domain IQ test covering abstract reasoning,
-        numerical logic, spatial intelligence, verbal reasoning, and decision
-        speed.
+        {ui.introBody}
       </p>
       <div className="mt-7 grid gap-3 sm:grid-cols-3">
         {summaryCards.map((item) => (
@@ -507,7 +562,7 @@ export function AssessmentIntro({ onStart }: { onStart: () => void }) {
         onClick={onStart}
         className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full bg-slate-950 px-6 py-4 text-base font-semibold text-white shadow-lg shadow-slate-900/10 transition hover:bg-slate-800"
       >
-        Start IQ Test
+        {ui.startTest}
         <ArrowRight className="h-4 w-4" aria-hidden />
       </button>
     </section>
@@ -516,16 +571,20 @@ export function AssessmentIntro({ onStart }: { onStart: () => void }) {
 
 function ProgressHeader({
   progress,
-  step
+  step,
+  stepLabel,
+  totalQuestions
 }: {
   progress: number;
   step: number;
+  stepLabel: (step: number, total: number) => string;
+  totalQuestions: number;
 }) {
   return (
     <header className="mx-auto w-full border-b border-slate-200 pb-3 sm:pb-5 lg:pb-4">
       <div className="flex items-center gap-3 sm:gap-4">
         <p className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold tabular-nums text-slate-600 shadow-sm sm:py-1.5 sm:text-sm">
-          Step {step} of {TOTAL_QUESTIONS}
+          {stepLabel(step, totalQuestions)}
         </p>
         <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-slate-200 sm:h-2">
           <div
@@ -548,34 +607,38 @@ function formatCountdown(totalSeconds: number) {
 }
 
 function QuestionScreen({
+  locale,
   question,
   step,
   totalRemainingSeconds,
   selectedOption,
   onAnswer,
-  onRestart
+  onRestart,
+  ui
 }: {
+  locale: IqLocale;
   question: CognitiveAssessmentQuestion;
   step: number;
   totalRemainingSeconds: number;
   selectedOption: CognitiveOptionKey | null;
   onAnswer: (optionKey: CognitiveOptionKey) => void;
   onRestart: () => void;
+  ui: ReturnType<typeof getIqAssessmentUiCopy>;
 }) {
   return (
     <section className="w-full">
       <div className="mb-4 text-center sm:mb-6 lg:mb-5">
         <div className="mx-auto grid max-w-[20rem] grid-cols-2 gap-1.5 rounded-[1.15rem] border border-slate-200/80 bg-white/80 p-1 shadow-[0_18px_45px_-32px_rgba(15,23,42,0.45)] backdrop-blur sm:flex sm:max-w-none sm:flex-wrap sm:items-center sm:justify-center sm:gap-2 sm:border-0 sm:bg-transparent sm:p-0 sm:shadow-none sm:backdrop-blur-0">
           <span className="inline-flex min-h-7 items-center justify-center rounded-full bg-slate-950 px-2.5 py-1 text-center text-[0.6rem] font-bold uppercase tracking-[0.08em] text-white shadow-sm sm:min-h-0 sm:px-3 sm:text-xs sm:tracking-[0.14em]">
-            {domainLabels[question.domain]}
+            {getIqDomainLabel(locale, question.domain)}
           </span>
           <span className="inline-flex min-h-7 items-center justify-center rounded-full border border-slate-200 bg-white px-2.5 py-1 text-center text-[0.6rem] font-bold uppercase tracking-[0.08em] text-slate-500 shadow-sm sm:min-h-0 sm:px-3 sm:text-xs sm:tracking-[0.14em]">
-            {question.difficulty}
+            {getIqDifficultyLabel(locale, question.difficulty)}
           </span>
           <span className="inline-flex min-h-7 items-center justify-center gap-1 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-center text-[0.6rem] font-bold uppercase tracking-[0.08em] text-slate-500 shadow-sm sm:min-h-0 sm:gap-1.5 sm:px-3 sm:text-xs sm:tracking-[0.14em]">
             <Timer className="h-3 w-3 sm:h-3.5 sm:w-3.5" aria-hidden />
             <span className="whitespace-nowrap">
-              Time left {formatCountdown(totalRemainingSeconds)}
+              {ui.timeLeft(formatCountdown(totalRemainingSeconds))}
             </span>
           </span>
           <button
@@ -584,7 +647,7 @@ function QuestionScreen({
             className="inline-flex min-h-7 items-center justify-center gap-1 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-center text-[0.6rem] font-bold uppercase tracking-[0.08em] text-slate-500 shadow-sm transition hover:-translate-y-0.5 hover:border-slate-300 hover:text-slate-950 sm:min-h-0 sm:gap-1.5 sm:px-3 sm:text-xs sm:tracking-[0.14em]"
           >
             <RotateCcw className="h-3 w-3 sm:h-3.5 sm:w-3.5" aria-hidden />
-            <span className="whitespace-nowrap">Start again</span>
+            <span className="whitespace-nowrap">{ui.startAgain}</span>
           </button>
         </div>
         <h1 className="mx-auto mt-2 max-w-3xl rounded-[1.35rem] border border-slate-200 bg-white px-4 py-3 text-[1.08rem] font-semibold leading-snug tracking-tight text-slate-950 shadow-[0_16px_44px_-34px_rgba(15,23,42,0.55)] sm:mt-3 sm:rounded-[1.6rem] sm:px-6 sm:py-4 sm:text-3xl sm:leading-tight lg:text-[2rem]">
@@ -605,9 +668,11 @@ function QuestionScreen({
         <div className="lg:sticky lg:top-5">
           <div className="mb-3 flex items-center justify-between gap-3">
             <p className="text-sm font-semibold text-slate-700">
-              Choose one answer
+              {ui.chooseOneAnswer}
             </p>
-            <p className="text-xs font-medium text-slate-400">Question {step}</p>
+            <p className="text-xs font-medium text-slate-400">
+              {ui.questionNumber(step)}
+            </p>
           </div>
 
           <div className="grid gap-3 lg:gap-2.5">
@@ -899,14 +964,20 @@ function CubeSketch() {
   );
 }
 
-function AnalyzerScreen({ message }: { message: string }) {
+function AnalyzerScreen({
+  title,
+  message
+}: {
+  title: string;
+  message: string;
+}) {
   return (
     <section className="w-full max-w-xl rounded-[2rem] border border-slate-200 bg-white p-8 text-center shadow-[0_20px_60px_-34px_rgba(15,23,42,0.35)]">
       <div className="mx-auto grid h-20 w-20 place-items-center rounded-full bg-slate-50 ring-1 ring-slate-200">
         <div className="h-10 w-10 animate-spin rounded-full border-2 border-slate-200 border-t-slate-950" />
       </div>
       <h1 className="mt-7 text-3xl font-semibold tracking-tight text-slate-950">
-        Calculating your IQ score
+        {title}
       </h1>
       <p className="mt-3 text-base font-medium text-slate-700">{message}</p>
       <div className="mx-auto mt-7 h-2 max-w-sm overflow-hidden rounded-full bg-slate-100">

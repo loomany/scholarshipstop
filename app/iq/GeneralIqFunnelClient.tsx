@@ -15,7 +15,7 @@ import ScholarshipIqTestClient from './ScholarshipIqTestClient';
 
 type GeneralFunnelPhase = 'landing' | 'assessment' | 'email' | 'paywall';
 
-const GENERAL_ASSESSMENT_STORAGE_KEY = 'iq_general_assessment:v1';
+const GENERAL_ASSESSMENT_STORAGE_KEY = 'iq_general_assessment:v2';
 const GENERAL_FUNNEL_PHASE_STORAGE_KEY = 'iq_general_funnel_phase:v1';
 const GENERAL_EMAIL_STORAGE_KEY = 'iq_general_email:v1';
 const GENERAL_RESULT_STORAGE_KEY = 'iq_general_result:v1';
