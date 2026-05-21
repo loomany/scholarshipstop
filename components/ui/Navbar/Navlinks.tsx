@@ -28,6 +28,13 @@ import {
 
 import Logo from '@/components/icons/Logo';
 import LanguageSwitcher from '@/components/i18n/LanguageSwitcher';
+import IqLanguageSwitcher from '@/components/iq/IqLanguageSwitcher';
+import type { IqLocale } from '@/lib/iq/i18n/iqLocales';
+import { getIqLocalizedHref } from '@/lib/iq/i18n/iqLocalizedHref';
+import {
+  getIqLocaleFromPathname,
+  isIqProductBrowserPathname
+} from '@/lib/iq/i18n/iqPaths';
 import MobileDrawerNavIcon from '@/components/ui/Navbar/MobileDrawerNavIcon';
 import { siteNavLink as nav } from '@/components/ui/nav/siteNavLink';
 import {
@@ -52,6 +59,8 @@ import s from './Navbar.module.css';
 type NavlinksProps = {
   initialNavbarAuth?: NavbarInitialAuth;
   initialLocale?: SupportedLocale;
+  isIqSubdomainHost?: boolean;
+  iqLocale?: IqLocale;
 };
 
 const IQ_TEST_HOME_HREF = 'https://iq.scholarshiptop.com/';
@@ -327,7 +336,9 @@ function sublinkActive(href: string, pathname: string) {
 
 export default function Navlinks({
   initialNavbarAuth = null,
-  initialLocale = 'en'
+  initialLocale = 'en',
+  isIqSubdomainHost = false,
+  iqLocale
 }: NavlinksProps) {
   const pathname = usePathname() ?? '';
   const locale = resolveNavLocaleFromPathname(pathname);
@@ -368,17 +379,14 @@ export default function Navlinks({
     (item) => locale === 'en' || localizedPilotHref(locale, item.href) != null
   );
   const isIqSubdomain =
-    typeof window !== 'undefined' &&
-    window.location.hostname.toLowerCase() === 'iq.scholarshiptop.com';
-  const isIqProductPage =
-    isIqSubdomain ||
-    canonicalPathname === '/iq' ||
-    canonicalPathname === '/iq/about' ||
-    canonicalPathname === '/iq/help' ||
-    canonicalPathname === '/iq/privacy-policy' ||
-    canonicalPathname === '/iq/terms' ||
-    canonicalPathname === '/iq/refund-policy' ||
-    canonicalPathname === '/iq/faq';
+    isIqSubdomainHost ||
+    (typeof window !== 'undefined' &&
+      window.location.hostname.toLowerCase() === 'iq.scholarshiptop.com');
+  const isIqProductPage = isIqProductBrowserPathname(pathname ?? '/', {
+    onIqSubdomain: isIqSubdomain
+  });
+  const activeIqLocale =
+    iqLocale ?? getIqLocaleFromPathname(pathname ?? '/');
   const [menuOpen, setMenuOpen] = useState(false);
   const [aboutExpanded, setAboutExpanded] = useState(false);
   const [essaysExpanded, setEssaysExpanded] = useState(false);
@@ -454,7 +462,9 @@ export default function Navlinks({
   );
 
   const closeMenu = useCallback(() => setMenuOpen(false), []);
-  const iqHomeHref = isIqSubdomain ? '/' : '/iq';
+  const iqHomeHref = isIqSubdomain
+    ? getIqLocalizedHref('/', activeIqLocale, { onIqSubdomain: true })
+    : '/iq';
 
   useEffect(() => {
     closeMenu();
@@ -536,6 +546,7 @@ export default function Navlinks({
           <Logo variant="header" />
         </Link>
 
+        <IqLanguageSwitcher onIqSubdomain={isIqSubdomain} />
       </div>
     );
   }

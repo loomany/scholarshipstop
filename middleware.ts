@@ -5,24 +5,20 @@ import { canonicalStateVsSlug } from '@/lib/seo/stateCompareSlug';
 import { canonicalUniversityVsSlug } from '@/lib/seo/universityCompareSlug';
 import { updateSession } from '@/utils/supabase/middleware';
 import { isStage2PilotLocale } from '@/lib/i18n/pilotRoutes';
+import { IQ_SUBDOMAIN_HOST } from '@/lib/iq/i18n/iqLocales';
+import { handleIqSubdomainMiddleware } from '@/lib/iq/i18n/iqMiddleware';
 
-const IQ_SUBDOMAIN_REWRITE_PATHS = new Set([
-  '/about',
-  '/help',
-  '/privacy-policy',
-  '/terms',
-  '/refund-policy',
-  '/faq',
-  '/scholarship-match',
-  '/provider-research',
-  '/college-fit',
-  '/essay-prep',
-  '/deadline-strategy'
-]);
+function requestHostname(request: NextRequest): string {
+  const raw =
+    request.headers.get('x-forwarded-host') ??
+    request.headers.get('host') ??
+    '';
+  return raw.split(',')[0]?.trim().toLowerCase().replace(/:\d+$/, '') ?? '';
+}
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const host = request.headers.get('host')?.split(':')[0]?.toLowerCase();
+  const host = requestHostname(request);
   const localeSegment = pathname.split('/').filter(Boolean)[0];
 
   if (host === 'www.scholarshiptop.com') {
@@ -69,37 +65,8 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url, 301);
   }
 
-  if (
-    host === 'iq.scholarshiptop.com' &&
-    (pathname === '/' || pathname === '')
-  ) {
-    const url = request.nextUrl.clone();
-    url.pathname = '/iq';
-    return NextResponse.rewrite(url);
-  }
-
-  if (host === 'iq.scholarshiptop.com' && pathname === '/iq') {
-    const url = request.nextUrl.clone();
-    url.pathname = '/';
-    return NextResponse.redirect(url, 308);
-  }
-
-  if (host === 'iq.scholarshiptop.com' && pathname.startsWith('/iq/')) {
-    const url = request.nextUrl.clone();
-    url.pathname = pathname.replace(/^\/iq/, '') || '/';
-    return NextResponse.redirect(url, 308);
-  }
-
-  if (host === 'iq.scholarshiptop.com' && pathname === '/assessment') {
-    const url = request.nextUrl.clone();
-    url.pathname = '/iq/assessment';
-    return NextResponse.rewrite(url);
-  }
-
-  if (host === 'iq.scholarshiptop.com' && IQ_SUBDOMAIN_REWRITE_PATHS.has(pathname)) {
-    const url = request.nextUrl.clone();
-    url.pathname = `/iq${pathname}`;
-    return NextResponse.rewrite(url);
+  if (host === IQ_SUBDOMAIN_HOST) {
+    return handleIqSubdomainMiddleware(request);
   }
 
   /** Canonical alphabetically sorted `-vs-` pairs for university comparison URLs. */
@@ -170,7 +137,7 @@ export async function middleware(request: NextRequest) {
     url.pathname = pathname.replace(/^\/content-hub/, '/resources');
     return NextResponse.redirect(url, 308);
   }
-  if (isStage2PilotLocale(localeSegment)) {
+  if (host !== IQ_SUBDOMAIN_HOST && isStage2PilotLocale(localeSegment)) {
     const requestHeaders = new Headers(request.headers);
     requestHeaders.set('x-scholarshiptop-locale', localeSegment);
     return NextResponse.next({

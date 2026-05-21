@@ -27,6 +27,7 @@ import {
   isStage2PilotLocale,
   type Stage2PilotLocale
 } from '@/lib/i18n/pilotRoutes';
+import { getIqLocaleFromRequestHeaders } from '@/lib/iq/i18n/getIqLocaleFromRequest';
 import 'styles/main.css';
 
 function normalizeRequestHost(value: string | null): string {
@@ -38,8 +39,12 @@ function shouldHideAiNavigatorForHost(host: string): boolean {
 }
 
 function requestLocaleFromHeaders(
-  requestHeaders: ReturnType<typeof headers>
+  requestHeaders: ReturnType<typeof headers>,
+  requestHost: string
 ): Stage2PilotLocale | typeof ROOT_LOCALE {
+  if (shouldHideAiNavigatorForHost(requestHost)) {
+    return getIqLocaleFromRequestHeaders(requestHeaders);
+  }
   const locale = requestHeaders.get('x-scholarshiptop-locale');
   return isStage2PilotLocale(locale) ? locale : ROOT_LOCALE;
 }
@@ -134,11 +139,11 @@ export const viewport: Viewport = {
 
 export default async function RootLayout({ children }: PropsWithChildren) {
   const requestHeaders = headers();
-  const requestLocale = requestLocaleFromHeaders(requestHeaders);
-  const requestDirection = getLocaleDirection(requestLocale);
   const requestHost = normalizeRequestHost(
     requestHeaders.get('x-forwarded-host') ?? requestHeaders.get('host')
   );
+  const requestLocale = requestLocaleFromHeaders(requestHeaders, requestHost);
+  const requestDirection = getLocaleDirection(requestLocale);
   const showAiNavigator = !shouldHideAiNavigatorForHost(requestHost);
   const siteUrl = getURL().replace(/\/$/, '');
   const localizedSiteDescriptions = {
