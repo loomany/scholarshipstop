@@ -38,11 +38,13 @@ import { ESSAYS_SECTION_PATH } from '@/lib/essays/essayHubSection';
 import { SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF } from '@/app/scholarships/scholarshipListUrl';
 import type { NavbarInitialAuth } from '@/lib/nav/getNavbarInitialAuth';
 import { stripLocalePrefix } from '@/lib/i18n/paths';
-import { getStage2LocaleFromPathname, type Stage2PilotLocale } from '@/lib/i18n/pilotRoutes';
 import {
+  hrefForLocalizedUiRequired,
   localizedPilotHref,
   localizedSubscriptionHref
 } from '@/lib/i18n/localizedHref';
+import { resolveNavLocaleFromPathname } from '@/lib/i18n/resolveNavLocale';
+import type { Stage2PilotLocale } from '@/lib/i18n/pilotRoutes';
 import type { SupportedLocale } from '@/lib/i18n/types';
 import NavbarUserSlot from './NavbarUserSlot';
 import s from './Navbar.module.css';
@@ -225,26 +227,28 @@ const LOCALIZED_COMPARE_SUBLINKS: Record<
 > = {
   es: [
     {
-      href: '/compare/scholarship-vs-grant',
-      label: 'Beca vs subvención',
-      description: 'Diferencias entre tipos de ayuda educativa.'
+      href: '/compare/universities',
+      label: 'Universidades',
+      description:
+        'Comparaciones becas y ensayos entre universidades publicadas.'
     },
     {
-      href: '/compare/no-essay-vs-essay-scholarships',
-      label: 'Sin ensayo vs con ensayo',
-      description: 'Compara esfuerzo, competencia y estrategia.'
+      href: '/compare/states',
+      label: 'Estados',
+      description: 'Comparaciones del mercado de becas por estado en EE. UU.'
     }
   ],
   fr: [
     {
-      href: '/compare/scholarship-vs-grant',
-      label: 'Bourse vs subvention',
-      description: 'Différences entre types d’aide éducative.'
+      href: '/compare/universities',
+      label: 'Universités',
+      description:
+        'Comparaisons de bourses et d’essais entre universités publiées.'
     },
     {
-      href: '/compare/no-essay-vs-essay-scholarships',
-      label: 'Sans rédaction vs avec rédaction',
-      description: 'Comparer effort, concurrence et stratégie.'
+      href: '/compare/states',
+      label: 'États',
+      description: 'Comparaisons du marché des bourses par État aux États-Unis.'
     }
   ]
 };
@@ -326,18 +330,16 @@ export default function Navlinks({
   initialLocale = 'en'
 }: NavlinksProps) {
   const pathname = usePathname() ?? '';
-  const locale =
-    getStage2LocaleFromPathname(pathname) ??
-    (initialLocale === 'es' || initialLocale === 'fr' ? initialLocale : 'en');
+  const locale = resolveNavLocaleFromPathname(pathname);
   const navCopy = LOCALIZED_NAV_COPY[locale];
   const canonicalPathname = stripLocalePrefix(pathname);
-  const localHref = useCallback(
-    (href: string) => localizedPilotHref(locale, href),
-    [locale]
-  );
   const pilotNavHref = useCallback(
-    (href: string) => localHref(href) ?? href,
-    [localHref]
+    (href: string) =>
+      locale === 'en'
+        ? href
+        : (localizedPilotHref(locale, href) ??
+          hrefForLocalizedUiRequired(locale, href)),
+    [locale]
   );
   const subscriptionHref = localizedSubscriptionHref(locale);
   /**
@@ -362,7 +364,9 @@ export default function Navlinks({
     locale === 'en'
       ? ESSAYS_GUIDE_SUBLINKS
       : LOCALIZED_ESSAYS_GUIDE_SUBLINKS[locale]
-  ).filter((item) => locale === 'en' || localHref(item.href) != null);
+  ).filter(
+    (item) => locale === 'en' || localizedPilotHref(locale, item.href) != null
+  );
   const isIqSubdomain =
     typeof window !== 'undefined' &&
     window.location.hostname.toLowerCase() === 'iq.scholarshiptop.com';
@@ -765,7 +769,6 @@ export default function Navlinks({
           <LanguageSwitcher
             variant="dropdown"
             pathname={pathname || pilotNavHref('/')}
-            currentLocale={locale}
           />
         </div>
       </div>

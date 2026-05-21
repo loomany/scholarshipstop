@@ -28,6 +28,13 @@ import { getCompareHubUiCopy, type CompareHubUiCopy } from '@/lib/i18n/hubUiCopy
 import { getCompareHubIqPromoCopy } from '@/lib/i18n/hubIqPromoByHub';
 import { getStaticCompareGuideCardCopy } from '@/lib/i18n/staticCompareGuideCards';
 import {
+  buildStaticCompareGuideEntries,
+  filterStaticCompareGuides,
+  isStaticCompareCategory,
+  staticCompareCategoryCounts,
+  type StaticCompareGuideEntry
+} from '@/lib/i18n/staticCompareHub';
+import {
   hrefForLocalizedUiRequired,
   sectionPathForLocale
 } from '@/lib/i18n/localizedHref';
@@ -51,15 +58,52 @@ const CompareIndexToolbarClient = dynamic(
 );
 
 
+function CompareSubhubCategoryPromo({
+  ui,
+  hrefForPath,
+  category
+}: {
+  ui: CompareHubUiCopy;
+  hrefForPath: (path: string) => string;
+  category: 'universities' | 'states';
+}) {
+  const path =
+    category === 'universities' ? '/compare/universities' : '/compare/states';
+  const title =
+    category === 'universities'
+      ? ui.toolbar.categoryUniversities
+      : ui.toolbar.categoryStates;
+  return (
+    <section className="mt-8 rounded-3xl border border-gray-200 bg-white p-6 shadow-sm sm:mt-10">
+      <h2 className="text-xl font-bold text-gray-950">{title}</h2>
+      <p className="mt-3 max-w-2xl text-sm leading-7 text-gray-600">
+        {ui.staticSubhubPromoBody}
+      </p>
+      <Link
+        href={hrefForPath(path)}
+        className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-orange-600 hover:text-orange-700"
+      >
+        {ui.staticSubhubPromoCta}
+        <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+      </Link>
+    </section>
+  );
+}
+
 function EvergreenCompareGuides({
   ui,
   hrefForPath,
-  locale
+  locale,
+  guides
 }: {
   ui: CompareHubUiCopy;
   hrefForPath: (path: string) => string;
   locale: Stage2PilotLocale | 'en';
+  guides?: StaticCompareGuideEntry[];
 }) {
+  const slugs =
+    guides?.map((g) => g.slug) ??
+    STATIC_COMPARE_GUIDES.map((guide) => guide.slug);
   return (
     <section
       className="mt-8 rounded-3xl border border-orange-100 bg-orange-50/40 p-5 shadow-sm sm:mt-10 sm:p-6 lg:p-8"
@@ -80,12 +124,12 @@ function EvergreenCompareGuides({
         </p>
       </div>
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {STATIC_COMPARE_GUIDES.map((guide) => {
-          const card = getStaticCompareGuideCardCopy(locale, guide.slug);
+        {slugs.map((slug) => {
+          const card = getStaticCompareGuideCardCopy(locale, slug);
           return (
           <Link
-            key={guide.slug}
-            href={hrefForPath(`/compare/${encodeURIComponent(guide.slug)}`)}
+            key={slug}
+            href={hrefForPath(`/compare/${encodeURIComponent(slug)}`)}
             className="group flex h-full flex-col rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-orange-200 hover:shadow-md"
           >
             <span className="w-fit rounded-full bg-orange-100 px-2.5 py-1 text-xs font-semibold text-orange-800">
@@ -164,6 +208,26 @@ export async function CompareIndexPageContent({
   const showingTo =
     total === 0 ? 0 : Math.min(currentPage * COMPARE_INDEX_PAGE_SIZE, total);
   const hasAnyPublished = allItems.length > 0;
+  const staticEntries =
+    locale !== 'en' ? buildStaticCompareGuideEntries(locale) : [];
+  const staticFiltered =
+    locale !== 'en'
+      ? filterStaticCompareGuides(staticEntries, queryState)
+      : [];
+  const staticCategoryCounts =
+    locale !== 'en'
+      ? staticCompareCategoryCounts(staticEntries, queryState.q)
+      : categoryCounts;
+  const showCompareToolbar =
+    (locale === 'en' && hasAnyPublished) || staticEntries.length > 0;
+  const staticToolbarResultCount = staticFiltered.length;
+  const staticShowingFrom =
+    staticToolbarResultCount === 0 ? 0 : 1;
+  const staticShowingTo = staticToolbarResultCount;
+  const showStaticSubhubPromo =
+    locale !== 'en' &&
+    queryState.category !== 'all' &&
+    isStaticCompareCategory(queryState.category);
 
   const breadcrumbsSchema = {
     '@context': 'https://schema.org',
@@ -234,11 +298,6 @@ export async function CompareIndexPageContent({
           </ol>
         </nav>
 
-        {/*
-          On ES/FR the DB-backed comparison long-tail (`/compare/states/...`,
-          `/compare/universities/...`) is English-only, so we hide the toolbar +
-          card grid + pagination. The localized evergreen compare guides remain visible.
-        */}
         <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start xl:grid-cols-[minmax(0,1fr)_400px]">
           <div className="min-w-0">
             <header className="max-w-3xl">
@@ -250,7 +309,7 @@ export async function CompareIndexPageContent({
               </p>
             </header>
 
-            {hasAnyPublished && locale === 'en' ? (
+            {showCompareToolbar ? (
               <Suspense
                 fallback={
                   <div
@@ -260,11 +319,20 @@ export async function CompareIndexPageContent({
                 }
               >
                 <CompareIndexToolbarClient
-                  categoryCounts={categoryCounts}
-                  resultCount={total}
-                  showingFrom={showingFrom}
-                  showingTo={showingTo}
-                  suggestionItems={suggestionItems}
+                  categoryCounts={
+                    locale === 'en' ? categoryCounts : staticCategoryCounts
+                  }
+                  resultCount={
+                    locale === 'en' ? total : staticToolbarResultCount
+                  }
+                  showingFrom={
+                    locale === 'en' ? showingFrom : staticShowingFrom
+                  }
+                  showingTo={locale === 'en' ? showingTo : staticShowingTo}
+                  suggestionItems={
+                    locale === 'en' ? suggestionItems : []
+                  }
+                  basePath={sectionPath}
                   locale={locale}
                   compareToolbar={ui.toolbar}
                 />
@@ -280,7 +348,21 @@ export async function CompareIndexPageContent({
           </aside>
         </div>
 
-        <EvergreenCompareGuides ui={ui} hrefForPath={hrefForPath} locale={locale} />
+        {showStaticSubhubPromo &&
+        isStaticCompareCategory(queryState.category) ? (
+          <CompareSubhubCategoryPromo
+            ui={ui}
+            hrefForPath={hrefForPath}
+            category={queryState.category}
+          />
+        ) : (
+          <EvergreenCompareGuides
+            ui={ui}
+            hrefForPath={hrefForPath}
+            locale={locale}
+            guides={locale !== 'en' ? staticFiltered : undefined}
+          />
+        )}
 
         {locale === 'en' ? (
           !hasAnyPublished ? (

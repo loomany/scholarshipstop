@@ -16,11 +16,8 @@ import {
 import type { NavbarInitialAuth } from '@/lib/nav/getNavbarInitialAuth';
 import { siteNavLink as nav } from '@/components/ui/nav/siteNavLink';
 import { createClient } from '@/utils/supabase/client';
-import {
-  getStage2LocaleFromPathname,
-  isStage2PilotLocale,
-  type Stage2PilotLocale
-} from '@/lib/i18n/pilotRoutes';
+import { resolveNavLocaleFromPathname } from '@/lib/i18n/resolveNavLocale';
+import type { Stage2PilotLocale } from '@/lib/i18n/pilotRoutes';
 import type { SupportedLocale } from '@/lib/i18n/types';
 import { stripLocalePrefix } from '@/lib/i18n/paths';
 
@@ -57,9 +54,7 @@ export default function NavbarUserSlot({
   initialLocale = 'en'
 }: NavbarUserSlotProps) {
   const router = useRouter();
-  const locale =
-    getStage2LocaleFromPathname(pathname) ??
-    (isStage2PilotLocale(initialLocale) ? initialLocale : 'en');
+  const locale = resolveNavLocaleFromPathname(pathname);
   const canonicalPathname = stripLocalePrefix(pathname);
   const authCopy = AUTH_COPY[locale];
   const [clientUser, setClientUser] = useState<User | null>(null);

@@ -73,6 +73,30 @@ test('language switcher covers /subscription cluster', () => {
   );
 });
 
+test('language switcher on /es/compare/universities uses pathname locale (not stale SSR)', () => {
+  const items = getStage2LanguageSwitcherItems({
+    pathname: '/es/compare/universities',
+    currentLocale: 'en'
+  });
+  assert.deepEqual(
+    items.map((item) => [item.locale, item.href, item.current]),
+    [
+      ['en', '/compare/universities', false],
+      ['es', '/es/compare/universities', true],
+      ['fr', '/fr/compare/universities', false]
+    ]
+  );
+});
+
+test('language switcher on /compare uses English as active even if currentLocale is es', () => {
+  const items = getStage2LanguageSwitcherItems({
+    pathname: '/compare',
+    currentLocale: 'es'
+  });
+  assert.equal(items.find((i) => i.locale === 'en')?.current, true);
+  assert.equal(items.find((i) => i.locale === 'es')?.current, false);
+});
+
 test('language switcher on /fr/scholarships/hub/international-friendly links to EN and ES equivalents', () => {
   const items = getStage2LanguageSwitcherItems({
     pathname: '/fr/scholarships/hub/international-friendly'

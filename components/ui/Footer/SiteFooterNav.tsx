@@ -10,7 +10,7 @@ import {
   isFooterLinkActive,
   type FooterLinkLocale
 } from '@/lib/i18n/localizedFooterLinks';
-import { getStage2LocaleFromPathname } from '@/lib/i18n/pilotRoutes';
+import { resolveNavLocaleFromPathname } from '@/lib/i18n/resolveNavLocale';
 import type { SupportedLocale } from '@/lib/i18n/types';
 import { stripLocalePrefix } from '@/lib/i18n/paths';
 
@@ -28,9 +28,7 @@ export default function SiteFooterNav({
 }) {
   const pathname = usePathname() ?? '';
 
-  const locale: FooterLinkLocale =
-    getStage2LocaleFromPathname(pathname) ??
-    (initialLocale === 'es' || initialLocale === 'fr' ? initialLocale : 'en');
+  const locale: FooterLinkLocale = resolveNavLocaleFromPathname(pathname);
   const canonicalPathname = stripLocalePrefix(pathname);
   const links = getFooterLinks(locale);
 

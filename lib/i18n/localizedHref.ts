@@ -14,6 +14,8 @@ import {
 } from '@/lib/i18n/subscriptionPageCopy';
 import { getLocalizedPilotPage } from '@/lib/i18n/staticTranslations';
 import { categoryIsPromotedSeo } from '@/lib/scholarships/categorySeoAllowlist';
+import { isResourcePilotSlug } from '@/lib/i18n/resourcePilot/resourcePilotSlugs';
+import { resourcesArticlePath } from '@/lib/content-hub/resourcesSection';
 
 export type LocalizedUiLocale = Stage2PilotLocale | 'en';
 
@@ -74,6 +76,9 @@ export function hrefForLocalizedUiRequired(
   if (locale !== 'en') {
     if (pathOnly === '/') return `/${locale}${suffix}`;
     if (STAGE2_PILOT_HUB_PATHS.has(pathOnly)) {
+      return `/${locale}${pathOnly}${suffix}`;
+    }
+    if (isLocalizedCompareSubhubPath(pathOnly)) {
       return `/${locale}${pathOnly}${suffix}`;
     }
   }
@@ -190,6 +195,23 @@ export function localizedCategorySeoHref(
   return normalizeCanonicalPath(`/${locale}${path}`);
 }
 
+/** CMS resource articles in Stage 4D pilot (`/resources/{slug}`). */
+function resourcePilotArticleSlug(canonicalPath: string): string | null {
+  const match = canonicalPath.match(/^\/resources\/([^/]+)$/);
+  if (!match) return null;
+  const slug = match[1]!.trim().toLowerCase();
+  return isResourcePilotSlug(slug) ? slug : null;
+}
+
+export function localizedResourcePilotArticleHref(
+  locale: LocalizedUiLocale,
+  articleSlug: string
+): string {
+  const path = resourcesArticlePath(articleSlug);
+  if (locale === 'en') return normalizeCanonicalPath(path);
+  return normalizeCanonicalPath(`/${locale}${path}`);
+}
+
 /** Locale-aware public pricing page (`/subscription`, `/es/subscription`, `/fr/subscription`). */
 export function localizedSubscriptionHref(locale: LocalizedUiLocale): string {
   return localizedSubscriptionPath(locale);
@@ -203,9 +225,20 @@ export function isLocalizedSubscriptionPath(path: string): boolean {
   );
 }
 
+/** Compare sub-hubs (English DB listings; localized URL + chrome). */
+export function isLocalizedCompareSubhubPath(path: string): boolean {
+  const normalized = normalizeCanonicalPath(path.split(/[?#]/, 1)[0] ?? path);
+  return (
+    normalized === '/compare/universities' ||
+    normalized === '/compare/states' ||
+    normalized.startsWith('/compare/universities/') ||
+    normalized.startsWith('/compare/states/')
+  );
+}
+
 export function getStage2LanguageSwitcherItems({
   pathname,
-  currentLocale
+  currentLocale: _currentLocale
 }: {
   pathname: string;
   currentLocale?: Stage2PilotLocale | 'en' | null;
@@ -213,13 +246,46 @@ export function getStage2LanguageSwitcherItems({
   const canonicalPath = stage2CanonicalPathFromPathname(pathname);
   const hubTab = hubTabSegment(canonicalPath);
   const categorySlug = categorySeoSlug(canonicalPath);
+  const resourceSlug = resourcePilotArticleSlug(canonicalPath);
   const isSubscription = isLocalizedSubscriptionPath(canonicalPath);
-  const isPilot = isStage2PilotCanonicalPath(canonicalPath);
-  if (!isPilot && !hubTab && !isSubscription && !categorySlug) return [];
+  const isPilot =
+    isStage2PilotCanonicalPath(canonicalPath) ||
+    isLocalizedCompareSubhubPath(canonicalPath);
+  if (!isPilot && !hubTab && !isSubscription && !categorySlug && !resourceSlug) {
+    return [];
+  }
+
+  const activeLocale = getStage2LocaleFromPathname(pathname) ?? 'en';
+
+  if (resourceSlug) {
+    const locales = ['en', ...STAGE2_PILOT_LOCALES] as const;
+    return locales
+      .map((locale) => ({
+        locale,
+        label: STAGE2_PILOT_LANGUAGE_LABELS[locale],
+        href: localizedResourcePilotArticleHref(locale, resourceSlug),
+        current: locale === activeLocale
+      }))
+      .filter(
+        (item) => !item.href.includes('/en/') && !item.href.startsWith('/en')
+      );
+  }
+
+  if (isLocalizedCompareSubhubPath(canonicalPath)) {
+    const locales = ['en', ...STAGE2_PILOT_LOCALES] as const;
+    return locales
+      .map((locale) => ({
+        locale,
+        label: STAGE2_PILOT_LANGUAGE_LABELS[locale],
+        href: hrefForLocalizedUiRequired(locale, canonicalPath),
+        current: locale === activeLocale
+      }))
+      .filter(
+        (item) => !item.href.includes('/en/') && !item.href.startsWith('/en')
+      );
+  }
 
   if (categorySlug) {
-    const activeLocale =
-      currentLocale ?? getStage2LocaleFromPathname(pathname) ?? 'en';
     const locales = ['en', ...STAGE2_PILOT_LOCALES] as const;
     return locales
       .map((locale) => ({
@@ -233,8 +299,6 @@ export function getStage2LanguageSwitcherItems({
       );
   }
 
-  const activeLocale =
-    currentLocale ?? getStage2LocaleFromPathname(pathname) ?? 'en';
   const locales = ['en', ...STAGE2_PILOT_LOCALES] as const;
 
   return locales
@@ -243,7 +307,10 @@ export function getStage2LanguageSwitcherItems({
         ? localizedSubscriptionHref(locale)
         : hubTab
           ? localizedScholarshipHubTabHref(locale, hubTab)
-          : localizedPilotHref(locale, canonicalPath);
+          : localizedPilotHref(locale, canonicalPath) ??
+            (isLocalizedCompareSubhubPath(canonicalPath)
+              ? hrefForLocalizedUiRequired(locale, canonicalPath)
+              : null);
       return href
         ? {
             locale,

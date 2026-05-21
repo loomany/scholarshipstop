@@ -40,6 +40,18 @@ import {
   sectionPathForLocale
 } from '@/lib/i18n/localizedHref';
 import type { Stage2PilotLocale } from '@/lib/i18n/pilotRoutes';
+import { listPublishedResourceArticleSourceIds } from '@/lib/i18n/resourcePilot/listPublishedResourceArticleTranslations';
+import {
+  buildStaticResourceGuideEntries,
+  filterStaticResourceGuides
+} from '@/lib/i18n/staticResourceHub';
+import {
+  RESOURCE_CATEGORY_ORDER,
+  type ResourceCategoryId
+} from '@/lib/content-hub/resourceTaxonomy';
+
+/** Show ES/FR CMS grid only when enough published DB translations exist. */
+const MIN_TRANSLATED_RESOURCES_FOR_LOCALE_GRID = 10;
 
 const baseTitle = `${RESOURCES_PAGE_TITLE} — Guides & Tips`;
 const baseDescription =
@@ -99,13 +111,17 @@ function ResourcesIqAssessmentCard({
 function StaticScholarshipGuidesSection({
   ui,
   hrefForPath,
-  locale
+  locale,
+  guideSlugs
 }: {
   ui: ResourcesHubUiCopy;
   hrefForPath: (path: string) => string;
   locale: Stage2PilotLocale | 'en';
+  guideSlugs?: string[];
 }) {
-  const featured = STATIC_SCHOLARSHIP_GUIDES.slice(0, 6);
+  const featured = STATIC_SCHOLARSHIP_GUIDES.filter(
+    (guide) => !guideSlugs || guideSlugs.includes(guide.slug)
+  ).slice(0, 6);
   return (
     <section
       className="mt-10 rounded-3xl border border-gray-200 bg-gray-50/80 p-5 sm:p-6"
@@ -456,11 +472,23 @@ export async function ResourcesIndexPageContent({
   const sectionPath = sectionPathForLocale(locale, RESOURCES_SECTION_PATH);
   const hrefForPath = (path: string) => hrefForLocalizedUiRequired(locale, path);
   const queryState = parseResourcesIndexSearchParams(searchParams);
-  const [allPosts, latestEssays] = await Promise.all([
+  const [allPosts, latestEssays, translatedSourceIds] = await Promise.all([
     fetchAllPublishedContentPostsListFields(),
-    fetchLatestPublishedEssayHubList(240)
+    fetchLatestPublishedEssayHubList(240),
+    locale === 'en' ? Promise.resolve(null) : listPublishedResourceArticleSourceIds()
   ]);
-  const classified = classifyResourcePosts(allPosts);
+
+  const postsForLocale =
+    locale === 'en' || !translatedSourceIds
+      ? allPosts
+      : allPosts.filter((p) => p.id && translatedSourceIds.has(p.id));
+
+  const showLocaleDbGrid =
+    locale === 'en' ||
+    (translatedSourceIds != null &&
+      translatedSourceIds.size >= MIN_TRANSLATED_RESOURCES_FOR_LOCALE_GRID);
+
+  const classified = classifyResourcePosts(postsForLocale);
   const essayCovers = latestEssays
     .map((essay) => essay.hero_image_url?.trim() ?? '')
     .filter(Boolean);
@@ -502,7 +530,23 @@ export async function ResourcesIndexPageContent({
   const showingTo =
     total === 0 ? 0 : Math.min(currentPage * pageSize, total);
 
-  const hasAnyPublished = allPosts.some((p) => p.slug?.trim());
+  const hasAnyPublished = postsForLocale.some((p) => p.slug?.trim());
+  const staticEntries =
+    locale !== 'en' ? buildStaticResourceGuideEntries(locale) : [];
+  const staticFiltered =
+    locale !== 'en'
+      ? filterStaticResourceGuides(staticEntries, queryState)
+      : [];
+  const staticGuideSlugs = staticFiltered.map((entry) => entry.slug);
+  const showStaticResourcesToolbar =
+    locale !== 'en' && !showLocaleDbGrid && staticEntries.length > 0;
+  const emptyStaticCategoryCounts = RESOURCE_CATEGORY_ORDER.reduce(
+    (acc, id) => {
+      acc[id] = 0;
+      return acc;
+    },
+    {} as Record<ResourceCategoryId, number>
+  );
   const breadcrumbsSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -593,11 +637,10 @@ export async function ResourcesIndexPageContent({
         </nav>
 
         {/*
-          On ES/FR the DB-backed long-tail grid (`ResourcesGrid`) and its toolbar/pagination
-          would surface untranslated English cards. We hide them and keep only the localized
-          static guides + IQ aside until the long-tail itself is translated.
+          ES/FR: show DB grid only for content_posts with published resource_article
+          translations (Stage 4D pilot). Untranslated English CMS cards stay hidden.
         */}
-        {locale === 'en' ? (
+        {locale === 'en' || showLocaleDbGrid ? (
           <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start xl:grid-cols-[minmax(0,1fr)_400px]">
             <div className="min-w-0">
               <header className="max-w-3xl">
@@ -635,14 +678,34 @@ export async function ResourcesIndexPageContent({
           </div>
         ) : (
           <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start xl:grid-cols-[minmax(0,1fr)_400px]">
-            <header className="max-w-3xl">
-              <h1 className="text-[2.25rem] font-bold leading-[1.08] tracking-tight text-gray-900 sm:text-4xl lg:text-[2.5rem] lg:leading-[1.1]">
-                {ui.h1}
-              </h1>
-              <p className="mt-4 text-lg leading-relaxed text-gray-600 sm:text-xl sm:leading-relaxed">
-                {ui.intro}
-              </p>
-            </header>
+            <div className="min-w-0">
+              <header className="max-w-3xl">
+                <h1 className="text-[2.25rem] font-bold leading-[1.08] tracking-tight text-gray-900 sm:text-4xl lg:text-[2.5rem] lg:leading-[1.1]">
+                  {ui.h1}
+                </h1>
+                <p className="mt-4 text-lg leading-relaxed text-gray-600 sm:text-xl sm:leading-relaxed">
+                  {ui.intro}
+                </p>
+              </header>
+              {showStaticResourcesToolbar ? (
+                <Suspense
+                  fallback={
+                    <div
+                      className="mt-6 h-24 max-w-3xl animate-pulse rounded-2xl bg-gray-100"
+                      aria-hidden
+                    />
+                  }
+                >
+                  <ResourcesIndexToolbar
+                    locale={locale}
+                    categoryCounts={emptyStaticCategoryCounts}
+                    resultCount={staticFiltered.length}
+                    showingFrom={staticFiltered.length === 0 ? 0 : 1}
+                    showingTo={staticFiltered.length}
+                  />
+                </Suspense>
+              ) : null}
+            </div>
             <aside className="min-w-0 lg:pt-8" aria-label="Cognitive assessment">
               <ResourcesIqAssessmentCard iq={iqCopy} />
             </aside>
@@ -653,24 +716,39 @@ export async function ResourcesIndexPageContent({
           ui={ui}
           hrefForPath={hrefForPath}
           locale={locale}
+          guideSlugs={
+            locale !== 'en' && !showLocaleDbGrid ? staticGuideSlugs : undefined
+          }
         />
 
-        {locale === 'en' ? (
+        {locale === 'en' || showLocaleDbGrid ? (
           !hasAnyPublished ? (
             <p className="mt-12 text-center text-gray-600">
               {ui.noPublished}
             </p>
           ) : (
-            <ResourcesGrid
-              posts={withSlug}
-              fallbackCoverByPostId={fallbackCoverByPostId}
-              hrefForPath={hrefForPath}
-              iq={iqCopy}
-            />
+            <>
+              {locale !== 'en' && ui.translatedDbTitle ? (
+                <header className="mt-12 max-w-3xl">
+                  <p className="text-sm font-semibold uppercase tracking-wide text-orange-600">
+                    {ui.translatedDbEyebrow}
+                  </p>
+                  <h2 className="mt-2 text-2xl font-bold tracking-tight text-gray-900">
+                    {ui.translatedDbTitle}
+                  </h2>
+                </header>
+              ) : null}
+              <ResourcesGrid
+                posts={withSlug}
+                fallbackCoverByPostId={fallbackCoverByPostId}
+                hrefForPath={hrefForPath}
+                iq={iqCopy}
+              />
+            </>
           )
         ) : null}
 
-        {locale === 'en' && hasAnyPublished && withSlug.length > 0 ? (
+        {(locale === 'en' || showLocaleDbGrid) && hasAnyPublished && withSlug.length > 0 ? (
           <>
             <div className="mt-6 lg:hidden">
               <ResourcesIqAssessmentCard iq={iqCopy} />

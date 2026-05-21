@@ -60,6 +60,8 @@ export type CompareHubUiCopy = {
   evergreenBody: string;
   evergreenBadge: string;
   readComparison: string;
+  staticSubhubPromoBody: string;
+  staticSubhubPromoCta: string;
   toolbar: CompareHubToolbarCopy;
   gridIq: CompareHubGridIqCopy;
 };
@@ -73,6 +75,8 @@ export type ResourcesHubUiCopy = {
   scamWarning: string;
   noPublished: string;
   noMatches: string;
+  translatedDbEyebrow?: string;
+  translatedDbTitle?: string;
 };
 
 export type ProvidersHubCountryOption = {
@@ -297,6 +301,9 @@ const EN_COMPARE: CompareHubUiCopy = {
     'These guides explain common scholarship choices in plain English: grant versus scholarship, merit versus need, no-essay versus essay, and local versus national opportunities.',
   evergreenBadge: 'Evergreen guide',
   readComparison: 'Read comparison',
+  staticSubhubPromoBody:
+    'Browse the published university or state matchup index. Matchup cards and detail pages remain in English until localized translations are published.',
+  staticSubhubPromoCta: 'Open matchup index',
   toolbar: EN_COMPARE_TOOLBAR,
   gridIq: {
     featuredTool: 'Featured Tool',
@@ -324,6 +331,9 @@ const ES_COMPARE: CompareHubUiCopy = {
     'Estas guías explican elecciones habituales: beca frente a subvención, mérito frente a necesidad, sin ensayo frente a con ensayo, y local frente a nacional.',
   evergreenBadge: 'Guía permanente',
   readComparison: 'Leer comparación',
+  staticSubhubPromoBody:
+    'Explora el índice publicado de enfrentamientos por universidad o estado. Las tarjetas y páginas detalladas siguen en inglés hasta que existan traducciones publicadas.',
+  staticSubhubPromoCta: 'Abrir índice de enfrentamientos',
   toolbar: {
     searchPlaceholder: 'Buscar comparaciones',
     categoriesAria: 'Categorías',
@@ -365,6 +375,9 @@ const FR_COMPARE: CompareHubUiCopy = {
     'Ces guides expliquent les choix courants : bourse vs subvention, mérite vs besoin, sans essai vs avec essai, local vs national.',
   evergreenBadge: 'Guide durable',
   readComparison: 'Lire la comparaison',
+  staticSubhubPromoBody:
+    'Parcourez l’index publié des matchs par université ou par État. Les cartes et pages détaillées restent en anglais jusqu’à publication des traductions.',
+  staticSubhubPromoCta: 'Ouvrir l’index des matchs',
   toolbar: {
     searchPlaceholder: 'Rechercher des comparaisons',
     categoriesAria: 'Catégories',
@@ -412,7 +425,9 @@ const ES_RESOURCES: ResourcesHubUiCopy = {
   staticGuidesTitle: 'Empieza con una estrategia práctica de becas',
   scamWarning: 'Señales de fraude',
   noPublished: 'Aún no hay recursos publicados. Vuelve pronto.',
-  noMatches: 'Ninguna guía coincide con tus filtros. Prueba limpiar búsqueda o categorías.'
+  noMatches: 'Ninguna guía coincide con tus filtros. Prueba limpiar búsqueda o categorías.',
+  translatedDbEyebrow: 'Artículos traducidos',
+  translatedDbTitle: 'Guías de becas en español'
 };
 
 const FR_RESOURCES: ResourcesHubUiCopy = {
@@ -424,7 +439,9 @@ const FR_RESOURCES: ResourcesHubUiCopy = {
   staticGuidesTitle: 'Commencez par une stratégie pratique',
   scamWarning: 'Signes d’arnaque',
   noPublished: 'Aucune ressource publiée pour le moment. Revenez bientôt.',
-  noMatches: 'Aucun guide ne correspond à vos filtres. Essayez d’effacer la recherche ou les catégories.'
+  noMatches: 'Aucun guide ne correspond à vos filtres. Essayez d’effacer la recherche ou les catégories.',
+  translatedDbEyebrow: 'Articles traduits',
+  translatedDbTitle: 'Guides bourses en français'
 };
 
 const EN_PROVIDERS_GRID_IQ: ProvidersHubGridIqCopy = {

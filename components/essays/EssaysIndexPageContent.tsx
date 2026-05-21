@@ -24,6 +24,11 @@ import {
   essayHubArticlePath
 } from '@/lib/essays/essayHubSection';
 import { STATIC_ESSAY_GUIDES } from '@/lib/essays/staticEssayGuides';
+import { getStaticEssayGuideCardCopy } from '@/lib/i18n/staticEssayGuideCards';
+import {
+  buildStaticEssayGuideEntries,
+  filterStaticEssayGuides
+} from '@/lib/i18n/staticEssayHub';
 import { getURL } from '@/utils/helpers';
 import {
   getEssaysHubUiCopy,
@@ -124,6 +129,13 @@ export async function EssaysIndexPageContent({
     total === 0 ? 0 : (currentPage - 1) * pageSize + 1;
   const showingTo =
     total === 0 ? 0 : Math.min(currentPage * pageSize, total);
+  const staticEntries =
+    locale !== 'en' ? buildStaticEssayGuideEntries(locale) : [];
+  const staticFiltered =
+    locale !== 'en'
+      ? filterStaticEssayGuides(staticEntries, queryState)
+      : [];
+  const showStaticEssaysToolbar = locale !== 'en' && staticEntries.length > 0;
 
   const breadcrumbsSchema = {
     '@context': 'https://schema.org',
@@ -261,28 +273,36 @@ export async function EssaysIndexPageContent({
             </section>
           </Suspense>
         ) : (
-          <>
-            <header className="mt-4 max-w-3xl sm:mt-5">
-              <h1 className="text-[2.25rem] font-bold leading-[1.08] tracking-tight text-gray-900 sm:text-4xl lg:text-[2.5rem] lg:leading-[1.1]">
-                {locale === 'en' ? ESSAYS_PAGE_TITLE : ui.h1}
-              </h1>
-              <p className="mt-4 text-lg leading-relaxed text-gray-600 sm:text-xl sm:leading-relaxed">
-                {locale === 'en'
-                  ? 'How-to guides for scholarship essays—structured prompts, outlines, and revision checklists. For browsing awards, use the scholarship directory.'
-                  : ui.intro}
-              </p>
-            </header>
-            <div className="mt-6 flex justify-center sm:mt-8 lg:justify-end">
-              <div className="w-full max-w-[min(20rem,100%)] sm:max-w-sm">
-                <EssaysIndexHeroMedia
-                  youtubeVideoId={
-                    process.env.NEXT_PUBLIC_ESSAYS_HERO_YOUTUBE_ID?.trim() || null
-                  }
-                  ctaLabel={ui.tryEssayMentor}
+          <section className="mt-4 flex flex-col gap-6 sm:mt-5 lg:grid lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start lg:gap-x-8 lg:gap-y-0 xl:gap-x-10">
+            <div className="min-w-0 space-y-4 sm:space-y-5">
+              <header>
+                <h1 className="text-[2.25rem] font-bold leading-[1.08] tracking-tight text-gray-900 sm:text-4xl lg:text-[2.5rem] lg:leading-[1.1]">
+                  {ui.h1}
+                </h1>
+                <p className="mt-4 text-lg leading-relaxed text-gray-600 sm:text-xl sm:leading-relaxed">
+                  {ui.intro}
+                </p>
+              </header>
+              {showStaticEssaysToolbar ? (
+                <EssaysIndexToolbar
+                  locale={locale}
+                  categoryOptions={[]}
+                  resultCount={staticFiltered.length}
+                  showingFrom={staticFiltered.length === 0 ? 0 : 1}
+                  showingTo={staticFiltered.length}
+                  className="mt-0 w-full max-w-none"
                 />
-              </div>
+              ) : null}
             </div>
-          </>
+            <aside className="w-full max-w-sm shrink-0 lg:max-w-none lg:w-full">
+              <EssaysIndexHeroMedia
+                youtubeVideoId={
+                  process.env.NEXT_PUBLIC_ESSAYS_HERO_YOUTUBE_ID?.trim() || null
+                }
+                ctaLabel={ui.tryEssayMentor}
+              />
+            </aside>
+          </section>
         )}
 
         {!hasAnyPublished ? (
@@ -298,6 +318,18 @@ export async function EssaysIndexPageContent({
             <EssayCommandCenter
               ui={ui}
               hrefForPath={hrefForPath}
+              locale={locale}
+              featuredSlugs={
+                locale !== 'en'
+                  ? staticFiltered
+                      .map((entry) => entry.slug)
+                      .filter((slug) =>
+                        ['examples', 'checklist', 'financial-need', 'career-goals'].includes(
+                          slug
+                        )
+                      )
+                  : undefined
+              }
               showEssayMentor={locale === 'en'}
             />
             {/*
@@ -342,16 +374,24 @@ export async function EssaysIndexPageContent({
 function EssayCommandCenter({
   ui,
   hrefForPath,
+  locale,
+  featuredSlugs,
   showEssayMentor
 }: {
   ui: EssaysHubUiCopy;
   hrefForPath: (path: string) => string;
+  locale: Stage2PilotLocale | 'en';
+  featuredSlugs?: string[];
   showEssayMentor: boolean;
 }) {
+  const defaultFeatured = [
+    'examples',
+    'checklist',
+    'financial-need',
+    'career-goals'
+  ];
   const featuredStaticGuides = STATIC_ESSAY_GUIDES.filter((guide) =>
-    ['examples', 'checklist', 'financial-need', 'career-goals'].includes(
-      guide.slug
-    )
+    (featuredSlugs ?? defaultFeatured).includes(guide.slug)
   );
 
   return (
@@ -412,7 +452,9 @@ function EssayCommandCenter({
       </div>
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {featuredStaticGuides.map((guide) => (
+        {featuredStaticGuides.map((guide) => {
+          const card = getStaticEssayGuideCardCopy(locale, guide.slug);
+          return (
           <Link
             key={guide.slug}
             href={hrefForPath(essayHubArticlePath(guide.slug))}
@@ -425,13 +467,14 @@ function EssayCommandCenter({
               </span>
             </div>
             <h3 className="mt-3 line-clamp-2 text-sm font-bold leading-snug text-gray-950">
-              {guide.h1}
+              {card.title}
             </h3>
             <p className="mt-2 line-clamp-3 text-xs leading-5 text-gray-600">
-              {guide.oneSentence}
+              {card.description}
             </p>
           </Link>
-        ))}
+          );
+        })}
       </div>
     </section>
   );
