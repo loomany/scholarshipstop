@@ -40,7 +40,6 @@ import {
   sectionPathForLocale
 } from '@/lib/i18n/localizedHref';
 import type { Stage2PilotLocale } from '@/lib/i18n/pilotRoutes';
-import { listPublishedResourceArticleSourceIds } from '@/lib/i18n/resourcePilot/listPublishedResourceArticleTranslations';
 import {
   buildStaticResourceGuideEntries,
   filterStaticResourceGuides
@@ -49,9 +48,6 @@ import {
   RESOURCE_CATEGORY_ORDER,
   type ResourceCategoryId
 } from '@/lib/content-hub/resourceTaxonomy';
-
-/** Show ES/FR CMS grid only when enough published DB translations exist. */
-const MIN_TRANSLATED_RESOURCES_FOR_LOCALE_GRID = 10;
 
 const baseTitle = `${RESOURCES_PAGE_TITLE} — Guides & Tips`;
 const baseDescription =
@@ -472,21 +468,14 @@ export async function ResourcesIndexPageContent({
   const sectionPath = sectionPathForLocale(locale, RESOURCES_SECTION_PATH);
   const hrefForPath = (path: string) => hrefForLocalizedUiRequired(locale, path);
   const queryState = parseResourcesIndexSearchParams(searchParams);
-  const [allPosts, latestEssays, translatedSourceIds] = await Promise.all([
+  const [allPosts, latestEssays] = await Promise.all([
     fetchAllPublishedContentPostsListFields(),
-    fetchLatestPublishedEssayHubList(240),
-    locale === 'en' ? Promise.resolve(null) : listPublishedResourceArticleSourceIds()
+    fetchLatestPublishedEssayHubList(240)
   ]);
 
-  const postsForLocale =
-    locale === 'en' || !translatedSourceIds
-      ? allPosts
-      : allPosts.filter((p) => p.id && translatedSourceIds.has(p.id));
-
-  const showLocaleDbGrid =
-    locale === 'en' ||
-    (translatedSourceIds != null &&
-      translatedSourceIds.size >= MIN_TRANSLATED_RESOURCES_FOR_LOCALE_GRID);
+  const postsForLocale = locale === 'en' ? allPosts : [];
+  /** ES/FR: CMS resource grid stays hidden until Stage 4D resource_article pilot ships. */
+  const showLocaleDbGrid = locale === 'en';
 
   const classified = classifyResourcePosts(postsForLocale);
   const essayCovers = latestEssays

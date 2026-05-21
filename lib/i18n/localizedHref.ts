@@ -14,8 +14,6 @@ import {
 } from '@/lib/i18n/subscriptionPageCopy';
 import { getLocalizedPilotPage } from '@/lib/i18n/staticTranslations';
 import { categoryIsPromotedSeo } from '@/lib/scholarships/categorySeoAllowlist';
-import { isResourcePilotSlug } from '@/lib/i18n/resourcePilot/resourcePilotSlugs';
-import { resourcesArticlePath } from '@/lib/content-hub/resourcesSection';
 
 export type LocalizedUiLocale = Stage2PilotLocale | 'en';
 
@@ -195,23 +193,6 @@ export function localizedCategorySeoHref(
   return normalizeCanonicalPath(`/${locale}${path}`);
 }
 
-/** CMS resource articles in Stage 4D pilot (`/resources/{slug}`). */
-function resourcePilotArticleSlug(canonicalPath: string): string | null {
-  const match = canonicalPath.match(/^\/resources\/([^/]+)$/);
-  if (!match) return null;
-  const slug = match[1]!.trim().toLowerCase();
-  return isResourcePilotSlug(slug) ? slug : null;
-}
-
-export function localizedResourcePilotArticleHref(
-  locale: LocalizedUiLocale,
-  articleSlug: string
-): string {
-  const path = resourcesArticlePath(articleSlug);
-  if (locale === 'en') return normalizeCanonicalPath(path);
-  return normalizeCanonicalPath(`/${locale}${path}`);
-}
-
 /** Locale-aware public pricing page (`/subscription`, `/es/subscription`, `/fr/subscription`). */
 export function localizedSubscriptionHref(locale: LocalizedUiLocale): string {
   return localizedSubscriptionPath(locale);
@@ -246,30 +227,15 @@ export function getStage2LanguageSwitcherItems({
   const canonicalPath = stage2CanonicalPathFromPathname(pathname);
   const hubTab = hubTabSegment(canonicalPath);
   const categorySlug = categorySeoSlug(canonicalPath);
-  const resourceSlug = resourcePilotArticleSlug(canonicalPath);
   const isSubscription = isLocalizedSubscriptionPath(canonicalPath);
   const isPilot =
     isStage2PilotCanonicalPath(canonicalPath) ||
     isLocalizedCompareSubhubPath(canonicalPath);
-  if (!isPilot && !hubTab && !isSubscription && !categorySlug && !resourceSlug) {
+  if (!isPilot && !hubTab && !isSubscription && !categorySlug) {
     return [];
   }
 
   const activeLocale = getStage2LocaleFromPathname(pathname) ?? 'en';
-
-  if (resourceSlug) {
-    const locales = ['en', ...STAGE2_PILOT_LOCALES] as const;
-    return locales
-      .map((locale) => ({
-        locale,
-        label: STAGE2_PILOT_LANGUAGE_LABELS[locale],
-        href: localizedResourcePilotArticleHref(locale, resourceSlug),
-        current: locale === activeLocale
-      }))
-      .filter(
-        (item) => !item.href.includes('/en/') && !item.href.startsWith('/en')
-      );
-  }
 
   if (isLocalizedCompareSubhubPath(canonicalPath)) {
     const locales = ['en', ...STAGE2_PILOT_LOCALES] as const;
