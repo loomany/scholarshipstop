@@ -699,6 +699,7 @@ export type HubToolbarUiCopy = {
   searchByKeywordAria: string;
   categories: string;
   filters: string;
+  filtersAria: string;
   showingRange: (
     from: number,
     to: number,
@@ -733,6 +734,7 @@ const EN_TOOLBAR: HubToolbarUiCopy = {
   searchByKeywordAria: 'Search by keyword',
   categories: 'Categories',
   filters: 'Filters',
+  filtersAria: 'Open filters',
   showingRange: (from, to, total, unit) =>
     `Showing ${from}–${to} of ${total}${unit ? ` ${unit}` : ''}`,
   readMore: 'Read more →'
@@ -743,6 +745,7 @@ const ES_TOOLBAR: HubToolbarUiCopy = {
   searchByKeywordAria: 'Buscar por palabra clave',
   categories: 'Categorías',
   filters: 'Filtros',
+  filtersAria: 'Abrir filtros',
   showingRange: (from, to, total, unit) =>
     `Mostrando ${from}–${to} de ${total}${unit ? ` ${unit}` : ''}`,
   readMore: 'Leer más →'
@@ -753,6 +756,7 @@ const FR_TOOLBAR: HubToolbarUiCopy = {
   searchByKeywordAria: 'Rechercher par mot-clé',
   categories: 'Catégories',
   filters: 'Filtres',
+  filtersAria: 'Ouvrir les filtres',
   showingRange: (from, to, total, unit) =>
     `Affichage ${from}–${to} sur ${total}${unit ? ` ${unit}` : ''}`,
   readMore: 'Lire la suite →'

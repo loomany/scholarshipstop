@@ -73,6 +73,7 @@ type Props = {
   stateEncodedInPath?: boolean;
   searchPlaceholder?: string;
   countryOptions?: { value: ProvidersHubCountryBucket; label: string }[];
+  countriesDropdownLabel?: string;
   loadingSearchAria?: string;
 };
 
@@ -84,6 +85,7 @@ export function ProvidersHubToolbar({
   stateEncodedInPath = false,
   searchPlaceholder = 'Search by provider name, state, or your request...',
   countryOptions = DEFAULT_COUNTRY_OPTIONS,
+  countriesDropdownLabel = 'Countries',
   loadingSearchAria = 'Loading search'
 }: Props) {
   const router = useRouter();
@@ -207,7 +209,7 @@ export function ProvidersHubToolbar({
       <div
         ref={countriesDropdownRef}
         role="dialog"
-        aria-label="Countries"
+        aria-label={countriesDropdownLabel}
         className="fixed z-[200] flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white py-2 shadow-sm ring-1 ring-zinc-900/5"
         style={{
           top: countriesPanelLayout.top,
@@ -261,7 +263,7 @@ export function ProvidersHubToolbar({
           <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:gap-3">
             <div className="relative min-w-0 flex-1">
               <label htmlFor="providers-toolbar-q" className="sr-only">
-                Search providers
+                {searchPlaceholder}
               </label>
               <Search
                 className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-zinc-400"
@@ -294,7 +296,7 @@ export function ProvidersHubToolbar({
                   strokeWidth={2}
                   aria-hidden
                 />
-                Countries
+                {countriesDropdownLabel}
                 <ChevronDown
                   className={`h-4 w-4 shrink-0 text-gray-500 transition ${countriesOpen ? 'rotate-180' : ''}`}
                   aria-hidden

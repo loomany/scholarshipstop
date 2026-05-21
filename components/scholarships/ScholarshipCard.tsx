@@ -53,6 +53,16 @@ import {
   countryLabelFromCode,
   dedupeHostCountryCodesForDisplay
 } from '@/lib/scholarships/countryEligibility/countries';
+import { getScholarshipsHubUiCopy } from '@/lib/i18n/scholarshipsHubUiCopy';
+import {
+  getLocalizedCatalogChipLabel,
+  getLocalizedCountryLabel
+} from '@/lib/i18n/taxonomyLabels';
+import {
+  getLocalizedBestForPhrase,
+  getLocalizedScholarshipDifficultyLevel,
+  getLocalizedScholarshipSourceShortLabel
+} from '@/lib/i18n/providerDisplayLabels';
 import { scholarshipDeadlineHasPassed } from '@/lib/scholarships/similarScholarships';
 import {
   resolveScholarshipDetailClickBudgetMode,
@@ -190,14 +200,7 @@ function replaceSummaryDollarAwardWithSourceCurrency(
   return summary.replace(/(?:\bUS\s*)?\$[\d,.\s]+(?:\s+USD)?/g, awardDisplay);
 }
 
-const DEFAULT_CARD_COPY: ScholarshipsHubUiCopy['card'] = {
-  save: 'Save',
-  saved: 'Saved ✓',
-  removeFromSavedAria: 'Remove from saved',
-  saveScholarshipAria: 'Save scholarship',
-  notRelevant: 'Not relevant',
-  restoreToMatches: 'Restore to matches'
-};
+const DEFAULT_CARD_COPY = getScholarshipsHubUiCopy('en').card;
 
 export default function ScholarshipCard({
   scholarship,
@@ -235,6 +238,17 @@ export default function ScholarshipCard({
     }
     return 'en';
   }, [pathname]);
+  const cardChrome = useMemo(
+    () => ({ ...getScholarshipsHubUiCopy(uiLocale).card, ...cardCopy }),
+    [uiLocale, cardCopy]
+  );
+  const countryLabel = useCallback(
+    (code: string) =>
+      uiLocale === 'en'
+        ? countryLabelFromCode(code)
+        : getLocalizedCountryLabel(code, uiLocale, countryLabelFromCode(code)),
+    [uiLocale]
+  );
   const prefixHubHref = useCallback(
     (href: string | null): string | null => {
       if (!href || uiLocale === 'en') return href;
@@ -285,7 +299,7 @@ export default function ScholarshipCard({
     const selectedMatch = selectedCodes.find((code) => codes.includes(code));
     const primary = selectedMatch ?? (codes.length === 1 ? codes[0] : null);
     if (!primary) return null;
-    const label = countryLabelFromCode(primary);
+    const label = countryLabel(primary);
     const matchesSelectedCountry = selectedMatch === primary;
     return {
       code: primary,
@@ -313,31 +327,31 @@ export default function ScholarshipCard({
       /^[A-Z]{2}$/i.test(code.trim())
     );
     if (hostCodes.includes('US') || hasStateSignal) {
-      const usLabel = countryLabelFromCode('US');
+      const usLabel = countryLabel('US');
       return {
         key: 'grant-location-us',
-        text: `Study in: ${usLabel}`,
+        text: `${cardChrome.studyInPrefix} ${usLabel}`,
         title: `Study opportunity in ${usLabel}`
       };
     }
     if (hostCodes.length === 1) {
-      const label = countryLabelFromCode(hostCodes[0]!);
+      const label = countryLabel(hostCodes[0]!);
       return {
         key: `grant-location-${hostCodes[0]}`,
-        text: `Study in: ${label}`,
+        text: `${cardChrome.studyInPrefix} ${label}`,
         title: `Study opportunity in ${label}`
       };
     }
     if (hostCodes.length > 1) {
       return {
         key: 'grant-location-multi',
-        text: `Study in: ${hostCodes.length} countries`,
+        text: cardChrome.studyInMulti(hostCodes.length),
         title: `Study opportunities spanning ${hostCodes.length} countries`,
         hostCodes: [...hostCodes]
       };
     }
     return null;
-  }, [scholarship.hostCountryCodes, scholarship.stateCodes]);
+  }, [scholarship.hostCountryCodes, scholarship.stateCodes, cardChrome, countryLabel]);
 
   const grantLocationHubHrefRaw = useMemo(() => {
     if (!grantLocationBadge) return null;
@@ -369,9 +383,8 @@ export default function ScholarshipCard({
     !grantLocationBadge && scholarship.hostProgramLocationUnspecified
       ? {
           key: 'grant-location-unspecified',
-          text: 'Host: Not specified',
-          title:
-            'Host/program location is not specified in the source data yet.'
+          text: cardChrome.hostNotSpecified,
+          title: cardChrome.hostNotSpecifiedTitle
         }
       : null;
 
@@ -465,15 +478,15 @@ export default function ScholarshipCard({
   const requirementsSummary =
     scholarship.listRequirementsSummary?.trim() ||
     (reqCount === 0
-      ? '0 requirements: No requirements'
-      : `${reqCount} requirement${reqCount === 1 ? '' : 's'}: Listed in detail`);
+      ? cardChrome.requirementsSummaryZero
+      : cardChrome.requirementsSummaryListed(reqCount));
 
   const requirementsMetric =
     reqDisplayCount === 0
-      ? 'None'
+      ? cardChrome.requirementsNone
       : reqDisplayCount === 1
-        ? '1 requirement'
-        : `${reqDisplayCount} requirements`;
+        ? cardChrome.requirementsOne
+        : cardChrome.requirementsMany(reqDisplayCount);
 
   const requirementsMetricInner = (
     <>
@@ -484,7 +497,7 @@ export default function ScholarshipCard({
       >
         {requirementsMetric}
       </p>
-      <p className={METRIC_LABEL}>Requirements</p>
+      <p className={METRIC_LABEL}>{cardChrome.requirementsLabel}</p>
     </>
   );
 
@@ -494,21 +507,32 @@ export default function ScholarshipCard({
 
   const cardSourceStatus = getScholarshipSourceStatus(scholarship);
   const cardDifficulty = getScholarshipApplicationDifficulty(scholarship);
-  const cardBestFor = getScholarshipBestForLabel(scholarship);
+  const cardBestFor = getLocalizedBestForPhrase(
+    getScholarshipBestForLabel(scholarship),
+    uiLocale
+  );
+  const localizedSourceShort = getLocalizedScholarshipSourceShortLabel(
+    cardSourceStatus.shortLabel,
+    uiLocale
+  );
+  const localizedEffortLevel = getLocalizedScholarshipDifficultyLevel(
+    cardDifficulty.level,
+    uiLocale
+  );
   const intelligenceBadges = [
     {
       key: 'best-for',
-      label: `Best for: ${cardBestFor}`,
-      title: 'ScholarshipTop best-fit signal from listing facts'
+      label: `${cardChrome.bestForPrefix} ${cardBestFor}`,
+      title: cardChrome.bestForBadgeTitle
     },
     {
       key: 'effort',
-      label: `Effort: ${cardDifficulty.level}`,
+      label: `${cardChrome.effortPrefix} ${localizedEffortLevel}`,
       title: cardDifficulty.reason
     },
     {
       key: 'source',
-      label: `Source: ${cardSourceStatus.shortLabel}`,
+      label: `${cardChrome.sourcePrefix} ${localizedSourceShort}`,
       title: cardSourceStatus.description
     }
   ] as const;
@@ -516,7 +540,7 @@ export default function ScholarshipCard({
   const intelligenceBadgesRow = (
     <div
       className="mt-2 flex w-full min-w-0 flex-nowrap items-center gap-x-1.5 max-[380px]:flex-wrap max-[380px]:gap-y-1"
-      aria-label="ScholarshipTop listing intelligence"
+      aria-label={cardChrome.intelligenceAria}
     >
       {intelligenceBadges.map((badge) => (
         <span
@@ -538,10 +562,14 @@ export default function ScholarshipCard({
     hasAwardContent
   );
 
-  const catalogChips = useMemo<ScholarshipCardChip[]>(
-    () => scholarshipCardChips(scholarship).visible,
-    [scholarship]
-  );
+  const catalogChips = useMemo<ScholarshipCardChip[]>(() => {
+    const raw = scholarshipCardChips(scholarship).visible;
+    if (uiLocale === 'en') return raw;
+    return raw.map((chip) => ({
+      ...chip,
+      label: getLocalizedCatalogChipLabel(chip.key, chip.label, uiLocale)
+    }));
+  }, [scholarship, uiLocale]);
   const targetedCategoryLocked = resolveScholarshipTargetedCategoryLocked({
     subscriptionLockedCatalog: subscriptionLocked,
     hasSubscription,
@@ -580,10 +608,10 @@ export default function ScholarshipCard({
   const openAuthNoSubPaywall =
     onSubscriptionDetailNavigate ?? onGuestDetailNavigate;
   const topRightBadgeLabel =
-    badgeLabelOverride?.trim() || (isUnread ? 'NEW' : null);
+    badgeLabelOverride?.trim() || (isUnread ? cardChrome.badgeNew : null);
   const topRightBadgeAriaLabel = badgeLabelOverride?.trim()
     ? badgeLabelOverride.trim()
-    : 'New - not opened yet';
+    : cardChrome.badgeNewAria;
   const payoutLine = payoutMethodChipLabel(scholarship.payoutMethod);
 
   const hasApplicants =
@@ -629,7 +657,7 @@ export default function ScholarshipCard({
     ? 'Approximate applicant volume when available.'
     : 'Applicant count when available.';
 
-  const actions = cardCopy ?? DEFAULT_CARD_COPY;
+  const actions = cardChrome;
   const cardActionControls =
     ignoreAction === 'restore' ? (
       <button
@@ -1059,7 +1087,7 @@ export default function ScholarshipCard({
                 >
                   {awardCell}
                 </p>
-                <p className={METRIC_LABEL}>Award Amount</p>
+                <p className={METRIC_LABEL}>{cardChrome.awardAmountLabel}</p>
                 {payoutLine ? (
                   <p
                     className={`mt-1 text-[11px] font-medium text-gray-500 ${awardMetricAlignTight}`}
@@ -1075,7 +1103,7 @@ export default function ScholarshipCard({
             {authNoSubPreviewBlur && openAuthNoSubPaywall ? (
               <AuthNoSubBlurUnlock
                 onUnlock={openAuthNoSubPaywall}
-                label="Unlock award and deadline with a free account or plan"
+                label={cardChrome.unlockAwardAria}
               />
             ) : null}
           </div>
@@ -1098,7 +1126,7 @@ export default function ScholarshipCard({
                   >
                     {awardCell}
                   </p>
-                  <p className={METRIC_LABEL}>Award Amount</p>
+                  <p className={METRIC_LABEL}>{cardChrome.awardAmountLabel}</p>
                   {payoutLine ? (
                     <p
                       className={`mt-1 text-[11px] font-medium text-gray-500 ${awardMetricAlignTight}`}
@@ -1223,7 +1251,7 @@ export default function ScholarshipCard({
               {authNoSubPreviewBlur && openAuthNoSubPaywall ? (
                 <AuthNoSubBlurUnlock
                   onUnlock={openAuthNoSubPaywall}
-                  label="Unlock award and deadline with a free account or plan"
+                  label={cardChrome.unlockAwardAria}
                 />
               ) : null}
             </div>
@@ -1280,7 +1308,7 @@ export default function ScholarshipCard({
                   >
                     {awardCell}
                   </p>
-                  <p className={METRIC_LABEL}>Award Amount</p>
+                  <p className={METRIC_LABEL}>{cardChrome.awardAmountLabel}</p>
                   {payoutLine ? (
                     <p
                       className={`mt-1 text-[11px] font-medium text-gray-500 ${awardMetricAlignTight}`}

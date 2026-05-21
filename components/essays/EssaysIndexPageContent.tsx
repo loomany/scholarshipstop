@@ -268,6 +268,7 @@ export async function EssaysIndexPageContent({
                   showingFrom={showingFrom}
                   showingTo={showingTo}
                   className="mt-2 lg:hidden"
+                  locale={locale}
                 />
               </aside>
             </section>

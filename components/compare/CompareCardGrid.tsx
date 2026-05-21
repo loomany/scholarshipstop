@@ -13,12 +13,15 @@ import {
 } from '@/lib/guest/guestHubClickBudget';
 import type { CompareIndexItem } from '@/lib/seo/compareIndexFilters';
 import type { CompareHubGridIqCopy } from '@/lib/i18n/hubUiCopy';
+import { getHubToolbarUiCopy } from '@/lib/i18n/hubUiCopy';
+import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
 
 type CompareCardGridProps = {
   items: CompareIndexItem[];
   emptyMessage: string;
   gridIq?: CompareHubGridIqCopy;
   iqHref?: string;
+  locale?: LocalizedUiLocale;
 };
 
 function CompareGridIqAssessmentCard({
@@ -91,8 +94,10 @@ export default function CompareCardGrid({
   items,
   emptyMessage,
   gridIq = DEFAULT_GRID_IQ,
-  iqHref = '/iq/assessment?intent=college_fit'
+  iqHref = '/iq/assessment?intent=college_fit',
+  locale = 'en'
 }: CompareCardGridProps) {
+  const readMoreLabel = getHubToolbarUiCopy(locale).readMore;
   const [offerOpen, setOfferOpen] = useState(false);
   const [, hubTick] = useState(0);
   useEffect(() => {
@@ -180,7 +185,7 @@ export default function CompareCardGrid({
                               aria-hidden
                             />
                           ) : null}
-                          Read more →
+                          {readMoreLabel}
                         </span>
                         {showLock ? (
                           <span id={`${headingId}-lock-hint`} className="sr-only">

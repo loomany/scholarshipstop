@@ -31,6 +31,7 @@ import { getCanonical } from '@/lib/seo/canonical';
 import { STATIC_SCHOLARSHIP_GUIDES } from '@/lib/resources/staticScholarshipGuides';
 import {
   getHubIqPromoUiCopy,
+  getHubToolbarUiCopy,
   getResourcesHubUiCopy,
   type ResourcesHubUiCopy
 } from '@/lib/i18n/hubUiCopy';
@@ -378,13 +379,16 @@ function ResourcesGrid({
   posts,
   fallbackCoverByPostId,
   hrefForPath,
-  iq
+  iq,
+  locale = 'en'
 }: {
   posts: ContentPostListFields[];
   fallbackCoverByPostId: Map<string, string>;
   hrefForPath: (path: string) => string;
   iq: ReturnType<typeof getHubIqPromoUiCopy>;
+  locale?: import('@/lib/i18n/localizedHref').LocalizedUiLocale;
 }) {
+  const readMore = getHubToolbarUiCopy(locale).readMore;
   const withSlug = rebalanceAdjacentDuplicateCovers(
     posts.filter((p) => p.slug?.trim()),
     fallbackCoverByPostId
@@ -442,7 +446,7 @@ function ResourcesGrid({
                     </p>
                   ) : null}
                   <span className="mt-4 inline-flex items-center text-sm font-semibold text-orange-600 group-hover:text-orange-700">
-                    Read more →
+                    {readMore}
                   </span>
                 </div>
               </Link>
@@ -583,7 +587,7 @@ export async function ResourcesIndexPageContent({
         '@type': 'ListItem',
         position: withSlug.length + index + 1,
         name: card.title,
-        item: getURL(resourcesArticlePath(guide.slug).replace(/^\/+/, ''))
+        item: getURL(hrefForPath(resourcesArticlePath(guide.slug)).replace(/^\/+/, ''))
       };
     }
   );
@@ -599,7 +603,7 @@ export async function ResourcesIndexPageContent({
           itemListElement: [
             ...withSlug.map((post, index) => {
               const slug = post.slug!.trim();
-              const path = resourcesArticlePath(slug).replace(/^\/+/, '');
+              const path = hrefForPath(resourcesArticlePath(slug)).replace(/^\/+/, '');
               return {
                 '@type': 'ListItem',
                 position: index + 1,
@@ -753,6 +757,7 @@ export async function ResourcesIndexPageContent({
                 fallbackCoverByPostId={fallbackCoverByPostId}
                 hrefForPath={hrefForPath}
                 iq={iqCopy}
+                locale={locale}
               />
             </>
           )

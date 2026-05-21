@@ -6,6 +6,7 @@ import { ArrowRight, BrainCircuit } from 'lucide-react';
 
 import type { ProviderHubRow } from '@/lib/providers/providerHubTypes';
 import type { ProvidersHubGridIqCopy } from '@/lib/i18n/hubUiCopy';
+import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
 
 import { ProvidersHubCard } from './ProvidersHubCard';
 
@@ -13,6 +14,7 @@ type Props = {
   rows: ProviderHubRow[];
   gridIq?: ProvidersHubGridIqCopy;
   iqHref?: string;
+  locale?: LocalizedUiLocale;
 };
 
 function ProvidersGridIqAssessmentCard({
@@ -86,13 +88,14 @@ const DEFAULT_GRID_IQ: ProvidersHubGridIqCopy = {
 export function ProvidersHubCardsGrid({
   rows,
   gridIq = DEFAULT_GRID_IQ,
-  iqHref = '/iq/assessment?intent=provider_research'
+  iqHref = '/iq/assessment?intent=provider_research',
+  locale = 'en'
 }: Props) {
   return (
     <ul className="mt-10 grid list-none grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
       {rows.map((row, index) => (
         <Fragment key={row.slug}>
-          <ProvidersHubCard row={row} />
+          <ProvidersHubCard row={row} locale={locale} />
           {index === 2 ? (
             <ProvidersGridIqAssessmentCard iq={gridIq} href={iqHref} />
           ) : null}

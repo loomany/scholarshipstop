@@ -193,3 +193,155 @@ export function getLocalizedFilterLabel(
   if (type === 'country') return getLocalizedCountryLabel(value, locale, fallback);
   return fallback;
 }
+
+/** Display-only chip labels on scholarship cards (keys from scholarshipCardChips). */
+const CATALOG_CHIP_EN_TO_ES: Record<string, string> = {
+  'No Essay': 'Sin ensayo',
+  'Easy Apply': 'Solicitud fácil',
+  'Quick Apply': 'Solicitud rápida',
+  'Few Requirements': 'Pocos requisitos',
+  Education: 'Educación',
+  Graduate: 'Posgrado',
+  Undergraduate: 'Pregrado',
+  'High School': 'Secundaria',
+  'High School Senior': 'Último año de secundaria',
+  PhD: 'Doctorado',
+  'Community College': 'Universidad comunitaria',
+  'Trade School': 'Escuela técnica',
+  Verified: 'Verificada',
+  'Paid to school': 'Pago a la escuela',
+  'Direct to student': 'Directo al estudiante',
+  'Non-monetary': 'No monetario',
+  'International Students': 'Estudiantes internacionales',
+  Women: 'Mujeres',
+  Minority: 'Minoría',
+  Hispanic: 'Hispanos',
+  'African American': 'Afroamericanos',
+  'First-Generation': 'Primera generación',
+  Disability: 'Discapacidad',
+  Veterans: 'Veteranos',
+  'LGBTQ+': 'LGBTQ+',
+  'Single Parent': 'Madre/padre soltero/a',
+  'Foster Youth': 'Jóvenes en acogida',
+  'Native American': 'Nativos americanos',
+  'Low Income': 'Bajos ingresos',
+  'Financial Need': 'Necesidad económica'
+};
+
+const CATALOG_CHIP_EN_TO_FR: Record<string, string> = {
+  'No Essay': 'Sans essai',
+  'Easy Apply': 'Candidature facile',
+  'Quick Apply': 'Candidature rapide',
+  'Few Requirements': 'Peu d’exigences',
+  Education: 'Éducation',
+  Graduate: 'Études supérieures',
+  Undergraduate: 'Premier cycle',
+  'High School': 'Lycée',
+  'High School Senior': 'Terminale',
+  PhD: 'Doctorat',
+  'Community College': 'Collège communautaire',
+  'Trade School': 'École professionnelle',
+  Verified: 'Vérifiée',
+  'Paid to school': 'Versé à l’établissement',
+  'Direct to student': 'Versé à l’étudiant',
+  'Non-monetary': 'Non monétaire',
+  'International Students': 'Étudiants internationaux',
+  Women: 'Femmes',
+  Minority: 'Minorités',
+  Hispanic: 'Hispaniques',
+  'African American': 'Afro-Américains',
+  'First-Generation': 'Première génération',
+  Disability: 'Handicap',
+  Veterans: 'Vétérans',
+  'LGBTQ+': 'LGBTQ+',
+  'Single Parent': 'Parent seul',
+  'Foster Youth': 'Jeunes placés',
+  'Native American': 'Amérindiens',
+  'Low Income': 'Faibles revenus',
+  'Financial Need': 'Besoin financier'
+};
+
+export function getLocalizedCatalogChipLabel(
+  chipKey: string,
+  englishLabel: string,
+  locale: LocalizedUiLocale
+): string {
+  if (locale === 'en') return englishLabel;
+  if (chipKey.startsWith('cat:')) {
+    const slug = chipKey.slice(4);
+    return getLocalizedCategoryLabel(slug, locale, englishLabel);
+  }
+  const map = locale === 'es' ? CATALOG_CHIP_EN_TO_ES : CATALOG_CHIP_EN_TO_FR;
+  return map[englishLabel] ?? englishLabel;
+}
+
+export type ResourceCategoryId =
+  | 'finding-scholarships'
+  | 'applications'
+  | 'eligibility'
+  | 'international-students'
+  | 'deadlines-planning'
+  | 'essays-writing'
+  | 'financial-aid-funding'
+  | 'student-types'
+  | 'strategy-tips'
+  | 'scams-safety'
+  | 'success-stories';
+
+const RESOURCE_CATEGORY_ES: Record<ResourceCategoryId, string> = {
+  'finding-scholarships': 'Encontrar becas',
+  applications: 'Solicitudes',
+  eligibility: 'Elegibilidad',
+  'international-students': 'Estudiantes internacionales',
+  'deadlines-planning': 'Fechas límite y planificación',
+  'essays-writing': 'Ensayos y redacción',
+  'financial-aid-funding': 'Ayuda financiera',
+  'student-types': 'Tipos de estudiante',
+  'strategy-tips': 'Estrategia y consejos',
+  'scams-safety': 'Estafas y seguridad',
+  'success-stories': 'Historias de éxito'
+};
+
+const RESOURCE_CATEGORY_FR: Record<ResourceCategoryId, string> = {
+  'finding-scholarships': 'Trouver des bourses',
+  applications: 'Candidatures',
+  eligibility: 'Éligibilité',
+  'international-students': 'Étudiants internationaux',
+  'deadlines-planning': 'Dates limites et planification',
+  'essays-writing': 'Essais et rédaction',
+  'financial-aid-funding': 'Aide financière',
+  'student-types': 'Types d’étudiants',
+  'strategy-tips': 'Stratégie et conseils',
+  'scams-safety': 'Arnaques et sécurité',
+  'success-stories': 'Réussites'
+};
+
+export function getLocalizedResourceCategoryLabel(
+  categoryId: string,
+  locale: LocalizedUiLocale,
+  fallback: string
+): string {
+  if (locale === 'en') return fallback;
+  const id = categoryId as ResourceCategoryId;
+  if (locale === 'es' && RESOURCE_CATEGORY_ES[id]) return RESOURCE_CATEGORY_ES[id];
+  if (locale === 'fr' && RESOURCE_CATEGORY_FR[id]) return RESOURCE_CATEGORY_FR[id];
+  return fallback;
+}
+
+export type ResourcesToolbarUiCopy = {
+  allTopics: string;
+  clear: string;
+  apply: string;
+};
+
+const RESOURCES_TOOLBAR: Record<LocalizedUiLocale, ResourcesToolbarUiCopy> = {
+  en: { allTopics: 'All topics', clear: 'Clear', apply: 'Apply' },
+  es: { allTopics: 'Todos los temas', clear: 'Limpiar', apply: 'Aplicar' },
+  fr: { allTopics: 'Tous les sujets', clear: 'Effacer', apply: 'Appliquer' }
+};
+
+export function getResourcesToolbarUiCopy(
+  locale: LocalizedUiLocale
+): ResourcesToolbarUiCopy {
+  return RESOURCES_TOOLBAR[locale];
+}

@@ -1,8 +1,7 @@
 import { notFound } from 'next/navigation';
 
-import UniversityBattlesPage, {
-  generateMetadata as generateEnglishMetadata
-} from '@/app/compare/universities/page';
+import { generateMetadata as generateEnglishMetadata } from '@/app/compare/universities/page';
+import { UniversityCompareHubPageBody } from '@/app/compare/universities/universityCompareHubPageBody';
 import { EnglishZoneNotice } from '@/components/i18n/EnglishZoneNotice';
 import {
   isStage2PilotLocale,
@@ -32,7 +31,10 @@ export default function LocalizedUniversityCompareHubPage({
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6">
         <EnglishZoneNotice locale={locale} />
       </div>
-      <UniversityBattlesPage searchParams={searchParams} />
+      <UniversityCompareHubPageBody
+        searchParams={searchParams}
+        locale={locale}
+      />
     </>
   );
 }

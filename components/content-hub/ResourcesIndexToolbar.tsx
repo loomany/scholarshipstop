@@ -75,9 +75,11 @@ function stateFromSearchParams(
   return parseResourcesIndexSearchParams(record);
 }
 
+import { getHubToolbarUiCopy } from '@/lib/i18n/hubUiCopy';
 import {
-  getHubToolbarUiCopy
-} from '@/lib/i18n/hubUiCopy';
+  getLocalizedResourceCategoryLabel,
+  getResourcesToolbarUiCopy
+} from '@/lib/i18n/taxonomyLabels';
 import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
 
 type ResourcesIndexToolbarProps = {
@@ -95,7 +97,9 @@ export default function ResourcesIndexToolbar({
   showingTo,
   locale
 }: ResourcesIndexToolbarProps) {
-  const toolbar = getHubToolbarUiCopy(locale ?? 'en');
+  const uiLocale = locale ?? 'en';
+  const toolbar = getHubToolbarUiCopy(uiLocale);
+  const resourcesToolbar = getResourcesToolbarUiCopy(uiLocale);
   const router = useRouter();
   const sp = useSearchParams();
   const applied = useMemo(() => stateFromSearchParams(sp), [sp]);
@@ -255,7 +259,7 @@ export default function ResourcesIndexToolbar({
       <div
         ref={categoryDropdownRef}
         role="dialog"
-        aria-label="Categories"
+        aria-label={toolbar.categories}
         className="fixed z-[200] flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm ring-1 ring-zinc-900/5"
         style={{
           top: categoryPanelLayout.top,
@@ -265,7 +269,7 @@ export default function ResourcesIndexToolbar({
         }}
       >
         <div className="shrink-0 border-b border-zinc-100 px-4 py-3">
-          <h2 className="text-base font-semibold text-zinc-900">Categories</h2>
+          <h2 className="text-base font-semibold text-zinc-900">{toolbar.categories}</h2>
           <p className="mt-0.5 text-xs text-zinc-500">
             Choose a topic to narrow guides. Clear below to show all.
           </p>
@@ -284,7 +288,7 @@ export default function ResourcesIndexToolbar({
                 className="scholarship-deadline-radio mt-0.5 h-4 w-4 shrink-0"
               />
               <span className="min-w-0 flex-1 text-sm font-medium text-zinc-800">
-                All topics
+                {resourcesToolbar.allTopics}
               </span>
             </label>
           </li>
@@ -299,7 +303,11 @@ export default function ResourcesIndexToolbar({
                   className="scholarship-deadline-radio mt-0.5 h-4 w-4 shrink-0"
                 />
                 <span className="min-w-0 flex-1 text-sm font-medium text-zinc-800">
-                  {resourceCategoryLabel(id)}
+                  {getLocalizedResourceCategoryLabel(
+                    id,
+                    uiLocale,
+                    resourceCategoryLabel(id)
+                  )}
                 </span>
                 <span className="shrink-0 tabular-nums text-sm font-medium text-zinc-500">
                   {categoryCounts[id] ?? 0}
@@ -314,7 +322,7 @@ export default function ResourcesIndexToolbar({
             className="rounded-md text-sm font-semibold text-zinc-600 underline-offset-2 transition hover:text-zinc-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/50 focus-visible:ring-offset-0"
             onClick={() => setDraftCategoryId(null)}
           >
-            Clear
+            {resourcesToolbar.clear}
           </button>
           <button
             type="button"
@@ -328,7 +336,7 @@ export default function ResourcesIndexToolbar({
               setCategoriesOpen(false);
             }}
           >
-            Apply
+            {resourcesToolbar.apply}
           </button>
         </div>
       </div>,
@@ -408,7 +416,7 @@ export default function ResourcesIndexToolbar({
             <div className="relative min-w-0 sm:min-w-0" ref={filtersRef}>
               <button
                 type="button"
-                aria-label="Open filters"
+                aria-label={toolbar.filtersAria}
                 aria-expanded={filtersOpen}
                 aria-haspopup="dialog"
                 onClick={() => {

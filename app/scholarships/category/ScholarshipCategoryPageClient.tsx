@@ -942,6 +942,7 @@ export default function ScholarshipCategoryPageClient({
                   <ScholarshipCard
                     key={s.id}
                     scholarship={s}
+                    cardCopy={hubUi.card}
                     isUnread={!viewedIds.includes(s.id)}
                     saved={savedIds.includes(s.id)}
                     onToggleSave={toggleSave}

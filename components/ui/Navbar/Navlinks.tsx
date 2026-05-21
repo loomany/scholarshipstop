@@ -746,17 +746,12 @@ export default function Navlinks({
                 </div>
               </div>
             </div>
-            {locale === 'en' ? (
-              <Link
-                href="/subscription"
-                className={clsx(
-                  nav.dark,
-                  pricingActive && nav.darkActive
-                )}
-              >
-                {navCopy.pricing}
-              </Link>
-            ) : null}
+            <Link
+              href={subscriptionHref}
+              className={clsx(nav.dark, pricingActive && nav.darkActive)}
+            >
+              {navCopy.pricing}
+            </Link>
           </nav>
         </div>
         <div className="flex min-w-0 shrink-0 items-center justify-end gap-2 sm:gap-3">

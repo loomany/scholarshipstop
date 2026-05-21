@@ -246,7 +246,7 @@ export default function EssaysIndexToolbar({
       <div
         ref={categoryDropdownRef}
         role="dialog"
-        aria-label="Categories"
+        aria-label={toolbar.categories}
         className="fixed z-[200] flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm ring-1 ring-zinc-900/5"
         style={{
           top: categoryPanelLayout.top,
@@ -256,7 +256,7 @@ export default function EssaysIndexToolbar({
         }}
       >
         <div className="shrink-0 border-b border-zinc-100 px-4 py-3">
-          <h2 className="text-base font-semibold text-zinc-900">Categories</h2>
+          <h2 className="text-base font-semibold text-zinc-900">{toolbar.categories}</h2>
           <p className="mt-0.5 text-xs text-zinc-500">
             Narrow guides by the linked scholarship category. Clear below to show
             all.
@@ -334,7 +334,7 @@ export default function EssaysIndexToolbar({
       <div
         ref={filtersDropdownRef}
         role="dialog"
-        aria-label="Filters"
+        aria-label={toolbar.filters}
         className="fixed z-[200] flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white py-2 shadow-sm ring-1 ring-zinc-900/5"
         style={{
           top: filtersPanelLayout.top,
@@ -404,7 +404,7 @@ export default function EssaysIndexToolbar({
             <div className="relative min-w-0 sm:min-w-0" ref={filtersRef}>
               <button
                 type="button"
-                aria-label="Open filters"
+                aria-label={toolbar.filtersAria}
                 aria-expanded={filtersOpen}
                 aria-haspopup="dialog"
                 onClick={() => {
@@ -418,7 +418,7 @@ export default function EssaysIndexToolbar({
                   strokeWidth={2}
                   aria-hidden
                 />
-                Filters
+                {toolbar.filters}
                 {filtersActiveCount > 0 ? (
                   <span className="tabular-nums text-gray-600">
                     ({filtersActiveCount})
@@ -439,7 +439,7 @@ export default function EssaysIndexToolbar({
                 className={`${CATALOG_CONTROL_BAR_BTN} w-full sm:w-auto`}
               >
                 <LayoutGrid className="h-[18px] w-[18px] text-gray-600" />
-                Categories
+                {toolbar.categories}
                 {categoryTriggerCount > 0 ? (
                   <span className="tabular-nums text-gray-600">
                     ({categoryTriggerCount})
@@ -460,6 +460,7 @@ export default function EssaysIndexToolbar({
         showingFrom={showingFrom}
         showingTo={showingTo}
         className="hidden lg:block"
+        locale={locale ?? 'en'}
       />
 
       {categoryDropdown}

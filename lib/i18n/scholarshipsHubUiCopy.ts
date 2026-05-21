@@ -46,6 +46,25 @@ export type ScholarshipsHubUiCopy = {
     saveScholarshipAria: string;
     notRelevant: string;
     restoreToMatches: string;
+    badgeNew: string;
+    badgeNewAria: string;
+    awardAmountLabel: string;
+    requirementsLabel: string;
+    requirementsNone: string;
+    requirementsOne: string;
+    requirementsMany: (count: number) => string;
+    requirementsSummaryZero: string;
+    requirementsSummaryListed: (count: number) => string;
+    bestForPrefix: string;
+    effortPrefix: string;
+    sourcePrefix: string;
+    hostNotSpecified: string;
+    hostNotSpecifiedTitle: string;
+    studyInPrefix: string;
+    studyInMulti: (count: number) => string;
+    intelligenceAria: string;
+    bestForBadgeTitle: string;
+    unlockAwardAria: string;
   };
   tryEssayMentor: string;
   inlineIq: {
@@ -208,7 +227,28 @@ const EN: ScholarshipsHubUiCopy = {
     removeFromSavedAria: 'Remove from saved',
     saveScholarshipAria: 'Save scholarship',
     notRelevant: 'Not relevant',
-    restoreToMatches: 'Restore to matches'
+    restoreToMatches: 'Restore to matches',
+    badgeNew: 'NEW',
+    badgeNewAria: 'New - not opened yet',
+    awardAmountLabel: 'Award Amount',
+    requirementsLabel: 'Requirements',
+    requirementsNone: 'None',
+    requirementsOne: '1 requirement',
+    requirementsMany: (count) => `${count} requirements`,
+    requirementsSummaryZero: '0 requirements: No requirements',
+    requirementsSummaryListed: (count) =>
+      `${count} requirement${count === 1 ? '' : 's'}: Listed in detail`,
+    bestForPrefix: 'Best for:',
+    effortPrefix: 'Effort:',
+    sourcePrefix: 'Source:',
+    hostNotSpecified: 'Host: Not specified',
+    hostNotSpecifiedTitle:
+      'Host/program location is not specified in the source data yet.',
+    studyInPrefix: 'Study in:',
+    studyInMulti: (count) => `Study in: ${count} countries`,
+    intelligenceAria: 'ScholarshipTop listing intelligence',
+    bestForBadgeTitle: 'ScholarshipTop best-fit signal from listing facts',
+    unlockAwardAria: 'Unlock award and deadline with a free account or plan'
   },
   tryEssayMentor: 'Try Essay Mentor',
   inlineIq: {
@@ -389,7 +429,28 @@ const ES: ScholarshipsHubUiCopy = {
     removeFromSavedAria: 'Quitar de guardadas',
     saveScholarshipAria: 'Guardar beca',
     notRelevant: 'No relevante',
-    restoreToMatches: 'Restaurar en coincidencias'
+    restoreToMatches: 'Restaurar en coincidencias',
+    badgeNew: 'NUEVO',
+    badgeNewAria: 'Nuevo — aún no abierto',
+    awardAmountLabel: 'Monto de la beca',
+    requirementsLabel: 'Requisitos',
+    requirementsNone: 'Ninguno',
+    requirementsOne: '1 requisito',
+    requirementsMany: (count) => `${count} requisitos`,
+    requirementsSummaryZero: '0 requisitos: sin requisitos',
+    requirementsSummaryListed: (count) =>
+      `${count} requisito${count === 1 ? '' : 's'}: ver detalle`,
+    bestForPrefix: 'Mejor para:',
+    effortPrefix: 'Esfuerzo:',
+    sourcePrefix: 'Fuente:',
+    hostNotSpecified: 'Anfitrión: sin especificar',
+    hostNotSpecifiedTitle:
+      'La ubicación del programa/anfitrión aún no está especificada en los datos.',
+    studyInPrefix: 'Estudio en:',
+    studyInMulti: (count) => `Estudio en: ${count} países`,
+    intelligenceAria: 'Señales de listado ScholarshipTop',
+    bestForBadgeTitle: 'Señal de mejor encaje de ScholarshipTop',
+    unlockAwardAria: 'Desbloquea monto y fecha con cuenta gratuita o plan'
   },
   tryEssayMentor: 'Probar Essay Mentor',
   inlineIq: {
@@ -571,7 +632,28 @@ const FR: ScholarshipsHubUiCopy = {
     removeFromSavedAria: 'Retirer des enregistrées',
     saveScholarshipAria: 'Enregistrer la bourse',
     notRelevant: 'Non pertinent',
-    restoreToMatches: 'Restaurer dans les correspondances'
+    restoreToMatches: 'Restaurer dans les correspondances',
+    badgeNew: 'NOUVEAU',
+    badgeNewAria: 'Nouveau — pas encore ouvert',
+    awardAmountLabel: 'Montant de la bourse',
+    requirementsLabel: 'Exigences',
+    requirementsNone: 'Aucune',
+    requirementsOne: '1 exigence',
+    requirementsMany: (count) => `${count} exigences`,
+    requirementsSummaryZero: '0 exigence : aucune exigence',
+    requirementsSummaryListed: (count) =>
+      `${count} exigence${count === 1 ? '' : 's'} : voir le détail`,
+    bestForPrefix: 'Meilleur pour :',
+    effortPrefix: 'Effort :',
+    sourcePrefix: 'Source :',
+    hostNotSpecified: 'Pays d’accueil non précisé',
+    hostNotSpecifiedTitle:
+      'Le lieu du programme/pays d’accueil n’est pas encore précisé dans les données.',
+    studyInPrefix: 'Études en :',
+    studyInMulti: (count) => `Études en : ${count} pays`,
+    intelligenceAria: 'Signaux de liste ScholarshipTop',
+    bestForBadgeTitle: 'Signal d’adéquation ScholarshipTop',
+    unlockAwardAria: 'Débloquez montant et date avec un compte gratuit ou un forfait'
   },
   tryEssayMentor: 'Essayer Essay Mentor',
   inlineIq: {

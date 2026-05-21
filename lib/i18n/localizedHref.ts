@@ -72,6 +72,10 @@ export function hrefForLocalizedUiRequired(
   }
   const localized = hrefForLocalizedUi(locale, pathOnly);
   if (localized) return `${localized}${suffix}`;
+  const resourceSlug = resourcePilotArticleSlug(pathOnly);
+  if (resourceSlug && locale !== 'en') {
+    return `${localizedResourcePilotArticleHref(locale, resourceSlug)}${suffix}`;
+  }
   if (locale !== 'en') {
     if (pathOnly === '/') return `/${locale}${suffix}`;
     if (STAGE2_PILOT_HUB_PATHS.has(pathOnly)) {

@@ -21,46 +21,54 @@ import {
 import { getScholarshipsHubUiCopy } from '@/lib/i18n/scholarshipsHubUiCopy';
 import type { ScholarshipHubPathTabInput } from '@/app/scholarships/scholarshipHubPath';
 
-const CONTINUE_SEARCH_SUBTITLE =
-  'Explore next steps to find scholarships faster, write stronger applications, and compare opportunities.';
-
-const CONTINUE_SEARCH_CARD_COPY: Record<
-  string,
-  { description: string; Icon: LucideIcon }
-> = {
-  '/resources': {
-    description:
-      'Guides to help you find, track, and apply for scholarships step by step.',
-    Icon: BookOpen
-  },
-  '/essays': {
-    description:
-      'Learn how to write strong scholarship essays and stand out from other applicants.',
-    Icon: FileText
-  },
-  '/providers': {
-    description:
-      'Explore organizations offering scholarships and understand their requirements.',
-    Icon: Building2
-  },
-  '/compare': {
-    description:
-      'Compare scholarships, states, and options to choose the best path.',
-    Icon: ArrowLeftRight
-  }
+const CONTINUE_SEARCH_CARD_META: Record<string, { Icon: LucideIcon }> = {
+  '/resources': { Icon: BookOpen },
+  '/essays': { Icon: FileText },
+  '/providers': { Icon: Building2 },
+  '/compare': { Icon: ArrowLeftRight }
 };
 
-const CONTINUE_SEARCH_BASE_CARDS = SCHOLARSHIP_HUB_RELATED_LINKS_DEFAULT.map(
-  (row) => {
-    const meta = CONTINUE_SEARCH_CARD_COPY[row.href];
+function continueSearchCards(locale: LocalizedUiLocale) {
+  const c = getScholarshipsHubUiCopy(locale).continueSearch;
+  const byHref: Record<
+    string,
+    { title: string; description: string; Icon: LucideIcon }
+  > = {
+    '/resources': {
+      title: c.resourcesTitle,
+      description: c.resourcesBody,
+      Icon: BookOpen
+    },
+    '/essays': {
+      title: c.essaysTitle,
+      description: c.essaysBody,
+      Icon: FileText
+    },
+    '/providers': {
+      title: c.providersTitle,
+      description: c.providersBody,
+      Icon: Building2
+    },
+    '/compare': {
+      title: c.compareTitle,
+      description: c.compareBody,
+      Icon: ArrowLeftRight
+    }
+  };
+  return SCHOLARSHIP_HUB_RELATED_LINKS_DEFAULT.map((row) => {
+    const meta = byHref[row.href] ?? {
+      title: row.label,
+      description: '',
+      Icon: CONTINUE_SEARCH_CARD_META[row.href]?.Icon ?? Compass
+    };
     return {
       href: row.href,
-      title: row.label,
+      title: meta.title,
       description: meta.description,
       Icon: meta.Icon
     };
-  }
-);
+  });
+}
 
 function scholarshipHubFaqPageJsonLd(
   faq: { question: string; answer: string }[]
@@ -140,7 +148,8 @@ export function ScholarshipHubCanonicalListingFooter({
     href: localizeHubFooterHref(locale, row.href)
   }));
   const idPrefix = `hub-${slug}-faq`;
-  const baseCards = CONTINUE_SEARCH_BASE_CARDS.map((card) => ({
+  const continueSearch = getScholarshipsHubUiCopy(locale).continueSearch;
+  const baseCards = continueSearchCards(locale).map((card) => ({
     ...card,
     href: localizeHubFooterHref(locale, card.href)
   }));
@@ -216,13 +225,13 @@ export function ScholarshipHubCanonicalListingFooter({
           id={`${idPrefix}-related-heading`}
           className="text-2xl font-bold tracking-tight text-slate-900"
         >
-          Continue your scholarship search
+          {continueSearch.heading}
         </h2>
         <p
           id={`${idPrefix}-related-subtitle`}
           className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-600 sm:text-[0.9375rem]"
         >
-          {CONTINUE_SEARCH_SUBTITLE}
+          {continueSearch.subtitle}
         </p>
         <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
           {baseCards.map(({ href, title, description, Icon }) => (
@@ -245,7 +254,7 @@ export function ScholarshipHubCanonicalListingFooter({
                   <h3 className="font-semibold text-lg text-slate-900">{title}</h3>
                   <p className="mt-1 text-sm text-slate-600">{description}</p>
                   <span className="mt-3 inline-block font-medium text-orange-500 transition group-hover:text-orange-600">
-                    Explore →
+                    {continueSearch.explore}
                   </span>
                 </div>
               </div>
@@ -270,10 +279,10 @@ export function ScholarshipHubCanonicalListingFooter({
                 <div className="min-w-0 flex-1">
                   <h3 className="font-semibold text-lg text-slate-900">{row.label}</h3>
                   <p className="mt-1 text-sm text-slate-600">
-                    Related scholarship listings and tools connected to this hub.
+                    {continueSearch.exploringSubtitle}
                   </p>
                   <span className="mt-3 inline-block font-medium text-orange-500 transition group-hover:text-orange-600">
-                    Explore →
+                    {continueSearch.explore}
                   </span>
                 </div>
               </div>

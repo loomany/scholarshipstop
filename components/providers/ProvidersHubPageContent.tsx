@@ -18,6 +18,7 @@ import {
 } from '@/lib/scholarships/seoTags/routeSegmentMaps';
 import { getURL } from '@/utils/helpers';
 import { getProvidersHubUiCopy, type ProvidersHubUiCopy } from '@/lib/i18n/hubUiCopy';
+import { getProviderCardUiCopy } from '@/lib/i18n/providerDisplayLabels';
 import { getProvidersHubIqPromoCopy } from '@/lib/i18n/hubIqPromoByHub';
 import { hrefForLocalizedUiRequired } from '@/lib/i18n/localizedHref';
 import type { Stage2PilotLocale } from '@/lib/i18n/pilotRoutes';
@@ -67,6 +68,7 @@ export async function ProvidersHubPageContent({
   ui: uiProp
 }: ProvidersHubPageContentProps) {
   const ui = uiProp ?? getProvidersHubUiCopy(locale);
+  const providerCardCopy = getProviderCardUiCopy(locale);
   const iqCopy = getProvidersHubIqPromoCopy(locale);
   const hrefForPath = (path: string) => hrefForLocalizedUiRequired(locale, path);
   const iqProviderResearchHref = '/iq/assessment?intent=provider_research';
@@ -303,6 +305,7 @@ export async function ProvidersHubPageContent({
                 )}
                 searchPlaceholder={ui.searchPlaceholder}
                 countryOptions={ui.countryOptions}
+                countriesDropdownLabel={providerCardCopy.countriesDropdown}
                 loadingSearchAria={ui.loadingSearchAria}
               />
             </div>
@@ -343,7 +346,12 @@ export async function ProvidersHubPageContent({
           </div>
         ) : (
           <>
-            <ProvidersHubCardsGrid rows={rows} gridIq={ui.gridIq} iqHref={iqProviderResearchHref} />
+            <ProvidersHubCardsGrid
+              rows={rows}
+              gridIq={ui.gridIq}
+              iqHref={iqProviderResearchHref}
+              locale={locale}
+            />
             <div className="mt-6 lg:hidden">
               <HubIqPromoAssessmentCard
                 href={iqProviderResearchHref}

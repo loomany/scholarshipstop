@@ -1,8 +1,7 @@
 import { notFound } from 'next/navigation';
 
-import StateBattlesPage, {
-  generateMetadata as generateEnglishMetadata
-} from '@/app/compare/states/page';
+import { generateMetadata as generateEnglishMetadata } from '@/app/compare/states/page';
+import { StateCompareHubPageBody } from '@/app/compare/states/stateCompareHubPageBody';
 import { EnglishZoneNotice } from '@/components/i18n/EnglishZoneNotice';
 import {
   isStage2PilotLocale,
@@ -32,7 +31,7 @@ export default function LocalizedStateCompareHubPage({
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6">
         <EnglishZoneNotice locale={locale} />
       </div>
-      <StateBattlesPage searchParams={searchParams} />
+      <StateCompareHubPageBody searchParams={searchParams} locale={locale} />
     </>
   );
 }
