@@ -130,5 +130,25 @@
   "trustworthy-scholarship-website": {
     "categoryId": "ai",
     "subcategoryId": "scholarship-search-safety"
+  },
+  "how-to-verify-ai-generated-scholarship-lists": {
+    "categoryId": "ai",
+    "subcategoryId": "scholarship-search-safety"
+  },
+  "chatgpt-prompts-for-scholarship-search": {
+    "categoryId": "ai",
+    "subcategoryId": "ai-scholarship-discovery"
+  },
+  "ai-tools-for-international-students-looking-for-scholarships": {
+    "categoryId": "ai",
+    "subcategoryId": "ai-scholarship-discovery"
+  },
+  "how-to-use-ai-without-missing-scholarship-deadlines": {
+    "categoryId": "ai",
+    "subcategoryId": "ai-scholarship-discovery"
+  },
+  "scholarship-search-checklist-using-ai": {
+    "categoryId": "ai",
+    "subcategoryId": "ai-scholarship-discovery"
   }
 }

@@ -1,11 +1,14 @@
 import type { RelatedScholarshipStored } from '@/lib/content-hub/articleScholarshipMatching/types';
+import { isAiResourcePackSlug } from '@/lib/content-hub/aiResourcePackSlugs';
 import type { ResourceArticleClassification } from '@/lib/content-hub/resourceTaxonomy';
 import { scholarshipDeadlineHasPassed } from '@/lib/scholarships/scholarshipDeadlineState';
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 
 export function shouldShowResourceArticleIqCta(
-  classification: ResourceArticleClassification | null
+  classification: ResourceArticleClassification | null,
+  slug?: string | null
 ): boolean {
+  if (isAiResourcePackSlug(slug)) return false;
   return classification?.categoryId !== 'ai';
 }
 

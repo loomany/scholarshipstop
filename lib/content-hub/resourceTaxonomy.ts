@@ -1,4 +1,8 @@
 import resourceArticleClassification from '@/data/resource-article-classification.json';
+import {
+  aiResourcePackSubcategoryId,
+  isAiResourcePackSlug
+} from '@/lib/content-hub/aiResourcePackSlugs';
 
 /** Matches list fields used on `/resources` (avoid importing `server-only` module here). */
 export type ResourcePostListFields = {
@@ -333,12 +337,12 @@ const SLUG_HINTS: { test: RegExp; subId: string }[] = [
   { test: /scam|fraud|fake scholarship/i, subId: 'scholarship-scam-warning-signs' },
   { test: /gpa/i, subId: 'gpa-requirements' },
   {
-    test: /international|f1|visa|non[-\s]?us citizen|overseas/i,
-    subId: 'scholarships-for-international-students'
+    test: /\b(chatgpt|gpt|ai tools?|ai scholarship|using-ai|verify-ai|ai-generated)\b/i,
+    subId: 'ai-scholarship-discovery'
   },
   {
-    test: /\b(chatgpt|gpt|ai tools?|ai scholarship)\b/i,
-    subId: 'ai-scholarship-discovery'
+    test: /international|f1|visa|non[-\s]?us citizen|overseas/i,
+    subId: 'scholarships-for-international-students'
   },
   {
     test: /scholarshiptop vs|vs fastweb|vs scholarships\.com|compare scholarship (websites|platforms)/i,
@@ -376,6 +380,13 @@ export function classifyResourceArticle(
 ): ResourceArticleClassification | null {
   const slug = post.slug?.trim() ?? '';
   if (!slug) return null;
+
+  if (isAiResourcePackSlug(slug)) {
+    return {
+      categoryId: 'ai',
+      subcategoryId: aiResourcePackSubcategoryId(slug)
+    };
+  }
 
   const ov = SLUG_OVERRIDES[slug];
   if (ov && isResourceCategoryId(ov.categoryId)) {

@@ -142,7 +142,10 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
   if (!post || !post.slug?.trim()) notFound();
 
   const resourceClassification = classifyResourceArticle(post);
-  const showResourceIqCta = shouldShowResourceArticleIqCta(resourceClassification);
+  const showResourceIqCta = shouldShowResourceArticleIqCta(
+    resourceClassification,
+    post.slug
+  );
 
   const matchedRelatedScholarships = filterActiveRelatedScholarshipItems(
     await getRelatedScholarshipsForResourceArticle(post)
