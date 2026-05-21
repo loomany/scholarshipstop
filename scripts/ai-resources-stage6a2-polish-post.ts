@@ -68,6 +68,11 @@ function analyze(html: string, md: string) {
   return {
     internalHrefCount: countInternalHref(html),
     hasComparisonTable: /<table\b/i.test(html) && /fastweb/i.test(blob),
+    hasComparisonCards:
+      /### ScholarshipTop/i.test(md) &&
+      /### Fastweb/i.test(md) &&
+      /### Scholarships\.com/i.test(md) &&
+      !/<table\b/i.test(html),
     hasProsCons:
       /scholarshiptop pros/i.test(blob) && /scholarshiptop limitations/i.test(blob),
     hasQuickAnswerBullets: /in 3–5 bullets|in 3-5 bullets/i.test(blob),
@@ -119,7 +124,7 @@ async function main() {
     internal_links: { before: beforeInternal, after: qa.internalHrefCount },
     sections: [
       'Quick Answer → bullet list + internal links',
-      'Comparison table → named platforms (ScholarshipTop, Fastweb, Scholarships.com, BigFuture, official pages)',
+      'Comparison cards → named platforms (ScholarshipTop, Fastweb, Scholarships.com, BigFuture, official pages)',
       'New block → ScholarshipTop pros / limitations / when to use official pages',
       'Disclaimer → strengthened',
       'FAQ → internal links added',
@@ -176,7 +181,7 @@ ${bodyHtml}
 
   const verdict =
     qa.internalHrefCount >= 8 &&
-    qa.hasComparisonTable &&
+    qa.hasComparisonCards &&
     qa.hasProsCons &&
     qa.hasDisclaimer &&
     !qa.hasDuplicateRel &&
@@ -197,7 +202,7 @@ ${bodyHtml}
 | Criterion | Pass |
 |-----------|------|
 | Internal hrefs (≥8) | ${qa.internalHrefCount >= 8 ? `Yes (${qa.internalHrefCount})` : `No (${qa.internalHrefCount})`} |
-| Named comparison table | ${qa.hasComparisonTable ? 'Yes' : 'No'} |
+| Comparison cards (no table) | ${qa.hasComparisonCards ? 'Yes' : 'No'} |
 | Pros / cons blocks | ${qa.hasProsCons ? 'Yes' : 'No'} |
 | Quick answer bullets | ${qa.hasQuickAnswerBullets ? 'Yes' : 'No'} |
 | Disclaimer | ${qa.hasDisclaimer ? 'Yes' : 'No'} |

@@ -252,42 +252,51 @@ export function scholarshipPublicSlugForMatching(
   return sl;
 }
 
-function formatAwardIntegerWithDots(raw: string): string {
-  const digits = raw.replace(/[,\.\s]/g, '');
-  if (!/^\d+$/.test(digits)) return raw;
-  return digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+function awardLocaleForDisplay(locale?: string): string {
+  const l = locale?.trim().toLowerCase();
+  if (l === 'es') return 'es-ES';
+  if (l === 'fr') return 'fr-FR';
+  return 'en-US';
 }
 
-function formatAwardThousandsWithDots(text: string): string {
+function formatAwardIntegerGrouped(raw: string, locale?: string): string {
+  const digits = raw.replace(/[,\.\s]/g, '');
+  if (!/^\d+$/.test(digits)) return raw;
+  const n = Number(digits);
+  if (!Number.isFinite(n)) return raw;
+  return n.toLocaleString(awardLocaleForDisplay(locale));
+}
+
+function formatAwardThousandsGrouped(text: string, locale?: string): string {
   return text.replace(
     /(^|[^\w.])(\d{1,3}(?:,\d{3})+|\d{4,})(?![\w.])/g,
     (_match, prefix: string, amount: string) =>
-      `${prefix}${formatAwardIntegerWithDots(amount)}`
+      `${prefix}${formatAwardIntegerGrouped(amount, locale)}`
   );
 }
 
 /**
- * Shows a leading $ for plain numeric catalog amounts (e.g. "2.500").
- * Award UI uses dot thousands separators so source currencies stay readable.
+ * Shows a leading $ for plain numeric catalog amounts (e.g. "2500" → "$2,500" en-US).
  */
 export function formatScholarshipAwardDisplay(
-  raw: string | null | undefined
+  raw: string | null | undefined,
+  locale?: string
 ): string {
   const t = raw?.trim() ?? '';
   if (!t || t === '—') return t;
   const rangeMatch = t.match(/^(\d[\d,.\s]*)\s*[-–]\s*(\d[\d,.\s]*)$/);
   if (rangeMatch) {
-    return `$${formatAwardIntegerWithDots(rangeMatch[1])} – $${formatAwardIntegerWithDots(rangeMatch[2])}`;
+    return `$${formatAwardIntegerGrouped(rangeMatch[1], locale)} – $${formatAwardIntegerGrouped(rangeMatch[2], locale)}`;
   }
-  if (/^\d[\d,.\s]*$/.test(t)) return `$${formatAwardIntegerWithDots(t)}`;
+  if (/^\d[\d,.\s]*$/.test(t)) return `$${formatAwardIntegerGrouped(t, locale)}`;
   if (
     /\b(full\s+tuition|full\s+ride|non[-\s]?monetary|amount\s+varies|varies|see\s+(the\s+)?(site|page|listing))\b/i.test(
       t
     )
   ) {
-    return formatAwardThousandsWithDots(t);
+    return formatAwardThousandsGrouped(t, locale);
   }
-  return formatAwardThousandsWithDots(t);
+  return formatAwardThousandsGrouped(t, locale);
 }
 
 /** Listing cards: max visible characters for text awards (Full Ride, Amount Varies, …). */
@@ -298,7 +307,10 @@ export const SCHOLARSHIP_CARD_AWARD_TEXT_MAX_LEN = 25;
  * `awardAmountNumericSort` powers sorting/filtering and may not preserve source currency.
  * Truncates long text; use `lineTitle` for full string when truncated.
  */
-export function resolveScholarshipCardAwardDisplay(s: Scholarship): {
+export function resolveScholarshipCardAwardDisplay(
+  s: Scholarship,
+  locale?: string
+): {
   line: string;
   isPlaceholder: boolean;
   lineTitle?: string;
@@ -306,7 +318,7 @@ export function resolveScholarshipCardAwardDisplay(s: Scholarship): {
 } {
   const raw = (s.amount ?? s.awardAmount)?.trim() ?? '';
   if (raw && raw !== '—') {
-    const formatted = formatScholarshipAwardDisplay(raw).trim();
+    const formatted = formatScholarshipAwardDisplay(raw, locale).trim();
     if (!formatted) {
       return {
         line: 'Amount Varies',
@@ -331,9 +343,9 @@ export function resolveScholarshipCardAwardDisplay(s: Scholarship): {
   const n = s.awardAmountNumericSort;
   if (n != null && Number.isFinite(n) && n > 0) {
     const rounded = Math.round(n);
-    const withDots = formatAwardIntegerWithDots(String(rounded));
+    const grouped = formatAwardIntegerGrouped(String(rounded), locale);
     return {
-      line: formatScholarshipAwardDisplay(withDots),
+      line: formatScholarshipAwardDisplay(grouped, locale),
       isPlaceholder: false,
       isNumeric: true
     };

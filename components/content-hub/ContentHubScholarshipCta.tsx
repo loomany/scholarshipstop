@@ -36,12 +36,12 @@ export default function ContentHubScholarshipCta({
           <span className="text-3xl leading-none" aria-hidden>
             🎯
           </span>
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900">{normalizedTitle}</h2>
+          <p className="text-3xl font-bold tracking-tight text-gray-900">{normalizedTitle}</p>
         </div>
       ) : (
-        <h2 className="w-full text-lg font-bold tracking-tight text-gray-900 sm:text-xl">
+        <p className="w-full text-lg font-bold tracking-tight text-gray-900 sm:text-xl">
           {hadTargetEmoji ? `🎯 ${normalizedTitle}` : normalizedTitle}
-        </h2>
+        </p>
       )}
       <p
         className={clsx(

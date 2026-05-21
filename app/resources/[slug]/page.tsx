@@ -28,7 +28,16 @@ import { isResourcePilotSlug } from '@/lib/i18n/resourcePilot/resourcePilotSlugs
 import { getCanonical } from '@/lib/seo/canonical';
 import { applyAutoInternalLinks } from '@/lib/content-hub/autoInternalLinks';
 import { deduplicateQuickSummaryBlocksInHtml } from '@/lib/content-hub/deduplicateQuickSummaryInHtml';
-import { injectH2H3IdsAndExtractToc } from '@/lib/content-hub/resourceArticleBodyToc';
+import {
+  injectH2H3IdsAndExtractToc,
+  RESOURCE_ARTICLE_TOC_OPTIONS
+} from '@/lib/content-hub/resourceArticleBodyToc';
+import {
+  filterActiveHubScholarships,
+  filterActiveRelatedScholarshipItems,
+  shouldShowResourceArticleIqCta
+} from '@/lib/content-hub/filterResourceArticleRelatedScholarships';
+import { classifyResourceArticle } from '@/lib/content-hub/resourceTaxonomy';
 import {
   splitForMidCtaInRemainder,
   splitForPrimaryCtaInsertion
@@ -132,15 +141,20 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
   const post = await fetchPublishedContentPostBySlug(params.slug);
   if (!post || !post.slug?.trim()) notFound();
 
-  const matchedRelatedScholarships =
-    await getRelatedScholarshipsForResourceArticle(post);
+  const resourceClassification = classifyResourceArticle(post);
+  const showResourceIqCta = shouldShowResourceArticleIqCta(resourceClassification);
+
+  const matchedRelatedScholarships = filterActiveRelatedScholarshipItems(
+    await getRelatedScholarshipsForResourceArticle(post)
+  );
   const hubScholarshipKeys = matchedRelatedScholarships.map((r) =>
     r.slug.trim()
   );
-  const hubScholarships =
+  const hubScholarships = filterActiveHubScholarships(
     hubScholarshipKeys.length > 0
       ? await fetchScholarshipsBySlugsOrIdsOrdered(hubScholarshipKeys)
-      : [];
+      : []
+  );
   const bodyHtmlDeduped = deduplicateQuickSummaryBlocksInHtml(
     post.body_html?.trim() ?? ''
   );
@@ -169,7 +183,7 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
   const {
     html: bodyHtmlAnchored,
     toc: tocItems
-  } = injectH2H3IdsAndExtractToc(bodyWithoutInlineFaq);
+  } = injectH2H3IdsAndExtractToc(bodyWithoutInlineFaq, RESOURCE_ARTICLE_TOC_OPTIONS);
 
   /** Local dev-only: remove before shipping — do not rely on prod logs. */
   if (process.env.NODE_ENV === 'development') {
@@ -355,7 +369,7 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
           primarySplit ? (
             <>
               <SafeContentPostBody html={primarySplit.before} />
-              <ResourceArticleIqCta />
+              {showResourceIqCta ? <ResourceArticleIqCta /> : null}
               {midSplit ? (
                 <>
                   <SafeContentPostBody html={midSplit.before} tightTop />
@@ -384,7 +398,7 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
           ) : (
             <>
               <SafeContentPostBody html={bodyHtmlAnchored} />
-              <ResourceArticleIqCta />
+              {showResourceIqCta ? <ResourceArticleIqCta /> : null}
             </>
           )
         ) : null}
@@ -405,7 +419,7 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
           <ContentHubArticleMatchedScholarships
             items={matchedRelatedScholarships}
             hubScholarships={hubScholarships}
-            showIqAdAfterFirst
+            showIqAdAfterFirst={showResourceIqCta}
           />
         ) : (
           <ContentHubScholarshipCta

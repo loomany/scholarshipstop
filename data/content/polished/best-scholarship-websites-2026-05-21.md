@@ -4,8 +4,6 @@ Maya opened twelve browser tabs after dinner: one for her university, one for a 
 
 ## Quick Answer
 
-**In 3–5 bullets:**
-
 - Use **[ScholarshipTop](/scholarships)** when you want modern discovery by **country, category, provider, and student profile**—especially helpful for **international students** comparing options across regions. Start with [profile-style matching](/scholarships/hub/matches) and field hubs such as [STEM](/scholarships/category/stem), [education](/scholarships/category/education), [medical](/scholarships/category/medical), or [law](/scholarships/category/law).
 - Use **official university, government, and foundation pages** when you need the **authoritative** deadline, amount, and application instructions for a specific award.
 - **Fastweb**, **Scholarships.com**, and **College Board BigFuture** can be useful for **U.S.-focused** volume and familiar workflows, but they are not a substitute for verifying each opportunity on the provider’s own site.
@@ -16,15 +14,47 @@ Students in the United States should also review federal aid basics through <a h
 
 ## Best Scholarship Websites Compared (2026)
 
-No single database lists every award. The table below compares **named platforms** plus official sources students should still use for verification.
+No single database lists every award. The comparison cards below stack **named platforms** plus official sources students should still use for verification—readable on phone and desktop without wide tables.
 
-| Platform | Best for | Strengths | Watch out for | Signup required | International student usefulness |
-|---|---|---|---|---|---|
-| **ScholarshipTop** | International discovery; category/provider/profile filtering | Clean [scholarship search](/scholarships), [resources](/resources), [matches hub](/scholarships/hub/matches), category pages ([STEM](/scholarships/category/stem), [education](/scholarships/category/education), [medical](/scholarships/category/medical), [law](/scholarships/category/law)) | Newer than some legacy U.S.-only directories; always verify on official provider pages | Free to search; account may help save work | **High** — built around cross-country and profile-based discovery |
-| **Fastweb** | U.S. high school and college students who want a familiar national directory | Large U.S. listing volume; long-running brand | Can feel signup-heavy; less emphasis on international comparison | **Yes** (account common) | **Moderate** — primarily U.S.-oriented |
-| **Scholarships.com** | U.S. students exploring a traditional scholarship database | Broad U.S. coverage; established directory model | May feel cluttered; filter depth varies by use case | **Yes** (account common) | **Low–moderate** — mainly domestic focus |
-| **College Board BigFuture** | U.S. students linking scholarships with college planning | Trusted college-planning context; scholarship search alongside planning tools | Not a full global discovery engine for every country | **Varies** (often free with account features) | **Low** — U.S. planning-first |
-| **Official university / government / provider pages** | Verifying real deadlines, eligibility, and application steps | Highest trust; direct from the organization offering the award | No single search across all providers; you must check each source | Usually **no** for browsing | **Essential** — use alongside any aggregator |
+### ScholarshipTop
+
+- **Best for:** International discovery; filtering by country, category, provider, and student profile.
+- **Strengths:** Clean [scholarship search](/scholarships), [resources](/resources), [matches hub](/scholarships/hub/matches), and category hubs ([STEM](/scholarships/category/stem), [education](/scholarships/category/education), [medical](/scholarships/category/medical), [law](/scholarships/category/law)).
+- **Watch out for:** Newer than some legacy U.S.-only directories; always confirm final rules on official provider pages.
+- **Signup required:** Free to search; an account may help you save work.
+- **International student usefulness:** **High** — built for cross-country and profile-based discovery, not only one domestic list.
+
+### Fastweb
+
+- **Best for:** U.S. high school and college students who want a familiar national directory.
+- **Strengths:** Large U.S. listing volume and a long-running brand many counselors recognize.
+- **Watch out for:** Can feel signup-heavy; less emphasis on comparing awards across countries.
+- **Signup required:** **Yes** — account creation is common.
+- **International student usefulness:** **Moderate** — primarily U.S.-oriented.
+
+### Scholarships.com
+
+- **Best for:** U.S. students exploring a traditional scholarship database workflow.
+- **Strengths:** Broad U.S. coverage and an established directory model.
+- **Watch out for:** Interface can feel cluttered; filter depth varies by listing and use case.
+- **Signup required:** **Yes** — account creation is common.
+- **International student usefulness:** **Low–moderate** — mainly domestic focus.
+
+### College Board BigFuture
+
+- **Best for:** U.S. students who want scholarships alongside college planning tools.
+- **Strengths:** Trusted college-planning context; scholarship search sits next to planning resources.
+- **Watch out for:** Not a full global discovery engine for every country or visa scenario.
+- **Signup required:** **Varies** — often free to browse with optional account features.
+- **International student usefulness:** **Low** — U.S. planning-first.
+
+### Official university, government, and provider pages
+
+- **Best for:** Verifying real deadlines, eligibility, amounts, and application steps before you submit.
+- **Strengths:** Highest trust—information comes directly from the organization offering the award.
+- **Watch out for:** No single search across every provider; you must check each source individually.
+- **Signup required:** Usually **no** for browsing award details.
+- **International student usefulness:** **Essential** — use alongside any aggregator, especially when residency or visa rules matter.
 
 ## ScholarshipTop: Pros, Limitations, and When to Use Official Pages
 

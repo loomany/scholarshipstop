@@ -11,7 +11,10 @@ import {
   mergeUniqueFaqItems
 } from '@/lib/content-hub/extractInlineFaqFromBodyHtml';
 import { deduplicateQuickSummaryBlocksInHtml } from '@/lib/content-hub/deduplicateQuickSummaryInHtml';
-import { injectH2H3IdsAndExtractToc } from '@/lib/content-hub/resourceArticleBodyToc';
+import {
+  injectH2H3IdsAndExtractToc,
+  RESOURCE_ARTICLE_TOC_OPTIONS
+} from '@/lib/content-hub/resourceArticleBodyToc';
 import {
   splitForMidCtaInRemainder,
   splitForPrimaryCtaInsertion
@@ -55,8 +58,10 @@ export default function LocalizedResourceArticlePage({
       ? inlineFaqSectionHeading
       : copy.faqSectionTitle;
 
-  const { html: bodyHtmlAnchored, toc: tocItems } =
-    injectH2H3IdsAndExtractToc(bodyWithoutInlineFaq);
+  const { html: bodyHtmlAnchored, toc: tocItems } = injectH2H3IdsAndExtractToc(
+    bodyWithoutInlineFaq,
+    RESOURCE_ARTICLE_TOC_OPTIONS
+  );
 
   const primarySplit = bodyHtmlAnchored
     ? splitForPrimaryCtaInsertion(bodyHtmlAnchored)

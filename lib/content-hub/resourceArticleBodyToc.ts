@@ -2,6 +2,24 @@
 
 export type ResourceArticleTocItem = { id: string; text: string };
 
+/** TOC for `/resources/[slug]` — main H2 sections only. */
+export const RESOURCE_ARTICLE_TOC_OPTIONS = {
+  h2Only: true,
+  excludeHeadingPatterns: [
+    /^quick\s+summary$/i,
+    /^faq\b/i,
+    /see scholarships you may qualify/i
+  ]
+} as const;
+
+export type InjectResourceArticleTocOptions = {
+  idSlugPrefix?: string;
+  /** When true, TOC lists only `<h2>` (ids still added to h2/h3). */
+  h2Only?: boolean;
+  /** Plain-text heading labels to omit from TOC. */
+  excludeHeadingPatterns?: readonly RegExp[];
+};
+
 function stripInnerHtmlToText(html: string): string {
   return html
     .replace(/<[^>]+>/g, ' ')
@@ -23,9 +41,19 @@ function slugifyAnchorSegment(text: string): string {
  *
  * `idSlugPrefix`: segment before `-h2-` / `-h3-` in generated ids (default `resource` for hub articles).
  */
+function shouldIncludeInToc(
+  tag: string,
+  text: string,
+  opts?: InjectResourceArticleTocOptions
+): boolean {
+  if (opts?.h2Only && tag !== 'h2') return false;
+  const patterns = opts?.excludeHeadingPatterns ?? [];
+  return !patterns.some((re) => re.test(text));
+}
+
 export function injectH2H3IdsAndExtractToc(
   html: string,
-  opts?: { idSlugPrefix?: string }
+  opts?: InjectResourceArticleTocOptions
 ): {
   html: string;
   toc: ResourceArticleTocItem[];
@@ -53,7 +81,9 @@ export function injectH2H3IdsAndExtractToc(
         const id = idMatch[1].trim();
         if (id) {
           used.add(id);
-          toc.push({ id, text });
+          if (shouldIncludeInToc(tag, text, opts)) {
+            toc.push({ id, text });
+          }
         }
         return full;
       }
@@ -67,7 +97,9 @@ export function injectH2H3IdsAndExtractToc(
         id = `${idSlugPrefix}-${lvl}-${base}-${n}`;
       }
       used.add(id);
-      toc.push({ id, text });
+      if (shouldIncludeInToc(tag, text, opts)) {
+        toc.push({ id, text });
+      }
 
       const insert = rawAttrs.trim() ? ` ${rawAttrs.trim()}` : '';
       return `<${tag} id="${id}"${insert}>${inner}</${tag}>`;

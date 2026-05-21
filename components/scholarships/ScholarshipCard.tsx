@@ -460,7 +460,7 @@ export default function ScholarshipCard({
   const geoFilterLinkClass =
     'pointer-events-auto relative z-20 cursor-pointer no-underline transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50 focus-visible:ring-offset-1';
 
-  const awardLine = resolveScholarshipCardAwardDisplay(scholarship);
+  const awardLine = resolveScholarshipCardAwardDisplay(scholarship, uiLocale);
   const awardCell = awardLine.line;
   const hasAwardContent = !awardLine.isPlaceholder;
 

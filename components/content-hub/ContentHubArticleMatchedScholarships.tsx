@@ -3,7 +3,10 @@ import Link from 'next/link';
 import ContentHubArticleMatchedScholarshipCards from '@/components/content-hub/ContentHubArticleMatchedScholarshipCards';
 import ScholarshipCatalogEntryLink from '@/components/scholarships/ScholarshipCatalogEntryLink';
 import type { RelatedScholarshipStored } from '@/lib/content-hub/articleScholarshipMatching/types';
-import type { Scholarship } from '@/app/scholarships/scholarshipsData';
+import {
+  formatScholarshipAwardDisplay,
+  type Scholarship
+} from '@/app/scholarships/scholarshipsData';
 
 const cardClass =
   'group flex h-full flex-col rounded-2xl border border-gray-200 bg-white p-5 text-left shadow-sm transition hover:border-gray-300 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2';
@@ -73,7 +76,7 @@ function MatchedScholarshipGrid({ items }: { items: RelatedScholarshipStored[] }
             <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-sm text-gray-600">
               {item.award_amount_text ? (
                 <span className="font-semibold text-gray-900">
-                  {item.award_amount_text}
+                  {formatScholarshipAwardDisplay(item.award_amount_text, 'en')}
                 </span>
               ) : null}
               {item.deadline_text ? (
