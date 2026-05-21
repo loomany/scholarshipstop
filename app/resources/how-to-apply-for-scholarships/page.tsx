@@ -5,6 +5,7 @@ import ScholarshipCatalogEntryLink from '@/components/scholarships/ScholarshipCa
 import ResourceGuideShell from '@/components/content-hub/resourceGuides/ResourceGuideShell';
 import { resourceGuideLinkClassName } from '@/lib/content-hub/resourceGuidePages';
 import { resourceGuideHref } from '@/lib/scholarships/resourceGuideRoutes';
+import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
 import { getCanonical } from '@/lib/seo/canonical';
 
 const hrefDeadlines = resourceGuideHref('scholarship-deadlines-explained');
@@ -15,9 +16,7 @@ export const metadata: Metadata = {
   title: 'How to Apply for Scholarships in 2026',
   description:
     'Step-by-step guide on how to apply for scholarships: where to look, what to prepare, mistakes to skip, and tips to submit stronger applications and improve your odds of funding.',
-  alternates: {
-    canonical
-  },
+  alternates: buildStage2EnglishPilotAlternates('/resources/how-to-apply-for-scholarships'),
   openGraph: {
     title: 'How to Apply for Scholarships in 2026',
     description:

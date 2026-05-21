@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 
 import { SiteFaqAccordion } from '@/components/ui/SiteFaqAccordion';
+import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
 import { getCanonical } from '@/lib/seo/canonical';
 
 const container = 'mx-auto w-full max-w-7xl';
@@ -35,9 +36,7 @@ const pageCanonical = getCanonical('/for-organizations');
 export const metadata: Metadata = {
   title: 'For organizations',
   description: orgDescription,
-  alternates: {
-    canonical: pageCanonical
-  },
+  alternates: buildStage2EnglishPilotAlternates('/for-organizations'),
   openGraph: {
     title: 'For organizations | ScholarshipTop',
     description: orgDescription,

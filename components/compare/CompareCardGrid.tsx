@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -12,17 +12,26 @@ import {
   type HubBudgetScope
 } from '@/lib/guest/guestHubClickBudget';
 import type { CompareIndexItem } from '@/lib/seo/compareIndexFilters';
+import type { CompareHubGridIqCopy } from '@/lib/i18n/hubUiCopy';
 
 type CompareCardGridProps = {
   items: CompareIndexItem[];
   emptyMessage: string;
+  gridIq?: CompareHubGridIqCopy;
+  iqHref?: string;
 };
 
-function CompareGridIqAssessmentCard() {
+function CompareGridIqAssessmentCard({
+  iq,
+  href
+}: {
+  iq: CompareHubGridIqCopy;
+  href: string;
+}) {
   return (
     <Link
-      href="/iq/assessment?intent=college_fit"
-      aria-label="Start IQ assessment"
+      href={href}
+      aria-label={iq.startIqAria}
       className="group relative flex h-full min-h-[15rem] flex-col overflow-hidden rounded-2xl border border-[#FFB875]/80 bg-gradient-to-br from-[#FFF7ED] via-white to-[#EEF6FF] p-5 text-left shadow-[0_12px_40px_-18px_rgba(234,88,12,0.58)] ring-1 ring-[#FFE2C2] transition duration-200 ease-out hover:-translate-y-0.5 hover:shadow-[0_18px_50px_-18px_rgba(234,88,12,0.74)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB875] focus-visible:ring-offset-2 sm:p-6"
     >
       <div
@@ -43,26 +52,23 @@ function CompareGridIqAssessmentCard() {
           <div className="mb-3 flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-[#FFB875] bg-white/80 px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-[0.15em] text-[#B45309] shadow-sm">
               <BrainCircuit className="h-3 w-3 text-[#F97316]" aria-hidden />
-              Featured Tool
+              {iq.featuredTool}
             </span>
             <span className="rounded-full bg-slate-950 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.12em] text-white">
-              Decision fit
+              {iq.badge}
             </span>
           </div>
           <h2 className="text-lg font-bold leading-snug tracking-tight text-slate-950 sm:text-xl">
-            Not sure which path fits you?
+            {iq.title}
           </h2>
-          <p className="mt-2 text-sm leading-relaxed text-slate-600">
-            Take a cognitive assessment and discover the thinking strengths that
-            can guide your scholarship strategy.
-          </p>
+          <p className="mt-2 text-sm leading-relaxed text-slate-600">{iq.body}</p>
         </div>
         <div className="mt-5 flex items-center justify-between gap-3 border-t border-orange-100 pt-3">
           <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">
-            IQ assessment
+            {iq.assessmentLabel}
           </span>
           <span className="inline-flex items-center gap-1 text-xs font-bold text-slate-950 transition group-hover:text-[#B45309]">
-            Start IQ test
+            {iq.startIqTest}
             <ArrowRight className="h-3.5 w-3.5" aria-hidden />
           </span>
         </div>
@@ -71,9 +77,21 @@ function CompareGridIqAssessmentCard() {
   );
 }
 
+const DEFAULT_GRID_IQ: CompareHubGridIqCopy = {
+  featuredTool: 'Featured Tool',
+  badge: 'Decision fit',
+  title: 'Not sure which path fits you?',
+  body: 'Take a cognitive assessment and discover the thinking strengths that can guide your scholarship strategy.',
+  assessmentLabel: 'IQ assessment',
+  startIqTest: 'Start IQ test',
+  startIqAria: 'Start IQ assessment'
+};
+
 export default function CompareCardGrid({
   items,
-  emptyMessage
+  emptyMessage,
+  gridIq = DEFAULT_GRID_IQ,
+  iqHref = '/iq/assessment?intent=college_fit'
 }: CompareCardGridProps) {
   const [offerOpen, setOfferOpen] = useState(false);
   const [, hubTick] = useState(0);
@@ -175,7 +193,7 @@ export default function CompareCardGrid({
                   </li>
                   {index === 2 ? (
                     <li key="compare-grid-iq-assessment">
-                      <CompareGridIqAssessmentCard />
+                      <CompareGridIqAssessmentCard iq={gridIq} href={iqHref} />
                     </li>
                   ) : null}
                 </Fragment>

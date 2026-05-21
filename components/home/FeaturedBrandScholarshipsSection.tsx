@@ -15,6 +15,10 @@ import {
   featuredHomeLogoUiScale,
   homeFeaturedDomainLogoPublicPath
 } from '@/lib/home/featuredBrandHomeLogos';
+import {
+  hrefForLocalizedUiRequired,
+  type LocalizedUiLocale
+} from '@/lib/i18n/localizedHref';
 
 export type { FeaturedBrandScholarship };
 
@@ -29,11 +33,26 @@ const SCROLL_STEP_PX = 340;
 type FeaturedBrandScholarshipsSectionProps = {
   className?: string;
   items?: FeaturedBrandScholarship[];
+  locale?: LocalizedUiLocale;
+  copy?: {
+    title: string;
+    disclaimer: string;
+    scrollLeft: string;
+    scrollRight: string;
+  };
 };
 
 export function FeaturedBrandScholarshipsSection({
   className,
-  items = FEATURED_BRAND_SCHOLARSHIPS_HOME
+  items = FEATURED_BRAND_SCHOLARSHIPS_HOME,
+  locale = 'en',
+  copy = {
+    title: 'Examples from our scholarship catalog',
+    disclaimer:
+      'Listings shown here are examples from our catalog and do not imply sponsorship or endorsement unless clearly stated.',
+    scrollLeft: 'Scroll scholarships left',
+    scrollRight: 'Scroll scholarships right'
+  }
 }: FeaturedBrandScholarshipsSectionProps) {
   const scrollerRef = useRef<HTMLUListElement>(null);
   /** Fal WebP missing or failed → Unavatar */
@@ -62,13 +81,17 @@ export function FeaturedBrandScholarshipsSection({
     const key = `${item.href}-${index}${keySuffix}`;
     const logoUiScale = featuredHomeLogoUiScale(item.brandDomain);
 
+    const resolvedHref = item.href === '/scholarships'
+      ? hrefForLocalizedUiRequired(locale, '/scholarships')
+      : item.href;
+
     return (
       <li
         key={key}
         className="flex w-[min(100vw-2.5rem,20rem)] shrink-0 snap-start sm:w-80"
       >
         <Link
-          href={item.href}
+          href={resolvedHref}
           className="group flex h-full min-h-[300px] w-full flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white pb-6 shadow-sm outline-none transition duration-300 ease-out hover:-translate-y-1 hover:shadow-lg focus-visible:ring-2 focus-visible:ring-orange-500/35 sm:min-h-[320px] sm:pb-7"
         >
           <div className="flex shrink-0 items-start justify-between gap-3">
@@ -137,11 +160,10 @@ export function FeaturedBrandScholarshipsSection({
     >
       <div className="mx-auto max-w-7xl text-center">
         <h2 id="featured-brand-scholarships-heading" className={`text-pretty ${h2Class}`}>
-          Examples from our scholarship catalog
+          {copy.title}
         </h2>
         <p className="mx-auto mt-4 max-w-2xl text-pretty text-sm leading-relaxed text-gray-500 sm:mt-5 sm:text-base sm:leading-relaxed">
-          Listings shown here are examples from our catalog and do not imply sponsorship or
-          endorsement unless clearly stated.
+          {copy.disclaimer}
         </p>
       </div>
 
@@ -153,7 +175,7 @@ export function FeaturedBrandScholarshipsSection({
           type="button"
           onClick={() => scrollByDir(-1)}
           className="absolute left-0 top-1/2 z-20 hidden -translate-y-1/2 rounded-full border border-gray-200 bg-white p-2.5 text-gray-700 shadow-md transition hover:border-gray-300 hover:text-blue-600 motion-reduce:md:flex"
-          aria-label="Scroll scholarships left"
+          aria-label={copy.scrollLeft}
         >
           <ChevronLeft className="h-5 w-5" strokeWidth={2} />
         </button>
@@ -161,7 +183,7 @@ export function FeaturedBrandScholarshipsSection({
           type="button"
           onClick={() => scrollByDir(1)}
           className="absolute right-0 top-1/2 z-20 hidden -translate-y-1/2 rounded-full border border-gray-200 bg-white p-2.5 text-gray-700 shadow-md transition hover:border-gray-300 hover:text-blue-600 motion-reduce:md:flex"
-          aria-label="Scroll scholarships right"
+          aria-label={copy.scrollRight}
         >
           <ChevronRight className="h-5 w-5" strokeWidth={2} />
         </button>

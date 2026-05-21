@@ -1,0 +1,66 @@
+[
+  {
+    "route": "/es",
+    "hits": []
+  },
+  {
+    "route": "/fr",
+    "hits": []
+  },
+  {
+    "route": "/es/scholarships",
+    "hits": []
+  },
+  {
+    "route": "/fr/scholarships",
+    "hits": []
+  },
+  {
+    "route": "/es/essays",
+    "hits": []
+  },
+  {
+    "route": "/fr/essays",
+    "hits": []
+  },
+  {
+    "route": "/es/providers",
+    "hits": []
+  },
+  {
+    "route": "/fr/providers",
+    "hits": []
+  },
+  {
+    "route": "/es/compare",
+    "hits": []
+  },
+  {
+    "route": "/fr/compare",
+    "hits": []
+  },
+  {
+    "route": "/es/resources",
+    "hits": []
+  },
+  {
+    "route": "/fr/resources",
+    "hits": []
+  },
+  {
+    "route": "/es/essays/examples",
+    "hits": []
+  },
+  {
+    "route": "/fr/essays/examples",
+    "hits": []
+  },
+  {
+    "route": "/es/compare/scholarship-vs-grant",
+    "hits": []
+  },
+  {
+    "route": "/fr/compare/scholarship-vs-grant",
+    "hits": []
+  }
+]

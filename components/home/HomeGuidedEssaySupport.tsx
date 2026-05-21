@@ -4,22 +4,20 @@ import Link from 'next/link';
 
 import { AiMentorHowItWorksVideo } from '@/components/essay/AiMentorHowItWorksVideo';
 import { homeEssayCtaClass } from '@/components/home/homeMarketingCtaClasses';
-
-const steps = [
-  'Understand the prompt',
-  'Build your angle',
-  'Create a strong outline',
-  'Refine your draft'
-] as const;
+import type { HomePageCopy } from '@/lib/i18n/homePageCopy';
 
 type HomeGuidedEssaySupportProps = {
   sectionPadX: string;
   sectionY: string;
+  copy: HomePageCopy['guidedEssay'];
+  essayLinkHref?: string;
 };
 
 export default function HomeGuidedEssaySupport({
   sectionPadX,
-  sectionY
+  sectionY,
+  copy,
+  essayLinkHref
 }: HomeGuidedEssaySupportProps) {
   return (
     <section
@@ -31,17 +29,19 @@ export default function HomeGuidedEssaySupport({
           <div className="flex min-w-0 flex-col gap-3 sm:gap-3.5">
             <AiMentorHowItWorksVideo
               className="relative aspect-video w-full overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-[0_12px_40px_-16px_rgba(15,23,42,0.12)] ring-1 ring-gray-100"
-              playButtonAriaLabel="Play video: guided essay support for scholarship applications"
+              playButtonAriaLabel={copy.playVideoAria}
             />
-            <Link href="/essay" className={`group ${homeEssayCtaClass}`}>
-              <span>Try Essay Mentor</span>
-              <span
-                className="text-orange-600 transition group-hover:translate-x-0.5 group-hover:text-orange-700"
-                aria-hidden
-              >
-                →
-              </span>
-            </Link>
+            {essayLinkHref ? (
+              <Link href={essayLinkHref} className={`group ${homeEssayCtaClass}`}>
+                <span>{copy.tryCta}</span>
+                <span
+                  className="text-orange-600 transition group-hover:translate-x-0.5 group-hover:text-orange-700"
+                  aria-hidden
+                >
+                  →
+                </span>
+              </Link>
+            ) : null}
           </div>
 
           <div className="min-w-0">
@@ -49,14 +49,13 @@ export default function HomeGuidedEssaySupport({
               id="home-guided-essay-heading"
               className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl"
             >
-              Guided essay support for scholarship applications
+              {copy.title}
             </h2>
             <p className="mt-4 text-base leading-relaxed text-gray-600 sm:text-lg sm:leading-relaxed">
-              Use AI tools to brainstorm, structure, and refine your ideas based on your own
-              experiences and goals.
+              {copy.body}
             </p>
             <ol className="mt-6 list-none space-y-4 sm:mt-7 sm:space-y-4">
-              {steps.map((label, i) => (
+              {copy.steps.map((label, i) => (
                 <li key={label} className="flex gap-4">
                   <span
                     className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-gray-900 bg-white text-sm font-semibold tabular-nums text-gray-900"
@@ -71,7 +70,7 @@ export default function HomeGuidedEssaySupport({
               ))}
             </ol>
             <p className="mt-6 text-sm leading-relaxed text-gray-500 sm:mt-7 sm:text-base sm:leading-relaxed">
-              Designed to support your writing process, not replace your judgment or your voice.
+              {copy.disclaimer}
             </p>
           </div>
         </div>

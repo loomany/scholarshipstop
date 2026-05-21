@@ -31,6 +31,8 @@ import { createPublicClient } from '@/utils/supabase/public';
 import { getURL } from '@/utils/helpers';
 import { isSeoNoiseQuery } from '@/app/scholarships/scholarshipSeoNoiseQuery';
 import { buildScholarshipListingJsonLd } from '@/app/scholarships/scholarshipListingJsonLd';
+import { buildCategoryPilotAlternates } from '@/lib/i18n/categoryPilot/categoryTranslationAlternates';
+import { fetchPublishedCategoryTranslation } from '@/lib/i18n/categoryPilot/resolveLocalizedCategoryPage';
 import { getCanonical } from '@/lib/seo/canonical';
 
 export const revalidate = 300;
@@ -84,14 +86,26 @@ export async function generateMetadata({
   const title = categoryListingMetaTitle(id, lower);
   const description = categoryListingMetaDescription(id, lower);
   const canonical = getCanonical(`/scholarships/category/${canonicalSlug}`);
+  const hasEs = Boolean(
+    await fetchPublishedCategoryTranslation(canonicalSlug, 'es')
+  );
+  const hasFr = Boolean(
+    await fetchPublishedCategoryTranslation(canonicalSlug, 'fr')
+  );
+  const alternates =
+    hasEs || hasFr
+      ? await buildCategoryPilotAlternates({
+          canonicalSlug,
+          currentLocale: 'en'
+        })
+      : { canonical };
+
   const meta: Metadata = {
     title,
     description,
     openGraph: { title, description, url: canonical },
     twitter: { card: 'summary_large_image', title, description },
-    alternates: {
-      canonical
-    }
+    alternates
   };
   if (isSeoNoiseQuery(searchParams)) {
     meta.robots = { index: false, follow: true };

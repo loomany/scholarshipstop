@@ -19,6 +19,9 @@ import {
 } from '@/lib/seo/compareIndexFilters';
 import { parseStateVsSlug, stateLabelFromSlug } from '@/lib/seo/stateCompareSlug';
 import { parseUniversityVsSlug } from '@/lib/seo/universityCompareSlug';
+import type { CompareHubToolbarCopy } from '@/lib/i18n/hubUiCopy';
+import { getHubToolbarUiCopy } from '@/lib/i18n/hubUiCopy';
+import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
 
 const PANEL_GAP = 8;
 const PANEL_VPAD = 12;
@@ -44,6 +47,8 @@ type CompareIndexToolbarProps = {
   searchPlaceholder?: string;
   resultLabel?: string;
   suggestionItems: CompareIndexItem[];
+  locale?: LocalizedUiLocale;
+  compareToolbar?: CompareHubToolbarCopy;
 };
 
 type SearchSuggestion = {
@@ -129,16 +134,6 @@ function buildSearchSuggestions(
   );
 }
 
-const CATEGORY_OPTIONS: {
-  id: CompareIndexCategory;
-  label: string;
-  countKey?: 'universities' | 'states';
-}[] = [
-  { id: 'all', label: 'All comparisons' },
-  { id: 'universities', label: 'University vs University', countKey: 'universities' },
-  { id: 'states', label: 'State vs State', countKey: 'states' }
-];
-
 export default function CompareIndexToolbar({
   categoryCounts = { universities: 0, states: 0 },
   resultCount,
@@ -147,10 +142,40 @@ export default function CompareIndexToolbar({
   basePath = '/compare',
   showCategories = true,
   fixedCategory,
-  searchPlaceholder = 'Search comparisons',
-  resultLabel = 'comparisons',
-  suggestionItems
+  searchPlaceholder: searchPlaceholderProp,
+  resultLabel: resultLabelProp,
+  suggestionItems,
+  locale,
+  compareToolbar
 }: CompareIndexToolbarProps) {
+  const toolbarCopy = getHubToolbarUiCopy(locale ?? 'en');
+  const searchPlaceholder =
+    searchPlaceholderProp ?? compareToolbar?.searchPlaceholder ?? 'Search comparisons';
+  const resultLabel =
+    resultLabelProp ?? compareToolbar?.resultLabel ?? 'comparisons';
+  const categoryOptions: {
+    id: CompareIndexCategory;
+    label: string;
+    countKey?: 'universities' | 'states';
+  }[] = compareToolbar
+    ? [
+        { id: 'all', label: compareToolbar.categoryAll },
+        {
+          id: 'universities',
+          label: compareToolbar.categoryUniversities,
+          countKey: 'universities'
+        },
+        { id: 'states', label: compareToolbar.categoryStates, countKey: 'states' }
+      ]
+    : [
+        { id: 'all', label: 'All comparisons' },
+        {
+          id: 'universities',
+          label: 'University vs University',
+          countKey: 'universities'
+        },
+        { id: 'states', label: 'State vs State', countKey: 'states' }
+      ];
   const router = useRouter();
   const sp = useSearchParams();
   const applied = useMemo(() => stateFromSearchParams(sp), [sp]);
@@ -304,7 +329,7 @@ export default function CompareIndexToolbar({
       <div
         ref={categoryDropdownRef}
         role="dialog"
-        aria-label="Categories"
+        aria-label={compareToolbar?.categoriesAria ?? 'Categories'}
         className="fixed z-[200] flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm ring-1 ring-zinc-900/5"
         style={{
           top: categoryPanelLayout.top,
@@ -314,16 +339,19 @@ export default function CompareIndexToolbar({
         }}
       >
         <div className="shrink-0 border-b border-zinc-100 px-4 py-3">
-          <h2 className="text-base font-semibold text-zinc-900">Categories</h2>
+          <h2 className="text-base font-semibold text-zinc-900">
+            {compareToolbar?.categoriesTitle ?? 'Categories'}
+          </h2>
           <p className="mt-0.5 text-xs text-zinc-500">
-            Choose which comparison collection to browse.
+            {compareToolbar?.categoriesHint ??
+              'Choose which comparison collection to browse.'}
           </p>
         </div>
         <ul
           className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-2 py-1"
           role="list"
         >
-          {CATEGORY_OPTIONS.map((option) => (
+          {categoryOptions.map((option) => (
             <li key={option.id}>
               <label className="flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 transition hover:bg-zinc-50">
                 <input
@@ -355,7 +383,7 @@ export default function CompareIndexToolbar({
             className="rounded-md text-sm font-semibold text-zinc-600 underline-offset-2 transition hover:text-zinc-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/50 focus-visible:ring-offset-0"
             onClick={() => setDraftCategory('all')}
           >
-            Clear
+            {compareToolbar?.clear ?? 'Clear'}
           </button>
           <button
             type="button"
@@ -368,7 +396,7 @@ export default function CompareIndexToolbar({
               setCategoriesOpen(false);
             }}
           >
-            Apply
+            {compareToolbar?.apply ?? 'Apply'}
           </button>
         </div>
       </div>,
@@ -424,7 +452,12 @@ export default function CompareIndexToolbar({
             />
             {suggestionsOpen && filteredSuggestions.length > 0 ? (
               <div className="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-[120] overflow-hidden rounded-2xl border border-zinc-200 bg-white py-1 shadow-sm ring-1 ring-zinc-900/5">
-                <ul role="listbox" aria-label="Search suggestions">
+                <ul
+                  role="listbox"
+                  aria-label={
+                    compareToolbar?.searchSuggestionsAria ?? 'Search suggestions'
+                  }
+                >
                   {filteredSuggestions.map((item, idx) => {
                     const active = idx === suggestionHighlight;
                     return (
@@ -452,7 +485,9 @@ export default function CompareIndexToolbar({
                               {item.label}
                             </span>
                             <span className="block text-xs text-zinc-500">
-                              {item.kind === 'state' ? 'State' : 'University'}
+                              {item.kind === 'state'
+                                ? (compareToolbar?.stateKind ?? 'State')
+                                : (compareToolbar?.universityKind ?? 'University')}
                             </span>
                           </span>
                         </button>
@@ -474,7 +509,7 @@ export default function CompareIndexToolbar({
                   className={`${CATALOG_CONTROL_BAR_BTN} w-full sm:w-auto`}
                 >
                   <LayoutGrid className="h-[18px] w-[18px] text-gray-600" />
-                  Categories
+                  {toolbarCopy.categories ?? compareToolbar?.categoriesTitle ?? 'Categories'}
                   {categoryTriggerCount > 0 ? (
                     <span className="tabular-nums text-gray-600">
                       ({categoryTriggerCount})
@@ -494,7 +529,12 @@ export default function CompareIndexToolbar({
       {resultCount > 0 ? (
         <p className="text-sm text-gray-500">
           {showingFrom >= 1 && showingTo >= showingFrom
-            ? `Showing ${showingFrom}–${showingTo} of ${resultCount} ${resultLabel}`
+            ? toolbarCopy.showingRange(
+                showingFrom,
+                showingTo,
+                resultCount,
+                resultLabel
+              )
             : `Found ${resultCount} ${resultLabel}`}
         </p>
       ) : null}

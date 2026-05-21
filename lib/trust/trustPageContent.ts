@@ -1,5 +1,8 @@
 import type { Metadata } from 'next';
 
+import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
+import { getCanonical } from '@/lib/seo/canonical';
+
 export type TrustPageKey =
   | 'about'
   | 'editorialPolicy'
@@ -43,6 +46,19 @@ export type TrustPageContent = {
     href: string;
     label: string;
   };
+};
+
+const TRUST_PAGE_PATHS: Record<TrustPageKey, string> = {
+  about: '/about',
+  editorialPolicy: '/editorial-policy',
+  verificationMethodology: '/scholarship-verification-methodology',
+  ranking: '/how-we-rank-scholarships',
+  howItWorks: '/how-scholarshiptop-works',
+  contact: '/contact',
+  disclaimer: '/financial-aid-disclaimer',
+  corrections: '/corrections',
+  scamWarning: '/scholarship-scam-warning',
+  howWeMakeMoney: '/how-we-make-money'
 };
 
 const trustLinks = {
@@ -554,12 +570,17 @@ export const TRUST_PAGE_CONTENT: Record<TrustPageKey, TrustPageContent> = {
 
 export function trustPageMetadata(key: TrustPageKey): Metadata {
   const page = TRUST_PAGE_CONTENT[key];
+  const path = TRUST_PAGE_PATHS[key];
+  const alternates = buildStage2EnglishPilotAlternates(path);
+  const canonical = getCanonical(path);
   return {
     title: page.title,
     description: page.description,
+    alternates,
     openGraph: {
       title: page.title,
       description: page.description,
+      url: canonical,
       type: 'website'
     }
   };

@@ -9,11 +9,12 @@ import {
   Zap
 } from 'lucide-react';
 
-const CONTINUE_SEARCH_SUBTITLE =
-  'Explore next steps to find scholarships faster, write stronger applications, and compare opportunities.';
-
-const CONTINUE_EXPLORING_SUBTITLE =
-  'Short paths to resources, essays, and curated hubs—without leaving the product flow.';
+import {
+  hrefForLocalizedUiRequired,
+  localizedScholarshipHubTabHref,
+  type LocalizedUiLocale
+} from '@/lib/i18n/localizedHref';
+import { getScholarshipsHubUiCopy } from '@/lib/i18n/scholarshipsHubUiCopy';
 
 const RELATED_CARD_CLASS =
   'group flex h-full cursor-pointer flex-col rounded-xl border border-slate-200 bg-white p-4 transition hover:border-orange-300 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/40 sm:p-5';
@@ -27,14 +28,22 @@ type Props = {
    * `full`: six-card grid including providers + compare (category hubs and legacy footers).
    */
   variant?: 'full' | 'exploring';
+  locale?: LocalizedUiLocale;
 };
+
+function linkForLocale(locale: LocalizedUiLocale, canonicalPath: string): string {
+  return hrefForLocalizedUiRequired(locale, canonicalPath);
+}
 
 /** Shared “Continue your scholarship search” / “Continue exploring” SaaS card grid. */
 export default function ContinueScholarshipSearchCardGrid({
   idPrefix = 'continue-search',
   className,
-  variant = 'full'
+  variant = 'full',
+  locale = 'en'
 }: Props) {
+  const c = getScholarshipsHubUiCopy(locale).continueSearch;
+
   if (variant === 'exploring') {
     return (
       <section
@@ -49,16 +58,16 @@ export default function ContinueScholarshipSearchCardGrid({
           id={`${idPrefix}-related-heading`}
           className="text-xl font-bold tracking-tight text-slate-900 md:text-2xl"
         >
-          Continue exploring
+          {c.exploringHeading}
         </h2>
         <p
           id={`${idPrefix}-related-subtitle`}
           className="mt-1 max-w-2xl text-sm text-slate-600"
         >
-          {CONTINUE_EXPLORING_SUBTITLE}
+          {c.exploringSubtitle}
         </p>
         <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <Link href="/resources" className={RELATED_CARD_CLASS}>
+          <Link href={linkForLocale(locale, '/resources')} className={RELATED_CARD_CLASS}>
             <div className="flex gap-3">
               <span
                 className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600 transition group-hover:bg-orange-50 group-hover:text-orange-600"
@@ -67,17 +76,15 @@ export default function ContinueScholarshipSearchCardGrid({
                 <BookOpen className="h-4 w-4" strokeWidth={2} />
               </span>
               <div className="min-w-0 flex flex-1 flex-col">
-                <h3 className="font-semibold text-slate-900">Scholarship resources</h3>
-                <p className="mt-1 flex-1 text-sm text-slate-600">
-                  Guides to find, track, and apply step by step.
-                </p>
+                <h3 className="font-semibold text-slate-900">{c.resourcesTitle}</h3>
+                <p className="mt-1 flex-1 text-sm text-slate-600">{c.resourcesBody}</p>
                 <span className="mt-3 inline-block text-sm font-medium text-orange-600 transition group-hover:text-orange-700">
-                  Explore →
+                  {c.explore}
                 </span>
               </div>
             </div>
           </Link>
-          <Link href="/essays" className={RELATED_CARD_CLASS}>
+          <Link href={linkForLocale(locale, '/essays')} className={RELATED_CARD_CLASS}>
             <div className="flex gap-3">
               <span
                 className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600 transition group-hover:bg-orange-50 group-hover:text-orange-600"
@@ -86,17 +93,18 @@ export default function ContinueScholarshipSearchCardGrid({
                 <FileText className="h-4 w-4" strokeWidth={2} />
               </span>
               <div className="min-w-0 flex flex-1 flex-col">
-                <h3 className="font-semibold text-slate-900">Essay guides</h3>
-                <p className="mt-1 flex-1 text-sm text-slate-600">
-                  Structure and revise scholarship essays faster.
-                </p>
+                <h3 className="font-semibold text-slate-900">{c.essaysTitle}</h3>
+                <p className="mt-1 flex-1 text-sm text-slate-600">{c.essaysBody}</p>
                 <span className="mt-3 inline-block text-sm font-medium text-orange-600 transition group-hover:text-orange-700">
-                  Explore →
+                  {c.explore}
                 </span>
               </div>
             </div>
           </Link>
-          <Link href="/scholarships/hub/easy-apply" className={RELATED_CARD_CLASS}>
+          <Link
+            href={localizedScholarshipHubTabHref(locale, 'easy-apply')}
+            className={RELATED_CARD_CLASS}
+          >
             <div className="flex gap-3">
               <span
                 className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600 transition group-hover:bg-orange-50 group-hover:text-orange-600"
@@ -105,18 +113,16 @@ export default function ContinueScholarshipSearchCardGrid({
                 <Zap className="h-4 w-4" strokeWidth={2} />
               </span>
               <div className="min-w-0 flex flex-1 flex-col">
-                <h3 className="font-semibold text-slate-900">Easy apply scholarships</h3>
-                <p className="mt-1 flex-1 text-sm text-slate-600">
-                  Fewer hurdles so you can submit sooner.
-                </p>
+                <h3 className="font-semibold text-slate-900">{c.easyApplyTitle}</h3>
+                <p className="mt-1 flex-1 text-sm text-slate-600">{c.easyApplyBody}</p>
                 <span className="mt-3 inline-block text-sm font-medium text-orange-600 transition group-hover:text-orange-700">
-                  Explore →
+                  {c.explore}
                 </span>
               </div>
             </div>
           </Link>
           <Link
-            href="/scholarships/hub/international-friendly"
+            href={localizedScholarshipHubTabHref(locale, 'international-friendly')}
             className={RELATED_CARD_CLASS}
           >
             <div className="flex gap-3">
@@ -127,14 +133,10 @@ export default function ContinueScholarshipSearchCardGrid({
                 <Globe2 className="h-4 w-4" strokeWidth={2} />
               </span>
               <div className="min-w-0 flex flex-1 flex-col">
-                <h3 className="font-semibold text-slate-900">
-                  Scholarships for international students
-                </h3>
-                <p className="mt-1 flex-1 text-sm text-slate-600">
-                  Hubs that fit visa-holding and global applicants.
-                </p>
+                <h3 className="font-semibold text-slate-900">{c.internationalTitle}</h3>
+                <p className="mt-1 flex-1 text-sm text-slate-600">{c.internationalBody}</p>
                 <span className="mt-3 inline-block text-sm font-medium text-orange-600 transition group-hover:text-orange-700">
-                  Explore →
+                  {c.explore}
                 </span>
               </div>
             </div>
@@ -157,16 +159,16 @@ export default function ContinueScholarshipSearchCardGrid({
         id={`${idPrefix}-related-heading`}
         className="text-2xl font-bold tracking-tight text-slate-900 md:text-3xl"
       >
-        Continue your scholarship search
+        {c.heading}
       </h2>
       <p
         id={`${idPrefix}-related-subtitle`}
         className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-600 sm:text-[0.9375rem]"
       >
-        {CONTINUE_SEARCH_SUBTITLE}
+        {c.subtitle}
       </p>
       <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
-        <Link href="/resources" className={RELATED_CARD_CLASS}>
+        <Link href={linkForLocale(locale, '/resources')} className={RELATED_CARD_CLASS}>
           <div className="flex gap-3">
             <span
               className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600 transition group-hover:bg-orange-50 group-hover:text-orange-600"
@@ -176,18 +178,16 @@ export default function ContinueScholarshipSearchCardGrid({
             </span>
             <div className="min-w-0 flex-1">
               <h3 className="font-semibold text-lg text-slate-900">
-                Scholarship resources
+                {c.resourcesTitle}
               </h3>
-              <p className="mt-1 text-sm text-slate-600">
-                Guides to help you find, track, and apply for scholarships step by step.
-              </p>
+              <p className="mt-1 text-sm text-slate-600">{c.resourcesBody}</p>
               <span className="mt-3 inline-block font-medium text-orange-500 transition group-hover:text-orange-600">
-                Explore →
+                {c.explore}
               </span>
             </div>
           </div>
         </Link>
-        <Link href="/essays" className={RELATED_CARD_CLASS}>
+        <Link href={linkForLocale(locale, '/essays')} className={RELATED_CARD_CLASS}>
           <div className="flex gap-3">
             <span
               className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600 transition group-hover:bg-orange-50 group-hover:text-orange-600"
@@ -196,17 +196,15 @@ export default function ContinueScholarshipSearchCardGrid({
               <FileText className="h-5 w-5" strokeWidth={2} />
             </span>
             <div className="min-w-0 flex-1">
-              <h3 className="font-semibold text-lg text-slate-900">Essay guides</h3>
-              <p className="mt-1 text-sm text-slate-600">
-                Learn how to write strong scholarship essays and stand out from other applicants.
-              </p>
+              <h3 className="font-semibold text-lg text-slate-900">{c.essaysTitle}</h3>
+              <p className="mt-1 text-sm text-slate-600">{c.essaysBody}</p>
               <span className="mt-3 inline-block font-medium text-orange-500 transition group-hover:text-orange-600">
-                Explore →
+                {c.explore}
               </span>
             </div>
           </div>
         </Link>
-        <Link href="/providers" className={RELATED_CARD_CLASS}>
+          <Link href={linkForLocale(locale, '/providers')} className={RELATED_CARD_CLASS}>
           <div className="flex gap-3">
             <span
               className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600 transition group-hover:bg-orange-50 group-hover:text-orange-600"
@@ -216,18 +214,16 @@ export default function ContinueScholarshipSearchCardGrid({
             </span>
             <div className="min-w-0 flex-1">
               <h3 className="font-semibold text-lg text-slate-900">
-                Scholarship providers
+                {c.providersTitle}
               </h3>
-              <p className="mt-1 text-sm text-slate-600">
-                Explore organizations offering scholarships and understand their requirements.
-              </p>
+              <p className="mt-1 text-sm text-slate-600">{c.providersBody}</p>
               <span className="mt-3 inline-block font-medium text-orange-500 transition group-hover:text-orange-600">
-                Explore →
+                {c.explore}
               </span>
             </div>
           </div>
         </Link>
-        <Link href="/compare" className={RELATED_CARD_CLASS}>
+          <Link href={linkForLocale(locale, '/compare')} className={RELATED_CARD_CLASS}>
           <div className="flex gap-3">
             <span
               className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600 transition group-hover:bg-orange-50 group-hover:text-orange-600"
@@ -237,18 +233,19 @@ export default function ContinueScholarshipSearchCardGrid({
             </span>
             <div className="min-w-0 flex-1">
               <h3 className="font-semibold text-lg text-slate-900">
-                Compare opportunities
+                {c.compareTitle}
               </h3>
-              <p className="mt-1 text-sm text-slate-600">
-                Compare scholarships, states, and options to choose the best path.
-              </p>
+              <p className="mt-1 text-sm text-slate-600">{c.compareBody}</p>
               <span className="mt-3 inline-block font-medium text-orange-500 transition group-hover:text-orange-600">
-                Explore →
+                {c.explore}
               </span>
             </div>
           </div>
         </Link>
-        <Link href="/scholarships/hub/easy-apply" className={RELATED_CARD_CLASS}>
+        <Link
+          href={localizedScholarshipHubTabHref(locale, 'easy-apply')}
+          className={RELATED_CARD_CLASS}
+        >
           <div className="flex gap-3">
             <span
               className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600 transition group-hover:bg-orange-50 group-hover:text-orange-600"
@@ -258,19 +255,17 @@ export default function ContinueScholarshipSearchCardGrid({
             </span>
             <div className="min-w-0 flex-1">
               <h3 className="font-semibold text-lg text-slate-900">
-                Easy apply scholarships
+                {c.easyApplyTitle}
               </h3>
-              <p className="mt-1 text-sm text-slate-600">
-                Find scholarships with simpler applications and fewer hurdles so you can submit faster.
-              </p>
+              <p className="mt-1 text-sm text-slate-600">{c.easyApplyBody}</p>
               <span className="mt-3 inline-block font-medium text-orange-500 transition group-hover:text-orange-600">
-                Explore →
+                {c.explore}
               </span>
             </div>
           </div>
         </Link>
         <Link
-          href="/scholarships/hub/international-friendly"
+          href={localizedScholarshipHubTabHref(locale, 'international-friendly')}
           className={RELATED_CARD_CLASS}
         >
           <div className="flex gap-3">
@@ -282,13 +277,11 @@ export default function ContinueScholarshipSearchCardGrid({
             </span>
             <div className="min-w-0 flex-1">
               <h3 className="font-semibold text-lg text-slate-900">
-                Scholarships for international students
+                {c.internationalTitle}
               </h3>
-              <p className="mt-1 text-sm text-slate-600">
-                Explore funding options that may fit international and visa-holding students.
-              </p>
+              <p className="mt-1 text-sm text-slate-600">{c.internationalBody}</p>
               <span className="mt-3 inline-block font-medium text-orange-500 transition group-hover:text-orange-600">
-                Explore →
+                {c.explore}
               </span>
             </div>
           </div>

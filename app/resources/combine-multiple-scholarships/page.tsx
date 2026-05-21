@@ -4,6 +4,7 @@ import Link from 'next/link';
 import ResourceGuideShell from '@/components/content-hub/resourceGuides/ResourceGuideShell';
 import { resourceGuideLinkClassName } from '@/lib/content-hub/resourceGuidePages';
 import { resourceGuideHref } from '@/lib/scholarships/resourceGuideRoutes';
+import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
 import { getCanonical } from '@/lib/seo/canonical';
 
 const hrefApply = resourceGuideHref('how-to-apply-for-scholarships');
@@ -14,9 +15,7 @@ export const metadata: Metadata = {
   title: 'Can You Combine Multiple Scholarships?',
   description:
     'Find out whether you can combine multiple scholarships, how stacking works with school policy, what limitations apply, and which questions to ask before accepting several awards.',
-  alternates: {
-    canonical
-  },
+  alternates: buildStage2EnglishPilotAlternates('/resources/combine-multiple-scholarships'),
   openGraph: {
     title: 'Can You Combine Multiple Scholarships?',
     description:

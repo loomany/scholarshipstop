@@ -1,8 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useMemo } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useCallback, useMemo } from 'react';
+import { extractLocaleFromPath } from '@/lib/i18n/paths';
+import {
+  localizedHubCatalogBrowserPath,
+  type LocalizedUiLocale
+} from '@/lib/i18n/localizedHref';
+import { isStage2PilotLocale } from '@/lib/i18n/pilotRoutes';
 import type { MouseEvent } from 'react';
 import { Info, Lock, Star } from 'lucide-react';
 import {
@@ -61,12 +67,14 @@ import {
 import { SHOW_SCHOLARSHIP_APPLICANT_COUNT_UI } from '@/lib/constants/scholarshipApplicantCountUi';
 import { dismissRouteProgress } from '@/lib/navigation/dismissRouteProgress';
 import type { ScholarshipListTabId } from '@/app/scholarships/scholarshipTabs';
+import type { ScholarshipsHubUiCopy } from '@/lib/i18n/scholarshipsHubUiCopy';
 import ScholarshipCatalogChipRow from '@/components/scholarships/ScholarshipCatalogChipRow';
 import { ScholarshipExpiredBadge } from '@/components/scholarships/ScholarshipExpiredBadge';
 import { StudyInHostCountriesPopover } from '@/components/scholarships/StudyInHostCountriesPopover';
 
 type ScholarshipCardProps = {
   scholarship: Scholarship;
+  cardCopy?: ScholarshipsHubUiCopy['card'];
   isUnread?: boolean;
   badgeLabelOverride?: string | null;
   saved: boolean;
@@ -182,8 +190,18 @@ function replaceSummaryDollarAwardWithSourceCurrency(
   return summary.replace(/(?:\bUS\s*)?\$[\d,.\s]+(?:\s+USD)?/g, awardDisplay);
 }
 
+const DEFAULT_CARD_COPY: ScholarshipsHubUiCopy['card'] = {
+  save: 'Save',
+  saved: 'Saved ✓',
+  removeFromSavedAria: 'Remove from saved',
+  saveScholarshipAria: 'Save scholarship',
+  notRelevant: 'Not relevant',
+  restoreToMatches: 'Restore to matches'
+};
+
 export default function ScholarshipCard({
   scholarship,
+  cardCopy,
   isUnread = false,
   badgeLabelOverride,
   saved,
@@ -207,6 +225,25 @@ export default function ScholarshipCard({
   returnToHref
 }: ScholarshipCardProps) {
   const router = useRouter();
+  const pathname = usePathname();
+  const uiLocale = useMemo((): LocalizedUiLocale => {
+    const fromPath = extractLocaleFromPath(pathname ?? '/');
+    if (fromPath && isStage2PilotLocale(fromPath)) return fromPath;
+    if (typeof window !== 'undefined') {
+      const fromWindow = extractLocaleFromPath(window.location.pathname);
+      if (fromWindow && isStage2PilotLocale(fromWindow)) return fromWindow;
+    }
+    return 'en';
+  }, [pathname]);
+  const prefixHubHref = useCallback(
+    (href: string | null): string | null => {
+      if (!href || uiLocale === 'en') return href;
+      const [pathPart, ...rest] = href.split(/(?=[?#])/);
+      const localized = localizedHubCatalogBrowserPath(uiLocale, pathPart ?? href);
+      return `${localized}${rest.join('')}`;
+    },
+    [uiLocale]
+  );
   const detailHref = useMemo(() => {
     const base = scholarshipPublicPath(scholarship);
     const safeReturnToHref = returnToHref?.trim();
@@ -302,7 +339,7 @@ export default function ScholarshipCard({
     return null;
   }, [scholarship.hostCountryCodes, scholarship.stateCodes]);
 
-  const grantLocationHubHref = useMemo(() => {
+  const grantLocationHubHrefRaw = useMemo(() => {
     if (!grantLocationBadge) return null;
     if (grantLocationBadge.key === 'grant-location-multi') return null;
     if (grantLocationBadge.key === 'grant-location-us') {
@@ -323,6 +360,10 @@ export default function ScholarshipCard({
     }
     return null;
   }, [grantLocationBadge]);
+  const grantLocationHubHref = useMemo(
+    () => prefixHubHref(grantLocationHubHrefRaw),
+    [grantLocationHubHrefRaw, prefixHubHref]
+  );
 
   const hostLocationUnspecifiedBadge: ScholarshipCardBadge | null =
     !grantLocationBadge && scholarship.hostProgramLocationUnspecified
@@ -335,10 +376,10 @@ export default function ScholarshipCard({
       : null;
 
   const hostLocationUnspecifiedHubHref = hostLocationUnspecifiedBadge
-    ? buildScholarshipTagHubHref({ hostUnspecified: true })
+    ? prefixHubHref(buildScholarshipTagHubHref({ hostUnspecified: true }))
     : null;
 
-  const applicantCountryHubHref = useMemo(() => {
+  const applicantCountryHubHrefRaw = useMemo(() => {
     if (!applicantCountryBadge) return null;
     return (
       scholarshipApplicantCountrySeoHref(applicantCountryBadge.code) ??
@@ -347,6 +388,10 @@ export default function ScholarshipCard({
       })
     );
   }, [applicantCountryBadge]);
+  const applicantCountryHubHref = useMemo(
+    () => prefixHubHref(applicantCountryHubHrefRaw),
+    [applicantCountryHubHrefRaw, prefixHubHref]
+  );
 
   const desktopGeoBadgeCount = [
     grantLocationBadge,
@@ -584,6 +629,7 @@ export default function ScholarshipCard({
     ? 'Approximate applicant volume when available.'
     : 'Applicant count when available.';
 
+  const actions = cardCopy ?? DEFAULT_CARD_COPY;
   const cardActionControls =
     ignoreAction === 'restore' ? (
       <button
@@ -595,14 +641,16 @@ export default function ScholarshipCard({
           onHide?.(scholarship.id);
         }}
       >
-        Restore to matches
+        {actions.restoreToMatches}
       </button>
     ) : (
       <>
         <button
           type="button"
           aria-pressed={saved}
-          aria-label={saved ? 'Remove from saved' : 'Save scholarship'}
+          aria-label={
+            saved ? actions.removeFromSavedAria : actions.saveScholarshipAria
+          }
           className={saved ? cardActionSavedClass : cardActionSaveClass}
           onClick={(e) => {
             e.preventDefault();
@@ -610,7 +658,7 @@ export default function ScholarshipCard({
             onToggleSave(scholarship.id);
           }}
         >
-          {saved ? 'Saved ✓' : 'Save'}
+          {saved ? actions.saved : actions.save}
         </button>
         <button
           type="button"
@@ -621,7 +669,7 @@ export default function ScholarshipCard({
             onHide?.(scholarship.id);
           }}
         >
-          Not relevant
+          {actions.notRelevant}
         </button>
       </>
     );
@@ -1261,7 +1309,7 @@ export default function ScholarshipCard({
               <div className="min-w-0 pointer-events-auto">
                 <ScholarshipCatalogChipRow
                   chips={catalogChips}
-                  getChipHref={scholarshipCatalogChipHubHref}
+                  getChipHref={(c) => prefixHubHref(scholarshipCatalogChipHubHref(c))}
                 />
               </div>
               <div className={desktopGeoBadgesWrapClass}>

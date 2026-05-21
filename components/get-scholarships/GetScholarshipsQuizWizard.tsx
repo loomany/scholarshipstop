@@ -37,6 +37,12 @@ import {
   loadBestRecommendationWizardDraft
 } from '@/lib/onboarding/bestRecommendationWizardDraft';
 import { getOAuthCallbackUrlWithNext } from '@/utils/helpers';
+import {
+  getGetScholarshipsQuizUiCopy,
+  type GetScholarshipsQuizUiCopy
+} from '@/lib/i18n/funnelUiCopy';
+import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
+import { localizedPilotHref } from '@/lib/i18n/localizedHref';
 
 function notifyDestructive(title: string, description?: string) {
   toast({
@@ -68,13 +74,28 @@ type Props = {
   /** Used when the user is already signed in (skip quiz → hub). */
   afterAuthPath?: string;
   onLeaveQuiz?: () => void;
+  /** When non-`en`, swaps visible copy and resolves the hub redirect to `/es|fr/scholarships`. */
+  locale?: LocalizedUiLocale;
 };
 
 export function GetScholarshipsQuizWizard({
-  afterAuthPath = SCHOLARSHIPS_HUB_BEST_MATCHES_HREF,
-  onLeaveQuiz
+  afterAuthPath,
+  onLeaveQuiz,
+  locale = 'en'
 }: Props) {
   const router = useRouter();
+  const ui: GetScholarshipsQuizUiCopy = getGetScholarshipsQuizUiCopy(locale);
+  const resolvedAfterAuthPath =
+    afterAuthPath ??
+    (locale === 'en'
+      ? SCHOLARSHIPS_HUB_BEST_MATCHES_HREF
+      : localizedPilotHref(locale, '/scholarships') ??
+        SCHOLARSHIPS_HUB_BEST_MATCHES_HREF);
+  const localizedScholarshipsHubHref =
+    locale === 'en'
+      ? SCHOLARSHIPS_HUB_BEST_MATCHES_HREF
+      : localizedPilotHref(locale, '/scholarships') ??
+        SCHOLARSHIPS_HUB_BEST_MATCHES_HREF;
   const [draft, setDraft] = useState<StoredOnboardingDraft | null>(null);
   const [quizStep, setQuizStep] = useState<LandingQuizStep>('country');
   const [selectedCountryCode, setSelectedCountryCode] = useState('');
@@ -101,11 +122,11 @@ export function GetScholarshipsQuizWizard({
   }, []);
 
   useEffect(() => {
-    void router.prefetch(afterAuthPath);
+    void router.prefetch(resolvedAfterAuthPath);
     const supabase = createClient();
     void supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
-        router.replace(afterAuthPath);
+        router.replace(resolvedAfterAuthPath);
         return;
       }
       const completedDraft = loadCompletedLandingQuizDraft();
@@ -118,10 +139,10 @@ export function GetScholarshipsQuizWizard({
         Boolean(bestWizardDraft?.submitted) &&
         isBestRecommendationWizardDraftComplete(bestWizardDraft);
       if (completedSeed || hasCompletedBestWizard) {
-        router.replace(afterAuthPath);
+        router.replace(resolvedAfterAuthPath);
       }
     });
-  }, [router, afterAuthPath]);
+  }, [router, resolvedAfterAuthPath]);
 
   useEffect(() => {
     if (!draft || stepReady) return;
@@ -147,7 +168,7 @@ export function GetScholarshipsQuizWizard({
     if (landingQuizCompleteRef.current) return;
     const normalizedEmail = email.trim().toLowerCase();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
-      setEmailError('Enter a valid email address.');
+      setEmailError(ui.errorInvalidEmail);
       return;
     }
     const completionDraft =
@@ -156,12 +177,12 @@ export function GetScholarshipsQuizWizard({
       !selectedCountryCode &&
       completionDraft.includeUnspecifiedApplicantCountries !== true
     ) {
-      setEmailError('Choose your country first.');
+      setEmailError(ui.errorChooseCountry);
       setQuizStep('country');
       return;
     }
     if (!options.seed) {
-      setEmailError('Could not prepare your scholarship filters.');
+      setEmailError(ui.errorCouldNotPrepareFilters);
       return;
     }
 
@@ -190,10 +211,7 @@ export function GetScholarshipsQuizWizard({
     } catch {
       landingQuizCompleteRef.current = false;
       setNavigatingToHub(false);
-      notifyDestructive(
-        'Could not save your filters',
-        'Check browser storage settings and try again.'
-      );
+      notifyDestructive(ui.errorCouldNotSaveFilters);
       return;
     }
     const draftForCompletion = completionDraft;
@@ -218,16 +236,16 @@ export function GetScholarshipsQuizWizard({
           : `${countryLabelFromCode(selectedCountryCode)} (${selectedCountryCode})`,
       email: normalizedEmail
     });
-    router.replace(SCHOLARSHIPS_HUB_BEST_MATCHES_HREF);
+    router.replace(localizedScholarshipsHubHref);
   },
-  [email, router, selectedCountryCode]);
+  [email, router, selectedCountryCode, ui, localizedScholarshipsHubHref]);
 
   const countryLabel =
     draft?.includeUnspecifiedApplicantCountries === true
-      ? 'Citizenship not specified'
+      ? ui.citizenshipNotSpecified
       : selectedCountryCode
         ? countryLabelFromCode(selectedCountryCode)
-        : 'your country';
+        : ui.yourCountryFallback;
 
   const sanitizePreferredHostsForSignup = useCallback((d: StoredOnboardingDraft): string[] => {
     const raw = d.preferredHostCountryCodes ?? [];
@@ -260,7 +278,7 @@ export function GetScholarshipsQuizWizard({
     }
     const code = normalizeCountryCode(countryCodeRaw ?? selectedCountryCode);
     if (!code) {
-      setCountryError('Choose your country to continue.');
+      setCountryError(ui.errorPickCountry);
       return;
     }
     setCountryError(null);
@@ -312,7 +330,7 @@ export function GetScholarshipsQuizWizard({
     const base = loadLandingQuizDraft() ?? emptyLandingQuizDraft();
     const pref = sanitizePreferredHostsForSignup(base);
     if (!selectedCountryCode && base.includeUnspecifiedApplicantCountries !== true) {
-      setEmailError('Choose your country first.');
+      setEmailError(ui.errorChooseCountry);
       setQuizStep('country');
       return;
     }
@@ -321,10 +339,7 @@ export function GetScholarshipsQuizWizard({
         ? buildScholarshipProfileFilterSeedForUnspecifiedApplicant(pref)
         : buildScholarshipProfileFilterSeedFromCountry(selectedCountryCode, pref);
     if (!seed) {
-      notifyDestructive(
-        'Almost there',
-        'Could not prepare your scholarship filters.'
-      );
+      notifyDestructive(ui.errorCouldNotPrepareFilters);
       return;
     }
 
@@ -346,10 +361,7 @@ export function GetScholarshipsQuizWizard({
     } catch {
       setGoogleSignInPending(false);
       setNavigatingToHub(false);
-      notifyDestructive(
-        'Could not save your filters',
-        'Check browser storage settings and try again.'
-      );
+      notifyDestructive(ui.errorCouldNotSaveFilters);
       return;
     }
 
@@ -357,15 +369,20 @@ export function GetScholarshipsQuizWizard({
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: getOAuthCallbackUrlWithNext(SCHOLARSHIPS_HUB_BEST_MATCHES_HREF)
+        redirectTo: getOAuthCallbackUrlWithNext(localizedScholarshipsHubHref)
       }
     });
     if (error) {
       setGoogleSignInPending(false);
       setNavigatingToHub(false);
-      setEmailError(error.message || 'Google sign-in failed.');
+      setEmailError(error.message || ui.errorGoogleSignInFailed);
     }
-  }, [sanitizePreferredHostsForSignup, selectedCountryCode]);
+  }, [
+    sanitizePreferredHostsForSignup,
+    selectedCountryCode,
+    ui,
+    localizedScholarshipsHubHref
+  ]);
 
   const step = draft
     ? stepReady
@@ -375,13 +392,13 @@ export function GetScholarshipsQuizWizard({
 
   useEffect(() => {
     if (step !== 'email') return;
-    router.prefetch(SCHOLARSHIPS_HUB_BEST_MATCHES_HREF);
-  }, [router, step]);
+    router.prefetch(localizedScholarshipsHubHref);
+  }, [router, step, localizedScholarshipsHubHref]);
 
   if (!draft) {
     return (
       <SiteBrandLoading
-        label="Loading your progress…"
+        label={ui.loadingProgress}
         className="min-h-[calc(100dvh-4rem)]"
       />
     );
@@ -396,7 +413,7 @@ export function GetScholarshipsQuizWizard({
             onClick={onLeaveQuiz}
             className="mb-8 text-sm text-gray-600 no-underline transition hover:text-black hover:underline"
           >
-            ← Back to intro
+            {ui.backToIntro}
           </button>
         ) : null}
 
@@ -404,6 +421,7 @@ export function GetScholarshipsQuizWizard({
           {step === 'country' ? (
             <CountryFirstStep
               disabled={navigatingToHub}
+              locale={locale}
               value={selectedCountryCode}
               includeUnspecifiedApplicantCountries={
                 draft.includeUnspecifiedApplicantCountries === true
@@ -428,7 +446,7 @@ export function GetScholarshipsQuizWizard({
                   preferredHostCountryCodes: b.preferredHostCountryCodes ?? []
                 });
               }}
-              progressEyebrow="Step 1 of 2 · Applicant country"
+              progressEyebrow={ui.countryStepProgress}
               error={countryError}
               onChange={(value) => {
                 setSelectedCountryCode(value);
@@ -454,11 +472,12 @@ export function GetScholarshipsQuizWizard({
             <CountryEmailSignupStep
               disabled={navigatingToHub}
               submitting={navigatingToHub}
+              locale={locale}
               email={email}
               countryLabel={countryLabel}
-              progressEyebrow="Step 2 of 2 · Account"
+              progressEyebrow={ui.emailStepProgress}
               submitLabel={
-                navigatingToHub ? 'Preparing your matches...' : 'See scholarship matches'
+                navigatingToHub ? ui.preparingMatches : ui.submitMatches
               }
               googleSubmitting={googleSignInPending}
               error={emailError}

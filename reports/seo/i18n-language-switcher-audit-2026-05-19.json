@@ -1,0 +1,1868 @@
+{
+  "summary": {
+    "generatedAt": "2026-05-21T12:41:53.574Z",
+    "baseUrl": "http://localhost:3020",
+    "totalPages": 51,
+    "pagesExpectingSwitcher": 51,
+    "pagesPassingSwitcher": 45,
+    "pagesWithBlockingSwitcherIssues": 6,
+    "pagesIntentionallyEnglishOnly": 0,
+    "pagesEnglishOnlyButFoundSwitcher": 0
+  },
+  "results": [
+    {
+      "url": "http://localhost:3020/",
+      "path": "/",
+      "locale": "en",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/",
+        "es": "/es",
+        "fr": "/fr"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/",
+          "current": true,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr",
+          "current": false,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/es",
+      "path": "/es",
+      "locale": "es",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/",
+        "es": "/es",
+        "fr": "/fr"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es",
+          "current": true,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr",
+          "current": false,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/fr",
+      "path": "/fr",
+      "locale": "fr",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/",
+        "es": "/es",
+        "fr": "/fr"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr",
+          "current": true,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/scholarships",
+      "path": "/scholarships",
+      "locale": "en",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/scholarships/hub/best-recommendation",
+        "es": "/es/scholarships/hub/best-recommendation",
+        "fr": "/fr/scholarships/hub/best-recommendation"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/scholarships/hub/best-recommendation",
+          "current": true,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/scholarships/hub/best-recommendation",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/scholarships/hub/best-recommendation",
+          "current": false,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/es/scholarships",
+      "path": "/es/scholarships",
+      "locale": "es",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/scholarships/hub/best-recommendation",
+        "es": "/es/scholarships/hub/best-recommendation",
+        "fr": "/fr/scholarships/hub/best-recommendation"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/scholarships/hub/best-recommendation",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/scholarships/hub/best-recommendation",
+          "current": true,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/scholarships/hub/best-recommendation",
+          "current": false,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/fr/scholarships",
+      "path": "/fr/scholarships",
+      "locale": "fr",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/scholarships/hub/best-recommendation",
+        "es": "/es/scholarships/hub/best-recommendation",
+        "fr": "/fr/scholarships/hub/best-recommendation"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/scholarships/hub/best-recommendation",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/scholarships/hub/best-recommendation",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/scholarships/hub/best-recommendation",
+          "current": true,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/scholarships/hub/best-recommendation",
+      "path": "/scholarships/hub/best-recommendation",
+      "locale": "en",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/scholarships/hub/best-recommendation",
+        "es": "/es/scholarships/hub/best-recommendation",
+        "fr": "/fr/scholarships/hub/best-recommendation"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/scholarships/hub/best-recommendation",
+          "current": true,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/scholarships/hub/best-recommendation",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/scholarships/hub/best-recommendation",
+          "current": false,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/es/scholarships/hub/best-recommendation",
+      "path": "/es/scholarships/hub/best-recommendation",
+      "locale": "es",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/scholarships/hub/best-recommendation",
+        "es": "/es/scholarships/hub/best-recommendation",
+        "fr": "/fr/scholarships/hub/best-recommendation"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/scholarships/hub/best-recommendation",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/scholarships/hub/best-recommendation",
+          "current": true,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/scholarships/hub/best-recommendation",
+          "current": false,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/fr/scholarships/hub/best-recommendation",
+      "path": "/fr/scholarships/hub/best-recommendation",
+      "locale": "fr",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/scholarships/hub/best-recommendation",
+        "es": "/es/scholarships/hub/best-recommendation",
+        "fr": "/fr/scholarships/hub/best-recommendation"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/scholarships/hub/best-recommendation",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/scholarships/hub/best-recommendation",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/scholarships/hub/best-recommendation",
+          "current": true,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/scholarships/hub/easy-apply",
+      "path": "/scholarships/hub/easy-apply",
+      "locale": "en",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/scholarships/hub/easy-apply",
+        "es": "/es/scholarships/hub/easy-apply",
+        "fr": "/fr/scholarships/hub/easy-apply"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/scholarships/hub/easy-apply",
+          "current": true,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/scholarships/hub/easy-apply",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/scholarships/hub/easy-apply",
+          "current": false,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/es/scholarships/hub/easy-apply",
+      "path": "/es/scholarships/hub/easy-apply",
+      "locale": "es",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/scholarships/hub/easy-apply",
+        "es": "/es/scholarships/hub/easy-apply",
+        "fr": "/fr/scholarships/hub/easy-apply"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/scholarships/hub/easy-apply",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/scholarships/hub/easy-apply",
+          "current": true,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/scholarships/hub/easy-apply",
+          "current": false,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/fr/scholarships/hub/easy-apply",
+      "path": "/fr/scholarships/hub/easy-apply",
+      "locale": "fr",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/scholarships/hub/easy-apply",
+        "es": "/es/scholarships/hub/easy-apply",
+        "fr": "/fr/scholarships/hub/easy-apply"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/scholarships/hub/easy-apply",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/scholarships/hub/easy-apply",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/scholarships/hub/easy-apply",
+          "current": true,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/scholarships/hub/hot-deadlines",
+      "path": "/scholarships/hub/hot-deadlines",
+      "locale": "en",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/scholarships/hub/hot-deadlines",
+        "es": "/es/scholarships/hub/hot-deadlines",
+        "fr": "/fr/scholarships/hub/hot-deadlines"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/scholarships/hub/hot-deadlines",
+          "current": true,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/scholarships/hub/hot-deadlines",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/scholarships/hub/hot-deadlines",
+          "current": false,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/es/scholarships/hub/hot-deadlines",
+      "path": "/es/scholarships/hub/hot-deadlines",
+      "locale": "es",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/scholarships/hub/hot-deadlines",
+        "es": "/es/scholarships/hub/hot-deadlines",
+        "fr": "/fr/scholarships/hub/hot-deadlines"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/scholarships/hub/hot-deadlines",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/scholarships/hub/hot-deadlines",
+          "current": true,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/scholarships/hub/hot-deadlines",
+          "current": false,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/fr/scholarships/hub/hot-deadlines",
+      "path": "/fr/scholarships/hub/hot-deadlines",
+      "locale": "fr",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/scholarships/hub/hot-deadlines",
+        "es": "/es/scholarships/hub/hot-deadlines",
+        "fr": "/fr/scholarships/hub/hot-deadlines"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/scholarships/hub/hot-deadlines",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/scholarships/hub/hot-deadlines",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/scholarships/hub/hot-deadlines",
+          "current": true,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/scholarships/hub/international-friendly",
+      "path": "/scholarships/hub/international-friendly",
+      "locale": "en",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/scholarships/hub/international-friendly",
+        "es": "/es/scholarships/hub/international-friendly",
+        "fr": "/fr/scholarships/hub/international-friendly"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/scholarships/hub/international-friendly",
+          "current": true,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/scholarships/hub/international-friendly",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/scholarships/hub/international-friendly",
+          "current": false,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/es/scholarships/hub/international-friendly",
+      "path": "/es/scholarships/hub/international-friendly",
+      "locale": "es",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/scholarships/hub/international-friendly",
+        "es": "/es/scholarships/hub/international-friendly",
+        "fr": "/fr/scholarships/hub/international-friendly"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/scholarships/hub/international-friendly",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/scholarships/hub/international-friendly",
+          "current": true,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/scholarships/hub/international-friendly",
+          "current": false,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/fr/scholarships/hub/international-friendly",
+      "path": "/fr/scholarships/hub/international-friendly",
+      "locale": "fr",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/scholarships/hub/international-friendly",
+        "es": "/es/scholarships/hub/international-friendly",
+        "fr": "/fr/scholarships/hub/international-friendly"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/scholarships/hub/international-friendly",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/scholarships/hub/international-friendly",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/scholarships/hub/international-friendly",
+          "current": true,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/essays",
+      "path": "/essays",
+      "locale": "en",
+      "status": 500,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/essays",
+        "es": "/es/essays",
+        "fr": "/fr/essays"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/essays",
+          "current": true,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/essays",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/essays",
+          "current": false,
+          "text": "Français"
+        }
+      ],
+      "issues": [
+        "HTTP 500"
+      ]
+    },
+    {
+      "url": "http://localhost:3020/es/essays",
+      "path": "/es/essays",
+      "locale": "es",
+      "status": 500,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/essays",
+        "es": "/es/essays",
+        "fr": "/fr/essays"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/essays",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/essays",
+          "current": true,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/essays",
+          "current": false,
+          "text": "Français"
+        }
+      ],
+      "issues": [
+        "HTTP 500"
+      ]
+    },
+    {
+      "url": "http://localhost:3020/fr/essays",
+      "path": "/fr/essays",
+      "locale": "fr",
+      "status": 500,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/essays",
+        "es": "/es/essays",
+        "fr": "/fr/essays"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/essays",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/essays",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/essays",
+          "current": true,
+          "text": "Français"
+        }
+      ],
+      "issues": [
+        "HTTP 500"
+      ]
+    },
+    {
+      "url": "http://localhost:3020/providers",
+      "path": "/providers",
+      "locale": "en",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/providers",
+        "es": "/es/providers",
+        "fr": "/fr/providers"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/providers",
+          "current": true,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/providers",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/providers",
+          "current": false,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/es/providers",
+      "path": "/es/providers",
+      "locale": "es",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/providers",
+        "es": "/es/providers",
+        "fr": "/fr/providers"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/providers",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/providers",
+          "current": true,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/providers",
+          "current": false,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/fr/providers",
+      "path": "/fr/providers",
+      "locale": "fr",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/providers",
+        "es": "/es/providers",
+        "fr": "/fr/providers"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/providers",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/providers",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/providers",
+          "current": true,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/compare",
+      "path": "/compare",
+      "locale": "en",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/compare",
+        "es": "/es/compare",
+        "fr": "/fr/compare"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/compare",
+          "current": true,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/compare",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/compare",
+          "current": false,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/es/compare",
+      "path": "/es/compare",
+      "locale": "es",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/compare",
+        "es": "/es/compare",
+        "fr": "/fr/compare"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/compare",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/compare",
+          "current": true,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/compare",
+          "current": false,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/fr/compare",
+      "path": "/fr/compare",
+      "locale": "fr",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/compare",
+        "es": "/es/compare",
+        "fr": "/fr/compare"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/compare",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/compare",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/compare",
+          "current": true,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/resources",
+      "path": "/resources",
+      "locale": "en",
+      "status": 500,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/resources",
+        "es": "/es/resources",
+        "fr": "/fr/resources"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/resources",
+          "current": true,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/resources",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/resources",
+          "current": false,
+          "text": "Français"
+        }
+      ],
+      "issues": [
+        "HTTP 500"
+      ]
+    },
+    {
+      "url": "http://localhost:3020/es/resources",
+      "path": "/es/resources",
+      "locale": "es",
+      "status": 500,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/resources",
+        "es": "/es/resources",
+        "fr": "/fr/resources"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/resources",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/resources",
+          "current": true,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/resources",
+          "current": false,
+          "text": "Français"
+        }
+      ],
+      "issues": [
+        "HTTP 500"
+      ]
+    },
+    {
+      "url": "http://localhost:3020/fr/resources",
+      "path": "/fr/resources",
+      "locale": "fr",
+      "status": 500,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/resources",
+        "es": "/es/resources",
+        "fr": "/fr/resources"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/resources",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/resources",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/resources",
+          "current": true,
+          "text": "Français"
+        }
+      ],
+      "issues": [
+        "HTTP 500"
+      ]
+    },
+    {
+      "url": "http://localhost:3020/terms",
+      "path": "/terms",
+      "locale": "en",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/terms",
+        "es": "/es/terms",
+        "fr": "/fr/terms"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/terms",
+          "current": true,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/terms",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/terms",
+          "current": false,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/es/terms",
+      "path": "/es/terms",
+      "locale": "es",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/terms",
+        "es": "/es/terms",
+        "fr": "/fr/terms"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/terms",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/terms",
+          "current": true,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/terms",
+          "current": false,
+          "text": "Français"
+        },
+        {
+          "locale": "en",
+          "href": "/terms",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/terms",
+          "current": true,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/terms",
+          "current": false,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/fr/terms",
+      "path": "/fr/terms",
+      "locale": "fr",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/terms",
+        "es": "/es/terms",
+        "fr": "/fr/terms"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/terms",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/terms",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/terms",
+          "current": true,
+          "text": "Français"
+        },
+        {
+          "locale": "en",
+          "href": "/terms",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/terms",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/terms",
+          "current": true,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/faq",
+      "path": "/faq",
+      "locale": "en",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/faq",
+        "es": "/es/faq",
+        "fr": "/fr/faq"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/faq",
+          "current": true,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/faq",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/faq",
+          "current": false,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/es/faq",
+      "path": "/es/faq",
+      "locale": "es",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/faq",
+        "es": "/es/faq",
+        "fr": "/fr/faq"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/faq",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/faq",
+          "current": true,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/faq",
+          "current": false,
+          "text": "Français"
+        },
+        {
+          "locale": "en",
+          "href": "/faq",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/faq",
+          "current": true,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/faq",
+          "current": false,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/fr/faq",
+      "path": "/fr/faq",
+      "locale": "fr",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/faq",
+        "es": "/es/faq",
+        "fr": "/fr/faq"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/faq",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/faq",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/faq",
+          "current": true,
+          "text": "Français"
+        },
+        {
+          "locale": "en",
+          "href": "/faq",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/faq",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/faq",
+          "current": true,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/privacy-policy",
+      "path": "/privacy-policy",
+      "locale": "en",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/privacy-policy",
+        "es": "/es/privacy-policy",
+        "fr": "/fr/privacy-policy"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/privacy-policy",
+          "current": true,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/privacy-policy",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/privacy-policy",
+          "current": false,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/es/privacy-policy",
+      "path": "/es/privacy-policy",
+      "locale": "es",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/privacy-policy",
+        "es": "/es/privacy-policy",
+        "fr": "/fr/privacy-policy"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/privacy-policy",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/privacy-policy",
+          "current": true,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/privacy-policy",
+          "current": false,
+          "text": "Français"
+        },
+        {
+          "locale": "en",
+          "href": "/privacy-policy",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/privacy-policy",
+          "current": true,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/privacy-policy",
+          "current": false,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/fr/privacy-policy",
+      "path": "/fr/privacy-policy",
+      "locale": "fr",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/privacy-policy",
+        "es": "/es/privacy-policy",
+        "fr": "/fr/privacy-policy"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/privacy-policy",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/privacy-policy",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/privacy-policy",
+          "current": true,
+          "text": "Français"
+        },
+        {
+          "locale": "en",
+          "href": "/privacy-policy",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/privacy-policy",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/privacy-policy",
+          "current": true,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/resources/how-to-find-scholarships",
+      "path": "/resources/how-to-find-scholarships",
+      "locale": "en",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/resources/how-to-find-scholarships",
+        "es": "/es/resources/how-to-find-scholarships",
+        "fr": "/fr/resources/how-to-find-scholarships"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/resources/how-to-find-scholarships",
+          "current": true,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/resources/how-to-find-scholarships",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/resources/how-to-find-scholarships",
+          "current": false,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/es/resources/how-to-find-scholarships",
+      "path": "/es/resources/how-to-find-scholarships",
+      "locale": "es",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/resources/how-to-find-scholarships",
+        "es": "/es/resources/how-to-find-scholarships",
+        "fr": "/fr/resources/how-to-find-scholarships"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/resources/how-to-find-scholarships",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/resources/how-to-find-scholarships",
+          "current": true,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/resources/how-to-find-scholarships",
+          "current": false,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/fr/resources/how-to-find-scholarships",
+      "path": "/fr/resources/how-to-find-scholarships",
+      "locale": "fr",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/resources/how-to-find-scholarships",
+        "es": "/es/resources/how-to-find-scholarships",
+        "fr": "/fr/resources/how-to-find-scholarships"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/resources/how-to-find-scholarships",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/resources/how-to-find-scholarships",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/resources/how-to-find-scholarships",
+          "current": true,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/essays/outline",
+      "path": "/essays/outline",
+      "locale": "en",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/essays/outline",
+        "es": "/es/essays/outline",
+        "fr": "/fr/essays/outline"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/essays/outline",
+          "current": true,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/essays/outline",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/essays/outline",
+          "current": false,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/es/essays/outline",
+      "path": "/es/essays/outline",
+      "locale": "es",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/essays/outline",
+        "es": "/es/essays/outline",
+        "fr": "/fr/essays/outline"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/essays/outline",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/essays/outline",
+          "current": true,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/essays/outline",
+          "current": false,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/fr/essays/outline",
+      "path": "/fr/essays/outline",
+      "locale": "fr",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/essays/outline",
+        "es": "/es/essays/outline",
+        "fr": "/fr/essays/outline"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/essays/outline",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/essays/outline",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/essays/outline",
+          "current": true,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/compare/scholarship-vs-grant",
+      "path": "/compare/scholarship-vs-grant",
+      "locale": "en",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/compare/scholarship-vs-grant",
+        "es": "/es/compare/scholarship-vs-grant",
+        "fr": "/fr/compare/scholarship-vs-grant"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/compare/scholarship-vs-grant",
+          "current": true,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/compare/scholarship-vs-grant",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/compare/scholarship-vs-grant",
+          "current": false,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/es/compare/scholarship-vs-grant",
+      "path": "/es/compare/scholarship-vs-grant",
+      "locale": "es",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/compare/scholarship-vs-grant",
+        "es": "/es/compare/scholarship-vs-grant",
+        "fr": "/fr/compare/scholarship-vs-grant"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/compare/scholarship-vs-grant",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/compare/scholarship-vs-grant",
+          "current": true,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/compare/scholarship-vs-grant",
+          "current": false,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/fr/compare/scholarship-vs-grant",
+      "path": "/fr/compare/scholarship-vs-grant",
+      "locale": "fr",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/compare/scholarship-vs-grant",
+        "es": "/es/compare/scholarship-vs-grant",
+        "fr": "/fr/compare/scholarship-vs-grant"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/compare/scholarship-vs-grant",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/compare/scholarship-vs-grant",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/compare/scholarship-vs-grant",
+          "current": true,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/subscription",
+      "path": "/subscription",
+      "locale": "en",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/subscription",
+        "es": "/es/subscription",
+        "fr": "/fr/subscription"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/subscription",
+          "current": true,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/subscription",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/subscription",
+          "current": false,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/es/subscription",
+      "path": "/es/subscription",
+      "locale": "es",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/subscription",
+        "es": "/es/subscription",
+        "fr": "/fr/subscription"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/subscription",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/subscription",
+          "current": true,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/subscription",
+          "current": false,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    },
+    {
+      "url": "http://localhost:3020/fr/subscription",
+      "path": "/fr/subscription",
+      "locale": "fr",
+      "status": 200,
+      "switcherExpected": true,
+      "switcherFound": true,
+      "expected": {
+        "en": "/subscription",
+        "es": "/es/subscription",
+        "fr": "/fr/subscription"
+      },
+      "actual": [
+        {
+          "locale": "en",
+          "href": "/subscription",
+          "current": false,
+          "text": "English"
+        },
+        {
+          "locale": "es",
+          "href": "/es/subscription",
+          "current": false,
+          "text": "Español"
+        },
+        {
+          "locale": "fr",
+          "href": "/fr/subscription",
+          "current": true,
+          "text": "Français"
+        }
+      ],
+      "issues": []
+    }
+  ]
+}

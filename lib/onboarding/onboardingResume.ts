@@ -1,3 +1,4 @@
+import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
 import type { OnboardingStep } from '@/lib/onboarding/onboardingFlowTypes';
 import type { StoredOnboardingDraft } from '@/lib/onboarding/scholarshipOnboardingDraft';
 
@@ -31,8 +32,32 @@ export function onboardingStepHref(
   return `${base}&next=${encodeURIComponent(n)}`;
 }
 
+/** Preserves `/es|fr/onboarding` for pilot locales; EN uses canonical `/onboarding`. */
+export function localizedOnboardingStepHref(
+  locale: LocalizedUiLocale,
+  step: OnboardingStep,
+  nextPath?: string | null
+): string {
+  const root =
+    locale === 'es' || locale === 'fr' ? `/${locale}/onboarding` : '/onboarding';
+  const base = `${root}?step=${step}`;
+  const n = nextPath?.trim();
+  if (!n) return base;
+  return `${base}&next=${encodeURIComponent(n)}`;
+}
+
 /** Sign-in surfaces “Create one” / “Sign up” → country-first account flow. */
 export const SCHOLARSHIP_ONBOARDING_SIGNUP_ENTRY_HREF = onboardingStepHref(1);
+
+/** Locale-aware signup entry — ES/FR pilot onboarding URLs, EN unchanged. */
+export function localizedScholarshipOnboardingSignupEntryHref(
+  locale: LocalizedUiLocale
+): string {
+  if (locale === 'es' || locale === 'fr') {
+    return `/${locale}/onboarding?step=1`;
+  }
+  return SCHOLARSHIP_ONBOARDING_SIGNUP_ENTRY_HREF;
+}
 
 export function clampOnboardingStepToProgress(
   draft: StoredOnboardingDraft,

@@ -4,6 +4,7 @@ import ScholarshipsHubPageClient from '@/app/scholarships/ScholarshipsHubPageCli
 import type { InitialScholarshipsPayload } from '@/app/scholarships/scholarshipListServerPayload';
 import type { LongTailRouteScopePayload } from '@/app/scholarships/scholarshipListServerPayload';
 import AuthStatusProvider from '@/components/auth/AuthStatusProvider';
+import type { Stage2PilotLocale } from '@/lib/i18n/pilotRoutes';
 
 type ScholarshipsHubPageAuthBridgeProps = {
   initialPayload: InitialScholarshipsPayload | null;
@@ -14,6 +15,7 @@ type ScholarshipsHubPageAuthBridgeProps = {
   /** Canonical `/scholarships/hub/[segment]` SSR copy under listings h1. */
   hubCanonicalIntroBelowTitle?: React.ReactNode;
   fallbackPageTitle?: string;
+  locale?: Stage2PilotLocale;
 };
 
 export default function ScholarshipsHubPageAuthBridge({
@@ -23,7 +25,8 @@ export default function ScholarshipsHubPageAuthBridge({
   leadContent = null,
   postListingContent = null,
   hubCanonicalIntroBelowTitle = null,
-  fallbackPageTitle = 'Scholarship matches'
+  fallbackPageTitle = 'Scholarship matches',
+  locale
 }: ScholarshipsHubPageAuthBridgeProps) {
   return (
     <AuthStatusProvider>
@@ -40,6 +43,7 @@ export default function ScholarshipsHubPageAuthBridge({
           postListingContent={postListingContent}
           hubCanonicalIntroBelowTitle={hubCanonicalIntroBelowTitle}
           fallbackPageTitle={fallbackPageTitle}
+          locale={locale}
         />
       )}
     </AuthStatusProvider>

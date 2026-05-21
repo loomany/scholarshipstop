@@ -4,19 +4,22 @@ import Link from 'next/link';
 import type { MouseEvent } from 'react';
 
 import { useScholarshipEntryHref } from '@/components/navigation/useScholarshipEntryHref';
+import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
 
 type HomePrimaryCtaClientProps = {
   className: string;
   children: React.ReactNode;
   id?: string;
+  locale?: LocalizedUiLocale;
 };
 
 export default function HomePrimaryCtaClient({
   className,
   children,
-  id
+  id,
+  locale = 'en'
 }: HomePrimaryCtaClientProps) {
-  const { href, resolved } = useScholarshipEntryHref();
+  const { href, resolved } = useScholarshipEntryHref(locale);
 
   const handleClick = (event: MouseEvent<HTMLAnchorElement>) => {
     if (resolved) return;

@@ -1,7 +1,7 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { useEffect, useState, useTransition } from 'react';
+import { useEffect, useMemo, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { Loader2, Sparkles, Star } from 'lucide-react';
 
@@ -12,6 +12,10 @@ import {
   SUBSCRIPTION_CURRENT_PLAN_BUTTON_FILL,
   SUBSCRIPTION_CURRENT_PLAN_BUTTON_FOCUS
 } from '@/lib/constants/scholarshipActionUi';
+import type {
+  SubscriptionPlanCopy,
+  SubscriptionPricingUiCopy
+} from '@/lib/i18n/subscriptionPageCopy';
 import { cn } from '@/utils/cn';
 import { type BillingPlanKey, getCheckoutURL } from '@/app/actions/billing';
 import { onboardingStepHref } from '@/lib/onboarding/onboardingResume';
@@ -25,20 +29,12 @@ declare global {
       Refresh?: () => void;
       Url?: {
         Open?: (url: string) => void;
-        /** Dismisses the in-app overlay (documented Lemon.js API). */
         Close?: () => void;
       };
     };
   }
 }
 
-/**
- * Lemon billing / portal / update-card URLs.
- * Prefer a **new tab** so the app page stays put. If popups are blocked, fall back to the overlay, then full navigation.
- *
- * Do **not** pass `noopener` in the third argument to `window.open`: in that case the return value is always
- * `null` even when a tab opened, so we would wrongly fall through to `location.assign` and navigate away too.
- */
 function openLemonHostedUrl(url: string) {
   if (typeof window === 'undefined') return;
 
@@ -56,14 +52,18 @@ function openLemonHostedUrl(url: string) {
   window.location.assign(url);
 }
 
-function PlanFeatureList({ items }: { items: string[] }) {
+function PlanFeatureList({
+  items
+}: {
+  items: SubscriptionPlanCopy['features'];
+}) {
   return (
     <ul
       className="flex w-full flex-col justify-center gap-1.5 text-left"
       role="list"
     >
       {items.map((line) => (
-        <li key={line} className="flex gap-2">
+        <li key={line.text} className="flex gap-2">
           <span
             className="shrink-0 text-sm font-bold text-green-500"
             aria-hidden
@@ -73,12 +73,10 @@ function PlanFeatureList({ items }: { items: string[] }) {
           <span
             className={cn(
               'text-sm text-gray-600',
-              (line.includes('Unlock AI Essay Mentor') ||
-                line.includes('Unlock IQ Strategy Report')) &&
-                'font-semibold text-gray-900'
+              line.emphasized && 'font-semibold text-gray-900'
             )}
           >
-            {line}
+            {line.text}
           </span>
         </li>
       ))}
@@ -93,13 +91,12 @@ type PlanRowProps = {
   price: string;
   priceSuffix?: string;
   billing: string;
-  features: string[];
+  features: SubscriptionPlanCopy['features'];
   buttonClassName: string;
   cardClassName?: string;
   planKey: BillingPlanKey;
   featured?: boolean;
   ctaAbove?: ReactNode;
-  /** Disabled CTA label when this tier is the user’s current plan (from subscription status). */
   currentPlanStatusLabel?: string;
   manageSubscriptionUrl?: string | null;
   updatePaymentUrl?: string | null;
@@ -107,7 +104,6 @@ type PlanRowProps = {
   showResumeAction?: boolean;
   showUpdatePaymentAction?: boolean;
   pastDueBillingAccent?: boolean;
-  /** Server API cancel (preferred); else `manageSubscriptionUrl` opens Lemon portal. */
   onCancelSubscription?: () => void | Promise<void>;
   isCancellingSubscription?: boolean;
   onResumeSubscription?: () => void | Promise<void>;
@@ -115,6 +111,7 @@ type PlanRowProps = {
   isLoading: boolean;
   isBusy: boolean;
   onSelect: (planKey: BillingPlanKey, title: string) => void;
+  copy: SubscriptionPricingUiCopy;
 };
 
 type PlanConfig = Omit<
@@ -127,6 +124,7 @@ type PlanConfig = Omit<
   | 'isCancellingSubscription'
   | 'onResumeSubscription'
   | 'isResumingSubscription'
+  | 'copy'
 >;
 
 function PlanGrantCard({
@@ -142,7 +140,7 @@ function PlanGrantCard({
   planKey,
   featured = false,
   ctaAbove,
-  currentPlanStatusLabel = 'Active Plan',
+  currentPlanStatusLabel,
   manageSubscriptionUrl = null,
   updatePaymentUrl = null,
   isCurrentPlan = false,
@@ -155,10 +153,13 @@ function PlanGrantCard({
   isResumingSubscription = false,
   isLoading,
   isBusy,
-  onSelect
+  onSelect,
+  copy
 }: PlanRowProps) {
   const isBusyOrLocked = isBusy || isCurrentPlan;
-  const resolvedButtonLabel = isCurrentPlan ? currentPlanStatusLabel : buttonLabel;
+  const resolvedButtonLabel = isCurrentPlan
+    ? (currentPlanStatusLabel ?? copy.defaultCurrentPlanLabel)
+    : buttonLabel;
 
   const showCancelSplit =
     isCurrentPlan &&
@@ -196,7 +197,9 @@ function PlanGrantCard({
             <span className="text-3xl font-bold tabular-nums text-gray-900 sm:text-4xl">
               {price}
             </span>
-            {priceSuffix ? <span className="text-sm text-gray-500">{priceSuffix}</span> : null}
+            {priceSuffix ? (
+              <span className="text-sm text-gray-500">{priceSuffix}</span>
+            ) : null}
           </div>
           <p className="mt-0.5 text-sm text-gray-500">{billing}</p>
         </div>
@@ -211,8 +214,8 @@ function PlanGrantCard({
               showCancelSplit ? (
                 <div
                   role="group"
-                  aria-label={`${resolvedButtonLabel}. Cancel ends renewal at period end.`}
-                  title={`${resolvedButtonLabel} | Cancel`}
+                  aria-label={copy.cancelGroupAriaLabel}
+                  title={`${resolvedButtonLabel} | ${copy.cancel}`}
                   className={cn(
                     'inline-flex w-full min-w-0 items-stretch overflow-hidden rounded-xl text-center text-xs font-semibold leading-none text-white sm:text-sm sm:leading-tight',
                     SUBSCRIPTION_CURRENT_PLAN_BUTTON_FILL
@@ -241,12 +244,15 @@ function PlanGrantCard({
                       }
                     }}
                     className="shrink-0 px-3 py-2.5 underline-offset-2 hover:underline focus:outline-none focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#FFB27D] enabled:cursor-pointer disabled:cursor-wait disabled:opacity-80 sm:px-4"
-                    aria-label="Cancel subscription"
+                    aria-label={copy.cancelAriaLabel}
                   >
                     {isCancellingSubscription ? (
-                      <Loader2 className="mx-0.5 h-4 w-4 shrink-0 animate-spin" aria-hidden />
+                      <Loader2
+                        className="mx-0.5 h-4 w-4 shrink-0 animate-spin"
+                        aria-hidden
+                      />
                     ) : (
-                      'Cancel'
+                      copy.cancel
                     )}
                   </button>
                 </div>
@@ -282,7 +288,7 @@ function PlanGrantCard({
                   buttonClassName
                 )}
               >
-                {isLoading ? 'Redirecting...' : resolvedButtonLabel}
+                {isLoading ? copy.redirecting : resolvedButtonLabel}
               </Button>
             )}
             {isCurrentPlan && showUpdatePaymentAction && updatePaymentUrl ? (
@@ -296,7 +302,7 @@ function PlanGrantCard({
                     : 'border border-amber-300 bg-amber-50 text-amber-900 hover:bg-amber-100'
                 )}
               >
-                Update Billing Info
+                {copy.updateBillingInfo}
               </button>
             ) : null}
             {isCurrentPlan &&
@@ -317,10 +323,10 @@ function PlanGrantCard({
                 {isResumingSubscription ? (
                   <>
                     <Loader2 className="h-4 w-4 shrink-0 animate-spin" aria-hidden />
-                    Resuming…
+                    {copy.resuming}
                   </>
                 ) : (
-                  'Resume Subscription'
+                  copy.resumeSubscription
                 )}
               </button>
             ) : null}
@@ -331,123 +337,98 @@ function PlanGrantCard({
   );
 }
 
-const MONTHLY_FEATURES: string[] = [
-  'Unlock Premium Scholarships',
-  'Unlock IQ Strategy Report',
-  'Access "Easy Apply" & "International"',
-  'Unblur all grant names & links',
-  'Unlimited Smart Filters'
-];
-
-const QUARTERLY_FEATURES: string[] = [
-  'Everything in Monthly, plus:',
-  'Unlock AI Essay Mentor',
-  'IQ-based grant strategy + essay next steps',
-  'Smart Interview & Voice Input',
-  'Unlimited essay generations',
-  'Instant email alerts for new matches',
-  'Save 35% compared to monthly',
-];
-
-const LIFETIME_FEATURES: string[] = [
-  'Everything in Quarterly, plus:',
-  'Unlock AI Essay Mentor',
-  'Full IQ report with matched grants, awards, and deadlines',
-  'Best price per month',
-  'Priority AI processing',
-  'Priority email alerts for new matches',
-  'Full access for the entire application season',
-  'Save 50% compared to monthly'
-];
-
-const PLANS: PlanConfig[] = [
-  {
-    title: 'Monthly',
-    buttonLabel: 'Start Plan',
-    planKey: 'monthly',
-    price: '$14.99',
-    priceSuffix: '/mo',
-    billing: 'Billed $14.99 every month.',
-    features: MONTHLY_FEATURES,
-    buttonClassName:
-      'border border-[#FF7A1A] bg-[#FF7A1A] text-white shadow-sm hover:border-[#E6670C] hover:bg-[#E6670C] focus-visible:ring-[#FFB27D] focus-visible:ring-offset-2'
-  },
-  {
-    title: 'Quarterly',
-    buttonLabel: 'Start Plan',
-    planKey: 'quarterly',
-    price: '$9.66',
-    priceSuffix: '/mo',
-    billing: 'Billed $29 every 3 months.',
-    features: QUARTERLY_FEATURES,
-    cardClassName: 'border-zinc-900 ring-1 ring-zinc-900/20',
-    buttonClassName:
-      'border border-[#FF7A1A] bg-[#FF7A1A] text-white shadow-sm hover:border-[#E6670C] hover:bg-[#E6670C] focus-visible:ring-[#FFB27D] focus-visible:ring-offset-2',
-    ctaAbove: (
-      <span
-        className="inline-flex max-w-full shrink-0 items-center justify-center gap-1.5 self-center whitespace-nowrap rounded-full bg-amber-50/95 px-2.5 py-1 text-[11px] font-semibold text-amber-900 ring-1 ring-amber-200/60 sm:px-3 sm:text-xs"
-        aria-label="Most popular plan"
-      >
-        <Star
-          className="h-3 w-3 shrink-0 fill-amber-400/90 text-amber-600/80"
-          strokeWidth={2}
-          aria-hidden
-        />
-        ⭐ Most Popular
-      </span>
-    )
-  },
-  {
-    title: 'Yearly',
-    buttonLabel: 'Start Plan',
-    planKey: 'yearly',
-    price: '$7.40',
-    priceSuffix: '/mo',
-    billing: 'Billed $89 every year.',
-    features: LIFETIME_FEATURES,
-    cardClassName: 'border-emerald-400 ring-1 ring-emerald-400/35',
-    buttonClassName:
-      'border border-emerald-500 bg-emerald-500 text-white shadow-sm hover:border-emerald-600 hover:bg-emerald-600',
-    ctaAbove: (
-      <span
-        className="inline-flex max-w-full shrink-0 items-center justify-center gap-1.5 self-center whitespace-nowrap rounded-full bg-emerald-50/95 px-2.5 py-1 text-[11px] font-semibold text-emerald-900 ring-1 ring-emerald-200/70 sm:px-3 sm:text-xs"
-        aria-label="Best value plan"
-      >
-        <Sparkles
-          className="h-3 w-3 shrink-0 text-emerald-600"
-          strokeWidth={2.2}
-          aria-hidden
-        />
-        ✨ Best Value
-      </span>
-    )
-  }
-];
+function buildPlans(copy: SubscriptionPricingUiCopy): PlanConfig[] {
+  const { monthly, quarterly, yearly } = copy.plans;
+  return [
+    {
+      title: monthly.title,
+      buttonLabel: monthly.buttonLabel,
+      planKey: 'monthly',
+      price: monthly.price,
+      priceSuffix: monthly.priceSuffix,
+      billing: monthly.billing,
+      features: monthly.features,
+      buttonClassName:
+        'border border-[#FF7A1A] bg-[#FF7A1A] text-white shadow-sm hover:border-[#E6670C] hover:bg-[#E6670C] focus-visible:ring-[#FFB27D] focus-visible:ring-offset-2'
+    },
+    {
+      title: quarterly.title,
+      buttonLabel: quarterly.buttonLabel,
+      planKey: 'quarterly',
+      price: quarterly.price,
+      priceSuffix: quarterly.priceSuffix,
+      billing: quarterly.billing,
+      features: quarterly.features,
+      cardClassName: 'border-zinc-900 ring-1 ring-zinc-900/20',
+      buttonClassName:
+        'border border-[#FF7A1A] bg-[#FF7A1A] text-white shadow-sm hover:border-[#E6670C] hover:bg-[#E6670C] focus-visible:ring-[#FFB27D] focus-visible:ring-offset-2',
+      ctaAbove: quarterly.mostPopularBadge ? (
+        <span
+          className="inline-flex max-w-full shrink-0 items-center justify-center gap-1.5 self-center whitespace-nowrap rounded-full bg-amber-50/95 px-2.5 py-1 text-[11px] font-semibold text-amber-900 ring-1 ring-amber-200/60 sm:px-3 sm:text-xs"
+          aria-label={quarterly.mostPopularAriaLabel}
+        >
+          <Star
+            className="h-3 w-3 shrink-0 fill-amber-400/90 text-amber-600/80"
+            strokeWidth={2}
+            aria-hidden
+          />
+          {quarterly.mostPopularBadge}
+        </span>
+      ) : undefined
+    },
+    {
+      title: yearly.title,
+      buttonLabel: yearly.buttonLabel,
+      planKey: 'yearly',
+      price: yearly.price,
+      priceSuffix: yearly.priceSuffix,
+      billing: yearly.billing,
+      features: yearly.features,
+      cardClassName: 'border-emerald-400 ring-1 ring-emerald-400/35',
+      buttonClassName:
+        'border border-emerald-500 bg-emerald-500 text-white shadow-sm hover:border-emerald-600 hover:bg-emerald-600',
+      ctaAbove: yearly.bestValueBadge ? (
+        <span
+          className="inline-flex max-w-full shrink-0 items-center justify-center gap-1.5 self-center whitespace-nowrap rounded-full bg-emerald-50/95 px-2.5 py-1 text-[11px] font-semibold text-emerald-900 ring-1 ring-emerald-200/70 sm:px-3 sm:text-xs"
+          aria-label={yearly.bestValueAriaLabel}
+        >
+          <Sparkles
+            className="h-3 w-3 shrink-0 text-emerald-600"
+            strokeWidth={2.2}
+            aria-hidden
+          />
+          {yearly.bestValueBadge}
+        </span>
+      ) : undefined
+    }
+  ];
+}
 
 export default function SubscriptionPricingClient({
+  copy,
+  returnPath = '/subscription',
   isAuthenticated = true,
   currentPlanKey = null,
-  currentPlanStatusLabel = 'Active Plan',
+  currentPlanStatusLabel,
   hasActiveSubscription: hasActiveSubscriptionProp,
   manageSubscriptionUrl = null,
   updatePaymentUrl = null,
   showResumeAction = false,
   showUpdatePaymentAction = false,
-  pastDueBillingAccent = false
+  pastDueBillingAccent = false,
+  isEligibleForSkipTrial: _isEligibleForSkipTrial
 }: {
-  /** From server: guest must not call checkout (redirect to onboarding with `next` instead). */
+  copy: SubscriptionPricingUiCopy;
+  returnPath?: string;
   isAuthenticated?: boolean;
   currentPlanKey?: BillingPlanKey | null;
-  /** Shown on the disabled button for the tier that matches `currentPlanKey`. */
   currentPlanStatusLabel?: string;
-  /** When set, overrides the legacy heuristic (`currentPlanKey !== null`). */
   hasActiveSubscription?: boolean;
   manageSubscriptionUrl?: string | null;
   updatePaymentUrl?: string | null;
   showResumeAction?: boolean;
   showUpdatePaymentAction?: boolean;
   pastDueBillingAccent?: boolean;
-  /** Legacy prop accepted to keep page-level callsite type-safe. */
   isEligibleForSkipTrial?: boolean;
 }) {
   const router = useRouter();
@@ -457,7 +438,10 @@ export default function SubscriptionPricingClient({
   const [isCancellingSubscription, setIsCancellingSubscription] = useState(false);
   const [isResumingSubscription, setIsResumingSubscription] = useState(false);
   const [billingActionError, setBillingActionError] = useState<string | null>(null);
+  const plans = useMemo(() => buildPlans(copy), [copy]);
   const isBusy = activePlanTitle !== null;
+  const resolvedStatusLabel =
+    currentPlanStatusLabel ?? copy.defaultCurrentPlanLabel;
   const hasActiveSubscription =
     typeof hasActiveSubscriptionProp === 'boolean'
       ? hasActiveSubscriptionProp
@@ -488,7 +472,7 @@ export default function SubscriptionPricingClient({
     setIsCancellingSubscription(true);
     try {
       const res = await fetch('/api/billing/cancel-subscription', { method: 'POST' });
-      let message = 'Could not cancel subscription.';
+      let message = copy.cancelFailed;
       try {
         const data = (await res.json()) as { error?: string };
         if (typeof data.error === 'string' && data.error.trim()) {
@@ -503,7 +487,7 @@ export default function SubscriptionPricingClient({
       }
       router.refresh();
     } catch {
-      setBillingActionError('Something went wrong. Please try again.');
+      setBillingActionError(copy.somethingWentWrong);
     } finally {
       setIsCancellingSubscription(false);
     }
@@ -514,7 +498,7 @@ export default function SubscriptionPricingClient({
     setIsResumingSubscription(true);
     try {
       const res = await fetch('/api/billing/resume-subscription', { method: 'POST' });
-      let message = 'Could not resume subscription.';
+      let message = copy.resumeFailed;
       try {
         const data = (await res.json()) as { error?: string };
         if (typeof data.error === 'string' && data.error.trim()) {
@@ -529,7 +513,7 @@ export default function SubscriptionPricingClient({
       }
       router.refresh();
     } catch {
-      setBillingActionError('Something went wrong. Please try again.');
+      setBillingActionError(copy.somethingWentWrong);
     } finally {
       setIsResumingSubscription(false);
     }
@@ -544,10 +528,9 @@ export default function SubscriptionPricingClient({
       currentPlanKey != null &&
       currentPlanKey !== planKey;
 
-    /** Guest checkout path: onboarding, then return to subscribe. */
     if (!isAuthenticated && !shouldChangeExistingPlan) {
       setActivePlanTitle(null);
-      router.push(onboardingStepHref(1, '/subscription'));
+      router.push(onboardingStepHref(1, returnPath));
       return;
     }
 
@@ -559,7 +542,7 @@ export default function SubscriptionPricingClient({
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ plan: planKey })
           });
-          let message = 'Plan change failed. Please try again.';
+          let message = copy.planChangeFailed;
           let detail: string | undefined;
           try {
             const data = (await res.json()) as {
@@ -598,7 +581,7 @@ export default function SubscriptionPricingClient({
         window.location.assign(checkoutUrl);
       } catch (error) {
         const message =
-          error instanceof Error ? error.message : 'Failed to start checkout.';
+          error instanceof Error ? error.message : copy.checkoutFailed;
         setCheckoutError(message);
         setActivePlanTitle(null);
       }
@@ -608,22 +591,12 @@ export default function SubscriptionPricingClient({
   return (
     <>
       <div className="mx-auto mt-10 grid w-full max-w-6xl grid-cols-1 items-stretch gap-4 md:grid-cols-3 md:gap-5 lg:gap-6">
-        {PLANS.map((plan) => (
+        {plans.map((plan) => (
           <PlanGrantCard
-            key={plan.title}
-            title={plan.title}
-            buttonLabel={plan.buttonLabel}
-            price={plan.price}
-            priceSuffix={plan.priceSuffix}
-            billing={plan.billing}
-            features={plan.features}
-            planKey={plan.planKey}
-            buttonClassName={plan.buttonClassName}
-            cardClassName={plan.cardClassName}
-            badge={plan.badge}
-            featured={plan.featured}
-            ctaAbove={plan.ctaAbove}
-            currentPlanStatusLabel={currentPlanStatusLabel}
+            key={plan.planKey}
+            {...plan}
+            copy={copy}
+            currentPlanStatusLabel={resolvedStatusLabel}
             manageSubscriptionUrl={manageSubscriptionUrl}
             updatePaymentUrl={updatePaymentUrl}
             isCurrentPlan={currentPlanKey === plan.planKey}
@@ -646,7 +619,6 @@ export default function SubscriptionPricingClient({
           {billingActionError ? (
             <div className="flex flex-col items-center gap-3">
               <p className="text-red-600">{billingActionError}</p>
-              {/** Portal URL is often missing in `raw_payload`; update-payment URL still opens Lemon hosted billing. */}
               {manageSubscriptionUrl || updatePaymentUrl ? (
                 <button
                   type="button"
@@ -658,8 +630,8 @@ export default function SubscriptionPricingClient({
                   className="inline-flex items-center justify-center rounded-xl border border-zinc-300 bg-white px-4 py-2.5 text-sm font-semibold text-zinc-800 shadow-sm transition hover:bg-zinc-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2"
                 >
                   {manageSubscriptionUrl
-                    ? 'Open billing portal'
-                    : 'Open billing in Lemon'}
+                    ? copy.openBillingPortal
+                    : copy.openBillingInLemon}
                 </button>
               ) : null}
             </div>
@@ -669,3 +641,4 @@ export default function SubscriptionPricingClient({
     </>
   );
 }
+

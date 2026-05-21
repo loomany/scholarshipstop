@@ -75,19 +75,27 @@ function stateFromSearchParams(
   return parseResourcesIndexSearchParams(record);
 }
 
+import {
+  getHubToolbarUiCopy
+} from '@/lib/i18n/hubUiCopy';
+import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
+
 type ResourcesIndexToolbarProps = {
   categoryCounts: Record<ResourceCategoryId, number>;
   resultCount: number;
   showingFrom: number;
   showingTo: number;
+  locale?: LocalizedUiLocale;
 };
 
 export default function ResourcesIndexToolbar({
   categoryCounts,
   resultCount,
   showingFrom,
-  showingTo
+  showingTo,
+  locale
 }: ResourcesIndexToolbarProps) {
+  const toolbar = getHubToolbarUiCopy(locale ?? 'en');
   const router = useRouter();
   const sp = useSearchParams();
   const applied = useMemo(() => stateFromSearchParams(sp), [sp]);
@@ -391,8 +399,8 @@ export default function ResourcesIndexToolbar({
             <input
               value={searchDraft}
               onChange={(e) => setSearchDraft(e.target.value)}
-              placeholder="Search by keyword"
-              aria-label="Search by keyword"
+              placeholder={toolbar.searchByKeyword}
+              aria-label={toolbar.searchByKeywordAria}
               className={CATALOG_SEARCH_BY_KEYWORD_INPUT_CLASS}
             />
           </div>
@@ -414,7 +422,7 @@ export default function ResourcesIndexToolbar({
                   strokeWidth={2}
                   aria-hidden
                 />
-                Filters
+                {toolbar.filters}
                 {filtersActiveCount > 0 ? (
                   <span className="tabular-nums text-gray-600">
                     ({filtersActiveCount})
@@ -435,7 +443,7 @@ export default function ResourcesIndexToolbar({
                 className={`${CATALOG_CONTROL_BAR_BTN} w-full sm:w-auto`}
               >
                 <LayoutGrid className="h-[18px] w-[18px] text-gray-600" />
-                Categories
+                {toolbar.categories}
                 {categoryTriggerCount > 0 ? (
                   <span className="tabular-nums text-gray-600">
                     ({categoryTriggerCount})
@@ -454,7 +462,7 @@ export default function ResourcesIndexToolbar({
       {resultCount > 0 ? (
         <p className="text-sm text-gray-500">
           {showingFrom >= 1 && showingTo >= showingFrom
-            ? `Showing ${showingFrom}–${showingTo} of ${resultCount} guides`
+            ? toolbar.showingRange(showingFrom, showingTo, resultCount, 'guides')
             : `Found ${resultCount} guides`}
         </p>
       ) : null}

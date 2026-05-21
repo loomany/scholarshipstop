@@ -4,6 +4,8 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 
 import Logo from '@/components/icons/Logo';
+import type { SupportedLocale } from '@/lib/i18n/types';
+import { hrefForLocalizedUiRequired } from '@/lib/i18n/localizedHref';
 
 /** Avoid `usePathname` during SSR (Turbopack can surface `useContext` null in dev). */
 const SiteFooterNav = dynamic(() => import('@/components/ui/Footer/SiteFooterNav'), {
@@ -20,8 +22,30 @@ const SiteFooterNav = dynamic(() => import('@/components/ui/Footer/SiteFooterNav
 /**
  * Primary site footer — ScholarshipTop branding and nav (same on all pages).
  */
-export default function SiteFooter() {
+const FOOTER_COPY = {
+  en: {
+    tagline: 'Helping students find the right scholarships faster.',
+    home: 'Home'
+  },
+  es: {
+    tagline: 'Ayudamos a estudiantes a encontrar becas adecuadas con más rapidez.',
+    home: 'Inicio'
+  },
+  fr: {
+    tagline: 'Nous aidons les étudiants à trouver plus vite les bonnes bourses.',
+    home: 'Accueil'
+  }
+} as const;
+
+export default function SiteFooter({
+  locale = 'en'
+}: {
+  locale?: SupportedLocale;
+}) {
   const year = new Date().getUTCFullYear();
+  const footerLocale = locale === 'es' || locale === 'fr' ? locale : 'en';
+  const copy = FOOTER_COPY[footerLocale];
+  const homeHref = hrefForLocalizedUiRequired(footerLocale, '/');
 
   return (
     <footer className="border-t border-gray-200/80 bg-[#f8f9fa]">
@@ -30,7 +54,7 @@ export default function SiteFooter() {
           <div className="flex max-w-full flex-col items-center gap-6 md:flex-row md:items-start md:gap-10">
             <div className="shrink-0">
               <Link
-                href="/"
+                href={homeHref}
                 className="inline-flex rounded-full bg-black px-4 py-2.5 ring-1 ring-gray-800 transition hover:ring-gray-600"
                 aria-label="ScholarshipTop — Home"
               >
@@ -39,17 +63,17 @@ export default function SiteFooter() {
             </div>
             <div className="flex w-full min-w-0 flex-col items-center gap-3 md:w-auto md:max-w-full md:gap-3">
               <div className="flex w-full min-w-0 justify-center md:w-auto">
-                <SiteFooterNav />
+                <SiteFooterNav initialLocale={footerLocale} />
               </div>
               <div className="max-w-3xl text-center text-xs leading-snug text-slate-600 sm:text-sm">
                 <div className="md:hidden">
-                  <p>Helping students find the right scholarships faster.</p>
+                  <p>{copy.tagline}</p>
                   <p className="mt-1 tabular-nums text-slate-500">
                     © {year} <span className="text-slate-600">ScholarshipTop</span>
                   </p>
                 </div>
                 <p className="hidden md:block">
-                  Helping students find the right scholarships faster.{' '}
+                  {copy.tagline}{' '}
                   <span className="tabular-nums text-slate-500">
                     | © {year} ScholarshipTop
                   </span>

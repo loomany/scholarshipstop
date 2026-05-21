@@ -3,6 +3,7 @@ import Link from 'next/link';
 
 import ResourceGuideShell from '@/components/content-hub/resourceGuides/ResourceGuideShell';
 import { resourceGuideLinkClassName } from '@/lib/content-hub/resourceGuidePages';
+import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
 import { getCanonical } from '@/lib/seo/canonical';
 
 const hrefInternationalHub = '/scholarships/hub/international-friendly';
@@ -17,9 +18,9 @@ export const metadata: Metadata = {
   title: 'Scholarships for International Students: Practical Guide',
   description:
     'A practical guide for international students looking for scholarships: eligibility checks, documents, essays, deadlines, and how to use international-friendly listings.',
-  alternates: {
-    canonical
-  },
+  alternates: buildStage2EnglishPilotAlternates(
+    '/resources/scholarships-for-international-students-guide'
+  ),
   openGraph: {
     title: 'Scholarships for International Students: Practical Guide',
     description:

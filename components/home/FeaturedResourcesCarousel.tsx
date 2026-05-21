@@ -32,9 +32,11 @@ function badgeClass(kind: HomeResourcesCarouselItem['kind']) {
 }
 
 export default function FeaturedResourcesCarousel({
-  items
+  items,
+  cardFallbackDescription = 'Open the full piece for the complete walkthrough and tips.'
 }: {
   items: HomeResourcesCarouselItem[];
+  cardFallbackDescription?: string;
 }) {
   const scrollerRef = useRef<HTMLDivElement>(null);
   const marqueeItems = [...items, ...items];
@@ -69,8 +71,7 @@ export default function FeaturedResourcesCarousel({
           {item.title}
         </h3>
         <p className="mt-2 flex-grow text-sm leading-relaxed text-gray-500 line-clamp-3 sm:text-base">
-          {item.description ||
-            'Open the full piece for the complete walkthrough and tips.'}
+          {item.description || cardFallbackDescription}
         </p>
         <span
           className={`mt-auto flex items-center gap-1.5 pt-6 text-sm font-semibold transition sm:text-base ${
@@ -112,8 +113,7 @@ export default function FeaturedResourcesCarousel({
           {item.title}
         </h3>
         <p className="mt-2 flex-grow text-sm leading-relaxed text-gray-500 line-clamp-3 sm:text-base">
-          {item.description ||
-            'Open the full piece for the complete walkthrough and tips.'}
+          {item.description || cardFallbackDescription}
         </p>
         <span
           className={`mt-auto flex items-center gap-1.5 pt-6 text-sm font-semibold transition sm:text-base ${

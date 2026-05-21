@@ -2,6 +2,11 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import {
+  getStage2LocaleFromPathname,
+  isStage2PilotLocale
+} from '@/lib/i18n/pilotRoutes';
+import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
 import { HubListSkeleton } from '@/components/scholarships/ScholarshipsHubShellSkeleton';
 import ScholarshipCategoryListingBreadcrumbs from '@/components/scholarships/ScholarshipCategoryListingBreadcrumbs';
 import ScholarshipCard from '@/components/scholarships/ScholarshipCard';
@@ -16,10 +21,12 @@ import ScholarshipsSidebar from '@/components/scholarships/ScholarshipsSidebar';
 import ScholarshipsTwoColumnLayout from '@/components/scholarships/ScholarshipsTwoColumnLayout';
 import { toast } from '@/components/ui/Toasts/use-toast';
 import {
-  SCHOLARSHIP_CATEGORY_LABELS,
   SCHOLARSHIP_CATEGORY_ORDER,
   type ScholarshipCategoryId
 } from '@/app/scholarships/scholarshipCategories';
+import { getScholarshipsHubUiCopy } from '@/lib/i18n/scholarshipsHubUiCopy';
+import { getScholarshipsFilterPanelsUiCopy } from '@/lib/i18n/scholarshipsFilterPanelsUiCopy';
+import { getLocalizedCategoryLabel } from '@/lib/i18n/taxonomyLabels';
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import {
   getIgnoredScholarshipIds,
@@ -149,7 +156,16 @@ export default function ScholarshipCategoryPageClient({
   needsEmailConfirmation = false,
   initialPayload = null
 }: Props) {
-  const pathname = usePathname();
+  const pathname = usePathname() ?? '';
+  const hubLocale = useMemo((): LocalizedUiLocale => {
+    const loc = getStage2LocaleFromPathname(pathname);
+    return loc && isStage2PilotLocale(loc) ? loc : 'en';
+  }, [pathname]);
+  const hubUi = useMemo(() => getScholarshipsHubUiCopy(hubLocale), [hubLocale]);
+  const filterPanelsUi = useMemo(
+    () => getScholarshipsFilterPanelsUiCopy(hubLocale),
+    [hubLocale]
+  );
   const router = useRouter();
   const searchParams = useSearchParams();
   const searchParamsString = searchParams.toString();
@@ -702,7 +718,7 @@ export default function ScholarshipCategoryPageClient({
     appliedCategoryIds.forEach((id) => {
       chips.push({
         id: `cat:${id}`,
-        label: SCHOLARSHIP_CATEGORY_LABELS[id],
+        label: getLocalizedCategoryLabel(id, hubLocale),
         onDismiss: () => {
           const next = new Set(appliedCategoryIds);
           next.delete(id);
@@ -807,7 +823,10 @@ export default function ScholarshipCategoryPageClient({
         maxWidth="listing"
         lead={
           <div className="min-w-0 space-y-4">
-            <ScholarshipCategoryListingBreadcrumbs pageTitle={pageTitle} />
+            <ScholarshipCategoryListingBreadcrumbs
+              pageTitle={pageTitle}
+              locale={hubLocale}
+            />
             <h1 className="min-w-0 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl lg:text-[2rem] lg:leading-tight">
               {pageTitle}
             </h1>
@@ -841,6 +860,9 @@ export default function ScholarshipCategoryPageClient({
       >
         <>
           <ScholarshipsListHeader
+            uiLocale={hubLocale}
+            uiCopy={hubUi}
+            filterPanelsCopy={filterPanelsUi}
             query={query}
             onQueryChange={onQueryChange}
             categoryCounts={categoryCounts}

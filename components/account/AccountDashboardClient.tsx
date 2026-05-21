@@ -1,8 +1,16 @@
 'use client';
 
+import { useMemo } from 'react';
+import { usePathname } from 'next/navigation';
 import type { User } from '@supabase/supabase-js';
 
 import ScholarshipCatalogEntryLink from '@/components/scholarships/ScholarshipCatalogEntryLink';
+import {
+  getStage2LocaleFromPathname,
+  isStage2PilotLocale
+} from '@/lib/i18n/pilotRoutes';
+import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
+import { getAccountUiCopy } from '@/lib/i18n/accountUiCopy';
 
 import SubscriptionPausedBanner from '@/components/billing/SubscriptionPausedBanner';
 import SubscriptionDebug from '@/components/debug/SubscriptionDebug';
@@ -59,6 +67,12 @@ export default function AccountDashboardClient({
   const subscriptionPaused = subscriptionPresentation.status === 'paused';
   const pausedResumeUrl = resolveResumeSubscriptionHref(subscription, '/subscription');
   const resendConfirmationMode = pickResendConfirmationMode(user, profile);
+  const pathname = usePathname() ?? '/account';
+  const uiLocale = useMemo((): LocalizedUiLocale => {
+    const loc = getStage2LocaleFromPathname(pathname);
+    return loc && isStage2PilotLocale(loc) ? loc : 'en';
+  }, [pathname]);
+  const ui = getAccountUiCopy(uiLocale);
 
   return (
     <div className="min-h-screen bg-zinc-50/90">
@@ -74,13 +88,14 @@ export default function AccountDashboardClient({
             emailConfirmed={emailConfirmedForUi}
             resendConfirmationMode={resendConfirmationMode}
             variant="saas"
+            uiLocale={uiLocale}
           />
 
           <div>
             <ScholarshipCatalogEntryLink
               className="text-sm font-medium text-zinc-500 transition hover:text-zinc-800"
             >
-              ← Back to scholarships
+              {ui.backToScholarships}
             </ScholarshipCatalogEntryLink>
           </div>
         </section>

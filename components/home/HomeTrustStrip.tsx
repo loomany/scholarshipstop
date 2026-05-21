@@ -1,38 +1,23 @@
 import Link from 'next/link';
 
+import type { HomePageCopy } from '@/lib/i18n/homePageCopy';
+
 const h2Class =
   'text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl lg:text-[2.35rem] lg:leading-[1.15] xl:text-[2.5rem]';
-
-const cards = [
-  {
-    title: 'Verified listings',
-    body:
-      'We review key scholarship details before surfacing opportunities to students.',
-    href: '/scholarship-verification-methodology',
-    cta: 'Read methodology'
-  },
-  {
-    title: 'Updated regularly',
-    body:
-      'We work to keep deadlines, eligibility notes, and award details current as programs change.',
-    href: '/corrections',
-    cta: 'Report a correction'
-  },
-  {
-    title: 'Official-source workflow',
-    body:
-      "In most cases, you apply through the provider's official site, not a mystery portal.",
-    href: '/financial-aid-disclaimer',
-    cta: 'Read disclaimer'
-  }
-] as const;
 
 type HomeTrustStripProps = {
   sectionPadX: string;
   sectionY: string;
+  copy: HomePageCopy['trustStrip'];
+  hrefForPath: (path: string) => string | null;
 };
 
-export default function HomeTrustStrip({ sectionPadX, sectionY }: HomeTrustStripProps) {
+export default function HomeTrustStrip({
+  sectionPadX,
+  sectionY,
+  copy,
+  hrefForPath
+}: HomeTrustStripProps) {
   return (
     <section
       className={`border-b border-gray-100 bg-gray-50/90 ${sectionY} ${sectionPadX}`}
@@ -43,10 +28,10 @@ export default function HomeTrustStrip({ sectionPadX, sectionY }: HomeTrustStrip
           id="home-trust-strip-heading"
           className={`text-center text-pretty ${h2Class}`}
         >
-          Built to reduce guesswork
+          {copy.title}
         </h2>
         <div className="mt-8 grid gap-6 sm:mt-10 sm:grid-cols-3 sm:gap-7 lg:gap-8">
-          {cards.map((card) => (
+          {copy.cards.map((card) => (
             <div
               key={card.title}
               className="rounded-2xl border border-gray-200/90 bg-white p-7 shadow-[0_4px_24px_-16px_rgba(15,23,42,0.08)] sm:p-8"
@@ -57,12 +42,14 @@ export default function HomeTrustStrip({ sectionPadX, sectionY }: HomeTrustStrip
               <p className="mt-3 text-[0.9375rem] leading-relaxed text-pretty text-gray-600 sm:text-base sm:leading-relaxed">
                 {card.body}
               </p>
-              <Link
-                href={card.href}
-                className="mt-4 inline-flex text-sm font-semibold text-orange-700 underline-offset-4 hover:text-orange-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/60 focus-visible:ring-offset-2"
-              >
-                {card.cta}
-              </Link>
+              {hrefForPath(card.href) ? (
+                <Link
+                  href={hrefForPath(card.href)!}
+                  className="mt-4 inline-flex text-sm font-semibold text-orange-700 underline-offset-4 hover:text-orange-800 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/60 focus-visible:ring-offset-2"
+                >
+                  {card.cta}
+                </Link>
+              ) : null}
             </div>
           ))}
         </div>

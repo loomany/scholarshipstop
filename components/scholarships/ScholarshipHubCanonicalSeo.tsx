@@ -13,6 +13,13 @@ import {
   SCHOLARSHIP_HUB_CANONICAL_SEO,
   SCHOLARSHIP_HUB_RELATED_LINKS_DEFAULT
 } from '@/app/scholarships/scholarshipHubCanonicalSeoContent';
+import {
+  hrefForLocalizedUiRequired,
+  localizedScholarshipHubTabHref,
+  type LocalizedUiLocale
+} from '@/lib/i18n/localizedHref';
+import { getScholarshipsHubUiCopy } from '@/lib/i18n/scholarshipsHubUiCopy';
+import type { ScholarshipHubPathTabInput } from '@/app/scholarships/scholarshipHubPath';
 
 const CONTINUE_SEARCH_SUBTITLE =
   'Explore next steps to find scholarships faster, write stronger applications, and compare opportunities.';
@@ -76,13 +83,16 @@ function scholarshipHubFaqPageJsonLd(
 /** Intro copy beneath the listings h1 — `/scholarships/hub/[segment]` canonical catalog only (SSR). */
 export function ScholarshipHubCanonicalIntro({
   slug,
-  introMarginTopClassName
+  introMarginTopClassName,
+  locale = 'en'
 }: {
   slug: ScholarshipHubCanonicalSeoSlug;
   /** Default `mt-5 sm:mt-6`. Best hub can override to match lead→toolbar vertical rhythm. */
   introMarginTopClassName?: string;
+  locale?: LocalizedUiLocale;
 }) {
   const pack = SCHOLARSHIP_HUB_CANONICAL_SEO[slug];
+  const introText = getScholarshipsHubUiCopy(locale).hubCanonicalIntro[slug] ?? pack.introText;
   const bestHubLayout = slug === 'best-recommendation';
   return (
     <div
@@ -94,7 +104,7 @@ export function ScholarshipHubCanonicalIntro({
       )}
     >
       <p className={bestHubLayout ? 'text-left text-pretty' : undefined}>
-        {pack.introText}
+        {introText}
       </p>
     </div>
   );
@@ -103,15 +113,37 @@ export function ScholarshipHubCanonicalIntro({
 /**
  * FAQ + related links below cards/pagination. FAQ uses visible text matching JSON-LD (`details` SSR).
  */
+function localizeHubFooterHref(locale: LocalizedUiLocale, href: string): string {
+  const normalized = href.split(/[?#]/, 1)[0] ?? href;
+  const suffix = href.slice(normalized.length);
+  const hubTabMatch = normalized.match(/^\/scholarships\/hub\/([^/]+)$/);
+  if (hubTabMatch) {
+    return `${localizedScholarshipHubTabHref(
+      locale,
+      hubTabMatch[1] as ScholarshipHubPathTabInput
+    )}${suffix}`;
+  }
+  return hrefForLocalizedUiRequired(locale, href);
+}
+
 export function ScholarshipHubCanonicalListingFooter({
-  slug
+  slug,
+  locale = 'en'
 }: {
   slug: ScholarshipHubCanonicalSeoSlug;
+  locale?: LocalizedUiLocale;
 }) {
   const pack = SCHOLARSHIP_HUB_CANONICAL_SEO[slug];
   const faqLd = scholarshipHubFaqPageJsonLd(pack.faq);
-  const extraRelated = pack.extraRelatedHrefs ?? [];
+  const extraRelated = (pack.extraRelatedHrefs ?? []).map((row) => ({
+    ...row,
+    href: localizeHubFooterHref(locale, row.href)
+  }));
   const idPrefix = `hub-${slug}-faq`;
+  const baseCards = CONTINUE_SEARCH_BASE_CARDS.map((card) => ({
+    ...card,
+    href: localizeHubFooterHref(locale, card.href)
+  }));
 
   return (
     <>
@@ -193,7 +225,7 @@ export function ScholarshipHubCanonicalListingFooter({
           {CONTINUE_SEARCH_SUBTITLE}
         </p>
         <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
-          {CONTINUE_SEARCH_BASE_CARDS.map(({ href, title, description, Icon }) => (
+          {baseCards.map(({ href, title, description, Icon }) => (
             <Link
               key={href}
               href={href}

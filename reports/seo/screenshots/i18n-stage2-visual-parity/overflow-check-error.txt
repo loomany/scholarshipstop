@@ -1,0 +1,5 @@
+page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3002/
+Call log:
+[2m  - navigating to "http://127.0.0.1:3002/", waiting until "domcontentloaded"[22m
+
+    at C:\dev\scholarshipstop\[eval1]:13:18

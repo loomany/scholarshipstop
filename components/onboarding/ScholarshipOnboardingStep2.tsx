@@ -32,6 +32,8 @@ import {
   sanitizeBirthYearInput,
   validateBirthDateFields
 } from '@/lib/validation/birthDateFields';
+import { getOnboardingUiCopy } from '@/lib/i18n/onboardingUiCopy';
+import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
 import { getOAuthCallbackUrlWithNext } from '@/utils/helpers';
 import { createClient } from '@/utils/supabase/client';
 
@@ -69,6 +71,7 @@ type Props = {
   draftStore?: 'onboarding' | 'landing';
   progressEyebrow?: string;
   visualVariant?: 'default' | 'saas';
+  locale?: LocalizedUiLocale;
 };
 
 export function ScholarshipOnboardingStep2({
@@ -81,8 +84,10 @@ export function ScholarshipOnboardingStep2({
   oauthRedirectAfterAuthPath,
   draftStore = 'onboarding',
   progressEyebrow,
-  visualVariant = 'default'
+  visualVariant = 'default',
+  locale = 'en'
 }: Props) {
+  const ob = getOnboardingUiCopy(locale);
   const showBirthAndPasswordFields = ACCOUNT_SHOW_DATE_OF_BIRTH_AND_PASSWORD_FIELDS;
   const loadDraft =
     draftStore === 'landing' ? loadLandingQuizDraft : loadStoredOnboardingDraft;
@@ -361,7 +366,7 @@ export function ScholarshipOnboardingStep2({
         className="rounded-xl border border-zinc-300 bg-white px-4 py-2.5 text-sm font-medium text-zinc-800 shadow-sm transition hover:border-zinc-400 hover:bg-zinc-50 disabled:opacity-50"
       >
         <ArrowLeft className="mr-2 inline h-4 w-4" aria-hidden />
-        Back
+        {ob.step2Back}
       </button>
       <div className="mx-auto max-w-lg text-center">
         {isSaas ? (
@@ -376,23 +381,21 @@ export function ScholarshipOnboardingStep2({
           id="onboarding-step2-title"
           className={`mt-2 text-2xl font-bold tracking-tight sm:text-3xl ${isSaas ? 'text-[#7A3B00]' : 'text-zinc-900'}`}
         >
-          Create your account
+          {ob.step2Title}
         </h2>
         <p className={`mx-auto mt-3 flex max-w-md flex-col gap-1 text-base font-medium leading-7 sm:max-w-lg ${isSaas ? 'text-[#8C5A2B]' : 'text-zinc-600'}`}>
-          <span>
-            Your email is used to save your matches and personalize results.
-          </span>
-          <span>We never sell your data.</span>
+          <span>{ob.step2Intro1}</span>
+          <span>{ob.step2Intro2}</span>
         </p>
       </div>
 
       <form className="space-y-5 text-left" onSubmit={handleSubmit} noValidate>
         <div className={showBirthAndPasswordFields ? undefined : 'hidden'}>
-          <p className={sectionLabelClass}>Birthday</p>
+          <p className={sectionLabelClass}>{ob.birthday}</p>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-3">
             <div>
               <DarkSelect
-                ariaLabel="Birth month"
+                ariaLabel={ob.birthMonthAria}
                 options={birthMonthOptions}
                 value={values.birthMonth}
                 onChange={(v) => setField('birthMonth', v)}
@@ -408,11 +411,11 @@ export function ScholarshipOnboardingStep2({
                 type="text"
                 inputMode="numeric"
                 pattern="[0-9]*"
-                aria-label="Birth day"
+                aria-label={ob.birthDayAria}
                 value={values.birthDay}
                 onChange={handleBirthDayChange}
                 disabled={disabled}
-                placeholder="Day"
+                placeholder={ob.dayPlaceholder}
                 maxLength={2}
                 className={`${datePartInputBaseClass} ${
                   birthDayError
@@ -428,11 +431,11 @@ export function ScholarshipOnboardingStep2({
                 type="text"
                 inputMode="numeric"
                 pattern="[0-9]*"
-                aria-label="Birth year"
+                aria-label={ob.birthYearAria}
                 value={values.birthYear}
                 onChange={handleBirthYearChange}
                 disabled={disabled}
-                placeholder="Year"
+                placeholder={ob.yearPlaceholder}
                 maxLength={4}
                 className={`${datePartInputBaseClass} ${
                   birthYearError
@@ -453,7 +456,7 @@ export function ScholarshipOnboardingStep2({
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
             <label htmlFor="onb-first" className="sr-only">
-              First name
+              {ob.firstNamePlaceholder}
             </label>
             <input
               id="onb-first"
@@ -461,7 +464,7 @@ export function ScholarshipOnboardingStep2({
               autoComplete="given-name"
               value={values.firstName}
               onChange={(e) => setField('firstName', e.target.value)}
-              placeholder="First name"
+              placeholder={ob.firstNamePlaceholder}
               disabled={disabled}
               className={fieldClass('firstName')}
             />
@@ -471,7 +474,7 @@ export function ScholarshipOnboardingStep2({
           </div>
           <div>
             <label htmlFor="onb-last" className="sr-only">
-              Last name
+              {ob.lastNamePlaceholder}
             </label>
             <input
               id="onb-last"
@@ -479,7 +482,7 @@ export function ScholarshipOnboardingStep2({
               autoComplete="family-name"
               value={values.lastName}
               onChange={(e) => setField('lastName', e.target.value)}
-              placeholder="Last name"
+              placeholder={ob.lastNamePlaceholder}
               disabled={disabled}
               className={fieldClass('lastName')}
             />
@@ -491,7 +494,7 @@ export function ScholarshipOnboardingStep2({
 
         <div>
           <label htmlFor="onb-email" className="sr-only">
-            Email address
+            {ob.emailPlaceholder}
           </label>
           <input
             id="onb-email"
@@ -499,7 +502,7 @@ export function ScholarshipOnboardingStep2({
             autoComplete="email"
             value={values.email}
             onChange={(e) => setField('email', e.target.value)}
-            placeholder="Email address"
+            placeholder={ob.emailPlaceholder}
             disabled={disabled}
             className={fieldClass('email')}
           />
@@ -513,7 +516,7 @@ export function ScholarshipOnboardingStep2({
         >
           <div>
             <label htmlFor="onb-pass" className="sr-only">
-              Create password
+              {ob.passwordPlaceholder}
             </label>
             <input
               id="onb-pass"
@@ -521,7 +524,7 @@ export function ScholarshipOnboardingStep2({
               autoComplete="new-password"
               value={values.password}
               onChange={(e) => setField('password', e.target.value)}
-              placeholder="Create password"
+              placeholder={ob.passwordPlaceholder}
               disabled={disabled}
               className={fieldClass('password')}
             />
@@ -531,7 +534,7 @@ export function ScholarshipOnboardingStep2({
           </div>
           <div>
             <label htmlFor="onb-pass2" className="sr-only">
-              Confirm password
+              {ob.confirmPasswordPlaceholder}
             </label>
             <input
               id="onb-pass2"
@@ -539,7 +542,7 @@ export function ScholarshipOnboardingStep2({
               autoComplete="new-password"
               value={values.confirmPassword}
               onChange={(e) => setField('confirmPassword', e.target.value)}
-              placeholder="Confirm password"
+              placeholder={ob.confirmPasswordPlaceholder}
               disabled={disabled}
               className={fieldClass('confirmPassword')}
             />
@@ -583,7 +586,7 @@ export function ScholarshipOnboardingStep2({
             />
             <path fill="none" d="M0 0h48v48H0z" />
           </svg>
-          Continue with Google
+          {ob.continueGoogle}
         </button>
 
         <button
@@ -592,7 +595,7 @@ export function ScholarshipOnboardingStep2({
           aria-busy={isSubmitting}
           className={ONBOARDING_PRIMARY_BUTTON_CLASS}
         >
-          {isSubmitting ? 'Creating your account…' : 'Create account & find scholarships'}
+          {isSubmitting ? ob.creatingAccount : ob.createAccountCta}
           {!isSubmitting && isSaas ? (
             <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
           ) : !isSubmitting ? (

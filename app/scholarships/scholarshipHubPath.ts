@@ -9,6 +9,7 @@ import {
   parseScholarshipTabParam,
   type ScholarshipListTabId
 } from '@/app/scholarships/scholarshipTabs';
+import { stripLocalePrefix } from '@/lib/i18n/paths';
 
 export const HUB_PATH_PREFIX = 'hub';
 
@@ -85,9 +86,10 @@ export function hubResolvedFromPathname(
   pathname: string | null | undefined
 ): HubPathToTabResult | null {
   if (!pathname?.trim()) return null;
+  const pathnameSansLocale = stripLocalePrefix(pathname.trim());
   const prefix = '/scholarships/';
-  if (!pathname.startsWith(prefix)) return null;
-  const rest = pathname.slice(prefix.length);
+  if (!pathnameSansLocale.startsWith(prefix)) return null;
+  const rest = pathnameSansLocale.slice(prefix.length);
   const segments = rest.split('/').filter((s) => s.length > 0);
   return hubPathToTab(segments);
 }

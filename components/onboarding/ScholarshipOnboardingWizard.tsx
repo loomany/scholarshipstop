@@ -2,7 +2,13 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import {
+  getStage2LocaleFromPathname,
+  isStage2PilotLocale
+} from '@/lib/i18n/pilotRoutes';
+import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
+import { getOnboardingUiCopy } from '@/lib/i18n/onboardingUiCopy';
 import { createClient } from '@/utils/supabase/client';
 import { getURL } from '@/utils/helpers';
 import { ScholarshipOnboardingStep2 } from '@/components/onboarding/ScholarshipOnboardingStep2';
@@ -13,7 +19,7 @@ import {
   clampOnboardingStepToProgress,
   defaultResumeOnboardingStep,
   normalizeOnboardingStepParam,
-  onboardingStepHref
+  localizedOnboardingStepHref
 } from '@/lib/onboarding/onboardingResume';
 import { parseSafeNextPath } from '@/lib/onboarding/safeNextPath';
 import { applyPendingLandingQuizMergeIfNeeded } from '@/lib/onboarding/mergeLandingQuizIntoOnboardingDraft';
@@ -90,14 +96,24 @@ export type ScholarshipOnboardingWizardProps = {
   embeddedAfterAuthPath?: string;
   /** Optional: embedded-only — return to intro (hero) from step 1. */
   onLeaveEmbeddedQuiz?: () => void;
+  /** When set (e.g. `/es/onboarding`), overrides pathname-derived locale for UI copy only. */
+  uiLocale?: LocalizedUiLocale;
 };
 
 export function ScholarshipOnboardingWizard({
   mode,
   embeddedAfterAuthPath = SCHOLARSHIPS_HUB_BEST_MATCHES_HREF,
-  onLeaveEmbeddedQuiz
+  onLeaveEmbeddedQuiz,
+  uiLocale: uiLocaleProp
 }: ScholarshipOnboardingWizardProps) {
   const router = useRouter();
+  const pathname = usePathname() ?? '/onboarding';
+  const uiLocale = useMemo((): LocalizedUiLocale => {
+    if (uiLocaleProp) return uiLocaleProp;
+    const loc = getStage2LocaleFromPathname(pathname);
+    return loc && isStage2PilotLocale(loc) ? loc : 'en';
+  }, [pathname, uiLocaleProp]);
+  const ob = getOnboardingUiCopy(uiLocale);
   const searchParams = useSearchParams();
   const requested =
     mode === 'standalone' ? parseStepParam(searchParams.get('step')) : null;
@@ -142,9 +158,9 @@ export function ScholarshipOnboardingWizard({
         : clampOnboardingStepToProgress(draft, requested);
     const cur = searchParams.get('step');
     if (cur !== String(target)) {
-      router.replace(onboardingStepHref(target, safeNext));
+      router.replace(localizedOnboardingStepHref(uiLocale, target, safeNext));
     }
-  }, [draft, requested, router, searchParams, safeNext, mode]);
+  }, [draft, requested, router, searchParams, safeNext, mode, uiLocale]);
 
   useEffect(() => {
     if (mode !== 'embedded' || !draft || embeddedStepReady) return;
@@ -179,9 +195,9 @@ export function ScholarshipOnboardingWizard({
         setEmbeddedStep(s);
         return;
       }
-      router.push(onboardingStepHref(s, safeNext));
+      router.push(localizedOnboardingStepHref(uiLocale, s, safeNext));
     },
-    [mode, router, safeNext]
+    [mode, router, safeNext, uiLocale]
   );
 
   const handleCountryContinue = useCallback(
@@ -201,7 +217,7 @@ export function ScholarshipOnboardingWizard({
       }
       const code = normalizeCountryCode(countryCodeRaw ?? '');
       if (!code) {
-        setCountryError('Choose your country to continue.');
+        setCountryError(ob.countryError);
         return;
       }
       setCountryError(null);
@@ -588,7 +604,7 @@ export function ScholarshipOnboardingWizard({
   if (!draft) {
     return (
       <SiteBrandLoading
-        label="Loading your progress…"
+        label={ob.loadingProgress}
         className="min-h-[calc(100dvh-4rem)]"
       />
     );
@@ -604,7 +620,7 @@ export function ScholarshipOnboardingWizard({
             href="/"
             className="mb-8 inline-block text-sm text-gray-600 no-underline transition hover:text-black hover:underline"
           >
-            ← Back to home
+            {ob.backToHome}
           </Link>
         ) : null}
 
@@ -614,13 +630,14 @@ export function ScholarshipOnboardingWizard({
             onClick={onLeaveEmbeddedQuiz}
             className="mb-8 text-sm text-gray-600 no-underline transition hover:text-black hover:underline"
           >
-            ← Back to intro
+            {ob.backToIntro}
           </button>
         ) : null}
 
         <div className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm sm:p-8">
           {step === 1 ? (
             <CountryFirstStep
+              locale={uiLocale}
               disabled={loading}
               value={draft.step4.countryCode ?? ''}
               includeUnspecifiedApplicantCountries={
@@ -639,9 +656,9 @@ export function ScholarshipOnboardingWizard({
                   }
                 });
               }}
-              progressEyebrow="Step 1 · Country"
-              title="Where are you applying from?"
-              description="Choose your applicant country first. We'll adapt the signup questions and scholarship matching to that country."
+              progressEyebrow={ob.step1Eyebrow}
+              title={ob.step1Title}
+              description={ob.step1Description}
               error={countryError}
               onChange={(value) => {
                 setCountryError(null);
@@ -661,11 +678,12 @@ export function ScholarshipOnboardingWizard({
           ) : null}
           {step === 2 ? (
             <ScholarshipOnboardingStep2
+              locale={uiLocale}
               disabled={loading}
               isSubmitting={loading}
               initialStep1={draft.step1}
               initialStep2={draft.step2}
-              progressEyebrow="Step 2 of 2 · Account"
+              progressEyebrow={ob.step2Eyebrow}
               visualVariant="saas"
               onBack={() => handleBack(1)}
               onContinue={handleAccountSubmit}

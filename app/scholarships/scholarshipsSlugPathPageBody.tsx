@@ -5,6 +5,10 @@ import Link from 'next/link';
 import ScholarshipsHubShellSkeleton from '@/components/scholarships/ScholarshipsHubShellSkeleton';
 import ScholarshipDetailPageAuthBridge from '@/app/scholarships/ScholarshipDetailPageAuthBridge';
 import ScholarshipsHubPageAuthBridge from '@/app/scholarships/ScholarshipsHubPageAuthBridge';
+import {
+  getScholarshipsHubUiCopy,
+  scholarshipListPageTitleLocalized
+} from '@/lib/i18n/scholarshipsHubUiCopy';
 import ContinueScholarshipSearchCardGrid from '@/components/scholarships/ContinueScholarshipSearchCardGrid';
 import {
   SCHOLARSHIP_HUB_CANONICAL_SEO,
@@ -69,6 +73,18 @@ import type { ProfilesRow } from '@/lib/scholarships/scholarshipMatch';
 import { createPublicClient } from '@/utils/supabase/public';
 import { createClient as createServerSupabase } from '@/utils/supabase/server';
 import { buildScholarshipListingJsonLd } from '@/app/scholarships/scholarshipListingJsonLd';
+import type { Stage2PilotLocale } from '@/lib/i18n/pilotRoutes';
+import { gateLocalizedScholarshipDetailOrNotFound } from '@/lib/i18n/localizedScholarshipDetailGate';
+import {
+  getScholarshipsCatalogIntroCopy,
+  type ScholarshipsCatalogIntroCopy
+} from '@/lib/i18n/hubUiCopy';
+import {
+  hrefForLocalizedUiRequired,
+  localizedScholarshipHubTabHref
+} from '@/lib/i18n/localizedHref';
+import { normalizeCanonicalPath } from '@/lib/i18n/paths';
+import type { ScholarshipHubPathTabInput } from '@/app/scholarships/scholarshipHubPath';
 
 /** Set DEBUG_SEO_SCHOLARSHIP=1 to log which SEO bundle and copy the server picked. */
 function debugLogListingSeo(payload: Record<string, unknown>) {
@@ -146,43 +162,30 @@ export type ScholarshipsSlugPathPageBodyProps = {
   segments: string[];
   /** Raw query string for hub root SSR alignment. */
   searchParamsString?: string;
+  /** When set, catalog root intro uses localized UI copy (layout unchanged). */
+  locale?: Stage2PilotLocale;
 };
 
 const SCHOLARSHIPS_ROOT_SCHEMA_DESCRIPTION =
   'Browse the ScholarshipTop catalog to find scholarships by deadline, award amount, eligibility, field of study, GPA, and student background.';
 
-function ScholarshipCatalogRootIntro() {
-  const tips = [
-    'Check eligibility first',
-    'Sort by deadline urgency',
-    'Compare effort vs award',
-    'Confirm the official source',
-    'Save realistic options'
-  ] as const;
-  const mistakes = [
-    'Applying from the title alone',
-    'Ignoring citizenship or residency rules',
-    'Missing deadline timezone details',
-    'Not checking payout or renewal terms',
-    'Submitting before documents are ready',
-    'Trusting unclear sources'
-  ] as const;
-
+function ScholarshipCatalogRootIntro({
+  copy,
+  hrefForPath = (href) => href
+}: {
+  copy: ScholarshipsCatalogIntroCopy;
+  hrefForPath?: (canonicalPath: string) => string;
+}) {
   return (
     <div className="mt-5 max-w-5xl rounded-2xl border border-slate-200/90 bg-gradient-to-b from-white to-slate-50/90 p-5 text-sm leading-relaxed text-slate-600 shadow-sm sm:mt-6 sm:p-6 sm:text-[0.9375rem] lg:mx-auto">
       <div className="grid gap-5 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
         <div>
           <h2 className="text-lg font-bold tracking-tight text-slate-950">
-            How to use this scholarship catalog
+            {copy.title}
           </h2>
-          <p className="mt-2">
-            Start broad, then narrow by eligibility, deadline, award value,
-            documents, location, and application effort. Prioritize scholarships
-            where your profile clearly matches the provider rules and where the
-            deadline and application path are clear.
-          </p>
+          <p className="mt-2">{copy.body}</p>
           <ul className="mt-4 grid gap-2 sm:grid-cols-2">
-            {tips.map((tip) => (
+            {copy.tips.map((tip) => (
               <li key={tip} className="flex items-start gap-2">
                 <span
                   className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-orange-500"
@@ -195,10 +198,10 @@ function ScholarshipCatalogRootIntro() {
         </div>
         <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
           <h2 className="text-base font-bold tracking-tight text-slate-950">
-            Common scholarship search mistakes
+            {copy.mistakesTitle}
           </h2>
           <ul className="mt-3 space-y-2">
-            {mistakes.map((mistake) => (
+            {copy.mistakes.map((mistake) => (
               <li key={mistake} className="flex items-start gap-2">
                 <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-slate-400" />
                 <span>{mistake}</span>
@@ -208,16 +211,10 @@ function ScholarshipCatalogRootIntro() {
         </div>
       </div>
       <div className="mt-5 flex flex-wrap gap-2 border-t border-slate-200 pt-4">
-        {[
-          ['No essay scholarships', '/scholarships/no-essay'],
-          ['Easy apply scholarships', '/scholarships/hub/easy-apply'],
-          ['International students', '/scholarships/hub/international-friendly'],
-          ['Verification methodology', '/scholarship-verification-methodology'],
-          ['Scam warning signs', '/scholarship-scam-warning']
-        ].map(([label, href]) => (
+        {copy.quickLinks.map(({ label, href }) => (
           <Link
             key={href}
-            href={href}
+            href={hrefForPath(href)}
             className="inline-flex rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/60 focus-visible:ring-offset-2"
           >
             {label}
@@ -237,7 +234,8 @@ async function HubRootStreamedBridge({
   listingJsonLdName,
   listingJsonLdDescription,
   includeListingJsonLd = false,
-  fallbackPageTitle = 'Scholarship matches'
+  fallbackPageTitle = 'Scholarship matches',
+  locale
 }: {
   searchParamsString: string;
   hubCanonicalSeoSlug?: ScholarshipHubCanonicalSeoSlug;
@@ -248,6 +246,7 @@ async function HubRootStreamedBridge({
   listingJsonLdDescription?: string;
   includeListingJsonLd?: boolean;
   fallbackPageTitle?: string;
+  locale?: Stage2PilotLocale;
 }) {
   type HubListingClient = ReturnType<typeof createPublicClient>;
   let profile: ProfilesRow | null = null;
@@ -279,6 +278,7 @@ async function HubRootStreamedBridge({
     hubCanonicalSeoSlug != null ? (
       <ScholarshipHubCanonicalIntro
         slug={hubCanonicalSeoSlug}
+        locale={locale ?? 'en'}
         introMarginTopClassName={
           hubCanonicalSeoSlug === 'best-recommendation' ? 'mt-5 sm:mt-6' : undefined
         }
@@ -288,7 +288,7 @@ async function HubRootStreamedBridge({
     );
   const hubFooter =
     hubCanonicalSeoSlug != null ? (
-      <ScholarshipHubCanonicalListingFooter slug={hubCanonicalSeoSlug} />
+      <ScholarshipHubCanonicalListingFooter slug={hubCanonicalSeoSlug} locale={locale ?? 'en'} />
     ) : (
       postListingContent ?? null
     );
@@ -319,10 +319,15 @@ async function HubRootStreamedBridge({
           }),
           initialListPayload
         )}
-        currentPathname={listingJsonLdPath ?? '/scholarships'}
+        currentPathname={
+          locale
+            ? hrefForLocalizedUiRequired(locale, listingJsonLdPath ?? '/scholarships')
+            : listingJsonLdPath ?? '/scholarships'
+        }
         hubCanonicalIntroBelowTitle={hubIntro}
         postListingContent={hubFooter}
         fallbackPageTitle={fallbackPageTitle}
+        locale={locale}
       />
     </>
   );
@@ -334,8 +339,22 @@ async function HubRootStreamedBridge({
  */
 export default async function ScholarshipsSlugPathPageBody({
   segments,
-  searchParamsString = ''
+  searchParamsString = '',
+  locale
 }: ScholarshipsSlugPathPageBodyProps) {
+  const catalogIntroCopy = getScholarshipsCatalogIntroCopy(locale ?? 'en');
+  const hrefForPath = (path: string) => {
+    const uiLocale = locale ?? 'en';
+    const normalized = normalizeCanonicalPath(path);
+    if (normalized.startsWith('/scholarships/hub/')) {
+      const segment = normalized.slice('/scholarships/hub/'.length);
+      return localizedScholarshipHubTabHref(
+        uiLocale,
+        segment as ScholarshipHubPathTabInput
+      );
+    }
+    return hrefForLocalizedUiRequired(uiLocale, path);
+  };
   /** `/scholarships/hub/{segment}` — same hub UI as `/scholarships`; never hit SEO/detail resolve. */
   if (segments[0] === HUB_PATH_PREFIX) {
     const hubResolved = hubPathToTab(segments);
@@ -349,13 +368,21 @@ export default async function ScholarshipsSlugPathPageBody({
     const hubSlugNorm = normalizeScholarshipDynamicParam(segments[1] ?? '');
     const hubCanonicalSeoSlug: ScholarshipHubCanonicalSeoSlug | undefined =
       isScholarshipHubCanonicalSeoSlug(hubSlugNorm) ? hubSlugNorm : undefined;
+    const hubUi = getScholarshipsHubUiCopy(locale ?? 'en');
     const hubFallbackPageTitle =
       hubResolved.audience === 'international_friendly'
-        ? 'Scholarships for international students'
-        : scholarshipListPageTitle(hubResolved.tab, { guest: true });
+        ? hubUi.internationalStudentsPageTitle
+        : scholarshipListPageTitleLocalized(hubResolved.tab, locale ?? 'en', {
+            guest: true
+          });
     return (
       <Suspense
-        fallback={<ScholarshipsHubShellSkeleton pageTitle={hubFallbackPageTitle} />}
+        fallback={
+          <ScholarshipsHubShellSkeleton
+            pageTitle={hubFallbackPageTitle}
+            locale={locale ?? 'en'}
+          />
+        }
       >
         <HubRootStreamedBridge
           searchParamsString={effectiveSearchParamsString}
@@ -369,6 +396,7 @@ export default async function ScholarshipsSlugPathPageBody({
           }
           includeListingJsonLd={searchParamsString.length === 0}
           fallbackPageTitle={hubFallbackPageTitle}
+          locale={locale}
         />
       </Suspense>
     );
@@ -381,17 +409,29 @@ export default async function ScholarshipsSlugPathPageBody({
       <Suspense fallback={<ScholarshipsHubShellSkeleton />}>
         <HubRootStreamedBridge
           searchParamsString={searchParamsString}
-          hubCanonicalIntroBelowTitle={<ScholarshipCatalogRootIntro />}
+          hubCanonicalIntroBelowTitle={
+            <ScholarshipCatalogRootIntro
+              copy={catalogIntroCopy}
+              hrefForPath={hrefForPath}
+            />
+          }
           postListingContent={
             <ContinueScholarshipSearchCardGrid
               idPrefix="scholarships-root-continue"
               className="mt-10 max-w-5xl lg:mx-auto"
+              locale={locale ?? 'en'}
             />
           }
           listingJsonLdPath="/scholarships"
-          listingJsonLdName="Find Scholarships"
+          listingJsonLdName={
+            getScholarshipsHubUiCopy(locale ?? 'en').defaultPageTitle
+          }
           listingJsonLdDescription={SCHOLARSHIPS_ROOT_SCHEMA_DESCRIPTION}
           includeListingJsonLd={searchParamsString.length === 0}
+          fallbackPageTitle={
+            getScholarshipsHubUiCopy(locale ?? 'en').defaultPageTitle
+          }
+          locale={locale}
         />
       </Suspense>
     );
@@ -401,6 +441,9 @@ export default async function ScholarshipsSlugPathPageBody({
     const scholarship = await getScholarshipDetailServer(segments[0]!);
     if (!scholarship) {
       notFound();
+    }
+    if (locale) {
+      await gateLocalizedScholarshipDetailOrNotFound(locale, scholarship.id);
     }
     const matchSlug = scholarshipPublicSlugForMatching(scholarship);
     const initialRelatedArticles = matchSlug
@@ -452,6 +495,9 @@ export default async function ScholarshipsSlugPathPageBody({
         : null;
     if (!scholarship) {
       notFound();
+    }
+    if (locale) {
+      await gateLocalizedScholarshipDetailOrNotFound(locale, scholarship.id);
     }
     const matchSlug = scholarshipPublicSlugForMatching(scholarship);
     const initialRelatedArticles = matchSlug

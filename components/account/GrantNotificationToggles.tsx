@@ -4,6 +4,8 @@ import { Check, X } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 
 import { GRANT_NOTIFY_CHANNELS } from '@/lib/notifications/grantNotificationPrefs';
+import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
+import { getAccountProfileUiCopy } from '@/lib/i18n/accountProfileUiCopy';
 import type { Database } from '@/types_db';
 
 type Prefs = Pick<
@@ -20,12 +22,15 @@ const SHOW_TELEGRAM_BOT_CARD = false;
 export default function GrantNotificationToggles({
   profile,
   userEmail,
-  disabled
+  disabled,
+  uiLocale = 'en'
 }: {
   profile: Database['public']['Tables']['profiles']['Row'] | null;
   userEmail?: string | null;
   disabled?: boolean;
+  uiLocale?: LocalizedUiLocale;
 }) {
+  const notifyUi = getAccountProfileUiCopy(uiLocale).grantNotify;
   const [prefs, setPrefs] = useState<Prefs>(() => ({
     email_notify_best_matches: profile?.email_notify_best_matches ?? true,
     email_notify_saved_filters: profile?.email_notify_saved_filters ?? true,
@@ -100,17 +105,19 @@ export default function GrantNotificationToggles({
     <div className="mt-6 space-y-4 border-t border-zinc-100 pt-6">
       <div>
         <p className="text-[11px] font-semibold uppercase tracking-wide text-zinc-500">
-          Grant email alerts
+          {notifyUi.heading}
         </p>
-        <p className="mt-1 text-sm text-zinc-600">
-          Choose what we can email you about. You can change this anytime.
-        </p>
+        <p className="mt-1 text-sm text-zinc-600">{notifyUi.description}</p>
       </div>
 
       <div className="grid gap-2.5 sm:grid-cols-2">
         {GRANT_NOTIFY_CHANNELS.map((ch) => {
           const on = prefs[ch.profileColumn];
           const busy = pendingKey === ch.profileColumn;
+          const localized = notifyUi.channels.find((c) => c.id === ch.id);
+          const shortLabel = localized?.shortLabel ?? ch.shortLabel;
+          const emailPromptOff = localized?.emailPromptOff ?? ch.emailPromptOff;
+          const emailPromptOn = localized?.emailPromptOn ?? ch.emailPromptOn;
           return (
             <button
               key={ch.id}
@@ -139,9 +146,9 @@ export default function GrantNotificationToggles({
                 )}
               </span>
               <span className="block text-xs font-semibold uppercase tracking-wide text-zinc-500">
-                {ch.shortLabel}
+                {shortLabel}
               </span>
-              <span className="mt-1 block pr-1">{on ? ch.emailPromptOn : ch.emailPromptOff}</span>
+              <span className="mt-1 block pr-1">{on ? emailPromptOn : emailPromptOff}</span>
             </button>
           );
         })}
@@ -161,13 +168,13 @@ export default function GrantNotificationToggles({
             onClick={() => void sendTest()}
             className="text-sm font-medium text-emerald-700 underline-offset-2 hover:underline disabled:opacity-50"
           >
-            {testState === 'loading' ? 'Sending test…' : 'Send test grant email'}
+            {testState === 'loading' ? notifyUi.sendingTest : notifyUi.sendTest}
           </button>
           {testState === 'ok' ? (
             <span className="text-xs text-emerald-700">Check {PREVIEW_TEST_EMAIL}</span>
           ) : null}
           {testState === 'err' ? (
-            <span className="text-xs text-red-600">Could not send — check Resend env</span>
+            <span className="text-xs text-red-600">{notifyUi.testErr}</span>
           ) : null}
         </div>
       ) : null}

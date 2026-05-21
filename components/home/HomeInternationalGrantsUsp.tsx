@@ -8,6 +8,8 @@ import type {
   HomeScholarshipCatalogStats,
   ScholarshipListMeta
 } from '@/lib/scholarships/scholarshipListServer';
+import { applyCopyTemplate } from '@/lib/i18n/copyTemplates';
+import type { HomePageCopy } from '@/lib/i18n/homePageCopy';
 
 const container = 'mx-auto w-full max-w-7xl';
 
@@ -87,14 +89,25 @@ function repeatUnitedStatesInMarquee(
 const countryCardLinkClass =
   'group flex min-w-[172px] shrink-0 items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm transition duration-200 ease-out hover:-translate-y-0.5 hover:border-orange-300/90 hover:bg-gradient-to-b hover:from-white hover:to-orange-50/95 hover:shadow-[0_12px_32px_-12px_rgba(234,88,12,0.22)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-white active:translate-y-0 sm:min-w-[184px] sm:gap-3.5 sm:px-5 sm:py-3.5 lg:min-w-[220px] lg:px-6 lg:py-4';
 
-function CountryCard({ row }: { row: HomeInternationalGrantsCountryRow }) {
-  const href = `/get-scholarships?country=${encodeURIComponent(row.code)}`;
+function CountryCard({
+  row,
+  copy,
+  getScholarshipsBaseHref
+}: {
+  row: HomeInternationalGrantsCountryRow;
+  copy: HomePageCopy['internationalGrants'];
+  getScholarshipsBaseHref: string;
+}) {
+  const href = `${getScholarshipsBaseHref}?country=${encodeURIComponent(row.code)}`;
   const formattedCount = formatInteger(row.count);
   return (
     <Link
       href={href}
       className={countryCardLinkClass}
-      aria-label={`${row.label}: ${formattedCount} scholarship listings — start matching`}
+      aria-label={applyCopyTemplate(copy.countryAriaTemplate, {
+        label: row.label,
+        count: formattedCount
+      })}
     >
       <img
         src={flagCdnUrl(row.code)}
@@ -111,7 +124,7 @@ function CountryCard({ row }: { row: HomeInternationalGrantsCountryRow }) {
           {row.label}
         </p>
         <p className="mt-0.5 text-xs tabular-nums text-gray-500 transition group-hover:text-orange-800/90 sm:text-sm lg:text-[0.9375rem]">
-          {formattedCount} listings
+          {applyCopyTemplate(copy.countryListingsTemplate, { count: formattedCount })}
         </p>
       </div>
     </Link>
@@ -123,13 +136,17 @@ type HomeInternationalGrantsUspProps = {
   sectionY: string;
   topApplicantCountries: HomeInternationalGrantsCountryRow[];
   catalogStats: HomeScholarshipCatalogStats | null;
+  copy: HomePageCopy['internationalGrants'];
+  getScholarshipsBaseHref: string;
 };
 
 export default function HomeInternationalGrantsUsp({
   sectionPadX,
   sectionY,
   topApplicantCountries,
-  catalogStats
+  catalogStats,
+  copy,
+  getScholarshipsBaseHref
 }: HomeInternationalGrantsUspProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const [visible, setVisible] = useState(false);
@@ -183,25 +200,23 @@ export default function HomeInternationalGrantsUsp({
           >
             <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-emerald-200/80 bg-emerald-50/90 px-3.5 py-1.5 text-sm font-semibold text-emerald-800 lg:mx-0">
               <Globe2 className="h-4 w-4 text-emerald-600" aria-hidden />
-              US &amp; International programs
+              {copy.badge}
             </div>
             <h2
               id="international-grants-heading"
               className="mt-5 text-pretty text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl lg:text-[2.65rem] lg:leading-[1.06]"
             >
-              Study grants in
-              <span className="block text-emerald-500">the US &amp; beyond</span>
+              {copy.titleLine1}
+              <span className="block text-emerald-500">{copy.titleLine2}</span>
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-pretty text-base leading-relaxed text-slate-500 sm:text-lg sm:leading-relaxed lg:mx-0 lg:max-w-xl">
-              Find funding in the world&apos;s leading colleges and universities. We&apos;ve
-              combined the largest US grant database with international programs to support your
-              talent anywhere on the globe.
+              {copy.body}
             </p>
             <Link
-              href="https://scholarshiptop.com/get-scholarships"
+              href={getScholarshipsBaseHref}
               className={`${emeraldCtaClass} mx-auto mt-8 lg:mx-0 lg:inline-flex`}
             >
-              Match me with grants
+              {copy.cta}
               <ArrowRight className="h-4 w-4 shrink-0 sm:h-5 sm:w-5" aria-hidden />
             </Link>
           </div>
@@ -212,10 +227,12 @@ export default function HomeInternationalGrantsUsp({
             >
               <div className="mb-4 flex flex-col items-center gap-2 lg:mb-5 lg:flex-row lg:justify-between">
                 <p className="text-center text-sm font-medium text-slate-500 lg:text-left">
-                  Top destinations in our catalog
+                  {copy.destinationsLabel}
                 </p>
                 <span className="hidden rounded-full border border-emerald-200 bg-white px-3 py-1 text-xs font-semibold text-emerald-700 lg:inline-flex">
-                  {destinationCountries.length} destinations
+                  {applyCopyTemplate(copy.destinationsCountTemplate, {
+                    count: destinationCountries.length
+                  })}
                 </span>
               </div>
 
@@ -226,7 +243,7 @@ export default function HomeInternationalGrantsUsp({
                       {formatInteger(catalogStats.activeScholarshipCount)}+
                     </p>
                     <p className="mt-1 text-xs font-medium leading-snug text-emerald-800 sm:text-sm">
-                      scholarships tracked live
+                      {copy.scholarshipsTracked}
                     </p>
                   </div>
                   {catalogStats.totalKnownAwardAmount > 0 ? (
@@ -235,7 +252,7 @@ export default function HomeInternationalGrantsUsp({
                         {formatUsdCompact(catalogStats.totalKnownAwardAmount)}
                       </p>
                       <p className="mt-1 text-xs font-medium leading-snug text-orange-800 sm:text-sm">
-                        known listed award value
+                        {copy.knownAwardValue}
                       </p>
                     </div>
                   ) : null}
@@ -245,7 +262,7 @@ export default function HomeInternationalGrantsUsp({
               <div
                 className="relative"
                 role="region"
-                aria-label="Top countries by scholarship listing count"
+                aria-label={copy.countriesRegionAria}
               >
                 <div
                   className="pointer-events-none absolute inset-y-0 left-0 z-10 w-12 bg-gradient-to-r from-white via-white/85 to-transparent sm:w-16 lg:from-slate-50 lg:via-slate-50/90"
@@ -258,26 +275,26 @@ export default function HomeInternationalGrantsUsp({
                 <div className="hidden snap-x gap-3 overflow-x-auto py-2 px-12 [scrollbar-width:none] motion-reduce:flex sm:gap-4 sm:px-16 [&::-webkit-scrollbar]:hidden">
                   {destinationCountries.map((row) => (
                     <div key={row.code} className="snap-start">
-                      <CountryCard row={row} />
+                      <CountryCard row={row} copy={copy} getScholarshipsBaseHref={getScholarshipsBaseHref} />
                     </div>
                   ))}
                 </div>
                 <div className="overflow-x-auto [scrollbar-width:none] motion-reduce:hidden lg:hidden [&::-webkit-scrollbar]:hidden">
                   <div className="flex w-max animate-home-country-marquee gap-3 py-2 pr-16 [animation-duration:80s] hover:[animation-play-state:paused] focus-within:[animation-play-state:paused] sm:gap-4 lg:py-3">
                     {primaryMarqueeItems.map((row, index) => (
-                      <CountryCard key={`${row.code}-${index}`} row={row} />
+                      <CountryCard key={`${row.code}-${index}`} row={row} copy={copy} getScholarshipsBaseHref={getScholarshipsBaseHref} />
                     ))}
                   </div>
                 </div>
                 <div className="hidden space-y-4 overflow-x-auto [scrollbar-width:none] motion-reduce:hidden lg:block [&::-webkit-scrollbar]:hidden">
                   <div className="flex w-max animate-home-country-marquee gap-4 py-2 pr-16 [animation-duration:95s] hover:[animation-play-state:paused] focus-within:[animation-play-state:paused]">
                     {primaryMarqueeItems.map((row, index) => (
-                      <CountryCard key={`${row.code}-primary-${index}`} row={row} />
+                      <CountryCard key={`${row.code}-primary-${index}`} row={row} copy={copy} getScholarshipsBaseHref={getScholarshipsBaseHref} />
                     ))}
                   </div>
                   <div className="flex w-max animate-home-country-marquee gap-4 py-2 pr-16 [animation-direction:reverse] [animation-duration:115s] hover:[animation-play-state:paused] focus-within:[animation-play-state:paused]">
                     {secondaryMarqueeItems.map((row, index) => (
-                      <CountryCard key={`${row.code}-secondary-${index}`} row={row} />
+                      <CountryCard key={`${row.code}-secondary-${index}`} row={row} copy={copy} getScholarshipsBaseHref={getScholarshipsBaseHref} />
                     ))}
                   </div>
                 </div>

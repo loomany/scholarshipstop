@@ -8,6 +8,11 @@ import {
   type LucideIcon
 } from 'lucide-react';
 
+import {
+  getScholarshipsHubUiCopy,
+  type ScholarshipsHubUiCopy
+} from '@/lib/i18n/scholarshipsHubUiCopy';
+import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
 import { scholarshipSidebarActiveRowClass } from '@/lib/constants/scholarshipActionUi';
 
 type PreviewNavItem = {
@@ -18,24 +23,39 @@ type PreviewNavItem = {
   active?: boolean;
 };
 
-const PREVIEW_NAV: PreviewNavItem[] = [
-  { id: 'best-recommendation', label: 'Best recommendations', count: 23, icon: Flame, active: true },
-  { id: 'easy-apply', label: 'Easy apply', count: 17, icon: Trophy },
-  { id: 'hot-deadlines', label: 'Hot Deadlines', count: 105, icon: Timer },
-  { id: 'matches', label: 'Matches', count: 3781, icon: Layers },
-  { id: 'saved', label: 'Saved', count: 4, icon: Heart },
-  { id: 'ignored', label: 'Ignored', count: 5, icon: Ban }
-];
-
 function formatCount(n: number): string {
   return n.toLocaleString('en-US');
+}
+
+function previewNav(sidebar: ScholarshipsHubUiCopy['sidebar']): PreviewNavItem[] {
+  return [
+    {
+      id: 'best-recommendation',
+      label: sidebar.bestRecommendation,
+      count: 23,
+      icon: Flame,
+      active: true
+    },
+    { id: 'easy-apply', label: sidebar.easyApply, count: 17, icon: Trophy },
+    { id: 'hot-deadlines', label: sidebar.hotDeadlines, count: 105, icon: Timer },
+    { id: 'matches', label: sidebar.matches, count: 3781, icon: Layers },
+    { id: 'saved', label: sidebar.saved, count: 4, icon: Heart },
+    { id: 'ignored', label: sidebar.ignored, count: 5, icon: Ban }
+  ];
 }
 
 /**
  * Static, compact sidebar for landing product demo — mirrors /scholarships nav styling
  * without routing or tooltips.
  */
-export default function ScholarshipsSidebarPreview() {
+export default function ScholarshipsSidebarPreview({
+  locale = 'en'
+}: {
+  locale?: LocalizedUiLocale;
+}) {
+  const sidebar = getScholarshipsHubUiCopy(locale).sidebar;
+  const nav = previewNav(sidebar);
+
   return (
     <aside
       className="flex w-full shrink-0 flex-col border-b border-gray-100 bg-white lg:w-[168px] lg:border-b-0 lg:border-r"
@@ -44,7 +64,7 @@ export default function ScholarshipsSidebarPreview() {
       <div className="px-2.5 py-2.5 lg:px-2 lg:pb-2 lg:pt-3">
         <div className="rounded-md bg-black px-2 py-2 text-center">
           <span className="text-[11px] font-bold leading-tight tracking-tight text-white lg:text-xs">
-            My scholarships
+            {sidebar.myScholarships}
           </span>
         </div>
       </div>
@@ -54,7 +74,7 @@ export default function ScholarshipsSidebarPreview() {
         aria-hidden
       >
         <ul className="space-y-0.5">
-          {PREVIEW_NAV.map((item) => {
+          {nav.map((item) => {
             const Icon = item.icon;
             const isActive = Boolean(item.active);
             const countStr = formatCount(item.count);

@@ -1,0 +1,1716 @@
+{
+  "summary": {
+    "generatedAt": "2026-05-21T12:34:13.396Z",
+    "baseUrl": "http://localhost:3020",
+    "totalPages": 124,
+    "pagesWithBlockingEnglish": 0,
+    "pagesWithBlockingAttr": 0,
+    "pagesWithBlockingLinkIssues": 0,
+    "pagesWithAllowedZoneCLinks": 40,
+    "pagesWithLanguageSwitcherLinks": 26,
+    "totalBlockingLinkIssues": 0,
+    "totalAllowedZoneCLinks": 52,
+    "totalLanguageSwitcherLinks": 52,
+    "pagesWithErrors": 0
+  },
+  "results": [
+    {
+      "url": "http://localhost:3020/es",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nEncuentra becas que encajen contigo en 2 minutos\n\nResponde unas preguntas rápidas y descubre becas a las que puedes aplicar hoy\n\nEncontrar mis becas\n\nListados verificados • Actualizados con frecuencia • Enlaces oficiales de solicitud. Empieza en menos de un minuto.\n\nProgramas en EE. UU. e internacionales\nBecas para estudiar en\nEE. UU. y más allá\n\nEncuentra financiación en universidades líderes. Combinamos el mayor catálogo de becas de EE. UU. con programas internacionales.\n\nEncontrar becas para mí\n\nDestinos principales en el catálogo\n\n1 destinos\n\n0+\n\nbecas activas en seguimiento\n\nUnited States\n\n1,473 listados\n\nUnited States\n\n1,473 listados\n\nUnited States\n\n1,473 listados\n\nUnited States\n\n1,473 listados\n\nUnited States\n\n1,473 listados\n\nUnited States\n\n1,473 listados\n\nUnited States\n\n1,473 listados\n\nUnited States\n\n1,473 listados\n\nHecho para reducir la incertidumbre\nListados verificados\n\nRevisamos datos clave de becas antes de mostrar oportunidades a estudiantes.\n\nLeer metodología\nActualizados con frecuencia\n\nTrabajamos para mantener fechas, elegibilidad y montos al d",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/scholarships",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nMejores recomendaciones\n\nCompleta tu perfil de becas para obtener mejores recomendaciones y alertas cuando se añadan nuevas oportunidades.\n\n0 becas encontradas\n\nOrdenar:\nRecomendado\nFiltros\nSoy de\nEstudio en\nCategorías\nBecas destacadas para explorar\nFAQ\nHow do best recommendations work?\nBest recommendations use your answers to match scholarships against profile signals such as school level, field of study, citizenship, GPA, and location.\nDo I need to answer every question?\nCan I update my recommendations?\nContinue your scholarship search\n\nExplore next steps to find scholarships faster, write stronger applications, and compare opportunities.\n\nScholarship resources\n\nGuides to help you find, track, and apply for scholarships step by step.\n\nExplore →\nEssay guides\n\nLearn how to write strong scholarship essays and stand out from other applicants.\n\nExplore →\nScholarship providers\n\nExplore organizations offering scholarships and understand their requirements.\n\nExplore →\nCompare opportunities\n\nCompare scholarships, states, and options to choose the best path.\n\nExplore ",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/essays",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nSomething went wrong\n\nAn unexpected error occurred. You can try again or return to the home page.\n\nAn error occurred in the Server Components render. The specific message is omitted in production builds to avoid leaking sensitive details. A digest property is included on this error instance which may provide additional details about the\n\nError ID: 2817919910\n\nTry again\nHome",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 500
+    },
+    {
+      "url": "http://localhost:3020/es/providers",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nInicio\n/\nProveedores\nProveedores de becas\n\nExplora organizaciones y fundaciones que ofrecen ayuda financiera en Estados Unidos.\n\nMostrando 0-0 de 0 proveedores\n\nSearch providers\nCountries\nHERRAMIENTA DESTACADA\nIQ\n\nElige proveedores que encajen con tu estrategia\n\nUsa tu arquetipo cerebral para entender cómo evalúas premios, fechas y complejidad antes de priorizar proveedores.\n\nEVALUACIÓN\nIniciar prueba IQ\n\nSCHOLARSHIP PROVIDER DIRECTORY\n\nUse providers to verify source context, not just names\n\nScholarshipTop builds provider profiles from live listing data. When an official source is missing or unclear, the profile should show that status instead of treating the provider as fully verified.\n\nVerification methodology\nCorrections\nFinancial aid disclaimer\nHow recommendations work\n\nActive scholarships\n\nHow many live listings are connected to the provider.\n\nSource status\n\nWhether an official URL is available or needs confirmation.\n\nData completeness\n\nHow much public context the profile can safely show.\n\nCorrections path\n\nStudents can report broken links or inaccurate e",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/iq/assessment?intent=provider_research",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/compare",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nInicio\n/\nComparar\nComparaciones de becas\n\nExplora enfrentamientos por estado y universidad, compara entornos de financiación y entra más rápido en los mercados de becas más fuertes.\n\nHERRAMIENTA DESTACADA\nIQ\n\nCompara universidades. Conócete primero.\n\nDescubre cómo tu lógica, velocidad y reconocimiento de patrones moldean cómo evalúas opciones de becas.\n\nEVALUACIÓN\nIniciar prueba IQ\n\nCOMPARAR TIPOS DE BECA\n\nEmpieza por decisiones permanentes antes de comparar enfrentamientos\n\nEstas guías explican elecciones habituales: beca frente a subvención, mérito frente a necesidad, sin ensayo frente a con ensayo, y local frente a nacional.\n\nGuía permanente\nBeca vs subvención\n\nAmbas pueden reducir costos educativos, pero no siempre significan lo mismo en reglas, fuente y solicitud.\n\nLeer comparación\nGuía permanente\nMérito vs necesidad financiera\n\nLa diferencia principal está en qué intenta medir el proveedor: rendimiento o brecha financiera.\n\nLeer comparación\nGuía permanente\nBecas sin ensayo vs becas con ensayo\n\nLas becas sin ensayo pueden ser rápidas, pero la facilidad no",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/iq/assessment?intent=college_fit",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/resources",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nSomething went wrong\n\nAn unexpected error occurred. You can try again or return to the home page.\n\nAn error occurred in the Server Components render. The specific message is omitted in production builds to avoid leaking sensitive details. A digest property is included on this error instance which may provide additional details about the\n\nError ID: 433706727\n\nTry again\nHome",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 500
+    },
+    {
+      "url": "http://localhost:3020/es/about",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nVolver al inicio\n\nCONFIANZA Y TRANSPARENCIA\n\nAcerca de ScholarshipTop\n\nScholarshipTop ayuda a estudiantes a buscar, comparar, guardar y actuar sobre oportunidades de becas con más contexto que una lista simple.\n\nExplorar becas\nMetodología de verificación\n\nREGLA CENTRADA EN ESTUDIANTES\n\nConfirma cada requisito final en la página oficial del proveedor antes de aplicar.\n\nScholarshipTop ayuda a buscar y planificar. Los proveedores oficiales controlan elegibilidad final, fechas, selección y pago.\n\nQué significa para estudiantes\n\nEl producto organiza oportunidades por ajuste, fecha, requisitos, valor, fuente y esfuerzo para que el estudiante pueda priorizar.\n\nUsa ScholarshipTop como una capa de organización y verificación inicial.\nRevisa la fuente oficial antes de enviar documentos o datos personales.\nNo asumas elegibilidad solo por el título de una beca.\nCómo mantenemos la calidad\n\nLa orientación editorial explica los datos disponibles sin inventar resultados, elegibilidad ni aprobación oficial.\n\nIndicamos cuando faltan datos importantes.\nSeparamos hechos públicos ",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/editorial-policy",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nVolver al inicio\n\nCONFIANZA Y TRANSPARENCIA\n\nPolítica editorial\n\nNuestra política editorial separa hechos públicos, análisis práctico y advertencias cuando la información de una beca está incompleta.\n\nExplorar becas\nMetodología de verificación\n\nREGLA CENTRADA EN ESTUDIANTES\n\nConfirma cada requisito final en la página oficial del proveedor antes de aplicar.\n\nScholarshipTop ayuda a buscar y planificar. Los proveedores oficiales controlan elegibilidad final, fechas, selección y pago.\n\nQué significa para estudiantes\n\nLos resúmenes deben ser originales, claros y basados en hechos disponibles; nunca deben copiar textos oficiales ni inventar datos.\n\nUsa ScholarshipTop como una capa de organización y verificación inicial.\nRevisa la fuente oficial antes de enviar documentos o datos personales.\nNo asumas elegibilidad solo por el título de una beca.\nCómo mantenemos la calidad\n\nSi una fuente cambia o se detecta un error, la página debe corregirse o marcarse como pendiente de verificación.\n\nIndicamos cuando faltan datos importantes.\nSeparamos hechos públicos de orientación",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/scholarship-verification-methodology",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nVolver al inicio\n\nCONFIANZA Y TRANSPARENCIA\n\nCómo verificamos becas\n\nScholarshipTop revisa señales como fuente oficial, fecha, monto, elegibilidad, documentos, ruta de solicitud y datos faltantes.\n\nExplorar becas\nMetodología de verificación\n\nREGLA CENTRADA EN ESTUDIANTES\n\nConfirma cada requisito final en la página oficial del proveedor antes de aplicar.\n\nScholarshipTop ayuda a buscar y planificar. Los proveedores oficiales controlan elegibilidad final, fechas, selección y pago.\n\nQué significa para estudiantes\n\nUna ficha puede mostrar fuente disponible, necesita confirmación, datos parciales, fuente poco clara o ciclo vencido.\n\nUsa ScholarshipTop como una capa de organización y verificación inicial.\nRevisa la fuente oficial antes de enviar documentos o datos personales.\nNo asumas elegibilidad solo por el título de una beca.\nCómo mantenemos la calidad\n\nLa transparencia es parte de la calidad: si algo falta, debe mostrarse como un dato a verificar.\n\nIndicamos cuando faltan datos importantes.\nSeparamos hechos públicos de orientación editorial.\nCorregimos informaci",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/how-we-rank-scholarships",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nVolver al inicio\n\nCONFIANZA Y TRANSPARENCIA\n\nCómo ordenamos recomendaciones\n\nLas recomendaciones se basan en ajuste de perfil, señales de elegibilidad, urgencia de fecha, esfuerzo y claridad de datos.\n\nExplorar becas\nMetodología de verificación\n\nREGLA CENTRADA EN ESTUDIANTES\n\nConfirma cada requisito final en la página oficial del proveedor antes de aplicar.\n\nScholarshipTop ayuda a buscar y planificar. Los proveedores oficiales controlan elegibilidad final, fechas, selección y pago.\n\nQué significa para estudiantes\n\nEl orden ayuda a priorizar oportunidades, pero no garantiza elegibilidad, selección ni pago.\n\nUsa ScholarshipTop como una capa de organización y verificación inicial.\nRevisa la fuente oficial antes de enviar documentos o datos personales.\nNo asumas elegibilidad solo por el título de una beca.\nCómo mantenemos la calidad\n\nLas señales de guardado, descartado y coincidencia deben apoyar la planificación sin reemplazar reglas oficiales.\n\nIndicamos cuando faltan datos importantes.\nSeparamos hechos públicos de orientación editorial.\nCorregimos información c",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/how-scholarshiptop-works",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nVolver al inicio\n\nCONFIANZA Y TRANSPARENCIA\n\nCómo funciona ScholarshipTop\n\nEl flujo es simple: responde preguntas, recibe coincidencias, compara oportunidades, guarda fechas y aplica en la fuente oficial.\n\nExplorar becas\nMetodología de verificación\n\nREGLA CENTRADA EN ESTUDIANTES\n\nConfirma cada requisito final en la página oficial del proveedor antes de aplicar.\n\nScholarshipTop ayuda a buscar y planificar. Los proveedores oficiales controlan elegibilidad final, fechas, selección y pago.\n\nQué significa para estudiantes\n\nScholarshipTop debe ayudar a pasar de búsqueda dispersa a una lista corta con acciones claras.\n\nUsa ScholarshipTop como una capa de organización y verificación inicial.\nRevisa la fuente oficial antes de enviar documentos o datos personales.\nNo asumas elegibilidad solo por el título de una beca.\nCómo mantenemos la calidad\n\nCada paso debe recordar que los detalles finales pertenecen al proveedor oficial.\n\nIndicamos cuando faltan datos importantes.\nSeparamos hechos públicos de orientación editorial.\nCorregimos información cuando se reporta un error ",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/financial-aid-disclaimer",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nVolver al inicio\n\nCONFIANZA Y TRANSPARENCIA\n\nAviso sobre ayuda financiera\n\nScholarshipTop no es proveedor de becas, universidad ni agencia gubernamental. La información es orientación y organización.\n\nExplorar becas\nMetodología de verificación\n\nREGLA CENTRADA EN ESTUDIANTES\n\nConfirma cada requisito final en la página oficial del proveedor antes de aplicar.\n\nScholarshipTop ayuda a buscar y planificar. Los proveedores oficiales controlan elegibilidad final, fechas, selección y pago.\n\nQué significa para estudiantes\n\nLos estudiantes deben confirmar reglas, fechas, pagos, renovaciones y documentos en la fuente oficial.\n\nUsa ScholarshipTop como una capa de organización y verificación inicial.\nRevisa la fuente oficial antes de enviar documentos o datos personales.\nNo asumas elegibilidad solo por el título de una beca.\nCómo mantenemos la calidad\n\nNinguna página debe prometer selección, elegibilidad final ni recepción de fondos.\n\nIndicamos cuando faltan datos importantes.\nSeparamos hechos públicos de orientación editorial.\nCorregimos información cuando se reporta un er",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/contact",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nVolver al inicio\n\nCONFIANZA Y TRANSPARENCIA\n\nContacto\n\nUsa contacto para soporte, errores de fuente, fechas incorrectas, elegibilidad dudosa o preocupaciones de seguridad.\n\nExplorar becas\nMetodología de verificación\n\nREGLA CENTRADA EN ESTUDIANTES\n\nConfirma cada requisito final en la página oficial del proveedor antes de aplicar.\n\nScholarshipTop ayuda a buscar y planificar. Los proveedores oficiales controlan elegibilidad final, fechas, selección y pago.\n\nQué significa para estudiantes\n\nLos reportes útiles incluyen URL, nombre de beca o proveedor, campo incorrecto y fuente que confirma el cambio.\n\nUsa ScholarshipTop como una capa de organización y verificación inicial.\nRevisa la fuente oficial antes de enviar documentos o datos personales.\nNo asumas elegibilidad solo por el título de una beca.\nCómo mantenemos la calidad\n\nCuando no hay datos suficientes, ScholarshipTop debe marcar la ficha para revisión en vez de inventar información.\n\nIndicamos cuando faltan datos importantes.\nSeparamos hechos públicos de orientación editorial.\nCorregimos información cuando se ",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/corrections",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nVolver al inicio\n\nCONFIANZA Y TRANSPARENCIA\n\nCorrecciones\n\nLos estudiantes y proveedores pueden reportar fechas incorrectas, enlaces rotos, elegibilidad errónea o posibles fraudes.\n\nExplorar becas\nMetodología de verificación\n\nREGLA CENTRADA EN ESTUDIANTES\n\nConfirma cada requisito final en la página oficial del proveedor antes de aplicar.\n\nScholarshipTop ayuda a buscar y planificar. Los proveedores oficiales controlan elegibilidad final, fechas, selección y pago.\n\nQué significa para estudiantes\n\nUna corrección debe basarse en una fuente verificable, preferentemente la página oficial del proveedor.\n\nUsa ScholarshipTop como una capa de organización y verificación inicial.\nRevisa la fuente oficial antes de enviar documentos o datos personales.\nNo asumas elegibilidad solo por el título de una beca.\nCómo mantenemos la calidad\n\nSi no se puede confirmar, la página debe señalar la incertidumbre de forma visible.\n\nIndicamos cuando faltan datos importantes.\nSeparamos hechos públicos de orientación editorial.\nCorregimos información cuando se reporta un error verificable.\n",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/scholarship-scam-warning",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nVolver al inicio\n\nCONFIANZA Y TRANSPARENCIA\n\nSeñales de fraude en becas\n\nDesconfía de cuotas obligatorias, cheques falsos, presión para actuar rápido, correos no oficiales y promesas garantizadas.\n\nExplorar becas\nMetodología de verificación\n\nREGLA CENTRADA EN ESTUDIANTES\n\nConfirma cada requisito final en la página oficial del proveedor antes de aplicar.\n\nScholarshipTop ayuda a buscar y planificar. Los proveedores oficiales controlan elegibilidad final, fechas, selección y pago.\n\nQué significa para estudiantes\n\nAntes de compartir datos, confirma dominio oficial, contacto del proveedor, fecha, requisitos y ruta de solicitud.\n\nUsa ScholarshipTop como una capa de organización y verificación inicial.\nRevisa la fuente oficial antes de enviar documentos o datos personales.\nNo asumas elegibilidad solo por el título de una beca.\nCómo mantenemos la calidad\n\nScholarshipTop debe ayudar a detectar riesgos sin acusar a organizaciones sin evidencia.\n\nIndicamos cuando faltan datos importantes.\nSeparamos hechos públicos de orientación editorial.\nCorregimos información cuando s",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/how-we-make-money",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nVolver al inicio\n\nCONFIANZA Y TRANSPARENCIA\n\nCómo gana dinero ScholarshipTop\n\nScholarshipTop puede ofrecer funciones gratuitas y de pago, pero pagar no garantiza una beca ni mejora decisiones de proveedores.\n\nExplorar becas\nMetodología de verificación\n\nREGLA CENTRADA EN ESTUDIANTES\n\nConfirma cada requisito final en la página oficial del proveedor antes de aplicar.\n\nScholarshipTop ayuda a buscar y planificar. Los proveedores oficiales controlan elegibilidad final, fechas, selección y pago.\n\nQué significa para estudiantes\n\nEl valor de pago debe estar ligado a herramientas, organización o soporte, no a promesas de adjudicación.\n\nUsa ScholarshipTop como una capa de organización y verificación inicial.\nRevisa la fuente oficial antes de enviar documentos o datos personales.\nNo asumas elegibilidad solo por el título de una beca.\nCómo mantenemos la calidad\n\nLas recomendaciones no deben venderse como posiciones falsas ni reseñas inventadas.\n\nIndicamos cuando faltan datos importantes.\nSeparamos hechos públicos de orientación editorial.\nCorregimos información cuando se r",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/essays/examples",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nInicio\n/\nEnsayos\n/\nEjemplos de ensayos para becas\n\nGUÍA DE ENSAYOS DE SCHOLARSHIPTOP\n\nEjemplos de ensayos para becas\n\nLos ejemplos sirven para entender estructura, no para copiar una historia. Úsalos para ver cómo un prompt se conecta con evidencia concreta.\n\nEN UNA FRASE\n\nUn buen ejemplo enseña estructura mientras tu respuesta final sigue siendo original.\n\nAbrir Essay Mentor\nBuscar becas\nCómo leer un ejemplo\n\nIdentifica el prompt, la afirmación central, la evidencia y la conexión con el objetivo educativo.\n\nMarca la idea principal.\nBusca detalles concretos.\nObserva cómo termina el ensayo.\nCrea tu versión\n\nSustituye cada detalle prestado por hechos reales de tu experiencia y revisa hasta que responda el prompt.\n\nUsa tu propia línea de tiempo.\nEvita copiar frases.\nConfirma límite de palabras.\nChecklist práctico\nPrompt claro\nHistoria propia\nEvidencia concreta\nCierre conectado al premio\nEjemplos\nDébil: Siempre quise ayudar. Mejor: Después de tutorizar a seis compañeros en álgebra, aprendí a explicar ideas difíciles por pasos.\nDébil: Esta beca cambiará mi vida. Me",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/essays/checklist",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nInicio\n/\nEnsayos\n/\nChecklist para ensayos de becas\n\nGUÍA DE ENSAYOS DE SCHOLARSHIPTOP\n\nChecklist para ensayos de becas\n\nUna revisión final debe comprobar más que gramática: confirma que el ensayo responde el prompt y sigue reglas del proveedor.\n\nEN UNA FRASE\n\nAntes de enviar, revisa ajuste al prompt, evidencia, formato, documentos y ruta oficial.\n\nAbrir Essay Mentor\nBuscar becas\nRevisión estratégica\n\nLee como si fueras el comité. La idea principal debe entenderse sin mirar tu currículum.\n\nLa introducción responde rápido.\nCada afirmación tiene prueba.\nEl cierre explica por qué importa ahora.\nSeguridad de envío\n\nMuchos errores ocurren por instrucciones omitidas: archivo, fecha, zona horaria o anonimato.\n\nRevisa formato.\nConfirma fecha oficial.\nComprueba documentos requeridos.\nChecklist práctico\nPrompt respondido\nEvidencia real\nLímite de palabras\nFormato correcto\nFuente oficial confirmada\nEjemplos\nCambia “soy dedicado” por la acción que lo demuestra.\nSi el proveedor exige PDF, no subas otro formato.\nHaz / Evita\nHaz\tEvita\nLee el ensayo en voz alta.\tEnvíes el prime",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/essays/financial-need",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nInicio\n/\nEnsayos\n/\nEnsayo de necesidad financiera\n\nGUÍA DE ENSAYOS DE SCHOLARSHIPTOP\n\nEnsayo de necesidad financiera\n\nUn ensayo de necesidad financiera debe explicar la brecha entre tus recursos y tu plan educativo sin convertir todo el texto en una lista de dificultades.\n\nEN UNA FRASE\n\nUn ensayo fuerte conecta una brecha real de financiación con un siguiente paso académico concreto.\n\nAbrir Essay Mentor\nBuscar becas\nExplica la brecha\n\nUsa lenguaje claro sobre qué costo es difícil cubrir y cómo la beca ayudaría.\n\nMenciona costos educativos relevantes.\nEvita detalles privados innecesarios.\nConecta la ayuda con matrícula, materiales o exámenes.\nEquilibra necesidad y acción\n\nLa necesidad importa, pero también debes mostrar qué estás haciendo con la oportunidad.\n\nIncluye esfuerzo o planificación.\nEvita exagerar.\nTermina con un siguiente paso.\nChecklist práctico\nMeta educativa\nBrecha real\nTono honesto\nUso claro del premio\nDocumentos confirmados\nEjemplos\nEsta ayuda cubriría el examen de certificación requerido para mi primer semestre.\nUna ayuda para libros reduciría ",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/essays/career-goals",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nInicio\n/\nEnsayos\n/\nEnsayo de metas profesionales\n\nGUÍA DE ENSAYOS DE SCHOLARSHIPTOP\n\nEnsayo de metas profesionales\n\nUn ensayo de metas profesionales debe mostrar por qué tu objetivo tiene sentido ahora, no solo qué cargo quieres en el futuro.\n\nEN UNA FRASE\n\nConecta evidencia pasada, plan de estudio actual y siguiente paso profesional.\n\nAbrir Essay Mentor\nBuscar becas\nHaz creíble la meta\n\nNo necesitas un plan perfecto a diez años; necesitas una dirección conectada a tus decisiones.\n\nNombra campo o rol.\nExplica qué te acercó a ese trabajo.\nIncluye cursos, proyectos o servicio.\nUsa la beca como puente\n\nExplica qué paso práctico facilita la beca: matrícula, libros, certificación, viaje o equipo.\n\nSé concreto.\nEvita prometer resultados garantizados.\nEnfócate en preparación.\nChecklist práctico\nMeta en una frase\nEvidencia personal\nPlan de estudio\nUso de la beca\nCierre realista\nEjemplos\nMi meta es analizar salud pública con enfoque en acceso rural.\nLa beca ayudaría a cubrir un certificado de datos antes de una práctica de investigación.\nHaz / Evita\nHaz\tEvita\nUsa evide",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/essays/mistakes",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nInicio\n/\nEnsayos\n/\nErrores comunes en ensayos de becas\n\nGUÍA DE ENSAYOS DE SCHOLARSHIPTOP\n\nErrores comunes en ensayos de becas\n\nMuchos ensayos débiles no fallan por falta de historia, sino porque la historia es demasiado general o no responde el prompt.\n\nEN UNA FRASE\n\nEl mayor error es escribir un ensayo pulido que podría pertenecer a cualquier estudiante.\n\nAbrir Essay Mentor\nBuscar becas\nAfirmaciones genéricas\n\nPalabras como dedicado o apasionado no son prueba. Sustitúyelas por acciones y resultados.\n\nNombra proyecto o responsabilidad.\nMuestra qué cambió.\nUsa detalles defendibles.\nIgnorar al proveedor\n\nNo necesitas halagar a la organización, pero sí responder lo que pidió.\n\nIdentifica tema del prompt.\nAdapta el texto.\nConfirma ejemplos requeridos.\nChecklist práctico\nQuitar frases genéricas\nAgregar prueba\nRevisar cada párrafo\nEvitar repetir currículum\nConfirmar fuente oficial\nEjemplos\nGenérico: soy líder. Mejor: organicé una colecta cuando mi club perdió patrocinador.\nGenérico: necesito la beca. Mejor: cubriría una cuota de laboratorio no incluida en mi ayuda ",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/compare/scholarship-vs-grant",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nVolver a comparar\n\nCOMPARACIÓN DE SCHOLARSHIPTOP\n\nBeca vs subvención\n\nRESPUESTA BREVE\n\nUna beca suele enfocarse en mérito, perfil o propósito; una subvención suele estar más ligada a necesidad, programa o financiación institucional.\n\nComparación rápida\nFactor\tBeca\tSubvención\nUso común\tPremio educativo competitivo.\tAyuda o financiación para un propósito definido.\nElegibilidad\tPuede depender de mérito, campo, identidad o necesidad.\tPuede depender de necesidad, programa, institución o gobierno.\nVerificación\tConfirma proveedor, fecha y documentos.\tConfirma reglas, pago y condiciones del programa.\nElige Beca cuando\nEl prompt pide logros, metas o perfil.\nPuedes preparar documentos competitivos.\nElige Subvención cuando\nLa ayuda está ligada a necesidad o programa.\nLa institución o agencia define reglas específicas.\nChecklist de decisión\nLeer reglas oficiales\nConfirmar si se renueva\nVerificar documentos\nComparar esfuerzo\nContinúa tu búsqueda de becas\nExplorar becas\nAviso sobre ayuda financiera\nBuscar becas\nPreguntas frecuentes\n¿Una subvención se devuelve?\n\nDepende del ",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/compare/merit-vs-need-based-scholarships",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nVolver a comparar\n\nCOMPARACIÓN DE SCHOLARSHIPTOP\n\nMérito vs necesidad financiera\n\nRESPUESTA BREVE\n\nLas becas por mérito premian evidencia de rendimiento; las de necesidad se enfocan en una brecha económica documentada.\n\nComparación rápida\nFactor\tMérito\tNecesidad\nBase\tNotas, liderazgo, talento, servicio o logros.\tCostos educativos frente a recursos disponibles.\nDocumentos\tTranscripción, recomendaciones, portafolio o ensayo.\tFormularios financieros, presupuesto o explicación de necesidad.\nRiesgo\tCompetencia alta.\tDatos financieros incompletos o requisitos estrictos.\nElige Mérito cuando\nTienes evidencia fuerte de rendimiento.\nPuedes demostrar logros con detalles.\nElige Necesidad cuando\nTu brecha financiera es clara.\nPuedes aportar documentos si se solicitan.\nChecklist de decisión\nIdentificar criterio principal\nPreparar evidencia\nConfirmar documentos\nEvitar promesas\nContinúa tu búsqueda de becas\nEnsayo de necesidad financiera\nExplorar becas\nBuscar becas\nPreguntas frecuentes\n¿Puedo aplicar a ambos tipos?\n\nSí, si cumples requisitos y puedes entregar documentos solic",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/compare/no-essay-vs-essay-scholarships",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nVolver a comparar\n\nCOMPARACIÓN DE SCHOLARSHIPTOP\n\nBecas sin ensayo vs becas con ensayo\n\nRESPUESTA BREVE\n\nSin ensayo reduce esfuerzo; con ensayo puede permitir diferenciarte si tu historia encaja con el prompt.\n\nComparación rápida\nFactor\tSin ensayo\tCon ensayo\nTiempo\tMás rápida.\tRequiere planificación y revisión.\nDiferenciación\tMenos espacio para explicar tu ajuste.\tMás espacio para evidencia personal.\nRiesgo\tPuede atraer más solicitantes.\tPuede fallar por prompt mal respondido.\nElige Sin ensayo cuando\nCumples reglas y tienes poco tiempo.\nLa solicitud es clara y gratuita.\nElige Con ensayo cuando\nTienes una historia fuerte.\nEl prompt encaja con tus metas o necesidad.\nChecklist de decisión\nConfirmar que no hay cuota\nRevisar elegibilidad\nUsar checklist si hay ensayo\nContinúa tu búsqueda de becas\nChecklist de ensayo\nExplorar becas\nBuscar becas\nPreguntas frecuentes\n¿Las becas sin ensayo son reales?\n\nAlgunas sí, pero confirma fuente, reglas, privacidad y ruta oficial.\n\n¿Cuándo vale la pena escribir ensayo?\n\nLos detalles, requisitos y términos de los proveedores pueden",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/compare/local-vs-national-scholarships",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nVolver a comparar\n\nCOMPARACIÓN DE SCHOLARSHIPTOP\n\nBecas locales vs becas nacionales\n\nRESPUESTA BREVE\n\nLa mejor opción depende de tu ajuste real, no solo del tamaño del premio.\n\nComparación rápida\nFactor\tLocal\tNacional\nAlcance\tEscuela, ciudad, condado, estado o comunidad.\tPaís completo o grupo amplio.\nCompetencia\tPuede ser menor si el criterio es estrecho.\tSuele ser más amplia.\nVerificación\tRevisa escuela, fundación o grupo cívico.\tRevisa proveedor nacional y reglas de privacidad.\nElige Local cuando\nCumples residencia o escuela específica.\nPuedes conseguir documentos locales.\nElige Nacional cuando\nTu perfil encaja con criterios amplios.\nPuedes competir con una solicitud fuerte.\nChecklist de decisión\nBuscar reglas de residencia\nConfirmar organización\nComparar esfuerzo y monto\nContinúa tu búsqueda de becas\nExplorar becas\nMetodología de verificación\nBuscar becas\nPreguntas frecuentes\n¿Las becas locales son mejores?\n\nNo siempre, pero pueden ser fuertes si la elegibilidad coincide claramente.\n\n¿Cómo verifico una beca local?\n\nLos detalles, requisitos y términos de los",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/essays/outline",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nInicio\n/\nEnsayos\n/\nEsquema de ensayo para becas\n\nGUÍA DE ENSAYOS DE SCHOLARSHIPTOP\n\nEsquema de ensayo para becas\n\nUn esquema evita que tu respuesta se convierta en una lista de logros. El objetivo es sostener un argumento claro sobre tu encaje con la beca.\n\nEN UNA FRASE\n\nUn buen esquema asigna a cada párrafo una función: responder el prompt, probarlo con evidencia y conectarlo con el premio.\n\nAbrir Essay Mentor\nBuscar becas\nEsquema de cinco partes\n\nLa mayoría de ensayos para becas se planifican con cinco partes: gancho, contexto, evidencia, reflexión y uso futuro del premio.\n\nGancho: un momento, decisión o problema concreto.\nContexto: por qué importa ese momento.\nEvidencia: qué hiciste, aprendiste, construiste o cambiaste.\nReflexión: qué demuestra la evidencia sobre ti.\nSiguiente paso: cómo la beca apoya un plan real.\nMantén el prompt visible\n\nAntes de redactar, reescribe el prompt como checklist. Cada párrafo debe cumplir una parte de esa lista.\n\nMarca temas obligatorios como necesidad, liderazgo, servicio o metas.\nAnota límite de palabras o formato.\nReserva ",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/essays/leadership",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nInicio\n/\nEnsayos\n/\nGuía de ensayo de liderazgo para becas\n\nGUÍA DE ENSAYOS DE SCHOLARSHIPTOP\n\nGuía de ensayo de liderazgo para becas\n\nLos ensayos de liderazgo son más fuertes cuando describen un problema concreto y lo que hiciste cuando otras personas dependían de tu criterio.\n\nEN UNA FRASE\n\nUn ensayo de liderazgo debe mostrar acción, responsabilidad, resultado y reflexión.\n\nAbrir Essay Mentor\nBuscar becas\nElige un momento real de liderazgo\n\nLiderazgo no siempre significa presidente de un club. Puede ser organizar, mediar, tutorizar, cuidar a la familia, iniciar un proyecto o asumir responsabilidad.\n\nEmpieza con un problema, no con un título.\nExplica qué hiciste personalmente.\nNombra el resultado o la lección.\nMuestra crecimiento\n\nLos comités suelen querer ver cómo piensas bajo presión. Incluye lo que aprendiste y cómo cambió tu siguiente acción.\n\nEvita decir que lo resolviste todo solo.\nReconoce al equipo o la comunidad cuando corresponda.\nConecta la lección con tu plan educativo.\nChecklist práctico\nIdentifica el problema.\nExplica tu rol.\nDescribe la acción q",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/essays/why-do-you-deserve-this-scholarship",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nInicio\n/\nEnsayos\n/\n¿Por qué mereces esta beca?\n\nGUÍA DE ENSAYOS DE SCHOLARSHIPTOP\n\n¿Por qué mereces esta beca?\n\nEste prompt no pide que declares ser mejor que todos los demás. Pide explicar por qué tu perfil encaja con el propósito del premio.\n\nEN UNA FRASE\n\nResponde este prompt demostrando encaje con evidencia, no reclamando derecho.\n\nAbrir Essay Mentor\nBuscar becas\nTraduce merecer en encaje\n\nUsa los criterios del proveedor como marco. Si la beca valora el servicio, habla de servicio. Si valora el campo, habla de tu preparación.\n\nNombra el encaje entre tu perfil y el premio.\nApóyalo con uno o dos hechos.\nExplica cómo el premio ayuda al siguiente paso.\nMantén un tono seguro y realista\n\nEl tono debe ser claro y agradecido, no disculpatorio ni arrogante.\n\nEvita decir que lo mereces más que otros.\nEvita gratitud genérica sin evidencia.\nCierra con algo práctico.\nChecklist práctico\nIdentifica el propósito de la beca.\nDeclara tu encaje.\nAporta evidencia.\nMenciona necesidad solo si es relevante.\nConecta el premio con un siguiente paso concreto.\nEjemplos\nEncajo con es",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/essays/personal-statement",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nInicio\n/\nEnsayos\n/\nDeclaración personal para becas\n\nGUÍA DE ENSAYOS DE SCHOLARSHIPTOP\n\nDeclaración personal para becas\n\nUna declaración personal ofrece al comité una imagen coherente de quién eres, qué moldeó tu dirección y por qué el premio encaja con tu siguiente paso.\n\nEN UNA FRASE\n\nUna declaración personal debe hacer que tu trasfondo, motivación y plan se sientan conectados.\n\nAbrir Essay Mentor\nBuscar becas\nEncuentra el hilo conductor\n\nLas mejores declaraciones no son autobiografías completas. Eligen los detalles que explican tu dirección actual.\n\nElige dos o tres momentos que se conecten.\nExplica decisiones, no solo eventos.\nCierra con la trayectoria educativa que sigues.\nEvita repetir el currículum\n\nPuedes mencionar logros, pero debes revelar significado y motivación que un currículum no muestra.\n\nReflexiona después de cada ejemplo.\nMuestra cómo cambió tu forma de pensar.\nMantén un tono específico y directo.\nChecklist práctico\nElige un tema central.\nUsa ejemplos específicos.\nExplica por qué importan los ejemplos.\nConecta con dirección académica o profesi",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/essays/stem",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nInicio\n/\nEnsayos\n/\nGuía de ensayo STEM para becas\n\nGUÍA DE ENSAYOS DE SCHOLARSHIPTOP\n\nGuía de ensayo STEM para becas\n\nUn ensayo STEM debe mostrar cómo piensas, construyes, pruebas, investigas o resuelves problemas. Evita decir solo que te gusta la ciencia o la tecnología.\n\nEN UNA FRASE\n\nUn buen ensayo STEM usa evidencia técnica y explica por qué el trabajo importa.\n\nAbrir Essay Mentor\nBuscar becas\nUsa evidencia técnica\n\nProyectos, laboratorios, código, prácticas, robótica, tutorías, investigación y cursos pueden ser evidencia si explicas tu rol con claridad.\n\nDescribe el problema en el que trabajaste.\nNombra tu contribución.\nExplica qué aprendiste o qué cambió.\nConecta STEM con impacto\n\nEl ensayo debe conectar el interés técnico con una persona, comunidad, industria, pregunta de investigación o dirección profesional.\n\nEvita jerga que no sirva a la historia.\nDefine términos técnicos cuando haga falta.\nMuestra curiosidad y persistencia.\nChecklist práctico\nNombra tu campo o dirección STEM.\nUsa un proyecto o momento de aprendizaje concreto.\nExplica tu rol.\nConecta",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        },
+        {
+          "href": "/scholarships/stem",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        },
+        {
+          "href": "/scholarships/engineering",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/essays/no-essay-scholarships",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nInicio\n/\nEnsayos\n/\nBecas sin ensayo\n\nGUÍA DE ENSAYOS DE SCHOLARSHIPTOP\n\nBecas sin ensayo\n\nLas becas sin ensayo ahorran tiempo, pero no siempre son más fáciles de ganar. Muchas son amplias y con mucho volumen; verifica la fuente y equilíbralas con premios de mejor encaje.\n\nEN UNA FRASE\n\nLas becas sin ensayo reducen la escritura, pero aún debes revisar elegibilidad, fuente, fecha y reglas de selección.\n\nAbrir Essay Mentor\nBuscar becas\nQué suele significar sin ensayo\n\nSignifica que el proveedor no pide un ensayo tradicional. La solicitud puede incluir formularios, respuestas de elegibilidad, prueba de matrícula o creación de cuenta.\n\nComprueba si existe una pregunta corta.\nConfirma elegibilidad antes de compartir datos personales.\nLee cómo se elige al ganador.\nCómo usarlas con criterio\n\nÚsalas como parte de un plan equilibrado, no como plan completo.\n\nGuarda opciones de bajo esfuerzo con fuente oficial clara.\nPrioriza premios de mejor encaje cuando el tiempo es limitado.\nDesconfía de cuotas o datos de contacto poco claros.\nChecklist práctico\nConfirma que realment",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        },
+        {
+          "href": "/scholarships/no-essay",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/resources/how-to-find-scholarships",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nInicio\n/\nRecursos\n/\nCómo encontrar becas que valgan tu tiempo\n\nGUÍA DE SCHOLARSHIPTOP\n\nCómo encontrar becas que valgan tu tiempo\n\nUna buena búsqueda no consiste en postular a todo. Empieza amplio, revisa elegibilidad pronto, compara esfuerzo con valor y guarda solo oportunidades con reglas oficiales claras.\n\nBuscar becas\nMetodología de verificación\nEmpieza por el encaje, no por el volumen\n\nLa forma más rápida de perder tiempo es postular solo por el título. Usa filtros de nivel, campo, país, ciudadanía, GPA e institución antes de leer el ensayo.\n\nHaz una búsqueda amplia y luego estrecha por elegibilidad.\nPrioriza listados con fuente oficial y fecha clara.\nGuarda por separado pistas prometedoras pero incompletas.\nCompara el esfuerzo antes de comprometerte\n\nUn premio grande con varios ensayos puede valer la pena, pero solo si tienes tiempo y encajas en las reglas principales.\n\nEstima los documentos requeridos.\nRevisa si cartas o transcripciones necesitan tiempo extra.\nEmpareja solicitudes de alto esfuerzo con tu evidencia más fuerte.\nChecklist práctico\nFuente of",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/resources/how-to-apply-for-scholarships-checklist",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nInicio\n/\nRecursos\n/\nChecklist de solicitud de becas\n\nGUÍA DE SCHOLARSHIPTOP\n\nChecklist de solicitud de becas\n\nLas solicitudes son más fáciles cuando separas elegibilidad, documentos, ensayo, revisión de fuente oficial y envío final.\n\nBuscar becas\nMetodología de verificación\nAntes de escribir\n\nNo empieces el ensayo hasta saber que la beca está abierta, que tu perfil encaja y que entiendes los materiales requeridos.\n\nLee elegibilidad antes del formulario.\nRevisa zona horaria y método de envío.\nLista cada documento y quién lo controla.\nAntes de enviar\n\nLa revisión final debe detectar campos vacíos, transcripciones viejas, nombres de archivo débiles y rutas no oficiales.\n\nUsa la página oficial del proveedor para reglas finales.\nRevisa el ensayo contra el prompt.\nGuarda confirmaciones o correos.\nChecklist práctico\nElegibilidad confirmada\nFecha confirmada\nPrompt copiado al plan\nTranscripción o matrícula solicitada\nCarta de recomendación en calendario\nEnlace oficial verificado\nConfirmación de envío guardada\nEjemplos\nSi se pide recomendación, pide con tiempo e incluye",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/resources/no-essay-scholarships-guide",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nInicio\n/\nRecursos\n/\nGuía de becas sin ensayo\n\nGUÍA DE SCHOLARSHIPTOP\n\nGuía de becas sin ensayo\n\nLas becas sin ensayo pueden ser útiles, pero las solicitudes fáciles suelen atraer mucha competencia. Trátalas como parte del plan, no como estrategia única.\n\nBuscar becas\nMetodología de verificación\nPor qué son diferentes\n\nMenor esfuerzo suele significar más postulantes. La tarea principal es confirmar que el listado es legítimo y que encajas en las reglas básicas.\n\nRevisa el estado de la fuente antes de compartir datos.\nConfirma si es sorteo o mérito.\nNo pagues para desbloquear una beca.\nCómo usarlas bien\n\nÚsalas como complementos rápidos después de completar solicitudes de mejor encaje.\n\nAplica solo cuando la fuente sea clara.\nGuarda fechas para no distraerte de postulaciones mayores.\nEquilibra entradas fáciles con becas dirigidas.\nChecklist práctico\nFuente oficial visible\nSin cuota obligatoria\nReglas de elegibilidad claras\nFecha clara\nExpectativas de privacidad aceptables\nEjemplos\nUna beca sin ensayo con proveedor poco claro debe verificarse, no aplicarse automá",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/scholarships/no-essay",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/resources/easy-scholarships-guide",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nInicio\n/\nRecursos\n/\nGuía de becas fáciles\n\nGUÍA DE SCHOLARSHIPTOP\n\nGuía de becas fáciles\n\nLas becas fáciles sirven cuando ahorran tiempo sin ocultar riesgo. La clave es separar solicitudes legítimas de bajo esfuerzo de listados vagos.\n\nBuscar becas\nMetodología de verificación\nQué debería significar fácil\n\nFácil debería significar menos materiales, reglas claras y ruta directa. No debería significar fuente poco clara, premio garantizado o pago sospechoso.\n\nBusca pocos materiales requeridos.\nConfirma la fuente oficial.\nRevisa privacidad y uso de datos.\nCuándo omitir\n\nOmite un listado cuando la elegibilidad es confusa, el proveedor es desconocido, falta la fecha o presionan a pagar o compartir datos sensibles.\n\nSin fuente oficial\nSin monto claro\nSin reglas de solicitud claras\nChecklist práctico\nNivel de esfuerzo revisado\nDocumentos revisados\nFecha revisada\nFuente revisada\nReglas del premio revisadas\nEjemplos\nUn formulario corto de un proveedor oficial puede ser una buena solicitud fácil.\nUn premio garantizado de un sitio desconocido debe tratarse como inseguro.\nR",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/resources/stem-scholarships-guide",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nInicio\n/\nRecursos\n/\nGuía de becas STEM\n\nGUÍA DE SCHOLARSHIPTOP\n\nGuía de becas STEM\n\nLas becas STEM suelen depender de campo, nivel, institución, interés en investigación, GPA, ciudadanía o metas profesionales. Lee elegibilidad con cuidado antes de redactar.\n\nBuscar becas\nMetodología de verificación\nSeñales comunes de elegibilidad STEM\n\nLos proveedores pueden limitar por carrera, rama de ingeniería, informática, salud, ciencia de datos, investigación o grupos subrepresentados.\n\nRevisa la redacción exacta del campo o carrera.\nConfirma nivel: secundaria, pregrado, posgrado o doctorado.\nBusca requisitos de GPA, investigación, prácticas o proyectos.\nCómo fortalecer una solicitud STEM\n\nUsa evidencia concreta: proyectos, investigación, prácticas, cursos, liderazgo o impacto comunitario alineado con la misión del proveedor.\n\nConecta tu historia con el enfoque del proveedor.\nPide transcripciones con tiempo.\nPide a recomendadores ejemplos específicos STEM.\nChecklist práctico\nCarrera o campo coincide\nNivel coincide\nReglas de GPA revisadas\nTranscripción lista\nRecomendació",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/scholarships/category/stem",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        },
+        {
+          "href": "/scholarships/category/medical",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        },
+        {
+          "href": "/scholarships/engineering",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/resources/scholarships-in-usa-for-international-students",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nInicio\n/\nRecursos\n/\nBecas en EE. UU. para estudiantes internacionales\n\nGUÍA DE SCHOLARSHIPTOP\n\nBecas en EE. UU. para estudiantes internacionales\n\nLas becas en EE. UU. para internacionales requieren revisar elegibilidad con cuidado. Algunas abren a no ciudadanos; otras exigen residencia, ciudadanía, FAFSA o matrícula en una institución específica.\n\nBuscar becas\nMetodología de verificación\nRevisiones de elegibilidad que importan\n\nConfirma ciudadanía, estatus de visa, institución, nivel, campo y si se exige FAFSA o residencia doméstica.\n\nRevisa redacción para no ciudadanos.\nConfirma si estudiantes con visa F-1 pueden postular.\nLee restricciones por escuela con atención.\nDocumentos a preparar\n\nMateriales comunes: transcripciones, prueba de matrícula, ensayos, documentación de necesidad, cartas y a veces detalles de visa.\n\nNo subas documentos sensibles a fuentes poco claras.\nConfirma el dominio oficial de solicitud.\nRevisa si aceptan documentos traducidos.\nChecklist práctico\nElegibilidad para no ciudadanos confirmada\nReglas de matrícula escolar confirmadas\nLenguaje",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/scholarships/study-in/united-states",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/resources/scholarships-for-high-school-seniors",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nInicio\n/\nRecursos\n/\nBecas para estudiantes de último año de secundaria\n\nGUÍA DE SCHOLARSHIPTOP\n\nBecas para estudiantes de último año de secundaria\n\nLos estudiantes de último año deben armar un calendario temprano porque fechas, cartas, transcripciones, ensayos y prueba de matrícula pueden coincidir con solicitudes universitarias.\n\nBuscar becas\nMetodología de verificación\nPrioriza por fecha y encaje\n\nEmpieza con becas donde el estatus de senior, año de graduación, universidad prevista, GPA, campo o ubicación coincidan claramente.\n\nSepara premios locales, escolares, nacionales y universitarios.\nObserva grupos de fechas en otoño, invierno y primavera.\nPide a consejeros tiempos para transcripciones y cartas.\nMateriales comunes\n\nSuelen pedir ensayos, transcripciones, actividades, cartas, prueba de matrícula o evidencia de necesidad financiera.\n\nTen lista de actividades lista.\nGuarda evidencia reutilizable para ensayos.\nRegistra confirmaciones de envío.\nChecklist práctico\nAño de graduación coincide\nReglas de matrícula universitaria revisadas\nTranscripción solicitada",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/scholarships/high-school",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/resources/scholarship-eligibility-explained",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nInicio\n/\nRecursos\n/\nElegibilidad para becas explicada\n\nGUÍA DE SCHOLARSHIPTOP\n\nElegibilidad para becas explicada\n\nLa elegibilidad es el primer filtro. Si no cumples las reglas principales, un ensayo fuerte por lo general no arregla la solicitud.\n\nBuscar becas\nMetodología de verificación\nCategorías comunes de elegibilidad\n\nLas becas pueden limitar por nivel académico, campo, institución, país, ciudadanía, residencia, GPA, necesidad, identidad, comunidad o plan de carrera.\n\nLee con cuidado el lenguaje de obligatorio.\nSepara requisitos preferidos de requisitos obligatorios.\nRevisa si aplican al momento de solicitar o al momento del premio.\nCuando la elegibilidad no está clara\n\nSi un listado no explica bien la elegibilidad, verifica la fuente oficial o contacta al proveedor antes de invertir mucho esfuerzo.\n\nBusca FAQ oficial o PDF de reglas.\nRevisa términos del año en curso.\nNo confíes solo en resúmenes de terceros.\nChecklist práctico\nNivel académico\nCampo o carrera\nCiudadanía o residencia\nGPA\nInstitución\nNecesidad financiera\nDocumentos\nEjemplos\nEstudiantes de EE",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/resources/scholarship-documents-checklist",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nInicio\n/\nRecursos\n/\nChecklist de documentos para becas\n\nGUÍA DE SCHOLARSHIPTOP\n\nChecklist de documentos para becas\n\nLos documentos suelen decidir si una solicitud es posible antes de la fecha límite. Arma una carpeta reutilizable y registra lo que pide cada proveedor.\n\nBuscar becas\nMetodología de verificación\nDocumentos comunes\n\nMuchas becas piden materiales académicos, de identidad, matrícula, necesidad financiera, ensayo, recomendación o portafolio.\n\nTranscripción o historial académico\nPrueba de matrícula o admisión\nEnsayo o respuesta corta\nCarta de recomendación\nCurrículum, lista de actividades o portafolio\nSeguridad de documentos\n\nSube documentos sensibles solo por rutas oficiales de confianza. Cuidado con formularios no oficiales, pagos inesperados o enlaces de correos desconocidos.\n\nRevisa el dominio de solicitud.\nEvita enviar datos bancarios demasiado pronto.\nGuarda copias de archivos enviados.\nChecklist práctico\nTranscripción\nPrueba de matrícula\nBorrador de ensayo\nSolicitud de recomendación\nCurrículum o lista de actividades\nEvidencia de necesidad finan",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/resources/how-to-apply-for-scholarships",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nEnglish\nEspañol\nFrançais\n← Volver al inicio/Recursos\nCómo solicitar becas\n\nLas becas premian la preparación más que la suerte. Esta guía te lleva por dónde buscar, qué reunir y cómo enviar solicitudes que realmente se lean, sin agotarte.\n\nLa mayoría de estudiantes pierde becas en la parte aburrida del medio: campos vacíos, ensayos copiados de otras apps o envíos de último minuto. Trata la solicitud como un proyecto con calendario, carpeta y checklist, y tus probabilidades suben rápido.\n\nDónde encontrar becas\n\nEmpieza con la oficina de ayuda financiera de tu escuela y los portales que recomiende tu consejero. Luego añade bases nacionales y explora becas por materia y estado para no perseguir solo los mismos premios enormes.\n\nRevisa elegibilidad antes de invertir tiempo en el ensayo.\nGuarda enlaces y fechas en un solo lugar.\nMezcla becas ambiciosas, de encaje y de respaldo.\nPrepara tus documentos\n\nLa mayoría pide los mismos bloques: transcripción, currículum o lista de actividades, prueba de matrícula y a veces información financiera. Arma una carpeta maestra en",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/resources/how-to-apply-for-scholarships",
+          "issue": "language switcher → English canonical of current page",
+          "classification": "language-switcher"
+        },
+        {
+          "href": "/fr/resources/how-to-apply-for-scholarships",
+          "issue": "language switcher → other Stage 2 locale",
+          "classification": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/resources/scholarship-deadlines-explained",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nEnglish\nEspañol\nFrançais\n← Volver al inicio/Recursos\nFechas de becas explicadas\n\nLas fechas parecen simples hasta que mezclas matasellos, zonas horarias y revisiones continuas. Aquí va qué significa realmente «vencer» y cómo mantenerte adelante sin vivir en el correo.\n\nLas fechas de becas no son todas iguales. Algunas cierran a medianoche. Otras son continuas y leen solicitudes hasta agotar fondos. Saber cuál enfrentas cambia qué tan rápido debes moverte.\n\nTipos de fechas\n\nLas fechas fijas cierran en día y hora exactos. Las continuas premian a quien llega temprano. Las prioritarias (comunes en ayuda institucional) dan mejor consideración si postulas antes de una primera fecha.\n\nConfirma la zona horaria en las reglas oficiales.\nVerifica si «recibido» significa enviado online o matasellos.\nAnota si las cartas deben llegar el mismo día.\nCuándo empezar\n\nEmpieza antes de lo que te parece cómodo, sobre todo para ensayos y cartas. Mapea fechas con al menos seis semanas de anticipación y trabaja hacia atrás.\n\nCómo hacer seguimiento\n\nUn calendario, una hoja o un docume",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/resources/scholarship-deadlines-explained",
+          "issue": "language switcher → English canonical of current page",
+          "classification": "language-switcher"
+        },
+        {
+          "href": "/fr/resources/scholarship-deadlines-explained",
+          "issue": "language switcher → other Stage 2 locale",
+          "classification": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/resources/combine-multiple-scholarships",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nEnglish\nEspañol\nFrançais\n← Volver al inicio/Recursos\n¿Puedes combinar varias becas?\n\nSí, a menudo, pero no siempre. «Acumular» depende de las reglas de cada premio, la política de tu escuela y si el dinero está etiquetado solo para matrícula. Así puedes pensarlo sin adivinar.\n\nAcumular becas suena como matemática de dinero gratis, pero escuelas y donantes tienen límites. Algunos premios cubren necesidad no cubierta; otros están limitados al costo de asistencia publicado.\n\nCómo funciona acumular\n\nAcumular significa tener más de una beca al mismo tiempo. Donantes privados, estados y tu universidad pueden enviar fondos a la oficina de facturación, que los aplica según la política.\n\nPregunta: ¿la beca va a la escuela o a mí directamente?\nPregunta: ¿se renueva automáticamente?\nPregunta: ¿solo cubre matrícula u otros costos?\nReglas y limitaciones\n\nBusca frases como «no acumulable», «último dólar» o «puede ajustar otra ayuda». Si estás cerca del tope, una beca nueva puede reemplazar parte de una beca existente.\n\nBecas privadas vs universitarias\n\nLas becas externas tr",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/resources/combine-multiple-scholarships",
+          "issue": "language switcher → English canonical of current page",
+          "classification": "language-switcher"
+        },
+        {
+          "href": "/fr/resources/combine-multiple-scholarships",
+          "issue": "language switcher → other Stage 2 locale",
+          "classification": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/resources/medical-scholarships-guide",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nEnglish\nEspañol\nFrançais\n← Volver al inicio/Recursos\nGuía de becas médicas\n\nLos estudiantes de salud tienen más ángulos de beca de los que parece. Esta guía ayuda a ordenar opciones sin convertir la búsqueda en otra clase a tiempo completo.\n\nLas becas médicas no son una sola categoría. Enfermería, pre-medicina, salud pública y ciencias biomédicas tienen caminos distintos. La estrategia empieza notando esas diferencias antes de copiar el mismo ensayo.\n\nEmpieza por el camino de salud que sigues\n\nUn error común es buscar solo «becas médicas». Los proveedores escriben premios por enfermería, farmacia, terapia, salud pública o medicina rural.\n\nPre-medicina: becas de ciencia, servicio y carrera en salud.\nEnfermería: hospitales, asociaciones estatales y fundaciones locales.\nSalud pública: prevención, comunidad y política.\nCiencias aliadas: certificación y escasez de personal.\nDe dónde suelen venir\n\nEscuelas, sistemas hospitalarios, asociaciones profesionales, fundaciones locales y empleadores suelen tener fondos que los estudiantes no ven si solo buscan en bases públ",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/resources/medical-scholarships-guide",
+          "issue": "language switcher → English canonical of current page",
+          "classification": "language-switcher"
+        },
+        {
+          "href": "/fr/resources/medical-scholarships-guide",
+          "issue": "language switcher → other Stage 2 locale",
+          "classification": "cross-locale-switcher"
+        },
+        {
+          "href": "/scholarships/category/medical",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/resources/scholarships-for-international-students-guide",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nEnglish\nEspañol\nFrançais\n← Volver al inicio/Recursos\nBecas para estudiantes internacionales\n\nLos internacionales pueden encontrar becas, pero la búsqueda es distinta: reglas de ciudadanía, estatus de visa, elegibilidad escolar, tiempos de documentos y restricciones de fondos importan antes de gastar horas en la solicitud equivocada.\n\nBuscar becas como internacional puede sentirse como leer letra pequeña todo el día. El objetivo no es postular a todo, sino identificar premios donde tu estatus y perfil encajan de verdad.\n\nQué significa amigable para internacionales\n\nNo significa garantizado. Significa que puede valer la pena revisar la ficha. Algunos proveedores abren explícitamente; otros exigen lectura detallada de ciudadanía, FAFSA o número de Seguro Social.\n\nEmpieza con ayuda de la escuela\n\nPara muchos internacionales, las mejores opciones empiezan en la universidad: mérito de admisión, departamentos, becas internacionales o asistentías de posgrado.\n\nSepara ayuda de admisión de becas externas\n\nLa palabra beca se usa para tipos distintos de dinero con reglas ",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/resources/scholarships-for-international-students-guide",
+          "issue": "language switcher → English canonical of current page",
+          "classification": "language-switcher"
+        },
+        {
+          "href": "/fr/resources/scholarships-for-international-students-guide",
+          "issue": "language switcher → other Stage 2 locale",
+          "classification": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/terms",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\n← Volver al inicio\nEnglish\nEspañol\nFrançais\nTérminos de servicio\n\nÚltima actualización: 9 de abril de 2026\n\nEstos Términos de servicio rigen tu acceso y uso de ScholarshipTop, un servicio operado por Daur M. (Freebee KZ). Al usar ScholarshipTop, aceptas estos Términos.\n\n1. Uso del servicio\n\nScholarshipTop ofrece listados de becas, filtros, recomendaciones basadas en perfil y herramientas relacionadas. Puedes usar el servicio solo para fines legales y personales.\n\n2. Sin garantía de resultados\n\nScholarshipTop no garantiza elegibilidad, aceptación por un proveedor, decisiones de financiamiento ni resultados de premios. Todas las decisiones las toman los proveedores de becas.\n\n3. Información del usuario\n\nEres responsable de proporcionar información precisa en tu cuenta y perfil. Datos incorrectos o incompletos pueden afectar recomendaciones y coincidencias.\n\n4. Cuentas\n\nSi creas una cuenta, eres responsable de mantener la confidencialidad de tus credenciales y de la actividad bajo tu cuenta.\n\n5. Listados de becas\n\nScholarshipTop puede mostrar información de diver",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/terms",
+          "issue": "language switcher → English canonical of current page",
+          "classification": "language-switcher"
+        },
+        {
+          "href": "/fr/terms",
+          "issue": "language switcher → other Stage 2 locale",
+          "classification": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/privacy-policy",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\n← Volver al inicio\nEnglish\nEspañol\nFrançais\nPolítica de privacidad\n\nÚltima actualización: 9 de abril de 2026\n\nScholarshipTop, operado por Daur M. (Freebee KZ), valora tu privacidad. Esta política explica qué información recopilamos, cómo la usamos y cómo la protegemos.\n\n1. Información que recopilamos\n\nPodemos recopilar información que nos proporcionas directamente, como nombre, correo, detalles de perfil académico, información de cuenta y mensajes de contacto. También podemos recopilar datos técnicos limitados automáticamente, como tipo de navegador, dispositivo, dirección IP, páginas visitadas y actividad de uso.\n\n2. Cómo usamos tu información\n\nPodemos usar tu información para crear y administrar tu cuenta, personalizar recomendaciones, mejorar búsqueda y experiencia, comunicarnos contigo, mantener seguridad y analizar el uso del producto.\n\n3. Datos de becas y recomendaciones\n\nScholarshipTop puede mostrar listados, filtros y recomendaciones según tu perfil. Buscamos mejorar relevancia y precisión, pero no garantizamos elegibilidad, decisiones de premios ni re",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/privacy-policy",
+          "issue": "language switcher → English canonical of current page",
+          "classification": "language-switcher"
+        },
+        {
+          "href": "/fr/privacy-policy",
+          "issue": "language switcher → other Stage 2 locale",
+          "classification": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/refund-policy",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\n← Volver al inicio\nEnglish\nEspañol\nFrançais\nPolítica de reembolsos\n\nÚltima actualización: 9 de abril de 2026\n\nEn ScholarshipTop, operado por Daur M. (Freebee KZ), queremos que estés satisfecho con nuestro servicio.\n\n1. Ventana de reembolso\n\nPuedes solicitar un reembolso completo dentro de los 14 días posteriores a tu compra inicial si no has usado extensivamente la base de datos.\n\n2. Prueba gratuita\n\nSi estás en una prueba gratuita de 3 días, puedes cancelar en cualquier momento antes de que termine para evitar cargos.\n\n3. Cómo solicitar\n\nPara solicitar un reembolso o cancelar tu suscripción, escríbenos a support@scholarshiptop.com.\n\n4. Procesamiento\n\nLos reembolsos se procesan a través de nuestro proveedor de pagos, LemonSqueezy.\n\nFAQ\n¿Cuánto tarda un reembolso?\n\nLos tiempos dependen de LemonSqueezy y de tu banco. Contáctanos si necesitas seguimiento.\n\n¿Los reembolsos aplican a becas?\n\nNo. Esta política cubre suscripciones y funciones de pago de ScholarshipTop, no premios de proveedores externos.\n\nScholarshipTop no concede becas directamente. Los requisitos, ",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/refund-policy",
+          "issue": "language switcher → English canonical of current page",
+          "classification": "language-switcher"
+        },
+        {
+          "href": "/fr/refund-policy",
+          "issue": "language switcher → other Stage 2 locale",
+          "classification": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/help",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\n← Volver al inicio\nEnglish\nEspañol\nFrançais\nAyuda\n\nÚltima actualización: 9 de abril de 2026\n\n¿Necesitas ayuda con ScholarshipTop? Esta página explica lo básico del funcionamiento de la plataforma y dónde obtener soporte.\n\nUsar ScholarshipTop\n\nScholarshipTop te ayuda a descubrir becas, explorar listados y ver recomendaciones según tu perfil. Puedes navegar becas, revisar fechas y guardar oportunidades para volver después.\n\nPerfil y coincidencias\n\nTu perfil ayuda a mostrar recomendaciones más relevantes. Cuanto más precisa sea tu información, mejores pueden ser las coincidencias.\n\nBecas guardadas\n\nPuedes guardar becas para seguir las oportunidades que más importan y mantenerte organizado mientras exploras opciones.\n\nElegibilidad y resultados\n\nScholarshipTop ayuda a encontrar oportunidades, pero no garantiza elegibilidad, aceptación ni resultados de financiamiento. Las decisiones finales las toman los proveedores de becas.\n\n¿Necesitas soporte?\n\nSi necesitas ayuda con tu cuenta, escríbenos a support@scholarshiptop.com.\n\nFAQ\n¿Cómo mejoro mis coincidencias?\n\nComplet",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/help",
+          "issue": "language switcher → English canonical of current page",
+          "classification": "language-switcher"
+        },
+        {
+          "href": "/fr/help",
+          "issue": "language switcher → other Stage 2 locale",
+          "classification": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/faq",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\n← Volver al inicio\nEnglish\nEspañol\nFrançais\nPreguntas frecuentes\n\nÚltima actualización: 9 de abril de 2026\n\nRespuestas a preguntas comunes sobre becas, el funcionamiento de ScholarshipTop, coincidencias de perfil, becas guardadas, elegibilidad y soporte.\n\nSobre ScholarshipTop\n\nScholarshipTop ayuda a los estudiantes a encontrar becas con más eficiencia mediante listados, filtros y coincidencias basadas en perfil.\n\nCuentas y planes\n\nPuedes explorar parte del catálogo sin cuenta, pero crear un perfil permite coincidencias personalizadas, guardar oportunidades y mejorar la experiencia. También ofrecemos planes de pago con herramientas adicionales.\n\nFAQ\n¿Qué es ScholarshipTop y cómo ayuda a encontrar becas?\n\nEs una plataforma para explorar becas, filtrar oportunidades y descubrir coincidencias según tu perfil y preferencias, en lugar de buscar manualmente en cientos de sitios.\n\n¿Cómo encuentro becas que encajen conmigo?\n\nCrea un perfil con tu nivel educativo, intereses y contexto. ScholarshipTop usa esa información para mostrar becas más relevantes.\n\n¿Necesito cuen",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/faq",
+          "issue": "language switcher → English canonical of current page",
+          "classification": "language-switcher"
+        },
+        {
+          "href": "/fr/faq",
+          "issue": "language switcher → other Stage 2 locale",
+          "classification": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/international-students",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nEnglish\nEspañol\nFrançais\n\nESTUDIANTES INTERNACIONALES\n\nEncuentra becas a las que realmente puedes postular\n\nDeja de perder tiempo en becas para las que no calificas. Mostramos solo oportunidades abiertas a estudiantes internacionales.\n\nEncontrar becas\nExplorar becas\nPor qué cuesta encontrar becas siendo internacional\n\nMuchas becas son solo para ciudadanos de EE. UU., los grandes sitios mezclan todo y las fechas se pierden mientras sigues buscando.\n\nReglas de elegibilidad al final del formulario\nPocos filtros claros para visa F1\nFechas que vencen durante la búsqueda\nHecho para estudiantes internacionales\n\nResultados solo internacionales, coincidencias según tu perfil y alertas de fechas para no perder plazos.\n\nSolo becas que aceptan internacionales\nCoincidencias según tu perfil\nRecordatorios de fechas\nQué obtienes con ScholarshipTop\n\nMenos tiempo leyendo reglas inútiles, solicitudes más rápidas y fechas más claras.\n\nSolo becas para las que probablemente calificas\nMenos tiempo en reglas repetidas\nSolicitudes más rápidas\nFechas claras\nBecas reales a las que puede",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/international-students",
+          "issue": "language switcher → English canonical of current page",
+          "classification": "language-switcher"
+        },
+        {
+          "href": "/fr/international-students",
+          "issue": "language switcher → other Stage 2 locale",
+          "classification": "cross-locale-switcher"
+        },
+        {
+          "href": "/scholarships/category/stem",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        },
+        {
+          "href": "/scholarships/no-essay",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/for-organizations",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nEnglish\nEspañol\nFrançais\n\nUNIVERSIDADES Y FUNDACIONES\n\nLlega a talento global\n\nScholarshipTop es la mejor forma de poner tus programas frente a estudiantes que ya buscan financiamiento, para encontrar postulantes más fuertes sin ruido extra.\n\nEncontrar becas\nExplorar becas\nPor qué nosotros\n\nConstruido para resultados: relevancia para estudiantes, visibilidad para tus programas.\n\nAudiencia dirigida según criterios\nAlcance global en más de 50 países\nGestión simple con flujo optimizado\nCómo funciona\n\nTres pasos simples del formulario al listado en vivo.\n\nCompleta el formulario con detalles del programa\nModeración rápida para verificar legitimidad\nLos estudiantes descubren tu beca y aplican por tus canales\nAudiencia dirigida\n\nTus programas llegan a estudiantes que coinciden con tus criterios para postulaciones más significativas.\n\nAlcance global\n\nConecta con estudiantes de más de 50 países que usan ScholarshipTop para descubrir financiamiento.\n\nGestión simple\n\nFlujo optimizado hoy, con panel para seguir interés y solicitudes próximamente.\n\nPreguntas frecuentes\n¿Cu",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/for-organizations",
+          "issue": "language switcher → English canonical of current page",
+          "classification": "language-switcher"
+        },
+        {
+          "href": "/fr/for-organizations",
+          "issue": "language switcher → other Stage 2 locale",
+          "classification": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/submit-grant",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nEnglish\nEspañol\nFrançais\n\nSOCIOS\n\nSolicitar cuenta de organización\n\nÚnete a ScholarshipTop como socio verificado. Solicita una cuenta para acceder al panel de tu organización, donde puedes publicar, gestionar y actualizar tus programas de becas.\n\nEncontrar becas\nExplorar becas\nBeneficios para socios\n\nPerfil verificado, gestión centralizada de becas, alcance dirigido y soporte prioritario del equipo de ScholarshipTop.\n\nSiguiente paso\n\nCompleta la solicitud de acceso de socio. También puedes empezar desde la página Para organizaciones si prefieres revisar el proceso primero.\n\nPerfil verificado\n\nUna página dedicada para tu universidad o fundación.\n\nGestión sencilla\n\nPublica, edita y gestiona tus becas en un solo lugar.\n\nAlcance dirigido\n\nTus becas llegan a los candidatos adecuados.\n\nSoporte prioritario\n\nAsistencia directa de nuestro equipo.\n\nPreguntas frecuentes\n¿Quién puede solicitar una cuenta?\nUniversidades acreditadas, fundaciones y otros financiadores legítimos de educación que quieran publicar becas verificadas.\n¿Cuánto tarda la verificación?\n\nScholarshipTo",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/submit-grant",
+          "issue": "language switcher → English canonical of current page",
+          "classification": "language-switcher"
+        },
+        {
+          "href": "/fr/submit-grant",
+          "issue": "language switcher → other Stage 2 locale",
+          "classification": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/get-scholarships",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nPASO 1 DE 2 · PAÍS DEL SOLICITANTE\n\n¿Desde qué país solicitas?\n\nSelecciona tu ciudadanía o país de origen para que mostremos becas en las que tienes más probabilidades de ser elegible.\n\nPAÍS DEL SOLICITANTE / CIUDADANÍA\nContinuar",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/onboarding",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\n← Volver al inicio\n\nPASO 1 · PAÍS\n\n¿Desde qué país solicitas?\n\nElige primero tu país de solicitante. Adaptaremos el registro y las becas recomendadas a ese país.\n\nPAÍS DEL SOLICITANTE / CIUDADANÍA\nContinuar",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/signin",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIniciar sesión\n\nConsulta tus becas recomendadas, oportunidades guardadas y el progreso de tus solicitudes.\n\nCorreo electrónico\nContraseña\nIniciar sesión con Google\nIniciar sesión\n\n¿Olvidaste tu contraseña?\n\n¿No tienes cuenta? Crear una",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/signin/password_signin",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIniciar sesión\n\nConsulta tus becas recomendadas, oportunidades guardadas y el progreso de tus solicitudes.\n\nCorreo electrónico\nContraseña\nIniciar sesión con Google\nIniciar sesión\n\n¿Olvidaste tu contraseña?\n\n¿No tienes cuenta? Crear una",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/signin/email_signin",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIniciar sesión\nCorreo electrónico\nIniciar sesión\n\nEntrar con correo y contraseña\n\n¿No tienes cuenta? Crear cuenta\n\nAcceso con terceros\nGitHub",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/signin/forgot_password",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nRecuperar contraseña\n\nIntroduce tu correo y te enviaremos un enlace para restablecer la contraseña.\n\nCorreo electrónico\nEnviar enlace de recuperación\n\nVolver al inicio de sesión\n\n¿No tienes cuenta? Crear una",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/subscription",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nDesbloquea precisión premium\nMensual\n$14.99/mes\n\nFacturación de $14.99 cada mes.\n\n✓\nDesbloquea becas premium\n✓\nDesbloquea el informe de estrategia IQ\n✓\nAcceso a «Easy Apply» e «International»\n✓\nMuestra todos los nombres y enlaces de becas\n✓\nFiltros inteligentes ilimitados\nEmpezar plan\n⭐ Más popular\nTrimestral\n$9.66/mes\n\nFacturación de $29 cada 3 meses.\n\n✓\nTodo lo del plan mensual, más:\n✓\nDesbloquea IQ Essay Mentor\n✓\nEstrategia de becas basada en IQ + próximos pasos del ensayo\n✓\nEntrevista inteligente y entrada por voz\n✓\nGeneraciones de ensayos ilimitadas\n✓\nAlertas instantáneas por correo de nuevas coincidencias\n✓\nAhorra un 35 % frente al plan mensual\nEmpezar plan\n✨ Mejor valor\nAnual\n$7.40/mes\n\nFacturación de $89 al año.\n\n✓\nTodo lo del plan trimestral, más:\n✓\nDesbloquea IQ Essay Mentor\n✓\nInforme IQ completo con becas, premios y fechas límite\n✓\nMejor precio por mes\n✓\nProcesamiento IA prioritario\n✓\nAlertas prioritarias por correo de nuevas coincidencias\n✓\nAcceso completo durante toda la temporada de solicitudes\n✓\nAhorra un 50 % frente al plan mensual\nEmpezar plan",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/subscription/success",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIdioma:\nEspañol\nGracias\n\nRecibimos tu pago. El acceso Premium se activa en cuanto nuestro socio de pagos confirme la suscripción, normalmente en un minuto.\n\nExplorar becas\nIr a la cuenta",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/account",
+      "locale": "es",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nAcerca de\nBuscar becas\nProveedores\nComparar\nRecursos\nEnsayos\nIniciar sesión\nIniciar sesión\n\nConsulta tus becas recomendadas, oportunidades guardadas y el progreso de tus solicitudes.\n\nCorreo electrónico\nContraseña\nIniciar sesión con Google\nIniciar sesión\n\n¿Olvidaste tu contraseña?\n\n¿No tienes cuenta? Crear una",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nTrouvez des bourses adaptées en 2 minutes\n\nRépondez à quelques questions et découvrez des bourses auxquelles vous pouvez postuler aujourd’hui\n\nTrouver mes bourses\n\nListes vérifiées • Mises à jour régulièrement • Liens officiels de candidature. Commencez en moins d’une minute.\n\nProgrammes aux États-Unis et internationaux\nBourses pour étudier aux\nÉtats-Unis et ailleurs\n\nTrouvez un financement dans les universités leaders. Nous combinons le plus grand catalogue américain avec des programmes internationaux.\n\nTrouver des bourses pour moi\n\nPrincipales destinations du catalogue\n\n1 destinations\n\n0+\n\nbourses suivies en direct\n\nUnited States\n\n1,473 listes\n\nUnited States\n\n1,473 listes\n\nUnited States\n\n1,473 listes\n\nUnited States\n\n1,473 listes\n\nUnited States\n\n1,473 listes\n\nUnited States\n\n1,473 listes\n\nUnited States\n\n1,473 listes\n\nUnited States\n\n1,473 listes\n\nConçu pour réduire l’incertitude\nListes vérifiées\n\nNous examinons les détails clés des bourses avant de les présenter aux étudiants.\n\nLire la méthode\nMises à jour régulièrement\n\nNous visons à garder dates,",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/scholarships",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nMeilleures recommandations\n\nComplétez votre profil bourses pour de meilleures recommandations et des alertes lorsque de nouvelles opportunités correspondent.\n\n0 bourses trouvées\n\nTrier :\nRecommandé\nFiltres\nJe viens de\nJ’étudie en\nCatégories\nBourses à explorer en priorité\nFAQ\nHow do best recommendations work?\nBest recommendations use your answers to match scholarships against profile signals such as school level, field of study, citizenship, GPA, and location.\nDo I need to answer every question?\nCan I update my recommendations?\nContinue your scholarship search\n\nExplore next steps to find scholarships faster, write stronger applications, and compare opportunities.\n\nScholarship resources\n\nGuides to help you find, track, and apply for scholarships step by step.\n\nExplore →\nEssay guides\n\nLearn how to write strong scholarship essays and stand out from other applicants.\n\nExplore →\nScholarship providers\n\nExplore organizations offering scholarships and understand their requirements.\n\nExplore →\nCompare opportunities\n\nCompare scholarships, states, and options",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/essays",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nSomething went wrong\n\nAn unexpected error occurred. You can try again or return to the home page.\n\nAn error occurred in the Server Components render. The specific message is omitted in production builds to avoid leaking sensitive details. A digest property is included on this error instance which may provide additional details about the\n\nError ID: 2817919910\n\nTry again\nHome",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 500
+    },
+    {
+      "url": "http://localhost:3020/fr/providers",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nAccueil\n/\nFournisseurs\nFournisseurs de bourses\n\nExplorez les organisations et fondations qui proposent une aide financière aux États-Unis.\n\nAffichage 0-0 sur 0 fournisseurs\n\nSearch providers\nCountries\nOUTIL EN VEDETTE\nIQ\n\nChoisissez des fournisseurs adaptés à votre stratégie\n\nUtilisez votre archétype cognitif pour comprendre comment vous évaluez montants, dates et complexité avant de prioriser les fournisseurs.\n\nÉVALUATION\nCommencer le test IQ\n\nSCHOLARSHIP PROVIDER DIRECTORY\n\nUse providers to verify source context, not just names\n\nScholarshipTop builds provider profiles from live listing data. When an official source is missing or unclear, the profile should show that status instead of treating the provider as fully verified.\n\nVerification methodology\nCorrections\nFinancial aid disclaimer\nHow recommendations work\n\nActive scholarships\n\nHow many live listings are connected to the provider.\n\nSource status\n\nWhether an official URL is available or needs confirmation.\n\nData completeness\n\nHow much public context the profile can safely show.\n\nCorrections p",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/iq/assessment?intent=provider_research",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/compare",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nAccueil\n/\nComparer\nComparaisons de bourses\n\nExplorez les matchs par État et université, comparez les environnements de financement et accédez plus vite aux marchés les plus solides.\n\nOUTIL EN VEDETTE\nIQ\n\nComparez les établissements. Comprenez-vous d’abord.\n\nVoyez comment votre logique, vitesse et reconnaissance de motifs façonnent votre façon d’évaluer les bourses.\n\nÉVALUATION\nCommencer le test IQ\n\nCOMPARER LES TYPES DE BOURSES\n\nCommencez par les décisions durables avant les matchs\n\nCes guides expliquent les choix courants : bourse vs subvention, mérite vs besoin, sans essai vs avec essai, local vs national.\n\nGuide durable\nBourse vs subvention\n\nLes deux peuvent réduire les coûts d’études, mais leurs règles, sources et parcours ne sont pas toujours identiques.\n\nLire la comparaison\nGuide durable\nMérite vs besoin financier\n\nLa différence principale est ce que le fournisseur cherche à mesurer: performance ou écart financier.\n\nLire la comparaison\nGuide durable\nBourses sans rédaction vs avec rédaction\n\nLes bourses sans rédaction peuvent être rapides, ma",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/iq/assessment?intent=college_fit",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/resources",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nSomething went wrong\n\nAn unexpected error occurred. You can try again or return to the home page.\n\nAn error occurred in the Server Components render. The specific message is omitted in production builds to avoid leaking sensitive details. A digest property is included on this error instance which may provide additional details about the\n\nError ID: 433706727\n\nTry again\nHome",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 500
+    },
+    {
+      "url": "http://localhost:3020/fr/about",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nRetour à l’accueil\n\nCONFIANCE ET TRANSPARENCE\n\nÀ propos de ScholarshipTop\n\nScholarshipTop aide les étudiants à rechercher, comparer, sauvegarder et utiliser des opportunités de bourses avec plus de contexte qu’une simple liste.\n\nExplorer les bourses\nMéthode de vérification\n\nRÈGLE CENTRÉE SUR L’ÉTUDIANT\n\nVérifiez chaque exigence finale sur la page officielle du fournisseur avant de postuler.\n\nScholarshipTop aide les étudiants à chercher et planifier. Les fournisseurs officiels contrôlent l’admissibilité finale, les dates, la sélection et le paiement.\n\nCe que cela signifie pour les étudiants\n\nLe produit organise les opportunités par adéquation, date, exigences, valeur, source et effort pour aider à prioriser.\n\nUtilisez ScholarshipTop comme une couche d’organisation et de vérification initiale.\nVérifiez la source officielle avant d’envoyer des documents ou des données personnelles.\nNe présumez pas votre admissibilité à partir du seul titre d’une bourse.\nComment nous maintenons la qualité\n\nLes conseils éditoriaux expliquent les données disponibles san",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/editorial-policy",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nRetour à l’accueil\n\nCONFIANCE ET TRANSPARENCE\n\nPolitique éditoriale\n\nNotre politique éditoriale sépare faits publics, analyse pratique et avertissements lorsque les informations d’une bourse sont incomplètes.\n\nExplorer les bourses\nMéthode de vérification\n\nRÈGLE CENTRÉE SUR L’ÉTUDIANT\n\nVérifiez chaque exigence finale sur la page officielle du fournisseur avant de postuler.\n\nScholarshipTop aide les étudiants à chercher et planifier. Les fournisseurs officiels contrôlent l’admissibilité finale, les dates, la sélection et le paiement.\n\nCe que cela signifie pour les étudiants\n\nLes résumés doivent être originaux, clairs et basés sur les faits disponibles; ils ne doivent pas copier les textes officiels ni inventer des données.\n\nUtilisez ScholarshipTop comme une couche d’organisation et de vérification initiale.\nVérifiez la source officielle avant d’envoyer des documents ou des données personnelles.\nNe présumez pas votre admissibilité à partir du seul titre d’une bourse.\nComment nous maintenons la qualité\n\nSi une source change ou qu’une erreur est détecté",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/scholarship-verification-methodology",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nRetour à l’accueil\n\nCONFIANCE ET TRANSPARENCE\n\nComment nous vérifions les bourses\n\nScholarshipTop examine des signaux comme source officielle, date, montant, admissibilité, documents, parcours de candidature et données manquantes.\n\nExplorer les bourses\nMéthode de vérification\n\nRÈGLE CENTRÉE SUR L’ÉTUDIANT\n\nVérifiez chaque exigence finale sur la page officielle du fournisseur avant de postuler.\n\nScholarshipTop aide les étudiants à chercher et planifier. Les fournisseurs officiels contrôlent l’admissibilité finale, les dates, la sélection et le paiement.\n\nCe que cela signifie pour les étudiants\n\nUne fiche peut indiquer source disponible, confirmation nécessaire, données partielles, source peu claire ou cycle expiré.\n\nUtilisez ScholarshipTop comme une couche d’organisation et de vérification initiale.\nVérifiez la source officielle avant d’envoyer des documents ou des données personnelles.\nNe présumez pas votre admissibilité à partir du seul titre d’une bourse.\nComment nous maintenons la qualité\n\nLa transparence fait partie de la qualité: si un élémen",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/how-we-rank-scholarships",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nRetour à l’accueil\n\nCONFIANCE ET TRANSPARENCE\n\nComment nous classons les recommandations\n\nLes recommandations reposent sur l’adéquation au profil, les signaux d’admissibilité, l’urgence de date, l’effort et la clarté des données.\n\nExplorer les bourses\nMéthode de vérification\n\nRÈGLE CENTRÉE SUR L’ÉTUDIANT\n\nVérifiez chaque exigence finale sur la page officielle du fournisseur avant de postuler.\n\nScholarshipTop aide les étudiants à chercher et planifier. Les fournisseurs officiels contrôlent l’admissibilité finale, les dates, la sélection et le paiement.\n\nCe que cela signifie pour les étudiants\n\nLe classement aide à prioriser, mais ne garantit ni admissibilité, ni sélection, ni paiement.\n\nUtilisez ScholarshipTop comme une couche d’organisation et de vérification initiale.\nVérifiez la source officielle avant d’envoyer des documents ou des données personnelles.\nNe présumez pas votre admissibilité à partir du seul titre d’une bourse.\nComment nous maintenons la qualité\n\nLes signaux de sauvegarde, rejet et correspondance doivent soutenir la planification ",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/how-scholarshiptop-works",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nRetour à l’accueil\n\nCONFIANCE ET TRANSPARENCE\n\nComment fonctionne ScholarshipTop\n\nLe parcours est simple: répondre à des questions, recevoir des correspondances, comparer les options, sauvegarder les dates et postuler à la source officielle.\n\nExplorer les bourses\nMéthode de vérification\n\nRÈGLE CENTRÉE SUR L’ÉTUDIANT\n\nVérifiez chaque exigence finale sur la page officielle du fournisseur avant de postuler.\n\nScholarshipTop aide les étudiants à chercher et planifier. Les fournisseurs officiels contrôlent l’admissibilité finale, les dates, la sélection et le paiement.\n\nCe que cela signifie pour les étudiants\n\nScholarshipTop aide à passer d’une recherche dispersée à une liste courte avec actions claires.\n\nUtilisez ScholarshipTop comme une couche d’organisation et de vérification initiale.\nVérifiez la source officielle avant d’envoyer des documents ou des données personnelles.\nNe présumez pas votre admissibilité à partir du seul titre d’une bourse.\nComment nous maintenons la qualité\n\nChaque étape doit rappeler que les détails finaux appartiennent au four",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/financial-aid-disclaimer",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nRetour à l’accueil\n\nCONFIANCE ET TRANSPARENCE\n\nAvertissement sur l’aide financière\n\nScholarshipTop n’est pas un fournisseur de bourses, une université ni une agence gouvernementale. L’information sert à guider et organiser.\n\nExplorer les bourses\nMéthode de vérification\n\nRÈGLE CENTRÉE SUR L’ÉTUDIANT\n\nVérifiez chaque exigence finale sur la page officielle du fournisseur avant de postuler.\n\nScholarshipTop aide les étudiants à chercher et planifier. Les fournisseurs officiels contrôlent l’admissibilité finale, les dates, la sélection et le paiement.\n\nCe que cela signifie pour les étudiants\n\nLes étudiants doivent confirmer règles, dates, paiements, renouvellements et documents à la source officielle.\n\nUtilisez ScholarshipTop comme une couche d’organisation et de vérification initiale.\nVérifiez la source officielle avant d’envoyer des documents ou des données personnelles.\nNe présumez pas votre admissibilité à partir du seul titre d’une bourse.\nComment nous maintenons la qualité\n\nAucune page ne doit promettre sélection, admissibilité finale ou réception",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/contact",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nRetour à l’accueil\n\nCONFIANCE ET TRANSPARENCE\n\nContact\n\nUtilisez le contact pour assistance, erreurs de source, dates incorrectes, admissibilité douteuse ou préoccupations de sécurité.\n\nExplorer les bourses\nMéthode de vérification\n\nRÈGLE CENTRÉE SUR L’ÉTUDIANT\n\nVérifiez chaque exigence finale sur la page officielle du fournisseur avant de postuler.\n\nScholarshipTop aide les étudiants à chercher et planifier. Les fournisseurs officiels contrôlent l’admissibilité finale, les dates, la sélection et le paiement.\n\nCe que cela signifie pour les étudiants\n\nLes signalements utiles incluent l’URL, le nom de la bourse ou du fournisseur, le champ incorrect et la source confirmant le changement.\n\nUtilisez ScholarshipTop comme une couche d’organisation et de vérification initiale.\nVérifiez la source officielle avant d’envoyer des documents ou des données personnelles.\nNe présumez pas votre admissibilité à partir du seul titre d’une bourse.\nComment nous maintenons la qualité\n\nQuand les données sont insuffisantes, ScholarshipTop doit marquer la fiche pour vérific",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/corrections",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nRetour à l’accueil\n\nCONFIANCE ET TRANSPARENCE\n\nCorrections\n\nLes étudiants et fournisseurs peuvent signaler dates incorrectes, liens brisés, admissibilité erronée ou risque d’arnaque.\n\nExplorer les bourses\nMéthode de vérification\n\nRÈGLE CENTRÉE SUR L’ÉTUDIANT\n\nVérifiez chaque exigence finale sur la page officielle du fournisseur avant de postuler.\n\nScholarshipTop aide les étudiants à chercher et planifier. Les fournisseurs officiels contrôlent l’admissibilité finale, les dates, la sélection et le paiement.\n\nCe que cela signifie pour les étudiants\n\nUne correction doit reposer sur une source vérifiable, idéalement la page officielle du fournisseur.\n\nUtilisez ScholarshipTop comme une couche d’organisation et de vérification initiale.\nVérifiez la source officielle avant d’envoyer des documents ou des données personnelles.\nNe présumez pas votre admissibilité à partir du seul titre d’une bourse.\nComment nous maintenons la qualité\n\nSi elle ne peut pas être confirmée, la page doit rendre l’incertitude visible.\n\nNous signalons les données importantes manqua",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/scholarship-scam-warning",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nRetour à l’accueil\n\nCONFIANCE ET TRANSPARENCE\n\nSignaux d’arnaque aux bourses\n\nMéfiez-vous des frais obligatoires, faux chèques, pression urgente, courriels non officiels et promesses garanties.\n\nExplorer les bourses\nMéthode de vérification\n\nRÈGLE CENTRÉE SUR L’ÉTUDIANT\n\nVérifiez chaque exigence finale sur la page officielle du fournisseur avant de postuler.\n\nScholarshipTop aide les étudiants à chercher et planifier. Les fournisseurs officiels contrôlent l’admissibilité finale, les dates, la sélection et le paiement.\n\nCe que cela signifie pour les étudiants\n\nAvant de partager des données, confirmez domaine officiel, contact, date, critères et parcours de candidature.\n\nUtilisez ScholarshipTop comme une couche d’organisation et de vérification initiale.\nVérifiez la source officielle avant d’envoyer des documents ou des données personnelles.\nNe présumez pas votre admissibilité à partir du seul titre d’une bourse.\nComment nous maintenons la qualité\n\nScholarshipTop doit aider à repérer les risques sans accuser sans preuve.\n\nNous signalons les données im",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/how-we-make-money",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nRetour à l’accueil\n\nCONFIANCE ET TRANSPARENCE\n\nComment ScholarshipTop gagne de l’argent\n\nScholarshipTop peut proposer des fonctions gratuites et payantes, mais payer ne garantit pas une bourse ni n’influence les fournisseurs.\n\nExplorer les bourses\nMéthode de vérification\n\nRÈGLE CENTRÉE SUR L’ÉTUDIANT\n\nVérifiez chaque exigence finale sur la page officielle du fournisseur avant de postuler.\n\nScholarshipTop aide les étudiants à chercher et planifier. Les fournisseurs officiels contrôlent l’admissibilité finale, les dates, la sélection et le paiement.\n\nCe que cela signifie pour les étudiants\n\nLa valeur payante doit concerner les outils, l’organisation ou le support, pas une promesse d’attribution.\n\nUtilisez ScholarshipTop comme une couche d’organisation et de vérification initiale.\nVérifiez la source officielle avant d’envoyer des documents ou des données personnelles.\nNe présumez pas votre admissibilité à partir du seul titre d’une bourse.\nComment nous maintenons la qualité\n\nLes recommandations ne doivent pas être vendues comme placements fictifs ou ",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/essays/examples",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nAccueil\n/\nRédaction\n/\nExemples de rédaction pour bourses\n\nGUIDE DE RÉDACTION SCHOLARSHIPTOP\n\nExemples de rédaction pour bourses\n\nLes exemples servent à comprendre la structure, pas à copier une histoire. Observez comment une consigne se relie à une preuve concrète.\n\nEN UNE PHRASE\n\nUn bon exemple enseigne la structure tout en laissant votre réponse finale originale.\n\nOuvrir Essay Mentor\nTrouver des bourses\nLire un exemple\n\nRepérez la consigne, l’idée centrale, la preuve et le lien avec l’objectif éducatif.\n\nMarquer l’idée principale\nChercher les détails concrets\nObserver la conclusion\nCréer votre version\n\nRemplacez chaque détail emprunté par des faits réels de votre parcours.\n\nUtiliser votre chronologie\nÉviter la copie\nConfirmer la limite de mots\nChecklist pratique\nConsigne claire\nHistoire personnelle\nPreuve concrète\nConclusion liée au prix\nExemples\nFaible: J’ai toujours voulu aider. Mieux: Après avoir aidé six camarades en algèbre, j’ai appris à expliquer par étapes.\nFaible: Cette bourse changera ma vie. Mieux: Cette aide couvrirait les frais de c",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/essays/checklist",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nAccueil\n/\nRédaction\n/\nChecklist pour rédaction de bourse\n\nGUIDE DE RÉDACTION SCHOLARSHIPTOP\n\nChecklist pour rédaction de bourse\n\nUne relecture finale doit vérifier plus que la grammaire: elle confirme que le texte répond à la consigne et suit les règles.\n\nEN UNE PHRASE\n\nAvant d’envoyer, vérifiez consigne, preuve, format, documents et parcours officiel.\n\nOuvrir Essay Mentor\nTrouver des bourses\nRelecture stratégique\n\nL’idée principale doit être claire sans votre CV à côté.\n\nIntroduction rapide\nPreuve pour chaque affirmation\nConclusion utile\nSécurité d’envoi\n\nDe nombreuses erreurs viennent du format, de la date, du fuseau horaire ou de l’anonymat.\n\nVérifier le format\nConfirmer la date officielle\nContrôler les documents\nChecklist pratique\nConsigne respectée\nPreuve réelle\nNombre de mots\nFormat correct\nSource officielle confirmée\nExemples\nRemplacez “je suis motivé” par l’action qui le prouve.\nSi le fournisseur exige PDF, n’envoyez pas un autre format.\nÀ faire / À éviter\nÀ faire\tÀ éviter\nLire le texte à voix haute.\tEnvoyer le premier brouillon propre.\nVé",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/essays/financial-need",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nAccueil\n/\nRédaction\n/\nRédaction sur le besoin financier\n\nGUIDE DE RÉDACTION SCHOLARSHIPTOP\n\nRédaction sur le besoin financier\n\nCe type de texte doit expliquer l’écart entre vos ressources et votre plan éducatif sans devenir une liste de difficultés.\n\nEN UNE PHRASE\n\nUn texte fort relie un écart financier réel à une prochaine étape académique concrète.\n\nOuvrir Essay Mentor\nTrouver des bourses\nExpliquer l’écart\n\nDites clairement quel coût est difficile à couvrir et comment la bourse aiderait.\n\nCoûts éducatifs pertinents\nVie privée respectée\nLien avec frais, matériel ou examens\nBesoin et action\n\nLe besoin compte, mais montrez aussi ce que vous faites de l’opportunité.\n\nEffort ou planification\nPas d’exagération\nProchain pas clair\nChecklist pratique\nObjectif éducatif\nÉcart réel\nTon honnête\nUsage du prix\nDocuments confirmés\nExemples\nCette aide couvrirait l’examen de certification requis pour mon premier semestre.\nUne aide pour les livres réduirait mes heures de travail pendant les examens.\nÀ faire / À éviter\nÀ faire\tÀ éviter\nÊtre précis sur les coûts.\tPa",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/essays/career-goals",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nAccueil\n/\nRédaction\n/\nRédaction sur les objectifs professionnels\n\nGUIDE DE RÉDACTION SCHOLARSHIPTOP\n\nRédaction sur les objectifs professionnels\n\nCe texte doit montrer pourquoi votre objectif a du sens maintenant, pas seulement quel poste vous voulez plus tard.\n\nEN UNE PHRASE\n\nReliez preuves passées, plan d’études actuel et prochaine étape professionnelle.\n\nOuvrir Essay Mentor\nTrouver des bourses\nRendre l’objectif crédible\n\nVous n’avez pas besoin d’un plan parfait sur dix ans; il faut une direction liée à vos choix.\n\nNommer le domaine\nExpliquer l’origine\nInclure cours, projets ou service\nLa bourse comme pont\n\nExpliquez l’étape pratique que la bourse facilite: frais, livres, certification, déplacement ou équipement.\n\nÊtre concret\nÉviter les garanties\nSe concentrer sur la préparation\nChecklist pratique\nObjectif en une phrase\nPreuve personnelle\nPlan d’études\nUsage de la bourse\nConclusion réaliste\nExemples\nMon objectif est d’analyser la santé publique avec un focus sur l’accès rural.\nLa bourse aiderait à financer un certificat de données avant un stage",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/essays/mistakes",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nAccueil\n/\nRédaction\n/\nErreurs courantes dans les rédactions de bourse\n\nGUIDE DE RÉDACTION SCHOLARSHIPTOP\n\nErreurs courantes dans les rédactions de bourse\n\nBeaucoup de textes faibles ne manquent pas d’histoire; ils sont trop généraux ou ne répondent pas à la consigne.\n\nEN UNE PHRASE\n\nLa plus grande erreur est d’écrire un texte poli qui pourrait appartenir à n’importe quel étudiant.\n\nOuvrir Essay Mentor\nTrouver des bourses\nAffirmations génériques\n\nDes mots comme motivé ou passionné ne sont pas des preuves. Remplacez-les par des actions.\n\nNommer projet ou responsabilité\nMontrer le changement\nUtiliser des détails défendables\nIgnorer le fournisseur\n\nVous n’avez pas besoin de flatter l’organisation, mais vous devez répondre à ce qui est demandé.\n\nIdentifier le thème\nAdapter le texte\nConfirmer les exemples requis\nChecklist pratique\nSupprimer phrases génériques\nAjouter preuve\nVérifier chaque paragraphe\nÉviter la répétition du CV\nConfirmer la source\nExemples\nGénérique: je suis leader. Mieux: j’ai organisé une collecte quand mon club a perdu son sponsor.\nGé",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/compare/scholarship-vs-grant",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nRetour à Comparer\n\nCOMPARAISON SCHOLARSHIPTOP\n\nBourse vs subvention\n\nRÉPONSE COURTE\n\nUne bourse met souvent l’accent sur mérite, profil ou objectif; une subvention est souvent liée à un besoin, programme ou financement institutionnel.\n\nComparaison rapide\nFacteur\tBourse\tSubvention\nUsage courant\tPrix éducatif compétitif.\tAide ou financement pour un but défini.\nAdmissibilité\tMérite, domaine, identité ou besoin.\tBesoin, programme, institution ou gouvernement.\nVérification\tConfirmer fournisseur, date et documents.\tConfirmer règles, paiement et conditions.\nChoisissez Bourse si\nLa consigne demande réalisations, objectifs ou profil.\nVous pouvez préparer des documents compétitifs.\nChoisissez Subvention si\nL’aide est liée au besoin ou au programme.\nUne institution ou agence fixe les règles.\nChecklist de décision\nLire les règles officielles\nConfirmer le renouvellement\nVérifier les documents\nComparer l’effort\nContinuez votre recherche de bourses\nExplorer les bourses\nAvertissement sur l’aide financière\nTrouver des bourses\nQuestions fréquentes\nUne subvention do",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/compare/merit-vs-need-based-scholarships",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nRetour à Comparer\n\nCOMPARAISON SCHOLARSHIPTOP\n\nMérite vs besoin financier\n\nRÉPONSE COURTE\n\nLes bourses au mérite récompensent des preuves de performance; celles selon le besoin ciblent un écart économique documenté.\n\nComparaison rapide\nFacteur\tMérite\tBesoin\nBase\tNotes, leadership, talent, service ou réussites.\tCoûts éducatifs face aux ressources.\nDocuments\tRelevé, recommandations, portfolio ou rédaction.\tFormulaires financiers, budget ou explication.\nRisque\tConcurrence élevée.\tDonnées financières incomplètes ou règles strictes.\nChoisissez Mérite si\nVous avez une preuve forte de performance.\nVous pouvez démontrer vos réussites.\nChoisissez Besoin si\nVotre écart financier est clair.\nVous pouvez fournir les documents demandés.\nChecklist de décision\nIdentifier le critère principal\nPréparer preuve\nConfirmer documents\nÉviter les promesses\nContinuez votre recherche de bourses\nGuide besoin financier\nExplorer les bourses\nTrouver des bourses\nQuestions fréquentes\nPuis-je postuler aux deux types?\n\nOui, si vous répondez aux critères et pouvez fournir les docume",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/compare/no-essay-vs-essay-scholarships",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nRetour à Comparer\n\nCOMPARAISON SCHOLARSHIPTOP\n\nBourses sans rédaction vs avec rédaction\n\nRÉPONSE COURTE\n\nSans rédaction réduit l’effort; avec rédaction permet de se distinguer si votre histoire correspond à la consigne.\n\nComparaison rapide\nFacteur\tSans rédaction\tAvec rédaction\nTemps\tPlus rapide.\tDemande planification et relecture.\nDifférenciation\tMoins d’espace pour expliquer votre adéquation.\tPlus d’espace pour des preuves personnelles.\nRisque\tPeut attirer plus de candidats.\tPeut échouer si la consigne est mal traitée.\nChoisissez Sans rédaction si\nVous remplissez les règles et manquez de temps.\nLa candidature est claire et gratuite.\nChoisissez Avec rédaction si\nVous avez une histoire forte.\nLa consigne correspond à vos objectifs ou besoins.\nChecklist de décision\nConfirmer absence de frais\nVérifier admissibilité\nUtiliser la checklist si rédaction\nContinuez votre recherche de bourses\nChecklist de rédaction\nExplorer les bourses\nTrouver des bourses\nQuestions fréquentes\nLes bourses sans rédaction sont-elles réelles?\n\nCertaines oui, mais vérifiez sourc",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/compare/local-vs-national-scholarships",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nRetour à Comparer\n\nCOMPARAISON SCHOLARSHIPTOP\n\nBourses locales vs bourses nationales\n\nRÉPONSE COURTE\n\nLa meilleure option dépend de votre adéquation réelle, pas seulement du montant.\n\nComparaison rapide\nFacteur\tLocale\tNationale\nPortée\tÉcole, ville, comté, État ou communauté.\tPays entier ou groupe large.\nConcurrence\tPeut être plus faible si le critère est étroit.\tSouvent plus large.\nVérification\tÉcole, fondation ou groupe civique.\tFournisseur national et règles de confidentialité.\nChoisissez Locale si\nVous remplissez une résidence ou école spécifique.\nVous pouvez obtenir des documents locaux.\nChoisissez Nationale si\nVotre profil correspond à des critères larges.\nVous pouvez produire une candidature forte.\nChecklist de décision\nVérifier résidence\nConfirmer organisation\nComparer effort et montant\nContinuez votre recherche de bourses\nExplorer les bourses\nMéthode de vérification\nTrouver des bourses\nQuestions fréquentes\nLes bourses locales sont-elles meilleures?\n\nPas toujours, mais elles peuvent être fortes si l’admissibilité correspond clairement.\n\nCom",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/essays/outline",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nAccueil\n/\nRédaction\n/\nPlan de rédaction pour bourses\n\nGUIDE DE RÉDACTION SCHOLARSHIPTOP\n\nPlan de rédaction pour bourses\n\nUn plan évite que votre réponse devienne une liste de réussites. L’objectif est de soutenir un argument clair sur votre adéquation avec la bourse.\n\nEN UNE PHRASE\n\nUn bon plan assigne à chaque paragraphe une fonction : répondre au prompt, le prouver et le relier au prix.\n\nOuvrir Essay Mentor\nTrouver des bourses\nPlan en cinq parties\n\nLa plupart des rédactions se planifient en cinq parties : accroche, contexte, preuves, réflexion et usage futur du prix.\n\nAccroche : un moment, une décision ou un problème concret.\nContexte : pourquoi ce moment compte.\nPreuves : ce que vous avez fait, appris, construit ou changé.\nRéflexion : ce que les preuves montrent sur vous.\nProchaine étape : comment la bourse soutient un plan réel.\nGardez le prompt visible\n\nAvant de rédiger, réécrivez le prompt en checklist. Chaque paragraphe doit en couvrir une partie.\n\nRepérez les thèmes obligatoires : besoin, leadership, service ou objectifs.\nNotez la limite d",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/essays/leadership",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nAccueil\n/\nRédaction\n/\nGuide de rédaction leadership pour bourses\n\nGUIDE DE RÉDACTION SCHOLARSHIPTOP\n\nGuide de rédaction leadership pour bourses\n\nLes textes sur le leadership sont plus forts quand ils décrivent un problème concret et ce que vous avez fait quand d’autres comptaient sur votre jugement.\n\nEN UNE PHRASE\n\nUn texte leadership doit montrer action, responsabilité, résultat et réflexion.\n\nOuvrir Essay Mentor\nTrouver des bourses\nChoisissez un vrai moment de leadership\n\nLe leadership ne signifie pas toujours président de club. Il peut être organiser, médier, tutoriser, assumer des responsabilités familiales ou lancer un projet.\n\nCommencez par un problème, pas un titre.\nExpliquez ce que vous avez fait personnellement.\nNommez le résultat ou la leçon.\nMontrez votre progression\n\nLes comités veulent souvent voir comment vous réfléchissez sous pression. Incluez ce que vous avez appris et comment cela a changé votre action suivante.\n\nÉvitez de prétendre avoir tout résolu seul.\nReconnaissez l’équipe ou la communauté si pertinent.\nReliez la leçon à vot",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/essays/why-do-you-deserve-this-scholarship",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nAccueil\n/\nRédaction\n/\nPourquoi méritez-vous cette bourse ?\n\nGUIDE DE RÉDACTION SCHOLARSHIPTOP\n\nPourquoi méritez-vous cette bourse ?\n\nCe prompt ne demande pas de vous déclarer meilleur que tous les autres. Il demande d’expliquer pourquoi votre profil correspond au but du prix.\n\nEN UNE PHRASE\n\nRépondez en prouvant l’adéquation avec des faits, pas en revendiquant un droit.\n\nOuvrir Essay Mentor\nTrouver des bourses\nTraduisez mériter en adéquation\n\nUtilisez les critères du fournisseur comme cadre. Si la bourse valorise le service, parlez de service. Si elle valorise le domaine, parlez de votre préparation.\n\nNommez l’adéquation entre votre profil et le prix.\nAppuyez-la sur un ou deux faits.\nExpliquez comment le prix aide la prochaine étape.\nRestez confiant et ancré\n\nLe ton doit être clair et reconnaissant, ni apologétique ni arrogant.\n\nÉvitez de dire que vous méritez plus que les autres.\nÉvitez une gratitude générique sans preuve.\nConcluez sur un point pratique.\nChecklist pratique\nIdentifiez le but de la bourse.\nÉnoncez votre adéquation.\nApportez des pre",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/essays/personal-statement",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nAccueil\n/\nRédaction\n/\nDéclaration personnelle pour bourses\n\nGUIDE DE RÉDACTION SCHOLARSHIPTOP\n\nDéclaration personnelle pour bourses\n\nUne déclaration personnelle donne au comité une image cohérente de qui vous êtes, de ce qui a orienté votre parcours et de pourquoi le prix correspond à votre prochaine étape.\n\nEN UNE PHRASE\n\nUne déclaration personnelle doit rendre parcours, motivation et plan cohérents.\n\nOuvrir Essay Mentor\nTrouver des bourses\nTrouvez le fil conducteur\n\nLes meilleures déclarations ne sont pas des autobiographies complètes. Elles choisissent les détails qui expliquent votre direction actuelle.\n\nChoisissez deux ou trois moments liés.\nExpliquez des choix, pas seulement des événements.\nConcluez sur la voie éducative que vous suivez.\nÉvitez de répéter le CV\n\nVous pouvez mentionner des réussites, mais il faut révéler sens et motivation que le CV ne montre pas.\n\nRéfléchissez après chaque exemple.\nMontrez comment votre pensée a évolué.\nGardez un ton précis et direct.\nChecklist pratique\nChoisissez un thème central.\nUtilisez des exemples préc",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/essays/stem",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nAccueil\n/\nRédaction\n/\nGuide de rédaction STEM pour bourses\n\nGUIDE DE RÉDACTION SCHOLARSHIPTOP\n\nGuide de rédaction STEM pour bourses\n\nUne rédaction STEM doit montrer comment vous pensez, construisez, testez, recherchez ou résolvez des problèmes. Évitez de dire seulement que vous aimez la science ou la technologie.\n\nEN UNE PHRASE\n\nUne bonne rédaction STEM utilise des preuves techniques et explique pourquoi le travail compte.\n\nOuvrir Essay Mentor\nTrouver des bourses\nUtilisez des preuves techniques\n\nProjets, labos, code, stages, robotique, tutorat, recherche et cours peuvent servir de preuves si vous expliquez clairement votre rôle.\n\nDécrivez le problème traité.\nNommez votre contribution.\nExpliquez ce que vous avez appris ou ce qui a changé.\nReliez STEM à l’impact\n\nLe texte doit relier l’intérêt technique à une personne, une communauté, une industrie, une question de recherche ou une direction professionnelle.\n\nÉvitez le jargon inutile.\nDéfinissez les termes techniques si besoin.\nMontrez curiosité et persistance.\nChecklist pratique\nNommez votre domain",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        },
+        {
+          "href": "/scholarships/stem",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        },
+        {
+          "href": "/scholarships/engineering",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/essays/no-essay-scholarships",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nAccueil\n/\nRédaction\n/\nBourses sans rédaction\n\nGUIDE DE RÉDACTION SCHOLARSHIPTOP\n\nBourses sans rédaction\n\nLes bourses sans rédaction font gagner du temps, mais ne sont pas automatiquement plus faciles à obtenir. Beaucoup sont larges et très demandées ; vérifiez la source et équilibrez-les avec des prix mieux adaptés.\n\nEN UNE PHRASE\n\nLes bourses sans rédaction réduisent l’écriture, mais il faut toujours vérifier admissibilité, source, date et règles de sélection.\n\nOuvrir Essay Mentor\nTrouver des bourses\nCe que signifie généralement sans rédaction\n\nLe fournisseur ne demande pas de texte traditionnel. La candidature peut inclure formulaires, réponses d’admissibilité, preuve d’inscription ou création de compte.\n\nVérifiez s’il existe une courte réponse.\nConfirmez l’admissibilité avant de partager des données personnelles.\nLisez comment le gagnant est choisi.\nComment les utiliser intelligemment\n\nUtilisez-les dans un plan équilibré, pas comme plan unique.\n\nGardez les options à faible effort avec source officielle claire.\nPriorisez les prix mieux adaptés q",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        },
+        {
+          "href": "/scholarships/no-essay",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/resources/how-to-find-scholarships",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nAccueil\n/\nRessources\n/\nComment trouver des bourses qui valent votre temps\n\nGUIDE SCHOLARSHIPTOP\n\nComment trouver des bourses qui valent votre temps\n\nUne bonne recherche ne consiste pas à tout postuler. Commencez large, vérifiez l’admissibilité tôt, comparez l’effort à la valeur et gardez seulement les opportunités avec des règles officielles claires.\n\nTrouver des bourses\nMéthode de vérification\nCommencez par l’adéquation, pas le volume\n\nLa perte de temps la plus rapide est de postuler sur le titre seul. Utilisez les filtres de niveau, domaine, pays, citoyenneté, GPA et établissement avant de lire la rédaction.\n\nFaites une recherche large puis affinez par admissibilité.\nPriorisez les fiches avec source officielle et date claire.\nGardez à part les pistes prometteuses mais incomplètes.\nComparez l’effort avant de vous engager\n\nUn gros prix avec plusieurs textes peut valoir le coup, mais seulement si vous avez le temps et correspondez aux règles principales.\n\nEstimez les documents requis.\nVérifiez si relevés ou lettres demandent du délai.\nAssociez les ",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/resources/how-to-apply-for-scholarships-checklist",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nAccueil\n/\nRessources\n/\nChecklist de candidature aux bourses\n\nGUIDE SCHOLARSHIPTOP\n\nChecklist de candidature aux bourses\n\nLes candidatures sont plus simples quand vous séparez admissibilité, documents, rédaction, revue de la source officielle et envoi final.\n\nTrouver des bourses\nMéthode de vérification\nAvant d’écrire\n\nNe commencez pas la rédaction tant que la bourse est ouverte, que votre profil correspond et que vous connaissez les pièces requises.\n\nLisez l’admissibilité avant le formulaire.\nVérifiez fuseau horaire et mode d’envoi.\nListez chaque document et qui le contrôle.\nAvant d’envoyer\n\nLa relecture finale doit repérer champs vides, relevés obsolètes, noms de fichiers faibles et voies non officielles.\n\nUtilisez la page officielle du fournisseur pour les règles finales.\nRelisez le texte face au prompt.\nEnregistrez confirmations ou e-mails.\nChecklist pratique\nAdmissibilité confirmée\nDate confirmée\nPrompt copié dans le plan\nRelevé ou inscription demandé\nLettre de recommandation planifiée\nLien officiel vérifié\nConfirmation d’envoi enregistrée\nExem",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/resources/no-essay-scholarships-guide",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nAccueil\n/\nRessources\n/\nGuide des bourses sans rédaction\n\nGUIDE SCHOLARSHIPTOP\n\nGuide des bourses sans rédaction\n\nLes bourses sans rédaction peuvent être utiles, mais les candidatures faciles attirent souvent beaucoup de monde. Traitez-les comme partie du plan, pas comme stratégie unique.\n\nTrouver des bourses\nMéthode de vérification\nPourquoi elles sont différentes\n\nMoins d’effort signifie souvent plus de candidats. La tâche principale est de confirmer que la fiche est légitime et que vous correspondez aux règles de base.\n\nVérifiez le statut de la source avant de partager des données.\nConfirmez s’il s’agit de tirage ou de mérite.\nNe payez pas pour débloquer une bourse.\nComment bien les utiliser\n\nUtilisez-les comme compléments rapides après les candidatures mieux adaptées.\n\nPostulez seulement si la source est claire.\nEnregistrez les dates pour ne pas distraire des grosses candidatures.\nÉquilibrez entrées faciles et bourses ciblées.\nChecklist pratique\nSource officielle visible\nAucun frais obligatoire\nRègles d’admissibilité claires\nDate claire\nAttentes",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/scholarships/no-essay",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/resources/easy-scholarships-guide",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nAccueil\n/\nRessources\n/\nGuide des bourses faciles\n\nGUIDE SCHOLARSHIPTOP\n\nGuide des bourses faciles\n\nLes bourses faciles aident quand elles font gagner du temps sans cacher le risque. Séparez les candidatures légitimes à faible effort des fiches vagues.\n\nTrouver des bourses\nMéthode de vérification\nCe que facile devrait signifier\n\nFacile devrait signifier moins de pièces, règles claires et voie directe. Pas source floue, prix garanti ou paiement suspect.\n\nCherchez peu de pièces requises.\nConfirmez la source officielle.\nVérifiez confidentialité et données.\nQuand passer\n\nPassez si l’admissibilité est confuse, le fournisseur inconnu, la date absente ou s’ils demandent paiement ou données sensibles.\n\nPas de source officielle\nPas de montant clair\nPas de règles claires\nChecklist pratique\nEffort vérifié\nDocuments vérifiés\nDate vérifiée\nSource vérifiée\nRègles du prix vérifiées\nExemples\nUn court formulaire officiel peut être une bonne candidature facile.\nUn prix garanti d’un site inconnu doit être traité comme dangereux.\nRelated ScholarshipTop pages\nBourses à",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/resources/stem-scholarships-guide",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nAccueil\n/\nRessources\n/\nGuide des bourses STEM\n\nGUIDE SCHOLARSHIPTOP\n\nGuide des bourses STEM\n\nLes bourses STEM dépendent souvent du domaine, du niveau, de l’établissement, de la recherche, du GPA, de la citoyenneté ou des objectifs professionnels. Lisez l’admissibilité avant de rédiger.\n\nTrouver des bourses\nMéthode de vérification\nSignaux d’admissibilité STEM courants\n\nLes fournisseurs peuvent limiter par filière, branche d’ingénierie, informatique, santé, data science, recherche ou groupes sous-représentés.\n\nVérifiez la formulation exacte du domaine.\nConfirmez le niveau : lycée, licence, master ou doctorat.\nCherchez GPA, recherche, stage ou projet requis.\nRenforcer une candidature STEM\n\nUtilisez des preuves concrètes : projets, recherche, stages, cours, leadership ou impact communautaire aligné sur la mission.\n\nReliez votre histoire au focus du fournisseur.\nPréparez les relevés tôt.\nDemandez aux recommandeurs des exemples STEM précis.\nChecklist pratique\nFilière ou domaine correspond\nNiveau correspond\nRègles GPA vérifiées\nRelevé prêt\nRecommandation",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/scholarships/category/stem",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        },
+        {
+          "href": "/scholarships/category/medical",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        },
+        {
+          "href": "/scholarships/engineering",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/resources/scholarships-in-usa-for-international-students",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nAccueil\n/\nRessources\n/\nBourses aux États-Unis pour étudiants internationaux\n\nGUIDE SCHOLARSHIPTOP\n\nBourses aux États-Unis pour étudiants internationaux\n\nLes bourses américaines pour internationaux exigent une vérification attentive. Certaines ouvrent aux non-citoyens ; d’autres exigent résidence, citoyenneté, FAFSA ou inscription dans un établissement précis.\n\nTrouver des bourses\nMéthode de vérification\nVérifications d’admissibilité importantes\n\nConfirmez citoyenneté, statut de visa, établissement, niveau, domaine et si FAFSA ou résidence domestique est exigé.\n\nLisez la formulation pour non-citoyens.\nConfirmez si les titulaires F-1 peuvent postuler.\nLisez attentivement les restrictions par école.\nDocuments à préparer\n\nPièces courantes : relevés, preuve d’inscription, rédactions, besoin financier, lettres et parfois détails de visa.\n\nNe téléversez pas de documents sensibles sur des sources floues.\nConfirmez le domaine officiel de candidature.\nVérifiez si les documents traduits sont acceptés.\nChecklist pratique\nAdmissibilité non-citoyens confirmée\nR",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/scholarships/study-in/united-states",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/resources/scholarships-for-high-school-seniors",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nAccueil\n/\nRessources\n/\nBourses pour lycéens en terminale\n\nGUIDE SCHOLARSHIPTOP\n\nBourses pour lycéens en terminale\n\nLes terminaux doivent construire un calendrier tôt car dates, lettres, relevés, rédactions et preuve d’inscription peuvent chevaucher les candidatures universitaires.\n\nTrouver des bourses\nMéthode de vérification\nPrioriser par date et adéquation\n\nCommencez par les bourses où statut de terminale, année de diplôme, université visée, GPA, domaine ou lieu correspondent clairement.\n\nSéparez prix locaux, scolaires, nationaux et universitaires.\nSurveillez les groupes de dates automne, hiver et printemps.\nDemandez tôt aux conseillers pour relevés et lettres.\nPièces courantes\n\nOn demande souvent rédactions, relevés, activités, lettres, preuve d’inscription ou besoin financier.\n\nGardez une liste d’activités prête.\nConservez des preuves réutilisables pour les textes.\nEnregistrez les confirmations d’envoi.\nChecklist pratique\nAnnée de diplôme correspond\nRègles d’inscription universitaire vérifiées\nRelevé demandé\nRecommandation demandée\nPrompt de ré",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/scholarships/high-school",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/resources/scholarship-eligibility-explained",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nAccueil\n/\nRessources\n/\nAdmissibilité aux bourses expliquée\n\nGUIDE SCHOLARSHIPTOP\n\nAdmissibilité aux bourses expliquée\n\nL’admissibilité est le premier filtre. Si vous ne correspondez pas aux règles principales, un bon texte ne rattrape généralement pas la candidature.\n\nTrouver des bourses\nMéthode de vérification\nCatégories d’admissibilité courantes\n\nLes bourses peuvent limiter par niveau, domaine, établissement, pays, citoyenneté, résidence, GPA, besoin, identité, communauté ou projet professionnel.\n\nLisez attentivement le langage obligatoire.\nSéparez critères souhaités et obligatoires.\nVérifiez s’ils s’appliquent à la candidature ou à l’attribution.\nQuand l’admissibilité est floue\n\nSi une fiche n’explique pas bien l’admissibilité, vérifiez la source officielle ou contactez le fournisseur avant un gros investissement.\n\nCherchez FAQ officielle ou PDF de règles.\nVérifiez les termes de l’année en cours.\nNe vous fiez pas seulement aux résumés tiers.\nChecklist pratique\nNiveau académique\nDomaine ou filière\nCitoyenneté ou résidence\nGPA\nÉtablissement\nBesoi",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/resources/scholarship-documents-checklist",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nAccueil\n/\nRessources\n/\nChecklist des documents pour bourses\n\nGUIDE SCHOLARSHIPTOP\n\nChecklist des documents pour bourses\n\nLes documents décident souvent si une candidature est possible avant la date limite. Créez un dossier réutilisable et suivez ce que demande chaque fournisseur.\n\nTrouver des bourses\nMéthode de vérification\nDocuments courants\n\nBeaucoup de bourses demandent pièces académiques, identité, inscription, besoin financier, rédaction, recommandation ou portfolio.\n\nRelevé ou dossier académique\nPreuve d’inscription ou d’admission\nRédaction ou courte réponse\nLettre de recommandation\nCV, liste d’activités ou portfolio\nSécurité des documents\n\nTéléversez les pièces sensibles uniquement via des voies officielles de confiance. Méfiez-vous des formulaires non officiels, paiements inattendus ou liens d’e-mails inconnus.\n\nVérifiez le domaine de candidature.\nÉvitez d’envoyer des données bancaires trop tôt.\nConservez des copies des fichiers envoyés.\nChecklist pratique\nRelevé\nPreuve d’inscription\nBrouillon de rédaction\nDemande de recommandation\nCV ou l",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/resources/how-to-apply-for-scholarships",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nEnglish\nEspañol\nFrançais\n← Retour à l’accueil/Ressources\nComment postuler aux bourses\n\nLes bourses récompensent la préparation plus que la chance. Ce guide vous accompagne sur où chercher, quoi rassembler et comment envoyer des candidatures lisibles sans vous épuiser.\n\nLa plupart des étudiants perdent des bourses dans la partie ennuyeuse : champs vides, textes copiés d’autres apps ou envois de dernière minute. Traitez la candidature comme un projet avec calendrier, dossier et checklist.\n\nOù trouver des bourses\n\nCommencez par le service d’aide financière de votre école et les portails recommandés. Ajoutez des bases nationales et explorez par matière et État pour ne pas courir les mêmes gros prix.\n\nVérifiez l’admissibilité avant d’investir du temps dans la rédaction.\nGardez liens et dates au même endroit.\nMélangez bourses ambitieuses, adaptées et de secours.\nPréparez vos documents\n\nLa plupart demandent relevé, CV ou liste d’activités, preuve d’inscription et parfois informations financières. Créez un dossier maître en PDF bien nommé.\n\nDemandez les l",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/resources/how-to-apply-for-scholarships",
+          "issue": "language switcher → English canonical of current page",
+          "classification": "language-switcher"
+        },
+        {
+          "href": "/es/resources/how-to-apply-for-scholarships",
+          "issue": "language switcher → other Stage 2 locale",
+          "classification": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/resources/scholarship-deadlines-explained",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nEnglish\nEspañol\nFrançais\n← Retour à l’accueil/Ressources\nDates de bourses expliquées\n\nLes dates semblent simples jusqu’à mélanger cachets, fuseaux et revues continues. Voici ce que « échéance » signifie vraiment et comment rester en avance sans vivre dans sa boîte mail.\n\nToutes les dates ne se valent pas. Certaines ferment à minuit. D’autres sont continues et lisent les dossiers jusqu’à épuisement des fonds.\n\nTypes de dates\n\nLes dates fixes ferment à un jour et une heure précis. Les continues récompensent les premiers arrivés. Les prioritaires donnent une meilleure considération avant une première date.\n\nConfirmez le fuseau horaire sur les règles officielles.\nVérifiez si « reçu » signifie en ligne ou cachet postal.\nNotez si les lettres doivent arriver le même jour.\nQuand commencer\n\nCommencez plus tôt que confortable, surtout pour textes et lettres. Cartographiez les dates au moins six semaines à l’avance.\n\nSuivre les dates\n\nCalendrier, tableur ou document : choisissez un système que vous ouvrirez. Pour chaque bourse : nom, lien, date, pièces et st",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/resources/scholarship-deadlines-explained",
+          "issue": "language switcher → English canonical of current page",
+          "classification": "language-switcher"
+        },
+        {
+          "href": "/es/resources/scholarship-deadlines-explained",
+          "issue": "language switcher → other Stage 2 locale",
+          "classification": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/resources/combine-multiple-scholarships",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nEnglish\nEspañol\nFrançais\n← Retour à l’accueil/Ressources\nPeut-on combiner plusieurs bourses ?\n\nOui, souvent, mais pas toujours. L’empilement dépend des règles de chaque prix, de la politique scolaire et du fait que l’argent soit limité aux frais de scolarité.\n\nEmpiler des bourses ressemble à de l’argent gratuit, mais écoles et donateurs ont des garde-fous. Certains prix comblent le besoin non couvert ; d’autres plafonnent au coût de présence publié.\n\nComment fonctionne l’empilement\n\nTenir plusieurs bourses en même temps. Donateurs privés, États et université envoient souvent les fonds au service de facturation, qui les applique selon la politique.\n\nLa bourse va-t-elle à l’école ou directement à moi ?\nSe renouvelle-t-elle automatiquement ?\nCouvre-t-elle seulement les frais ou d’autres coûts ?\nRègles et limites\n\nCherchez « non cumulable », « dernier dollar » ou « peut ajuster une autre aide ». Près du plafond, une nouvelle bourse peut remplacer une aide existante.\n\nBourses privées vs universitaires\n\nLes bourses externes ont leurs règles ; les univer",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/resources/combine-multiple-scholarships",
+          "issue": "language switcher → English canonical of current page",
+          "classification": "language-switcher"
+        },
+        {
+          "href": "/es/resources/combine-multiple-scholarships",
+          "issue": "language switcher → other Stage 2 locale",
+          "classification": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/resources/medical-scholarships-guide",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nEnglish\nEspañol\nFrançais\n← Retour à l’accueil/Ressources\nGuide des bourses médicales\n\nLes étudiants en santé ont plus d’angles qu’il n’y paraît. Ce guide aide à trier les options sans transformer la recherche en cours à plein temps.\n\nLes bourses médicales ne forment pas une seule catégorie. Infirmière, pré-médecine, santé publique et sciences biomédicales ont des chemins distincts.\n\nCommencez par votre voie santé réelle\n\nErreur courante : ne chercher que « bourses médicales ». Les fournisseurs écrivent pour infirmière, pharmacie, thérapie, santé publique ou médecine rurale.\n\nPré-médecine : bourses science, service et carrière santé.\nInfirmière : hôpitaux, associations d’État, fondations locales.\nSanté publique : prévention, communauté, politique.\nSoins paramédicaux : certification et pénurie de personnel.\nD’où viennent souvent les bourses\n\nÉcoles, hôpitaux, associations professionnelles, fondations locales et employeurs ont des fonds que les étudiants manquent s’ils ne cherchent que dans les bases publiques.\n\nAlignez votre histoire sur la raison d",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/resources/medical-scholarships-guide",
+          "issue": "language switcher → English canonical of current page",
+          "classification": "language-switcher"
+        },
+        {
+          "href": "/es/resources/medical-scholarships-guide",
+          "issue": "language switcher → other Stage 2 locale",
+          "classification": "cross-locale-switcher"
+        },
+        {
+          "href": "/scholarships/category/medical",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/resources/scholarships-for-international-students-guide",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nEnglish\nEspañol\nFrançais\n← Retour à l’accueil/Ressources\nBourses pour étudiants internationaux\n\nLes internationaux peuvent trouver des bourses, mais citoyenneté, visa, admissibilité scolaire, délais documentaires et restrictions de fonds comptent avant d’y passer des heures.\n\nChercher des bourses en tant qu’international peut sembler lire des conditions en permanence. L’objectif n’est pas de tout postuler, mais d’identifier les prix où votre statut correspond vraiment.\n\nQue signifie international-friendly\n\nCe n’est pas garanti. Cela signifie que la fiche peut mériter un examen. Certains fournisseurs ouvrent explicitement ; d’autres exigent une lecture fine de citoyenneté, FAFSA ou numéro de sécurité sociale.\n\nCommencez par l’aide de l’école\n\nPour beaucoup d’internationaux, les meilleures options commencent à l’université : mérite d’admission, départements, bourses internationales ou assistantats.\n\nSéparez aide d’admission et bourses externes\n\nLe mot bourse couvre des types d’argent et de règles différents. Gardez-les dans des catégories séparées d",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/resources/scholarships-for-international-students-guide",
+          "issue": "language switcher → English canonical of current page",
+          "classification": "language-switcher"
+        },
+        {
+          "href": "/es/resources/scholarships-for-international-students-guide",
+          "issue": "language switcher → other Stage 2 locale",
+          "classification": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/terms",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\n← Retour à l’accueil\nEnglish\nEspañol\nFrançais\nConditions d’utilisation\n\nDernière mise à jour : 9 avril 2026\n\nCes conditions régissent votre accès et utilisation de ScholarshipTop, un service exploité par Daur M. (Freebee KZ). En utilisant ScholarshipTop, vous acceptez ces conditions.\n\n1. Utilisation du service\n\nScholarshipTop propose des fiches de bourses, des filtres, des recommandations basées sur le profil et des outils associés. Vous ne pouvez utiliser le service qu’à des fins légales et personnelles.\n\n2. Aucune garantie de résultat\n\nScholarshipTop ne garantit ni admissibilité, ni acceptation par un fournisseur, ni décisions de financement, ni attribution de prix. Les fournisseurs de bourses prennent toutes les décisions.\n\n3. Informations utilisateur\n\nVous êtes responsable des informations exactes dans votre compte et profil. Des données incorrectes ou incomplètes peuvent affecter recommandations et correspondances.\n\n4. Comptes\n\nSi vous créez un compte, vous êtes responsable de la confidentialité de vos identifiants et de l’activité sous votre",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/terms",
+          "issue": "language switcher → English canonical of current page",
+          "classification": "language-switcher"
+        },
+        {
+          "href": "/es/terms",
+          "issue": "language switcher → other Stage 2 locale",
+          "classification": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/privacy-policy",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\n← Retour à l’accueil\nEnglish\nEspañol\nFrançais\nPolitique de confidentialité\n\nDernière mise à jour : 9 avril 2026\n\nScholarshipTop, exploité par Daur M. (Freebee KZ), respecte votre vie privée. Cette politique explique quelles informations nous collectons, comment nous les utilisons et comment nous les protégeons.\n\n1. Informations collectées\n\nNous pouvons collecter les informations que vous fournissez directement : nom, e-mail, détails de profil académique, informations de compte et messages de contact. Nous pouvons aussi collecter des données techniques limitées automatiquement : navigateur, appareil, adresse IP, pages visitées et activité.\n\n2. Utilisation de vos informations\n\nNous pouvons utiliser vos informations pour créer et gérer votre compte, personnaliser les recommandations, améliorer recherche et expérience, communiquer avec vous, maintenir la sécurité et analyser l’usage du produit.\n\n3. Données de bourses et recommandations\n\nScholarshipTop peut afficher fiches, filtres et recommandations selon votre profil. Nous visons pertinence et précis",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/privacy-policy",
+          "issue": "language switcher → English canonical of current page",
+          "classification": "language-switcher"
+        },
+        {
+          "href": "/es/privacy-policy",
+          "issue": "language switcher → other Stage 2 locale",
+          "classification": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/refund-policy",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\n← Retour à l’accueil\nEnglish\nEspañol\nFrançais\nPolitique de remboursement\n\nDernière mise à jour : 9 avril 2026\n\nChez ScholarshipTop, exploité par Daur M. (Freebee KZ), nous voulons que vous soyez satisfait de notre service.\n\n1. Délai de remboursement\n\nVous pouvez demander un remboursement complet dans les 14 jours suivant votre achat initial si vous n’avez pas largement utilisé la base de données.\n\n2. Essai gratuit\n\nSi vous êtes en essai gratuit de 3 jours, vous pouvez annuler avant la fin pour éviter d’être facturé.\n\n3. Comment demander\n\nPour demander un remboursement ou annuler votre abonnement, écrivez à support@scholarshiptop.com.\n\n4. Traitement\n\nLes remboursements sont traités via notre prestataire de paiement, LemonSqueezy.\n\nFAQ\nCombien de temps prend un remboursement ?\n\nLes délais dépendent de LemonSqueezy et de votre banque. Contactez-nous pour un suivi.\n\nLes remboursements concernent-ils les bourses ?\n\nNon. Cette politique couvre abonnements et fonctions payantes de ScholarshipTop, pas les prix des fournisseurs externes.\n\nScholarshipTop n’",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/refund-policy",
+          "issue": "language switcher → English canonical of current page",
+          "classification": "language-switcher"
+        },
+        {
+          "href": "/es/refund-policy",
+          "issue": "language switcher → other Stage 2 locale",
+          "classification": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/help",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\n← Retour à l’accueil\nEnglish\nEspañol\nFrançais\nAide\n\nDernière mise à jour : 9 avril 2026\n\nBesoin d’aide avec ScholarshipTop ? Cette page explique le fonctionnement de base de la plateforme et où obtenir du support.\n\nUtiliser ScholarshipTop\n\nScholarshipTop aide à découvrir des bourses, explorer des fiches et voir des recommandations selon votre profil. Vous pouvez parcourir des bourses, vérifier les dates et enregistrer des opportunités.\n\nProfil et correspondances\n\nVotre profil aide à afficher des recommandations plus pertinentes. Plus vos informations sont précises, meilleures peuvent être les correspondances.\n\nBourses enregistrées\n\nVous pouvez enregistrer des bourses pour suivre les opportunités importantes et rester organisé pendant votre recherche.\n\nAdmissibilité et résultats\n\nScholarshipTop aide à trouver des opportunités, mais ne garantit ni admissibilité, ni acceptation, ni financement. Les fournisseurs prennent les décisions finales.\n\nBesoin de support ?\n\nPour de l’aide avec votre compte, écrivez à support@scholarshiptop.com.\n\nFAQ\nComment am",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/help",
+          "issue": "language switcher → English canonical of current page",
+          "classification": "language-switcher"
+        },
+        {
+          "href": "/es/help",
+          "issue": "language switcher → other Stage 2 locale",
+          "classification": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/faq",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\n← Retour à l’accueil\nEnglish\nEspañol\nFrançais\nQuestions fréquentes\n\nDernière mise à jour : 9 avril 2026\n\nRéponses aux questions courantes sur les bourses, le fonctionnement de ScholarshipTop, correspondances de profil, bourses enregistrées, admissibilité et support.\n\nÀ propos de ScholarshipTop\n\nScholarshipTop aide les étudiants à trouver des bourses plus efficacement grâce à des fiches, filtres et correspondances basées sur le profil.\n\nComptes et offres\n\nVous pouvez explorer une partie du catalogue sans compte, mais un profil permet des correspondances personnalisées, l’enregistrement d’opportunités et une meilleure expérience. Des offres payantes existent aussi.\n\nFAQ\nQu’est-ce que ScholarshipTop et comment aide-t-il à trouver des bourses ?\n\nC’est une plateforme pour explorer des bourses, filtrer des opportunités et découvrir des correspondances selon votre profil, au lieu de chercher manuellement sur des centaines de sites.\n\nComment trouver des bourses qui me correspondent ?\n\nCréez un profil avec votre niveau, intérêts et parcours. ScholarshipTop",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/faq",
+          "issue": "language switcher → English canonical of current page",
+          "classification": "language-switcher"
+        },
+        {
+          "href": "/es/faq",
+          "issue": "language switcher → other Stage 2 locale",
+          "classification": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/international-students",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nEnglish\nEspañol\nFrançais\n\nÉTUDIANTS INTERNATIONAUX\n\nTrouvez des bourses auxquelles vous pouvez vraiment postuler\n\nArrêtez de perdre du temps sur des bourses pour lesquelles vous n’êtes pas admissible. Nous montrons seulement les opportunités ouvertes aux étudiants internationaux.\n\nTrouver des bourses\nExplorer les bourses\nPourquoi il est difficile de trouver des bourses en tant qu’international\n\nBeaucoup de bourses sont réservées aux citoyens américains, les grands sites mélangent tout et les dates passent pendant la recherche.\n\nRègles d’admissibilité lues trop tard\nPeu de filtres clairs pour visa F1\nDates manquées pendant la recherche\nConçu pour les étudiants internationaux\n\nRésultats internationaux uniquement, correspondances selon votre profil et alertes de dates.\n\nSeulement des bourses ouvertes aux internationaux\nCorrespondances selon votre profil\nRappels de dates\nCe que vous obtenez avec ScholarshipTop\n\nMoins de temps sur des règles inutiles, candidatures plus rapides et dates plus claires.\n\nSeulement des bourses probablement adaptées\nMoins de",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/international-students",
+          "issue": "language switcher → English canonical of current page",
+          "classification": "language-switcher"
+        },
+        {
+          "href": "/es/international-students",
+          "issue": "language switcher → other Stage 2 locale",
+          "classification": "cross-locale-switcher"
+        },
+        {
+          "href": "/scholarships/category/stem",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        },
+        {
+          "href": "/scholarships/no-essay",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "classification": "allowed-zone-c"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/for-organizations",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nEnglish\nEspañol\nFrançais\n\nUNIVERSITÉS ET FONDATIONS\n\nTouchez des talents mondiaux\n\nScholarshipTop est le meilleur moyen de placer vos programmes devant des étudiants qui cherchent déjà du financement, pour des candidatures plus solides sans bruit inutile.\n\nTrouver des bourses\nExplorer les bourses\nPourquoi nous\n\nConçu pour les résultats : pertinence pour les étudiants, visibilité pour vos programmes.\n\nAudience ciblée selon vos critères\nPortée mondiale dans plus de 50 pays\nGestion simple avec flux optimisé\nComment ça marche\n\nTrois étapes simples du formulaire à la fiche en ligne.\n\nRemplissez le formulaire avec les détails du programme\nModération rapide pour vérifier la légitimité\nLes étudiants découvrent votre bourse et postulent via vos canaux\nAudience ciblée\n\nVos programmes atteignent des étudiants qui correspondent à vos critères pour des candidatures plus pertinentes.\n\nPortée mondiale\n\nConnectez-vous à des étudiants de plus de 50 pays qui utilisent ScholarshipTop pour trouver du financement.\n\nGestion simple\n\nFlux optimisé aujourd’hui, avec table",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/for-organizations",
+          "issue": "language switcher → English canonical of current page",
+          "classification": "language-switcher"
+        },
+        {
+          "href": "/es/for-organizations",
+          "issue": "language switcher → other Stage 2 locale",
+          "classification": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/submit-grant",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nEnglish\nEspañol\nFrançais\n\nPARTENAIRES\n\nDemander un compte organisation\n\nRejoignez ScholarshipTop en tant que partenaire vérifié. Demandez un compte pour accéder au tableau de bord de votre organisation afin de publier, gérer et mettre à jour vos programmes de bourses.\n\nTrouver des bourses\nExplorer les bourses\nAvantages partenaires\n\nProfil vérifié, gestion centralisée des bourses, portée ciblée et support prioritaire de l’équipe ScholarshipTop.\n\nÉtape suivante\n\nComplétez la demande d’accès partenaire. Vous pouvez aussi commencer depuis la page Pour les organisations pour revoir le processus.\n\nProfil vérifié\n\nUne page dédiée pour votre université ou fondation.\n\nGestion facile\n\nPubliez, modifiez et gérez vos bourses au même endroit.\n\nPortée ciblée\n\nVos bourses atteignent les bons candidats.\n\nSupport prioritaire\n\nAssistance directe de notre équipe.\n\nQuestions fréquentes\nQui peut demander un compte ?\nUniversités accréditées, fondations et autres financeurs légitimes de l’éducation souhaitant publier des bourses vérifiées.\nCombien de temps prend la véri",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [
+        {
+          "href": "/submit-grant",
+          "issue": "language switcher → English canonical of current page",
+          "classification": "language-switcher"
+        },
+        {
+          "href": "/es/submit-grant",
+          "issue": "language switcher → other Stage 2 locale",
+          "classification": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/get-scholarships",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nÉTAPE 1 SUR 2 · PAYS DU CANDIDAT\n\nDepuis quel pays postulez-vous ?\n\nChoisissez votre nationalité ou pays d’origine pour voir les bourses pour lesquelles vous êtes le plus susceptible d’être éligible.\n\nPAYS DU CANDIDAT / NATIONALITÉ\nContinuer",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/onboarding",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\n← Retour à l’accueil\n\nÉTAPE 1 · PAYS\n\nDepuis quel pays candidatez-vous ?\n\nChoisissez d’abord votre pays de candidature. Nous adapterons l’inscription et les bourses à ce pays.\n\nPAYS DU CANDIDAT / NATIONALITÉ\nContinuer",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/signin",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nConnexion\n\nRetrouvez vos bourses recommandées, opportunités enregistrées et l’avancement de vos candidatures.\n\nE-mail\nMot de passe\nSe connecter avec Google\nSe connecter\n\nMot de passe oublié ?\n\nPas encore de compte ? Créer un compte",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/signin/password_signin",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nConnexion\n\nRetrouvez vos bourses recommandées, opportunités enregistrées et l’avancement de vos candidatures.\n\nE-mail\nMot de passe\nSe connecter avec Google\nSe connecter\n\nMot de passe oublié ?\n\nPas encore de compte ? Créer un compte",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/signin/email_signin",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nConnexion\nE-mail\nSe connecter\n\nSe connecter avec e-mail et mot de passe\n\nPas encore de compte ? Créer un compte\n\nConnexion tierce\nGitHub",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/signin/forgot_password",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nRéinitialiser le mot de passe\n\nSaisissez votre e-mail et nous vous enverrons un lien de réinitialisation.\n\nE-mail\nEnvoyer le lien\n\nRetour à la connexion\n\nPas encore de compte ? Créer un compte",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/subscription",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nDébloquez la précision premium\nMensuel\n$14.99/mois\n\nFacturation de 14,99 $ chaque mois.\n\n✓\nDébloquez les bourses premium\n✓\nDébloquez le rapport de stratégie IQ\n✓\nAccès à « Easy Apply » et « International »\n✓\nAffichez tous les noms et liens des bourses\n✓\nFiltres intelligents illimités\nCommencer\n⭐ Le plus populaire\nTrimestriel\n$9.66/mois\n\nFacturation de 29 $ tous les 3 mois.\n\n✓\nTout le Mensuel, plus :\n✓\nDébloquez IQ Essay Mentor\n✓\nStratégie de bourses basée sur l’IQ + prochaines étapes d’essai\n✓\nEntretien intelligent et saisie vocale\n✓\nGénérations d’essais illimitées\n✓\nAlertes e-mail instantanées pour les nouvelles correspondances\n✓\nÉconomisez 35 % par rapport au mensuel\nCommencer\n✨ Meilleur rapport qualité-prix\nAnnuel\n$7.40/mois\n\nFacturation de 89 $ par an.\n\n✓\nTout le Trimestriel, plus :\n✓\nDébloquez IQ Essay Mentor\n✓\nRapport IQ complet avec bourses, prix et dates limites\n✓\nMeilleur prix par mois\n✓\nTraitement IA prioritaire\n✓\nAlertes e-mail prioritaires pour les nouvelles correspondances\n✓\nAccès complet pour toute la saison des candidatures\n✓\nÉconom",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/subscription/success",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nLangue:\nFrançais\nMerci\n\nVotre paiement a été reçu. L’accès Premium s’active dès confirmation par notre partenaire de paiement — en général sous une minute.\n\nParcourir les bourses\nAller au compte",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/account",
+      "locale": "fr",
+      "innerTextSample": "Skip to content\nScholarship\nTop\nÀ propos\nChercher des bourses\nFournisseurs\nComparer\nRessources\nGuides d'essai\nConnexion\nConnexion\n\nRetrouvez vos bourses recommandées, opportunités enregistrées et l’avancement de vos candidatures.\n\nE-mail\nMot de passe\nSe connecter avec Google\nSe connecter\n\nMot de passe oublié ?\n\nPas encore de compte ? Créer un compte",
+      "blockingHits": [],
+      "blockingAttrHits": [],
+      "linkIssues": [],
+      "status": 200
+    }
+  ]
+}

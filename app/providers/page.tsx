@@ -15,6 +15,7 @@ import {
 } from '@/lib/providers/providersHubUrl';
 import { SEO_ROUTE_STATE_SLUG_TO_CODE } from '@/lib/scholarships/seoTags/routeSegmentMaps';
 import { getCanonical } from '@/lib/seo/canonical';
+import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
 
 export type { ProvidersHubSearchParams };
 
@@ -34,7 +35,7 @@ export async function generateMetadata({
   return {
     title: baseTitle,
     description: baseDescription,
-    alternates: { canonical: canonicalUrl },
+    alternates: buildStage2EnglishPilotAlternates('/providers'),
     ...(isCanonicalListing
       ? {}
       : { robots: { index: false, follow: true } }),

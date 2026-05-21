@@ -4,6 +4,7 @@ import Link from 'next/link';
 import ResourceGuideShell from '@/components/content-hub/resourceGuides/ResourceGuideShell';
 import { resourceGuideLinkClassName } from '@/lib/content-hub/resourceGuidePages';
 import { resourceGuideHref } from '@/lib/scholarships/resourceGuideRoutes';
+import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
 import { getCanonical } from '@/lib/seo/canonical';
 
 const hrefApply = resourceGuideHref('how-to-apply-for-scholarships');
@@ -14,9 +15,7 @@ export const metadata: Metadata = {
   title: "Scholarship Deadlines Explained: Don't Miss Your Chance",
   description:
     'Learn how scholarship deadlines really work—fixed vs rolling dates, when to start, how to track them, and habits so you do not miss important scholarship opportunities.',
-  alternates: {
-    canonical
-  },
+  alternates: buildStage2EnglishPilotAlternates('/resources/scholarship-deadlines-explained'),
   openGraph: {
     title: "Scholarship Deadlines Explained: Don't Miss Your Chance",
     description:

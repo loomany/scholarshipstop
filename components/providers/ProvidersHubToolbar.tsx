@@ -53,7 +53,7 @@ function measurePanel(el: HTMLElement): PanelLayout {
   return { top, left, width, maxHeight };
 }
 
-const COUNTRY_OPTIONS: {
+const DEFAULT_COUNTRY_OPTIONS: {
   value: ProvidersHubCountryBucket;
   label: string;
 }[] = [
@@ -71,6 +71,9 @@ type Props = {
   listingBasePath?: string;
   /** When state is in the path, omit hidden `state` inputs. */
   stateEncodedInPath?: boolean;
+  searchPlaceholder?: string;
+  countryOptions?: { value: ProvidersHubCountryBucket; label: string }[];
+  loadingSearchAria?: string;
 };
 
 export function ProvidersHubToolbar({
@@ -78,7 +81,10 @@ export function ProvidersHubToolbar({
   activeStateCode,
   activeCountry,
   listingBasePath = '/providers',
-  stateEncodedInPath = false
+  stateEncodedInPath = false,
+  searchPlaceholder = 'Search by provider name, state, or your request...',
+  countryOptions = DEFAULT_COUNTRY_OPTIONS,
+  loadingSearchAria = 'Loading search'
 }: Props) {
   const router = useRouter();
   const sp = useSearchParams();
@@ -211,7 +217,7 @@ export function ProvidersHubToolbar({
         }}
       >
         <ul role="listbox" aria-label="Filter by country" className="py-1">
-          {COUNTRY_OPTIONS.map((opt) => (
+          {countryOptions.map((opt) => (
             <li key={opt.value} role="option">
               <button
                 type="button"
@@ -267,7 +273,7 @@ export function ProvidersHubToolbar({
                 type="search"
                 value={qDraft}
                 onChange={(e) => setQDraft(e.target.value)}
-                placeholder="Search by provider name, state, or your request..."
+                placeholder={searchPlaceholder}
                 autoComplete="off"
                 className={`w-full py-3.5 pl-12 pr-4 text-left text-base text-zinc-900 ${SITE_SEARCH_INPUT_CHROME}`}
               />

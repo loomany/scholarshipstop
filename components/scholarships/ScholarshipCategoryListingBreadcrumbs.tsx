@@ -1,19 +1,26 @@
 import Link from 'next/link';
 
+import {
+  hrefForLocalizedUiRequired,
+  type LocalizedUiLocale
+} from '@/lib/i18n/localizedHref';
+
 type Props = {
   pageTitle: string;
+  locale?: LocalizedUiLocale;
 };
 
 /** Visible breadcrumbs — matches UX brief; JSON-LD stays unchanged on the page. */
 export default function ScholarshipCategoryListingBreadcrumbs({
-  pageTitle
+  pageTitle,
+  locale = 'en'
 }: Props) {
   return (
     <nav aria-label="Breadcrumb" className="mb-4">
       <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-slate-600">
         <li>
           <Link
-            href="/"
+            href={hrefForLocalizedUiRequired(locale, '/')}
             className="font-medium text-teal-800 underline decoration-teal-600/35 underline-offset-2 transition hover:text-teal-950 hover:decoration-teal-700/45"
           >
             Home
@@ -24,7 +31,7 @@ export default function ScholarshipCategoryListingBreadcrumbs({
         </li>
         <li>
           <Link
-            href="/scholarships"
+            href={hrefForLocalizedUiRequired(locale, '/scholarships')}
             className="font-medium text-teal-800 underline decoration-teal-600/35 underline-offset-2 transition hover:text-teal-950 hover:decoration-teal-700/45"
           >
             Scholarships

@@ -17,6 +17,10 @@ import {
   SCHOLARSHIPS_HUB_INTERNATIONAL_FRIENDLY_HREF,
   buildScholarshipTabHref
 } from '@/app/scholarships/scholarshipListUrl';
+import {
+  localizedScholarshipHubTabHref,
+  type LocalizedUiLocale
+} from '@/lib/i18n/localizedHref';
 import type {
   ScholarshipListTabId,
   ScholarshipSidebarCounts
@@ -32,6 +36,11 @@ import {
   scholarshipSidebarActiveRowClass
 } from '@/lib/constants/scholarshipActionUi';
 import { ScholarshipsSidebarAiMentorCard } from '@/components/scholarships/ScholarshipsSidebarAiMentorCard';
+import {
+  getScholarshipsHubUiCopy,
+  type ScholarshipsHubUiCopy
+} from '@/lib/i18n/scholarshipsHubUiCopy';
+import { stripLocalePrefix } from '@/lib/i18n/paths';
 
 export type { ScholarshipSidebarCounts };
 
@@ -77,49 +86,54 @@ const SUBSCRIPTION_GATED_TAB_IDS = new Set<ScholarshipListTabId>([
   'hot-deadlines'
 ]);
 
-const STATIC_TOP_ROWS: StaticNavDef[] = [
-  {
-    id: 'best-recommendation',
-    label: 'Best recommendation',
-    icon: Flame
-  }
-];
+function buildStaticTopRows(ui: ScholarshipsHubUiCopy): StaticNavDef[] {
+  return [
+    {
+      id: 'best-recommendation',
+      label: ui.sidebar.bestRecommendation,
+      icon: Flame
+    }
+  ];
+}
 
-const ACTION_NAV_DEFS: NavDef[] = [
-  {
-    id: 'easy-apply',
-    label: 'Easy apply',
-    icon: Trophy,
-    tooltip: 'Scholarships with lighter application effort.'
-  },
-  {
-    id: 'hot-deadlines',
-    label: 'Hot Deadlines',
-    icon: Timer,
-    tooltip: 'Deadlines in the next week — under 1 day or 1–7 days out.'
-  },
-  {
-    id: 'matches',
-    label: 'Matches',
-    icon: Layers,
-    tooltip: 'Scholarships that match your criteria.'
-  },
-  {
-    id: 'saved',
-    label: 'Saved',
-    icon: Heart,
-    tooltip: 'Scholarships you have saved.'
-  },
-  {
-    id: 'ignored',
-    label: 'Ignored',
-    icon: Ban,
-    tooltip: 'Scholarships you chose to hide.'
-  }
-];
+function buildActionNavDefs(ui: ScholarshipsHubUiCopy): NavDef[] {
+  return [
+    {
+      id: 'easy-apply',
+      label: ui.sidebar.easyApply,
+      icon: Trophy,
+      tooltip: ui.sidebar.easyApplyTooltip
+    },
+    {
+      id: 'hot-deadlines',
+      label: ui.sidebar.hotDeadlines,
+      icon: Timer,
+      tooltip: ui.sidebar.hotDeadlinesTooltip
+    },
+    {
+      id: 'matches',
+      label: ui.sidebar.matches,
+      icon: Layers,
+      tooltip: ui.sidebar.matchesTooltip
+    },
+    {
+      id: 'saved',
+      label: ui.sidebar.saved,
+      icon: Heart,
+      tooltip: ui.sidebar.savedTooltip
+    },
+    {
+      id: 'ignored',
+      label: ui.sidebar.ignored,
+      icon: Ban,
+      tooltip: ui.sidebar.ignoredTooltip
+    }
+  ];
+}
 
 function isScholarshipListPath(pathname: string): boolean {
-  return pathname === '/scholarships' || pathname.startsWith('/scholarships/');
+  const path = stripLocalePrefix(pathname);
+  return path === '/scholarships' || path.startsWith('/scholarships/');
 }
 
 function resolveActiveTabId(
@@ -128,14 +142,15 @@ function resolveActiveTabId(
   guestMode?: boolean
 ): ScholarshipListTabId | null {
   if (!pathname) return null;
-  if (pathname.startsWith('/scholarships/category/')) return 'matches';
+  const path = stripLocalePrefix(pathname);
+  if (path.startsWith('/scholarships/category/')) return 'matches';
   const isDetail =
-    /^\/scholarships\/[^/]+$/.test(pathname) && pathname !== '/scholarships';
+    /^\/scholarships\/[^/]+$/.test(path) && path !== '/scholarships';
   if (isDetail) return 'matches';
 
   if (!isScholarshipListPath(pathname)) return null;
 
-  const hubResolved = hubResolvedFromPathname(pathname);
+  const hubResolved = hubResolvedFromPathname(path);
   if (hubResolved) {
     const raw = searchParams?.get('tab') ?? null;
     if (raw === 'from-email') return null;
@@ -170,6 +185,8 @@ type ScholarshipsSidebarProps = {
   /** Optional row under Hot Deadlines — international audience filter + lock for free signed-in users. */
   internationalStudentsFilter?: ScholarshipsSidebarInternationalFilterProps | null;
   buildTabHref?: (id: ScholarshipListTabId) => string;
+  locale?: LocalizedUiLocale;
+  uiCopy?: ScholarshipsHubUiCopy;
 };
 
 export default function ScholarshipsSidebar({
@@ -182,8 +199,18 @@ export default function ScholarshipsSidebar({
   subscriptionLocked = false,
   onSubscriptionRestrictedNav,
   internationalStudentsFilter = null,
-  buildTabHref
+  buildTabHref,
+  locale = 'en',
+  uiCopy
 }: ScholarshipsSidebarProps) {
+  const tabHrefFor = (id: ScholarshipListTabId) =>
+    buildTabHref?.(id) ??
+    (locale !== 'en'
+      ? localizedScholarshipHubTabHref(locale, id)
+      : buildScholarshipTabHref(id));
+  const ui = uiCopy ?? getScholarshipsHubUiCopy(locale);
+  const staticTopRows = buildStaticTopRows(ui);
+  const actionNavDefs = buildActionNavDefs(ui);
   const [pathname, setPathname] = useState<string | null>(null);
   const [searchParams, setSearchParams] = useState<URLSearchParams | null>(null);
 
@@ -268,9 +295,9 @@ export default function ScholarshipsSidebar({
       <span
         className={`inline-flex h-4 min-w-[2.5ch] shrink-0 items-center justify-center rounded-full align-middle ring-1 ${loadingShellClass}`}
         role="status"
-        aria-label="Loading scholarship count"
+        aria-label={ui.loadingCountAria}
       >
-        <span className="sr-only">Loading scholarship count</span>
+        <span className="sr-only">{ui.loadingCountAria}</span>
         <span className="flex items-center gap-0.5" aria-hidden>
           {[0, 1, 2].map((idx) => (
             <span
@@ -288,22 +315,22 @@ export default function ScholarshipsSidebar({
     <div className="flex w-full flex-col lg:max-w-[320px] lg:shrink-0">
     <nav
       className="w-full max-w-none rounded-2xl bg-white p-3 shadow-sm"
-      aria-label="Scholarship categories"
+      aria-label={ui.sidebar.scholarshipCategoriesNavAria}
     >
       <div className="rounded-lg bg-black px-4 py-3.5 text-center">
         <span className="text-sm font-bold tracking-tight text-white">
-          My scholarships
+          {ui.sidebar.myScholarships}
         </span>
       </div>
 
       <ul className="mt-2 space-y-0.5">
-        {STATIC_TOP_ROWS.map((item) => {
+        {staticTopRows.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
           /** Same idea as Matches + International Friendly: don’t paint two rows “selected”. */
           const intlFilterOn = internationalStudentsFilter?.active === true;
           const navLooksActive = isActive && !intlFilterOn;
-          const href = buildTabHref?.(item.id) ?? buildScholarshipTabHref(item.id);
+          const href = tabHrefFor(item.id);
           const countSuffix = suffix(item.id);
           const showGuestLock =
             guestMode && GUEST_GATED_TAB_IDS.has(item.id);
@@ -390,14 +417,14 @@ export default function ScholarshipsSidebar({
           );
         })}
 
-        {ACTION_NAV_DEFS.flatMap((item) => {
+        {actionNavDefs.flatMap((item) => {
           const isActive = activeTab === item.id;
           /** On Matches tab + International Friendly filter: don’t paint both rows “selected”. */
           const intlFilterOn = internationalStudentsFilter?.active === true;
           const navLooksActive =
             isActive && !(item.id === 'matches' && intlFilterOn);
           const Icon = item.icon;
-          const href = buildTabHref?.(item.id) ?? buildScholarshipTabHref(item.id);
+          const href = tabHrefFor(item.id);
           const countSuffix = suffix(item.id);
           const showGuestLock =
             guestMode && GUEST_GATED_TAB_IDS.has(item.id);
@@ -431,8 +458,8 @@ export default function ScholarshipsSidebar({
               matchesNewIndicator.count > 0 ? (
                 <span
                   className="flex shrink-0 items-center gap-1 rounded-md bg-[#FF7A1A] px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-white shadow-sm"
-                  title={`${matchesNewIndicator.count} not opened yet`}
-                  aria-label={`${matchesNewIndicator.count} new scholarships`}
+                  title={ui.sidebar.matchesNewIndicatorTitle(matchesNewIndicator.count)}
+                  aria-label={ui.sidebar.matchesNewIndicatorAria(matchesNewIndicator.count)}
                 >
                   <span>NEW</span>
                   <span className="tabular-nums">{matchesNewIndicator.count}</span>
@@ -465,9 +492,9 @@ export default function ScholarshipsSidebar({
                 useDarkTooltips
                   ? undefined
                   : showGuestLock
-                    ? 'Create a free account to unlock'
+                    ? ui.sidebar.guestUnlockShort
                     : showSubscriptionLock
-                      ? 'Start your free access to unlock'
+                      ? ui.sidebar.subscriptionUnlockShort
                     : tip
               }
               onClick={() =>
@@ -525,8 +552,7 @@ export default function ScholarshipsSidebar({
                 : 'border-transparent hover:bg-gray-50/80'
             }`;
             const intlGated = showGuestLockIntl || showSubscriptionLockIntl;
-            const intlTip =
-              'Scholarships tagged International Friendly in our catalog (mentions international or foreign-national eligibility in our data).';
+            const intlTip = ui.sidebar.internationalFriendlyTooltip;
             const intlInner = (
               <>
                 <Globe
@@ -545,7 +571,9 @@ export default function ScholarshipsSidebar({
                   }`}
                 >
                   <span className="inline-flex items-baseline gap-1">
-                    <span className="min-w-0 truncate">International Friendly</span>
+                    <span className="min-w-0 truncate">
+                      {ui.sidebar.internationalFriendly}
+                    </span>
                     {renderCountSlot(intlCountSuffix, intlActive)}
                   </span>
                 </span>
@@ -558,8 +586,8 @@ export default function ScholarshipsSidebar({
                   useDarkTooltips
                     ? undefined
                     : showSubscriptionLockIntl
-                      ? 'Start your free access to unlock'
-                      : 'Create a free account to unlock'
+                      ? ui.sidebar.subscriptionUnlockShort
+                      : ui.sidebar.guestUnlockShort
                 }
                 onClick={() =>
                   showSubscriptionLockIntl
@@ -567,11 +595,7 @@ export default function ScholarshipsSidebar({
                     : intl.onGuestRestrictedClick()
                 }
                 className={`${intlRowClass} w-full cursor-pointer text-left group`}
-                aria-label={
-                  showSubscriptionLockIntl
-                    ? 'Start free access to use International Friendly'
-                    : 'Create a free account to use International Friendly'
-                }
+                aria-label={ui.sidebar.internationalFriendlyActivate}
               >
                 {intlInner}
               </button>
@@ -582,7 +606,7 @@ export default function ScholarshipsSidebar({
                 className={`${intlRowClass} w-full cursor-pointer text-left group`}
                 title={useDarkTooltips ? undefined : intlTip}
                 aria-pressed
-                aria-label="International Friendly on — click to clear"
+                aria-label={ui.sidebar.internationalFriendlyOnAria}
               >
                 {intlInner}
               </button>
@@ -592,7 +616,7 @@ export default function ScholarshipsSidebar({
                 prefetch={false}
                 className={`${intlRowClass} w-full cursor-pointer text-left group`}
                 title={useDarkTooltips ? undefined : intlTip}
-                aria-label="Show International Friendly scholarships"
+                aria-label={ui.sidebar.internationalFriendlyShowAria}
               >
                 {intlInner}
               </Link>
@@ -620,7 +644,7 @@ export default function ScholarshipsSidebar({
         })}
       </ul>
     </nav>
-    <ScholarshipsSidebarAiMentorCard />
+      <ScholarshipsSidebarAiMentorCard ctaLabel={ui.tryEssayMentor} />
     </div>
   );
 }

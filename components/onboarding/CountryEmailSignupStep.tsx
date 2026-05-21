@@ -5,6 +5,8 @@ import { ArrowLeft, ArrowRight, Mail } from 'lucide-react';
 
 import { SITE_INPUT_FOCUS_CLASS } from '@/lib/constants/siteInputFocus';
 import { ONBOARDING_PRIMARY_BUTTON_CLASS } from '@/lib/onboarding/onboardingPrimaryCta';
+import { getGetScholarshipsQuizUiCopy } from '@/lib/i18n/funnelUiCopy';
+import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
 
 const inputClass = `w-full rounded-xl border border-zinc-200 bg-white px-4 py-3.5 text-sm text-zinc-900 shadow-sm transition-all placeholder:text-zinc-400 hover:border-zinc-300 ${SITE_INPUT_FOCUS_CLASS}`;
 const inputErrorClass = `w-full rounded-xl border border-amber-400/90 bg-white px-4 py-3.5 text-sm text-zinc-900 shadow-sm transition-all placeholder:text-zinc-400 ${SITE_INPUT_FOCUS_CLASS}`;
@@ -24,6 +26,7 @@ type Props = {
   onBack?: () => void;
   onSubmit: () => void;
   onGoogleSignIn?: () => void;
+  locale?: LocalizedUiLocale;
 };
 
 export function CountryEmailSignupStep({
@@ -33,15 +36,22 @@ export function CountryEmailSignupStep({
   email,
   countryLabel,
   progressEyebrow,
-  title = 'Where should we send your scholarship matches?',
+  title,
   description,
-  submitLabel = 'Save my matches',
+  submitLabel,
   error = null,
   onEmailChange,
   onBack,
   onSubmit,
-  onGoogleSignIn
+  onGoogleSignIn,
+  locale = 'en'
 }: Props) {
+  const ui = getGetScholarshipsQuizUiCopy(locale);
+  const resolvedTitle = title ?? ui.emailStepTitle;
+  const resolvedSubmitLabel = submitLabel ?? ui.submitMatches;
+  const resolvedDescription =
+    description ??
+    ui.emailStepDescriptionTemplate.replace('{country}', countryLabel);
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     onSubmit();
@@ -57,7 +67,7 @@ export function CountryEmailSignupStep({
           className="rounded-xl border border-zinc-300 bg-white px-4 py-2.5 text-sm font-medium text-zinc-800 shadow-sm transition hover:border-zinc-400 hover:bg-zinc-50 disabled:opacity-50"
         >
           <ArrowLeft className="mr-2 inline h-4 w-4" aria-hidden />
-          Back
+          {ui.backButton}
         </button>
       ) : null}
 
@@ -69,18 +79,17 @@ export function CountryEmailSignupStep({
           {progressEyebrow}
         </p>
         <h1 className="mt-2 text-2xl font-bold tracking-tight text-[#7A3B00] sm:text-3xl">
-          {title}
+          {resolvedTitle}
         </h1>
         <p className="mx-auto mt-3 max-w-md text-base font-medium leading-7 text-[#8C5A2B] sm:max-w-lg">
-          {description ??
-            `No spam. We will send one daily scholarship digest for ${countryLabel}, plus a confirmation link so your matches stay saved.`}
+          {resolvedDescription}
         </p>
       </div>
 
       <form className="space-y-5 text-left" onSubmit={handleSubmit} noValidate>
         <div>
           <label htmlFor="country-email" className="sr-only">
-            Email address
+            {ui.emailFieldLabel}
           </label>
           <input
             id="country-email"
@@ -89,7 +98,7 @@ export function CountryEmailSignupStep({
             autoComplete="email"
             value={email}
             onChange={(event) => onEmailChange(event.target.value)}
-            placeholder="Email address"
+            placeholder={ui.emailPlaceholder}
             disabled={disabled || submitting}
             className={error ? inputErrorClass : inputClass}
           />
@@ -104,7 +113,7 @@ export function CountryEmailSignupStep({
           aria-busy={submitting}
           className={ONBOARDING_PRIMARY_BUTTON_CLASS}
         >
-          {submitLabel}
+          {resolvedSubmitLabel}
           {!submitting ? <ArrowRight className="ml-2 h-4 w-4" aria-hidden /> : null}
         </button>
         {onGoogleSignIn ? (
@@ -133,12 +142,11 @@ export function CountryEmailSignupStep({
                 d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.2-4.2 5.6l6.2 5.2C36.9 39.1 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"
               />
             </svg>
-            {googleSubmitting ? 'Opening Google...' : 'Sign in with Google'}
+            {googleSubmitting ? ui.openingGoogle : ui.signInWithGoogle}
           </button>
         ) : null}
         <p className="text-center text-xs leading-5 text-zinc-500">
-          You can unsubscribe anytime. No password needed now; if you want one later,
-          use forgot password.
+          {ui.noPasswordHint}
         </p>
       </form>
     </div>

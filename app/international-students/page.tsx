@@ -4,6 +4,7 @@ import { Check } from 'lucide-react';
 
 import { homePrimaryCtaClass } from '@/components/home/homeMarketingCtaClasses';
 import { SiteFaqAccordion, type SiteFaqItem } from '@/components/ui/SiteFaqAccordion';
+import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
 import { getCanonical } from '@/lib/seo/canonical';
 
 const container = 'mx-auto w-full max-w-7xl';
@@ -26,9 +27,7 @@ const getScholarshipsCtaPath = '/get-scholarships';
 export const metadata: Metadata = {
   title: 'Scholarships for International Students in the USA 2026 | ScholarshipTop',
   description: pageDescription,
-  alternates: {
-    canonical: pageCanonical
-  },
+  alternates: buildStage2EnglishPilotAlternates('/international-students'),
   openGraph: {
     title: 'Scholarships for International Students in the USA 2026 | ScholarshipTop',
     description: pageDescription,

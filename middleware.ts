@@ -4,6 +4,7 @@ import { preferredScholarshipSlugForLegacySlug } from '@/lib/seo/legacyScholarsh
 import { canonicalStateVsSlug } from '@/lib/seo/stateCompareSlug';
 import { canonicalUniversityVsSlug } from '@/lib/seo/universityCompareSlug';
 import { updateSession } from '@/utils/supabase/middleware';
+import { isStage2PilotLocale } from '@/lib/i18n/pilotRoutes';
 
 const IQ_SUBDOMAIN_REWRITE_PATHS = new Set([
   '/about',
@@ -22,6 +23,7 @@ const IQ_SUBDOMAIN_REWRITE_PATHS = new Set([
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const host = request.headers.get('host')?.split(':')[0]?.toLowerCase();
+  const localeSegment = pathname.split('/').filter(Boolean)[0];
 
   if (host === 'www.scholarshiptop.com') {
     const url = new URL(
@@ -167,6 +169,15 @@ export async function middleware(request: NextRequest) {
     const url = request.nextUrl.clone();
     url.pathname = pathname.replace(/^\/content-hub/, '/resources');
     return NextResponse.redirect(url, 308);
+  }
+  if (isStage2PilotLocale(localeSegment)) {
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set('x-scholarshiptop-locale', localeSegment);
+    return NextResponse.next({
+      request: {
+        headers: requestHeaders
+      }
+    });
   }
   /** Refresh Supabase session cookies on recovery hand-off (browser sets session just before this). */
   if (

@@ -2,6 +2,10 @@ import Link from 'next/link';
 import { Info, Star } from 'lucide-react';
 
 import { cn } from '@/utils/cn';
+import {
+  hrefForLocalizedUiRequired,
+  type LocalizedUiLocale
+} from '@/lib/i18n/localizedHref';
 
 /** Listing page; relative path works on any deployed host (e.g. production → scholarshiptop.com/scholarships). */
 export const SCHOLARSHIPS_BROWSE_HREF = '/scholarships' as const;
@@ -10,13 +14,15 @@ const DEMO_TAGS = ['No Essay', 'Easy Apply', 'Verified'] as const;
 
 export type ScholarshipCardPreviewProps = {
   className?: string;
+  locale?: LocalizedUiLocale;
 };
 
 /**
  * Landing-only product mock — “Apply now” links to the real scholarship directory.
  */
 export default function ScholarshipCardPreview({
-  className = ''
+  className = '',
+  locale = 'en'
 }: ScholarshipCardPreviewProps) {
   return (
     <article
@@ -80,7 +86,7 @@ export default function ScholarshipCardPreview({
         </div>
 
         <Link
-          href={SCHOLARSHIPS_BROWSE_HREF}
+          href={hrefForLocalizedUiRequired(locale, SCHOLARSHIPS_BROWSE_HREF)}
           className="pointer-events-auto w-full shrink-0 cursor-pointer rounded-xl bg-emerald-500 px-5 py-2.5 text-center text-sm font-medium text-white transition hover:bg-emerald-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700"
           aria-label="Browse scholarships"
         >

@@ -2,6 +2,8 @@
 
 import { useEffect } from 'react';
 
+import { LocaleAwareHomeLink } from '@/components/i18n/LocaleAwareHomeLink';
+
 function isChunkLoadError(error: Error): boolean {
   const message = error.message ?? '';
   return /Loading chunk \d+ failed|ChunkLoadError|failed to fetch dynamically imported module|Importing a module script failed/i.test(
@@ -59,12 +61,9 @@ export default function ErrorPage({
         >
           Try again
         </button>
-        <a
-          href="/"
-          className="inline-flex items-center justify-center rounded-xl border border-zinc-200 bg-white px-5 py-2.5 text-sm font-semibold text-zinc-900 shadow-sm transition hover:border-zinc-300 hover:bg-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/50"
-        >
+        <LocaleAwareHomeLink className="inline-flex items-center justify-center rounded-xl border border-zinc-200 bg-white px-5 py-2.5 text-sm font-semibold text-zinc-900 shadow-sm transition hover:border-zinc-300 hover:bg-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/50">
           Home
-        </a>
+        </LocaleAwareHomeLink>
       </div>
     </div>
   );

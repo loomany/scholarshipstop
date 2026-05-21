@@ -42,8 +42,8 @@ export type ScholarshipListTabId = (typeof SCHOLARSHIP_LIST_TAB_IDS)[number];
 
 export const DEFAULT_SCHOLARSHIP_TAB: ScholarshipListTabId = 'matches';
 
-/** Hub `/scholarships` default when `tab` is absent (catalog browse). */
-export const HUB_DEFAULT_SCHOLARSHIP_TAB: ScholarshipListTabId = 'matches';
+/** Hub `/scholarships` with no `tab`: prod parity → `/scholarships/hub/best-recommendation`. */
+export const HUB_DEFAULT_SCHOLARSHIP_TAB: ScholarshipListTabId = 'best-recommendation';
 export const LEGACY_BEST_RECOMMENDATION_TAB_ID = 'best-matches';
 
 const TAB_PARAM_VALUES = new Set<string>(SCHOLARSHIP_LIST_TAB_IDS);
@@ -65,7 +65,7 @@ export function parseScholarshipTabParam(
   return normalized as ScholarshipListTabId;
 }
 
-/** Hub listing: same defaults as guest — catalog `matches` when `tab` is missing. */
+/** Hub listing: delegates to guest parser (default Best recommendations when `tab` is missing). */
 export function parseHubScholarshipTabParam(
   raw: string | null | undefined
 ): ScholarshipListTabId {
@@ -73,12 +73,15 @@ export function parseHubScholarshipTabParam(
 }
 
 /**
- * Hub for guests: default **All** (`matches`); explicit `tab` in URL is respected
- * (e.g. `best-recommendation` for landing quiz / Best recommendation).
+ * Hub: when `tab` is omitted, default to **Best recommendations** (`HUB_DEFAULT_SCHOLARSHIP_TAB`).
+ * Hidden sidebar tabs normalize to `matches`. Explicit `tab` in the URL is always respected.
  */
 export function parseHubScholarshipTabParamForGuest(
   raw: string | null | undefined
 ): ScholarshipListTabId {
+  if (raw == null || String(raw).trim() === '') {
+    return HUB_DEFAULT_SCHOLARSHIP_TAB;
+  }
   const t = parseScholarshipTabParam(raw);
   if (HUB_HIDDEN_TAB_IDS.has(t)) return 'matches';
   return t;

@@ -32,6 +32,10 @@ import {
   SCHOLARSHIP_GPA_OPTIONS,
   SCHOLARSHIP_GPA_PREFER_NOT_TO_SAY
 } from '@/lib/constants/scholarshipGpaOptions';
+import {
+  getScholarshipsMoreFiltersUiCopy,
+  type ScholarshipsMoreFiltersUiCopy
+} from '@/lib/i18n/scholarshipsMoreFiltersUiCopy';
 
 type Bounds = {
   amountMin: number;
@@ -60,6 +64,7 @@ type ScholarshipsMoreFiltersPanelProps = {
   applyPending?: boolean;
   /** Hub: explain tab-only SQL / profile layers above the form. */
   contextNotices?: ScholarshipsMoreFiltersContextNotice[];
+  uiCopy?: ScholarshipsMoreFiltersUiCopy;
   /** Persist current draft as the “Saved filters” tab preset (hub). */
   onSaveFilter?: () => void;
   /** False when nothing is selected vs defaults or guest. */
@@ -535,8 +540,10 @@ export default function ScholarshipsMoreFiltersPanel({
   onGuestLockedAction,
   hasSubscription: _hasSubscription = true,
   onSubscriptionLockedAction: _onSubscriptionLockedAction,
-  contextNotices
+  contextNotices,
+  uiCopy
 }: ScholarshipsMoreFiltersPanelProps) {
+  const copy = uiCopy ?? getScholarshipsMoreFiltersUiCopy('en');
   const [showSlowPreviewIndicator, setShowSlowPreviewIndicator] = useState(false);
 
   useEffect(() => {
@@ -605,32 +612,29 @@ export default function ScholarshipsMoreFiltersPanel({
     });
 
   const profileSchoolLevelOptions = [
-    { value: '', label: 'Any school level' },
-    ...SCHOOL_LEVEL_OPTIONS
+    { value: '', label: copy.anySchoolLevel },
+    ...copy.schoolLevelOptions
   ];
   const profileFieldOfStudyOptions = [
-    { value: '', label: 'Any field of study' },
+    { value: '', label: copy.anyFieldOfStudy },
     ...FIELD_OF_STUDY_OPTIONS
   ];
   const profileCitizenshipOptions = [
-    { value: '', label: 'Any citizenship status' },
+    { value: '', label: copy.anyCitizenship },
     ...CITIZENSHIP_OPTIONS
   ];
   const gpaSelectOptions = [
-    { value: '', label: 'Any GPA' },
+    { value: '', label: copy.anyGpa },
     {
       value: SCHOLARSHIP_GPA_PREFER_NOT_TO_SAY,
-      label: 'Prefer not to say (optional)'
+      label: copy.preferNotToSayGpa
     },
     ...SCHOLARSHIP_GPA_BUCKET_OPTIONS,
     ...SCHOLARSHIP_GPA_OPTIONS
   ];
-  const requirementOptions = REQUIREMENT_TYPE_OPTIONS;
-  const educationOptions = EDUCATION_LEVEL_OPTIONS;
-  const easyApplyOptions: CheckboxGroupOption[] = EASY_APPLY_OPTIONS.map((opt) => ({
-    id: opt.id,
-    label: opt.label
-  }));
+  const requirementOptions = copy.requirementOptions;
+  const educationOptions = copy.educationOptions;
+  const easyApplyOptions: CheckboxGroupOption[] = copy.easyApplyOptions;
 
   const onRequirementCheckedChange = (id: string, checked: boolean) => {
     const next = new Set(value.includeRequirementTypes);
@@ -666,18 +670,17 @@ export default function ScholarshipsMoreFiltersPanel({
   };
 
   const previewLabel = (() => {
-    if (applyPending) return 'Applying filters...';
+    if (applyPending) return copy.applyingFilters;
     if (previewCountLoading) {
       const continuityCount = previewCount ?? previewCountFallback;
       if (continuityCount != null) {
-        return `Calculating... (${continuityCount})`;
+        return copy.calculatingWithCount(continuityCount);
       }
-      return 'Calculating...';
+      return copy.calculating;
     }
     const effectiveCount = previewCount ?? previewCountFallback;
-    if (effectiveCount == null) return 'Show results';
-    if (previewCountLoading) return `Show ${effectiveCount} results`;
-    return `Show ${effectiveCount} results`;
+    if (effectiveCount == null) return copy.showResults;
+    return copy.showResultsCount(effectiveCount);
   })();
   const applyButtonBusy = applyPending || previewCountLoading;
 
@@ -685,7 +688,7 @@ export default function ScholarshipsMoreFiltersPanel({
     <div className="fixed inset-0 z-[250] flex items-center justify-center p-4 sm:p-6">
       <button
         type="button"
-        aria-label="Close filters"
+        aria-label={copy.closeFiltersAria}
         className="absolute inset-0 bg-zinc-900/40 backdrop-blur-[2px]"
         onClick={onClose}
       />
@@ -708,7 +711,7 @@ export default function ScholarshipsMoreFiltersPanel({
             type="button"
             onClick={onClose}
             className="flex h-9 w-9 items-center justify-center rounded-lg text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-800"
-            aria-label="Close"
+            aria-label={copy.closeAria}
           >
             <X className="h-5 w-5" strokeWidth={2} />
           </button>
@@ -716,7 +719,7 @@ export default function ScholarshipsMoreFiltersPanel({
             id="more-filters-title"
             className="absolute left-1/2 -translate-x-1/2 text-base font-bold text-zinc-900"
           >
-            More Filters
+            {copy.title}
           </h2>
           <span className="w-9" aria-hidden />
         </header>
@@ -750,24 +753,21 @@ export default function ScholarshipsMoreFiltersPanel({
           <section className={`py-5 ${divider}`}>
             <div className="flex items-start justify-between gap-3">
               <div>
-                <h3 className={sectionTitle}>Student profile</h3>
-                <p className={sectionHint}>
-                  Add the quiz-style profile choices that are not covered by the
-                  advanced filters below.
-                </p>
+                <h3 className={sectionTitle}>{copy.studentProfile}</h3>
+                <p className={sectionHint}>{copy.studentProfileHint}</p>
               </div>
               <button
                 type="button"
                 onClick={clearStudentProfileChoices}
                 className="shrink-0 text-sm font-medium text-zinc-500 transition hover:text-zinc-800"
               >
-                Clear
+                {copy.clear}
               </button>
             </div>
             <div className="mt-4 space-y-4">
               <ProfileSelectField
                 id="profile-school-level"
-                label="Current school level"
+                label={copy.currentSchoolLevel}
                 value={value.profileSchoolLevelSlug}
                 options={profileSchoolLevelOptions}
                 onChange={(profileSchoolLevelSlug) =>
@@ -776,7 +776,7 @@ export default function ScholarshipsMoreFiltersPanel({
               />
               <ProfileSelectField
                 id="profile-field-of-study"
-                label="Field of study"
+                label={copy.fieldOfStudy}
                 value={value.profileFieldOfStudySlug}
                 options={profileFieldOfStudyOptions}
                 onChange={(profileFieldOfStudySlug) =>
@@ -785,7 +785,7 @@ export default function ScholarshipsMoreFiltersPanel({
               />
               <ProfileSelectField
                 id="profile-citizenship-status"
-                label="Citizenship status"
+                label={copy.citizenshipStatus}
                 value={value.profileCitizenshipStatus}
                 options={profileCitizenshipOptions}
                 onChange={(profileCitizenshipStatus) =>
@@ -797,22 +797,22 @@ export default function ScholarshipsMoreFiltersPanel({
 
           <section className={`py-5 ${divider}`}>
             <h3 className={sectionTitle}>
-              Filter by time until deadline
+              {copy.filterByDeadline}
               {deadlineShortRangeLocked ? (
                 <span className="ml-2 inline-flex items-center gap-1 rounded-full border border-zinc-200 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-zinc-500">
                   <Lock className={`h-3 w-3 ${scholarshipGuestLockIconClass}`} strokeWidth={2} />
-                  Locked
+                  {copy.locked}
                 </span>
               ) : null}
             </h3>
             <ul className="mt-4 space-y-3">
               {(
                 [
-                  ['any', 'Any'],
-                  ['lt1d', 'Less than 1 day'],
-                  ['d1_7', '1 - 7 days'],
-                  ['w1_4', '1 - 4 weeks'],
-                  ['gt4w', 'More than 4 weeks']
+                  ['any', copy.deadlineAny],
+                  ['lt1d', copy.deadlineLt1d],
+                  ['d1_7', copy.deadlineD1_7],
+                  ['w1_4', copy.deadlineW1_4],
+                  ['gt4w', copy.deadlineGt4w]
                 ] as const
               ).map(([id, label]) => {
                 const presetId = id as DeadlinePreset;
@@ -853,20 +853,13 @@ export default function ScholarshipsMoreFiltersPanel({
           </section>
 
           <section className={`py-5 ${divider}`}>
-            <h3 className={sectionTitle}>Citizenship & eligibility</h3>
-            <p className={sectionHint}>
-              Narrow listings that explicitly mention international students, foreign
-              nationals, or similar in our catalog fields. Always confirm rules on the
-              official program page—this is not legal or visa advice.
-            </p>
+            <h3 className={sectionTitle}>{copy.citizenshipEligibility}</h3>
+            <p className={sectionHint}>{copy.citizenshipEligibilityHint}</p>
             <ul className="mt-4 space-y-3">
               {(
                 [
-                  ['any', 'All applicants (default)'],
-                  [
-                    'international_friendly',
-                    'International Friendly (best effort)'
-                  ]
+                  ['any', copy.citizenshipAll],
+                  ['international_friendly', copy.citizenshipInternational]
                 ] as const
               ).map(([id, label]) => (
                 <li key={id}>
@@ -894,11 +887,11 @@ export default function ScholarshipsMoreFiltersPanel({
 
           <section className={`py-5 ${divider}`}>
             <h3 className={sectionTitle}>
-              Filter by scholarship amount
+              {copy.filterByAmount}
               {amountLocked ? (
                 <span className="ml-2 inline-flex items-center gap-1 rounded-full border border-zinc-200 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-zinc-500">
                   <Lock className={`h-3 w-3 ${scholarshipGuestLockIconClass}`} strokeWidth={2} />
-                  Locked
+                  {copy.locked}
                 </span>
               ) : null}
             </h3>
@@ -906,8 +899,8 @@ export default function ScholarshipsMoreFiltersPanel({
               {amountLocked ? (
                 <button
                   type="button"
-                  aria-label="Start your free access to use amount filter"
-                  title="Start your free access to use amount filter"
+                  aria-label={copy.unlockAmountAria}
+                  title={copy.unlockAmountAria}
                   onClick={() => onGuestLockedAction?.()}
                   className="absolute inset-0 z-10 cursor-pointer rounded-lg"
                 />
@@ -980,10 +973,8 @@ export default function ScholarshipsMoreFiltersPanel({
           </section>
 
           <section className={`py-5 ${divider}`}>
-            <h3 className={sectionTitle}>Application requirements</h3>
-            <p className={sectionHint}>
-              Show scholarships that require the selected items.
-            </p>
+            <h3 className={sectionTitle}>{copy.applicationRequirements}</h3>
+            <p className={sectionHint}>{copy.applicationRequirementsHint}</p>
             <div className="mt-4">
               <FilterCheckboxGroup
                 options={requirementOptions}
@@ -996,11 +987,11 @@ export default function ScholarshipsMoreFiltersPanel({
 
           <section className={`py-5 ${divider}`}>
             <h3 className={sectionTitle}>
-              Filter by number of applicants
+              {copy.filterByApplicants}
               {applicantsLocked ? (
                 <span className="ml-2 inline-flex items-center gap-1 rounded-full border border-zinc-200 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-zinc-500">
                   <Lock className={`h-3 w-3 ${scholarshipGuestLockIconClass}`} strokeWidth={2} />
-                  Locked
+                  {copy.locked}
                 </span>
               ) : null}
             </h3>
@@ -1008,8 +999,8 @@ export default function ScholarshipsMoreFiltersPanel({
               {applicantsLocked ? (
                 <button
                   type="button"
-                  aria-label="Start your free access to use applicants filter"
-                  title="Start your free access to use applicants filter"
+                  aria-label={copy.unlockApplicantsAria}
+                  title={copy.unlockApplicantsAria}
                   onClick={() => onGuestLockedAction?.()}
                   className="absolute inset-0 z-10 cursor-pointer rounded-lg"
                 />
@@ -1079,18 +1070,15 @@ export default function ScholarshipsMoreFiltersPanel({
 
           <section className={`py-5 ${divider}`}>
             <h3 className={sectionTitle}>
-              Eligibility
+              {copy.eligibility}
               {eligibilityLocked ? (
                 <span className="ml-2 inline-flex items-center gap-1 rounded-full border border-zinc-200 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-zinc-500">
                   <Lock className={`h-3 w-3 ${scholarshipGuestLockIconClass}`} strokeWidth={2} />
-                  Locked
+                  {copy.locked}
                 </span>
               ) : null}
             </h3>
-            <p className={sectionHint}>
-              Show scholarships that mention any of these audiences (OR). Empty
-              = no filter.
-            </p>
+            <p className={sectionHint}>{copy.eligibilityHint}</p>
             <div className="relative mt-4">
               {eligibilityLocked ? (
                 <button
@@ -1102,7 +1090,7 @@ export default function ScholarshipsMoreFiltersPanel({
                 />
               ) : null}
               <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                {ELIGIBILITY_OPTIONS.map((opt) => (
+                {copy.eligibilityOptions.map((opt) => (
                   <label
                     key={opt.id}
                     className="flex cursor-pointer items-start gap-2"
@@ -1141,10 +1129,8 @@ export default function ScholarshipsMoreFiltersPanel({
           </section>
 
           <section className={`py-5 ${divider}`}>
-            <h3 className={sectionTitle}>Education level</h3>
-            <p className={sectionHint}>
-              Show listings that match any selected level (OR).
-            </p>
+            <h3 className={sectionTitle}>{copy.educationLevel}</h3>
+            <p className={sectionHint}>{copy.educationHint}</p>
             <div className="mt-4">
               <FilterCheckboxGroup
                 options={educationOptions}
@@ -1155,14 +1141,12 @@ export default function ScholarshipsMoreFiltersPanel({
           </section>
 
           <section className={`py-5 ${divider}`}>
-            <h3 className={sectionTitle}>GPA</h3>
-            <p className={sectionHint}>
-              Choose the GPA level you want scholarship requirements matched against.
-            </p>
+            <h3 className={sectionTitle}>{copy.gpa}</h3>
+            <p className={sectionHint}>{copy.gpaHint}</p>
             <div className="mt-4">
               <ProfileSelectField
                 id="more-filters-gpa"
-                label="GPA"
+                label={copy.gpa}
                 value={value.gpaChoice}
                 options={gpaSelectOptions}
                 onChange={(next) =>
@@ -1177,22 +1161,18 @@ export default function ScholarshipsMoreFiltersPanel({
           </section>
 
           <section className={`py-5 ${divider}`}>
-            <h3 className={sectionTitle}>Location</h3>
-            <p className={sectionHint}>
-              Search by U.S. state (matches each listing&apos;s state data). Choose a
-              suggestion — partial typing alone does not narrow results until the name is
-              valid.
-            </p>
+            <h3 className={sectionTitle}>{copy.location}</h3>
+            <p className={sectionHint}>{copy.locationHint}</p>
             <div className="mt-4">
               <UsStateAutocomplete
                 id="more-filters-state"
-                ariaLabel="U.S. state filter"
+                ariaLabel={copy.stateFilterAria}
                 value={value.filterStateInput}
                 onChange={(next) =>
                   onChange({ ...value, filterStateInput: next })
                 }
                 inputClassName={filterPanelStateInputClass}
-                placeholder="Type a state, e.g. Cal…"
+                placeholder={copy.statePlaceholder}
                 maxSuggestions={8}
               />
             </div>
@@ -1227,27 +1207,24 @@ export default function ScholarshipsMoreFiltersPanel({
 
           <section className={`py-5 ${divider}`}>
             <h3 className={sectionTitle}>
-              University
+              {copy.university}
               {universityLocked ? (
                 <span className="ml-2 inline-flex items-center gap-1 rounded-full border border-zinc-200 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-zinc-500">
                   <Lock
                     className={`h-3 w-3 ${scholarshipGuestLockIconClass}`}
                     strokeWidth={2}
                   />
-                  Locked
+                  {copy.locked}
                 </span>
               ) : null}
             </h3>
-            <p className={sectionHint}>
-              Start typing a university name and choose a suggestion from our indexed
-              catalog to narrow results to that school.
-            </p>
+            <p className={sectionHint}>{copy.universityHint}</p>
             <div className="relative mt-4">
               {universityLocked ? (
                 <button
                   type="button"
-                  aria-label="Unlock Premium to filter by university"
-                  title="Unlock Premium to filter by university"
+                  aria-label={copy.unlockUniversityAria}
+                  title={copy.unlockUniversityAria}
                   onClick={() => onGuestLockedAction?.()}
                   className="absolute inset-0 z-10 cursor-pointer rounded-xl"
                 />
@@ -1273,20 +1250,12 @@ export default function ScholarshipsMoreFiltersPanel({
                 subscriptionLocked={universityLocked}
               />
             </div>
-            <p className="mt-2 text-xs text-zinc-500">
-              Enter at least 2 characters. Filtering applies after you choose a
-              suggestion.
-            </p>
+            <p className="mt-2 text-xs text-zinc-500">{copy.universityTypeHint}</p>
           </section>
 
           <section className={`py-5 ${divider}`}>
-            <h3 className={sectionTitle}>
-              Easy apply
-            </h3>
-            <p className={sectionHint}>
-              Highlights no-essay and lighter applications when we can detect
-              them (OR).
-            </p>
+            <h3 className={sectionTitle}>{copy.easyApply}</h3>
+            <p className={sectionHint}>{copy.easyApplyHint}</p>
             <div className="mt-4">
               <FilterCheckboxGroup
                 options={easyApplyOptions}
@@ -1297,11 +1266,8 @@ export default function ScholarshipsMoreFiltersPanel({
           </section>
 
           <section className={`py-5 ${divider}`}>
-            <h3 className={sectionTitle}>Data completeness</h3>
-            <p className={sectionHint}>
-              How much key information we could extract for this listing (deadline,
-              apply link, requirements, etc.). Not a score of legitimacy.
-            </p>
+            <h3 className={sectionTitle}>{copy.dataCompleteness}</h3>
+            <p className={sectionHint}>{copy.dataCompletenessHint}</p>
             <ul className="mt-4 space-y-4">
               <li>
                 <label className="flex cursor-pointer gap-3">
@@ -1313,10 +1279,10 @@ export default function ScholarshipsMoreFiltersPanel({
                   />
                   <span>
                     <span className="block text-sm font-bold text-zinc-900">
-                      Basic info
+                      {copy.basicInfo}
                     </span>
                     <span className="mt-0.5 block text-xs leading-relaxed text-zinc-500">
-                      Only a few core fields are filled in.
+                      {copy.basicInfoBody}
                     </span>
                   </span>
                 </label>
@@ -1331,10 +1297,10 @@ export default function ScholarshipsMoreFiltersPanel({
                   />
                   <span>
                     <span className="block text-sm font-bold text-zinc-900">
-                      Standard detail
+                      {copy.standardDetail}
                     </span>
                     <span className="mt-0.5 block text-xs leading-relaxed text-zinc-500">
-                      A solid amount of information for comparing programs.
+                      {copy.standardDetailBody}
                     </span>
                   </span>
                 </label>
@@ -1349,10 +1315,10 @@ export default function ScholarshipsMoreFiltersPanel({
                   />
                   <span>
                     <span className="block text-sm font-bold text-zinc-900">
-                      Detailed listing
+                      {copy.detailedListing}
                     </span>
                     <span className="mt-0.5 block text-xs leading-relaxed text-zinc-500">
-                      Richer structured fields from the public listing.
+                      {copy.detailedListingBody}
                     </span>
                   </span>
                 </label>
@@ -1367,10 +1333,10 @@ export default function ScholarshipsMoreFiltersPanel({
                   />
                   <span>
                     <span className="block text-sm font-bold text-zinc-900">
-                      Verified listing
+                      {copy.verifiedListing}
                     </span>
                     <span className="mt-0.5 block text-xs leading-relaxed text-zinc-500">
-                      Marked verified — always confirm on the official site.
+                      {copy.verifiedListingBody}
                     </span>
                   </span>
                 </label>
@@ -1379,7 +1345,7 @@ export default function ScholarshipsMoreFiltersPanel({
           </section>
 
           <section className={`py-5 ${divider}`}>
-            <h3 className={sectionTitle}>Filter by payout method</h3>
+            <h3 className={sectionTitle}>{copy.payoutMethod}</h3>
             <ul className="mt-4 space-y-4">
               <li>
                 <label className="flex cursor-pointer gap-3">
@@ -1391,10 +1357,10 @@ export default function ScholarshipsMoreFiltersPanel({
                   />
                   <span>
                     <span className="block text-sm font-bold text-zinc-900">
-                      College
+                      {copy.payoutCollege}
                     </span>
                     <span className="mt-0.5 block text-xs leading-relaxed text-zinc-500">
-                      Funds are paid to the Financial Aid Office on your behalf.
+                      {copy.payoutCollegeBody}
                     </span>
                   </span>
                 </label>
@@ -1409,10 +1375,10 @@ export default function ScholarshipsMoreFiltersPanel({
                   />
                   <span>
                     <span className="block text-sm font-bold text-zinc-900">
-                      Student
+                      {copy.payoutStudent}
                     </span>
                     <span className="mt-0.5 block text-xs leading-relaxed text-zinc-500">
-                      Scholarship funds are paid directly to you.
+                      {copy.payoutStudentBody}
                     </span>
                   </span>
                 </label>
@@ -1427,11 +1393,10 @@ export default function ScholarshipsMoreFiltersPanel({
                   />
                   <span>
                     <span className="block text-sm font-bold text-zinc-900">
-                      Non-monetary awards
+                      {copy.payoutNonMonetary}
                     </span>
                     <span className="mt-0.5 block text-xs leading-relaxed text-zinc-500">
-                      Prizes that support educational goals (courses,
-                      subscriptions, etc.)
+                      {copy.payoutNonMonetaryBody}
                     </span>
                   </span>
                 </label>
@@ -1446,11 +1411,10 @@ export default function ScholarshipsMoreFiltersPanel({
                   />
                   <span>
                     <span className="block text-sm font-bold text-zinc-900">
-                      Not Stated
+                      {copy.payoutNotStated}
                     </span>
                     <span className="mt-0.5 block text-xs leading-relaxed text-zinc-500">
-                      Payment process details have not been specified by the
-                      provider.
+                      {copy.payoutNotStatedBody}
                     </span>
                   </span>
                 </label>
@@ -1465,7 +1429,7 @@ export default function ScholarshipsMoreFiltersPanel({
             onClick={onClear}
             className="rounded-md text-sm font-semibold text-zinc-700 underline decoration-zinc-300 underline-offset-2 hover:text-zinc-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/50 focus-visible:ring-offset-0"
           >
-            Clear
+            {copy.clear}
           </button>
           <div className="flex min-w-0 shrink-0 flex-wrap items-center justify-end gap-2 sm:gap-3">
             {onSaveFilter ? (
@@ -1479,11 +1443,7 @@ export default function ScholarshipsMoreFiltersPanel({
                   onSaveFilter();
                 }}
                 disabled={isAuthenticated ? !saveFilterEnabled : false}
-                title={
-                  !isAuthenticated
-                    ? 'Save filter preset after you start your free trial'
-                    : undefined
-                }
+                title={!isAuthenticated ? copy.saveFilterGuestTitle : undefined}
                 className={`${scholarshipSaveFilterButtonClass} ${!isAuthenticated ? 'opacity-95' : ''}`}
               >
                 {!isAuthenticated ? (
@@ -1493,7 +1453,7 @@ export default function ScholarshipsMoreFiltersPanel({
                     aria-hidden
                   />
                 ) : null}
-                Save filter
+                {copy.saveFilter}
               </button>
             ) : null}
             <button

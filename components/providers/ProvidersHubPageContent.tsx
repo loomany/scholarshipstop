@@ -1,9 +1,8 @@
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { permanentRedirect, redirect } from 'next/navigation';
-import { ArrowRight, BrainCircuit } from 'lucide-react';
-
 import ResourcesPagination from '@/components/content-hub/ResourcesPagination';
+import { HubIqPromoAssessmentCard } from '@/components/i18n/HubIqPromoAssessmentCard';
 import { ProvidersHubCardsGrid } from '@/components/providers/ProvidersHubCardsGrid';
 import { US_STATE_CODE_TO_NAME } from '@/lib/constants/usStates';
 import { fetchProviderHubListing } from '@/lib/providers/providerHubServer';
@@ -18,10 +17,14 @@ import {
   SEO_ROUTE_STATE_SLUG_TO_CODE
 } from '@/lib/scholarships/seoTags/routeSegmentMaps';
 import { getURL } from '@/utils/helpers';
+import { getProvidersHubUiCopy, type ProvidersHubUiCopy } from '@/lib/i18n/hubUiCopy';
+import { getProvidersHubIqPromoCopy } from '@/lib/i18n/hubIqPromoByHub';
+import { hrefForLocalizedUiRequired } from '@/lib/i18n/localizedHref';
+import type { Stage2PilotLocale } from '@/lib/i18n/pilotRoutes';
 
 /**
  * `useSearchParams` in the toolbar can hit the same Turbopack SSR pitfall as
- * `usePathname` in Navlinks — load client-only (see `components/ui/Navbar/Navbar.tsx`).
+ * `usePathname` in Navlinks вЂ” load client-only (see `components/ui/Navbar/Navbar.tsx`).
  */
 const ProvidersHubToolbarClient = dynamic(
   () =>
@@ -45,53 +48,6 @@ const ProvidersHubToolbarClient = dynamic(
   }
 );
 
-function ProvidersIqAssessmentCard() {
-  return (
-    <Link
-      href="/iq/assessment?intent=provider_research"
-      aria-label="Start IQ assessment"
-      className="group relative block overflow-hidden rounded-3xl border border-[#FFB875]/80 bg-gradient-to-br from-[#FFF7ED] via-white to-[#EEF6FF] p-5 text-left shadow-[0_18px_45px_-30px_rgba(234,88,12,0.58)] ring-1 ring-[#FFE2C2] transition hover:-translate-y-0.5 hover:shadow-[0_24px_58px_-34px_rgba(234,88,12,0.72)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB875] focus-visible:ring-offset-2 lg:min-h-[13.25rem]"
-    >
-      <div
-        className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-[#FF7A1A] via-slate-950 to-[#0EA5E9]"
-        aria-hidden
-      />
-      <div
-        className="absolute -right-12 -top-16 h-36 w-36 rounded-full bg-[#FF7A1A]/16 blur-3xl"
-        aria-hidden
-      />
-      <div className="relative flex h-full min-w-0 flex-col justify-between pl-1">
-        <div>
-          <div className="mb-2 flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#FFB875] bg-white/80 px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-[0.15em] text-[#B45309] shadow-sm">
-              <BrainCircuit className="h-3 w-3 text-[#F97316]" aria-hidden />
-              Featured Tool
-            </span>
-            <span className="rounded-full bg-slate-950 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.12em] text-white">
-              IQ
-            </span>
-          </div>
-          <p className="text-xl font-semibold leading-snug tracking-tight text-slate-950">
-            Choose providers that fit your strategy
-          </p>
-          <p className="mt-2 text-sm leading-relaxed text-slate-500">
-            Use your Brain Archetype to understand how you evaluate awards,
-            deadlines, and application complexity before prioritizing providers.
-          </p>
-        </div>
-        <div className="mt-5 flex items-center justify-between gap-3 border-t border-orange-100 pt-3">
-          <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">
-            Assessment
-          </span>
-          <span className="inline-flex items-center gap-1 text-xs font-bold text-slate-950 transition group-hover:text-[#B45309]">
-            Start IQ test
-            <ArrowRight className="h-3.5 w-3.5" aria-hidden />
-          </span>
-        </div>
-      </div>
-    </Link>
-  );
-}
 
 export type ProvidersHubPageContentProps = {
   searchParams: ProvidersHubSearchParams;
@@ -99,17 +55,25 @@ export type ProvidersHubPageContentProps = {
   pathStateCode: string;
   /** Lowercase SEO slug for path; null on national hub. */
   stateSlug: string | null;
+  locale?: Stage2PilotLocale | 'en';
+  ui?: ProvidersHubUiCopy;
 };
 
 export async function ProvidersHubPageContent({
   searchParams,
   pathStateCode,
-  stateSlug
+  stateSlug,
+  locale = 'en',
+  ui: uiProp
 }: ProvidersHubPageContentProps) {
+  const ui = uiProp ?? getProvidersHubUiCopy(locale);
+  const iqCopy = getProvidersHubIqPromoCopy(locale);
+  const hrefForPath = (path: string) => hrefForLocalizedUiRequired(locale, path);
+  const iqProviderResearchHref = '/iq/assessment?intent=provider_research';
   const { q, countryBucket, stateCode, currentPage } =
     parseProvidersHubListingInputs(searchParams, pathStateCode);
 
-  // One-word "search" that is a state slug → canonical state hub (not e.g. /providers/florida?q=texas).
+  // One-word "search" that is a state slug в†’ canonical state hub (not e.g. /providers/florida?q=texas).
   const qTrim = q?.trim();
   if (pathStateCode && qTrim && !qTrim.includes(' ')) {
     const codeFromQuery = SEO_ROUTE_STATE_SLUG_TO_CODE[qTrim.toLowerCase()];
@@ -164,18 +128,20 @@ export async function ProvidersHubPageContent({
       : Math.min(currentPage * PROVIDERS_HUB_PAGE_SIZE, total);
 
   const buildPageHref = (page: number) =>
-    buildProvidersHubHref({
-      q: q ?? undefined,
-      state: stateCode || undefined,
-      country: countryBucket,
-      page
-    });
+    hrefForPath(
+      buildProvidersHubHref({
+        q: q ?? undefined,
+        state: stateCode || undefined,
+        country: countryBucket,
+        page
+      })
+    );
 
   const countrySummary =
     countryBucket === 'us'
-      ? 'United States only'
+      ? ui.countryOptions.find((o) => o.value === 'us')?.label ?? null
       : countryBucket === 'other'
-        ? 'outside US / unknown region'
+        ? ui.countryOptions.find((o) => o.value === 'other')?.label ?? null
         : null;
 
   const resetHref =
@@ -192,8 +158,18 @@ export async function ProvidersHubPageContent({
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: getURL('/') },
-      { '@type': 'ListItem', position: 2, name: 'Providers', item: getURL('/providers') },
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: ui.home,
+        item: getURL(hrefForPath('/').replace(/^\/+/, '') || '/')
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: ui.breadcrumb,
+        item: getURL(hrefForPath('/providers').replace(/^\/+/, ''))
+      },
       ...(stateName && canonicalStateSlug
         ? [
             {
@@ -236,11 +212,11 @@ export async function ProvidersHubPageContent({
   const h1 =
     stateName && stateSlug
       ? `Scholarship providers in ${stateName}`
-      : 'Scholarship Providers';
+      : ui.h1;
   const intro =
     stateName && stateSlug
       ? `Organizations and foundations with active scholarship listings tied to ${stateName}.`
-      : 'Explore organizations and foundations offering financial aid across the United States.';
+      : ui.intro;
 
   return (
     <div className="bg-white text-zinc-900 antialiased">
@@ -263,10 +239,10 @@ export async function ProvidersHubPageContent({
           <ol className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
             <li>
               <Link
-                href="/"
+                href={hrefForPath('/')}
                 className="font-medium text-zinc-600 transition hover:text-zinc-900"
               >
-                Home
+                {ui.home}
               </Link>
             </li>
             <li className="text-zinc-300" aria-hidden>
@@ -276,10 +252,10 @@ export async function ProvidersHubPageContent({
               <>
                 <li>
                   <Link
-                    href="/providers"
+                    href={hrefForPath('/providers')}
                     className="font-medium text-zinc-600 transition hover:text-zinc-900"
                   >
-                    Providers
+                    {ui.breadcrumb}
                   </Link>
                 </li>
                 <li className="text-zinc-300" aria-hidden>
@@ -291,7 +267,7 @@ export async function ProvidersHubPageContent({
               </>
             ) : (
               <li className="font-medium text-zinc-900" aria-current="page">
-                Providers
+                {ui.breadcrumb}
               </li>
             )}
           </ol>
@@ -309,10 +285,11 @@ export async function ProvidersHubPageContent({
             </header>
 
             <p className="mt-6 text-sm text-zinc-500">
-              Showing {showingFrom}-{showingTo} of {total.toLocaleString()} providers
-              {q?.trim() ? ` matching “${q.trim()}”` : ''}
-              {stateName ? ` in ${stateName}` : ''}
-              {countrySummary ? ` · ${countrySummary}` : ''}
+              {ui.showingProviders(showingFrom, showingTo, total, {
+                query: q ?? undefined,
+                stateName,
+                countrySummary
+              })}
             </p>
 
             <div className="mt-6 w-full">
@@ -324,42 +301,54 @@ export async function ProvidersHubPageContent({
                 stateEncodedInPath={Boolean(
                   stateSlug && stateCode && countryBucket !== 'other'
                 )}
+                searchPlaceholder={ui.searchPlaceholder}
+                countryOptions={ui.countryOptions}
+                loadingSearchAria={ui.loadingSearchAria}
               />
             </div>
           </div>
 
           <aside className="min-w-0 lg:pt-8" aria-label="Cognitive assessment">
-            <ProvidersIqAssessmentCard />
+            <HubIqPromoAssessmentCard
+              href={iqProviderResearchHref}
+              iq={iqCopy}
+            />
           </aside>
         </div>
 
-        <ProviderDirectoryTrustSection stateName={stateName} />
+        <ProviderDirectoryTrustSection
+          stateName={stateName}
+          hrefForPath={hrefForPath}
+        />
 
         {rows.length === 0 ? (
           <div className="mt-8 rounded-2xl border border-zinc-200 bg-white p-10 text-center shadow-sm">
             <p className="text-zinc-700">
               {countryBucket === 'us' && !stateName
-                ? 'No US providers match these filters.'
+                ? ui.emptyUs
                 : stateName
-                  ? `No providers found in ${stateName}.`
+                  ? ui.emptyState(stateName)
                   : countryBucket === 'other'
-                    ? 'No providers in this category yet.'
+                    ? ui.emptyOther
                     : q?.trim()
-                      ? 'No providers match your search.'
-                      : 'No providers found.'}
+                      ? ui.emptySearch
+                      : ui.emptyDefault}
             </p>
             <Link
-              href={resetHref}
+              href={hrefForPath(resetHref)}
               className="mt-5 inline-flex items-center justify-center rounded-xl border border-zinc-200 bg-white px-5 py-2.5 text-sm font-semibold text-zinc-900 shadow-sm transition hover:border-zinc-300 hover:bg-zinc-50"
             >
-              Reset filters
+              {ui.resetFilters}
             </Link>
           </div>
         ) : (
           <>
-            <ProvidersHubCardsGrid rows={rows} />
+            <ProvidersHubCardsGrid rows={rows} gridIq={ui.gridIq} iqHref={iqProviderResearchHref} />
             <div className="mt-6 lg:hidden">
-              <ProvidersIqAssessmentCard />
+              <HubIqPromoAssessmentCard
+                href={iqProviderResearchHref}
+                iq={iqCopy}
+              />
             </div>
             <ResourcesPagination
               currentPage={currentPage}
@@ -373,7 +362,13 @@ export async function ProvidersHubPageContent({
   );
 }
 
-function ProviderDirectoryTrustSection({ stateName }: { stateName: string | null }) {
+function ProviderDirectoryTrustSection({
+  stateName,
+  hrefForPath
+}: {
+  stateName: string | null;
+  hrefForPath: (path: string) => string;
+}) {
   const directoryLabel = stateName
     ? `provider profiles in ${stateName}`
     : 'provider profiles';
@@ -407,7 +402,7 @@ function ProviderDirectoryTrustSection({ stateName }: { stateName: string | null
           ].map(([label, href]) => (
             <Link
               key={href}
-              href={href}
+              href={hrefForPath(href)}
               className="rounded-full border border-emerald-200 bg-white px-3 py-1.5 text-xs font-semibold text-emerald-900 transition hover:border-emerald-300 hover:bg-emerald-50"
             >
               {label}

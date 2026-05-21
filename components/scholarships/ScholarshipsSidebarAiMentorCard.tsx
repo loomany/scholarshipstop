@@ -6,7 +6,11 @@ import { AiMentorHowItWorksVideo } from '@/components/essay/AiMentorHowItWorksVi
 /**
  * Desktop-only CTA under “My scholarships” on /scholarships — matches homepage mentor styling.
  */
-export function ScholarshipsSidebarAiMentorCard() {
+export function ScholarshipsSidebarAiMentorCard({
+  ctaLabel
+}: {
+  ctaLabel?: string;
+}) {
   return (
     <section
       className="mt-4 hidden w-full max-w-none lg:block"
@@ -18,7 +22,7 @@ export function ScholarshipsSidebarAiMentorCard() {
           playButtonAriaLabel="Play video: How the AI Essay Mentor works"
         />
         <div className="border-t border-gray-100/90 bg-white p-3">
-          <AiMentorCtaLink />
+          <AiMentorCtaLink label={ctaLabel} />
         </div>
       </div>
     </section>

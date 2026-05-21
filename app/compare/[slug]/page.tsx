@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { StaticCompareGuidePage } from '@/components/compare/StaticCompareGuidePage';
 import { getStaticCompareGuide } from '@/lib/compare/staticCompareGuides';
 import { getCanonical } from '@/lib/seo/canonical';
+import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
 
 type PageProps = {
   params: { slug: string };
@@ -19,11 +20,12 @@ export function generateMetadata({ params }: PageProps): Metadata {
     };
   }
 
-  const canonical = getCanonical(`/compare/${encodeURIComponent(guide.slug)}`);
+  const path = `/compare/${encodeURIComponent(guide.slug)}`;
+  const canonical = getCanonical(path);
   return {
     title: guide.title,
     description: guide.description,
-    alternates: { canonical },
+    alternates: buildStage2EnglishPilotAlternates(path),
     openGraph: {
       title: guide.title,
       description: guide.description,

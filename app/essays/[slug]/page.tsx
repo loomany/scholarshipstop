@@ -35,6 +35,7 @@ import { getRelatedScholarshipsForEssayGuide } from '@/lib/essays/relatedScholar
 import { fetchScholarshipsBySlugsOrIdsOrdered } from '@/lib/scholarships/supabase';
 import { getURL } from '@/utils/helpers';
 import { getCanonical } from '@/lib/seo/canonical';
+import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
 
 export const revalidate = 300;
 
@@ -184,11 +185,12 @@ export async function generateMetadata({
   const slug = decodeURIComponent(params.slug).trim();
   const staticGuide = getStaticEssayGuide(slug);
   if (staticGuide) {
-    const canonical = getCanonical(essayHubArticlePath(staticGuide.slug));
+    const path = essayHubArticlePath(staticGuide.slug);
+    const canonical = getCanonical(path);
     return {
       title: staticGuide.title,
       description: staticGuide.description,
-      alternates: { canonical },
+      alternates: buildStage2EnglishPilotAlternates(path),
       openGraph: {
         type: 'article',
         url: canonical,

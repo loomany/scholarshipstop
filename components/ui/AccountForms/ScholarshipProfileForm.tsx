@@ -61,6 +61,14 @@ import {
   SCHOLARSHIP_COUNTRY_OPTIONS
 } from '@/lib/scholarships/countryEligibility/countries';
 import { preferredHostCountryCodesFromProfileJson } from '@/lib/scholarships/profilePreferredHostCountries';
+import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
+import {
+  accountCitizenshipSelectOptions,
+  accountFieldOfStudySelectOptions,
+  accountGpaSelectOptions,
+  accountSchoolLevelSelectOptions,
+  getAccountProfileUiCopy
+} from '@/lib/i18n/accountProfileUiCopy';
 
 type ProfilesRow = Database['public']['Tables']['profiles']['Row'];
 type Subscription = Tables<'subscriptions'>;
@@ -128,21 +136,6 @@ const labelClassSaaS =
 
 const accountResendConfirmationButtonClass = `inline-flex max-w-full items-center justify-center rounded-full border border-emerald-500 bg-white px-4 py-2.5 text-center text-sm font-semibold text-emerald-700 shadow-sm transition hover:bg-emerald-50 disabled:pointer-events-none disabled:opacity-60 ${SCHOLARSHIP_ACTION_FOCUS_VISIBLE}`;
 
-/** Same option sets as onboarding Step 1 / Step 3 (`DarkSelect`). */
-const schoolLevelSelectOptions = [
-  { value: '', label: 'Select your school level' },
-  ...SCHOOL_LEVEL_OPTIONS.map((o) => ({ value: o.value, label: o.label }))
-];
-
-const fieldOfStudySelectOptions = [
-  { value: '', label: 'Select your field of study' },
-  ...FIELD_OF_STUDY_OPTIONS.map((o) => ({ value: o.value, label: o.label }))
-];
-
-const citizenshipSelectOptions = [
-  { value: '', label: 'Select citizenship status' },
-  ...CITIZENSHIP_OPTIONS.map((o) => ({ value: o.value, label: o.label }))
-];
 
 function snapshotIncludeUnspecifiedApplicantCountries(raw: unknown): boolean {
   return Boolean(
@@ -155,17 +148,6 @@ function snapshotIncludeUnspecifiedApplicantCountries(raw: unknown): boolean {
 
 const birthMonthOptions = buildBirthMonthSelectOptions();
 
-const gpaProfileSelectOptions = [
-  {
-    value: SCHOLARSHIP_GPA_PREFER_NOT_TO_SAY,
-    label: 'Prefer not to say (optional)'
-  },
-  ...SCHOLARSHIP_GPA_BUCKET_OPTIONS.map((o) => ({
-    value: o.value,
-    label: o.label
-  })),
-  ...SCHOLARSHIP_GPA_OPTIONS.map((o) => ({ value: o.value, label: o.label }))
-];
 
 const EDUCATION_PATCH_KEYS = [
   'school_level',
@@ -270,17 +252,6 @@ const compactUpgradeButtonBaseClass =
 const compactUpgradeRowClass =
   'flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white p-4';
 
-const premiumPerks = [
-  'Unlimited Scholarship Matches',
-  'AI-Powered Application Assistant',
-  'Early Access to New Grants'
-] as const;
-
-const freePlanPrecisionPerks = [
-  'AI-Precision Matching: We filter out the noise. See only grants you actually qualify for.',
-  'Precision Filters: Field of study, nationality, intent—sort instantly without the headache.',
-  'Time-Saver: Stop wasting 20+ hours on manual research every single week.'
-] as const;
 
 function formatPlanDate(dateValue: string | null | undefined) {
   if (!dateValue) return null;
@@ -321,7 +292,8 @@ export default function ScholarshipProfileForm({
   userEmail,
   emailConfirmed,
   resendConfirmationMode = null,
-  variant = 'default'
+  variant = 'default',
+  uiLocale = 'en'
 }: {
   profile: ProfilesRow | null;
   subscription?: SubscriptionWithPriceAndProduct | null;
@@ -335,8 +307,14 @@ export default function ScholarshipProfileForm({
   resendConfirmationMode?: 'app' | 'supabase' | null;
   /** `account`: compact card on /account (page supplies section heading). `saas`: split profile cards, no outer Card. */
   variant?: 'default' | 'account' | 'saas';
+  uiLocale?: LocalizedUiLocale;
 }) {
   const router = useRouter();
+  const t = getAccountProfileUiCopy(uiLocale);
+  const schoolLevelSelectOptions = accountSchoolLevelSelectOptions(uiLocale);
+  const fieldOfStudySelectOptions = accountFieldOfStudySelectOptions(uiLocale);
+  const citizenshipSelectOptions = accountCitizenshipSelectOptions(uiLocale);
+  const gpaProfileSelectOptions = accountGpaSelectOptions(uiLocale);
   const birth0 = useMemo(() => birthPartsFromProfile(profile), [profile]);
 
   const [firstName, setFirstName] = useState(profile?.first_name ?? '');
@@ -580,7 +558,7 @@ export default function ScholarshipProfileForm({
         }
         return;
       }
-      const savedOk = 'Saved.';
+      const savedOk = t.savedOk;
       if (section) {
         setSectionFeedback((f) => ({ ...f, [section]: { type: 'ok', text: savedOk } }));
       } else {
@@ -703,7 +681,7 @@ export default function ScholarshipProfileForm({
 
       setSectionFeedback((f) => ({
         ...f,
-        personal: { type: 'ok', text: 'Saved.' }
+        personal: { type: 'ok', text: t.savedOk }
       }));
       router.refresh();
     } finally {
@@ -1076,7 +1054,7 @@ export default function ScholarshipProfileForm({
               const byCode = SCHOLARSHIP_COUNTRY_OPTIONS.find((c) => c.code === upper)?.code;
               if (byCode) handleCountryCodeChange(byCode);
             }}
-            placeholder="Select or type applicant country"
+            placeholder={t.placeholders.applicantCountry}
             disabled={submitting}
             autoComplete="off"
             className={`${ic} pr-10`}
@@ -1205,12 +1183,11 @@ export default function ScholarshipProfileForm({
     const subscriptionStatusUi = (() => {
       if (paymentFailed) {
         return {
-          badgeLabel: 'Payment Failed',
+          badgeLabel: t.subscriptionUi.paymentFailed.badge,
           badgeClass: 'bg-amber-100 text-amber-800 font-medium ring-1 ring-amber-200',
-          title: 'Update Billing To Restore Access',
-          subtitle:
-            'We could not renew your subscription after the trial ended. Update your card to unlock access again.',
-          buttonLabel: 'Subscription Manager',
+          title: t.subscriptionUi.paymentFailed.title,
+          subtitle: t.subscriptionUi.paymentFailed.subtitle,
+          buttonLabel: t.subscriptionUi.paymentFailed.button,
           buttonClass:
             'bg-amber-500 text-white shadow-sm hover:bg-amber-600 hover:shadow-md'
         };
@@ -1218,13 +1195,12 @@ export default function ScholarshipProfileForm({
 
       if (subscriptionPaused) {
         return {
-          badgeLabel: 'Paused',
+          badgeLabel: t.subscriptionUi.paused.badge,
           badgeClass:
             'bg-amber-100 text-amber-900 font-medium ring-1 ring-amber-300/80 dark:bg-amber-500/20 dark:text-amber-100 dark:ring-amber-400/50',
-          title: 'Subscription on hold',
-          subtitle:
-            'Your subscription is currently paused. You can resume it anytime to regain full access.',
-          buttonLabel: 'Resume Access',
+          title: t.subscriptionUi.paused.title,
+          subtitle: t.subscriptionUi.paused.subtitle,
+          buttonLabel: t.subscriptionUi.paused.button,
           buttonClass:
             'border border-amber-400/80 bg-amber-400/15 text-amber-950 shadow-sm hover:bg-amber-400/25 dark:text-amber-50'
         };
@@ -1235,9 +1211,9 @@ export default function ScholarshipProfileForm({
           return {
             badgeLabel: subscriptionPresentation.label,
             badgeClass: 'bg-orange-100 text-orange-700 font-medium ring-1 ring-orange-200',
-            title: 'Keep Premium Access Active',
+            title: t.subscriptionUi.trial.title,
             subtitle: null,
-            buttonLabel: 'Subscription Manager',
+            buttonLabel: t.subscriptionUi.trial.button,
             buttonClass:
               'bg-slate-900 text-white shadow-sm hover:bg-slate-800 hover:shadow-md',
             showTrialProgress: true
@@ -1246,16 +1222,16 @@ export default function ScholarshipProfileForm({
           return {
             badgeLabel: subscriptionPresentation.label,
             badgeClass: 'bg-emerald-100 text-emerald-700 font-medium ring-1 ring-emerald-200',
-            title: 'Premium Precision Active',
-            subtitle: 'You are saving 20+ hours of manual research this month.',
+            title: t.subscriptionUi.monthly.title,
+            subtitle: t.subscriptionUi.monthly.subtitle,
             hidePrimaryAction: true
           };
         case 'quarterly':
           return {
             badgeLabel: subscriptionPresentation.label,
             badgeClass: 'bg-blue-100 text-blue-700 font-medium ring-1 ring-blue-200',
-            title: 'Smart Searching, Better Results',
-            subtitle: '',
+            title: t.subscriptionUi.quarterly.title,
+            subtitle: t.subscriptionUi.quarterly.subtitle,
             hidePrimaryAction: true
           };
         case 'yearly':
@@ -1263,21 +1239,21 @@ export default function ScholarshipProfileForm({
             badgeLabel: subscriptionPresentation.label,
             badgeClass:
               'border border-amber-300 bg-violet-100 text-violet-800 font-medium ring-1 ring-violet-200',
-            title: 'Elite Access Unlocked',
-            subtitle: 'You have top-tier priority for all AI-curated matches.',
+            title: t.subscriptionUi.yearly.title,
+            subtitle: t.subscriptionUi.yearly.subtitle,
             hidePrimaryAction: true
           };
         case 'none':
         default:
           return {
-            badgeLabel: 'Free Plan',
+            badgeLabel: t.subscriptionUi.none.badge,
             badgeClass: 'bg-slate-100 text-slate-600 font-medium',
-            title: 'Unlock Premium Access',
-            subtitle: 'Start 3-Day Free Trial, then as low as $12/mo.',
-            buttonLabel: 'Subscription Manager',
+            title: t.subscriptionUi.none.title,
+            subtitle: t.subscriptionUi.none.subtitle,
+            buttonLabel: t.subscriptionUi.none.button,
             buttonClass:
               'bg-orange-500 text-white shadow-lg shadow-orange-200 hover:bg-orange-600 hover:shadow-orange-200',
-            buttonSubtext: 'Full access. No commitment. Cancel anytime.'
+            buttonSubtext: t.subscriptionUi.none.buttonSubtext
           };
       }
     })();
@@ -1312,7 +1288,7 @@ export default function ScholarshipProfileForm({
           disabled={submitting}
           className={accountPagePrimaryButtonClass}
         >
-          {submitting ? 'Saving…' : 'Save'}
+          {submitting ? t.saving : t.save}
         </button>
       );
 
@@ -1357,7 +1333,7 @@ export default function ScholarshipProfileForm({
                     <div className="min-w-0 w-full md:w-auto">
                       <div className="flex flex-row items-center justify-between gap-2 md:flex-col md:items-center md:justify-start md:gap-2">
                         <p className="min-w-0 text-sm font-semibold text-slate-900 md:text-center md:whitespace-nowrap">
-                          Subscription status
+                          {t.subscriptionStatusHeading}
                         </p>
                         <div
                           id="subscription-status"
@@ -1381,7 +1357,7 @@ export default function ScholarshipProfileForm({
                 <div className="grid items-stretch gap-2 px-5 py-2.5 md:grid-cols-2 md:px-7 md:py-3">
                   <div className="flex min-h-0 items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white p-3">
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-slate-900">Quarterly</p>
+                      <p className="text-sm font-medium text-slate-900">{t.quarterly}</p>
                       <p className="mt-1 text-sm text-slate-500">$19/mo</p>
                     </div>
                     <div className="flex shrink-0 flex-col items-end gap-1.5 pt-0.5">
@@ -1392,17 +1368,17 @@ export default function ScholarshipProfileForm({
                         }}
                         className={`inline-flex items-center justify-center ${compactUpgradeButtonBaseClass} bg-orange-500 text-white hover:bg-orange-600`}
                       >
-                        Upgrade
+                        {t.upgrade}
                       </button>
                       <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 text-[11px] font-bold uppercase tracking-wide text-emerald-700">
-                        Save 24%
+                        {t.save24}
                       </span>
                     </div>
                   </div>
 
                   <div className="flex min-h-0 items-center justify-between gap-3 rounded-xl border-2 border-slate-300 bg-white p-3">
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-slate-900">Yearly</p>
+                      <p className="text-sm font-medium text-slate-900">{t.yearly}</p>
                       <p className="mt-1 text-sm text-slate-500">$12/mo</p>
                     </div>
                     <div className="flex shrink-0 flex-col items-end gap-1.5 pt-0.5">
@@ -1413,10 +1389,10 @@ export default function ScholarshipProfileForm({
                         }}
                         className={`inline-flex items-center justify-center ${compactUpgradeButtonBaseClass} bg-orange-500 text-white hover:bg-orange-600`}
                       >
-                        Upgrade
+                        {t.upgrade}
                       </button>
                       <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 text-[11px] font-bold uppercase tracking-wide text-emerald-700">
-                        Save 52%
+                        {t.save52}
                       </span>
                     </div>
                   </div>
@@ -1501,7 +1477,7 @@ export default function ScholarshipProfileForm({
                         subscriptionType === 'trial' ? 'mb-1.5' : 'mb-2'
                       }`}
                     >
-                      <span>Trial countdown</span>
+                      <span>{t.trialCountdown}</span>
                     </div>
                     <div className="h-2 overflow-hidden rounded-full bg-orange-100">
                       <div
@@ -1614,7 +1590,7 @@ export default function ScholarshipProfileForm({
                 {!paymentFailed &&
                 (subscriptionType === 'none' || subscriptionType === 'trial') ? (
                   <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-700 text-center md:text-left">
-                    Stop Searching. Start Winning.
+                    {t.stopSearchingHeadline}
                   </p>
                 ) : null}
                 {subscriptionType === 'quarterly' ? (
@@ -1622,7 +1598,7 @@ export default function ScholarshipProfileForm({
                     <div className="flex min-h-[108px] flex-col rounded-xl border-2 border-slate-300 bg-white px-2 pt-1.5 pb-1">
                       <div className="flex items-center justify-between gap-3">
                         <div className="min-w-0 flex-1 self-center">
-                          <p className="text-sm font-medium text-slate-900">Yearly</p>
+                          <p className="text-sm font-medium text-slate-900">{t.yearly}</p>
                           <p className="mt-1 text-sm text-slate-500">$12/mo</p>
                         </div>
                         <div className="flex shrink-0 flex-col items-end gap-1.5 pt-0.5">
@@ -1633,10 +1609,10 @@ export default function ScholarshipProfileForm({
                             }}
                             className={`${compactUpgradeButtonBaseClass} bg-orange-500 text-white hover:bg-orange-600`}
                           >
-                            Upgrade
+                            {t.upgrade}
                           </button>
                           <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-1 text-[11px] font-bold uppercase tracking-wide text-emerald-700">
-                            Save 52%
+                            {t.save52}
                           </span>
                         </div>
                       </div>
@@ -1675,14 +1651,13 @@ export default function ScholarshipProfileForm({
                     className="mt-2 rounded-xl border border-amber-300/50 bg-amber-400/10 px-4 py-3 text-left text-sm leading-snug text-amber-950 shadow-sm ring-1 ring-amber-400/20 dark:bg-amber-500/10 dark:text-amber-50 dark:ring-amber-500/25"
                     role="status"
                   >
-                    Premium tools stay paused until you resume your subscription from the billing
-                    portal.
+                    {t.pausedBillingNote}
                   </div>
                 ) : (
                   <div className="mt-4 space-y-4 text-center md:mt-3 md:space-y-3 md:text-left">
                     {(subscriptionType === 'none' || subscriptionType === 'trial'
-                      ? freePlanPrecisionPerks
-                      : premiumPerks
+                      ? t.freePlanPerks
+                      : t.premiumPerks
                     ).map((perk) => (
                       <div key={perk} className="text-sm leading-relaxed text-slate-500">
                         <span>{perk}</span>
@@ -1696,10 +1671,10 @@ export default function ScholarshipProfileForm({
           </div>
 
           <div className="rounded-2xl border border-zinc-100 bg-white p-6 shadow-[0_2px_24px_-8px_rgba(15,23,42,0.08)]">
-            <h3 className="text-base font-semibold text-zinc-900">Personal info</h3>
+            <h3 className="text-base font-semibold text-zinc-900">{t.sections.personal}</h3>
             <div className="mt-4 space-y-1">
               <label className={lc} htmlFor="spf-first_name">
-                First name
+                {t.labels.firstName}
               </label>
               <input
                 id="spf-first_name"
@@ -1710,7 +1685,7 @@ export default function ScholarshipProfileForm({
                 autoComplete="given-name"
               />
               <label className={lc} htmlFor="spf-last_name">
-                Last name
+                {t.labels.lastName}
               </label>
               <input
                 id="spf-last_name"
@@ -1762,12 +1737,12 @@ export default function ScholarshipProfileForm({
                           aria-hidden
                         />
                         <span className="text-[11px] font-bold uppercase tracking-tight text-emerald-700">
-                          Confirmed
+                          {t.emailConfirmedBadge}
                         </span>
                       </>
                     ) : (
                       <span className="text-[11px] font-semibold uppercase tracking-tight text-amber-900">
-                        Not confirmed
+                        {t.emailNotConfirmedBadge}
                       </span>
                     )}
                   </div>
@@ -1775,8 +1750,7 @@ export default function ScholarshipProfileForm({
               </div>
               {emailConfirmed === false && userEmail ? (
                 <p className="mt-2 max-w-lg text-xs text-zinc-500">
-                  Check your inbox for the confirmation link. You can still browse; some actions may
-                  stay limited until you confirm.
+                  {t.emailConfirmInboxHint}
                 </p>
               ) : null}
               {ACCOUNT_SHOW_DATE_OF_BIRTH_AND_PASSWORD_FIELDS ? birthDateFields : null}
@@ -1789,7 +1763,7 @@ export default function ScholarshipProfileForm({
                   disabled={submitting || resendingConfirmation}
                   className={accountResendConfirmationButtonClass}
                 >
-                  {resendingConfirmation ? 'Sending…' : 'Resend confirmation'}
+                  {resendingConfirmation ? t.resendSending : t.resendConfirmation}
                 </button>
               ) : undefined,
               endSlot: (
@@ -1798,7 +1772,7 @@ export default function ScholarshipProfileForm({
                   onClick={() => void handleLogOut()}
                   className={accountPagePrimaryButtonClass}
                 >
-                  Log out
+                  {t.logOut}
                 </button>
               )
             })}
@@ -1807,12 +1781,13 @@ export default function ScholarshipProfileForm({
                 profile={profile}
                 userEmail={userEmail}
                 disabled={submitting}
+                uiLocale={uiLocale}
               />
             ) : null}
           </div>
 
           <div className="rounded-2xl border border-zinc-100 bg-white p-6 shadow-[0_2px_24px_-8px_rgba(15,23,42,0.08)]">
-            <h3 className="text-base font-semibold text-zinc-900">Education</h3>
+            <h3 className="text-base font-semibold text-zinc-900">{t.sections.education}</h3>
             <div className="mt-4 space-y-1">
               <label className={lc} htmlFor="spf-school">
                 School level
@@ -1844,7 +1819,7 @@ export default function ScholarshipProfileForm({
           </div>
 
           <div className="rounded-2xl border border-zinc-100 bg-white p-6 shadow-[0_2px_24px_-8px_rgba(15,23,42,0.08)]">
-            <h3 className="text-base font-semibold text-zinc-900">Eligibility</h3>
+            <h3 className="text-base font-semibold text-zinc-900">{t.sections.eligibility}</h3>
             <div className="mt-4 space-y-1">
               <div className={eligibilityFieldBlockClass}>
                 <label className={eligibilityLabelClass} htmlFor="spf-citizenship">
@@ -1885,7 +1860,7 @@ export default function ScholarshipProfileForm({
                       const byCode = SCHOLARSHIP_COUNTRY_OPTIONS.find((c) => c.code === upper)?.code;
                       if (byCode) handleCountryCodeChange(byCode);
                     }}
-                    placeholder="Select or type applicant country"
+                    placeholder={t.placeholders.applicantCountry}
                     disabled={submitting}
                     autoComplete="off"
                     className={`${ic} pr-10`}
@@ -1987,7 +1962,7 @@ export default function ScholarshipProfileForm({
       title={isAccount ? undefined : 'Scholarship profile'}
       description={
         isAccount
-          ? 'Saved to your account. We use this for scholarship matching.'
+          ? t.savedHint
           : 'Stored in your account (public.profiles). Update these fields anytime — they power scholarship matching.'
       }
       footer={saveFooter}

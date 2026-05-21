@@ -3,6 +3,7 @@ import Link from 'next/link';
 
 import ResourceGuideShell from '@/components/content-hub/resourceGuides/ResourceGuideShell';
 import { resourceGuideLinkClassName } from '@/lib/content-hub/resourceGuidePages';
+import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
 import { getCanonical } from '@/lib/seo/canonical';
 
 const hrefMedicalCategory = '/scholarships/category/medical';
@@ -17,9 +18,7 @@ export const metadata: Metadata = {
   title: 'Medical Scholarships Guide for Healthcare Students',
   description:
     'A practical guide to medical and healthcare scholarships: where to look, how to qualify, what materials to prepare, and how to choose stronger applications.',
-  alternates: {
-    canonical
-  },
+  alternates: buildStage2EnglishPilotAlternates('/resources/medical-scholarships-guide'),
   openGraph: {
     title: 'Medical Scholarships Guide for Healthcare Students',
     description:

@@ -72,11 +72,15 @@ function stateFromSearchParams(sp: URLSearchParams): EssaysIndexQueryState {
   return parseEssaysIndexSearchParams(record);
 }
 
+import { getHubToolbarUiCopy } from '@/lib/i18n/hubUiCopy';
+import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
+
 type EssaysIndexToolbarProps = {
   categoryOptions: EssayCategoryToolbarOption[];
   resultCount: number;
   showingFrom: number;
   showingTo: number;
+  locale?: LocalizedUiLocale;
   /** Merged onto the root wrapper (e.g. `mt-0` beside hero video). */
   className?: string;
 };
@@ -86,8 +90,10 @@ export default function EssaysIndexToolbar({
   resultCount,
   showingFrom,
   showingTo,
+  locale,
   className
 }: EssaysIndexToolbarProps) {
+  const toolbar = getHubToolbarUiCopy(locale ?? 'en');
   const router = useRouter();
   const sp = useSearchParams();
   const applied = useMemo(() => stateFromSearchParams(sp), [sp]);
@@ -389,8 +395,8 @@ export default function EssaysIndexToolbar({
             <input
               value={searchDraft}
               onChange={(e) => setSearchDraft(e.target.value)}
-              placeholder="Search by keyword"
-              aria-label="Search by keyword"
+              placeholder={toolbar.searchByKeyword}
+              aria-label={toolbar.searchByKeywordAria}
               className={CATALOG_SEARCH_BY_KEYWORD_INPUT_CLASS}
             />
           </div>

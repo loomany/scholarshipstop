@@ -1,4 +1,4 @@
-﻿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowRight, BrainCircuit } from 'lucide-react';
@@ -22,6 +22,7 @@ import {
   resourcesArticlePath
 } from '@/lib/content-hub/resourcesSection';
 import { getURL } from '@/utils/helpers';
+import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
 import { getCanonical } from '@/lib/seo/canonical';
 import { applyAutoInternalLinks } from '@/lib/content-hub/autoInternalLinks';
 import { deduplicateQuickSummaryBlocksInHtml } from '@/lib/content-hub/deduplicateQuickSummaryInHtml';
@@ -82,11 +83,12 @@ export async function generateMetadata({
   const slug = decodeURIComponent(params.slug).trim();
   const staticGuide = getStaticScholarshipGuide(slug);
   if (staticGuide) {
-    const canonical = getCanonical(resourcesArticlePath(staticGuide.slug));
+    const path = resourcesArticlePath(staticGuide.slug);
+    const canonical = getCanonical(path);
     return {
       title: staticGuide.title,
       description: staticGuide.description,
-      alternates: { canonical },
+      alternates: buildStage2EnglishPilotAlternates(path),
       openGraph: {
         title: staticGuide.title,
         description: staticGuide.description,

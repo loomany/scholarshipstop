@@ -22,6 +22,11 @@ import { ScholarshipOnboardingDraftPostAuthSync } from '@/components/onboarding/
 import HomeAiNavigatorWidget from '@/components/home/HomeAiNavigatorWidget';
 import SiteFooter from '@/components/ui/Footer/SiteFooter';
 import dynamic from 'next/dynamic';
+import { getLocaleDirection, ROOT_LOCALE } from '@/lib/i18n/locales';
+import {
+  isStage2PilotLocale,
+  type Stage2PilotLocale
+} from '@/lib/i18n/pilotRoutes';
 import 'styles/main.css';
 
 function normalizeRequestHost(value: string | null): string {
@@ -30,6 +35,13 @@ function normalizeRequestHost(value: string | null): string {
 
 function shouldHideAiNavigatorForHost(host: string): boolean {
   return host === 'iq.scholarshiptop.com' || host.startsWith('iq.');
+}
+
+function requestLocaleFromHeaders(
+  requestHeaders: ReturnType<typeof headers>
+): Stage2PilotLocale | typeof ROOT_LOCALE {
+  const locale = requestHeaders.get('x-scholarshiptop-locale');
+  return isStage2PilotLocale(locale) ? locale : ROOT_LOCALE;
 }
 
 /** Client-only: `usePathname` / `useSearchParams` can throw with Turbopack SSR (`useContext` null). */
@@ -122,11 +134,18 @@ export const viewport: Viewport = {
 
 export default async function RootLayout({ children }: PropsWithChildren) {
   const requestHeaders = headers();
+  const requestLocale = requestLocaleFromHeaders(requestHeaders);
+  const requestDirection = getLocaleDirection(requestLocale);
   const requestHost = normalizeRequestHost(
     requestHeaders.get('x-forwarded-host') ?? requestHeaders.get('host')
   );
   const showAiNavigator = !shouldHideAiNavigatorForHost(requestHost);
   const siteUrl = getURL().replace(/\/$/, '');
+  const localizedSiteDescriptions = {
+    en: 'Scholarship search and application-planning platform that helps students find relevant scholarships, compare eligibility and deadlines, understand application requirements, save opportunities, and apply through official provider sources.',
+    es: 'Plataforma de búsqueda y planificación de becas que ayuda a estudiantes a encontrar oportunidades relevantes, comparar elegibilidad y fechas, entender requisitos y aplicar mediante fuentes oficiales.',
+    fr: 'Plateforme de recherche et de planification de bourses qui aide les étudiants à trouver des opportunités pertinentes, comparer critères et dates, comprendre les exigences et postuler via les sources officielles.'
+  } as const;
   const publisherId = `${siteUrl}#scholarshiptop-publisher`;
   const websiteId = `${siteUrl}#website`;
   const siteSchema = {
@@ -138,13 +157,12 @@ export default async function RootLayout({ children }: PropsWithChildren) {
         name: 'ScholarshipTop',
         url: siteUrl,
         email: 'support@scholarshiptop.com',
-        description:
-          'Scholarship search and application-planning platform that helps students find relevant scholarships, compare eligibility and deadlines, understand application requirements, save opportunities, and apply through official provider sources.',
+        description: localizedSiteDescriptions[requestLocale],
         contactPoint: {
           '@type': 'ContactPoint',
           email: 'support@scholarshiptop.com',
           contactType: 'customer support',
-          availableLanguage: ['English']
+          availableLanguage: ['English', 'Spanish', 'French']
         },
         logo: {
           '@type': 'ImageObject',
@@ -156,10 +174,13 @@ export default async function RootLayout({ children }: PropsWithChildren) {
         '@type': 'WebSite',
         name: 'ScholarshipTop',
         url: siteUrl,
+        inLanguage: requestLocale,
         publisher: { '@id': publisherId },
         potentialAction: {
           '@type': 'SearchAction',
-          target: `${siteUrl}/scholarships?q={search_term_string}`,
+          target: `${siteUrl}${
+            requestLocale === ROOT_LOCALE ? '' : `/${requestLocale}`
+          }/scholarships?q={search_term_string}`,
           'query-input': 'required name=search_term_string'
         }
       }
@@ -167,7 +188,11 @@ export default async function RootLayout({ children }: PropsWithChildren) {
   };
 
   return (
-    <html lang="en" className={`${fontSans.variable} font-sans`}>
+    <html
+      lang={requestLocale}
+      dir={requestDirection}
+      className={`${fontSans.variable} font-sans`}
+    >
       <head>
         <meta name="fo-verify" content="5b534bf7-226a-4032-8ba7-1ce652711bd1" />
         <meta
@@ -212,14 +237,14 @@ gtag('config', '${GOOGLE_ADS_AW_ID}');
         <div className="w-full min-w-0 max-w-full">
           <NavigationProgress />
           <ScholarshipOnboardingDraftPostAuthSync />
-          <Navbar />
+          <Navbar locale={requestLocale} />
           <main
             id="skip"
             className="relative z-10 min-h-[calc(100dvh-4rem)] w-full min-w-0 md:min-h-[calc(100dvh-5rem)]"
           >
             {children}
           </main>
-          <SiteFooter />
+          <SiteFooter locale={requestLocale} />
         </div>
         {showAiNavigator ? <HomeAiNavigatorWidget /> : null}
         <Suspense fallback={null}>

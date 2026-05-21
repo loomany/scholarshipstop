@@ -20,10 +20,14 @@ import {
 } from 'lucide-react';
 
 import {
-  SCHOLARSHIP_CATEGORY_LABELS,
   SCHOLARSHIP_CATEGORY_ORDER,
   type ScholarshipCategoryId
 } from '@/app/scholarships/scholarshipCategories';
+import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
+import {
+  getLocalizedCategoryLabel,
+  getLocalizedCountryLabel
+} from '@/lib/i18n/taxonomyLabels';
 import {
   CATALOG_CONTROL_BAR_BTN,
   CATALOG_CONTROL_BAR_BTN_COMPACT,
@@ -33,6 +37,14 @@ import {
 import { scholarshipCategoriesApplyButtonClass } from '@/lib/constants/scholarshipActionUi';
 import { type SortOption } from '@/app/scholarships/scholarshipSort';
 import type { ScholarshipListTabId } from '@/app/scholarships/scholarshipTabs';
+import {
+  getScholarshipsHubUiCopy,
+  type ScholarshipsHubUiCopy
+} from '@/lib/i18n/scholarshipsHubUiCopy';
+import {
+  getScholarshipsFilterPanelsUiCopy,
+  type ScholarshipsFilterPanelsUiCopy
+} from '@/lib/i18n/scholarshipsFilterPanelsUiCopy';
 
 export type { SortOption };
 
@@ -94,53 +106,10 @@ type ScholarshipsListHeaderProps = {
   suppressBottomMargin?: boolean;
   /** Center the “Showing … / Found …” summary line (e.g. best hub). */
   centerResultSummary?: boolean;
-};
-
-function listingResultUnit(
-  tab: ScholarshipListTabId | undefined,
-  plural: boolean
-): string {
-  switch (tab) {
-    case 'saved':
-      return plural ? 'saved scholarships' : 'saved scholarship';
-    case 'started':
-      return plural ? 'started applications' : 'started application';
-    case 'submitted':
-      return plural ? 'submitted applications' : 'submitted application';
-    case 'ignored':
-      return plural ? 'ignored scholarships' : 'ignored scholarship';
-    case 'recommended':
-    case 'easy-apply':
-    case 'hot-deadlines':
-      return plural ? 'scholarships' : 'scholarship';
-    case 'matches':
-    default:
-      return plural ? 'scholarships' : 'scholarship';
-  }
-}
-
-/** Порядок: сначала понятные дефолты, затем остальное; magic = рекомендации по скорингу. */
-const SORT_OPTIONS: { value: SortOption; label: string }[] = [
-  { value: 'magic', label: 'Recommended' },
-  { value: 'most_recent', label: 'Newest' },
-  { value: 'closest_deadline', label: 'Deadline soonest' },
-  { value: 'highest_amount', label: 'Amount high → low' },
-  { value: 'verified_first', label: 'Verified first' },
-  { value: 'least_requirements', label: 'Fewest requirements' },
-  { value: 'fewest_applicants', label: 'Least applicants' }
-];
-
-const SORT_TRIGGER_LABEL: Record<SortOption, string> = {
-  best_match: 'Recommended',
-  best_recommendation: 'Recommended',
-  most_recent: 'Newest',
-  closest_deadline: 'Deadline soonest',
-  highest_amount: 'Amount high → low',
-  magic: 'Recommended',
-  lowest_amount: 'Recommended',
-  least_requirements: 'Fewest requirements',
-  fewest_applicants: 'Least applicants',
-  verified_first: 'Verified first'
+  uiCopy?: ScholarshipsHubUiCopy;
+  filterPanelsCopy?: ScholarshipsFilterPanelsUiCopy;
+  /** Locale for visible category/country filter labels (IDs unchanged). */
+  uiLocale?: LocalizedUiLocale;
 };
 
 const CATEGORY_PANEL_GAP = 8;
@@ -158,30 +127,23 @@ type CategoryPanelLayout = {
 
 type CountryCountRow = { code: string; label: string; count: number };
 
-let englishRegionDisplayNames: Intl.DisplayNames | null | undefined;
-
-function countryLabelFromIsoCode(code: string): string | null {
-  const normalized = code.trim().toUpperCase();
-  if (!/^[A-Z]{2}$/.test(normalized)) return null;
-  if (englishRegionDisplayNames === undefined) {
-    englishRegionDisplayNames =
-      typeof Intl.DisplayNames === 'function'
-        ? new Intl.DisplayNames(['en'], { type: 'region' })
-        : null;
-  }
-  const label = englishRegionDisplayNames?.of(normalized)?.trim();
-  if (!label || label === normalized || label === 'Unknown Region') return null;
-  return label;
-}
-
-function displayCountryCountRow(country: CountryCountRow): CountryCountRow {
+function displayCountryCountRow(
+  country: CountryCountRow,
+  locale: LocalizedUiLocale
+): CountryCountRow {
   const code = country.code.trim().toUpperCase();
   const label = country.label.trim();
-  if (label && label.toUpperCase() !== code) return country;
+  if (label && label.toUpperCase() !== code) {
+    return {
+      ...country,
+      code,
+      label: getLocalizedCountryLabel(code, locale, label)
+    };
+  }
   return {
     ...country,
     code,
-    label: (countryLabelFromIsoCode(code) ?? label) || code
+    label: getLocalizedCountryLabel(code, locale, label) || code
   };
 }
 
@@ -261,8 +223,13 @@ function ScholarshipsListHeader({
   onSavedFilterPresetSelect,
   savedFilterBarHint,
   suppressBottomMargin = false,
-  centerResultSummary = false
+  centerResultSummary = false,
+  uiCopy,
+  filterPanelsCopy,
+  uiLocale = 'en'
 }: ScholarshipsListHeaderProps) {
+  const ui = uiCopy ?? getScholarshipsHubUiCopy(uiLocale);
+  const fp = filterPanelsCopy ?? getScholarshipsFilterPanelsUiCopy(uiLocale);
   const [categoriesOpen, setCategoriesOpen] = useState(false);
   const [countriesOpen, setCountriesOpen] = useState(false);
   const [destinationOpen, setDestinationOpen] = useState(false);
@@ -361,9 +328,11 @@ function ScholarshipsListHeader({
     const q = categorySearch.trim().toLowerCase();
     return SCHOLARSHIP_CATEGORY_ORDER.filter((id) => {
       if (!q) return true;
-      return SCHOLARSHIP_CATEGORY_LABELS[id].toLowerCase().includes(q);
+      return getLocalizedCategoryLabel(id, uiLocale)
+        .toLowerCase()
+        .includes(q);
     });
-  }, [categorySearch]);
+  }, [categorySearch, uiLocale]);
 
   const countrySortSelection = countriesOpen
     ? draftCountryCodes
@@ -372,7 +341,7 @@ function ScholarshipsListHeader({
   const filteredCountryRows = useMemo(() => {
     const q = countrySearch.trim().toLowerCase();
     return countryCounts
-      .map(displayCountryCountRow)
+      .map((row) => displayCountryCountRow(row, uiLocale))
       .filter((country) => {
         if (!q) return true;
         return (
@@ -385,7 +354,7 @@ function ScholarshipsListHeader({
         const bSelected = countrySortSelection.has(b.code) ? 1 : 0;
         return bSelected - aSelected || b.count - a.count || a.label.localeCompare(b.label);
       });
-  }, [countrySortSelection, countryCounts, countrySearch]);
+  }, [countrySortSelection, countryCounts, countrySearch, uiLocale]);
 
   const hostSortSelection = destinationOpen
     ? draftHostCountryCodes
@@ -394,7 +363,7 @@ function ScholarshipsListHeader({
   const filteredHostRows = useMemo(() => {
     const q = destinationSearch.trim().toLowerCase();
     return hostCountryCounts
-      .map(displayCountryCountRow)
+      .map((row) => displayCountryCountRow(row, uiLocale))
       .filter((country) => {
         if (!q) return true;
         return (
@@ -409,7 +378,7 @@ function ScholarshipsListHeader({
           bSelected - aSelected || b.count - a.count || a.label.localeCompare(b.label)
         );
       });
-  }, [destinationSearch, hostCountryCounts, hostSortSelection]);
+  }, [destinationSearch, hostCountryCounts, hostSortSelection, uiLocale]);
 
   /** Study destination: rows with scholarships in the current filtered list (for “Select all”). */
   const selectableFilteredHostCodes = useMemo(
@@ -482,7 +451,7 @@ function ScholarshipsListHeader({
     activeCountryCount > 0 || appliedIncludeUnspecifiedCountry;
   const countryBadgeCaption =
     activeCountryCount === 0 && appliedIncludeUnspecifiedCountry
-      ? 'Not specified'
+      ? ui.notSpecified
       : activeCountryCount > 0
         ? formatIsoCodesForFilterBadge(appliedCountryCodes)
         : '';
@@ -492,12 +461,12 @@ function ScholarshipsListHeader({
     activeHostCountryCount > 0 || appliedIncludeUnspecifiedHostCountry;
   const hostCountryBadgeCaption =
     activeHostCountryCount === 0 && appliedIncludeUnspecifiedHostCountry
-      ? 'Not specified'
+      ? ui.notSpecified
       : activeHostCountryCount > 0
         ? formatIsoCodesForFilterBadge(appliedHostCountryCodes)
         : '';
 
-  const sortTriggerLabel = SORT_TRIGGER_LABEL[sortBy];
+  const sortTriggerLabel = ui.sortTriggerLabels[sortBy];
 
   const categoryDropdown =
     mounted &&
@@ -507,7 +476,7 @@ function ScholarshipsListHeader({
       <div
         ref={categoryDropdownRef}
         role="dialog"
-        aria-label="Filter by category"
+        aria-label={ui.filterByCategoryAria}
         className="fixed z-[200] flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm ring-1 ring-zinc-900/5"
         style={{
           top: categoryPanelLayout.top,
@@ -518,18 +487,18 @@ function ScholarshipsListHeader({
       >
         <div className="shrink-0 border-b border-zinc-100 px-4 py-3">
           <h2 className="text-base font-semibold text-zinc-900">
-            Categories
+            {ui.categories}
           </h2>
           <p className="mt-0.5 text-xs text-zinc-500">
-            Include only selected categories in the list.
+            {ui.categoriesPanelIncludeOnly}
           </p>
         </div>
         <div className="shrink-0 px-4 py-3">
           <input
             value={categorySearch}
             onChange={(e) => setCategorySearch(e.target.value)}
-            placeholder="Search categories"
-            aria-label="Search categories"
+            placeholder={ui.searchCategories}
+            aria-label={ui.searchCategories}
             className={`w-full px-3 py-2.5 text-left text-sm text-zinc-900 ${SITE_SEARCH_INPUT_CHROME}`}
           />
         </div>
@@ -547,7 +516,7 @@ function ScholarshipsListHeader({
                   className="scholarship-filter-checkbox h-4 w-4 shrink-0"
                 />
                 <span className="min-w-0 flex-1 text-sm font-medium text-zinc-800">
-                  {SCHOLARSHIP_CATEGORY_LABELS[id]}
+                  {getLocalizedCategoryLabel(id, uiLocale)}
                 </span>
                 <span className="shrink-0 tabular-nums text-sm font-medium text-zinc-500">
                   {categoryCounts[id] ?? 0}
@@ -562,7 +531,7 @@ function ScholarshipsListHeader({
             className="rounded-md text-sm font-semibold text-zinc-600 underline-offset-2 transition hover:text-zinc-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/50 focus-visible:ring-offset-0"
             onClick={() => setDraftCategories(new Set())}
           >
-            Clear
+            {ui.clearCategories}
           </button>
           <button
             type="button"
@@ -572,7 +541,7 @@ function ScholarshipsListHeader({
               setCategoriesOpen(false);
             }}
           >
-            Apply
+            {ui.applyCategories}
           </button>
         </div>
       </div>,
@@ -615,13 +584,21 @@ function ScholarshipsListHeader({
             {resultCount === null
               ? loadingCountText
               : resultCount === 0
-                ? `Found 0 ${listingResultUnit(listTab, true)}`
+                ? ui.foundZero(ui.listingResultUnit(listTab, true))
                 : showingFrom != null &&
                     showingTo != null &&
                     showingFrom >= 1 &&
                     showingTo >= showingFrom
-                  ? `Showing ${showingFrom}–${showingTo} of ${resultCount} ${listingResultUnit(listTab, resultCount !== 1)}`
-                  : `Found ${resultCount} ${listingResultUnit(listTab, resultCount !== 1)}`}
+                  ? ui.showingRange(
+                      showingFrom,
+                      showingTo,
+                      resultCount,
+                      ui.listingResultUnit(listTab, resultCount !== 1)
+                    )
+                  : ui.foundCount(
+                      resultCount,
+                      ui.listingResultUnit(listTab, resultCount !== 1)
+                    )}
           </p>
 
           <div className="flex flex-col gap-3">
@@ -635,8 +612,8 @@ function ScholarshipsListHeader({
                 <input
                   value={query}
                   onChange={(e) => onQueryChange(e.target.value)}
-                  placeholder="Search by keyword"
-                  aria-label="Search by keyword"
+                  placeholder={ui.searchByKeyword}
+                  aria-label={ui.searchByKeywordAria}
                   className={CATALOG_SEARCH_BY_KEYWORD_INPUT_CLASS}
                 />
               </div>
@@ -658,7 +635,7 @@ function ScholarshipsListHeader({
                     className={`${CATALOG_CONTROL_BAR_BTN} w-full justify-between sm:min-w-[11rem]`}
                   >
                     <span className="flex min-w-0 flex-1 items-center gap-2 truncate">
-                      <span className="shrink-0 text-gray-500">Sort:</span>
+                      <span className="shrink-0 text-gray-500">{ui.sortLabel}</span>
                       <span className="min-w-0 truncate font-medium text-gray-900">
                         {sortTriggerLabel}
                       </span>
@@ -671,10 +648,10 @@ function ScholarshipsListHeader({
                   {sortOpen ? (
                     <ul
                       role="listbox"
-                      aria-label="Sort options"
+                      aria-label={ui.sortOptionsAria}
                       className="absolute left-0 z-[200] mt-2 w-full min-w-[12rem] max-w-[min(calc(100vw-2rem),18rem)] overflow-hidden rounded-xl border border-gray-200 bg-white py-2 shadow-lg ring-1 ring-gray-900/5 sm:left-auto sm:right-0 sm:w-max"
                     >
-                      {SORT_OPTIONS.map((opt) => (
+                      {ui.sortOptions.map((opt) => (
                         <li
                           key={opt.value}
                           role="option"
@@ -712,7 +689,7 @@ function ScholarshipsListHeader({
                 <div className="grid w-full min-w-0 grid-cols-2 items-center gap-3 sm:flex sm:flex-nowrap sm:gap-2 sm:overflow-visible">
                 <button
                   type="button"
-                  aria-label="Open more filters"
+                  aria-label={ui.filtersAria}
                   onClick={() => {
                     setCategoriesOpen(false);
                     setCountriesOpen(false);
@@ -727,7 +704,7 @@ function ScholarshipsListHeader({
                     strokeWidth={2}
                     aria-hidden
                   />
-                  Filters
+                  {ui.filters}
                   {moreFiltersActiveCount > 0 ? (
                     <span className="tabular-nums text-gray-600">
                       ({moreFiltersActiveCount})
@@ -747,7 +724,7 @@ function ScholarshipsListHeader({
                   <button
                     type="button"
                     disabled={!onApplyCountries}
-                    title="I am from (citizenship / home country)"
+                    title={ui.imFromTitle}
                     onClick={() => {
                       if (!onApplyCountries) return;
                       setSortOpen(false);
@@ -770,7 +747,7 @@ function ScholarshipsListHeader({
                     className={`${CATALOG_CONTROL_BAR_BTN_COMPACT} w-full max-w-full sm:w-auto sm:max-w-[min(100%,12.5rem)]`}
                   >
                     <Globe2 className="h-4 w-4 shrink-0 text-gray-600" />
-                    <span className="min-w-0 truncate">I&apos;m from (citizenship)</span>
+                    <span className="min-w-0 truncate">{ui.imFrom}</span>
                     {showCountryBadge && countryBadgeCaption ? (
                       <span className="font-medium tabular-nums tracking-wide text-gray-600">
                         ({countryBadgeCaption})
@@ -783,25 +760,23 @@ function ScholarshipsListHeader({
                   {countriesOpen ? (
                     <div
                       role="dialog"
-                      aria-label="Filter by citizenship or home country"
+                      aria-label={fp.filterByCitizenshipAria}
                       className="absolute top-[calc(100%+0.5rem)] z-[80] flex max-h-[min(32rem,min(85dvh,calc(100svh-7rem)))] w-[min(22rem,calc(100vw-1rem))] max-w-[calc(100vw-1rem)] flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm ring-1 ring-zinc-900/5 left-1/2 -translate-x-1/2 max-sm:left-0 max-sm:right-auto max-sm:translate-x-0 sm:left-0 sm:translate-x-0"
                     >
                       <div className="border-b border-zinc-100 px-4 py-3">
                         <h2 className="text-base font-semibold text-zinc-900">
-                          I am from (citizenship)
+                          {ui.imFrom}
                         </h2>
                         <p className="mt-0.5 text-xs leading-relaxed text-zinc-500">
-                          Choose your citizenship or home country for a targeted list, or
-                          browse grants where eligible countries are not explicitly recorded
-                          in our data (wider search—always verify eligibility).
+                          {fp.imFromPanelBody}
                         </p>
                       </div>
                       <div className="px-4 py-3">
                         <input
                           value={countrySearch}
                           onChange={(e) => setCountrySearch(e.target.value)}
-                          placeholder="Search by country name"
-                          aria-label="Search by country name"
+                          placeholder={ui.searchCountry}
+                          aria-label={ui.searchCountry}
                           className={`w-full px-3 py-2.5 text-left text-sm text-zinc-900 ${SITE_SEARCH_INPUT_CHROME}`}
                         />
                       </div>
@@ -812,7 +787,7 @@ function ScholarshipsListHeader({
                         {countryCountsLoading ? (
                           <li className="space-y-2 px-3 py-3" aria-live="polite">
                             <p className="text-sm font-medium text-zinc-600">
-                              Loading country filters...
+                              {fp.loadingCountryFilters}
                             </p>
                             {[0, 1, 2].map((i) => (
                               <div
@@ -861,13 +836,11 @@ function ScholarshipsListHeader({
                                   <span className="min-w-0 flex-1">
                                     <span className="block text-center">
                                       <span className="inline-block whitespace-nowrap text-sm font-semibold leading-snug text-emerald-950">
-                                        Citizenship not specified
+                                        {fp.citizenshipNotSpecified}
                                       </span>
                                     </span>
                                     <span className="mt-1 block text-left text-[11px] leading-[1.35] text-emerald-600/85">
-                                      Grants without explicit country eligibility in our
-                                      database. Local or other restrictions may still
-                                      apply—please verify before you apply.
+                                      {fp.citizenshipNotSpecifiedBody}
                                     </span>
                                   </span>
                                   <span className="shrink-0 rounded-full bg-white px-2.5 py-1 text-xs font-semibold tabular-nums text-emerald-800 ring-1 ring-emerald-200">
@@ -915,7 +888,7 @@ function ScholarshipsListHeader({
                           </>
                         ) : (
                           <li className="px-3 py-6 text-center text-sm text-zinc-500">
-                            No dedicated matches yet. Try International-friendly grants.
+                            {fp.noDedicatedMatches}
                           </li>
                         )}
                       </ul>
@@ -928,7 +901,7 @@ function ScholarshipsListHeader({
                             setDraftIncludeUnspecifiedCountry(false);
                           }}
                         >
-                          Clear
+                          {ui.clear}
                         </button>
                         <button
                           type="button"
@@ -941,7 +914,7 @@ function ScholarshipsListHeader({
                             setCountriesOpen(false);
                           }}
                         >
-                          Show scholarships
+                          {fp.showScholarships}
                         </button>
                       </div>
                     </div>
@@ -961,7 +934,7 @@ function ScholarshipsListHeader({
                     <button
                       type="button"
                       disabled={!onApplyHostCountries}
-                      title="Study destination"
+                      title={ui.studyInTitle}
                       onClick={() => {
                         setSortOpen(false);
                         setCategoriesOpen(false);
@@ -984,7 +957,7 @@ function ScholarshipsListHeader({
                     >
                       <Globe2 className="h-4 w-4 shrink-0 text-gray-600" />
                       <span className="min-w-0 truncate">
-                        Study in
+                        {ui.studyIn}
                         {showHostCountryBadge && hostCountryBadgeCaption ? (
                           <span className="font-medium tabular-nums tracking-wide text-gray-600">
                             {' '}
@@ -999,24 +972,23 @@ function ScholarshipsListHeader({
                     {destinationOpen ? (
                       <div
                         role="dialog"
-                        aria-label="Filter by study destination"
+                        aria-label={fp.filterByStudyDestinationAria}
                         className="absolute top-[calc(100%+0.5rem)] z-[80] flex max-h-[min(32rem,min(85dvh,calc(100svh-7rem)))] w-[min(22rem,calc(100vw-1rem))] max-w-[calc(100vw-1rem)] flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-sm ring-1 ring-zinc-900/5 left-1/2 -translate-x-1/2 max-sm:left-auto max-sm:right-0 max-sm:translate-x-0 sm:left-0 sm:translate-x-0"
                       >
                         <div className="border-b border-zinc-100 px-4 py-3">
                           <h2 className="text-base font-semibold text-zinc-900">
-                            Study destination
+                            {ui.studyIn}
                           </h2>
                           <p className="mt-0.5 text-xs leading-relaxed text-zinc-500">
-                            Choose the country where you want to study, or browse awards with
-                            unspecified locations.
+                            {fp.studyDestinationBody}
                           </p>
                         </div>
                         <div className="px-4 py-3">
                           <input
                             value={destinationSearch}
                             onChange={(e) => setDestinationSearch(e.target.value)}
-                            placeholder="Search countries"
-                            aria-label="Search countries"
+                            placeholder={ui.searchCountries}
+                            aria-label={ui.searchCountries}
                             className={`w-full px-3 py-2.5 text-left text-sm text-zinc-900 ${SITE_SEARCH_INPUT_CHROME}`}
                           />
                         </div>
@@ -1027,7 +999,7 @@ function ScholarshipsListHeader({
                           {hostCountryCountsLoading ? (
                             <li className="space-y-2 px-3 py-3" aria-live="polite">
                               <p className="text-sm font-medium text-zinc-600">
-                                Loading location filters…
+                                {fp.loadingLocationFilters}
                               </p>
                               {[0, 1, 2].map((i) => (
                                 <div
@@ -1076,12 +1048,11 @@ function ScholarshipsListHeader({
                                     <span className="min-w-0 flex-1">
                                       <span className="block text-center">
                                         <span className="inline-block whitespace-nowrap text-sm font-semibold leading-snug text-emerald-950">
-                                          Any / Unspecified location
+                                          {fp.anyUnspecifiedLocation}
                                         </span>
                                       </span>
                                       <span className="mt-1 block text-left text-xs leading-relaxed text-emerald-600/85">
-                                        Grants with no explicit study country recorded. Please
-                                        verify the official location before you apply.
+                                        {fp.anyUnspecifiedLocationBody}
                                       </span>
                                     </span>
                                     <span className="shrink-0 rounded-full bg-white px-2.5 py-1 text-xs font-semibold tabular-nums text-emerald-800 ring-1 ring-emerald-200">
@@ -1134,7 +1105,7 @@ function ScholarshipsListHeader({
                             </>
                           ) : (
                             <li className="px-3 py-6 text-center text-sm text-zinc-500">
-                              No location data yet for this catalog.
+                              {fp.noLocationData}
                             </li>
                           )}
                         </ul>
@@ -1148,7 +1119,7 @@ function ScholarshipsListHeader({
                                 setDraftIncludeUnspecifiedHost(false);
                               }}
                             >
-                              Clear
+                              {ui.clear}
                             </button>
                             <button
                               type="button"
@@ -1169,7 +1140,7 @@ function ScholarshipsListHeader({
                                 setDraftIncludeUnspecifiedHost(false);
                               }}
                             >
-                              Select all
+                              {fp.selectAll}
                             </button>
                           </div>
                           <button
@@ -1183,7 +1154,7 @@ function ScholarshipsListHeader({
                               setDestinationOpen(false);
                             }}
                           >
-                            Show scholarships
+                            {fp.showScholarships}
                           </button>
                         </div>
                       </div>
@@ -1217,7 +1188,7 @@ function ScholarshipsListHeader({
                     className={`${CATALOG_CONTROL_BAR_BTN} w-full sm:w-auto`}
                   >
                     <LayoutGrid className="h-[18px] w-[18px] text-gray-600" />
-                    Categories
+                    {ui.categories}
                     {activeFilterCount > 0 ? (
                       <span className="tabular-nums text-gray-600">
                         ({activeFilterCount})
@@ -1233,7 +1204,7 @@ function ScholarshipsListHeader({
               {savedFilterPresetButtons.length > 0 ? (
                 <div className="mt-3 flex min-w-0 flex-wrap items-center gap-2 border-t border-zinc-100 pt-3">
                   <span className="text-xs font-medium text-zinc-400">
-                    {savedFilterBarHint?.trim() || 'Saved filters'}
+                    {savedFilterBarHint?.trim() || ui.savedFiltersDefault}
                   </span>
                   {savedFilterPresetButtons.map((preset) => (
                     <button
@@ -1282,7 +1253,7 @@ function ScholarshipsListHeader({
                 onClick={onClearAllListingChips}
                 className="shrink-0 text-xs font-semibold text-teal-700 underline decoration-teal-300 underline-offset-2 hover:text-teal-900"
               >
-                Clear all
+                {ui.clearAll}
               </button>
             ) : null}
           </div>

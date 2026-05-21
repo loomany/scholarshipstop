@@ -3,10 +3,12 @@ import Link from 'next/link';
 import clsx from 'clsx';
 
 import { siteNavLink as nav } from '@/components/ui/nav/siteNavLink';
+import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
-  description: 'Privacy Policy for ScholarshipTop'
+  description: 'Privacy Policy for ScholarshipTop',
+  alternates: buildStage2EnglishPilotAlternates('/privacy-policy')
 };
 
 const sectionClass = 'mt-12 first:mt-10';

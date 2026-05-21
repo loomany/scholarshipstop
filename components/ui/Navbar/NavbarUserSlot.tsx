@@ -16,12 +16,30 @@ import {
 import type { NavbarInitialAuth } from '@/lib/nav/getNavbarInitialAuth';
 import { siteNavLink as nav } from '@/components/ui/nav/siteNavLink';
 import { createClient } from '@/utils/supabase/client';
+import {
+  getStage2LocaleFromPathname,
+  isStage2PilotLocale,
+  type Stage2PilotLocale
+} from '@/lib/i18n/pilotRoutes';
+import type { SupportedLocale } from '@/lib/i18n/types';
+import { stripLocalePrefix } from '@/lib/i18n/paths';
 
 type NavbarUserSlotProps = {
   pathname: string;
   variant: 'header' | 'drawer';
   onNavigate?: () => void;
   initialNavbarAuth?: NavbarInitialAuth;
+  /** From server layout when pathname is not yet available (nav is client-only). */
+  initialLocale?: SupportedLocale;
+};
+
+const AUTH_COPY: Record<
+  'en' | Stage2PilotLocale,
+  { account: string; signIn: string; signOut: string }
+> = {
+  en: { account: 'Account', signIn: 'Sign In', signOut: 'Sign out' },
+  es: { account: 'Cuenta', signIn: 'Iniciar sesión', signOut: 'Cerrar sesión' },
+  fr: { account: 'Compte', signIn: 'Connexion', signOut: 'Se déconnecter' }
 };
 
 function stubUserFromInitial(initial: NonNullable<NavbarInitialAuth>): User {
@@ -35,9 +53,15 @@ export default function NavbarUserSlot({
   pathname,
   variant,
   onNavigate,
-  initialNavbarAuth = null
+  initialNavbarAuth = null,
+  initialLocale = 'en'
 }: NavbarUserSlotProps) {
   const router = useRouter();
+  const locale =
+    getStage2LocaleFromPathname(pathname) ??
+    (isStage2PilotLocale(initialLocale) ? initialLocale : 'en');
+  const canonicalPathname = stripLocalePrefix(pathname);
+  const authCopy = AUTH_COPY[locale];
   const [clientUser, setClientUser] = useState<User | null>(null);
   const [authSyncDone, setAuthSyncDone] = useState(false);
   const [profileDisplayName, setProfileDisplayName] = useState<string | null>(
@@ -121,19 +145,23 @@ export default function NavbarUserSlot({
       !String(profileFirstName ?? '').trim() &&
       !String(profileDisplayName ?? '').trim()
     ) {
-      return 'Account';
+      return authCopy.account;
     }
     return accountNavbarLabel(profileFirstName, profileDisplayName, user);
-  }, [profileDisplayName, profileFirstName, profileQueryIdle, user]);
+  }, [authCopy.account, profileDisplayName, profileFirstName, profileQueryIdle, user]);
 
   const accountActive = useMemo(
-    () => pathname === '/account' || pathname.startsWith('/account/'),
-    [pathname]
+    () =>
+      canonicalPathname === '/account' ||
+      canonicalPathname.startsWith('/account/'),
+    [canonicalPathname]
   );
 
   const signInActive = useMemo(
-    () => pathname === '/signin' || pathname.startsWith('/signin/'),
-    [pathname]
+    () =>
+      canonicalPathname === '/signin' ||
+      canonicalPathname.startsWith('/signin/'),
+    [canonicalPathname]
   );
 
   const signOut = useCallback(async () => {
@@ -147,13 +175,16 @@ export default function NavbarUserSlot({
     router.refresh();
   }, [router]);
 
+  const signInHref = locale === 'en' ? '/signin' : `/${locale}/signin`;
+  const accountHref = '/account';
+
   if (variant === 'drawer') {
     if (!user) return null;
     return (
       <>
         <div className="my-2 border-t border-white/15" role="separator" />
         <Link
-          href="/account"
+          href={accountHref}
           className={clsx(
             nav.darkDrawer,
             'flex w-full max-w-full items-center gap-3',
@@ -162,7 +193,7 @@ export default function NavbarUserSlot({
           onClick={onNavigate}
         >
           <MobileDrawerNavIcon icon={UserCircle} active={accountActive} />
-          <span className="min-w-0">Account</span>
+          <span className="min-w-0">{authCopy.account}</span>
         </Link>
         <button
           type="button"
@@ -177,7 +208,7 @@ export default function NavbarUserSlot({
           }}
         >
           <MobileDrawerNavIcon icon={LogOut} />
-          <span className="min-w-0">Sign out</span>
+          <span className="min-w-0">{authCopy.signOut}</span>
         </button>
       </>
     );
@@ -187,7 +218,7 @@ export default function NavbarUserSlot({
     <div className="flex min-w-[4.75rem] shrink-0 items-center justify-end gap-2 sm:min-w-[5.5rem] lg:min-w-[13rem]">
       {user ? (
         <Link
-          href="/account"
+          href={accountHref}
           className={clsx(nav.dark, nav.darkAccount, accountActive && nav.darkActive)}
           title={accountLabel}
         >
@@ -195,10 +226,10 @@ export default function NavbarUserSlot({
         </Link>
       ) : (
         <Link
-          href="/signin"
+          href={signInHref}
           className={clsx(nav.dark, signInActive && nav.darkActive)}
         >
-          Sign In
+          {authCopy.signIn}
         </Link>
       )}
     </div>

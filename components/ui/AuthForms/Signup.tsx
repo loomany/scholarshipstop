@@ -9,19 +9,36 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { SITE_INPUT_FOCUS_CLASS } from '@/lib/constants/siteInputFocus';
 import { PASSWORD_POLICY_HINT } from '@/lib/validation/passwordPolicy';
+import { getAuthUiCopy } from '@/lib/i18n/authUiCopy';
+import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
 
-// Define prop type with allowEmail boolean
 interface SignUpProps {
   allowEmail: boolean;
   redirectMethod: string;
+  locale?: LocalizedUiLocale;
+  passwordSignInHref?: string;
+  emailSignInHref?: string;
 }
 
-export default function SignUp({ allowEmail, redirectMethod }: SignUpProps) {
+export default function SignUp({
+  allowEmail,
+  redirectMethod,
+  locale = 'en',
+  passwordSignInHref,
+  emailSignInHref
+}: SignUpProps) {
   const router = redirectMethod === 'client' ? useRouter() : null;
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const ui = getAuthUiCopy(locale);
+  const localePasswordSignInHref =
+    passwordSignInHref ??
+    (locale === 'en' ? '/signin/password_signin' : `/${locale}/signin/password_signin`);
+  const localeEmailSignInHref =
+    emailSignInHref ??
+    (locale === 'en' ? '/signin/email_signin' : `/${locale}/signin/email_signin`);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    setIsSubmitting(true); // Disable the button while the request is being handled
+    setIsSubmitting(true);
     await handleRequest(e, signUp, router);
     setIsSubmitting(false);
   };
@@ -35,10 +52,10 @@ export default function SignUp({ allowEmail, redirectMethod }: SignUpProps) {
       >
         <div className="grid gap-2">
           <div className="grid gap-1">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">{ui.emailLabel}</label>
             <input
               id="email"
-              placeholder="name@example.com"
+              placeholder={ui.emailPlaceholder}
               type="email"
               name="email"
               autoCapitalize="none"
@@ -46,10 +63,10 @@ export default function SignUp({ allowEmail, redirectMethod }: SignUpProps) {
               autoCorrect="off"
               className={`w-full rounded-md border border-zinc-200 bg-white px-3 py-3 text-zinc-900 placeholder:text-zinc-400 outline-none ${SITE_INPUT_FOCUS_CLASS}`}
             />
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">{ui.passwordLabel}</label>
             <input
               id="password"
-              placeholder="Password"
+              placeholder={ui.passwordPlaceholderSignUp}
               type="password"
               name="password"
               autoComplete="new-password"
@@ -63,20 +80,20 @@ export default function SignUp({ allowEmail, redirectMethod }: SignUpProps) {
             className="mt-1"
             loading={isSubmitting}
           >
-            Sign up
+            {ui.signUpButton}
           </Button>
         </div>
       </form>
-      <p>Already have an account?</p>
+      <p>{ui.haveAccountQuestion}</p>
       <p>
-        <Link href="/signin/password_signin" className="font-light text-sm">
-          Sign in with email and password
+        <Link href={localePasswordSignInHref} className="font-light text-sm">
+          {ui.signInWithEmailPassword}
         </Link>
       </p>
       {allowEmail && (
         <p>
-          <Link href="/signin/email_signin" className="font-light text-sm">
-            Sign in via magic link
+          <Link href={localeEmailSignInHref} className="font-light text-sm">
+            {ui.signInWithEmailLink}
           </Link>
         </p>
       )}

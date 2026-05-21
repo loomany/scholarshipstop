@@ -1,5 +1,9 @@
 'use client';
 
+import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
+import type { ScholarshipsHubUiCopy } from '@/lib/i18n/scholarshipsHubUiCopy';
+import { getScholarshipsHubUiCopy } from '@/lib/i18n/scholarshipsHubUiCopy';
+
 /**
  * Hub listing shell while Suspense/streaming resolves — mirrors
  * `ScholarshipsTwoColumnLayout` + lead (h1 + intro) + list header + cards
@@ -37,13 +41,17 @@ export function HubListSkeleton({
   );
 }
 
-function HubSidebarSkeleton() {
+function HubSidebarSkeleton({
+  sidebar
+}: {
+  sidebar: ScholarshipsHubUiCopy['sidebar'];
+}) {
   return (
     <div className="space-y-4">
       <div className="rounded-2xl bg-white p-3 shadow-sm">
         <div className="rounded-lg bg-black px-4 py-3.5 text-center">
           <span className="text-sm font-bold tracking-tight text-white">
-            My scholarships
+            {sidebar.myScholarships}
           </span>
         </div>
         <ul className="mt-2 space-y-0.5">
@@ -67,11 +75,15 @@ function HubSidebarSkeleton() {
 type ScholarshipsHubShellSkeletonProps = {
   /** Listing h1 — default matches root hub before tab resolves. */
   pageTitle?: string;
+  /** Resolved client-side — do not pass `sidebar` from RSC (contains functions). */
+  locale?: LocalizedUiLocale;
 };
 
 export default function ScholarshipsHubShellSkeleton({
-  pageTitle = 'Scholarship matches'
+  pageTitle = 'Scholarship matches',
+  locale = 'en'
 }: ScholarshipsHubShellSkeletonProps) {
+  const sidebarUi = getScholarshipsHubUiCopy(locale).sidebar;
   return (
     <section
       aria-busy
@@ -101,10 +113,10 @@ export default function ScholarshipsHubShellSkeleton({
         <div className="flex w-full min-w-0 flex-col gap-8 lg:flex-row lg:items-stretch lg:gap-6 xl:gap-8">
           <aside
             className="order-1 w-full shrink-0 lg:order-2 lg:w-[min(100%,280px)] lg:max-w-[30%] xl:w-[300px] 2xl:w-[320px]"
-            aria-label="My scholarships navigation"
+            aria-label={sidebarUi.scholarshipCategoriesNavAria}
           >
             <div className="lg:sticky lg:top-20 lg:z-10 lg:w-full">
-              <HubSidebarSkeleton />
+              <HubSidebarSkeleton sidebar={sidebarUi} />
             </div>
           </aside>
 

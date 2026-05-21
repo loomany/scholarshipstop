@@ -5,6 +5,7 @@ import { Building, FileText, HeartHandshake, Target } from 'lucide-react';
 
 import PartnerRequestAccess from '@/components/submit-grant/PartnerRequestAccess';
 import { siteNavLink as nav } from '@/components/ui/nav/siteNavLink';
+import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
 import { getCanonical } from '@/lib/seo/canonical';
 
 const description =
@@ -15,7 +16,7 @@ const canonical = getCanonical('/submit-grant');
 export const metadata: Metadata = {
   title: 'Request an Organization Account',
   description,
-  alternates: { canonical },
+  alternates: buildStage2EnglishPilotAlternates('/submit-grant'),
   openGraph: {
     title: 'Request an Organization Account | ScholarshipTop',
     description,

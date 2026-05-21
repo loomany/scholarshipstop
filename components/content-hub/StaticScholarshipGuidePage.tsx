@@ -9,23 +9,61 @@ import {
 } from '@/lib/content-hub/resourcesSection';
 import { getURL } from '@/utils/helpers';
 
-export default function StaticScholarshipGuidePage({
-  guide
-}: {
+type StaticScholarshipGuidePageCopy = {
+  home: string;
+  resources: string;
+  eyebrow: string;
+  findScholarships: string;
+  verificationMethodology: string;
+  practicalChecklist: string;
+  examples: string;
+  relatedPages: string;
+  faq: string;
+  disclaimer: string;
+};
+
+const DEFAULT_COPY: StaticScholarshipGuidePageCopy = {
+  home: 'Home',
+  resources: RESOURCES_PAGE_TITLE,
+  eyebrow: 'ScholarshipTop guide',
+  findScholarships: 'Find scholarships',
+  verificationMethodology: 'Verification methodology',
+  practicalChecklist: 'Practical checklist',
+  examples: 'Examples',
+  relatedPages: 'Related ScholarshipTop pages',
+  faq: 'FAQ',
+  disclaimer:
+    'ScholarshipTop does not provide scholarships directly. Always confirm final requirements, deadlines, payout, and application steps on the official provider page.'
+};
+
+type StaticScholarshipGuidePageProps = {
   guide: StaticScholarshipGuide;
-}) {
+  locale?: string;
+  copy?: StaticScholarshipGuidePageCopy;
+  hrefForPath?: (href: string) => string;
+  urlForPath?: (path: string) => string;
+};
+
+export default function StaticScholarshipGuidePage({
+  guide,
+  locale = 'en',
+  copy = DEFAULT_COPY,
+  hrefForPath = (href) => href,
+  urlForPath = (path) => getURL(path)
+}: StaticScholarshipGuidePageProps) {
   const path = resourcesArticlePath(guide.slug);
-  const articleUrl = getURL(path);
+  const articleUrl = urlForPath(path);
+  const resourcesHubHref = hrefForPath(RESOURCES_SECTION_PATH);
   const breadcrumbsSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: getURL('/') },
+      { '@type': 'ListItem', position: 1, name: copy.home, item: urlForPath('/') },
       {
         '@type': 'ListItem',
         position: 2,
-        name: RESOURCES_PAGE_TITLE,
-        item: getURL(RESOURCES_SECTION_PATH)
+        name: copy.resources,
+        item: urlForPath(RESOURCES_SECTION_PATH)
       },
       { '@type': 'ListItem', position: 3, name: guide.title, item: articleUrl }
     ]
@@ -33,6 +71,7 @@ export default function StaticScholarshipGuidePage({
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
+    inLanguage: locale,
     mainEntityOfPage: articleUrl,
     headline: guide.title,
     description: guide.description,
@@ -77,8 +116,8 @@ export default function StaticScholarshipGuidePage({
         <nav className="text-sm text-gray-500" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
             <li>
-              <Link href="/" className="font-medium text-gray-600 hover:text-gray-900">
-                Home
+              <Link href={hrefForPath('/')} className="font-medium text-gray-600 hover:text-gray-900">
+                {copy.home}
               </Link>
             </li>
             <li className="text-gray-300" aria-hidden>
@@ -86,10 +125,10 @@ export default function StaticScholarshipGuidePage({
             </li>
             <li>
               <Link
-                href={RESOURCES_SECTION_PATH}
+                href={resourcesHubHref}
                 className="font-medium text-gray-600 hover:text-gray-900"
               >
-                {RESOURCES_PAGE_TITLE}
+                {copy.resources}
               </Link>
             </li>
             <li className="text-gray-300" aria-hidden>
@@ -103,7 +142,7 @@ export default function StaticScholarshipGuidePage({
 
         <header className="mt-8">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-orange-600">
-            ScholarshipTop guide
+            {copy.eyebrow}
           </p>
           <h1 className="mt-3 text-4xl font-bold leading-tight tracking-tight text-gray-950 sm:text-5xl">
             {guide.title}
@@ -111,17 +150,17 @@ export default function StaticScholarshipGuidePage({
           <p className="mt-5 text-lg leading-8 text-gray-600">{guide.intro}</p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
-              href="/scholarships"
+              href={hrefForPath('/scholarships')}
               className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-orange-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-orange-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2"
             >
-              Find scholarships
+              {copy.findScholarships}
               <ArrowRight className="h-4 w-4" aria-hidden />
             </Link>
             <Link
-              href="/scholarship-verification-methodology"
+              href={hrefForPath('/scholarship-verification-methodology')}
               className="inline-flex min-h-11 items-center justify-center rounded-xl border border-gray-200 bg-white px-5 py-2.5 text-sm font-semibold text-gray-800 shadow-sm transition hover:border-gray-300 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2"
             >
-              Verification methodology
+              {copy.verificationMethodology}
             </Link>
           </div>
         </header>
@@ -148,7 +187,7 @@ export default function StaticScholarshipGuidePage({
         <section className="mt-10 grid gap-5 lg:grid-cols-2">
           <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
             <h2 className="text-xl font-bold tracking-tight text-gray-950">
-              Practical checklist
+              {copy.practicalChecklist}
             </h2>
             <ul className="mt-4 space-y-2 text-sm leading-6 text-gray-700">
               {guide.checklist.map((item) => (
@@ -161,7 +200,7 @@ export default function StaticScholarshipGuidePage({
           </div>
           <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
             <h2 className="text-xl font-bold tracking-tight text-gray-950">
-              Examples
+              {copy.examples}
             </h2>
             <ul className="mt-4 space-y-3 text-sm leading-6 text-gray-700">
               {guide.examples.map((item) => (
@@ -179,7 +218,7 @@ export default function StaticScholarshipGuidePage({
             {guide.links.map((link) => (
               <Link
                 key={link.href}
-                href={link.href}
+                href={hrefForPath(link.href)}
                 className="rounded-full border border-orange-200 bg-white px-3 py-1.5 text-sm font-semibold text-orange-800 transition hover:border-orange-300 hover:bg-orange-100"
               >
                 {link.label}
@@ -193,7 +232,7 @@ export default function StaticScholarshipGuidePage({
             id="static-guide-faq-heading"
             className="text-2xl font-bold tracking-tight text-gray-950"
           >
-            FAQ
+            {copy.faq}
           </h2>
           <div className="mt-5 divide-y divide-gray-200 rounded-2xl border border-gray-200 bg-white shadow-sm">
             {guide.faq.map((item, i) => (
@@ -210,9 +249,7 @@ export default function StaticScholarshipGuidePage({
         </section>
 
         <p className="mt-10 rounded-2xl border border-gray-200 bg-gray-50 px-5 py-4 text-sm leading-6 text-gray-600">
-          ScholarshipTop does not provide scholarships directly. Always confirm
-          final requirements, deadlines, payout, and application steps on the
-          official provider page.
+          {copy.disclaimer}
         </p>
       </article>
     </main>

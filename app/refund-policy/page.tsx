@@ -3,10 +3,12 @@ import Link from 'next/link';
 import clsx from 'clsx';
 
 import { siteNavLink as nav } from '@/components/ui/nav/siteNavLink';
+import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
 
 export const metadata: Metadata = {
   title: 'Refund Policy',
-  description: 'Refund Policy for Daur M. (Freebee KZ) and ScholarshipTop.'
+  description: 'Refund Policy for Daur M. (Freebee KZ) and ScholarshipTop.',
+  alternates: buildStage2EnglishPilotAlternates('/refund-policy')
 };
 
 const sectionClass = 'mt-12 first:mt-10';

@@ -90,13 +90,30 @@ import { useCurrentUserScholarshipMatchProfile } from './useCurrentUserScholarsh
 import { type SortOption } from './scholarshipSort';
 import {
   LEGACY_BEST_RECOMMENDATION_TAB_ID,
+  HUB_DEFAULT_SCHOLARSHIP_TAB,
   parseHubScholarshipTabParam,
   scholarshipListLoadingText,
-  scholarshipListPageTitle,
   scholarshipTabShowsCardActions,
   type ScholarshipListTabId,
   type ScholarshipSidebarCounts
 } from './scholarshipTabs';
+import {
+  getScholarshipsHubUiCopy,
+  type ScholarshipsHubUiCopy,
+  scholarshipListPageTitleLocalized
+} from '@/lib/i18n/scholarshipsHubUiCopy';
+import { getScholarshipsFilterPanelsUiCopy } from '@/lib/i18n/scholarshipsFilterPanelsUiCopy';
+import { getScholarshipsMoreFiltersUiCopy } from '@/lib/i18n/scholarshipsMoreFiltersUiCopy';
+import {
+  localizedHubCatalogBrowserPath,
+  localizedScholarshipHubTabHref,
+  type LocalizedUiLocale
+} from '@/lib/i18n/localizedHref';
+import { stripLocalePrefix } from '@/lib/i18n/paths';
+import {
+  getStage2LocaleFromPathname,
+  type Stage2PilotLocale
+} from '@/lib/i18n/pilotRoutes';
 import { getViewedScholarshipIds } from './viewedScholarships';
 import {
   buildHubCatalogBrowserUrl,
@@ -320,7 +337,8 @@ function ScholarshipsPageInner({
   currentPathname = '/scholarships',
   leadContent = null,
   postListingContent = null,
-  hubCanonicalIntroBelowTitle = null
+  hubCanonicalIntroBelowTitle = null,
+  locale: localeProp
 }: {
   isAuthenticated: boolean;
   /** False until Supabase session is known — avoids guest URL normalization racing ahead of login. */
@@ -334,11 +352,29 @@ function ScholarshipsPageInner({
   postListingContent?: ReactNode;
   /** Canonical `/scholarships/hub/*` SSR intro — rendered under h1 before filters (when `leadContent` omitted). */
   hubCanonicalIntroBelowTitle?: ReactNode;
+  locale?: Stage2PilotLocale;
 }) {
   const router = useRouter();
   const queryClient = useQueryClient();
   const searchParams = useSearchParams();
   const pathname = currentPathname || '/scholarships';
+  const pathnameCanonical = stripLocalePrefix(pathname);
+  const uiLocale: LocalizedUiLocale =
+    localeProp ??
+    getStage2LocaleFromPathname(pathname) ??
+    'en';
+  const hubUi = useMemo(
+    () => getScholarshipsHubUiCopy(uiLocale),
+    [uiLocale]
+  );
+  const filterPanelsUi = useMemo(
+    () => getScholarshipsFilterPanelsUiCopy(uiLocale),
+    [uiLocale]
+  );
+  const moreFiltersUi = useMemo(
+    () => getScholarshipsMoreFiltersUiCopy(uiLocale),
+    [uiLocale]
+  );
   const hubRouteResolved = useMemo(() => {
     if (routeScope) return null;
     return hubResolvedFromPathname(pathname);
@@ -418,10 +454,18 @@ function ScholarshipsPageInner({
   /** Hub `/international-friendly` uses `matches` tab but gets its own H1. */
   const hubListingPageTitle = useMemo(() => {
     if (hubRouteResolved?.audience === 'international_friendly') {
-      return 'Scholarships for international students';
+      return hubUi.internationalStudentsPageTitle;
     }
-    return scholarshipListPageTitle(activeTab, { guest: hubTreatAsGuest });
-  }, [hubRouteResolved?.audience, activeTab, hubTreatAsGuest]);
+    return scholarshipListPageTitleLocalized(activeTab, uiLocale, {
+      guest: hubTreatAsGuest
+    });
+  }, [
+    hubRouteResolved?.audience,
+    activeTab,
+    hubTreatAsGuest,
+    hubUi.internationalStudentsPageTitle,
+    uiLocale
+  ]);
   /** Guest parity limits for anyone without a subscription (includes guests). */
   const catalogFreeTier = authResolved && !hasSubscription;
   /** Best tab: avoid one frame of guest UI before we know the session (prevents card ↔ locks flicker). */
@@ -604,11 +648,15 @@ function ScholarshipsPageInner({
           patch,
           activeTab
         );
-        const url = search ? `${hubPathname}?${search}` : hubPathname;
+        const localizedHubPath = localizedHubCatalogBrowserPath(
+          uiLocale,
+          hubPathname
+        );
+        const url = search ? `${localizedHubPath}?${search}` : localizedHubPath;
         router.replace(url, { scroll: options?.scroll ?? false });
       });
     },
-    [pathname, router, searchParamsString, activeTab, routeScope]
+    [pathname, router, searchParamsString, activeTab, routeScope, uiLocale]
   );
 
   const handleGuestBestRecommendationEditAnswers = useCallback(() => {
@@ -1037,7 +1085,9 @@ function ScholarshipsPageInner({
     }
     const resetPage = hasAdvDeadline;
     replaceListingParams({
-      ...(needDefaultHubTab ? { tab: 'matches', scope: 'catalog' } : {}),
+      ...(needDefaultHubTab
+        ? { tab: HUB_DEFAULT_SCHOLARSHIP_TAB, scope: 'catalog' }
+        : {}),
       ...(hasAdvDeadline ? { deadline: 'any' } : {}),
       resetPage
     });
@@ -2836,14 +2886,14 @@ function ScholarshipsPageInner({
     if (activeTab === 'best-recommendation') {
       out.push({
         key: 'scope-best-profile',
-        title: 'Best recommendations',
+        title: hubUi.pageTitles['best-recommendation'],
         body: 'We use your profile (GPA, school level, field of study, state, citizenship) to rank results and sometimes apply extra database filters. A few rules may not map to a single checkbox in this panel.',
         learnMoreHref: '/account',
         learnMoreLabel: 'Edit profile'
       });
     }
     return out;
-  }, [activeTab, parsedList.audience]);
+  }, [activeTab, parsedList.audience, hubUi.pageTitles]);
 
   const openMoreFilters = useCallback(() => {
     const basis = moreFiltersApplied ?? emptyMoreFiltersState;
@@ -3187,9 +3237,13 @@ function ScholarshipsPageInner({
         { page, resetPage: false },
         activeTab
       );
-      return search ? `${hubPathname}?${search}` : hubPathname;
+      const localizedHubPath = localizedHubCatalogBrowserPath(
+        uiLocale,
+        hubPathname
+      );
+      return search ? `${localizedHubPath}?${search}` : localizedHubPath;
     },
-    [pathname, searchParams, searchParamsString, activeTab, routeScope]
+    [pathname, searchParams, searchParamsString, activeTab, routeScope, uiLocale]
   );
 
   const currentListingHref = useMemo(() => {
@@ -3209,8 +3263,15 @@ function ScholarshipsPageInner({
     },
     [pathname]
   );
+  const buildLocaleHubTabHref = useCallback(
+    (id: ScholarshipListTabId) => localizedScholarshipHubTabHref(uiLocale, id),
+    [uiLocale]
+  );
+
   const internationalFriendlyHref = useMemo(() => {
-    if (!routeScope?.providerSlug) return SCHOLARSHIPS_HUB_INTERNATIONAL_FRIENDLY_HREF;
+    if (!routeScope?.providerSlug) {
+      return localizedScholarshipHubTabHref(uiLocale, 'international-friendly');
+    }
     const p = buildScholarshipListSearchParams(new URLSearchParams(), {
       tab: 'matches',
       scope: 'catalog',
@@ -3219,7 +3280,7 @@ function ScholarshipsPageInner({
     });
     const qs = p.toString();
     return qs ? `${pathname}?${qs}` : pathname;
-  }, [pathname, routeScope?.providerSlug]);
+  }, [pathname, routeScope?.providerSlug, uiLocale]);
 
   const moreFiltersOffDefault = useMemo(() => {
     if (!moreFiltersApplied) return false;
@@ -3311,14 +3372,17 @@ function ScholarshipsPageInner({
     }
     const isHubCatalog =
       !routeScope &&
-      (pathname === '/scholarships' || pathname.startsWith('/scholarships/hub/'));
+      (pathnameCanonical === '/scholarships' ||
+        pathnameCanonical.startsWith('/scholarships/hub/'));
     router.replace(
-      isHubCatalog ? buildScholarshipTabHref(activeTab) : pathname,
+      isHubCatalog ? localizedScholarshipHubTabHref(uiLocale, activeTab) : pathname,
       { scroll: false }
     );
   }, [
     router,
     pathname,
+    pathnameCanonical,
+    uiLocale,
     activeTab,
     listMeta?.filterBounds,
     listMeta?.profileFilterSeed,
@@ -3589,7 +3653,7 @@ function ScholarshipsPageInner({
             Edit answers
           </button>
           <Link
-            href="/scholarships/hub/matches"
+            href={localizedScholarshipHubTabHref(uiLocale, 'matches')}
             className="inline-flex items-center justify-center rounded-xl border border-zinc-200 bg-white px-4 py-2.5 text-sm font-semibold text-zinc-700 shadow-sm transition hover:border-zinc-300 hover:bg-zinc-50"
           >
             Browse Matches
@@ -3640,6 +3704,8 @@ function ScholarshipsPageInner({
         }
         sidebar={
           <ScholarshipsSidebar
+            locale={uiLocale}
+            uiCopy={hubUi}
             counts={sidebarCounts}
             showCounts={sidebarCountsReady}
             matchesNewIndicator={null}
@@ -3649,7 +3715,9 @@ function ScholarshipsPageInner({
             }
             subscriptionLocked={false}
             onSubscriptionRestrictedNav={openLockedCategoryWall}
-            buildTabHref={routeScope?.providerSlug ? buildSidebarTabHref : undefined}
+            buildTabHref={
+              routeScope?.providerSlug ? buildSidebarTabHref : buildLocaleHubTabHref
+            }
             internationalStudentsFilter={{
               active: internationalSidebarChecked,
               href: internationalFriendlyHref,
@@ -3668,6 +3736,9 @@ function ScholarshipsPageInner({
           ) : (
             <>
               <ScholarshipsListHeader
+                uiLocale={uiLocale}
+                uiCopy={hubUi}
+                filterPanelsCopy={filterPanelsUi}
                 query={query}
                 onQueryChange={onQueryChange}
                 categoryCounts={categoryCounts}
@@ -3703,8 +3774,8 @@ function ScholarshipsPageInner({
                 omitHeadlineBlock
                 loadingCountText={
                   activeTab === 'best-recommendation' && isAuthenticated
-                    ? 'Loading best recommendations...'
-                    : scholarshipListLoadingText(activeTab)
+                    ? hubUi.loadingText['best-recommendation']
+                    : hubUi.loadingText[activeTab]
                 }
                 listTab={activeTab}
                 categoriesDisabled={!isLoading && totalCount === 0}
@@ -3742,8 +3813,8 @@ function ScholarshipsPageInner({
                   <div className="flex flex-col mt-5 sm:mt-6">
                     <h2 className="text-center text-lg font-semibold tracking-tight text-zinc-900">
                       {transientBestRecommendationProfileSeed
-                        ? 'Recommended scholarships for you'
-                        : 'Top scholarships to explore'}
+                        ? hubUi.guestExploreRecommendedTitle
+                        : hubUi.guestExploreTopTitle}
                     </h2>
                     <div className="mt-4 flex flex-col gap-4">
                     {guestBestCatalogFallbackActive ? (
@@ -3764,6 +3835,7 @@ function ScholarshipsPageInner({
                             <div key={s.id} className="contents">
                               <ScholarshipCard
                                 scholarship={s}
+                                cardCopy={hubUi.card}
                                 isUnread={!viewedSet.has(s.id)}
                                 saved={savedSet.has(s.id)}
                                 onToggleSave={toggleSave}
@@ -3799,7 +3871,7 @@ function ScholarshipsPageInner({
                                 returnToHref={currentListingHref}
                               />
                               {shouldShowIqInlineCard(index) ? (
-                                <ScholarshipIqInlineCard />
+                                <ScholarshipIqInlineCard copy={hubUi.inlineIq} />
                               ) : null}
                             </div>
                           ))}
@@ -3866,6 +3938,7 @@ function ScholarshipsPageInner({
                             <div key={s.id} className="contents">
                               <ScholarshipCard
                                 scholarship={s}
+                                cardCopy={hubUi.card}
                                 isUnread={!viewedSet.has(s.id)}
                                 saved={savedSet.has(s.id)}
                                 onToggleSave={toggleSave}
@@ -3901,7 +3974,7 @@ function ScholarshipsPageInner({
                                 returnToHref={currentListingHref}
                               />
                               {shouldShowIqInlineCard(index) ? (
-                                <ScholarshipIqInlineCard />
+                                <ScholarshipIqInlineCard copy={hubUi.inlineIq} />
                               ) : null}
                             </div>
                           ))}
@@ -4040,6 +4113,7 @@ function ScholarshipsPageInner({
                   <div key={s.id} className="contents">
                     <ScholarshipCard
                       scholarship={s}
+                      cardCopy={hubUi.card}
                       isUnread={!viewedSet.has(s.id)}
                       saved={savedSet.has(s.id)}
                       onToggleSave={toggleSave}
@@ -4077,7 +4151,7 @@ function ScholarshipsPageInner({
                       returnToHref={currentListingHref}
                     />
                     {shouldShowIqInlineCard(index) ? (
-                      <ScholarshipIqInlineCard />
+                      <ScholarshipIqInlineCard copy={hubUi.inlineIq} />
                     ) : null}
                   </div>
                 ))}
@@ -4115,6 +4189,7 @@ function ScholarshipsPageInner({
         hasSubscription={hasSubscription}
         onSubscriptionLockedAction={openLockedCategoryWall}
         contextNotices={moreFiltersPanelContextNotices}
+        uiCopy={moreFiltersUi}
       />
       <SaveFilterPresetModal
         open={isSavePresetModalOpen}
@@ -4162,7 +4237,8 @@ export default function ScholarshipsHubPageClient({
   leadContent = null,
   postListingContent = null,
   hubCanonicalIntroBelowTitle = null,
-  fallbackPageTitle = 'Scholarship matches'
+  fallbackPageTitle = 'Scholarship matches',
+  locale
 }: {
   isAuthenticated?: boolean;
   authResolved?: boolean;
@@ -4175,11 +4251,17 @@ export default function ScholarshipsHubPageClient({
   postListingContent?: ReactNode;
   hubCanonicalIntroBelowTitle?: ReactNode;
   fallbackPageTitle?: string;
+  locale?: Stage2PilotLocale;
 }) {
   return (
     <ScholarshipsHubQueryProvider>
       <Suspense
-        fallback={<ScholarshipsHubShellSkeleton pageTitle={fallbackPageTitle} />}
+        fallback={
+          <ScholarshipsHubShellSkeleton
+            pageTitle={fallbackPageTitle}
+            locale={locale ?? 'en'}
+          />
+        }
       >
         <ScholarshipsPageInner
           isAuthenticated={isAuthenticated}
@@ -4192,6 +4274,7 @@ export default function ScholarshipsHubPageClient({
           leadContent={leadContent}
           postListingContent={postListingContent}
           hubCanonicalIntroBelowTitle={hubCanonicalIntroBelowTitle}
+          locale={locale}
         />
       </Suspense>
     </ScholarshipsHubQueryProvider>

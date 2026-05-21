@@ -1,0 +1,55 @@
+route_group,path_pattern,example_url,content_type,indexable,in_sitemap,localized_es_fr,llms_include,notes
+core,/,https://scholarshiptop.com/,home,yes,yes,yes,yes,EN root; /es /fr home
+core,/scholarships,https://scholarshiptop.com/scholarships,scholarship catalog,yes,yes,yes,yes,Primary discovery hub
+core,/scholarships/hub/{tab},https://scholarshiptop.com/scholarships/hub/matches,curated listing hub,yes,partial,yes,pattern,Hub tabs: best-recommendation recommended easy-apply hot-deadlines international-friendly
+core,/providers,https://scholarshiptop.com/providers,provider directory,yes,yes,yes,yes,
+core,/providers/{stateSlug},https://scholarshiptop.com/providers/california,state provider hub,yes,yes,no,pattern,State slugs from SEO_ROUTE_STATE_CODE_TO_SLUG
+core,/essays,https://scholarshiptop.com/essays,essay guides hub,yes,yes,yes,yes,
+core,/resources,https://scholarshiptop.com/resources,resources hub,yes,yes,yes,yes,Localized hubs omit DB article grid
+core,/compare,https://scholarshiptop.com/compare,compare hub,yes,yes,yes,yes,
+core,/compare/universities,https://scholarshiptop.com/compare/universities,compare index,yes,yes,no,yes,
+core,/compare/states,https://scholarshiptop.com/compare/states,compare index,yes,yes,no,yes,
+funnel,/get-scholarships,https://scholarshiptop.com/get-scholarships,marketing funnel,no,no,yes,mention-only,noindex follow; localized wrappers same
+product,/subscription,https://scholarshiptop.com/subscription,pricing,yes,no,yes,summarize,Indexable but excluded from sitemap by design
+product,/subscription/success,https://scholarshiptop.com/subscription/success,post-checkout,no,no,yes,no,noindex
+trust,/about,https://scholarshiptop.com/about,trust,yes,yes,yes,yes,
+trust,/how-scholarshiptop-works,https://scholarshiptop.com/how-scholarshiptop-works,trust,yes,yes,yes,yes,
+trust,/scholarship-verification-methodology,https://scholarshiptop.com/scholarship-verification-methodology,methodology,yes,yes,yes,yes,Critical for AI disclaimers
+trust,/how-we-rank-scholarships,https://scholarshiptop.com/how-we-rank-scholarships,methodology,yes,yes,yes,yes,
+trust,/editorial-policy,https://scholarshiptop.com/editorial-policy,editorial,yes,yes,yes,yes,
+trust,/financial-aid-disclaimer,https://scholarshiptop.com/financial-aid-disclaimer,legal,yes,yes,yes,yes,
+trust,/scholarship-scam-warning,https://scholarshiptop.com/scholarship-scam-warning,trust,yes,yes,yes,yes,
+trust,/how-we-make-money,https://scholarshiptop.com/how-we-make-money,transparency,yes,yes,yes,yes,
+trust,/contact,https://scholarshiptop.com/contact,support,yes,yes,yes,yes,
+trust,/corrections,https://scholarshiptop.com/corrections,corrections,yes,yes,yes,yes,
+legal,/terms,https://scholarshiptop.com/terms,legal,yes,pilot,yes,yes,
+legal,/privacy-policy,https://scholarshiptop.com/privacy-policy,legal,yes,pilot,yes,yes,
+legal,/refund-policy,https://scholarshiptop.com/refund-policy,legal,yes,pilot,yes,yes,
+legal,/help,https://scholarshiptop.com/help,help,yes,pilot,yes,yes,
+legal,/faq,https://scholarshiptop.com/faq,faq,yes,pilot,yes,yes,
+marketing,/international-students,https://scholarshiptop.com/international-students,marketing,yes,pilot,yes,yes,
+marketing,/for-organizations,https://scholarshiptop.com/for-organizations,marketing,yes,pilot,yes,yes,
+marketing,/submit-grant,https://scholarshiptop.com/submit-grant,submit,yes,pilot,yes,yes,
+static-resource,/resources/{slug},https://scholarshiptop.com/resources/how-to-find-scholarships,static guide,yes,yes,yes,examples,9+ guides in STATIC_SCHOLARSHIP_GUIDES plus dedicated routes
+static-essay,/essays/{slug},https://scholarshiptop.com/essays/examples,static guide,yes,yes,yes,examples,13 static essay guides
+static-compare,/compare/{slug},https://scholarshiptop.com/compare/scholarship-vs-grant,static compare,yes,yes,yes,examples,4 static compare guides
+db-scholarship,/scholarships/{slug},https://scholarshiptop.com/scholarships/{example-slug},scholarship detail,yes,chunked,no,pattern-only,~19k URLs; verify on official source
+db-category,/scholarships/category/{id},https://scholarshiptop.com/scholarships/category/stem,category L1,yes,yes,labels-only,list-ids,11 promoted categories (miscellaneous excluded)
+db-longtail,/scholarships/{preset},https://scholarshiptop.com/scholarships/closing-soon,long-tail listing,yes,subset,no,pattern,11 LONG_TAIL_SLUGS; 4 in sitemap subset
+db-provider,/providers/{id},https://scholarshiptop.com/providers/{id},provider profile,yes,yes,no,pattern-only,~5k; quality-gated
+db-resource,/resources/{slug},https://scholarshiptop.com/resources/{cms-slug},CMS article,yes,yes,no,pattern-only,~900 published
+db-essay,/essays/{slug},https://scholarshiptop.com/essays/{db-slug},DB essay page,yes,yes,no,pattern-only,~12k
+db-compare-univ,/compare/universities/{slug},https://scholarshiptop.com/compare/universities/{a-vs-b},university compare,yes,yes,no,pattern-only,quality-gated
+db-compare-state,/compare/states/{slug},https://scholarshiptop.com/compare/states/{a-vs-b},state compare,yes,yes,no,pattern-only,quality-gated
+db-seo-manifest,/scholarships/{seo-path},https://scholarshiptop.com/scholarships/{manifest-path},programmatic SEO,yes,drip-gated,no,pattern-only,Manifest + drip feed
+localized,/es/{pilot-path},https://scholarshiptop.com/es/scholarships,localized pilot,yes,locale-es,yes,summarize,53 paths; no /en prefix
+localized,/fr/{pilot-path},https://scholarshiptop.com/fr/scholarships,localized pilot,yes,locale-fr,yes,summarize,53 paths
+private,/account,https://scholarshiptop.com/account,account,no,no,yes,no,noindex
+private,/dashboard,https://scholarshiptop.com/dashboard,dashboard,no,no,no,no,noindex nofollow
+private,/signin/*,https://scholarshiptop.com/signin,auth,no,no,yes,no,noindex
+private,/onboarding,https://scholarshiptop.com/onboarding,onboarding,no,no,yes,no,noindex
+private,/api/*,https://scholarshiptop.com/api/scholarships,API,n/a,n/a,n/a,no,robots disallow /api/
+private,/essay,https://scholarshiptop.com/essay,essay tool,no,no,no,no,noindex product
+private,/essays/u/{id},https://scholarshiptop.com/essays/u/{id},user essay,no,no,no,no,noindex
+sitemap,index,/sitemap.xml,https://scholarshiptop.com/sitemap.xml,sitemap index,n/a,n/a,n/a,reference,Link from llms.txt not inline URLs
+excluded,/en/*,https://scholarshiptop.com/en/,invalid locale,n/a,n/a,n/a,no,English uses root not /en

@@ -3,10 +3,12 @@ import Link from 'next/link';
 import clsx from 'clsx';
 
 import { siteNavLink as nav } from '@/components/ui/nav/siteNavLink';
+import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
 
 export const metadata: Metadata = {
   title: 'Terms',
-  description: 'Terms of Use for ScholarshipTop'
+  description: 'Terms of Use for ScholarshipTop',
+  alternates: buildStage2EnglishPilotAlternates('/terms')
 };
 
 const sectionClass = 'mt-12 first:mt-10';

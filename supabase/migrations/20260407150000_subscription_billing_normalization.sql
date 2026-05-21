@@ -1,6 +1,5 @@
-alter type subscription_status add value if not exists 'on_trial';
-alter type subscription_status add value if not exists 'cancelled';
-alter type subscription_status add value if not exists 'expired';
+-- Enum values on_trial/cancelled/expired are added in 20260410170000_billing_webhook_schema_guard.sql
+-- (cannot ADD VALUE and use new enum labels in the same migration transaction).
 
 alter table public.subscriptions
   add column if not exists provider text not null default 'stripe',
@@ -46,7 +45,7 @@ set
   plan_code = coalesce(
     s.plan_code,
     case
-      when s.status in ('trialing', 'on_trial') then 'trial'
+      when s.status = 'trialing' then 'trial'
       when p.interval = 'year' then 'yearly_pro'
       when p.interval = 'month' and coalesce(p.interval_count, 1) = 3 then 'quarterly_pro'
       when p.interval = 'month' then 'monthly_pro'
@@ -64,16 +63,16 @@ set subscription_plan = case
     left join public.prices pr on pr.id = s.price_id
     where s.user_id = p.id
       and (
-        s.status in ('trialing', 'on_trial')
+        s.status = 'trialing'
         or s.status = 'active'
-        or (s.status in ('canceled', 'cancelled') and s.ended_at is not null and s.ended_at > now())
+        or (s.status = 'canceled' and s.ended_at is not null and s.ended_at > now())
       )
     order by s.created desc
     limit 1
   ) then coalesce(
     (
       select case
-        when s.status in ('trialing', 'on_trial') then 'trial'
+        when s.status = 'trialing' then 'trial'
         when pr.interval = 'year' then 'yearly_pro'
         when pr.interval = 'month' and coalesce(pr.interval_count, 1) = 3 then 'quarterly_pro'
         when pr.interval = 'month' then 'monthly_pro'

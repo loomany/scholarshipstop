@@ -3,6 +3,7 @@ import Link from 'next/link';
 import clsx from 'clsx';
 
 import { siteNavLink as nav } from '@/components/ui/nav/siteNavLink';
+import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
 import { getCanonical } from '@/lib/seo/canonical';
 
 const faqDescription =
@@ -13,9 +14,7 @@ const faqCanonical = getCanonical('/faq');
 export const metadata: Metadata = {
   title: 'FAQ',
   description: faqDescription,
-  alternates: {
-    canonical: faqCanonical
-  },
+  alternates: buildStage2EnglishPilotAlternates('/faq'),
   openGraph: {
     title: 'FAQ',
     description: faqDescription,

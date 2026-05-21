@@ -1,0 +1,1862 @@
+{
+  "generatedAt": "2026-05-21T12:40:04.664Z",
+  "baseUrl": "http://localhost:3020",
+  "pageAudits": [
+    {
+      "url": "http://localhost:3020/es",
+      "locale": "es",
+      "canonicalPath": "/",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/scholarships",
+      "locale": "es",
+      "canonicalPath": "/scholarships",
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "text": "Probar Essay Mentor→",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/essays",
+      "locale": "es",
+      "canonicalPath": "/essays",
+      "linkIssues": [],
+      "status": 500
+    },
+    {
+      "url": "http://localhost:3020/es/providers",
+      "locale": "es",
+      "canonicalPath": "/providers",
+      "linkIssues": [
+        {
+          "href": "/iq/assessment?intent=provider_research",
+          "text": "Herramienta destacadaIQElige proveedores que encajen con tu estrategiaUsa tu arq",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/compare",
+      "locale": "es",
+      "canonicalPath": "/compare",
+      "linkIssues": [
+        {
+          "href": "/iq/assessment?intent=college_fit",
+          "text": "Herramienta destacadaIQCompara universidades. Conócete primero.Descubre cómo tu ",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/resources",
+      "locale": "es",
+      "canonicalPath": "/resources",
+      "linkIssues": [],
+      "status": 500
+    },
+    {
+      "url": "http://localhost:3020/es/about",
+      "locale": "es",
+      "canonicalPath": "/about",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/editorial-policy",
+      "locale": "es",
+      "canonicalPath": "/editorial-policy",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/scholarship-verification-methodology",
+      "locale": "es",
+      "canonicalPath": "/scholarship-verification-methodology",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/how-we-rank-scholarships",
+      "locale": "es",
+      "canonicalPath": "/how-we-rank-scholarships",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/how-scholarshiptop-works",
+      "locale": "es",
+      "canonicalPath": "/how-scholarshiptop-works",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/financial-aid-disclaimer",
+      "locale": "es",
+      "canonicalPath": "/financial-aid-disclaimer",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/contact",
+      "locale": "es",
+      "canonicalPath": "/contact",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/corrections",
+      "locale": "es",
+      "canonicalPath": "/corrections",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/scholarship-scam-warning",
+      "locale": "es",
+      "canonicalPath": "/scholarship-scam-warning",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/how-we-make-money",
+      "locale": "es",
+      "canonicalPath": "/how-we-make-money",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/essays/examples",
+      "locale": "es",
+      "canonicalPath": "/essays/examples",
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "text": "Abrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        },
+        {
+          "href": "/essay",
+          "text": "Abrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/essays/checklist",
+      "locale": "es",
+      "canonicalPath": "/essays/checklist",
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "text": "Abrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        },
+        {
+          "href": "/essay",
+          "text": "Abrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/essays/financial-need",
+      "locale": "es",
+      "canonicalPath": "/essays/financial-need",
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "text": "Abrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        },
+        {
+          "href": "/essay",
+          "text": "Abrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/essays/career-goals",
+      "locale": "es",
+      "canonicalPath": "/essays/career-goals",
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "text": "Abrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        },
+        {
+          "href": "/essay",
+          "text": "Abrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/essays/mistakes",
+      "locale": "es",
+      "canonicalPath": "/essays/mistakes",
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "text": "Abrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        },
+        {
+          "href": "/essay",
+          "text": "Abrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/compare/scholarship-vs-grant",
+      "locale": "es",
+      "canonicalPath": "/compare/scholarship-vs-grant",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/compare/merit-vs-need-based-scholarships",
+      "locale": "es",
+      "canonicalPath": "/compare/merit-vs-need-based-scholarships",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/compare/no-essay-vs-essay-scholarships",
+      "locale": "es",
+      "canonicalPath": "/compare/no-essay-vs-essay-scholarships",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/compare/local-vs-national-scholarships",
+      "locale": "es",
+      "canonicalPath": "/compare/local-vs-national-scholarships",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/essays/outline",
+      "locale": "es",
+      "canonicalPath": "/essays/outline",
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "text": "Abrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        },
+        {
+          "href": "/essay",
+          "text": "Abrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/essays/leadership",
+      "locale": "es",
+      "canonicalPath": "/essays/leadership",
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "text": "Abrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        },
+        {
+          "href": "/essay",
+          "text": "Abrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/essays/why-do-you-deserve-this-scholarship",
+      "locale": "es",
+      "canonicalPath": "/essays/why-do-you-deserve-this-scholarship",
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "text": "Abrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        },
+        {
+          "href": "/essay",
+          "text": "Abrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/essays/personal-statement",
+      "locale": "es",
+      "canonicalPath": "/essays/personal-statement",
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "text": "Abrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        },
+        {
+          "href": "/essay",
+          "text": "Abrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/essays/stem",
+      "locale": "es",
+      "canonicalPath": "/essays/stem",
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "text": "Abrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        },
+        {
+          "href": "/essay",
+          "text": "Abrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        },
+        {
+          "href": "/scholarships/stem",
+          "text": "Becas STEM",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        },
+        {
+          "href": "/scholarships/engineering",
+          "text": "Becas de ingeniería",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/essays/no-essay-scholarships",
+      "locale": "es",
+      "canonicalPath": "/essays/no-essay-scholarships",
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "text": "Abrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        },
+        {
+          "href": "/essay",
+          "text": "Abrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        },
+        {
+          "href": "/scholarships/no-essay",
+          "text": "Becas sin ensayo",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/resources/how-to-find-scholarships",
+      "locale": "es",
+      "canonicalPath": "/resources/how-to-find-scholarships",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/resources/how-to-apply-for-scholarships-checklist",
+      "locale": "es",
+      "canonicalPath": "/resources/how-to-apply-for-scholarships-checklist",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/resources/no-essay-scholarships-guide",
+      "locale": "es",
+      "canonicalPath": "/resources/no-essay-scholarships-guide",
+      "linkIssues": [
+        {
+          "href": "/scholarships/no-essay",
+          "text": "Explorar becas sin ensayo",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/resources/easy-scholarships-guide",
+      "locale": "es",
+      "canonicalPath": "/resources/easy-scholarships-guide",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/resources/stem-scholarships-guide",
+      "locale": "es",
+      "canonicalPath": "/resources/stem-scholarships-guide",
+      "linkIssues": [
+        {
+          "href": "/scholarships/category/stem",
+          "text": "Becas STEM",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        },
+        {
+          "href": "/scholarships/category/medical",
+          "text": "Becas médicas",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        },
+        {
+          "href": "/scholarships/engineering",
+          "text": "Becas de ingeniería",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/resources/scholarships-in-usa-for-international-students",
+      "locale": "es",
+      "canonicalPath": "/resources/scholarships-in-usa-for-international-students",
+      "linkIssues": [
+        {
+          "href": "/scholarships/study-in/united-states",
+          "text": "Becas en Estados Unidos",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/resources/scholarships-for-high-school-seniors",
+      "locale": "es",
+      "canonicalPath": "/resources/scholarships-for-high-school-seniors",
+      "linkIssues": [
+        {
+          "href": "/scholarships/high-school",
+          "text": "Becas de secundaria",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/resources/scholarship-eligibility-explained",
+      "locale": "es",
+      "canonicalPath": "/resources/scholarship-eligibility-explained",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/resources/scholarship-documents-checklist",
+      "locale": "es",
+      "canonicalPath": "/resources/scholarship-documents-checklist",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/resources/how-to-apply-for-scholarships",
+      "locale": "es",
+      "canonicalPath": "/resources/how-to-apply-for-scholarships",
+      "linkIssues": [
+        {
+          "href": "/resources/how-to-apply-for-scholarships",
+          "text": "English",
+          "issue": "language switcher → English canonical of current page",
+          "severity": "language-switcher"
+        },
+        {
+          "href": "/fr/resources/how-to-apply-for-scholarships",
+          "text": "Français",
+          "issue": "language switcher → other Stage 2 locale",
+          "severity": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/resources/scholarship-deadlines-explained",
+      "locale": "es",
+      "canonicalPath": "/resources/scholarship-deadlines-explained",
+      "linkIssues": [
+        {
+          "href": "/resources/scholarship-deadlines-explained",
+          "text": "English",
+          "issue": "language switcher → English canonical of current page",
+          "severity": "language-switcher"
+        },
+        {
+          "href": "/fr/resources/scholarship-deadlines-explained",
+          "text": "Français",
+          "issue": "language switcher → other Stage 2 locale",
+          "severity": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/resources/combine-multiple-scholarships",
+      "locale": "es",
+      "canonicalPath": "/resources/combine-multiple-scholarships",
+      "linkIssues": [
+        {
+          "href": "/resources/combine-multiple-scholarships",
+          "text": "English",
+          "issue": "language switcher → English canonical of current page",
+          "severity": "language-switcher"
+        },
+        {
+          "href": "/fr/resources/combine-multiple-scholarships",
+          "text": "Français",
+          "issue": "language switcher → other Stage 2 locale",
+          "severity": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/resources/medical-scholarships-guide",
+      "locale": "es",
+      "canonicalPath": "/resources/medical-scholarships-guide",
+      "linkIssues": [
+        {
+          "href": "/resources/medical-scholarships-guide",
+          "text": "English",
+          "issue": "language switcher → English canonical of current page",
+          "severity": "language-switcher"
+        },
+        {
+          "href": "/fr/resources/medical-scholarships-guide",
+          "text": "Français",
+          "issue": "language switcher → other Stage 2 locale",
+          "severity": "cross-locale-switcher"
+        },
+        {
+          "href": "/scholarships/category/medical",
+          "text": "Explorar becas de medicina",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/resources/scholarships-for-international-students-guide",
+      "locale": "es",
+      "canonicalPath": "/resources/scholarships-for-international-students-guide",
+      "linkIssues": [
+        {
+          "href": "/resources/scholarships-for-international-students-guide",
+          "text": "English",
+          "issue": "language switcher → English canonical of current page",
+          "severity": "language-switcher"
+        },
+        {
+          "href": "/fr/resources/scholarships-for-international-students-guide",
+          "text": "Français",
+          "issue": "language switcher → other Stage 2 locale",
+          "severity": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/terms",
+      "locale": "es",
+      "canonicalPath": "/terms",
+      "linkIssues": [
+        {
+          "href": "/terms",
+          "text": "English",
+          "issue": "language switcher → English canonical of current page",
+          "severity": "language-switcher"
+        },
+        {
+          "href": "/fr/terms",
+          "text": "Français",
+          "issue": "language switcher → other Stage 2 locale",
+          "severity": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/privacy-policy",
+      "locale": "es",
+      "canonicalPath": "/privacy-policy",
+      "linkIssues": [
+        {
+          "href": "/privacy-policy",
+          "text": "English",
+          "issue": "language switcher → English canonical of current page",
+          "severity": "language-switcher"
+        },
+        {
+          "href": "/fr/privacy-policy",
+          "text": "Français",
+          "issue": "language switcher → other Stage 2 locale",
+          "severity": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/refund-policy",
+      "locale": "es",
+      "canonicalPath": "/refund-policy",
+      "linkIssues": [
+        {
+          "href": "/refund-policy",
+          "text": "English",
+          "issue": "language switcher → English canonical of current page",
+          "severity": "language-switcher"
+        },
+        {
+          "href": "/fr/refund-policy",
+          "text": "Français",
+          "issue": "language switcher → other Stage 2 locale",
+          "severity": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/help",
+      "locale": "es",
+      "canonicalPath": "/help",
+      "linkIssues": [
+        {
+          "href": "/help",
+          "text": "English",
+          "issue": "language switcher → English canonical of current page",
+          "severity": "language-switcher"
+        },
+        {
+          "href": "/fr/help",
+          "text": "Français",
+          "issue": "language switcher → other Stage 2 locale",
+          "severity": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/faq",
+      "locale": "es",
+      "canonicalPath": "/faq",
+      "linkIssues": [
+        {
+          "href": "/faq",
+          "text": "English",
+          "issue": "language switcher → English canonical of current page",
+          "severity": "language-switcher"
+        },
+        {
+          "href": "/fr/faq",
+          "text": "Français",
+          "issue": "language switcher → other Stage 2 locale",
+          "severity": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/international-students",
+      "locale": "es",
+      "canonicalPath": "/international-students",
+      "linkIssues": [
+        {
+          "href": "/international-students",
+          "text": "English",
+          "issue": "language switcher → English canonical of current page",
+          "severity": "language-switcher"
+        },
+        {
+          "href": "/fr/international-students",
+          "text": "Français",
+          "issue": "language switcher → other Stage 2 locale",
+          "severity": "cross-locale-switcher"
+        },
+        {
+          "href": "/scholarships/category/stem",
+          "text": "Becas corporativasEmpresas como Google o Boeing ejecutan programas abiertos a es",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        },
+        {
+          "href": "/scholarships/no-essay",
+          "text": "Becas sin ensayoOportunidades de aplicación rápida con requisitos mínimos para c",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/for-organizations",
+      "locale": "es",
+      "canonicalPath": "/for-organizations",
+      "linkIssues": [
+        {
+          "href": "/for-organizations",
+          "text": "English",
+          "issue": "language switcher → English canonical of current page",
+          "severity": "language-switcher"
+        },
+        {
+          "href": "/fr/for-organizations",
+          "text": "Français",
+          "issue": "language switcher → other Stage 2 locale",
+          "severity": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/submit-grant",
+      "locale": "es",
+      "canonicalPath": "/submit-grant",
+      "linkIssues": [
+        {
+          "href": "/submit-grant",
+          "text": "English",
+          "issue": "language switcher → English canonical of current page",
+          "severity": "language-switcher"
+        },
+        {
+          "href": "/fr/submit-grant",
+          "text": "Français",
+          "issue": "language switcher → other Stage 2 locale",
+          "severity": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/get-scholarships",
+      "locale": "es",
+      "canonicalPath": "/get-scholarships",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/signin",
+      "locale": "es",
+      "canonicalPath": "/signin",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/scholarships/hub/best-recommendation",
+      "locale": "es",
+      "canonicalPath": "/scholarships/hub/best-recommendation",
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "text": "Probar Essay Mentor→",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/scholarships/hub/matches",
+      "locale": "es",
+      "canonicalPath": "/scholarships/hub/matches",
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "text": "Probar Essay Mentor→",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/scholarships/hub/easy-apply",
+      "locale": "es",
+      "canonicalPath": "/scholarships/hub/easy-apply",
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "text": "Probar Essay Mentor→",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/es/scholarships/hub/international-friendly",
+      "locale": "es",
+      "canonicalPath": "/scholarships/hub/international-friendly",
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "text": "Probar Essay Mentor→",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr",
+      "locale": "fr",
+      "canonicalPath": "/",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/scholarships",
+      "locale": "fr",
+      "canonicalPath": "/scholarships",
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "text": "Essayer Essay Mentor→",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/essays",
+      "locale": "fr",
+      "canonicalPath": "/essays",
+      "linkIssues": [],
+      "status": 500
+    },
+    {
+      "url": "http://localhost:3020/fr/providers",
+      "locale": "fr",
+      "canonicalPath": "/providers",
+      "linkIssues": [
+        {
+          "href": "/iq/assessment?intent=provider_research",
+          "text": "Outil en vedetteIQChoisissez des fournisseurs adaptés à votre stratégieUtilisez ",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/compare",
+      "locale": "fr",
+      "canonicalPath": "/compare",
+      "linkIssues": [
+        {
+          "href": "/iq/assessment?intent=college_fit",
+          "text": "Outil en vedetteIQComparez les établissements. Comprenez-vous d’abord.Voyez comm",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/resources",
+      "locale": "fr",
+      "canonicalPath": "/resources",
+      "linkIssues": [],
+      "status": 500
+    },
+    {
+      "url": "http://localhost:3020/fr/about",
+      "locale": "fr",
+      "canonicalPath": "/about",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/editorial-policy",
+      "locale": "fr",
+      "canonicalPath": "/editorial-policy",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/scholarship-verification-methodology",
+      "locale": "fr",
+      "canonicalPath": "/scholarship-verification-methodology",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/how-we-rank-scholarships",
+      "locale": "fr",
+      "canonicalPath": "/how-we-rank-scholarships",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/how-scholarshiptop-works",
+      "locale": "fr",
+      "canonicalPath": "/how-scholarshiptop-works",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/financial-aid-disclaimer",
+      "locale": "fr",
+      "canonicalPath": "/financial-aid-disclaimer",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/contact",
+      "locale": "fr",
+      "canonicalPath": "/contact",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/corrections",
+      "locale": "fr",
+      "canonicalPath": "/corrections",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/scholarship-scam-warning",
+      "locale": "fr",
+      "canonicalPath": "/scholarship-scam-warning",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/how-we-make-money",
+      "locale": "fr",
+      "canonicalPath": "/how-we-make-money",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/essays/examples",
+      "locale": "fr",
+      "canonicalPath": "/essays/examples",
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "text": "Ouvrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        },
+        {
+          "href": "/essay",
+          "text": "Ouvrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/essays/checklist",
+      "locale": "fr",
+      "canonicalPath": "/essays/checklist",
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "text": "Ouvrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        },
+        {
+          "href": "/essay",
+          "text": "Ouvrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/essays/financial-need",
+      "locale": "fr",
+      "canonicalPath": "/essays/financial-need",
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "text": "Ouvrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        },
+        {
+          "href": "/essay",
+          "text": "Ouvrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/essays/career-goals",
+      "locale": "fr",
+      "canonicalPath": "/essays/career-goals",
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "text": "Ouvrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        },
+        {
+          "href": "/essay",
+          "text": "Ouvrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/essays/mistakes",
+      "locale": "fr",
+      "canonicalPath": "/essays/mistakes",
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "text": "Ouvrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        },
+        {
+          "href": "/essay",
+          "text": "Ouvrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/compare/scholarship-vs-grant",
+      "locale": "fr",
+      "canonicalPath": "/compare/scholarship-vs-grant",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/compare/merit-vs-need-based-scholarships",
+      "locale": "fr",
+      "canonicalPath": "/compare/merit-vs-need-based-scholarships",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/compare/no-essay-vs-essay-scholarships",
+      "locale": "fr",
+      "canonicalPath": "/compare/no-essay-vs-essay-scholarships",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/compare/local-vs-national-scholarships",
+      "locale": "fr",
+      "canonicalPath": "/compare/local-vs-national-scholarships",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/essays/outline",
+      "locale": "fr",
+      "canonicalPath": "/essays/outline",
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "text": "Ouvrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        },
+        {
+          "href": "/essay",
+          "text": "Ouvrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/essays/leadership",
+      "locale": "fr",
+      "canonicalPath": "/essays/leadership",
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "text": "Ouvrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        },
+        {
+          "href": "/essay",
+          "text": "Ouvrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/essays/why-do-you-deserve-this-scholarship",
+      "locale": "fr",
+      "canonicalPath": "/essays/why-do-you-deserve-this-scholarship",
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "text": "Ouvrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        },
+        {
+          "href": "/essay",
+          "text": "Ouvrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/essays/personal-statement",
+      "locale": "fr",
+      "canonicalPath": "/essays/personal-statement",
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "text": "Ouvrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        },
+        {
+          "href": "/essay",
+          "text": "Ouvrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/essays/stem",
+      "locale": "fr",
+      "canonicalPath": "/essays/stem",
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "text": "Ouvrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        },
+        {
+          "href": "/essay",
+          "text": "Ouvrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        },
+        {
+          "href": "/scholarships/stem",
+          "text": "Bourses STEM",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        },
+        {
+          "href": "/scholarships/engineering",
+          "text": "Bourses ingénierie",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/essays/no-essay-scholarships",
+      "locale": "fr",
+      "canonicalPath": "/essays/no-essay-scholarships",
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "text": "Ouvrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        },
+        {
+          "href": "/essay",
+          "text": "Ouvrir Essay Mentor",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        },
+        {
+          "href": "/scholarships/no-essay",
+          "text": "Bourses sans rédaction",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/resources/how-to-find-scholarships",
+      "locale": "fr",
+      "canonicalPath": "/resources/how-to-find-scholarships",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/resources/how-to-apply-for-scholarships-checklist",
+      "locale": "fr",
+      "canonicalPath": "/resources/how-to-apply-for-scholarships-checklist",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/resources/no-essay-scholarships-guide",
+      "locale": "fr",
+      "canonicalPath": "/resources/no-essay-scholarships-guide",
+      "linkIssues": [
+        {
+          "href": "/scholarships/no-essay",
+          "text": "Bourses sans rédaction",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/resources/easy-scholarships-guide",
+      "locale": "fr",
+      "canonicalPath": "/resources/easy-scholarships-guide",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/resources/stem-scholarships-guide",
+      "locale": "fr",
+      "canonicalPath": "/resources/stem-scholarships-guide",
+      "linkIssues": [
+        {
+          "href": "/scholarships/category/stem",
+          "text": "Bourses STEM",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        },
+        {
+          "href": "/scholarships/category/medical",
+          "text": "Bourses médicales",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        },
+        {
+          "href": "/scholarships/engineering",
+          "text": "Bourses ingénierie",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/resources/scholarships-in-usa-for-international-students",
+      "locale": "fr",
+      "canonicalPath": "/resources/scholarships-in-usa-for-international-students",
+      "linkIssues": [
+        {
+          "href": "/scholarships/study-in/united-states",
+          "text": "Bourses aux États-Unis",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/resources/scholarships-for-high-school-seniors",
+      "locale": "fr",
+      "canonicalPath": "/resources/scholarships-for-high-school-seniors",
+      "linkIssues": [
+        {
+          "href": "/scholarships/high-school",
+          "text": "Bourses lycée",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/resources/scholarship-eligibility-explained",
+      "locale": "fr",
+      "canonicalPath": "/resources/scholarship-eligibility-explained",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/resources/scholarship-documents-checklist",
+      "locale": "fr",
+      "canonicalPath": "/resources/scholarship-documents-checklist",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/resources/how-to-apply-for-scholarships",
+      "locale": "fr",
+      "canonicalPath": "/resources/how-to-apply-for-scholarships",
+      "linkIssues": [
+        {
+          "href": "/resources/how-to-apply-for-scholarships",
+          "text": "English",
+          "issue": "language switcher → English canonical of current page",
+          "severity": "language-switcher"
+        },
+        {
+          "href": "/es/resources/how-to-apply-for-scholarships",
+          "text": "Español",
+          "issue": "language switcher → other Stage 2 locale",
+          "severity": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/resources/scholarship-deadlines-explained",
+      "locale": "fr",
+      "canonicalPath": "/resources/scholarship-deadlines-explained",
+      "linkIssues": [
+        {
+          "href": "/resources/scholarship-deadlines-explained",
+          "text": "English",
+          "issue": "language switcher → English canonical of current page",
+          "severity": "language-switcher"
+        },
+        {
+          "href": "/es/resources/scholarship-deadlines-explained",
+          "text": "Español",
+          "issue": "language switcher → other Stage 2 locale",
+          "severity": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/resources/combine-multiple-scholarships",
+      "locale": "fr",
+      "canonicalPath": "/resources/combine-multiple-scholarships",
+      "linkIssues": [
+        {
+          "href": "/resources/combine-multiple-scholarships",
+          "text": "English",
+          "issue": "language switcher → English canonical of current page",
+          "severity": "language-switcher"
+        },
+        {
+          "href": "/es/resources/combine-multiple-scholarships",
+          "text": "Español",
+          "issue": "language switcher → other Stage 2 locale",
+          "severity": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/resources/medical-scholarships-guide",
+      "locale": "fr",
+      "canonicalPath": "/resources/medical-scholarships-guide",
+      "linkIssues": [
+        {
+          "href": "/resources/medical-scholarships-guide",
+          "text": "English",
+          "issue": "language switcher → English canonical of current page",
+          "severity": "language-switcher"
+        },
+        {
+          "href": "/es/resources/medical-scholarships-guide",
+          "text": "Español",
+          "issue": "language switcher → other Stage 2 locale",
+          "severity": "cross-locale-switcher"
+        },
+        {
+          "href": "/scholarships/category/medical",
+          "text": "Parcourir les bourses médecine",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/resources/scholarships-for-international-students-guide",
+      "locale": "fr",
+      "canonicalPath": "/resources/scholarships-for-international-students-guide",
+      "linkIssues": [
+        {
+          "href": "/resources/scholarships-for-international-students-guide",
+          "text": "English",
+          "issue": "language switcher → English canonical of current page",
+          "severity": "language-switcher"
+        },
+        {
+          "href": "/es/resources/scholarships-for-international-students-guide",
+          "text": "Español",
+          "issue": "language switcher → other Stage 2 locale",
+          "severity": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/terms",
+      "locale": "fr",
+      "canonicalPath": "/terms",
+      "linkIssues": [
+        {
+          "href": "/terms",
+          "text": "English",
+          "issue": "language switcher → English canonical of current page",
+          "severity": "language-switcher"
+        },
+        {
+          "href": "/es/terms",
+          "text": "Español",
+          "issue": "language switcher → other Stage 2 locale",
+          "severity": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/privacy-policy",
+      "locale": "fr",
+      "canonicalPath": "/privacy-policy",
+      "linkIssues": [
+        {
+          "href": "/privacy-policy",
+          "text": "English",
+          "issue": "language switcher → English canonical of current page",
+          "severity": "language-switcher"
+        },
+        {
+          "href": "/es/privacy-policy",
+          "text": "Español",
+          "issue": "language switcher → other Stage 2 locale",
+          "severity": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/refund-policy",
+      "locale": "fr",
+      "canonicalPath": "/refund-policy",
+      "linkIssues": [
+        {
+          "href": "/refund-policy",
+          "text": "English",
+          "issue": "language switcher → English canonical of current page",
+          "severity": "language-switcher"
+        },
+        {
+          "href": "/es/refund-policy",
+          "text": "Español",
+          "issue": "language switcher → other Stage 2 locale",
+          "severity": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/help",
+      "locale": "fr",
+      "canonicalPath": "/help",
+      "linkIssues": [
+        {
+          "href": "/help",
+          "text": "English",
+          "issue": "language switcher → English canonical of current page",
+          "severity": "language-switcher"
+        },
+        {
+          "href": "/es/help",
+          "text": "Español",
+          "issue": "language switcher → other Stage 2 locale",
+          "severity": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/faq",
+      "locale": "fr",
+      "canonicalPath": "/faq",
+      "linkIssues": [
+        {
+          "href": "/faq",
+          "text": "English",
+          "issue": "language switcher → English canonical of current page",
+          "severity": "language-switcher"
+        },
+        {
+          "href": "/es/faq",
+          "text": "Español",
+          "issue": "language switcher → other Stage 2 locale",
+          "severity": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/international-students",
+      "locale": "fr",
+      "canonicalPath": "/international-students",
+      "linkIssues": [
+        {
+          "href": "/international-students",
+          "text": "English",
+          "issue": "language switcher → English canonical of current page",
+          "severity": "language-switcher"
+        },
+        {
+          "href": "/es/international-students",
+          "text": "Español",
+          "issue": "language switcher → other Stage 2 locale",
+          "severity": "cross-locale-switcher"
+        },
+        {
+          "href": "/scholarships/category/stem",
+          "text": "Bourses d’entreprisesDes entreprises comme Google ou Boeing proposent des progra",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        },
+        {
+          "href": "/scholarships/no-essay",
+          "text": "Bourses sans rédactionOpportunités à candidature rapide avec peu d’exigences pou",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/for-organizations",
+      "locale": "fr",
+      "canonicalPath": "/for-organizations",
+      "linkIssues": [
+        {
+          "href": "/for-organizations",
+          "text": "English",
+          "issue": "language switcher → English canonical of current page",
+          "severity": "language-switcher"
+        },
+        {
+          "href": "/es/for-organizations",
+          "text": "Español",
+          "issue": "language switcher → other Stage 2 locale",
+          "severity": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/submit-grant",
+      "locale": "fr",
+      "canonicalPath": "/submit-grant",
+      "linkIssues": [
+        {
+          "href": "/submit-grant",
+          "text": "English",
+          "issue": "language switcher → English canonical of current page",
+          "severity": "language-switcher"
+        },
+        {
+          "href": "/es/submit-grant",
+          "text": "Español",
+          "issue": "language switcher → other Stage 2 locale",
+          "severity": "cross-locale-switcher"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/get-scholarships",
+      "locale": "fr",
+      "canonicalPath": "/get-scholarships",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/signin",
+      "locale": "fr",
+      "canonicalPath": "/signin",
+      "linkIssues": [],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/scholarships/hub/best-recommendation",
+      "locale": "fr",
+      "canonicalPath": "/scholarships/hub/best-recommendation",
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "text": "Essayer Essay Mentor→",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/scholarships/hub/matches",
+      "locale": "fr",
+      "canonicalPath": "/scholarships/hub/matches",
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "text": "Essayer Essay Mentor→",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/scholarships/hub/easy-apply",
+      "locale": "fr",
+      "canonicalPath": "/scholarships/hub/easy-apply",
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "text": "Essayer Essay Mentor→",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    },
+    {
+      "url": "http://localhost:3020/fr/scholarships/hub/international-friendly",
+      "locale": "fr",
+      "canonicalPath": "/scholarships/hub/international-friendly",
+      "linkIssues": [
+        {
+          "href": "/essay",
+          "text": "Essayer Essay Mentor→",
+          "issue": "allowed English-only (Zone C: DB/long-tail or product flow)",
+          "severity": "allowed"
+        }
+      ],
+      "status": 200
+    }
+  ],
+  "clickTests": [
+    {
+      "locale": "es",
+      "label": "Buscar becas",
+      "selector": "xpath=//main[@id=\"skip\"]/preceding-sibling::nav[1]//a[@href=\"/es/scholarships\"]",
+      "expectedPath": "/es/scholarships",
+      "actualUrl": "http://localhost:3020/es/scholarships/hub/best-recommendation",
+      "pass": true
+    },
+    {
+      "locale": "es",
+      "label": "Proveedores",
+      "selector": "xpath=//main[@id=\"skip\"]/preceding-sibling::nav[1]//a[@href=\"/es/providers\"]",
+      "expectedPath": "/es/providers",
+      "actualUrl": "http://localhost:3020/es/providers",
+      "pass": true
+    },
+    {
+      "locale": "es",
+      "label": "Comparar",
+      "selector": "xpath=//main[@id=\"skip\"]/preceding-sibling::nav[1]//a[@href=\"/es/compare\"]",
+      "expectedPath": "/es/compare",
+      "actualUrl": "http://localhost:3020/es/compare",
+      "pass": true
+    },
+    {
+      "locale": "es",
+      "label": "Recursos",
+      "selector": "xpath=//main[@id=\"skip\"]/preceding-sibling::nav[1]//a[@href=\"/es/resources\"]",
+      "expectedPath": "/es/resources",
+      "actualUrl": "http://localhost:3020/es/resources",
+      "pass": true
+    },
+    {
+      "locale": "es",
+      "label": "Ensayos",
+      "selector": "xpath=//main[@id=\"skip\"]/preceding-sibling::nav[1]//a[@href=\"/es/essays\"]",
+      "expectedPath": "/es/essays",
+      "actualUrl": "http://localhost:3020/es/essays",
+      "pass": true
+    },
+    {
+      "locale": "es",
+      "label": "Footer About",
+      "selector": "footer a[href=\"/es/about\"]",
+      "expectedPath": "/es/about",
+      "actualUrl": "http://localhost:3020/es/about",
+      "pass": true
+    },
+    {
+      "locale": "es",
+      "label": "Footer Terms",
+      "selector": "footer a[href=\"/es/terms\"]",
+      "expectedPath": "/es/terms",
+      "actualUrl": "http://localhost:3020/es/terms",
+      "pass": true
+    },
+    {
+      "locale": "es",
+      "label": "Footer FAQ",
+      "selector": "footer a[href=\"/es/faq\"]",
+      "expectedPath": "/es/faq",
+      "actualUrl": "http://localhost:3020/es/faq",
+      "pass": true
+    },
+    {
+      "locale": "es",
+      "label": "Footer Privacy",
+      "selector": "footer a[href=\"/es/privacy-policy\"]",
+      "expectedPath": "/es/privacy-policy",
+      "actualUrl": "http://localhost:3020/es/privacy-policy",
+      "pass": true
+    },
+    {
+      "locale": "fr",
+      "label": "Chercher des bourses",
+      "selector": "xpath=//main[@id=\"skip\"]/preceding-sibling::nav[1]//a[@href=\"/fr/scholarships\"]",
+      "expectedPath": "/fr/scholarships",
+      "actualUrl": "http://localhost:3020/fr/scholarships/hub/best-recommendation",
+      "pass": true
+    },
+    {
+      "locale": "fr",
+      "label": "Fournisseurs",
+      "selector": "xpath=//main[@id=\"skip\"]/preceding-sibling::nav[1]//a[@href=\"/fr/providers\"]",
+      "expectedPath": "/fr/providers",
+      "actualUrl": "http://localhost:3020/fr/providers",
+      "pass": true
+    },
+    {
+      "locale": "fr",
+      "label": "Comparer",
+      "selector": "xpath=//main[@id=\"skip\"]/preceding-sibling::nav[1]//a[@href=\"/fr/compare\"]",
+      "expectedPath": "/fr/compare",
+      "actualUrl": "http://localhost:3020/fr/compare",
+      "pass": true
+    },
+    {
+      "locale": "fr",
+      "label": "Ressources",
+      "selector": "xpath=//main[@id=\"skip\"]/preceding-sibling::nav[1]//a[@href=\"/fr/resources\"]",
+      "expectedPath": "/fr/resources",
+      "actualUrl": "http://localhost:3020/fr/resources",
+      "pass": true
+    },
+    {
+      "locale": "fr",
+      "label": "Guides d'essai",
+      "selector": "xpath=//main[@id=\"skip\"]/preceding-sibling::nav[1]//a[@href=\"/fr/essays\"]",
+      "expectedPath": "/fr/essays",
+      "actualUrl": "http://localhost:3020/fr/essays",
+      "pass": true
+    },
+    {
+      "locale": "fr",
+      "label": "Footer About",
+      "selector": "footer a[href=\"/fr/about\"]",
+      "expectedPath": "/fr/about",
+      "actualUrl": "http://localhost:3020/fr/about",
+      "pass": true
+    },
+    {
+      "locale": "fr",
+      "label": "Footer Terms",
+      "selector": "footer a[href=\"/fr/terms\"]",
+      "expectedPath": "/fr/terms",
+      "actualUrl": "http://localhost:3020/fr/terms",
+      "pass": true
+    },
+    {
+      "locale": "fr",
+      "label": "Footer FAQ",
+      "selector": "footer a[href=\"/fr/faq\"]",
+      "expectedPath": "/fr/faq",
+      "actualUrl": "http://localhost:3020/fr/faq",
+      "pass": true
+    },
+    {
+      "locale": "fr",
+      "label": "Footer Privacy",
+      "selector": "footer a[href=\"/fr/privacy-policy\"]",
+      "expectedPath": "/fr/privacy-policy",
+      "actualUrl": "http://localhost:3020/fr/privacy-policy",
+      "pass": true
+    }
+  ],
+  "summary": {
+    "pagesCrawled": 118,
+    "blockingLinkIssues": 0,
+    "allowedEnglishLinks": 82,
+    "languageSwitcherLinks": 26,
+    "crossLocaleSwitcherLinks": 26,
+    "clickTestsPassed": 18,
+    "clickTestsFailed": 0
+  },
+  "pricingVisibleOnEsNav": false
+}

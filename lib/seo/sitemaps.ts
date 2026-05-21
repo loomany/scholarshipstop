@@ -32,6 +32,12 @@ import { buildCrossCountrySeoSitemapEntries } from '@/lib/seo/crossCountrySitema
 import { isCompareHubSeoGenerationCanonicalPath } from '@/lib/seo/sitemapProgrammaticHubPath';
 import { getProviderSeoQualityPolicy } from '@/lib/seo/providerSeoQualityPolicy';
 import { getCompareSeoQualityPolicy } from '@/lib/seo/compareSeoQualityPolicy';
+import { listPublishedCategoryTranslations } from '@/lib/i18n/categoryPilot/listPublishedCategoryTranslations';
+import { buildLocalizedSitemapEntry } from '@/lib/i18n/localizedSitemaps';
+import {
+  listLocalizedPilotPages,
+  type LocalizedPilotPageBucket
+} from '@/lib/i18n/staticTranslations';
 
 export { isSeoDripFeedActive } from '@/lib/seo/seoDripFeed';
 
@@ -617,6 +623,7 @@ export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
 export const buildSitemapDocuments = cache(async (): Promise<SitemapDocument[]> => {
   void getVisibleSeoRoutes();
   const buckets = await buildSitemapBuckets();
+  const localizedPilotDocs = buildLocalizedPilotSitemapDocuments();
 
   return [
     ...buildDocumentsForBucket('core', 'core', buckets.core, 'single-or-indexed'),
@@ -651,9 +658,82 @@ export const buildSitemapDocuments = cache(async (): Promise<SitemapDocument[]> 
       'compare',
       buckets.compare,
       'single-or-indexed'
-    )
+    ),
+    ...localizedPilotDocs,
+    ...(await buildLocalizedCategorySitemapDocuments())
   ];
 });
+
+function buildLocalizedPilotSitemapDocuments(): SitemapDocument[] {
+  const docs: SitemapDocument[] = [];
+  const buckets: LocalizedPilotPageBucket[] = [
+    'core',
+    'essays',
+    'compare',
+    'resources'
+  ];
+
+  for (const locale of ['es', 'fr'] as const) {
+    for (const bucket of buckets) {
+      const entries = listLocalizedPilotPages({ locale, bucket })
+        .map((page) =>
+          buildLocalizedSitemapEntry({
+            locale: page.locale,
+            canonicalPath: page.canonicalPath,
+            sourceIndexable: true,
+            translationStatus: page.status,
+            qualityScore: page.qualityScore,
+            hasLocalizedTitle: Boolean(page.title.trim()),
+            hasLocalizedH1: Boolean(page.h1.trim()),
+            hasLocalizedBody: Boolean(page.intro.trim()),
+            hasMixedLanguageRisk: false,
+            lastModified: page.updatedAt
+          })
+        )
+        .filter((entry): entry is MetadataRoute.Sitemap[number] =>
+          Boolean(entry)
+        );
+      if (entries.length === 0) continue;
+      docs.push(makeSitemapDocument(bucket, `locale-${locale}-${bucket}`, entries));
+    }
+  }
+
+  return docs;
+}
+
+async function buildLocalizedCategorySitemapDocuments(): Promise<SitemapDocument[]> {
+  const rows = await listPublishedCategoryTranslations();
+  if (rows.length === 0) return [];
+
+  const byLocale = new Map<'es' | 'fr', MetadataRoute.Sitemap>();
+  for (const row of rows) {
+    const canonicalPath = `/scholarships/category/${row.sourceId}`;
+    const entry = buildLocalizedSitemapEntry({
+      locale: row.locale,
+      canonicalPath,
+      sourceIndexable: true,
+      translationStatus: 'published',
+      qualityScore: row.qualityScore ?? 90,
+      hasLocalizedTitle: Boolean(row.translatedTitle?.trim()),
+      hasLocalizedH1: Boolean(row.translatedTitle?.trim()),
+      hasLocalizedBody: true,
+      hasMixedLanguageRisk: false,
+      lastModified: row.lastModified
+    });
+    if (!entry) continue;
+    const bucket = byLocale.get(row.locale) ?? [];
+    bucket.push(entry);
+    byLocale.set(row.locale, bucket);
+  }
+
+  const docs: SitemapDocument[] = [];
+  for (const locale of ['es', 'fr'] as const) {
+    const entries = byLocale.get(locale);
+    if (!entries?.length) continue;
+    docs.push(makeSitemapDocument('categories', `locale-${locale}-categories`, entries));
+  }
+  return docs;
+}
 
 export const getSitemapDocumentBySlug = cache(
   async (slug: string): Promise<SitemapDocument | null> => {

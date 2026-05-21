@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
 import {
@@ -11,6 +11,11 @@ import {
 } from '@/lib/auth/recoveryUrlErrors';
 import { SiteBrandLoading } from '@/components/ui/SiteBrandLoading';
 import {
+  localizedSigninPath,
+  readStoredUiLocale
+} from '@/components/i18n/LocaleUiPreference';
+import { getAuthUiCopy } from '@/lib/i18n/authUiCopy';
+import {
   getErrorRedirect,
   getStatusRedirect,
   TOAST_VARIANT_WARNING_PARAM
@@ -19,10 +24,20 @@ import {
 function ResetPasswordExchange() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [label, setLabel] = useState('Signing you in…');
+  const storedLocale = useMemo(() => readStoredUiLocale(), []);
+  const authUi = useMemo(() => getAuthUiCopy(storedLocale), [storedLocale]);
+  const [label, setLabel] = useState(authUi.resetPasswordSigningIn);
+
+  useEffect(() => {
+    setLabel(authUi.resetPasswordSigningIn);
+  }, [authUi.resetPasswordSigningIn]);
 
   useEffect(() => {
     let cancelled = false;
+    const locale = readStoredUiLocale();
+    const ui = getAuthUiCopy(locale);
+    const forgotPath = localizedSigninPath(locale, '/signin/forgot_password');
+    const updatePasswordPath = localizedSigninPath(locale, '/signin/update_password');
 
     async function run() {
       const supabase = createClient();
@@ -37,7 +52,7 @@ function ResetPasswordExchange() {
         if (!cancelled) {
           router.replace(
             getErrorRedirect(
-              '/signin/forgot_password',
+              forgotPath,
               u.title,
               u.description,
               false,
@@ -53,10 +68,9 @@ function ResetPasswordExchange() {
         if (!cancelled) {
           router.replace(
             getErrorRedirect(
-              '/signin/forgot_password',
+              forgotPath,
               qpError,
-              searchParams.get('error_description') ??
-                'Link may be expired. Request a new reset email.'
+              searchParams.get('error_description') ?? ui.resetLinkExpiredDescription
             )
           );
         }
@@ -74,9 +88,9 @@ function ResetPasswordExchange() {
           if (!cancelled) {
             router.replace(
               getErrorRedirect(
-                '/signin/forgot_password',
+                forgotPath,
                 error.name,
-                "Sorry, we weren't able to log you in. Please try again."
+                ui.resetLoginFailedDescription
               )
             );
           }
@@ -84,7 +98,7 @@ function ResetPasswordExchange() {
         }
       } else if (implicit.access_token && implicit.refresh_token) {
         /** PKCE client does not auto-apply implicit `#access_token` fragments — set explicitly. */
-        setLabel('Completing sign-in…');
+        setLabel(ui.resetPasswordCompleting);
         const { error } = await supabase.auth.setSession({
           access_token: implicit.access_token,
           refresh_token: implicit.refresh_token
@@ -93,10 +107,9 @@ function ResetPasswordExchange() {
           if (!cancelled) {
             router.replace(
               getErrorRedirect(
-                '/signin/forgot_password',
-                'Could not use reset link',
-                error.message ||
-                  'Request a new password reset email and try again.'
+                forgotPath,
+                ui.resetCouldNotUseLink,
+                error.message || ui.resetRequestNewEmail
               )
             );
           }
@@ -112,7 +125,7 @@ function ResetPasswordExchange() {
           /* ignore */
         }
       } else {
-        setLabel('Completing sign-in…');
+        setLabel(ui.resetPasswordCompleting);
         let session = (await supabase.auth.getSession()).data.session;
         if (!session) {
           session = await new Promise((resolve) => {
@@ -146,9 +159,9 @@ function ResetPasswordExchange() {
           if (!cancelled) {
             router.replace(
               getErrorRedirect(
-                '/signin/forgot_password',
-                'Reset link incomplete',
-                'Open the link from your latest email, or request a new password reset.',
+                forgotPath,
+                ui.resetLinkIncomplete,
+                ui.resetOpenLatestEmail,
                 false,
                 TOAST_VARIANT_WARNING_PARAM
               )
@@ -160,9 +173,9 @@ function ResetPasswordExchange() {
 
       if (!cancelled) {
         const nextPath = getStatusRedirect(
-          '/signin/update_password',
-          'You are now signed in.',
-          'Please enter a new password for your account.'
+          updatePasswordPath,
+          ui.resetNowSignedIn,
+          ui.resetEnterNewPassword
         );
         /** Full navigation so SSR receives session cookies (soft `router` nav can skip them). */
         window.location.assign(new URL(nextPath, window.location.origin).href);

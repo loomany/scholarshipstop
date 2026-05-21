@@ -8,7 +8,8 @@ import { contentHubProseClassName } from '@/lib/content-hub/contentHubProseClass
 import {
   RESOURCE_GUIDE_CARDS,
   resourceGuideCardHref,
-  resourceGuideLinkClassName
+  resourceGuideLinkClassName,
+  type ResourceGuideCard
 } from '@/lib/content-hub/resourceGuidePages';
 import {
   RESOURCES_PAGE_TITLE,
@@ -30,6 +31,16 @@ export type ResourceGuideShellProps = {
   children: React.ReactNode;
   faq: ResourceGuideFaqItem[];
   endReading: ResourceGuideEndLink[];
+  homeHref?: string;
+  resourcesHref?: string;
+  backToHomeLabel?: string;
+  resourcesNavLabel?: string;
+  continueReadingLabel?: string;
+  relatedGuidesLabel?: string;
+  ctaTitle?: string;
+  ctaDescription?: string;
+  ctaButtonText?: string;
+  cardHrefForSlug?: (slug: ResourceGuideCard['slug']) => string;
 };
 
 export default function ResourceGuideShell({
@@ -37,7 +48,17 @@ export default function ResourceGuideShell({
   subtitle,
   children,
   faq,
-  endReading
+  endReading,
+  homeHref = '/',
+  resourcesHref = RESOURCES_SECTION_PATH,
+  backToHomeLabel = 'Back to home',
+  resourcesNavLabel = RESOURCES_PAGE_TITLE,
+  continueReadingLabel = 'Continue Reading',
+  relatedGuidesLabel = 'Related Guides',
+  ctaTitle = 'Find Scholarships That Match You',
+  ctaDescription = 'Browse scholarships based on your profile and apply faster.',
+  ctaButtonText = 'Find Scholarships',
+  cardHrefForSlug = resourceGuideCardHref
 }: ResourceGuideShellProps) {
   const breadcrumbsSchema = {
     '@context': 'https://schema.org',
@@ -92,17 +113,17 @@ export default function ResourceGuideShell({
       ) : null}
       <article className="mx-auto max-w-3xl px-5 sm:px-6">
         <nav className="mb-8 text-sm" aria-label="Breadcrumb">
-          <Link href="/" className={clsx(nav.legal, 'inline-block')}>
-            ← Back to home
+          <Link href={homeHref} className={clsx(nav.legal, 'inline-block')}>
+            ← {backToHomeLabel}
           </Link>
           <span className="mx-2 text-zinc-300" aria-hidden>
             /
           </span>
           <Link
-            href={RESOURCES_SECTION_PATH}
+            href={resourcesHref}
             className="font-medium text-zinc-600 underline-offset-2 hover:text-zinc-900 hover:underline"
           >
-            {RESOURCES_PAGE_TITLE}
+            {resourcesNavLabel}
           </Link>
         </nav>
 
@@ -135,7 +156,7 @@ export default function ResourceGuideShell({
             id="continue-reading-heading"
             className="text-base font-semibold tracking-tight text-zinc-900 sm:text-lg"
           >
-            Continue Reading
+            {continueReadingLabel}
           </h2>
           <ul className="mt-5 list-none space-y-4 p-0">
             {endReading.map((item) => (
@@ -151,9 +172,9 @@ export default function ResourceGuideShell({
 
         <ContentHubScholarshipCta
           className="mt-10 sm:mt-12"
-          title="Find Scholarships That Match You"
-          description="Browse scholarships based on your profile and apply faster."
-          buttonText="Find Scholarships"
+          title={ctaTitle}
+          description={ctaDescription}
+          buttonText={ctaButtonText}
         />
 
         <section
@@ -164,13 +185,13 @@ export default function ResourceGuideShell({
             id="related-guides-heading"
             className="text-xl font-bold tracking-tight text-zinc-900 sm:text-2xl"
           >
-            Related Guides
+            {relatedGuidesLabel}
           </h2>
           <ul className="mt-6 grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-3 sm:gap-5">
             {RESOURCE_GUIDE_CARDS.map((card) => (
               <li key={card.slug}>
                 <Link
-                  href={resourceGuideCardHref(card.slug)}
+                  href={cardHrefForSlug(card.slug)}
                   className="group flex h-full flex-col rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-zinc-300 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/80 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-50 sm:p-6"
                 >
                   <span className="text-base font-semibold tracking-tight text-zinc-900 group-hover:text-orange-700">

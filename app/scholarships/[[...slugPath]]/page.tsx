@@ -7,6 +7,7 @@ import { normalizeScholarshipDynamicParam } from '@/app/scholarships/scholarship
 import { scholarshipHubQueryStringFromNextSearchParamsRecord } from '@/app/scholarships/scholarshipHubCanonicalQueryString';
 import { isSeoNoiseQuery } from '@/app/scholarships/scholarshipSeoNoiseQuery';
 import { getCanonical } from '@/lib/seo/canonical';
+import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
 
 export const revalidate = 300;
 
@@ -48,7 +49,7 @@ export async function generateMetadata({
   return {
     title: 'Find Scholarships',
     description: SCHOLARSHIPS_ROOT_DESCRIPTION,
-    alternates: { canonical },
+    alternates: buildStage2EnglishPilotAlternates('/scholarships'),
     openGraph: {
       title: 'Find Scholarships',
       description: SCHOLARSHIPS_ROOT_DESCRIPTION,

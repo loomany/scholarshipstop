@@ -9,6 +9,8 @@ import {
   countryLabelFromCode,
   normalizeCountryCode
 } from '@/lib/scholarships/countryEligibility/countries';
+import { getGetScholarshipsQuizUiCopy } from '@/lib/i18n/funnelUiCopy';
+import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
 
 type Props = {
   disabled?: boolean;
@@ -23,21 +25,26 @@ type Props = {
   /** Mutually exclusive with `value`: broad catalog (no explicit applicant-country filter). */
   includeUnspecifiedApplicantCountries?: boolean;
   onIncludeUnspecifiedApplicantCountriesChange?: (next: boolean) => void;
+  locale?: LocalizedUiLocale;
 };
 
 export function CountryFirstStep({
   disabled = false,
   value,
   progressEyebrow,
-  title = 'Which country are you applying from?',
-  description = 'Choose your citizenship or home country first so we can show scholarships you are more likely eligible for.',
+  title,
+  description,
   error = null,
   onChange,
   onContinue,
   onBack,
   includeUnspecifiedApplicantCountries = false,
-  onIncludeUnspecifiedApplicantCountriesChange
+  onIncludeUnspecifiedApplicantCountriesChange,
+  locale = 'en'
 }: Props) {
+  const ui = getGetScholarshipsQuizUiCopy(locale);
+  const resolvedTitle = title ?? ui.countryStepTitle;
+  const resolvedDescription = description ?? ui.countryStepDescription;
   const [countryInput, setCountryInput] = useState('');
   const [countryOpen, setCountryOpen] = useState(false);
   const countryRootRef = useRef<HTMLDivElement>(null);
@@ -60,7 +67,7 @@ export function CountryFirstStep({
 
   useEffect(() => {
     if (includeUnspecifiedApplicantCountries) {
-      setCountryInput('Citizenship not specified');
+      setCountryInput(ui.citizenshipNotSpecified);
       return;
     }
     if (!normalizedValue) {
@@ -118,7 +125,7 @@ export function CountryFirstStep({
       ? [
           {
             code: '__UNSPECIFIED__',
-            label: 'Citizenship not specified'
+            label: ui.citizenshipNotSpecified
           },
           ...countries
         ]
@@ -156,7 +163,7 @@ export function CountryFirstStep({
           className="rounded-xl border border-zinc-300 bg-white px-4 py-2.5 text-sm font-medium text-zinc-800 shadow-sm transition hover:border-zinc-400 hover:bg-zinc-50 disabled:opacity-50"
         >
           <ArrowLeft className="mr-2 inline h-4 w-4" aria-hidden />
-          Back
+          {ui.backButton}
         </button>
       ) : null}
 
@@ -168,10 +175,10 @@ export function CountryFirstStep({
           {progressEyebrow}
         </p>
         <h1 className="mt-2 text-2xl font-bold tracking-tight text-[#7A3B00] sm:text-3xl">
-          {title}
+          {resolvedTitle}
         </h1>
         <p className="mx-auto mt-3 max-w-md text-base font-medium leading-7 text-[#8C5A2B] sm:max-w-lg">
-          {description}
+          {resolvedDescription}
         </p>
       </div>
 
@@ -181,7 +188,7 @@ export function CountryFirstStep({
             htmlFor="country-first-country"
             className="mb-2 block text-xs font-medium uppercase tracking-[0.14em] text-gray-700"
           >
-            Applicant country / citizenship
+            {ui.countryFieldLabel}
           </label>
           <div ref={countryRootRef} className="relative">
             <input
@@ -194,7 +201,7 @@ export function CountryFirstStep({
                 if (
                   includeUnspecifiedApplicantCountries &&
                   next.trim().toLowerCase() !==
-                    'citizenship not specified'.toLowerCase()
+                    ui.citizenshipNotSpecified.toLowerCase()
                 ) {
                   onIncludeUnspecifiedApplicantCountriesChange?.(false);
                 }
@@ -204,7 +211,7 @@ export function CountryFirstStep({
                 if (code) onChange(code);
               }}
               disabled={disabled}
-              placeholder="Select or type your country"
+              placeholder={ui.countryPlaceholder}
               className="w-full rounded-xl border border-zinc-200 bg-white px-4 py-3 pr-10 text-sm text-zinc-900 shadow-sm outline-none transition placeholder:text-zinc-400 focus:border-zinc-300 focus:ring-2 focus:ring-zinc-200/80 disabled:cursor-not-allowed disabled:opacity-50"
               autoComplete="off"
             />
@@ -217,11 +224,11 @@ export function CountryFirstStep({
             {countryOpen ? (
               <ul
                 role="listbox"
-                aria-label="Applicant country suggestions"
+                aria-label={ui.countryFieldLabel}
                 className="absolute left-0 right-0 top-[calc(100%+0.4rem)] z-30 max-h-72 overflow-y-auto rounded-xl border border-zinc-200 bg-white py-1 shadow-lg ring-1 ring-black/5"
               >
                 {filteredCountries.length === 0 ? (
-                  <li className="px-4 py-2.5 text-sm text-zinc-500">No matches found.</li>
+                  <li className="px-4 py-2.5 text-sm text-zinc-500">{ui.countryNoMatches}</li>
                 ) : (
                   filteredCountries.map((country) => (
                     <li key={country.code}>
@@ -232,7 +239,7 @@ export function CountryFirstStep({
                           if (country.code === '__UNSPECIFIED__') {
                             onIncludeUnspecifiedApplicantCountriesChange?.(true);
                             onChange('');
-                            setCountryInput('Citizenship not specified');
+                            setCountryInput(ui.citizenshipNotSpecified);
                             setCountryOpen(false);
                             return;
                           }
@@ -248,7 +255,7 @@ export function CountryFirstStep({
                             {country.code}
                           </span>
                         ) : (
-                          <span className="text-xs text-zinc-400">Optional</span>
+                          <span className="text-xs text-zinc-400">{ui.countryOptional}</span>
                         )}
                       </button>
                     </li>
@@ -267,7 +274,7 @@ export function CountryFirstStep({
           disabled={disabled || !canContinue}
           className={ONBOARDING_PRIMARY_BUTTON_CLASS}
         >
-          Continue
+          {ui.continueButton}
           <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
         </button>
       </form>

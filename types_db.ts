@@ -753,6 +753,93 @@ export interface Database {
         }
         Relationships: []
       }
+      content_translations: {
+        Row: {
+          id: string
+          source_type: string
+          source_id: string
+          locale: string
+          source_hash: string | null
+          source_updated_at: string | null
+          status: string
+          translated_slug: string | null
+          translated_title: string | null
+          translated_meta_title: string | null
+          translated_meta_description: string | null
+          translated_summary: string | null
+          translated_body: string | null
+          translated_faq_json: Json | null
+          translated_schema_json: Json | null
+          translated_extra_json: Json | null
+          quality_score: number | null
+          machine_model: string | null
+          translated_by: string | null
+          reviewed_by: string | null
+          reviewer_notes: string | null
+          published_at: string | null
+          stale_at: string | null
+          blocked_reason: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          source_type: string
+          source_id: string
+          locale: string
+          source_hash?: string | null
+          source_updated_at?: string | null
+          status?: string
+          translated_slug?: string | null
+          translated_title?: string | null
+          translated_meta_title?: string | null
+          translated_meta_description?: string | null
+          translated_summary?: string | null
+          translated_body?: string | null
+          translated_faq_json?: Json | null
+          translated_schema_json?: Json | null
+          translated_extra_json?: Json | null
+          quality_score?: number | null
+          machine_model?: string | null
+          translated_by?: string | null
+          reviewed_by?: string | null
+          reviewer_notes?: string | null
+          published_at?: string | null
+          stale_at?: string | null
+          blocked_reason?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          source_type?: string
+          source_id?: string
+          locale?: string
+          source_hash?: string | null
+          source_updated_at?: string | null
+          status?: string
+          translated_slug?: string | null
+          translated_title?: string | null
+          translated_meta_title?: string | null
+          translated_meta_description?: string | null
+          translated_summary?: string | null
+          translated_body?: string | null
+          translated_faq_json?: Json | null
+          translated_schema_json?: Json | null
+          translated_extra_json?: Json | null
+          quality_score?: number | null
+          machine_model?: string | null
+          translated_by?: string | null
+          reviewed_by?: string | null
+          reviewer_notes?: string | null
+          published_at?: string | null
+          stale_at?: string | null
+          blocked_reason?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       prices: {
         Row: {
           active: boolean | null

@@ -5,19 +5,50 @@ import type { TrustPageContent } from '@/lib/trust/trustPageContent';
 
 type TrustPageTemplateProps = {
   page: TrustPageContent;
+  copy?: {
+    backHome: string;
+    methodology: string;
+    studentFirstRule: string;
+    studentFirstHeadline: string;
+    studentFirstBody: string;
+    relatedTrustPages: string;
+    quickReminder: string;
+    quickReminderBody: string;
+    disclaimer: string;
+  };
+  hrefForPath?: (href: string) => string;
 };
 
-export default function TrustPageTemplate({ page }: TrustPageTemplateProps) {
+const DEFAULT_COPY = {
+  backHome: 'Back to home',
+  methodology: 'Verification methodology',
+  studentFirstRule: 'Student-first rule',
+  studentFirstHeadline:
+    'Confirm every final requirement on the official provider page before applying.',
+  studentFirstBody:
+    'ScholarshipTop helps students search and plan. Official providers control final eligibility, deadlines, selection, and award payment.',
+  relatedTrustPages: 'Related trust pages',
+  quickReminder: 'Quick reminder',
+  quickReminderBody:
+    'Recommendations do not guarantee eligibility, selection, or award payment.',
+  disclaimer: 'Read disclaimer'
+} as const;
+
+export default function TrustPageTemplate({
+  page,
+  copy = DEFAULT_COPY,
+  hrefForPath = (href) => href
+}: TrustPageTemplateProps) {
   const primaryCta = page.cta ?? { href: '/scholarships', label: 'Browse scholarships' };
 
   return (
     <main className="min-h-[calc(100dvh-5rem)] bg-zinc-50 pb-16 pt-10 text-zinc-900 sm:pb-20 sm:pt-14">
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
         <Link
-          href="/"
+          href={hrefForPath('/')}
           className="inline-flex items-center rounded-full border border-zinc-200 bg-white px-3 py-1.5 text-sm font-medium text-zinc-600 shadow-sm transition hover:border-zinc-300 hover:text-zinc-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/60 focus-visible:ring-offset-2"
         >
-          Back to home
+          {copy.backHome}
         </Link>
 
         <section className="mt-8 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
@@ -34,30 +65,30 @@ export default function TrustPageTemplate({ page }: TrustPageTemplateProps) {
               </p>
               <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 <Link
-                  href={primaryCta.href}
+                  href={hrefForPath(primaryCta.href)}
                   className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-orange-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-orange-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2"
                 >
                   {primaryCta.label}
                   <ArrowRight className="h-4 w-4" aria-hidden />
                 </Link>
                 <Link
-                  href="/scholarship-verification-methodology"
+                  href={hrefForPath('/scholarship-verification-methodology')}
                   className="inline-flex min-h-11 items-center justify-center rounded-xl border border-zinc-200 bg-white px-5 py-2.5 text-sm font-semibold text-zinc-800 shadow-sm transition hover:border-zinc-300 hover:bg-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2"
                 >
-                  Verification methodology
+                  {copy.methodology}
                 </Link>
               </div>
             </div>
 
             <div className="border-t border-zinc-200 bg-zinc-950 p-6 text-white sm:p-8 lg:border-l lg:border-t-0 lg:p-10">
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-orange-300">
-                Student-first rule
+                {copy.studentFirstRule}
               </p>
               <p className="mt-4 text-2xl font-semibold leading-snug tracking-tight">
-                Confirm every final requirement on the official provider page before applying.
+                {copy.studentFirstHeadline}
               </p>
               <p className="mt-4 text-sm leading-6 text-zinc-300">
-                ScholarshipTop helps students search and plan. Official providers control final eligibility, deadlines, selection, and award payment.
+                {copy.studentFirstBody}
               </p>
             </div>
           </div>
@@ -143,13 +174,13 @@ export default function TrustPageTemplate({ page }: TrustPageTemplateProps) {
           <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
             <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
               <h2 className="text-base font-semibold tracking-tight text-zinc-950">
-                Related trust pages
+                {copy.relatedTrustPages}
               </h2>
               <div className="mt-4 space-y-3">
                 {(page.links ?? []).map((link) => (
                   <Link
                     key={link.href}
-                    href={link.href}
+                    href={hrefForPath(link.href)}
                     className="block rounded-xl border border-zinc-200 bg-zinc-50/70 p-3 transition hover:border-zinc-300 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/60 focus-visible:ring-offset-2"
                   >
                     <span className="text-sm font-semibold text-zinc-950">
@@ -165,16 +196,16 @@ export default function TrustPageTemplate({ page }: TrustPageTemplateProps) {
 
             <div className="rounded-2xl border border-orange-200 bg-orange-50/80 p-5 shadow-sm">
               <h2 className="text-base font-semibold tracking-tight text-orange-950">
-                Quick reminder
+                {copy.quickReminder}
               </h2>
               <p className="mt-2 text-sm leading-6 text-orange-900">
-                Recommendations do not guarantee eligibility, selection, or award payment.
+                {copy.quickReminderBody}
               </p>
               <Link
-                href="/financial-aid-disclaimer"
+                href={hrefForPath('/financial-aid-disclaimer')}
                 className="mt-4 inline-flex text-sm font-semibold text-orange-800 underline-offset-4 hover:underline"
               >
-                Read disclaimer
+                {copy.disclaimer}
               </Link>
             </div>
           </aside>

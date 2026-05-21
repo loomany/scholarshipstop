@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 
 import Logo from '@/components/icons/Logo';
+import LanguageSwitcher from '@/components/i18n/LanguageSwitcher';
 import MobileDrawerNavIcon from '@/components/ui/Navbar/MobileDrawerNavIcon';
 import { siteNavLink as nav } from '@/components/ui/nav/siteNavLink';
 import {
@@ -34,13 +35,21 @@ import {
   RESOURCES_SECTION_PATH
 } from '@/lib/content-hub/resourcesSection';
 import { ESSAYS_SECTION_PATH } from '@/lib/essays/essayHubSection';
-import type { NavbarInitialAuth } from '@/lib/nav/getNavbarInitialAuth';
 import { SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF } from '@/app/scholarships/scholarshipListUrl';
+import type { NavbarInitialAuth } from '@/lib/nav/getNavbarInitialAuth';
+import { stripLocalePrefix } from '@/lib/i18n/paths';
+import { getStage2LocaleFromPathname, type Stage2PilotLocale } from '@/lib/i18n/pilotRoutes';
+import {
+  localizedPilotHref,
+  localizedSubscriptionHref
+} from '@/lib/i18n/localizedHref';
+import type { SupportedLocale } from '@/lib/i18n/types';
 import NavbarUserSlot from './NavbarUserSlot';
 import s from './Navbar.module.css';
 
 type NavlinksProps = {
   initialNavbarAuth?: NavbarInitialAuth;
+  initialLocale?: SupportedLocale;
 };
 
 const IQ_TEST_HOME_HREF = 'https://iq.scholarshiptop.com/';
@@ -75,6 +84,215 @@ const VERSUS_SUBLINKS = [
   }
 ] as const;
 
+const LOCALIZED_NAV_COPY: Record<
+  'en' | Stage2PilotLocale,
+  {
+    about: string;
+    findScholarships: string;
+    providers: string;
+    compare: string;
+    resources: string;
+    essayGuides: string;
+    pricing: string;
+    iqTest: string;
+    forOrganizations: string;
+    openMenu: string;
+    closeMenu: string;
+    mainNavigation: string;
+    siteMenu: string;
+    aboutMenu: string;
+    compareMenu: string;
+    essayMenu: string;
+    collapseAbout: string;
+    expandAbout: string;
+    collapseCompare: string;
+    expandCompare: string;
+    collapseEssays: string;
+    expandEssays: string;
+    essayGuidesLinks: string;
+    guidesAndMentor: string;
+  }
+> = {
+  en: {
+    about: 'About',
+    findScholarships: 'Find Scholarships',
+    providers: 'Providers',
+    compare: 'Compare',
+    resources: RESOURCES_SECTION_LABEL,
+    essayGuides: 'Essay Guides',
+    pricing: 'Pricing',
+    iqTest: 'IQ Test',
+    forOrganizations: 'For Organizations',
+    openMenu: 'Open menu',
+    closeMenu: 'Close menu',
+    mainNavigation: 'Main navigation',
+    siteMenu: 'Site menu',
+    aboutMenu: 'About menu',
+    compareMenu: 'Compare menu',
+    essayMenu: 'Essay Guides menu',
+    collapseAbout: 'Collapse About submenu',
+    expandAbout: 'Expand About submenu',
+    collapseCompare: 'Collapse Compare submenu',
+    expandCompare: 'Expand Compare submenu',
+    collapseEssays: 'Collapse Essay Guides submenu',
+    expandEssays: 'Expand Essay Guides submenu',
+    essayGuidesLinks: 'Essay Guides links',
+    guidesAndMentor: 'Guides and AI mentor'
+  },
+  es: {
+    about: 'Acerca de',
+    findScholarships: 'Buscar becas',
+    providers: 'Proveedores',
+    compare: 'Comparar',
+    resources: 'Recursos',
+    essayGuides: 'Ensayos',
+    pricing: 'Precios',
+    iqTest: 'Prueba IQ',
+    forOrganizations: 'Organizaciones',
+    openMenu: 'Abrir menú',
+    closeMenu: 'Cerrar menú',
+    mainNavigation: 'Navegación principal',
+    siteMenu: 'Menú del sitio',
+    aboutMenu: 'Menú de confianza',
+    compareMenu: 'Menú de comparaciones',
+    essayMenu: 'Menú de ensayos',
+    collapseAbout: 'Contraer menú Acerca de',
+    expandAbout: 'Expandir menú Acerca de',
+    collapseCompare: 'Contraer menú Comparar',
+    expandCompare: 'Expandir menú Comparar',
+    collapseEssays: 'Contraer menú Ensayos',
+    expandEssays: 'Expandir menú Ensayos',
+    essayGuidesLinks: 'Enlaces de ensayos',
+    guidesAndMentor: 'Guías y mentor IA'
+  },
+  fr: {
+    about: 'À propos',
+    findScholarships: 'Chercher des bourses',
+    providers: 'Fournisseurs',
+    compare: 'Comparer',
+    resources: 'Ressources',
+    essayGuides: "Guides d'essai",
+    pricing: 'Tarifs',
+    iqTest: 'Test IQ',
+    forOrganizations: 'Organisations',
+    openMenu: 'Ouvrir le menu',
+    closeMenu: 'Fermer le menu',
+    mainNavigation: 'Navigation principale',
+    siteMenu: 'Menu du site',
+    aboutMenu: 'Menu confiance',
+    compareMenu: 'Menu comparaisons',
+    essayMenu: 'Menu rédaction',
+    collapseAbout: 'Réduire le menu À propos',
+    expandAbout: 'Développer le menu À propos',
+    collapseCompare: 'Réduire le menu Comparer',
+    expandCompare: 'Développer le menu Comparer',
+    collapseEssays: 'Réduire le menu Rédaction',
+    expandEssays: 'Développer le menu Rédaction',
+    essayGuidesLinks: 'Liens guides d’essai',
+    guidesAndMentor: 'Guides et mentor IA'
+  }
+};
+
+const LOCALIZED_ABOUT_SUBLINKS: Record<
+  Stage2PilotLocale,
+  Array<{ href: string; label: string }>
+> = {
+  es: [
+    { href: '/about', label: 'Acerca de' },
+    { href: '/how-scholarshiptop-works', label: 'Cómo funciona' },
+    { href: '/scholarship-verification-methodology', label: 'Verificación' },
+    { href: '/how-we-rank-scholarships', label: 'Recomendaciones' },
+    { href: '/editorial-policy', label: 'Política editorial' },
+    { href: '/corrections', label: 'Correcciones' },
+    { href: '/financial-aid-disclaimer', label: 'Aviso financiero' },
+    { href: '/how-we-make-money', label: 'Cómo ganamos dinero' }
+  ],
+  fr: [
+    { href: '/about', label: 'À propos' },
+    { href: '/how-scholarshiptop-works', label: 'Fonctionnement' },
+    { href: '/scholarship-verification-methodology', label: 'Vérification' },
+    { href: '/how-we-rank-scholarships', label: 'Recommandations' },
+    { href: '/editorial-policy', label: 'Politique éditoriale' },
+    { href: '/corrections', label: 'Corrections' },
+    { href: '/financial-aid-disclaimer', label: 'Avertissement' },
+    { href: '/how-we-make-money', label: 'Revenus' }
+  ]
+};
+
+const LOCALIZED_COMPARE_SUBLINKS: Record<
+  Stage2PilotLocale,
+  Array<{ href: string; label: string; description: string }>
+> = {
+  es: [
+    {
+      href: '/compare/scholarship-vs-grant',
+      label: 'Beca vs subvención',
+      description: 'Diferencias entre tipos de ayuda educativa.'
+    },
+    {
+      href: '/compare/no-essay-vs-essay-scholarships',
+      label: 'Sin ensayo vs con ensayo',
+      description: 'Compara esfuerzo, competencia y estrategia.'
+    }
+  ],
+  fr: [
+    {
+      href: '/compare/scholarship-vs-grant',
+      label: 'Bourse vs subvention',
+      description: 'Différences entre types d’aide éducative.'
+    },
+    {
+      href: '/compare/no-essay-vs-essay-scholarships',
+      label: 'Sans rédaction vs avec rédaction',
+      description: 'Comparer effort, concurrence et stratégie.'
+    }
+  ]
+};
+
+type EssayGuideSublink = {
+  href: string;
+  title: string;
+  description: string;
+  kicker: string;
+  featured?: boolean;
+};
+
+const LOCALIZED_ESSAYS_GUIDE_SUBLINKS: Record<
+  Stage2PilotLocale,
+  EssayGuideSublink[]
+> = {
+  es: [
+    {
+      href: ESSAYS_SECTION_PATH,
+      title: 'Biblioteca de guías',
+      description: 'Ejemplos, checklist y guías por prompt para becas.',
+      kicker: 'Guías'
+    },
+    {
+      href: ESSAY_MENTOR_PATH,
+      title: 'Essay Mentor',
+      description: 'Herramienta guiada para estructurar tus ideas antes de escribir.',
+      kicker: 'Studio',
+      featured: true
+    }
+  ],
+  fr: [
+    {
+      href: ESSAYS_SECTION_PATH,
+      title: 'Bibliothèque de guides',
+      description: 'Exemples, checklist et guides par consigne pour les bourses.',
+      kicker: 'Guides'
+    },
+    {
+      href: ESSAY_MENTOR_PATH,
+      title: 'Essay Mentor',
+      description: 'Outil guidé pour structurer vos idées avant d’écrire.',
+      kicker: 'Studio',
+      featured: true
+    }
+  ]
+};
+
 /** Подменю Essay Guides: хаб статей и инструмент ментора (не путать с `/essays`). */
 const ESSAYS_GUIDE_SUBLINKS: {
   href: string;
@@ -103,20 +321,60 @@ function sublinkActive(href: string, pathname: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
+export default function Navlinks({
+  initialNavbarAuth = null,
+  initialLocale = 'en'
+}: NavlinksProps) {
   const pathname = usePathname() ?? '';
+  const locale =
+    getStage2LocaleFromPathname(pathname) ??
+    (initialLocale === 'es' || initialLocale === 'fr' ? initialLocale : 'en');
+  const navCopy = LOCALIZED_NAV_COPY[locale];
+  const canonicalPathname = stripLocalePrefix(pathname);
+  const localHref = useCallback(
+    (href: string) => localizedPilotHref(locale, href),
+    [locale]
+  );
+  const pilotNavHref = useCallback(
+    (href: string) => localHref(href) ?? href,
+    [localHref]
+  );
+  const subscriptionHref = localizedSubscriptionHref(locale);
+  /**
+   * “Find Scholarships”: on EN go straight to the canonical hub URL so the user
+   * does not see `/scholarships` for a moment before client-side normalization.
+   * ES/FR keep their localized hub root (translations live at `/es/scholarships`,
+   * `/fr/scholarships`; the hub query still defaults to Best recommendation).
+   */
+  const findScholarshipsHref =
+    locale === 'en'
+      ? SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF
+      : pilotNavHref('/scholarships');
+  const aboutSublinks =
+    locale === 'en' ? ABOUT_SUBLINKS : LOCALIZED_ABOUT_SUBLINKS[locale];
+  const mobileAboutSublinks =
+    locale === 'en'
+      ? MOBILE_ABOUT_SUBLINKS
+      : LOCALIZED_ABOUT_SUBLINKS[locale];
+  const versusSublinks =
+    locale === 'en' ? VERSUS_SUBLINKS : LOCALIZED_COMPARE_SUBLINKS[locale];
+  const essayGuideSublinks = (
+    locale === 'en'
+      ? ESSAYS_GUIDE_SUBLINKS
+      : LOCALIZED_ESSAYS_GUIDE_SUBLINKS[locale]
+  ).filter((item) => locale === 'en' || localHref(item.href) != null);
   const isIqSubdomain =
     typeof window !== 'undefined' &&
     window.location.hostname.toLowerCase() === 'iq.scholarshiptop.com';
   const isIqProductPage =
     isIqSubdomain ||
-    pathname === '/iq' ||
-    pathname === '/iq/about' ||
-    pathname === '/iq/help' ||
-    pathname === '/iq/privacy-policy' ||
-    pathname === '/iq/terms' ||
-    pathname === '/iq/refund-policy' ||
-    pathname === '/iq/faq';
+    canonicalPathname === '/iq' ||
+    canonicalPathname === '/iq/about' ||
+    canonicalPathname === '/iq/help' ||
+    canonicalPathname === '/iq/privacy-policy' ||
+    canonicalPathname === '/iq/terms' ||
+    canonicalPathname === '/iq/refund-policy' ||
+    canonicalPathname === '/iq/faq';
   const [menuOpen, setMenuOpen] = useState(false);
   const [aboutExpanded, setAboutExpanded] = useState(false);
   const [essaysExpanded, setEssaysExpanded] = useState(false);
@@ -127,29 +385,29 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
   const menuId = useId();
 
   const aboutSectionActive = useMemo(() => {
-    if (pathname === '/about' || pathname.startsWith('/about/')) return true;
-    return ABOUT_SUBLINKS.some((l) => sublinkActive(l.href, pathname));
-  }, [pathname]);
+    if (canonicalPathname === '/about' || canonicalPathname.startsWith('/about/')) return true;
+    return aboutSublinks.some((l) => sublinkActive(l.href, canonicalPathname));
+  }, [canonicalPathname, aboutSublinks]);
 
   const resourcesSectionActive = useMemo(
     () =>
-      pathname === RESOURCES_SECTION_PATH ||
-      pathname.startsWith(`${RESOURCES_SECTION_PATH}/`),
-    [pathname]
+      canonicalPathname === RESOURCES_SECTION_PATH ||
+      canonicalPathname.startsWith(`${RESOURCES_SECTION_PATH}/`),
+    [canonicalPathname]
   );
 
   const essaysSectionActive = useMemo(
     () =>
-      pathname === ESSAYS_SECTION_PATH ||
-      pathname.startsWith(`${ESSAYS_SECTION_PATH}/`),
-    [pathname]
+      canonicalPathname === ESSAYS_SECTION_PATH ||
+      canonicalPathname.startsWith(`${ESSAYS_SECTION_PATH}/`),
+    [canonicalPathname]
   );
 
   const essayMentorActive = useMemo(() => {
-    if (pathname === ESSAY_MENTOR_PATH) return true;
-    if (!pathname.startsWith(`${ESSAY_MENTOR_PATH}/`)) return false;
-    return !pathname.startsWith(`${ESSAYS_SECTION_PATH}`);
-  }, [pathname]);
+    if (canonicalPathname === ESSAY_MENTOR_PATH) return true;
+    if (!canonicalPathname.startsWith(`${ESSAY_MENTOR_PATH}/`)) return false;
+    return !canonicalPathname.startsWith(`${ESSAYS_SECTION_PATH}`);
+  }, [canonicalPathname]);
 
   const essayGuidesNavActive = useMemo(
     () => essaysSectionActive || essayMentorActive,
@@ -158,31 +416,37 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
 
   const scholarshipsActive = useMemo(
     () =>
-      pathname === '/scholarships' || pathname.startsWith('/scholarships/'),
-    [pathname]
+      canonicalPathname === '/scholarships' ||
+      canonicalPathname.startsWith('/scholarships/'),
+    [canonicalPathname]
   );
 
   const providersActive = useMemo(
-    () => pathname === '/providers' || pathname.startsWith('/providers/'),
-    [pathname]
+    () =>
+      canonicalPathname === '/providers' ||
+      canonicalPathname.startsWith('/providers/'),
+    [canonicalPathname]
   );
 
   const pricingActive = useMemo(
     () =>
-      pathname === '/subscription' || pathname.startsWith('/subscription/'),
-    [pathname]
+      canonicalPathname === '/subscription' ||
+      canonicalPathname.startsWith('/subscription/'),
+    [canonicalPathname]
   );
 
   const forOrganizationsActive = useMemo(
     () =>
-      pathname === '/for-organizations' ||
-      pathname.startsWith('/for-organizations/'),
-    [pathname]
+      canonicalPathname === '/for-organizations' ||
+      canonicalPathname.startsWith('/for-organizations/'),
+    [canonicalPathname]
   );
 
   const versusActive = useMemo(
-    () => pathname === VERSUS_HUB_PATH || pathname.startsWith(`${VERSUS_HUB_PATH}/`),
-    [pathname]
+    () =>
+      canonicalPathname === VERSUS_HUB_PATH ||
+      canonicalPathname.startsWith(`${VERSUS_HUB_PATH}/`),
+    [canonicalPathname]
   );
 
   const closeMenu = useCallback(() => setMenuOpen(false), []);
@@ -281,7 +545,7 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
             className="relative z-0 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-zinc-100 transition hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black lg:hidden md:h-11 md:w-11"
             aria-expanded={menuOpen}
             aria-controls={menuId}
-            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-label={menuOpen ? navCopy.closeMenu : navCopy.openMenu}
             onClick={() => setMenuOpen((o) => !o)}
           >
             {menuOpen ? (
@@ -291,7 +555,7 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
             )}
           </button>
           <Link
-            href="/"
+            href={pilotNavHref('/')}
             className={`${s.logo} relative z-[1] shrink-0`}
             aria-label="ScholarshipTop — Home"
           >
@@ -299,18 +563,18 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
           </Link>
           <nav
             className={s.inlineNav}
-            aria-label="Main navigation"
+            aria-label={navCopy.mainNavigation}
           >
             <div className="group/about relative">
               <Link
-                href="/about"
+                href={pilotNavHref('/about')}
                 className={clsx(
                   nav.dark,
                   aboutSectionActive && nav.darkActive
                 )}
                 aria-haspopup="menu"
               >
-                About
+                {navCopy.about}
               </Link>
               <div
                 className="pointer-events-none invisible absolute left-0 top-full z-[110] pt-2 opacity-0 transition-[opacity,visibility] duration-150 ease-out group-hover/about:pointer-events-auto group-hover/about:visible group-hover/about:opacity-100 group-focus-within/about:pointer-events-auto group-focus-within/about:visible group-focus-within/about:opacity-100"
@@ -318,14 +582,14 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
               >
                 <div
                   className="min-w-[240px] max-w-[280px] rounded-2xl border border-gray-200 bg-white p-3 shadow-lg"
-                  aria-label="About menu"
+                  aria-label={navCopy.aboutMenu}
                 >
-                  {ABOUT_SUBLINKS.map(({ href, label }) => {
-                    const active = sublinkActive(href, pathname);
+                  {aboutSublinks.map(({ href, label }) => {
+                    const active = sublinkActive(href, canonicalPathname);
                     return (
                       <Link
                         key={href}
-                        href={href}
+                        href={pilotNavHref(href)}
                         className={clsx(
                           nav.lightPanel,
                           active && nav.lightPanelActive
@@ -339,24 +603,24 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
               </div>
             </div>
             <Link
-              href={SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF}
+              href={findScholarshipsHref}
               className={clsx(nav.dark, scholarshipsActive && nav.darkActive)}
             >
-              Find Scholarships
+              {navCopy.findScholarships}
             </Link>
             <Link
-              href="/providers"
+              href={pilotNavHref('/providers')}
               className={clsx(nav.dark, providersActive && nav.darkActive)}
             >
-              Providers
+              {navCopy.providers}
             </Link>
             <div className="group/versus relative">
               <Link
-                href={VERSUS_HUB_PATH}
+                href={pilotNavHref(VERSUS_HUB_PATH)}
                 className={clsx(nav.dark, versusActive && nav.darkActive)}
                 aria-haspopup="menu"
               >
-                Compare
+                {navCopy.compare}
               </Link>
               <div
                 className="pointer-events-none invisible absolute left-0 top-full z-[110] pt-2 opacity-0 transition-[opacity,visibility] duration-150 ease-out group-hover/versus:pointer-events-auto group-hover/versus:visible group-hover/versus:opacity-100 group-focus-within/versus:pointer-events-auto group-focus-within/versus:visible group-focus-within/versus:opacity-100"
@@ -364,14 +628,14 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
               >
                 <div
                   className="min-w-[280px] max-w-[320px] rounded-2xl border border-gray-200 bg-white p-3 shadow-lg"
-                  aria-label="Compare menu"
+                  aria-label={navCopy.compareMenu}
                 >
-                  {VERSUS_SUBLINKS.map((item) => {
-                    const active = sublinkActive(item.href, pathname);
+                  {versusSublinks.map((item) => {
+                    const active = sublinkActive(item.href, canonicalPathname);
                     return (
                       <Link
                         key={item.href}
-                        href={item.href}
+                        href={pilotNavHref(item.href)}
                         className={clsx(
                           'flex flex-col gap-1 rounded-xl px-3 py-2.5 text-left transition-colors hover:bg-zinc-50',
                           active && 'bg-zinc-50'
@@ -390,27 +654,27 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
               </div>
             </div>
             <Link
-              href={RESOURCES_SECTION_PATH}
+              href={pilotNavHref(RESOURCES_SECTION_PATH)}
               className={clsx(
                 nav.dark,
                 resourcesSectionActive && nav.darkActive
               )}
             >
-              {RESOURCES_SECTION_LABEL}
+              {navCopy.resources}
             </Link>
             <div
               className="group/essays relative"
               onMouseLeave={() => setSuppressEssayGuidesFlyout(false)}
             >
               <Link
-                href={ESSAYS_SECTION_PATH}
+                href={pilotNavHref(ESSAYS_SECTION_PATH)}
                 className={clsx(
                   nav.dark,
                   essayGuidesNavActive && nav.darkActive
                 )}
                 aria-haspopup="menu"
               >
-                Essay Guides
+                {navCopy.essayGuides}
               </Link>
               <div
                 className={clsx(
@@ -424,9 +688,9 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
               >
                 <div
                   className="min-w-[min(100vw-2rem,18rem)] max-w-[22rem] rounded-2xl border border-gray-200 bg-white p-3 shadow-lg"
-                  aria-label="Essay Guides menu"
+                  aria-label={navCopy.essayMenu}
                 >
-                  {ESSAYS_GUIDE_SUBLINKS.map((item) => {
+                  {essayGuideSublinks.map((item) => {
                     const active =
                       item.href === ESSAYS_SECTION_PATH
                         ? essaysSectionActive
@@ -434,7 +698,7 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                     return (
                       <Link
                         key={item.href}
-                        href={item.href}
+                        href={pilotNavHref(item.href)}
                         onClick={() => setSuppressEssayGuidesFlyout(true)}
                         className={clsx(
                           'relative flex flex-col gap-1 rounded-xl px-3 py-2.5 text-left transition-colors',
@@ -478,15 +742,17 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                 </div>
               </div>
             </div>
-            <Link
-              href="/subscription"
-              className={clsx(
-                nav.dark,
-                pricingActive && nav.darkActive
-              )}
-            >
-              Pricing
-            </Link>
+            {locale === 'en' ? (
+              <Link
+                href="/subscription"
+                className={clsx(
+                  nav.dark,
+                  pricingActive && nav.darkActive
+                )}
+              >
+                {navCopy.pricing}
+              </Link>
+            ) : null}
           </nav>
         </div>
         <div className="flex min-w-0 shrink-0 items-center justify-end gap-2 sm:gap-3">
@@ -494,6 +760,12 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
             pathname={pathname}
             variant="header"
             initialNavbarAuth={initialNavbarAuth}
+            initialLocale={locale}
+          />
+          <LanguageSwitcher
+            variant="dropdown"
+            pathname={pathname || pilotNavHref('/')}
+            currentLocale={locale}
           />
         </div>
       </div>
@@ -504,19 +776,19 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
               <button
                 type="button"
                 className="fixed inset-0 z-[98] bg-black/65 backdrop-blur-[2px] lg:hidden"
-                aria-label="Close menu"
+                aria-label={navCopy.closeMenu}
                 onClick={closeMenu}
               />
               <div
                 id={menuId}
                 role="dialog"
                 aria-modal="true"
-                aria-label="Site menu"
+                aria-label={navCopy.siteMenu}
                 className="fixed left-0 top-0 z-[101] flex h-[100dvh] min-h-[100dvh] w-[min(100%,18rem)] max-w-full flex-col overflow-hidden border-r border-zinc-800 bg-zinc-950 shadow-2xl lg:hidden sm:w-[19rem]"
               >
                 <div className="flex shrink-0 items-center justify-between gap-2 border-b border-zinc-800 px-3 pb-3 pt-[max(0.75rem,env(safe-area-inset-top,0px))] md:px-4">
                   <Link
-                    href="/"
+                    href={pilotNavHref('/')}
                     onClick={closeMenu}
                     className={`${s.logo} min-w-0`}
                     aria-label="ScholarshipTop — Home"
@@ -526,7 +798,7 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                   <button
                     type="button"
                     className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-zinc-100 transition hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950 md:h-11 md:w-11"
-                    aria-label="Close menu"
+                    aria-label={navCopy.closeMenu}
                     onClick={closeMenu}
                   >
                     <X className="h-6 w-6" strokeWidth={2} aria-hidden />
@@ -534,7 +806,7 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                 </div>
             <nav
               className="flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto overscroll-contain p-3 pt-3 pb-[max(1rem,env(safe-area-inset-bottom,0px))]"
-              aria-label="Main"
+              aria-label={navCopy.mainNavigation}
             >
               <div className="w-full max-w-full">
                 <div
@@ -549,7 +821,7 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                   }}
                 >
                   <Link
-                    href="/about"
+                    href={pilotNavHref('/about')}
                     className={clsx(
                       nav.darkDrawer,
                       'flex min-w-0 flex-1 items-center gap-3 rounded-none rounded-l-lg py-3 pl-3 pr-2',
@@ -561,7 +833,7 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                       icon={Info}
                       active={aboutSectionActive}
                     />
-                    <span className="min-w-0">About</span>
+                    <span className="min-w-0">{navCopy.about}</span>
                   </Link>
                   <button
                     type="button"
@@ -570,7 +842,7 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                     aria-controls={`${menuId}-about-sub`}
                     id={`${menuId}-about-chevron`}
                     aria-label={
-                      aboutExpanded ? 'Collapse About submenu' : 'Expand About submenu'
+                      aboutExpanded ? navCopy.collapseAbout : navCopy.expandAbout
                     }
                     onClick={() => setAboutExpanded((o) => !o)}
                   >
@@ -598,12 +870,12 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                       role="group"
                       aria-label="Help and legal"
                     >
-                      {MOBILE_ABOUT_SUBLINKS.map(({ href, label }) => {
-                        const active = sublinkActive(href, pathname);
+                      {mobileAboutSublinks.map(({ href, label }) => {
+                        const active = sublinkActive(href, canonicalPathname);
                         return (
                           <Link
                             key={href}
-                            href={href}
+                            href={pilotNavHref(href)}
                             className={clsx(
                               nav.darkDrawerSub,
                               active && nav.darkDrawerSubActive
@@ -619,7 +891,7 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                 </div>
               </div>
               <Link
-                href={SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF}
+                href={findScholarshipsHref}
                 className={clsx(
                   nav.darkDrawer,
                   'flex w-full max-w-full items-center gap-3',
@@ -631,10 +903,10 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                   icon={Search}
                   active={scholarshipsActive}
                 />
-                <span className="min-w-0">Find Scholarships</span>
+                <span className="min-w-0">{navCopy.findScholarships}</span>
               </Link>
               <Link
-                href="/providers"
+                href={pilotNavHref('/providers')}
                 className={clsx(
                   nav.darkDrawer,
                   'flex w-full max-w-full items-center gap-3',
@@ -646,7 +918,7 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                   icon={Building2}
                   active={providersActive}
                 />
-                <span className="min-w-0">Providers</span>
+                <span className="min-w-0">{navCopy.providers}</span>
               </Link>
               <div className="w-full max-w-full">
                 <div
@@ -661,7 +933,7 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                   }}
                 >
                   <Link
-                    href={VERSUS_HUB_PATH}
+                    href={pilotNavHref(VERSUS_HUB_PATH)}
                     className={clsx(
                       nav.darkDrawer,
                       'flex min-w-0 flex-1 items-center gap-3 rounded-none rounded-l-lg py-3 pl-3 pr-2',
@@ -673,7 +945,7 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                       icon={GitCompareArrows}
                       active={versusActive}
                     />
-                    <span className="min-w-0">Compare</span>
+                    <span className="min-w-0">{navCopy.compare}</span>
                   </Link>
                   <button
                     type="button"
@@ -682,7 +954,7 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                     aria-controls={`${menuId}-versus-sub`}
                     id={`${menuId}-versus-chevron`}
                     aria-label={
-                      versusExpanded ? 'Collapse Compare submenu' : 'Expand Compare submenu'
+                      versusExpanded ? navCopy.collapseCompare : navCopy.expandCompare
                     }
                     onClick={() => setVersusExpanded((o) => !o)}
                   >
@@ -710,12 +982,12 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                       role="group"
                       aria-label="University vs University and State vs State"
                     >
-                      {VERSUS_SUBLINKS.map((item) => {
-                        const active = sublinkActive(item.href, pathname);
+                      {versusSublinks.map((item) => {
+                        const active = sublinkActive(item.href, canonicalPathname);
                         return (
                           <Link
                             key={item.href}
-                            href={item.href}
+                            href={pilotNavHref(item.href)}
                             className={clsx(
                               nav.darkDrawerSub,
                               'flex flex-col gap-0.5 py-2.5',
@@ -737,7 +1009,7 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                 </div>
               </div>
               <Link
-                href={RESOURCES_SECTION_PATH}
+                href={pilotNavHref(RESOURCES_SECTION_PATH)}
                 className={clsx(
                   nav.darkDrawer,
                   'flex w-full max-w-full items-center gap-3',
@@ -749,7 +1021,7 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                   icon={LayoutGrid}
                   active={resourcesSectionActive}
                 />
-                <span className="min-w-0">{RESOURCES_SECTION_LABEL}</span>
+                <span className="min-w-0">{navCopy.resources}</span>
               </Link>
               <div className="w-full max-w-full">
                 <div
@@ -764,7 +1036,7 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                   }}
                 >
                   <Link
-                    href={ESSAYS_SECTION_PATH}
+                    href={pilotNavHref(ESSAYS_SECTION_PATH)}
                     className={clsx(
                       nav.darkDrawer,
                       'flex min-w-0 flex-1 items-center gap-3 rounded-none rounded-l-lg py-3 pl-3 pr-2',
@@ -776,7 +1048,7 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                       icon={BookOpen}
                       active={essayGuidesNavActive}
                     />
-                    <span className="min-w-0">Essay Guides</span>
+                    <span className="min-w-0">{navCopy.essayGuides}</span>
                   </Link>
                   <button
                     type="button"
@@ -786,8 +1058,8 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                     id={`${menuId}-essays-chevron`}
                     aria-label={
                       essaysExpanded
-                        ? 'Collapse Essay Guides submenu'
-                        : 'Expand Essay Guides submenu'
+                        ? navCopy.collapseEssays
+                        : navCopy.expandEssays
                     }
                     onClick={() => setEssaysExpanded((o) => !o)}
                   >
@@ -803,7 +1075,7 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                 <div
                   id={`${menuId}-essays-sub`}
                   role="region"
-                  aria-label="Essay Guides links"
+                  aria-label={navCopy.essayGuidesLinks}
                   className={clsx(
                     'grid transition-[grid-template-rows] duration-200 ease-out',
                     essaysExpanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
@@ -813,9 +1085,9 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                     <div
                       className="mb-1 ml-3 mt-0.5 flex flex-col gap-1 border-l border-white/15 pl-3"
                       role="group"
-                      aria-label="Guides and AI mentor"
+                      aria-label={navCopy.guidesAndMentor}
                     >
-                      {ESSAYS_GUIDE_SUBLINKS.map((item) => {
+                      {essayGuideSublinks.map((item) => {
                         const active =
                           item.href === ESSAYS_SECTION_PATH
                             ? essaysSectionActive
@@ -823,7 +1095,7 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                         return (
                           <Link
                             key={item.href}
-                            href={item.href}
+                            href={pilotNavHref(item.href)}
                             className={clsx(
                               nav.darkDrawerSub,
                               'flex flex-col gap-0.5 py-2.5',
@@ -863,40 +1135,45 @@ export default function Navlinks({ initialNavbarAuth = null }: NavlinksProps) {
                 onClick={closeMenu}
               >
                 <MobileDrawerNavIcon icon={Sparkles} active={false} />
-                <span className="min-w-0">IQ Test</span>
+                <span className="min-w-0">{navCopy.iqTest}</span>
               </Link>
-              <Link
-                href="/subscription"
-                className={clsx(
-                  nav.darkDrawer,
-                  'flex w-full max-w-full items-center gap-3',
-                  pricingActive && nav.darkDrawerActive
-                )}
-                onClick={closeMenu}
-              >
-                <MobileDrawerNavIcon icon={BadgeDollarSign} active={pricingActive} />
-                <span className="min-w-0">Pricing</span>
-              </Link>
-              <Link
-                href="/for-organizations"
-                className={clsx(
-                  nav.darkDrawer,
-                  'flex w-full max-w-full items-center gap-3',
-                  forOrganizationsActive && nav.darkDrawerActive
-                )}
-                onClick={closeMenu}
-              >
-                <MobileDrawerNavIcon
-                  icon={Handshake}
-                  active={forOrganizationsActive}
-                />
-                <span className="min-w-0">For Organizations</span>
-              </Link>
+              <>
+                <Link
+                  href={subscriptionHref}
+                  className={clsx(
+                    nav.darkDrawer,
+                    'flex w-full max-w-full items-center gap-3',
+                    pricingActive && nav.darkDrawerActive
+                  )}
+                  onClick={closeMenu}
+                >
+                  <MobileDrawerNavIcon icon={BadgeDollarSign} active={pricingActive} />
+                  <span className="min-w-0">{navCopy.pricing}</span>
+                </Link>
+                {locale === 'en' ? (
+                  <Link
+                    href="/for-organizations"
+                    className={clsx(
+                      nav.darkDrawer,
+                      'flex w-full max-w-full items-center gap-3',
+                      forOrganizationsActive && nav.darkDrawerActive
+                    )}
+                    onClick={closeMenu}
+                  >
+                    <MobileDrawerNavIcon
+                      icon={Handshake}
+                      active={forOrganizationsActive}
+                    />
+                    <span className="min-w-0">{navCopy.forOrganizations}</span>
+                  </Link>
+                ) : null}
+              </>
               <NavbarUserSlot
                 pathname={pathname}
                 variant="drawer"
                 onNavigate={closeMenu}
                 initialNavbarAuth={initialNavbarAuth}
+                initialLocale={locale}
               />
             </nav>
               </div>

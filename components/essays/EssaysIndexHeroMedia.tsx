@@ -18,6 +18,8 @@ const ESSAYS_LOCAL_VIDEO_SHELL = `relative ${CARD_COVER_ASPECT} ${mediaShellClas
 type EssaysIndexHeroMediaProps = {
   /** When set, renders YouTube iframe instead of <video>. */
   youtubeVideoId?: string | null;
+  /** Localized label for the AI Mentor CTA pill under the video. */
+  ctaLabel?: string;
 };
 
 function YoutubeEmbed({ videoId }: { videoId: string }) {
@@ -35,7 +37,10 @@ function YoutubeEmbed({ videoId }: { videoId: string }) {
   );
 }
 
-export function EssaysIndexHeroMedia({ youtubeVideoId }: EssaysIndexHeroMediaProps) {
+export function EssaysIndexHeroMedia({
+  youtubeVideoId,
+  ctaLabel
+}: EssaysIndexHeroMediaProps) {
   const id = youtubeVideoId?.trim();
   const media = id ? (
     <YoutubeEmbed videoId={id} />
@@ -49,7 +54,7 @@ export function EssaysIndexHeroMedia({ youtubeVideoId }: EssaysIndexHeroMediaPro
   return (
     <div className="flex w-full flex-col gap-2 sm:gap-2.5">
       {media}
-      <AiMentorCtaLink />
+      <AiMentorCtaLink label={ctaLabel} />
     </div>
   );
 }

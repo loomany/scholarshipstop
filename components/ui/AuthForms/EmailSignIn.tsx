@@ -5,31 +5,44 @@ import Link from 'next/link';
 
 import { SITE_INPUT_FOCUS_CLASS } from '@/lib/constants/siteInputFocus';
 
-import { SCHOLARSHIP_ONBOARDING_SIGNUP_ENTRY_HREF } from '@/lib/onboarding/onboardingResume';
+import { localizedScholarshipOnboardingSignupEntryHref } from '@/lib/onboarding/onboardingResume';
 import {
   handleRequest,
   signInWithEmailClient
 } from '@/utils/auth-helpers/client';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { getAuthUiCopy } from '@/lib/i18n/authUiCopy';
+import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
 
-// Define prop type with allowPassword boolean
 interface EmailSignInProps {
   allowPassword: boolean;
   redirectMethod: string;
   disableButton?: boolean;
+  locale?: LocalizedUiLocale;
+  passwordSignInHref?: string;
+  signUpHref?: string;
 }
 
 export default function EmailSignIn({
   allowPassword,
   redirectMethod,
-  disableButton
+  disableButton,
+  locale = 'en',
+  passwordSignInHref,
+  signUpHref
 }: EmailSignInProps) {
   const router = redirectMethod === 'client' ? useRouter() : null;
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const ui = getAuthUiCopy(locale);
+  const localePasswordHref =
+    passwordSignInHref ??
+    (locale === 'en' ? '/signin/password_signin' : `/${locale}/signin/password_signin`);
+  const localeSignUpHref =
+    signUpHref ?? localizedScholarshipOnboardingSignupEntryHref(locale);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    setIsSubmitting(true); // Disable the button while the request is being handled
+    setIsSubmitting(true);
     await handleRequest(e, signInWithEmailClient, router);
     setIsSubmitting(false);
   };
@@ -43,10 +56,10 @@ export default function EmailSignIn({
       >
         <div className="grid gap-2">
           <div className="grid gap-1">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">{ui.emailLabel}</label>
             <input
               id="email"
-              placeholder="name@example.com"
+              placeholder={ui.emailPlaceholder}
               type="email"
               name="email"
               autoCapitalize="none"
@@ -62,23 +75,20 @@ export default function EmailSignIn({
             loading={isSubmitting}
             disabled={disableButton}
           >
-            Sign in
+            {ui.signInButton}
           </Button>
         </div>
       </form>
       {allowPassword && (
         <>
           <p>
-            <Link href="/signin/password_signin" className="font-light text-sm">
-              Sign in with email and password
+            <Link href={localePasswordHref} className="font-light text-sm">
+              {ui.signInWithEmailPassword}
             </Link>
           </p>
           <p>
-            <Link
-              href={SCHOLARSHIP_ONBOARDING_SIGNUP_ENTRY_HREF}
-              className="font-light text-sm"
-            >
-              Don&apos;t have an account? Sign up
+            <Link href={localeSignUpHref} className="font-light text-sm">
+              {ui.noAccountQuestion} {ui.signUpAction}
             </Link>
           </p>
         </>
