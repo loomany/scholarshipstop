@@ -1,0 +1,693 @@
+{
+  "generatedAt": "2026-05-21T19:22:57.231Z",
+  "packId": "ai-resources-2026-05-21",
+  "source": "ai-resources-2026-05-21",
+  "category": "ai",
+  "topicCount": 30,
+  "dryRun": true,
+  "openAiGenerationExecuted": false,
+  "dbWritesExecuted": false,
+  "supabaseQueried": true,
+  "taxonomy": {
+    "aiCategoryPresent": true,
+    "aiCategoryLast": true,
+    "categoryOrder": [
+      "finding-scholarships",
+      "applications",
+      "eligibility",
+      "international-students",
+      "deadlines-planning",
+      "essays-writing",
+      "financial-aid-funding",
+      "student-types",
+      "strategy-tips",
+      "scams-safety",
+      "success-stories",
+      "ai"
+    ]
+  },
+  "classification": {
+    "overridesForPack": 30,
+    "missingOrWrong": []
+  },
+  "targetTables": [
+    "content_topics",
+    "content_posts",
+    "content-images"
+  ],
+  "plannedHubFilterUrl": "https://scholarshiptop.com/resources?cat=ai",
+  "plannedUrls": [
+    "https://scholarshiptop.com/resources/best-scholarship-websites",
+    "https://scholarshiptop.com/resources/best-scholarship-search-engines-international-students",
+    "https://scholarshiptop.com/resources/scholarshiptop-vs-fastweb",
+    "https://scholarshiptop.com/resources/scholarshiptop-vs-scholarships-com",
+    "https://scholarshiptop.com/resources/best-free-scholarship-websites-without-spam",
+    "https://scholarshiptop.com/resources/best-scholarship-websites-for-graduate-students",
+    "https://scholarshiptop.com/resources/best-scholarship-websites-international-students-usa",
+    "https://scholarshiptop.com/resources/best-sites-to-find-fully-funded-scholarships",
+    "https://scholarshiptop.com/resources/best-scholarship-websites-by-category",
+    "https://scholarshiptop.com/resources/how-to-choose-legit-scholarship-website",
+    "https://scholarshiptop.com/resources/how-ai-can-help-find-scholarships",
+    "https://scholarshiptop.com/resources/can-chatgpt-help-find-scholarships",
+    "https://scholarshiptop.com/resources/best-ai-tools-for-finding-scholarships",
+    "https://scholarshiptop.com/resources/how-to-use-chatgpt-to-search-for-scholarships",
+    "https://scholarshiptop.com/resources/ai-scholarship-search-vs-traditional-databases",
+    "https://scholarshiptop.com/resources/best-scholarship-platforms-for-high-school-students",
+    "https://scholarshiptop.com/resources/best-scholarship-platforms-for-college-students",
+    "https://scholarshiptop.com/resources/best-scholarship-platforms-for-transfer-students",
+    "https://scholarshiptop.com/resources/best-scholarship-sites-for-women-stem-medical-law",
+    "https://scholarshiptop.com/resources/best-scholarship-sites-outside-united-states",
+    "https://scholarshiptop.com/resources/how-to-compare-scholarship-websites",
+    "https://scholarshiptop.com/resources/fake-scholarship-website-red-flags",
+    "https://scholarshiptop.com/resources/scholarship-search-checklist",
+    "https://scholarshiptop.com/resources/find-scholarships-by-country-major-profile",
+    "https://scholarshiptop.com/resources/best-scholarship-websites-financial-aid-fast",
+    "https://scholarshiptop.com/resources/how-scholarship-matching-works",
+    "https://scholarshiptop.com/resources/scholarship-search-engines-vs-provider-websites",
+    "https://scholarshiptop.com/resources/how-to-use-scholarshiptop-to-find-scholarships",
+    "https://scholarshiptop.com/resources/best-scholarship-resources-international-graduate-students",
+    "https://scholarshiptop.com/resources/trustworthy-scholarship-website"
+  ],
+  "articles": [
+    {
+      "title": "Best Scholarship Websites for Students in 2026",
+      "slug": "best-scholarship-websites",
+      "category": "AI",
+      "subcategoryId": "ai-scholarship-discovery",
+      "primaryKeyword": "best scholarship websites",
+      "plannedUrl": "https://scholarshiptop.com/resources/best-scholarship-websites",
+      "classificationOverride": {
+        "categoryId": "ai",
+        "subcategoryId": "ai-scholarship-discovery"
+      },
+      "sitemapEligibleWhenPublished": true,
+      "sitemapEligibleNow": false
+    },
+    {
+      "title": "Best Scholarship Search Engines for International Students",
+      "slug": "best-scholarship-search-engines-international-students",
+      "category": "AI",
+      "subcategoryId": "ai-scholarship-discovery",
+      "primaryKeyword": "best scholarship search engines for international students",
+      "plannedUrl": "https://scholarshiptop.com/resources/best-scholarship-search-engines-international-students",
+      "classificationOverride": {
+        "categoryId": "ai",
+        "subcategoryId": "ai-scholarship-discovery"
+      },
+      "sitemapEligibleWhenPublished": true,
+      "sitemapEligibleNow": false
+    },
+    {
+      "title": "ScholarshipTop vs Fastweb: Which Scholarship Platform Is Better?",
+      "slug": "scholarshiptop-vs-fastweb",
+      "category": "AI",
+      "subcategoryId": "scholarship-platform-comparisons",
+      "primaryKeyword": "ScholarshipTop vs Fastweb",
+      "plannedUrl": "https://scholarshiptop.com/resources/scholarshiptop-vs-fastweb",
+      "classificationOverride": {
+        "categoryId": "ai",
+        "subcategoryId": "scholarship-platform-comparisons"
+      },
+      "sitemapEligibleWhenPublished": true,
+      "sitemapEligibleNow": false
+    },
+    {
+      "title": "ScholarshipTop vs Scholarships.com: Which Site Should Students Use?",
+      "slug": "scholarshiptop-vs-scholarships-com",
+      "category": "AI",
+      "subcategoryId": "scholarship-platform-comparisons",
+      "primaryKeyword": "ScholarshipTop vs Scholarships.com",
+      "plannedUrl": "https://scholarshiptop.com/resources/scholarshiptop-vs-scholarships-com",
+      "classificationOverride": {
+        "categoryId": "ai",
+        "subcategoryId": "scholarship-platform-comparisons"
+      },
+      "sitemapEligibleWhenPublished": true,
+      "sitemapEligibleNow": false
+    },
+    {
+      "title": "Best Free Scholarship Websites Without Spam",
+      "slug": "best-free-scholarship-websites-without-spam",
+      "category": "AI",
+      "subcategoryId": "scholarship-search-safety",
+      "primaryKeyword": "free scholarship websites",
+      "plannedUrl": "https://scholarshiptop.com/resources/best-free-scholarship-websites-without-spam",
+      "classificationOverride": {
+        "categoryId": "ai",
+        "subcategoryId": "scholarship-search-safety"
+      },
+      "sitemapEligibleWhenPublished": true,
+      "sitemapEligibleNow": false
+    },
+    {
+      "title": "Best Scholarship Websites for Graduate Students",
+      "slug": "best-scholarship-websites-for-graduate-students",
+      "category": "AI",
+      "subcategoryId": "ai-scholarship-discovery",
+      "primaryKeyword": "scholarship websites for graduate students",
+      "plannedUrl": "https://scholarshiptop.com/resources/best-scholarship-websites-for-graduate-students",
+      "classificationOverride": {
+        "categoryId": "ai",
+        "subcategoryId": "ai-scholarship-discovery"
+      },
+      "sitemapEligibleWhenPublished": true,
+      "sitemapEligibleNow": false
+    },
+    {
+      "title": "Best Scholarship Websites for International Students in the USA",
+      "slug": "best-scholarship-websites-international-students-usa",
+      "category": "AI",
+      "subcategoryId": "ai-scholarship-discovery",
+      "primaryKeyword": "scholarships for international students in USA",
+      "plannedUrl": "https://scholarshiptop.com/resources/best-scholarship-websites-international-students-usa",
+      "classificationOverride": {
+        "categoryId": "ai",
+        "subcategoryId": "ai-scholarship-discovery"
+      },
+      "sitemapEligibleWhenPublished": true,
+      "sitemapEligibleNow": false
+    },
+    {
+      "title": "Best Sites to Find Fully Funded Scholarships",
+      "slug": "best-sites-to-find-fully-funded-scholarships",
+      "category": "AI",
+      "subcategoryId": "ai-scholarship-discovery",
+      "primaryKeyword": "fully funded scholarship websites",
+      "plannedUrl": "https://scholarshiptop.com/resources/best-sites-to-find-fully-funded-scholarships",
+      "classificationOverride": {
+        "categoryId": "ai",
+        "subcategoryId": "ai-scholarship-discovery"
+      },
+      "sitemapEligibleWhenPublished": true,
+      "sitemapEligibleNow": false
+    },
+    {
+      "title": "Best Scholarship Websites by Category: STEM, Arts, Medical, Law",
+      "slug": "best-scholarship-websites-by-category",
+      "category": "AI",
+      "subcategoryId": "ai-scholarship-discovery",
+      "primaryKeyword": "scholarship websites by category",
+      "plannedUrl": "https://scholarshiptop.com/resources/best-scholarship-websites-by-category",
+      "classificationOverride": {
+        "categoryId": "ai",
+        "subcategoryId": "ai-scholarship-discovery"
+      },
+      "sitemapEligibleWhenPublished": true,
+      "sitemapEligibleNow": false
+    },
+    {
+      "title": "How to Choose a Legit Scholarship Website",
+      "slug": "how-to-choose-legit-scholarship-website",
+      "category": "AI",
+      "subcategoryId": "scholarship-search-safety",
+      "primaryKeyword": "legit scholarship website",
+      "plannedUrl": "https://scholarshiptop.com/resources/how-to-choose-legit-scholarship-website",
+      "classificationOverride": {
+        "categoryId": "ai",
+        "subcategoryId": "scholarship-search-safety"
+      },
+      "sitemapEligibleWhenPublished": true,
+      "sitemapEligibleNow": false
+    },
+    {
+      "title": "How AI Can Help Students Find Scholarships",
+      "slug": "how-ai-can-help-find-scholarships",
+      "category": "AI",
+      "subcategoryId": "ai-scholarship-discovery",
+      "primaryKeyword": "AI scholarship search",
+      "plannedUrl": "https://scholarshiptop.com/resources/how-ai-can-help-find-scholarships",
+      "classificationOverride": {
+        "categoryId": "ai",
+        "subcategoryId": "ai-scholarship-discovery"
+      },
+      "sitemapEligibleWhenPublished": true,
+      "sitemapEligibleNow": false
+    },
+    {
+      "title": "Can ChatGPT Help You Find Scholarships?",
+      "slug": "can-chatgpt-help-find-scholarships",
+      "category": "AI",
+      "subcategoryId": "ai-scholarship-discovery",
+      "primaryKeyword": "can ChatGPT find scholarships",
+      "plannedUrl": "https://scholarshiptop.com/resources/can-chatgpt-help-find-scholarships",
+      "classificationOverride": {
+        "categoryId": "ai",
+        "subcategoryId": "ai-scholarship-discovery"
+      },
+      "sitemapEligibleWhenPublished": true,
+      "sitemapEligibleNow": false
+    },
+    {
+      "title": "Best AI Tools for Finding Scholarships",
+      "slug": "best-ai-tools-for-finding-scholarships",
+      "category": "AI",
+      "subcategoryId": "ai-scholarship-discovery",
+      "primaryKeyword": "AI tools for scholarships",
+      "plannedUrl": "https://scholarshiptop.com/resources/best-ai-tools-for-finding-scholarships",
+      "classificationOverride": {
+        "categoryId": "ai",
+        "subcategoryId": "ai-scholarship-discovery"
+      },
+      "sitemapEligibleWhenPublished": true,
+      "sitemapEligibleNow": false
+    },
+    {
+      "title": "How to Use ChatGPT to Search for Scholarships Safely",
+      "slug": "how-to-use-chatgpt-to-search-for-scholarships",
+      "category": "AI",
+      "subcategoryId": "ai-scholarship-discovery",
+      "primaryKeyword": "use ChatGPT to find scholarships",
+      "plannedUrl": "https://scholarshiptop.com/resources/how-to-use-chatgpt-to-search-for-scholarships",
+      "classificationOverride": {
+        "categoryId": "ai",
+        "subcategoryId": "ai-scholarship-discovery"
+      },
+      "sitemapEligibleWhenPublished": true,
+      "sitemapEligibleNow": false
+    },
+    {
+      "title": "AI Scholarship Search vs Traditional Scholarship Databases",
+      "slug": "ai-scholarship-search-vs-traditional-databases",
+      "category": "AI",
+      "subcategoryId": "ai-scholarship-discovery",
+      "primaryKeyword": "AI scholarship search vs scholarship databases",
+      "plannedUrl": "https://scholarshiptop.com/resources/ai-scholarship-search-vs-traditional-databases",
+      "classificationOverride": {
+        "categoryId": "ai",
+        "subcategoryId": "ai-scholarship-discovery"
+      },
+      "sitemapEligibleWhenPublished": true,
+      "sitemapEligibleNow": false
+    },
+    {
+      "title": "Best Scholarship Platforms for High School Students",
+      "slug": "best-scholarship-platforms-for-high-school-students",
+      "category": "AI",
+      "subcategoryId": "ai-scholarship-discovery",
+      "primaryKeyword": "scholarship platforms for high school students",
+      "plannedUrl": "https://scholarshiptop.com/resources/best-scholarship-platforms-for-high-school-students",
+      "classificationOverride": {
+        "categoryId": "ai",
+        "subcategoryId": "ai-scholarship-discovery"
+      },
+      "sitemapEligibleWhenPublished": true,
+      "sitemapEligibleNow": false
+    },
+    {
+      "title": "Best Scholarship Platforms for College Students",
+      "slug": "best-scholarship-platforms-for-college-students",
+      "category": "AI",
+      "subcategoryId": "ai-scholarship-discovery",
+      "primaryKeyword": "scholarship platforms for college students",
+      "plannedUrl": "https://scholarshiptop.com/resources/best-scholarship-platforms-for-college-students",
+      "classificationOverride": {
+        "categoryId": "ai",
+        "subcategoryId": "ai-scholarship-discovery"
+      },
+      "sitemapEligibleWhenPublished": true,
+      "sitemapEligibleNow": false
+    },
+    {
+      "title": "Best Scholarship Platforms for Transfer Students",
+      "slug": "best-scholarship-platforms-for-transfer-students",
+      "category": "AI",
+      "subcategoryId": "ai-scholarship-discovery",
+      "primaryKeyword": "scholarships for transfer students",
+      "plannedUrl": "https://scholarshiptop.com/resources/best-scholarship-platforms-for-transfer-students",
+      "classificationOverride": {
+        "categoryId": "ai",
+        "subcategoryId": "ai-scholarship-discovery"
+      },
+      "sitemapEligibleWhenPublished": true,
+      "sitemapEligibleNow": false
+    },
+    {
+      "title": "Best Scholarship Sites for Women, STEM, Medical, and Law Students",
+      "slug": "best-scholarship-sites-for-women-stem-medical-law",
+      "category": "AI",
+      "subcategoryId": "ai-scholarship-discovery",
+      "primaryKeyword": "best scholarship sites for STEM students",
+      "plannedUrl": "https://scholarshiptop.com/resources/best-scholarship-sites-for-women-stem-medical-law",
+      "classificationOverride": {
+        "categoryId": "ai",
+        "subcategoryId": "ai-scholarship-discovery"
+      },
+      "sitemapEligibleWhenPublished": true,
+      "sitemapEligibleNow": false
+    },
+    {
+      "title": "Best Scholarship Sites for Students Outside the United States",
+      "slug": "best-scholarship-sites-outside-united-states",
+      "category": "AI",
+      "subcategoryId": "ai-scholarship-discovery",
+      "primaryKeyword": "scholarships for students outside the US",
+      "plannedUrl": "https://scholarshiptop.com/resources/best-scholarship-sites-outside-united-states",
+      "classificationOverride": {
+        "categoryId": "ai",
+        "subcategoryId": "ai-scholarship-discovery"
+      },
+      "sitemapEligibleWhenPublished": true,
+      "sitemapEligibleNow": false
+    },
+    {
+      "title": "How to Compare Scholarship Websites Before You Sign Up",
+      "slug": "how-to-compare-scholarship-websites",
+      "category": "AI",
+      "subcategoryId": "scholarship-platform-comparisons",
+      "primaryKeyword": "compare scholarship websites",
+      "plannedUrl": "https://scholarshiptop.com/resources/how-to-compare-scholarship-websites",
+      "classificationOverride": {
+        "categoryId": "ai",
+        "subcategoryId": "scholarship-platform-comparisons"
+      },
+      "sitemapEligibleWhenPublished": true,
+      "sitemapEligibleNow": false
+    },
+    {
+      "title": "Red Flags of Fake Scholarship Websites",
+      "slug": "fake-scholarship-website-red-flags",
+      "category": "AI",
+      "subcategoryId": "scholarship-search-safety",
+      "primaryKeyword": "fake scholarship websites",
+      "plannedUrl": "https://scholarshiptop.com/resources/fake-scholarship-website-red-flags",
+      "classificationOverride": {
+        "categoryId": "ai",
+        "subcategoryId": "scholarship-search-safety"
+      },
+      "sitemapEligibleWhenPublished": true,
+      "sitemapEligibleNow": false
+    },
+    {
+      "title": "Scholarship Search Checklist: What Students Should Check First",
+      "slug": "scholarship-search-checklist",
+      "category": "AI",
+      "subcategoryId": "scholarship-search-safety",
+      "primaryKeyword": "scholarship search checklist",
+      "plannedUrl": "https://scholarshiptop.com/resources/scholarship-search-checklist",
+      "classificationOverride": {
+        "categoryId": "ai",
+        "subcategoryId": "scholarship-search-safety"
+      },
+      "sitemapEligibleWhenPublished": true,
+      "sitemapEligibleNow": false
+    },
+    {
+      "title": "How to Find Scholarships by Country, Major, and Student Profile",
+      "slug": "find-scholarships-by-country-major-profile",
+      "category": "AI",
+      "subcategoryId": "ai-scholarship-discovery",
+      "primaryKeyword": "find scholarships by country and major",
+      "plannedUrl": "https://scholarshiptop.com/resources/find-scholarships-by-country-major-profile",
+      "classificationOverride": {
+        "categoryId": "ai",
+        "subcategoryId": "ai-scholarship-discovery"
+      },
+      "sitemapEligibleWhenPublished": true,
+      "sitemapEligibleNow": false
+    },
+    {
+      "title": "Best Scholarship Websites for Students Who Need Financial Aid Fast",
+      "slug": "best-scholarship-websites-financial-aid-fast",
+      "category": "AI",
+      "subcategoryId": "ai-scholarship-discovery",
+      "primaryKeyword": "scholarships for financial aid fast",
+      "plannedUrl": "https://scholarshiptop.com/resources/best-scholarship-websites-financial-aid-fast",
+      "classificationOverride": {
+        "categoryId": "ai",
+        "subcategoryId": "ai-scholarship-discovery"
+      },
+      "sitemapEligibleWhenPublished": true,
+      "sitemapEligibleNow": false
+    },
+    {
+      "title": "How Scholarship Matching Works",
+      "slug": "how-scholarship-matching-works",
+      "category": "AI",
+      "subcategoryId": "ai-scholarship-discovery",
+      "primaryKeyword": "scholarship matching",
+      "plannedUrl": "https://scholarshiptop.com/resources/how-scholarship-matching-works",
+      "classificationOverride": {
+        "categoryId": "ai",
+        "subcategoryId": "ai-scholarship-discovery"
+      },
+      "sitemapEligibleWhenPublished": true,
+      "sitemapEligibleNow": false
+    },
+    {
+      "title": "Scholarship Search Engines vs Provider Websites",
+      "slug": "scholarship-search-engines-vs-provider-websites",
+      "category": "AI",
+      "subcategoryId": "ai-scholarship-discovery",
+      "primaryKeyword": "scholarship search engines vs provider websites",
+      "plannedUrl": "https://scholarshiptop.com/resources/scholarship-search-engines-vs-provider-websites",
+      "classificationOverride": {
+        "categoryId": "ai",
+        "subcategoryId": "ai-scholarship-discovery"
+      },
+      "sitemapEligibleWhenPublished": true,
+      "sitemapEligibleNow": false
+    },
+    {
+      "title": "How to Use ScholarshipTop to Find Relevant Scholarships",
+      "slug": "how-to-use-scholarshiptop-to-find-scholarships",
+      "category": "AI",
+      "subcategoryId": "ai-scholarship-discovery",
+      "primaryKeyword": "how to use ScholarshipTop",
+      "plannedUrl": "https://scholarshiptop.com/resources/how-to-use-scholarshiptop-to-find-scholarships",
+      "classificationOverride": {
+        "categoryId": "ai",
+        "subcategoryId": "ai-scholarship-discovery"
+      },
+      "sitemapEligibleWhenPublished": true,
+      "sitemapEligibleNow": false
+    },
+    {
+      "title": "Best Scholarship Resources for International Graduate Students",
+      "slug": "best-scholarship-resources-international-graduate-students",
+      "category": "AI",
+      "subcategoryId": "ai-scholarship-discovery",
+      "primaryKeyword": "scholarships for international graduate students",
+      "plannedUrl": "https://scholarshiptop.com/resources/best-scholarship-resources-international-graduate-students",
+      "classificationOverride": {
+        "categoryId": "ai",
+        "subcategoryId": "ai-scholarship-discovery"
+      },
+      "sitemapEligibleWhenPublished": true,
+      "sitemapEligibleNow": false
+    },
+    {
+      "title": "What Makes a Scholarship Website Trustworthy?",
+      "slug": "trustworthy-scholarship-website",
+      "category": "AI",
+      "subcategoryId": "scholarship-search-safety",
+      "primaryKeyword": "trustworthy scholarship website",
+      "plannedUrl": "https://scholarshiptop.com/resources/trustworthy-scholarship-website",
+      "classificationOverride": {
+        "categoryId": "ai",
+        "subcategoryId": "scholarship-search-safety"
+      },
+      "sitemapEligibleWhenPublished": true,
+      "sitemapEligibleNow": false
+    }
+  ],
+  "slugStatus": {
+    "best-scholarship-websites": {
+      "contentPostExists": false,
+      "contentPostStatus": null,
+      "queuedTopicExists": false,
+      "relatedSlugNote": null
+    },
+    "best-scholarship-search-engines-international-students": {
+      "contentPostExists": false,
+      "contentPostStatus": null,
+      "queuedTopicExists": false,
+      "relatedSlugNote": null
+    },
+    "scholarshiptop-vs-fastweb": {
+      "contentPostExists": false,
+      "contentPostStatus": null,
+      "queuedTopicExists": false,
+      "relatedSlugNote": "DB may contain scholarshiptop-vs-fastweb-international-students (different slug)"
+    },
+    "scholarshiptop-vs-scholarships-com": {
+      "contentPostExists": false,
+      "contentPostStatus": null,
+      "queuedTopicExists": false,
+      "relatedSlugNote": null
+    },
+    "best-free-scholarship-websites-without-spam": {
+      "contentPostExists": false,
+      "contentPostStatus": null,
+      "queuedTopicExists": false,
+      "relatedSlugNote": null
+    },
+    "best-scholarship-websites-for-graduate-students": {
+      "contentPostExists": false,
+      "contentPostStatus": null,
+      "queuedTopicExists": false,
+      "relatedSlugNote": null
+    },
+    "best-scholarship-websites-international-students-usa": {
+      "contentPostExists": false,
+      "contentPostStatus": null,
+      "queuedTopicExists": false,
+      "relatedSlugNote": null
+    },
+    "best-sites-to-find-fully-funded-scholarships": {
+      "contentPostExists": false,
+      "contentPostStatus": null,
+      "queuedTopicExists": false,
+      "relatedSlugNote": null
+    },
+    "best-scholarship-websites-by-category": {
+      "contentPostExists": false,
+      "contentPostStatus": null,
+      "queuedTopicExists": false,
+      "relatedSlugNote": null
+    },
+    "how-to-choose-legit-scholarship-website": {
+      "contentPostExists": false,
+      "contentPostStatus": null,
+      "queuedTopicExists": false,
+      "relatedSlugNote": null
+    },
+    "how-ai-can-help-find-scholarships": {
+      "contentPostExists": false,
+      "contentPostStatus": null,
+      "queuedTopicExists": false,
+      "relatedSlugNote": null
+    },
+    "can-chatgpt-help-find-scholarships": {
+      "contentPostExists": false,
+      "contentPostStatus": null,
+      "queuedTopicExists": false,
+      "relatedSlugNote": null
+    },
+    "best-ai-tools-for-finding-scholarships": {
+      "contentPostExists": false,
+      "contentPostStatus": null,
+      "queuedTopicExists": false,
+      "relatedSlugNote": null
+    },
+    "how-to-use-chatgpt-to-search-for-scholarships": {
+      "contentPostExists": false,
+      "contentPostStatus": null,
+      "queuedTopicExists": false,
+      "relatedSlugNote": null
+    },
+    "ai-scholarship-search-vs-traditional-databases": {
+      "contentPostExists": false,
+      "contentPostStatus": null,
+      "queuedTopicExists": false,
+      "relatedSlugNote": null
+    },
+    "best-scholarship-platforms-for-high-school-students": {
+      "contentPostExists": false,
+      "contentPostStatus": null,
+      "queuedTopicExists": false,
+      "relatedSlugNote": null
+    },
+    "best-scholarship-platforms-for-college-students": {
+      "contentPostExists": false,
+      "contentPostStatus": null,
+      "queuedTopicExists": false,
+      "relatedSlugNote": null
+    },
+    "best-scholarship-platforms-for-transfer-students": {
+      "contentPostExists": false,
+      "contentPostStatus": null,
+      "queuedTopicExists": false,
+      "relatedSlugNote": null
+    },
+    "best-scholarship-sites-for-women-stem-medical-law": {
+      "contentPostExists": false,
+      "contentPostStatus": null,
+      "queuedTopicExists": false,
+      "relatedSlugNote": null
+    },
+    "best-scholarship-sites-outside-united-states": {
+      "contentPostExists": false,
+      "contentPostStatus": null,
+      "queuedTopicExists": false,
+      "relatedSlugNote": null
+    },
+    "how-to-compare-scholarship-websites": {
+      "contentPostExists": false,
+      "contentPostStatus": null,
+      "queuedTopicExists": false,
+      "relatedSlugNote": null
+    },
+    "fake-scholarship-website-red-flags": {
+      "contentPostExists": false,
+      "contentPostStatus": null,
+      "queuedTopicExists": false,
+      "relatedSlugNote": null
+    },
+    "scholarship-search-checklist": {
+      "contentPostExists": false,
+      "contentPostStatus": null,
+      "queuedTopicExists": false,
+      "relatedSlugNote": null
+    },
+    "find-scholarships-by-country-major-profile": {
+      "contentPostExists": false,
+      "contentPostStatus": null,
+      "queuedTopicExists": false,
+      "relatedSlugNote": null
+    },
+    "best-scholarship-websites-financial-aid-fast": {
+      "contentPostExists": false,
+      "contentPostStatus": null,
+      "queuedTopicExists": false,
+      "relatedSlugNote": null
+    },
+    "how-scholarship-matching-works": {
+      "contentPostExists": false,
+      "contentPostStatus": null,
+      "queuedTopicExists": false,
+      "relatedSlugNote": null
+    },
+    "scholarship-search-engines-vs-provider-websites": {
+      "contentPostExists": false,
+      "contentPostStatus": null,
+      "queuedTopicExists": false,
+      "relatedSlugNote": null
+    },
+    "how-to-use-scholarshiptop-to-find-scholarships": {
+      "contentPostExists": false,
+      "contentPostStatus": null,
+      "queuedTopicExists": false,
+      "relatedSlugNote": null
+    },
+    "best-scholarship-resources-international-graduate-students": {
+      "contentPostExists": false,
+      "contentPostStatus": null,
+      "queuedTopicExists": false,
+      "relatedSlugNote": null
+    },
+    "trustworthy-scholarship-website": {
+      "contentPostExists": false,
+      "contentPostStatus": null,
+      "queuedTopicExists": false,
+      "relatedSlugNote": null
+    }
+  },
+  "costEstimate": {
+    "estimatedInputTokens": 125250,
+    "estimatedOutputTokens": 200250,
+    "estimatedUsdMin": 1.7,
+    "estimatedUsdMax": 2.29,
+    "note": "Heuristic only; no OpenAI calls in dry-run",
+    "modelAssumptions": {
+      "seo": "gpt-4.1-mini",
+      "article": "gpt-4.1",
+      "expansionFactor": 0.35
+    }
+  },
+  "generationCommandAfterApproval": [
+    "CONTENT_HUB_ALLOW_PRODUCTION_WRITES=1 CONTENT_HUB_SOURCE=ai-resources-2026-05-21 npx tsx scripts/seed-ai-resources-topics.ts --write",
+    "cd services/content-hub && npm run build",
+    "CONTENT_HUB_ALLOW_PRODUCTION_WRITES=1 CONTENT_HUB_BATCH_LIMIT=30 CONTENT_HUB_SOURCE=ai-resources-2026-05-21 CONTENT_HUB_POSTS_PER_RUN=30 CONTENT_HUB_AUTO_PUBLISH=0 npm run content:run-once"
+  ],
+  "publishCommandAfterApproval": "npx dotenv-cli -e .env.local -- npx tsx scripts/publish-unpublished-content.ts --dry-run"
+}

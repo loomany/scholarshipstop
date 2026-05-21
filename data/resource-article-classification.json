@@ -10,5 +10,125 @@
   "combine-multiple-scholarships": {
     "categoryId": "financial-aid-funding",
     "subcategoryId": "stacking-scholarships"
+  },
+  "best-scholarship-websites": {
+    "categoryId": "ai",
+    "subcategoryId": "ai-scholarship-discovery"
+  },
+  "best-scholarship-search-engines-international-students": {
+    "categoryId": "ai",
+    "subcategoryId": "ai-scholarship-discovery"
+  },
+  "scholarshiptop-vs-fastweb": {
+    "categoryId": "ai",
+    "subcategoryId": "scholarship-platform-comparisons"
+  },
+  "scholarshiptop-vs-scholarships-com": {
+    "categoryId": "ai",
+    "subcategoryId": "scholarship-platform-comparisons"
+  },
+  "best-free-scholarship-websites-without-spam": {
+    "categoryId": "ai",
+    "subcategoryId": "scholarship-search-safety"
+  },
+  "best-scholarship-websites-for-graduate-students": {
+    "categoryId": "ai",
+    "subcategoryId": "ai-scholarship-discovery"
+  },
+  "best-scholarship-websites-international-students-usa": {
+    "categoryId": "ai",
+    "subcategoryId": "ai-scholarship-discovery"
+  },
+  "best-sites-to-find-fully-funded-scholarships": {
+    "categoryId": "ai",
+    "subcategoryId": "ai-scholarship-discovery"
+  },
+  "best-scholarship-websites-by-category": {
+    "categoryId": "ai",
+    "subcategoryId": "ai-scholarship-discovery"
+  },
+  "how-to-choose-legit-scholarship-website": {
+    "categoryId": "ai",
+    "subcategoryId": "scholarship-search-safety"
+  },
+  "how-ai-can-help-find-scholarships": {
+    "categoryId": "ai",
+    "subcategoryId": "ai-scholarship-discovery"
+  },
+  "can-chatgpt-help-find-scholarships": {
+    "categoryId": "ai",
+    "subcategoryId": "ai-scholarship-discovery"
+  },
+  "best-ai-tools-for-finding-scholarships": {
+    "categoryId": "ai",
+    "subcategoryId": "ai-scholarship-discovery"
+  },
+  "how-to-use-chatgpt-to-search-for-scholarships": {
+    "categoryId": "ai",
+    "subcategoryId": "ai-scholarship-discovery"
+  },
+  "ai-scholarship-search-vs-traditional-databases": {
+    "categoryId": "ai",
+    "subcategoryId": "ai-scholarship-discovery"
+  },
+  "best-scholarship-platforms-for-high-school-students": {
+    "categoryId": "ai",
+    "subcategoryId": "ai-scholarship-discovery"
+  },
+  "best-scholarship-platforms-for-college-students": {
+    "categoryId": "ai",
+    "subcategoryId": "ai-scholarship-discovery"
+  },
+  "best-scholarship-platforms-for-transfer-students": {
+    "categoryId": "ai",
+    "subcategoryId": "ai-scholarship-discovery"
+  },
+  "best-scholarship-sites-for-women-stem-medical-law": {
+    "categoryId": "ai",
+    "subcategoryId": "ai-scholarship-discovery"
+  },
+  "best-scholarship-sites-outside-united-states": {
+    "categoryId": "ai",
+    "subcategoryId": "ai-scholarship-discovery"
+  },
+  "how-to-compare-scholarship-websites": {
+    "categoryId": "ai",
+    "subcategoryId": "scholarship-platform-comparisons"
+  },
+  "fake-scholarship-website-red-flags": {
+    "categoryId": "ai",
+    "subcategoryId": "scholarship-search-safety"
+  },
+  "scholarship-search-checklist": {
+    "categoryId": "ai",
+    "subcategoryId": "scholarship-search-safety"
+  },
+  "find-scholarships-by-country-major-profile": {
+    "categoryId": "ai",
+    "subcategoryId": "ai-scholarship-discovery"
+  },
+  "best-scholarship-websites-financial-aid-fast": {
+    "categoryId": "ai",
+    "subcategoryId": "ai-scholarship-discovery"
+  },
+  "how-scholarship-matching-works": {
+    "categoryId": "ai",
+    "subcategoryId": "ai-scholarship-discovery"
+  },
+  "scholarship-search-engines-vs-provider-websites": {
+    "categoryId": "ai",
+    "subcategoryId": "ai-scholarship-discovery"
+  },
+  "how-to-use-scholarshiptop-to-find-scholarships": {
+    "categoryId": "ai",
+    "subcategoryId": "ai-scholarship-discovery"
+  },
+  "best-scholarship-resources-international-graduate-students": {
+    "categoryId": "ai",
+    "subcategoryId": "ai-scholarship-discovery"
+  },
+  "trustworthy-scholarship-website": {
+    "categoryId": "ai",
+    "subcategoryId": "scholarship-search-safety"
   }
 }

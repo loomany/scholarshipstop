@@ -4,22 +4,32 @@ import { env } from "../config/env.js";
 import { logger } from "./logger.js";
 import { addWatermark, WATERMARK_TEXT } from "./image/addWatermark.js";
 import { COVER_ASPECT_RATIO_DECIMAL, COVER_HEIGHT, COVER_WIDTH } from "./imageConfig.js";
+import { parseAiPackTopicString } from "./aiResourcesPack.js";
 export const supabase = createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
     auth: { persistSession: false }
 });
 const MAX_SIZE_BYTES = 500 * 1024;
 const JPEG_QUALITIES = [82, 78, 74];
 export async function pickQueuedTopic() {
+    const expectedSource = process.env.CONTENT_HUB_SOURCE?.trim();
     const { data, error } = await supabase
         .from("content_topics")
         .select("*")
         .eq("status", "queued")
         .order("priority", { ascending: true })
-        .limit(1)
-        .maybeSingle();
+        .limit(expectedSource ? 50 : 1);
     if (error)
         throw error;
-    return data;
+    const rows = (data ?? []);
+    if (!expectedSource) {
+        return rows[0] ?? null;
+    }
+    for (const row of rows) {
+        const parsed = parseAiPackTopicString(row.topic);
+        if (parsed?.packId === expectedSource)
+            return row;
+    }
+    return null;
 }
 function truncateNullable(value, maxLength) {
     const clean = value?.trim();

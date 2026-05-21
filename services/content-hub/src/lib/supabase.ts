@@ -5,6 +5,7 @@ import { logger } from "./logger.js";
 import { addWatermark, WATERMARK_TEXT } from "./image/addWatermark.js";
 import { COVER_ASPECT_RATIO_DECIMAL, COVER_HEIGHT, COVER_WIDTH } from "./imageConfig.js";
 import type { ContentTopic, RelatedArticle } from "./types.js";
+import { parseAiPackTopicString } from "./aiResourcesPack.js";
 
 export const supabase = createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
   auth: { persistSession: false }
@@ -53,16 +54,25 @@ export interface TopicStatusMetadata {
 }
 
 export async function pickQueuedTopic(): Promise<ContentTopic | null> {
+  const expectedSource = process.env.CONTENT_HUB_SOURCE?.trim();
   const { data, error } = await supabase
     .from("content_topics")
     .select("*")
     .eq("status", "queued")
     .order("priority", { ascending: true })
-    .limit(1)
-    .maybeSingle();
+    .limit(expectedSource ? 50 : 1);
 
   if (error) throw error;
-  return data as ContentTopic | null;
+  const rows = (data ?? []) as ContentTopic[];
+  if (!expectedSource) {
+    return rows[0] ?? null;
+  }
+
+  for (const row of rows) {
+    const parsed = parseAiPackTopicString(row.topic);
+    if (parsed?.packId === expectedSource) return row;
+  }
+  return null;
 }
 
 function truncateNullable(value: string | null | undefined, maxLength: number): string | null {

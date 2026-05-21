@@ -13,6 +13,15 @@ function resolveModel(modelFromEnv) {
     const candidate = (modelFromEnv ?? "").trim();
     return candidate.length > 0 ? candidate : "gpt-4.1-mini";
 }
+/** gpt-5 / o-series only allow default temperature; omit explicit value. */
+function modelSupportsCustomTemperature(model) {
+    const id = model.trim().toLowerCase();
+    if (/^gpt-5/i.test(id))
+        return false;
+    if (/^o\d/i.test(id))
+        return false;
+    return true;
+}
 function logAiCall(taskName, model) {
     logger.info(`[AI] Calling ${model} for ${taskName}...`);
 }
@@ -41,7 +50,7 @@ async function chatCompletionText(params) {
         const completion = await client.chat.completions.create({
             model,
             messages,
-            temperature: 0.45,
+            ...(modelSupportsCustomTemperature(model) ? { temperature: 0.45 } : {}),
             max_completion_tokens: env.OPENAI_MAX_COMPLETION_TOKENS,
             ...(jsonMode ? { response_format: { type: "json_object" } } : {})
         }, { timeout: env.OPENAI_REQUEST_TIMEOUT_MS });
@@ -306,8 +315,8 @@ async function autoFixMissingH1(article) {
         body_markdown: fixedMarkdown
     };
 }
-export async function generateSeoBrief(topic) {
-    const raw = await generateJson(buildSeoBriefPrompt(topic), "seo_brief_generation", resolveModel(env.OPENAI_MODEL_STANDARD));
+export async function generateSeoBrief(topic, promptOverlay = "") {
+    const raw = await generateJson(buildSeoBriefPrompt(topic, promptOverlay), "seo_brief_generation", resolveModel(env.OPENAI_MODEL_STANDARD));
     try {
         const parsed = seoBriefSchema.parse(raw);
         return {
@@ -325,12 +334,12 @@ export async function generateSeoBrief(topic) {
         throw e;
     }
 }
-export async function generateArticle(topic, seoBrief, context, options) {
+export async function generateArticle(topic, seoBrief, context, options, promptOverlay = "") {
     const minWords = getEffectiveMinWords();
     const minCharsNoSpaces = getEffectiveMinCharsNoSpaces();
     const standardModel = resolveModel(env.OPENAI_MODEL_STANDARD);
     const smartModel = resolveModel(env.OPENAI_MODEL_SMART);
-    const firstRaw = await generateJson(buildArticlePrompt(topic, seoBrief, context, options), "article_generation", standardModel);
+    const firstRaw = await generateJson(buildArticlePrompt(topic, seoBrief, context, options, promptOverlay), "article_generation", standardModel);
     const firstParsed = articleSchema.parse(firstRaw);
     const firstArticleBase = {
         ...firstParsed,

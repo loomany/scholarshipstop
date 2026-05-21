@@ -18,7 +18,8 @@ export type ResourceCategoryId =
   | 'student-types'
   | 'strategy-tips'
   | 'scams-safety'
-  | 'success-stories';
+  | 'success-stories'
+  | 'ai';
 
 export type ResourceSubcategory = {
   id: string;
@@ -239,6 +240,24 @@ export const RESOURCE_CATEGORIES: ResourceCategory[] = [
         label: 'What successful applicants do'
       }
     ]
+  },
+  {
+    id: 'ai',
+    label: 'AI',
+    subcategories: [
+      {
+        id: 'ai-scholarship-discovery',
+        label: 'AI & scholarship discovery'
+      },
+      {
+        id: 'scholarship-platform-comparisons',
+        label: 'Scholarship platform comparisons'
+      },
+      {
+        id: 'scholarship-search-safety',
+        label: 'Trust, safety & search checklists'
+      }
+    ]
   }
 ];
 
@@ -316,6 +335,22 @@ const SLUG_HINTS: { test: RegExp; subId: string }[] = [
   {
     test: /international|f1|visa|non[-\s]?us citizen|overseas/i,
     subId: 'scholarships-for-international-students'
+  },
+  {
+    test: /\b(chatgpt|gpt|ai tools?|ai scholarship)\b/i,
+    subId: 'ai-scholarship-discovery'
+  },
+  {
+    test: /scholarshiptop vs|vs fastweb|vs scholarships\.com|compare scholarship (websites|platforms)/i,
+    subId: 'scholarship-platform-comparisons'
+  },
+  {
+    test: /red flags|fake scholarship|trustworthy|legit scholarship|search checklist/i,
+    subId: 'scholarship-search-safety'
+  },
+  {
+    test: /best scholarship (websites|platforms|sites|search engines|resources)/i,
+    subId: 'ai-scholarship-discovery'
   }
 ];
 

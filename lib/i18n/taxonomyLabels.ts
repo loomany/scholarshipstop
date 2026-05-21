@@ -286,7 +286,8 @@ export type ResourceCategoryId =
   | 'student-types'
   | 'strategy-tips'
   | 'scams-safety'
-  | 'success-stories';
+  | 'success-stories'
+  | 'ai';
 
 const RESOURCE_CATEGORY_ES: Record<ResourceCategoryId, string> = {
   'finding-scholarships': 'Encontrar becas',
@@ -299,7 +300,8 @@ const RESOURCE_CATEGORY_ES: Record<ResourceCategoryId, string> = {
   'student-types': 'Tipos de estudiante',
   'strategy-tips': 'Estrategia y consejos',
   'scams-safety': 'Estafas y seguridad',
-  'success-stories': 'Historias de éxito'
+  'success-stories': 'Historias de éxito',
+  ai: 'IA'
 };
 
 const RESOURCE_CATEGORY_FR: Record<ResourceCategoryId, string> = {
@@ -313,7 +315,8 @@ const RESOURCE_CATEGORY_FR: Record<ResourceCategoryId, string> = {
   'student-types': 'Types d’étudiants',
   'strategy-tips': 'Stratégie et conseils',
   'scams-safety': 'Arnaques et sécurité',
-  'success-stories': 'Réussites'
+  'success-stories': 'Réussites',
+  ai: 'IA'
 };
 
 export function getLocalizedResourceCategoryLabel(

@@ -1,4 +1,5 @@
 import slugify from "slugify";
+import { randomUUID } from "node:crypto";
 import { env } from "../config/env.js";
 import { FalTimeoutError, generateImage } from "../lib/fal.js";
 import { markdownToHtml } from "../lib/html.js";
@@ -15,6 +16,33 @@ import { triggerArticleMatching } from "../lib/articleMatchingNotifier.js";
 import { isImagePromptTooSimilar, pickCompositionVariant, pickAlternativeImageStyle, pickArticleType, pickImageStyle, pickIntroStyle, selectScene } from "../lib/variation.js";
 import { countWords } from "../lib/markdown.js";
 import { runSeoPublishGuardWarnOnlyLocal } from "../seo/prePublishSeoGuard.js";
+import { assertProductionWritesAllowed, buildAiPackPromptOverlay, parseAiPackTopicString, resolveExpectedPackSource, topicMatchesPackSource } from "../lib/aiResourcesPack.js";
+const JOB_SERVICE = "Контент Хаб";
+const JOB_NAME = "content:run-once";
+const JOB_RUN_ID = randomUUID();
+const JOB_STARTED_AT_MS = Date.now();
+const jobCounters = { processed: 0, success: 0, failed: 0, skipped: 0 };
+function escapeMarkerValue(value) {
+    return value.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+}
+function markerBase() {
+    return `service="${escapeMarkerValue(JOB_SERVICE)}" job="${escapeMarkerValue(JOB_NAME)}" runId="${escapeMarkerValue(JOB_RUN_ID)}"`;
+}
+function emitJobStart() {
+    console.log(`JOB_START ${markerBase()} timestamp="${new Date(JOB_STARTED_AT_MS).toISOString()}"`);
+}
+function emitJobProgress() {
+    console.log(`JOB_PROGRESS ${markerBase()} processed=${jobCounters.processed} success=${jobCounters.success} failed=${jobCounters.failed} skipped=${jobCounters.skipped}`);
+}
+function emitJobDone() {
+    const durationMs = Math.max(0, Date.now() - JOB_STARTED_AT_MS);
+    console.log(`JOB_DONE ${markerBase()} durationMs=${durationMs} processed=${jobCounters.processed} success=${jobCounters.success} failed=${jobCounters.failed} skipped=${jobCounters.skipped} exit=0`);
+}
+function emitJobFailed(error) {
+    const durationMs = Math.max(0, Date.now() - JOB_STARTED_AT_MS);
+    const message = error instanceof Error ? error.message : String(error);
+    console.error(`JOB_FAILED ${markerBase()} durationMs=${durationMs} processed=${jobCounters.processed} success=${jobCounters.success} failed=${jobCounters.failed} skipped=${jobCounters.skipped} error="${escapeMarkerValue(message)}"`);
+}
 class RequeueTopicError extends Error {
     constructor(message) {
         super(message);
@@ -370,6 +398,17 @@ async function processOneTopic() {
         logger.info("no queued topics");
         return "empty";
     }
+    if (!topicMatchesPackSource(topic.topic)) {
+        logger.warn("skipping topic: CONTENT_HUB_SOURCE mismatch", {
+            topicId: topic.id,
+            expected: resolveExpectedPackSource()
+        });
+        return "empty";
+    }
+    const packMeta = parseAiPackTopicString(topic.topic);
+    if (packMeta) {
+        assertProductionWritesAllowed();
+    }
     logger.info("topic picked", { topicId: topic.id, topic: topic.topic });
     await updateTopicStatus(topic.id, "processing");
     try {
@@ -380,13 +419,31 @@ async function processOneTopic() {
         const relatedArticlesEnabled = resolveLinkingFlag(env.CONTENT_HUB_ENABLE_RELATED_ARTICLES, ["ENABLE_RELATED_ARTICLES_LINKING"]);
         const externalLinksEnabled = resolveLinkingFlag(env.CONTENT_HUB_ENABLE_EXTERNAL_LINKS, ["ENABLE_EXTERNAL_LINKS"]);
         stage = "generating_seo";
-        const seoBrief = await generateSeoBrief(topic.topic);
+        const promptOverlay = packMeta ? buildAiPackPromptOverlay(packMeta) : "";
+        const displayTopic = packMeta?.title?.trim() || topic.topic;
+        const seoBrief = await generateSeoBrief(displayTopic, promptOverlay);
+        if (packMeta) {
+            seoBrief.slug = packMeta.slug;
+            if (packMeta.keyword)
+                seoBrief.primary_keyword = packMeta.keyword;
+        }
         logger.info("seo generated", { topicId: topic.id, slug: seoBrief.slug });
         stage = "generating_article";
         const context = { scholarships: [], faqPages, relatedArticles: publishedArticles };
-        const articleType = pickArticleType(topic.topic);
+        const packArticleType = packMeta?.articleType;
+        const articleType = packArticleType &&
+            ["list", "guide", "strategy", "comparison", "niche", "deep_dive"].includes(packArticleType)
+            ? packArticleType
+            : pickArticleType(topic.topic);
         const introStyle = pickIntroStyle();
-        const article = await generateArticle(topic.topic, seoBrief, context, { articleType, introStyle, allowExternalLinks: externalLinksEnabled });
+        const article = await generateArticle(displayTopic, seoBrief, context, {
+            articleType,
+            introStyle,
+            allowExternalLinks: externalLinksEnabled
+        }, promptOverlay);
+        if (packMeta) {
+            article.slug = packMeta.slug;
+        }
         logger.info("article generated", { topicId: topic.id, slug: article.slug });
         const initialExternalAuthorityLinksCount = countExternalAuthorityLinks(article.body_markdown);
         logger.info(`[Content] OpenAI included ${initialExternalAuthorityLinksCount} external authority links in the article body.`, {
@@ -1188,6 +1245,7 @@ async function processOneTopic() {
     }
 }
 async function main() {
+    emitJobStart();
     if (env.RUN_REPROCESS_ON_START) {
         await runStartupReprocess();
     }
@@ -1198,29 +1256,61 @@ async function main() {
                 result = await processOneTopic();
             }
             catch (error) {
+                jobCounters.failed += 1;
+                emitJobProgress();
                 logUnknownError("[Cycle] uncaught loop error", error);
                 continue;
             }
             if (result === "empty") {
+                jobCounters.skipped += 1;
+                emitJobProgress();
                 logger.info("[Cycle] Queue fully drained. Exiting continuous run.");
                 break;
             }
             if (result === "published") {
+                jobCounters.processed += 1;
+                jobCounters.success += 1;
+                emitJobProgress();
                 logger.info("[Cycle] Article published successfully. Continuing immediately without pause.");
             }
             else {
+                jobCounters.processed += 1;
+                jobCounters.skipped += 1;
+                emitJobProgress();
                 logger.info("[Cycle] Publication failed/deferred. Retrying next topic immediately...", { result });
             }
         }
+        emitJobDone();
         return;
     }
-    for (let i = 0; i < env.CONTENT_HUB_POSTS_PER_RUN; i += 1) {
+    const batchLimitRaw = process.env.CONTENT_HUB_BATCH_LIMIT?.trim();
+    const batchLimit = batchLimitRaw ? Number.parseInt(batchLimitRaw, 10) : 0;
+    const runCount = resolveExpectedPackSource() && Number.isFinite(batchLimit) && batchLimit > 0
+        ? Math.min(env.CONTENT_HUB_POSTS_PER_RUN, batchLimit)
+        : env.CONTENT_HUB_POSTS_PER_RUN;
+    for (let i = 0; i < runCount; i += 1) {
         const result = await processOneTopic();
-        if (result === "empty")
+        if (result === "empty") {
+            jobCounters.skipped += 1;
+            emitJobProgress();
             break;
+        }
+        if (result === "published") {
+            jobCounters.processed += 1;
+            jobCounters.success += 1;
+            emitJobProgress();
+            continue;
+        }
+        jobCounters.processed += 1;
+        jobCounters.skipped += 1;
+        emitJobProgress();
     }
+    emitJobDone();
 }
 main().catch((error) => {
+    jobCounters.failed += 1;
+    emitJobProgress();
+    emitJobFailed(error);
     logUnknownError("fatal", error);
-    process.exitCode = 1;
+    process.exit(1);
 });

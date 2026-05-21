@@ -39,6 +39,14 @@ import type { AnchorSuggestion } from "../lib/types.js";
 import type { TopicFailureClass, UploadedImageResult } from "../lib/supabase.js";
 import { countWords } from "../lib/markdown.js";
 import { runSeoPublishGuardWarnOnlyLocal } from "../seo/prePublishSeoGuard.js";
+import {
+  assertProductionWritesAllowed,
+  buildAiPackPromptOverlay,
+  parseAiPackTopicString,
+  resolveExpectedPackSource,
+  topicMatchesPackSource
+} from "../lib/aiResourcesPack.js";
+import type { ArticleType } from "../lib/variation.js";
 
 type JobCounters = {
   processed: number;
@@ -512,6 +520,19 @@ async function processOneTopic(): Promise<"published" | "deferred" | "empty"> {
     return "empty";
   }
 
+  if (!topicMatchesPackSource(topic.topic)) {
+    logger.warn("skipping topic: CONTENT_HUB_SOURCE mismatch", {
+      topicId: topic.id,
+      expected: resolveExpectedPackSource()
+    });
+    return "empty";
+  }
+
+  const packMeta = parseAiPackTopicString(topic.topic);
+  if (packMeta) {
+    assertProductionWritesAllowed();
+  }
+
   logger.info("topic picked", { topicId: topic.id, topic: topic.topic });
   await updateTopicStatus(topic.id, "processing");
 
@@ -524,14 +545,32 @@ async function processOneTopic(): Promise<"published" | "deferred" | "empty"> {
     const externalLinksEnabled = resolveLinkingFlag(env.CONTENT_HUB_ENABLE_EXTERNAL_LINKS, ["ENABLE_EXTERNAL_LINKS"]);
 
     stage = "generating_seo";
-    const seoBrief = await generateSeoBrief(topic.topic);
+    const promptOverlay = packMeta ? buildAiPackPromptOverlay(packMeta) : "";
+    const displayTopic = packMeta?.title?.trim() || topic.topic;
+    const seoBrief = await generateSeoBrief(displayTopic, promptOverlay);
+    if (packMeta) {
+      seoBrief.slug = packMeta.slug;
+      if (packMeta.keyword) seoBrief.primary_keyword = packMeta.keyword;
+    }
     logger.info("seo generated", { topicId: topic.id, slug: seoBrief.slug });
 
     stage = "generating_article";
     const context = { scholarships: [], faqPages, relatedArticles: publishedArticles };
-    const articleType = pickArticleType(topic.topic);
+    const packArticleType = packMeta?.articleType as ArticleType | undefined;
+    const articleType =
+      packArticleType &&
+      ["list", "guide", "strategy", "comparison", "niche", "deep_dive"].includes(packArticleType)
+        ? packArticleType
+        : pickArticleType(topic.topic);
     const introStyle = pickIntroStyle();
-    const article = await generateArticle(topic.topic, seoBrief, context, { articleType, introStyle, allowExternalLinks: externalLinksEnabled });
+    const article = await generateArticle(displayTopic, seoBrief, context, {
+      articleType,
+      introStyle,
+      allowExternalLinks: externalLinksEnabled
+    }, promptOverlay);
+    if (packMeta) {
+      article.slug = packMeta.slug;
+    }
     logger.info("article generated", { topicId: topic.id, slug: article.slug });
     const initialExternalAuthorityLinksCount = countExternalAuthorityLinks(article.body_markdown);
     logger.info(`[Content] OpenAI included ${initialExternalAuthorityLinksCount} external authority links in the article body.`, {
@@ -1397,7 +1436,14 @@ async function main() {
     return;
   }
 
-  for (let i = 0; i < env.CONTENT_HUB_POSTS_PER_RUN; i += 1) {
+  const batchLimitRaw = process.env.CONTENT_HUB_BATCH_LIMIT?.trim();
+  const batchLimit = batchLimitRaw ? Number.parseInt(batchLimitRaw, 10) : 0;
+  const runCount =
+    resolveExpectedPackSource() && Number.isFinite(batchLimit) && batchLimit > 0
+      ? Math.min(env.CONTENT_HUB_POSTS_PER_RUN, batchLimit)
+      : env.CONTENT_HUB_POSTS_PER_RUN;
+
+  for (let i = 0; i < runCount; i += 1) {
     const result = await processOneTopic();
     if (result === "empty") {
       jobCounters.skipped += 1;
