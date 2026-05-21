@@ -8,6 +8,7 @@ import {
 import {
   getIqLocaleFromPathname,
   iqInternalRewritePath,
+  isIqProductBrowserPathname,
   parseIqPublicPathname,
   pathnameHasForbiddenIqEnPrefix,
   stripIqLocalePrefix
@@ -62,4 +63,23 @@ test('pathnameHasForbiddenIqEnPrefix detects /en paths', () => {
 test('getIqLocaleFromPathname reads locale from pathname', () => {
   assert.equal(getIqLocaleFromPathname('/fr/help'), 'fr');
   assert.equal(stripIqLocalePrefix('/fr/help'), '/help');
+});
+
+test('main site home is not IQ product chrome', () => {
+  assert.equal(
+    isIqProductBrowserPathname('/', { onIqSubdomain: false }),
+    false
+  );
+  assert.equal(
+    isIqProductBrowserPathname('/es', { onIqSubdomain: false }),
+    false
+  );
+  assert.equal(
+    isIqProductBrowserPathname('/iq', { onIqSubdomain: false }),
+    true
+  );
+  assert.equal(
+    isIqProductBrowserPathname('/iq/assessment', { onIqSubdomain: false }),
+    true
+  );
 });

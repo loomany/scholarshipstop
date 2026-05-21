@@ -62,9 +62,14 @@ export function iqProductPathFromBrowserPathname(
 ): string {
   const withoutLocale = stripIqLocalePrefix(pathname);
   if (!options.onIqSubdomain) {
-    if (withoutLocale === '/' || withoutLocale === '') return '/iq';
-    if (withoutLocale.startsWith('/iq')) return normalizeIqPathname(withoutLocale);
-    return `/iq${withoutLocale === '/' ? '' : withoutLocale}`;
+    const normalized = normalizeIqPathname(pathname);
+    if (normalized === '/iq' || normalized.startsWith('/iq/')) {
+      return normalized;
+    }
+    if (withoutLocale.startsWith('/iq')) {
+      return normalizeIqPathname(withoutLocale);
+    }
+    return withoutLocale;
   }
   return withoutLocale;
 }
@@ -97,24 +102,9 @@ export function isIqProductBrowserPathname(
   pathname: string,
   options: { onIqSubdomain: boolean }
 ): boolean {
-  const productPath = iqProductPathFromBrowserPathname(pathname, options);
   if (!options.onIqSubdomain) {
-    return (
-      productPath === '/iq' ||
-      productPath === '/iq/about' ||
-      productPath === '/iq/help' ||
-      productPath === '/iq/privacy-policy' ||
-      productPath === '/iq/terms' ||
-      productPath === '/iq/refund-policy' ||
-      productPath === '/iq/faq' ||
-      productPath === '/iq/assessment' ||
-      productPath.startsWith('/iq/report/') ||
-      productPath.startsWith('/iq/scholarship-match') ||
-      productPath === '/iq/provider-research' ||
-      productPath === '/iq/college-fit' ||
-      productPath === '/iq/essay-prep' ||
-      productPath === '/iq/deadline-strategy'
-    );
+    const normalized = normalizeIqPathname(pathname);
+    return normalized === '/iq' || normalized.startsWith('/iq/');
   }
   const stripped = stripIqLocalePrefix(pathname);
   return (
