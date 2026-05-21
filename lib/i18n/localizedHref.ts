@@ -13,6 +13,7 @@ import {
   SUBSCRIPTION_CANONICAL_PATH
 } from '@/lib/i18n/subscriptionPageCopy';
 import { getLocalizedPilotPage } from '@/lib/i18n/staticTranslations';
+import { isResourcePilotSlug } from '@/lib/i18n/resourcePilot/resourcePilotSlugs';
 import { categoryIsPromotedSeo } from '@/lib/scholarships/categorySeoAllowlist';
 
 export type LocalizedUiLocale = Stage2PilotLocale | 'en';
@@ -176,6 +177,23 @@ function hubTabSegment(canonicalPath: string): ScholarshipHubPathTabInput | null
   return match[1] as ScholarshipHubPathTabInput;
 }
 
+/** Stage 4D resource_article pilot (`/resources/{slug}` with published ES/FR). */
+function resourcePilotArticleSlug(canonicalPath: string): string | null {
+  const match = canonicalPath.match(/^\/resources\/([^/]+)$/);
+  if (!match) return null;
+  const slug = match[1]!.trim().toLowerCase();
+  return isResourcePilotSlug(slug) ? slug : null;
+}
+
+export function localizedResourcePilotArticleHref(
+  locale: LocalizedUiLocale,
+  slug: string
+): string {
+  const path = `/resources/${slug}`;
+  if (locale === 'en') return normalizeCanonicalPath(path);
+  return normalizeCanonicalPath(`/${locale}${path}`);
+}
+
 /** Promoted L1 category SEO (`/scholarships/category/{id}`) with DB pilot translations. */
 function categorySeoSlug(canonicalPath: string): string | null {
   const match = canonicalPath.match(/^\/scholarships\/category\/([^/]+)$/);
@@ -227,11 +245,12 @@ export function getStage2LanguageSwitcherItems({
   const canonicalPath = stage2CanonicalPathFromPathname(pathname);
   const hubTab = hubTabSegment(canonicalPath);
   const categorySlug = categorySeoSlug(canonicalPath);
+  const resourceSlug = resourcePilotArticleSlug(canonicalPath);
   const isSubscription = isLocalizedSubscriptionPath(canonicalPath);
   const isPilot =
     isStage2PilotCanonicalPath(canonicalPath) ||
     isLocalizedCompareSubhubPath(canonicalPath);
-  if (!isPilot && !hubTab && !isSubscription && !categorySlug) {
+  if (!isPilot && !hubTab && !isSubscription && !categorySlug && !resourceSlug) {
     return [];
   }
 
@@ -258,6 +277,20 @@ export function getStage2LanguageSwitcherItems({
         locale,
         label: STAGE2_PILOT_LANGUAGE_LABELS[locale],
         href: localizedCategorySeoHref(locale, categorySlug),
+        current: locale === activeLocale
+      }))
+      .filter(
+        (item) => !item.href.includes('/en/') && !item.href.startsWith('/en')
+      );
+  }
+
+  if (resourceSlug) {
+    const locales = ['en', ...STAGE2_PILOT_LOCALES] as const;
+    return locales
+      .map((locale) => ({
+        locale,
+        label: STAGE2_PILOT_LANGUAGE_LABELS[locale],
+        href: localizedResourcePilotArticleHref(locale, resourceSlug),
         current: locale === activeLocale
       }))
       .filter(

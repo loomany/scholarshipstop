@@ -33,6 +33,8 @@ import { isCompareHubSeoGenerationCanonicalPath } from '@/lib/seo/sitemapProgram
 import { getProviderSeoQualityPolicy } from '@/lib/seo/providerSeoQualityPolicy';
 import { getCompareSeoQualityPolicy } from '@/lib/seo/compareSeoQualityPolicy';
 import { listPublishedCategoryTranslations } from '@/lib/i18n/categoryPilot/listPublishedCategoryTranslations';
+import { listPublishedResourceArticleTranslations } from '@/lib/i18n/resourcePilot/listPublishedResourceArticleTranslations';
+import { isResourcePilotSlug } from '@/lib/i18n/resourcePilot/resourcePilotSlugs';
 import { buildLocalizedSitemapEntry } from '@/lib/i18n/localizedSitemaps';
 import {
   listLocalizedPilotPages,
@@ -660,7 +662,8 @@ export const buildSitemapDocuments = cache(async (): Promise<SitemapDocument[]> 
       'single-or-indexed'
     ),
     ...localizedPilotDocs,
-    ...(await buildLocalizedCategorySitemapDocuments())
+    ...(await buildLocalizedCategorySitemapDocuments()),
+    ...(await buildLocalizedResourceArticleSitemapDocuments())
   ];
 });
 
@@ -731,6 +734,62 @@ async function buildLocalizedCategorySitemapDocuments(): Promise<SitemapDocument
     const entries = byLocale.get(locale);
     if (!entries?.length) continue;
     docs.push(makeSitemapDocument('categories', `locale-${locale}-categories`, entries));
+  }
+  return docs;
+}
+
+async function buildLocalizedResourceArticleSitemapDocuments(): Promise<
+  SitemapDocument[]
+> {
+  const rows = await listPublishedResourceArticleTranslations();
+  if (rows.length === 0) return [];
+
+  const supabase = createPublicClient();
+  if (!supabase) return [];
+
+  const ids = [...new Set(rows.map((r) => r.sourceId))];
+  const { data: posts, error } = await supabase
+    .from('content_posts')
+    .select('id, slug')
+    .in('id', ids)
+    .eq('status', 'published');
+
+  if (error || !posts?.length) return [];
+
+  const slugById = new Map(
+    posts.map((p) => [String(p.id), String(p.slug ?? '').trim().toLowerCase()])
+  );
+
+  const byLocale = new Map<'es' | 'fr', MetadataRoute.Sitemap>();
+  for (const row of rows) {
+    const slug = slugById.get(row.sourceId);
+    if (!slug || !isResourcePilotSlug(slug)) continue;
+    const canonicalPath = resourcesArticlePath(slug);
+    const entry = buildLocalizedSitemapEntry({
+      locale: row.locale,
+      canonicalPath,
+      sourceIndexable: true,
+      translationStatus: 'published',
+      qualityScore: row.qualityScore ?? 90,
+      hasLocalizedTitle: Boolean(row.translatedTitle?.trim()),
+      hasLocalizedH1: Boolean(row.translatedTitle?.trim()),
+      hasLocalizedBody: true,
+      hasMixedLanguageRisk: false,
+      lastModified: row.lastModified
+    });
+    if (!entry) continue;
+    const bucket = byLocale.get(row.locale) ?? [];
+    bucket.push(entry);
+    byLocale.set(row.locale, bucket);
+  }
+
+  const docs: SitemapDocument[] = [];
+  for (const locale of ['es', 'fr'] as const) {
+    const entries = byLocale.get(locale);
+    if (!entries?.length) continue;
+    docs.push(
+      makeSitemapDocument('resources', `locale-${locale}-resources-db`, entries)
+    );
   }
   return docs;
 }

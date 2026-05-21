@@ -48,6 +48,9 @@ import {
   RESOURCE_CATEGORY_ORDER,
   type ResourceCategoryId
 } from '@/lib/content-hub/resourceTaxonomy';
+import { listPublishedResourceArticleTranslations } from '@/lib/i18n/resourcePilot/listPublishedResourceArticleTranslations';
+
+const MIN_TRANSLATED_RESOURCES_FOR_LOCALE_GRID = 10;
 
 const baseTitle = `${RESOURCES_PAGE_TITLE} — Guides & Tips`;
 const baseDescription =
@@ -468,14 +471,32 @@ export async function ResourcesIndexPageContent({
   const sectionPath = sectionPathForLocale(locale, RESOURCES_SECTION_PATH);
   const hrefForPath = (path: string) => hrefForLocalizedUiRequired(locale, path);
   const queryState = parseResourcesIndexSearchParams(searchParams);
-  const [allPosts, latestEssays] = await Promise.all([
-    fetchAllPublishedContentPostsListFields(),
-    fetchLatestPublishedEssayHubList(240)
-  ]);
+  const [allPosts, latestEssays, resourceTranslationSummaries] =
+    await Promise.all([
+      fetchAllPublishedContentPostsListFields(),
+      fetchLatestPublishedEssayHubList(240),
+      locale !== 'en'
+        ? listPublishedResourceArticleTranslations()
+        : Promise.resolve([])
+    ]);
 
-  const postsForLocale = locale === 'en' ? allPosts : [];
-  /** ES/FR: CMS resource grid stays hidden until Stage 4D resource_article pilot ships. */
-  const showLocaleDbGrid = locale === 'en';
+  const translatedIdsForLocale = new Set(
+    resourceTranslationSummaries
+      .filter((row) => row.locale === locale)
+      .map((row) => row.sourceId)
+  );
+  const translatedResourceCount = resourceTranslationSummaries.filter(
+    (row) => row.locale === locale
+  ).length;
+
+  const postsForLocale =
+    locale === 'en'
+      ? allPosts
+      : allPosts.filter((post) => translatedIdsForLocale.has(post.id));
+
+  const showLocaleDbGrid =
+    locale === 'en' ||
+    translatedResourceCount >= MIN_TRANSLATED_RESOURCES_FOR_LOCALE_GRID;
 
   const classified = classifyResourcePosts(postsForLocale);
   const essayCovers = latestEssays

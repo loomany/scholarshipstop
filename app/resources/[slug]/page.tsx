@@ -23,6 +23,8 @@ import {
 } from '@/lib/content-hub/resourcesSection';
 import { getURL } from '@/utils/helpers';
 import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
+import { buildResourcePilotAlternates } from '@/lib/i18n/resourcePilot/resourceTranslationAlternates';
+import { isResourcePilotSlug } from '@/lib/i18n/resourcePilot/resourcePilotSlugs';
 import { getCanonical } from '@/lib/seo/canonical';
 import { applyAutoInternalLinks } from '@/lib/content-hub/autoInternalLinks';
 import { deduplicateQuickSummaryBlocksInHtml } from '@/lib/content-hub/deduplicateQuickSummaryInHtml';
@@ -104,17 +106,18 @@ export async function generateMetadata({
     post.meta_title?.trim() || post.title?.trim() || 'Article';
   const description = post.meta_description?.trim() || undefined;
   const ogImage = post.cover_image_url?.trim();
-  const canonical = getCanonical(resourcesArticlePath(slug));
+  const path = resourcesArticlePath(slug);
+  const alternates = isResourcePilotSlug(slug)
+    ? await buildResourcePilotAlternates({ slug, currentLocale: 'en' })
+    : { canonical: getCanonical(path) };
   return {
     title,
     description,
-    alternates: {
-      canonical
-    },
+    alternates,
     openGraph: {
       title,
       description,
-      url: canonical,
+      url: alternates.canonical ?? getCanonical(path),
       ...(ogImage ? { images: [{ url: ogImage }] } : {})
     }
   };
