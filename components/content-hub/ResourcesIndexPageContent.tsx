@@ -341,9 +341,9 @@ function ResourcesGridIqAssessmentCard({
                     </p>
                   </div>
                   <div className="rounded-lg border border-dashed border-slate-300 bg-slate-50/80 px-1.5 py-1">
-                    <p className="text-[8px] font-medium text-slate-500">Type</p>
+                    <p className="text-[8px] font-medium text-slate-500">Fit</p>
                     <p className="mt-0.5 text-xs font-bold leading-none text-slate-950">
-                      ???
+                      Profile
                     </p>
                   </div>
                 </div>
@@ -380,12 +380,15 @@ function ResourcesGrid({
   fallbackCoverByPostId,
   hrefForPath,
   iq,
+  showIqPromoInGrid = true,
   locale = 'en'
 }: {
   posts: ContentPostListFields[];
   fallbackCoverByPostId: Map<string, string>;
   hrefForPath: (path: string) => string;
   iq: ReturnType<typeof getHubIqPromoUiCopy>;
+  /** AI pack hub (`?cat=ai`) hides the grid IQ card (avoids “Type ???” promo tile). */
+  showIqPromoInGrid?: boolean;
   locale?: import('@/lib/i18n/localizedHref').LocalizedUiLocale;
 }) {
   const readMore = getHubToolbarUiCopy(locale).readMore;
@@ -451,7 +454,9 @@ function ResourcesGrid({
                 </div>
               </Link>
             </li>
-            {index === 2 ? <ResourcesGridIqAssessmentCard iq={iq} /> : null}
+            {showIqPromoInGrid && index === 2 ? (
+              <ResourcesGridIqAssessmentCard iq={iq} />
+            ) : null}
           </Fragment>
         );
       })}
@@ -475,6 +480,7 @@ export async function ResourcesIndexPageContent({
   const sectionPath = sectionPathForLocale(locale, RESOURCES_SECTION_PATH);
   const hrefForPath = (path: string) => hrefForLocalizedUiRequired(locale, path);
   const queryState = parseResourcesIndexSearchParams(searchParams);
+  const hideIqPromoOnHub = queryState.categoryId === 'ai';
   const [allPosts, latestEssays, resourceTranslationSummaries] =
     await Promise.all([
       fetchAllPublishedContentPostsListFields(),
@@ -655,7 +661,13 @@ export async function ResourcesIndexPageContent({
           translations (Stage 4D pilot). Untranslated English CMS cards stay hidden.
         */}
         {locale === 'en' || showLocaleDbGrid ? (
-          <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start xl:grid-cols-[minmax(0,1fr)_400px]">
+          <div
+            className={
+              hideIqPromoOnHub
+                ? 'mt-8'
+                : 'mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start xl:grid-cols-[minmax(0,1fr)_400px]'
+            }
+          >
             <div className="min-w-0">
               <header className="max-w-3xl">
                 <h1 className="text-[2.25rem] font-bold leading-[1.08] tracking-tight text-gray-900 sm:text-4xl lg:text-[2.5rem] lg:leading-[1.1]">
@@ -686,12 +698,20 @@ export async function ResourcesIndexPageContent({
               ) : null}
             </div>
 
-            <aside className="min-w-0 lg:pt-8" aria-label="Cognitive assessment">
-              <ResourcesIqAssessmentCard iq={iqCopy} />
-            </aside>
+            {!hideIqPromoOnHub ? (
+              <aside className="min-w-0 lg:pt-8" aria-label="Cognitive assessment">
+                <ResourcesIqAssessmentCard iq={iqCopy} />
+              </aside>
+            ) : null}
           </div>
         ) : (
-          <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start xl:grid-cols-[minmax(0,1fr)_400px]">
+          <div
+            className={
+              hideIqPromoOnHub
+                ? 'mt-8'
+                : 'mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start xl:grid-cols-[minmax(0,1fr)_400px]'
+            }
+          >
             <div className="min-w-0">
               <header className="max-w-3xl">
                 <h1 className="text-[2.25rem] font-bold leading-[1.08] tracking-tight text-gray-900 sm:text-4xl lg:text-[2.5rem] lg:leading-[1.1]">
@@ -720,9 +740,11 @@ export async function ResourcesIndexPageContent({
                 </Suspense>
               ) : null}
             </div>
-            <aside className="min-w-0 lg:pt-8" aria-label="Cognitive assessment">
-              <ResourcesIqAssessmentCard iq={iqCopy} />
-            </aside>
+            {!hideIqPromoOnHub ? (
+              <aside className="min-w-0 lg:pt-8" aria-label="Cognitive assessment">
+                <ResourcesIqAssessmentCard iq={iqCopy} />
+              </aside>
+            ) : null}
           </div>
         )}
 
@@ -757,6 +779,7 @@ export async function ResourcesIndexPageContent({
                 fallbackCoverByPostId={fallbackCoverByPostId}
                 hrefForPath={hrefForPath}
                 iq={iqCopy}
+                showIqPromoInGrid={!hideIqPromoOnHub}
                 locale={locale}
               />
             </>
@@ -765,9 +788,11 @@ export async function ResourcesIndexPageContent({
 
         {(locale === 'en' || showLocaleDbGrid) && hasAnyPublished && withSlug.length > 0 ? (
           <>
-            <div className="mt-6 lg:hidden">
-              <ResourcesIqAssessmentCard iq={iqCopy} />
-            </div>
+            {!hideIqPromoOnHub ? (
+              <div className="mt-6 lg:hidden">
+                <ResourcesIqAssessmentCard iq={iqCopy} />
+              </div>
+            ) : null}
             <ResourcesPagination
               currentPage={currentPage}
               totalPages={totalPages}

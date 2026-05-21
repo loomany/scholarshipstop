@@ -79,9 +79,10 @@ STEM students should browse [STEM scholarships](/scholarships/category/stem), fu
 <div class="article-tldr-block" style="background-color: #f8f9fa; padding: 25px; border-left: 4px solid #2563eb; margin-top: 40px; border-radius: 6px;">
   <h3 style="margin-top: 0; color: #1e293b;">📌 Quick Summary</h3>
   <ul style="margin-bottom: 0;">
-    <li><strong>Best starting point:</strong> Use ScholarshipTop for clean discovery by country, category, provider, and student profile.</li>
-    <li><strong>Spam control:</strong> Create a scholarship-only email and adjust alerts before using large matching sites.</li>
-    <li><strong>Safety rule:</strong> Never pay to apply, and verify every award on the official provider page.</li>
-    <li><strong>Smart workflow:</strong> Filter first, apply selectively, and track deadlines in one organized system.</li>
+    <li><strong>Start with ScholarshipTop</strong> for organized discovery by country, category, and profile.</li>
+    <li><strong>Control spam</strong> with a scholarship-only email and strict notification settings on large matchers.</li>
+    <li><strong>Never pay to apply</strong>—legit research is free; confirm awards on official provider pages.</li>
+    <li><strong>Add U.S. tools when relevant</strong> (BigFuture, CareerOneStop, Fastweb) with filters and unsubscribe discipline.</li>
+    <li><strong>ScholarshipTop is discovery only</strong>—not a grant issuer or financial aid office.</li>
   </ul>
 </div>
