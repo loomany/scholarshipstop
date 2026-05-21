@@ -42,6 +42,18 @@ export const faqItemSchema = z.object({
     question: z.string().min(8),
     answer: z.string().min(20)
 });
+function normalizeImageBriefField(val) {
+    if (typeof val === 'string')
+        return val.trim();
+    if (val && typeof val === 'object' && !Array.isArray(val)) {
+        return Object.values(val)
+            .filter((v) => typeof v === 'string')
+            .map((v) => v.trim())
+            .filter(Boolean)
+            .join(' ');
+    }
+    return val;
+}
 export const seoBriefSchema = z.object({
     primary_keyword: z.string().min(2),
     secondary_keywords: z.array(z.string().min(2)).default([]),
@@ -52,7 +64,7 @@ export const seoBriefSchema = z.object({
     meta_description: z.string().min(30),
     faq_questions: z.array(z.string().min(8)).default([]),
     article_angle: z.string().min(10),
-    image_brief: z.string().min(10)
+    image_brief: z.preprocess((val) => normalizeImageBriefField(val), z.string().min(10))
 });
 export const articleSchema = z.object({
     title: z.string().min(5),
