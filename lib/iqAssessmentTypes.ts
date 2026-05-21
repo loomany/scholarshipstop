@@ -2,6 +2,7 @@ import type {
   CognitiveOptionKey,
   CognitiveQuestionDomain
 } from '@/lib/cognitiveAssessmentQuestions';
+import type { IqLocale } from '@/lib/iq/i18n/iqLocales';
 
 export type UserIntent =
   | 'general_iq'
@@ -35,6 +36,8 @@ export type AssessmentResult = {
   percentile: number;
   archetype: string;
   domainScores: DomainScore[];
+  /** Locale used when the assessment was scored (for report/paywall copy). */
+  assessmentLocale?: IqLocale;
 };
 
 export type StrategyGrantRecommendation = {

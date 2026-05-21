@@ -191,7 +191,8 @@ function buildAssessmentResult(
     iqScore,
     percentile,
     archetype: lockedArchetype(domainScores, locale),
-    domainScores
+    domainScores,
+    assessmentLocale: locale
   };
 }
 

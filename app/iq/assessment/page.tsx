@@ -1,17 +1,25 @@
 import type { Metadata } from 'next';
 
+import { getIqLocaleFromRequest } from '@/lib/iq/i18n/getIqLocaleFromRequest';
+import { getIqAssessmentMetadata } from '@/lib/iq/i18n/iqMetadataCopy';
 import { parseUserIntent } from '@/lib/iqIntent';
 
 import ContextualAssessmentFunnelClient from './ContextualAssessmentFunnelClient';
 
-export const metadata: Metadata = {
-  title: 'Start IQ Test | 30-Question Online IQ Score',
-  description:
-    'Complete a timed 30-question IQ test to generate your IQ score, percentile, domain breakdown, and Brain Archetype report.',
-  alternates: {
-    canonical: 'https://iq.scholarshiptop.com/assessment'
-  }
-};
+export const dynamic = 'force-dynamic';
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = getIqLocaleFromRequest();
+  const meta = getIqAssessmentMetadata(locale);
+
+  return {
+    title: meta.title,
+    description: meta.description,
+    alternates: {
+      canonical: 'https://iq.scholarshiptop.com/assessment'
+    }
+  };
+}
 
 type CognitiveAssessmentPageProps = {
   searchParams?: {

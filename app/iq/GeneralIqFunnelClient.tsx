@@ -11,6 +11,9 @@ import { CountryEmailSignupStep } from '@/components/onboarding/CountryEmailSign
 import { createClient } from '@/utils/supabase/client';
 import { getOAuthCallbackUrlWithNext } from '@/utils/helpers';
 
+import { useIqLocale } from '@/components/iq/IqLocaleProvider';
+import { getIqFunnelEmailCopy } from '@/lib/iq/i18n/iqFunnelEmailCopy';
+
 import ScholarshipIqTestClient from './ScholarshipIqTestClient';
 
 type GeneralFunnelPhase = 'landing' | 'assessment' | 'email' | 'paywall';
@@ -56,6 +59,8 @@ function writeTextStorage(key: string, value: string) {
 }
 
 export default function GeneralIqFunnelClient() {
+  const { locale } = useIqLocale();
+  const emailCopy = getIqFunnelEmailCopy(locale);
   const [phase, setPhase] = useState<GeneralFunnelPhase>('landing');
   const [result, setResult] = useState<AssessmentResult | null>(null);
   const [email, setEmail] = useState('');
@@ -116,7 +121,7 @@ export default function GeneralIqFunnelClient() {
   const continueFromEmail = () => {
     const normalizedEmail = email.trim().toLowerCase();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
-      setEmailError('Enter a valid email address.');
+      setEmailError(emailCopy.errors.invalidEmail);
       return;
     }
     setEmailError(null);
@@ -138,11 +143,11 @@ export default function GeneralIqFunnelClient() {
       });
       if (error) {
         setGoogleSignInPending(false);
-        setEmailError(error.message || 'Google sign-in failed.');
+        setEmailError(error.message || emailCopy.errors.googleFailed);
       }
     } catch {
       setGoogleSignInPending(false);
-      setEmailError('Google sign-in failed. Try again in a moment.');
+      setEmailError(emailCopy.errors.googleRetry);
     }
   };
 
@@ -160,10 +165,11 @@ export default function GeneralIqFunnelClient() {
             <CountryEmailSignupStep
               email={email}
               countryLabel=""
-              progressEyebrow="Step 1 · Email"
-              title="Where should we save your IQ profile?"
-              description="Enter your email to continue to the IQ test. You can use the same email again anytime; after payment we will send your full report and private result link."
-              submitLabel="Continue to IQ test"
+              locale={locale}
+              progressEyebrow={emailCopy.progressEyebrow}
+              title={emailCopy.title}
+              description={emailCopy.description}
+              submitLabel={emailCopy.submitLabel}
               googleSubmitting={googleSignInPending}
               error={emailError}
               onEmailChange={(value) => {

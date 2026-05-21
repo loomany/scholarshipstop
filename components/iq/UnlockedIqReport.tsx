@@ -1,4 +1,9 @@
 import IqProductFooter from '@/components/iq/IqProductFooter';
+import type { IqLocale } from '@/lib/iq/i18n/iqLocales';
+import {
+  getIqReportCopy,
+  resolveIqReportLocale
+} from '@/lib/iq/i18n/iqReportCopy';
 import type { AssessmentResult } from '@/lib/iqAssessmentTypes';
 
 function formatReportDuration(totalSeconds: number) {
@@ -12,13 +17,17 @@ export default function UnlockedIqReport({
   result,
   email,
   onRestart,
-  localPreview = false
+  localPreview = false,
+  locale: localeProp
 }: {
   result: AssessmentResult;
   email?: string | null;
   onRestart?: () => void;
   localPreview?: boolean;
+  locale?: IqLocale;
 }) {
+  const locale = localeProp ?? resolveIqReportLocale(result);
+  const copy = getIqReportCopy(locale);
   const topDomains = [...result.domainScores].sort((a, b) => b.score - a.score);
   const normalizedEmail = email?.trim() || null;
   const totalDuration =
@@ -26,27 +35,26 @@ export default function UnlockedIqReport({
     Number.isFinite(result.totalDurationSeconds)
       ? Math.max(0, Math.round(result.totalDurationSeconds))
       : null;
+  const topPercent = Math.max(1, 100 - result.percentile);
 
   return (
     <main className="iq-product-shell min-h-screen bg-[#f8fafc] text-slate-950">
       <section className="mx-auto max-w-5xl px-6 py-12 sm:py-16">
         <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_28px_90px_-42px_rgba(15,23,42,0.45)] sm:p-8 lg:p-10">
           <p className="text-sm font-bold uppercase tracking-[0.2em] text-emerald-600">
-            {localPreview ? 'Local preview unlocked' : 'Full report unlocked'}
+            {localPreview ? copy.localPreviewBadge : copy.unlockedBadge}
           </p>
           <h1 className="mt-4 text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
-            Your IQ-style cognitive profile
+            {copy.title}
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600">
-            This educational report summarizes your timed assessment result,
-            domain profile, and Brain Archetype. It is not a clinical diagnosis
-            or licensed psychological assessment.
+            {copy.disclaimer}
           </p>
           {localPreview || onRestart ? (
             <div className="mt-5 flex flex-wrap items-center gap-3">
               {localPreview ? (
                 <span className="rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-700">
-                  Visible only on localhost. Production stays locked.
+                  {copy.localhostNotice}
                 </span>
               ) : null}
               {onRestart ? (
@@ -55,29 +63,29 @@ export default function UnlockedIqReport({
                   onClick={onRestart}
                   className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:-translate-y-0.5 hover:border-slate-300 hover:text-slate-950"
                 >
-                  Start again
+                  {copy.startAgain}
                 </button>
               ) : null}
               {totalDuration !== null ? (
                 <span className="rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-semibold tabular-nums text-slate-700">
-                  Total time {formatReportDuration(totalDuration)}
+                  {copy.totalTime(formatReportDuration(totalDuration))}
                 </span>
               ) : null}
             </div>
           ) : null}
 
           <div className="mt-8 grid gap-4 sm:grid-cols-3">
-            <ReportStat label="IQ-style score" value={String(result.iqScore)} />
+            <ReportStat label={copy.stats.iqStyleScore} value={String(result.iqScore)} />
             <ReportStat
-              label="Percentile context"
-              value={`Top ${Math.max(1, 100 - result.percentile)}%`}
+              label={copy.stats.percentileContext}
+              value={copy.stats.topPercent(topPercent)}
             />
-            <ReportStat label="Brain Archetype" value={result.archetype} />
+            <ReportStat label={copy.stats.brainArchetype} value={result.archetype} />
           </div>
 
           <div className="mt-8 rounded-[1.75rem] border border-slate-200 bg-slate-50 p-5">
             <h2 className="text-xl font-semibold tracking-tight text-slate-950">
-              Domain breakdown
+              {copy.domainBreakdown}
             </h2>
             <div className="mt-5 grid gap-4">
               {topDomains.map((domain) => (
@@ -99,18 +107,20 @@ export default function UnlockedIqReport({
 
           <div className="mt-8 grid gap-4 lg:grid-cols-2">
             <InsightCard
-              title="How to read this"
-              text="Your score combines accuracy, item difficulty, and timing across the assessment. The domain chart is often more useful than the single number because it shows how your reasoning style is distributed."
+              title={copy.insights.howToReadTitle}
+              text={copy.insights.howToReadText}
             />
             <InsightCard
-              title="Your strongest signal"
-              text={`${topDomains[0]?.label ?? 'Your top domain'} appears as your strongest relative area in this run. Use that as a practical clue about how you naturally approach new problems.`}
+              title={copy.insights.strongestTitle}
+              text={copy.insights.strongestText(
+                topDomains[0]?.label ?? copy.stats.brainArchetype
+              )}
             />
           </div>
 
           {normalizedEmail ? (
             <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-              <p className="text-sm font-semibold text-slate-500">Report email</p>
+              <p className="text-sm font-semibold text-slate-500">{copy.reportEmail}</p>
               <p className="mt-2 break-all text-base font-semibold text-slate-950">
                 {normalizedEmail}
               </p>

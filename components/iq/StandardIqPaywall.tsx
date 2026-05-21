@@ -4,8 +4,11 @@ import { useEffect, useState, useTransition } from 'react';
 import { ArrowRight, BrainCircuit, CheckCircle2, Lock, Sparkles } from 'lucide-react';
 
 import { getIqReportCheckoutURL } from '@/app/actions/iqReportCheckout';
+import { useIqLocale } from '@/components/iq/IqLocaleProvider';
 import IqProductFooter from '@/components/iq/IqProductFooter';
 import UnlockedIqReport from '@/components/iq/UnlockedIqReport';
+import { getIqPaywallCopy } from '@/lib/iq/i18n/iqPaywallCopy';
+import { resolveIqReportLocale } from '@/lib/iq/i18n/iqReportCopy';
 import type { AssessmentResult } from '@/lib/iqAssessmentTypes';
 
 type StandardIqPaywallProps = {
@@ -21,6 +24,9 @@ export default function StandardIqPaywall({
   funnel = 'standalone_iq',
   onRestart
 }: StandardIqPaywallProps) {
+  const { locale: shellLocale } = useIqLocale();
+  const locale = resolveIqReportLocale(result, shellLocale);
+  const copy = getIqPaywallCopy(locale);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const [localPreviewUnlocked, setLocalPreviewUnlocked] = useState(false);
@@ -40,6 +46,7 @@ export default function StandardIqPaywall({
         email={email}
         onRestart={onRestart}
         localPreview
+        locale={locale}
       />
     );
   }
@@ -63,30 +70,24 @@ export default function StandardIqPaywall({
           <div className="p-5 text-center sm:p-8 lg:p-10 lg:text-left">
             <div className="inline-flex items-center gap-2 rounded-full bg-indigo-50 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-indigo-700 ring-1 ring-indigo-100">
               <BrainCircuit className="h-4 w-4" aria-hidden />
-              IQ report ready
+              {copy.badge}
             </div>
             <h1 className="mt-5 text-3xl font-semibold tracking-tight text-slate-950 sm:mt-6 sm:text-5xl">
-              Your cognitive report has been generated.
+              {copy.title}
             </h1>
             <p className="mx-auto mt-3 max-w-xl text-base leading-7 text-slate-600 lg:mx-0 lg:mt-4">
-              Your 30 timed answers produced an IQ-style score, percentile context,
-              five-domain profile, and Brain Archetype. Unlock the full report for
-              a one-time $9.99 payment.
+              {copy.body}
             </p>
 
             <div className="hidden lg:block">
               <div className="mt-7 grid gap-3 sm:grid-cols-2">
-                <LockedResultCard label="IQ-style score" />
-                <LockedResultCard label="Brain Archetype" />
+                <LockedResultCard label={copy.lockedIqScore} />
+                <LockedResultCard label={copy.lockedArchetype} />
               </div>
 
               <div className="mt-6 rounded-[1.75rem] border border-slate-200 bg-slate-50 p-5">
-                <p className="text-sm font-bold text-slate-950">Preview included</p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Your assessment is complete. The exact score, archetype, domain
-                  interpretation, and strength profile are prepared behind the
-                  unlock screen.
-                </p>
+                <p className="text-sm font-bold text-slate-950">{copy.previewTitle}</p>
+                <p className="mt-2 text-sm leading-6 text-slate-600">{copy.previewBody}</p>
               </div>
             </div>
           </div>
@@ -96,10 +97,10 @@ export default function StandardIqPaywall({
               <div className="pointer-events-none select-none opacity-35 blur-[5px]">
                 <div className="flex items-center justify-between gap-4">
                   <p className="text-sm font-bold uppercase tracking-[0.18em] text-slate-500">
-                    Domain preview
+                    {copy.domainPreview}
                   </p>
                   <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
-                    Locked
+                    {copy.lockedBadge}
                   </span>
                 </div>
                 <div className="mt-5 space-y-4">
@@ -129,24 +130,19 @@ export default function StandardIqPaywall({
                   </div>
                   <div className="min-w-0">
                     <p className="text-xs font-bold uppercase tracking-[0.18em] text-indigo-600">
-                      Full interpretation locked
+                      {copy.unlockEyebrow}
                     </p>
                     <h2 className="mt-2 text-[1.7rem] font-semibold leading-tight tracking-tight text-slate-950 sm:text-3xl lg:text-2xl">
-                      Unlock your complete IQ profile
+                      {copy.unlockTitle}
                     </h2>
                     <p className="mx-auto mt-3 max-w-sm text-base leading-7 text-slate-600 lg:mx-0 lg:text-sm lg:leading-6">
-                      Reveal your exact score context, domain ranking, Brain
-                      Archetype, strengths profile, and plain-English explanation.
+                      {copy.unlockBody}
                     </p>
                   </div>
                 </div>
 
                 <div className="mt-5 grid gap-2 text-sm font-semibold text-slate-700">
-                  {[
-                    'Exact IQ-style score band and percentile context',
-                    'Five-domain breakdown with strongest area',
-                    'Brain Archetype and strengths interpretation'
-                  ].map((item) => (
+                  {copy.unlockBullets.map((item) => (
                     <div key={item} className="flex gap-2 rounded-2xl bg-slate-50 px-4 py-3">
                       <CheckCircle2
                         className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600"
@@ -163,7 +159,7 @@ export default function StandardIqPaywall({
                   disabled={isPending}
                   className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-slate-950 px-6 py-4 text-base font-semibold text-white shadow-lg shadow-slate-900/10 transition hover:-translate-y-0.5 hover:bg-slate-800 disabled:pointer-events-none disabled:opacity-70"
                 >
-                  {isPending ? 'Opening checkout...' : 'Unlock full IQ report - $9.99'}
+                  {isPending ? copy.checkoutPending : copy.checkoutCta}
                   <ArrowRight className="h-4 w-4" aria-hidden />
                 </button>
                 {error ? (
@@ -173,7 +169,7 @@ export default function StandardIqPaywall({
                 ) : null}
                 <p className="mt-3 flex items-center justify-center gap-1.5 text-center text-xs font-medium leading-5 text-slate-500">
                   <Sparkles className="h-3.5 w-3.5" aria-hidden />
-                  One-time payment. Secure LemonSqueezy checkout.
+                  {copy.checkoutFootnote}
                 </p>
                 {onRestart ? (
                   <button
@@ -181,7 +177,7 @@ export default function StandardIqPaywall({
                     onClick={onRestart}
                     className="mt-3 w-full text-center text-sm font-semibold text-slate-500 transition hover:text-slate-950 hover:underline"
                   >
-                    Start again
+                    {copy.startAgain}
                   </button>
                 ) : null}
               </div>
@@ -205,4 +201,3 @@ function LockedResultCard({ label }: { label: string }) {
     </div>
   );
 }
-

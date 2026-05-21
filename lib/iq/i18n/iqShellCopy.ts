@@ -18,15 +18,13 @@ const IQ_SHELL_COPY: Record<IqLocale, IqShellCopy> = {
     languageSwitcherLabel: 'Idioma',
     languageNames: { en: 'English', es: 'Español', fr: 'Français' },
     productNavAria: 'Navegación del producto IQ',
-    localeShellNotice:
-      'Interfaz en español — las preguntas y el informe completo se traducirán en la siguiente fase.'
+    localeShellNotice: null
   },
   fr: {
     languageSwitcherLabel: 'Langue',
     languageNames: { en: 'English', es: 'Español', fr: 'Français' },
     productNavAria: 'Navigation produit IQ',
-    localeShellNotice:
-      'Interface en français — les questions et le rapport complet seront traduits à l’étape suivante.'
+    localeShellNotice: null
   }
 };
 

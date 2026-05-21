@@ -1,26 +1,34 @@
+'use client';
+
 import Link from 'next/link';
 
 import Logo from '@/components/icons/Logo';
+import { useIqLocale } from '@/components/iq/IqLocaleProvider';
+import { getIqFooterCopy, type IqFooterLinkKey } from '@/lib/iq/i18n/iqFooterCopy';
+import { getIqLocalizedHref } from '@/lib/iq/i18n/iqLocalizedHref';
 
-const iqFooterLinks = [
-  { href: '/iq', label: 'Home' },
-  { href: '/iq/about', label: 'About' },
-  { href: '/iq/help', label: 'Help' },
-  { href: '/iq/privacy-policy', label: 'Privacy Policy' },
-  { href: '/iq/terms', label: 'Terms of Service' },
-  { href: '/iq/refund-policy', label: 'Refund Policy' },
-  { href: '/iq/faq', label: 'FAQ' }
+const LINK_KEYS: IqFooterLinkKey[] = [
+  'home',
+  'about',
+  'help',
+  'privacy',
+  'terms',
+  'refund',
+  'faq'
 ];
 
 export default function IqProductFooter() {
+  const { locale } = useIqLocale();
+  const copy = getIqFooterCopy(locale);
+
   return (
     <footer className="border-t border-slate-200 bg-white">
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-center gap-3 px-6 py-4 sm:flex-row sm:gap-6 sm:py-5">
         <div className="shrink-0">
           <Link
-            href="/iq"
+            href={getIqLocalizedHref('/', locale, { onIqSubdomain: true })}
             className="inline-flex rounded-full bg-black px-4 py-2.5 ring-1 ring-gray-800 transition hover:ring-gray-600"
-            aria-label="IQ Profile - Home"
+            aria-label={copy.homeAria}
           >
             <Logo variant="footer" />
           </Link>
@@ -28,15 +36,17 @@ export default function IqProductFooter() {
 
         <nav
           className="flex min-w-0 flex-wrap items-center justify-center gap-x-4 gap-y-2 text-center text-sm font-medium text-slate-700"
-          aria-label="IQ product footer"
+          aria-label={copy.navAria}
         >
-          {iqFooterLinks.map((link) => (
+          {LINK_KEYS.map((key) => (
             <Link
-              key={link.href}
-              href={link.href}
+              key={key}
+              href={getIqLocalizedHref(copy.paths[key], locale, {
+                onIqSubdomain: true
+              })}
               className="transition hover:text-slate-950 hover:underline"
             >
-              {link.label}
+              {copy.links[key]}
             </Link>
           ))}
         </nav>

@@ -60,6 +60,8 @@ import { normalizeCountryCode } from '@/lib/scholarships/countryEligibility/coun
 import { generateStrategy } from '@/lib/strategyRecommendationEngine';
 import { createClient } from '@/utils/supabase/client';
 import { getOAuthCallbackUrlWithNext } from '@/utils/helpers';
+import { useIqLocale } from '@/components/iq/IqLocaleProvider';
+import { getIqContextualFunnelCopy } from '@/lib/iq/i18n/iqContextualFunnelCopy';
 
 type ContextualFunnelPhase =
   | 'intro'
@@ -93,54 +95,6 @@ const FUNNEL_PHASE_STORAGE_KEY = 'iq_contextual_funnel_phase:v1';
 const RESULT_STORAGE_KEY = 'iq_contextual_result:v1';
 const RECOMMENDED_GRANTS_STORAGE_KEY = 'iq_contextual_recommended_grants:v1';
 const CONTEXTUAL_EMAIL_STORAGE_KEY = 'iq_contextual_email:v1';
-
-const intentCopy: Record<
-  UserIntent,
-  { eyebrow: string; title: string; text: string; outcome: string }
-> = {
-  general_iq: {
-    eyebrow: 'Cognitive profile',
-    title: 'Take a research-informed IQ-style test before you choose your next move.',
-    text: 'This short cognitive assessment measures how you solve problems across reasoning, speed, spatial thinking, verbal logic, and decision-making.',
-    outcome:
-      'Then we translate your profile into a practical scholarship strategy.'
-  },
-  essay_prep: {
-    eyebrow: 'Essay prep path',
-    title: 'Discover the thinking pattern behind stronger scholarship essays.',
-    text: 'The test helps identify whether your advantage is structure, logic, verbal reasoning, or pattern recognition before you write.',
-    outcome:
-      'Your final strategy will point toward essay angles and awards where your profile can stand out.'
-  },
-  college_fit: {
-    eyebrow: 'College fit path',
-    title: 'Compare schools through the way your brain works.',
-    text: 'Instead of guessing, use a five-domain cognitive profile to understand how you evaluate tradeoffs, deadlines, and application styles.',
-    outcome:
-      'Your final strategy will connect your profile to school and scholarship-fit decisions.'
-  },
-  scholarship_match: {
-    eyebrow: 'Scholarship match path',
-    title: 'Find scholarships that fit how your brain works.',
-    text: 'Take the same 30-question cognitive assessment used for the general IQ flow, then add a few goals so the result becomes useful.',
-    outcome:
-      'Your final strategy will prioritize awards, reading, and next steps based on your strengths.'
-  },
-  provider_research: {
-    eyebrow: 'Provider research path',
-    title: 'Prioritize scholarship providers with a clearer strategy.',
-    text: 'A cognitive profile can help you decide whether to focus on essay-heavy providers, fast applications, research awards, or logic-based opportunities.',
-    outcome:
-      'Your final strategy will help you choose which providers deserve attention first.'
-  },
-  deadline_strategy: {
-    eyebrow: 'Deadline strategy path',
-    title: 'Build an application plan around your execution style.',
-    text: 'The assessment looks at speed, prioritization, and reasoning so your scholarship plan can match how you actually work under pressure.',
-    outcome:
-      'Your final strategy will separate quick wins from higher-effort deadlines.'
-  }
-};
 
 type ContextualPreview = {
   label: string;
@@ -252,46 +206,8 @@ const contextualPreviews: Record<UserIntent, ContextualPreview> = {
   }
 };
 
-const sciencePillars = [
-  {
-    name: 'ICAR',
-    detail: 'short online cognitive battery',
-    icon: LineChart
-  },
-  {
-    name: 'Raven',
-    detail: 'visual pattern reasoning',
-    icon: Network
-  },
-  {
-    name: 'Wechsler',
-    detail: 'multi-index profile thinking',
-    icon: BrainCircuit
-  },
-  {
-    name: 'Cattell',
-    detail: 'fluid intelligence tradition',
-    icon: ShieldCheck
-  }
-];
-
-const assessmentHighlights = [
-  {
-    title: '30 focused questions',
-    text: 'Short enough to finish, structured enough to reveal a useful pattern.',
-    icon: Timer
-  },
-  {
-    title: '5 cognitive domains',
-    text: 'Reasoning, spatial intelligence, verbal logic, numerical logic, and decision speed.',
-    icon: BrainCircuit
-  },
-  {
-    title: 'Strategy after score',
-    text: 'Your result becomes a scholarship plan after matching details.',
-    icon: FileText
-  }
-];
+const HIGHLIGHT_ICONS = [Timer, BrainCircuit, FileText] as const;
+const PILLAR_ICONS = [LineChart, Network, BrainCircuit, ShieldCheck] as const;
 
 function readStoredIntent() {
   try {
@@ -516,6 +432,8 @@ function clearFunnelProgressStorage() {
 export default function ContextualAssessmentFunnelClient({
   initialIntent
 }: ContextualAssessmentFunnelClientProps) {
+  const { locale } = useIqLocale();
+  const funnelCopy = getIqContextualFunnelCopy(locale);
   const [intent, setIntent] = useState<UserIntent>(initialIntent);
   const [phase, setPhase] = useState<ContextualFunnelPhase>('intro');
   const [hydrated, setHydrated] = useState(false);
@@ -734,7 +652,7 @@ export default function ContextualAssessmentFunnelClient({
     return (
       <main className="fixed inset-0 z-[200] grid place-items-center bg-[#F8FAFC] px-4 text-slate-950">
         <div className="rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm font-semibold text-slate-600 shadow-sm">
-          Loading your progress...
+          {funnelCopy.loadingProgress}
         </div>
       </main>
     );
@@ -938,6 +856,8 @@ function ContextualIqEmailGate({
   intent: UserIntent;
   onComplete: (email: string, userId: string) => void;
 }) {
+  const { locale } = useIqLocale();
+  const { emailGate: gate } = getIqContextualFunnelCopy(locale);
   const [email, setEmail] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -949,7 +869,7 @@ function ContextualIqEmailGate({
 
     const normalizedEmail = email.trim().toLowerCase();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
-      setError('Enter a valid email address.');
+      setError(gate.errors.invalidEmail);
       return;
     }
 
@@ -981,7 +901,7 @@ function ContextualIqEmailGate({
       });
 
       if (signUpError) {
-        setError(signUpError.message || 'Could not create your account.');
+        setError(signUpError.message || gate.errors.accountFailed);
         setSubmitting(false);
         return;
       }
@@ -1001,9 +921,7 @@ function ContextualIqEmailGate({
 
       const userId = activeSession?.user.id;
       if (!userId) {
-        setError(
-          'Account was created, but we could not start your session. Check your email to continue.'
-        );
+        setError(gate.errors.sessionFailed);
         setSubmitting(false);
         return;
       }
@@ -1026,7 +944,7 @@ function ContextualIqEmailGate({
 
       onComplete(normalizedEmail, userId);
     } catch {
-      setError('Something went wrong. Check your connection and try again.');
+      setError(gate.errors.connection);
       setSubmitting(false);
     }
   };
@@ -1045,11 +963,11 @@ function ContextualIqEmailGate({
       });
       if (googleError) {
         setGoogleSubmitting(false);
-        setError(googleError.message || 'Google sign-in failed.');
+        setError(googleError.message || gate.errors.googleFailed);
       }
     } catch {
       setGoogleSubmitting(false);
-      setError('Google sign-in failed. Try again in a moment.');
+      setError(gate.errors.googleFailed);
     }
   };
 
@@ -1062,19 +980,19 @@ function ContextualIqEmailGate({
               <BrainCircuit className="h-7 w-7" aria-hidden />
             </div>
             <p className="mt-6 text-sm font-bold uppercase tracking-[0.2em] text-indigo-600">
-              {mode === 'pre_assessment' ? 'Start your IQ profile' : 'Your report is ready'}
+              {mode === 'pre_assessment' ? gate.preEyebrow : gate.postEyebrow}
             </p>
             <h1 className="mt-3 text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
-              Where should we save your IQ profile?
+              {gate.title}
             </h1>
             <p className="mx-auto mt-4 max-w-xl text-base leading-7 text-slate-600">
-              {mode === 'pre_assessment'
-                ? 'Enter your email before the test so your IQ result can be saved and connected to your next step.'
-                : 'Enter your email so your IQ profile is saved before you choose whether to unlock the full IQ report or continue to matched grants.'}
+              {mode === 'pre_assessment' ? gate.preBody : gate.postBody}
             </p>
 
             <label className="mx-auto mt-8 block max-w-md text-left">
-              <span className="text-sm font-semibold text-slate-700">Email</span>
+              <span className="text-sm font-semibold text-slate-700">
+                {gate.emailLabel}
+              </span>
               <span className="mt-2 flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 ring-1 ring-transparent transition focus-within:border-slate-400 focus-within:bg-white focus-within:ring-slate-200">
                 <Mail className="h-5 w-5 text-slate-400" aria-hidden />
                 <input
@@ -1083,7 +1001,7 @@ function ContextualIqEmailGate({
                   autoComplete="email"
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
-                  placeholder="you@example.com"
+                  placeholder={gate.emailPlaceholder}
                   className="min-w-0 flex-1 bg-transparent text-base font-medium text-slate-950 outline-none placeholder:text-slate-400"
                 />
               </span>
@@ -1101,10 +1019,10 @@ function ContextualIqEmailGate({
               className="group mt-7 inline-flex w-full max-w-md items-center justify-center gap-2 rounded-full bg-slate-950 px-6 py-4 text-base font-semibold text-white shadow-lg shadow-slate-900/10 transition hover:-translate-y-0.5 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {submitting
-                ? 'Saving your IQ profile...'
+                ? gate.saving
                 : mode === 'pre_assessment'
-                  ? 'Continue to IQ test'
-                  : 'Continue'}
+                  ? gate.continuePre
+                  : gate.continuePost}
               <ArrowRight
                 className="h-4 w-4 transition group-hover:translate-x-0.5"
                 aria-hidden
@@ -1122,12 +1040,11 @@ function ContextualIqEmailGate({
                 <path fill="#4CAF50" d="M24 44c5.1 0 9.8-2 13.3-5.2l-6.2-5.2C29.1 35.1 26.7 36 24 36c-5.2 0-9.7-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z" />
                 <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.2-4.2 5.6l6.2 5.2C36.9 39.1 44 34 44 24c0-1.3-.1-2.4-.4-3.5z" />
               </svg>
-              {googleSubmitting ? 'Opening Google...' : 'Sign in with Google'}
+              {googleSubmitting ? gate.googleOpening : gate.googleSignIn}
             </button>
 
             <p className="mx-auto mt-4 max-w-md text-xs leading-5 text-slate-500">
-              No password needed now. Your account keeps the IQ result available if
-              you continue after the test.
+              {gate.noPasswordHint}
             </p>
           </form>
         </div>
@@ -1427,7 +1344,10 @@ function ContextualIntro({
   intent: UserIntent;
   onStart: () => void | Promise<void>;
 }) {
-  const copy = intentCopy[intent];
+  const { locale } = useIqLocale();
+  const funnelCopy = getIqContextualFunnelCopy(locale);
+  const copy = funnelCopy.intents[intent];
+  const aside = funnelCopy.introAside;
 
   return (
     <main className="iq-assessment-compact-page bg-[radial-gradient(circle_at_12%_8%,#ffedd5_0,transparent_30%),radial-gradient(circle_at_86%_10%,#dbeafe_0,transparent_28%),#F8FAFC] text-slate-950">
@@ -1450,8 +1370,8 @@ function ContextualIntro({
           </div>
 
           <div className="mt-8 grid gap-3 sm:grid-cols-3">
-            {assessmentHighlights.map((item) => {
-              const Icon = item.icon;
+            {funnelCopy.highlights.map((item, index) => {
+              const Icon = HIGHLIGHT_ICONS[index]!;
               return (
                 <div
                   key={item.title}
@@ -1477,12 +1397,12 @@ function ContextualIntro({
               onClick={onStart}
               className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-slate-950 px-6 py-4 text-base font-semibold text-white shadow-lg shadow-slate-900/10 transition hover:-translate-y-0.5 hover:bg-slate-800 sm:w-auto"
             >
-              Start IQ test
+              {funnelCopy.startTest}
               <ArrowRight className="h-4 w-4" aria-hidden />
             </button>
             <p className="inline-flex items-center gap-2 text-sm font-medium text-slate-500">
               <BrainCircuit className="h-4 w-4" aria-hidden />
-              30 questions, then scholarship matching details.
+              {funnelCopy.startSubline}
             </p>
           </div>
         </div>
@@ -1490,22 +1410,15 @@ function ContextualIntro({
         <aside className="overflow-hidden rounded-[2rem] border border-slate-800 bg-slate-950 p-6 text-white shadow-[0_28px_90px_-42px_rgba(15,23,42,0.65)] sm:p-8 lg:p-10">
           <p className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-indigo-100 ring-1 ring-white/15">
             <ShieldCheck className="h-4 w-4" aria-hidden />
-            Research-informed
+            {aside.badge}
           </p>
-          <h2 className="mt-5 text-2xl font-semibold tracking-tight">
-            Inspired by modern online psychometrics, not positioned as a clinical
-            exam.
-          </h2>
-          <p className="mt-3 text-sm leading-6 text-slate-300">
-            The research brief points to ICAR as the closest online-battery
-            reference, with Raven, Wechsler, and Cattell as the historical
-            backbone. The result is an interpretive cognitive profile, not a
-            medical diagnosis.
-          </p>
+          <h2 className="mt-5 text-2xl font-semibold tracking-tight">{aside.title}</h2>
+          <p className="mt-3 text-sm leading-6 text-slate-300">{aside.body}</p>
+          <p className="mt-4 text-xs leading-5 text-slate-400">{aside.disclaimer}</p>
 
           <div className="mt-6 grid gap-3 sm:grid-cols-2">
-            {sciencePillars.map((pillar) => {
-              const Icon = pillar.icon;
+            {aside.pillars.map((pillar, index) => {
+              const Icon = PILLAR_ICONS[index]!;
               return (
                 <div
                   key={pillar.name}
