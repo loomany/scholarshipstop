@@ -221,6 +221,27 @@ export function localizedProviderProfileHref(
   return normalizeCanonicalPath(`/${locale}${path}`);
 }
 
+export function localizedEssayGuideHref(locale: LocalizedUiLocale, slug: string): string {
+  const path = `/essays/${slug}`;
+  if (locale === 'en') return normalizeCanonicalPath(path);
+  return normalizeCanonicalPath(`/${locale}${path}`);
+}
+
+export function localizedCompareUniversityHref(
+  locale: LocalizedUiLocale,
+  slug: string
+): string {
+  const path = `/compare/universities/${slug}`;
+  if (locale === 'en') return normalizeCanonicalPath(path);
+  return normalizeCanonicalPath(`/${locale}${path}`);
+}
+
+export function localizedCompareStateHref(locale: LocalizedUiLocale, slug: string): string {
+  const path = `/compare/states/${slug}`;
+  if (locale === 'en') return normalizeCanonicalPath(path);
+  return normalizeCanonicalPath(`/${locale}${path}`);
+}
+
 /** Promoted L1 category SEO (`/scholarships/category/{id}`) with DB pilot translations. */
 function categorySeoSlug(canonicalPath: string): string | null {
   const match = canonicalPath.match(/^\/scholarships\/category\/([^/]+)$/);
