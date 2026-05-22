@@ -50,7 +50,13 @@
 
 ## Pushed to main
 
-`059142f..809e613` (4 feat commits)
+`059142f..809e613` (4 feat commits), `2760ff5` (docs), `404ba41` (scholarship detail-db sitemap)
+
+## Post-fix verify (`404ba41`)
+
+- `locale-es|fr-scholarships-detail-db` in `/sitemap.xml`; both XML **200**
+- **6** ES + **6** FR pilot scholarship URLs (12 total)
+- `scholarships-0.xml` **200**; no `/en/` or draft markers in detail-db XML
 
 ## OpenAI
 

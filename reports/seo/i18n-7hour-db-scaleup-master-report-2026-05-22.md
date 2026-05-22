@@ -23,6 +23,8 @@ Cumulative published ES+FR rows (approx.): category 22, resources 50, providers 
 2. `5bbe6d5` — provider +2 pilot
 3. `ef71a1e` — essay detail pilot (routes + seed)
 4. `809e613` — compare detail pilot (routes + seed + sitemap/switcher)
+5. `2760ff5` — session reports
+6. `404ba41` — fix scholarship detail-db sitemap (service-role slug join)
 
 Prior session baseline: `f3f1f13`, `059142f` (5E-1 climate-stripes).
 
@@ -59,9 +61,24 @@ Prior session baseline: `f3f1f13`, `059142f` (5E-1 climate-stripes).
 
 ## Sitemap / hreflang
 
-- New ES/FR sitemap buckets: essays guide DB, compare detail DB
+- New ES/FR sitemap buckets: essays guide DB, compare detail DB, **scholarship detail DB** (after `404ba41`)
 - hreflang only for published translations; no `/en`
 - English root URLs canonical
+
+### Post-deploy verify — `404ba41` (2026-05-22)
+
+| Check | Result |
+|-------|--------|
+| `/sitemap.xml` lists `locale-es-scholarships-detail-db` | yes |
+| `/sitemap.xml` lists `locale-fr-scholarships-detail-db` | yes |
+| `/sitemaps/locale-es-scholarships-detail-db.xml` | 200, 6 URLs |
+| `/sitemaps/locale-fr-scholarships-detail-db.xml` | 200, 6 URLs |
+| Total pilot scholarship detail URLs in ES+FR sitemaps | 12 |
+| `/sitemaps/scholarships-0.xml` | 200 |
+| `/en/` in detail-db sitemap locs | none |
+| draft/review strings in XML | none |
+
+**Fix:** `listPublishedScholarshipDetailTranslations` used anon client for `scholarships` join (RLS denied); switched to service-role for slug/indexable lookup.
 
 ## Rollback SQL (session batches)
 
