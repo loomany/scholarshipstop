@@ -133,7 +133,7 @@ export default function LanguageSwitcher({
   triggerClassName
 }: LanguageSwitcherProps) {
   const items = getStage2LanguageSwitcherItems({ pathname, currentLocale });
-  if (items.length <= 1) return null;
+  if (items.length === 0) return null;
 
   const navLabel = label ?? defaultLabelFor(items);
 

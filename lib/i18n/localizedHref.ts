@@ -15,6 +15,7 @@ import {
 import { getLocalizedPilotPage } from '@/lib/i18n/staticTranslations';
 import { isResourcePilotSlug } from '@/lib/i18n/resourcePilot/resourcePilotSlugs';
 import { categoryIsPromotedSeo } from '@/lib/scholarships/categorySeoAllowlist';
+import { getDetailLanguageSwitcherItems } from '@/lib/i18n/detailLanguageSwitcher';
 
 export type LocalizedUiLocale = Stage2PilotLocale | 'en';
 
@@ -268,6 +269,11 @@ export function getStage2LanguageSwitcherItems({
   pathname: string;
   currentLocale?: Stage2PilotLocale | 'en' | null;
 }): Stage2LanguageSwitcherItem[] {
+  const detailItems = getDetailLanguageSwitcherItems(pathname);
+  if (detailItems.length > 0) {
+    return detailItems;
+  }
+
   const canonicalPath = stage2CanonicalPathFromPathname(pathname);
   const hubTab = hubTabSegment(canonicalPath);
   const categorySlug = categorySeoSlug(canonicalPath);

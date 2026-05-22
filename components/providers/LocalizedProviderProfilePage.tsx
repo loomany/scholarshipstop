@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight, BrainCircuit, Check } from 'lucide-react';
 
+import LanguageSwitcher from '@/components/i18n/LanguageSwitcher';
 import ResourcesPagination from '@/components/content-hub/ResourcesPagination';
 import ProviderProfilePageAuthBridge from '@/app/providers/ProviderProfilePageAuthBridge';
 import { ProviderProfileContextLinks } from '@/components/providers/ProviderProfileContextLinks';
@@ -269,6 +270,13 @@ export default function LocalizedProviderProfilePage({
         />
       ) : null}
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-4 flex flex-wrap items-center justify-end gap-3">
+          <LanguageSwitcher
+            pathname={providerPath}
+            currentLocale={locale}
+            variant="dropdown"
+          />
+        </div>
         <header className="rounded-2xl border border-gray-100 bg-white px-6 py-8 shadow-sm sm:px-10 sm:py-10">
           <div className="min-w-0 space-y-4">
             <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">

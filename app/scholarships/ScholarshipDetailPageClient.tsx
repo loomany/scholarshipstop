@@ -10,6 +10,7 @@ import {
 } from 'react';
 import type { ReactNode } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import {
   ArrowRight,
@@ -44,6 +45,8 @@ import ScholarshipRegistrationWallModal, {
 } from '@/components/scholarships/ScholarshipRegistrationWallModal';
 import HomePrimaryCtaClient from '@/components/home/HomePrimaryCtaClient';
 import { breadcrumbCategoryLabel } from '@/app/scholarships/scholarshipCategories';
+import { getScholarshipDetailUiCopy } from '@/lib/i18n/scholarshipDetailUiCopy';
+import { getStage2LocaleFromPathname } from '@/lib/i18n/pilotRoutes';
 import { buildScholarshipTagHubHref } from '@/app/scholarships/scholarshipTagHubLinks';
 import {
   scholarshipApplicantCountrySeoHref,
@@ -1146,6 +1149,9 @@ export default function ScholarshipDetailPageClient({
   const layoutInitialScholarship = useScholarshipDetailInitialData();
   const serverScholarship = initialScholarship ?? layoutInitialScholarship;
   const backToMatchesHref = returnToHref;
+  const pathname = usePathname() ?? '/scholarships';
+  const detailUiLocale = getStage2LocaleFromPathname(pathname) ?? 'en';
+  const detailUi = getScholarshipDetailUiCopy(detailUiLocale);
 
   useLayoutEffect(() => {
     if (!routeParam) return;
@@ -1519,7 +1525,7 @@ export default function ScholarshipDetailPageClient({
         >
           <div className={scholarshipDetailShellClass}>
             <div className="flex min-h-[50vh] w-full items-center justify-center">
-              <p className="text-red-600">Failed to load scholarships</p>
+              <p className="text-red-600">{detailUi.failedToLoad}</p>
             </div>
           </div>
         </section>
@@ -1542,10 +1548,10 @@ export default function ScholarshipDetailPageClient({
               scroll
               className="mb-6 inline-flex items-center text-sm font-medium text-zinc-600 transition hover:text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2"
             >
-              ← Back to Matches
+              {detailUi.backToMatches}
             </Link>
             <div className="rounded-2xl border border-zinc-200/80 bg-white p-6 text-zinc-600 shadow-sm ring-1 ring-zinc-100/50">
-              Scholarship not found
+              {detailUi.notFound}
             </div>
           </div>
         </section>
@@ -1752,7 +1758,7 @@ export default function ScholarshipDetailPageClient({
         className={detailApplyPrimaryClass}
       >
         <ExternalLink className="h-4 w-4 shrink-0" aria-hidden />
-        Provider website
+        {detailUi.providerWebsite}
       </a>
     ) : (
       <button
@@ -1766,7 +1772,7 @@ export default function ScholarshipDetailPageClient({
           strokeWidth={2}
           aria-hidden
         />
-        Provider website
+        {detailUi.providerWebsite}
       </button>
     )
   ) : null;
@@ -2034,7 +2040,7 @@ export default function ScholarshipDetailPageClient({
           scroll
           className={detailBackToMatchesLinkClass}
         >
-          ← Back to Matches
+          {detailUi.backToMatches}
         </Link>
 
         <div className={`mt-4 ${scholarshipDetailHeroSurfaceClass}`}>
@@ -2046,7 +2052,7 @@ export default function ScholarshipDetailPageClient({
                 scroll
                 className="font-medium text-zinc-600 underline-offset-2 transition hover:text-zinc-900 hover:underline"
               >
-                Scholarships
+                {detailUi.scholarshipsHub}
               </Link>
             </li>
             {categorySlugForLinks ? (
@@ -2145,13 +2151,13 @@ export default function ScholarshipDetailPageClient({
           {hasDeadlineStat ? (
             <StatCard
               primary={deadlinePrimary}
-              secondary={deadlineSecondaryLine ?? 'Scholarship deadline'}
+              secondary={deadlineSecondaryLine ?? detailUi.deadlineSecondary}
               deadlineFooter
               extra={recurringExtra}
               notice={
                 detailDeadlineNeedsNotice ? (
                   <p className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm font-medium leading-snug text-amber-900">
-                    Deadline may have passed. Check the official provider page before applying.
+                    {detailUi.deadlinePassedNotice}
                   </p>
                 ) : null
               }
@@ -2161,18 +2167,18 @@ export default function ScholarshipDetailPageClient({
             <StatCard
               primary={awardDisplay}
               primaryTitle={awardStatLine.lineTitle ?? awardFullDisplay}
-              secondary="Award amount"
+              secondary={detailUi.awardAmount}
             />
           ) : null}
           {hasApplicantsStat ? (
             <StatCard
               primary={scholarship.applicantCount!.toLocaleString()}
-              secondary="Scholarship applicants"
+              secondary={detailUi.applicants}
             />
           ) : null}
           <StatCard
             primary={String(reqCount)}
-            secondary="Requirements"
+            secondary={detailUi.requirements}
           />
         </div>
         {authNoSubDetailPreviewBlur ? <AuthNoSubDetailStatsBlur /> : null}
@@ -2206,7 +2212,7 @@ export default function ScholarshipDetailPageClient({
         <ScholarshipDetailIqDecisionCard />
         {whoLines.length > 0 ? (
           <div className="mt-10">
-            <SectionLabel>Who can apply</SectionLabel>
+            <SectionLabel>{detailUi.whoCanApply}</SectionLabel>
             <div className={scholarshipDetailCardPrimaryClass}>
               <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-zinc-700 md:text-base">
                 {whoLines.map((item, i) => (
@@ -2217,8 +2223,7 @@ export default function ScholarshipDetailPageClient({
               </ul>
               {eligibilityFromAi ? (
                 <p className="mt-4 text-xs leading-relaxed text-zinc-500">
-                  Always verify the full eligibility rules on the official
-                  source before you apply.
+                  {detailUi.verifyEligibilityNote}
                 </p>
               ) : null}
             </div>
@@ -3047,7 +3052,7 @@ export default function ScholarshipDetailPageClient({
                               className="h-3.5 w-3.5 shrink-0"
                               aria-hidden
                             />
-                            Provider website
+                            {detailUi.providerWebsite}
                           </a>
                         ) : (
                           <button
@@ -3060,7 +3065,7 @@ export default function ScholarshipDetailPageClient({
                               strokeWidth={2}
                               aria-hidden
                             />
-                            Provider website
+                            {detailUi.providerWebsite}
                           </button>
                         )
                       ) : null}
@@ -3184,7 +3189,7 @@ export default function ScholarshipDetailPageClient({
                       onClick={() => setDescExpanded((e) => !e)}
                       className="mt-2 text-sm font-semibold text-sky-600 underline decoration-sky-600/40 underline-offset-2 hover:text-sky-700"
                     >
-                      {descExpanded ? 'Show less' : 'Show more'}
+                      {descExpanded ? detailUi.showLess : detailUi.showMore}
                     </button>
                   ) : null}
                 </div>
@@ -3206,7 +3211,7 @@ export default function ScholarshipDetailPageClient({
         {showApplyNowCta || officialName || lastVerifiedLabel ? (
           <div className="mt-8 pb-0">
             <h2 className="mb-2 text-lg font-semibold tracking-tight text-zinc-900">
-              Sponsor & application
+              {detailUi.sponsorAndApplication}
             </h2>
             <div
               className={`${scholarshipDetailCardTrustClass} text-sm text-zinc-700`}
@@ -3227,21 +3232,21 @@ export default function ScholarshipDetailPageClient({
                           rel="noopener noreferrer"
                           className={detailApplyPrimaryClass}
                         >
-                          Apply now
+                          {detailUi.applyNow}
                         </a>
                       ) : (
                         <button
                           type="button"
                           className={detailApplyPrimaryClass}
                           onClick={openApplyAccessWall}
-                          title="Premium subscription required to apply on the official site"
+                          title={detailUi.applyPremiumTitle}
                         >
                           <Lock
                             className="h-4 w-4 shrink-0 text-white stroke-white"
                             strokeWidth={2}
                             aria-hidden
                           />
-                          Apply now
+                          {detailUi.applyNow}
                         </button>
                       )
                     ) : hasSubscription ? (
@@ -3249,9 +3254,9 @@ export default function ScholarshipDetailPageClient({
                         <span
                           className={`${detailApplyPrimaryClass} cursor-wait opacity-75`}
                           aria-busy="true"
-                          aria-label="Loading apply link"
+                          aria-label={detailUi.applyLoadingAria}
                         >
-                          Apply now
+                          {detailUi.applyNow}
                         </span>
                       ) : null
                     ) : (
@@ -3259,14 +3264,14 @@ export default function ScholarshipDetailPageClient({
                         type="button"
                         className={detailApplyPrimaryClass}
                         onClick={openApplyAccessWall}
-                        title="Premium subscription required to apply on the official site"
+                        title={detailUi.applyPremiumTitle}
                       >
                         <Lock
                           className="h-4 w-4 shrink-0 text-white stroke-white"
                           strokeWidth={2}
                           aria-hidden
                         />
-                        Apply now
+                        {detailUi.applyNow}
                       </button>
                     )}
                   </li>
@@ -3277,8 +3282,8 @@ export default function ScholarshipDetailPageClient({
                     aria-pressed={savedIds.includes(scholarship.id)}
                     aria-label={
                       savedIds.includes(scholarship.id)
-                        ? 'Remove from saved'
-                        : 'Save scholarship'
+                        ? detailUi.removeSavedAria
+                        : detailUi.saveAria
                     }
                     className={
                       savedIds.includes(scholarship.id)
@@ -3312,7 +3317,7 @@ export default function ScholarshipDetailPageClient({
                       );
                     }}
                   >
-                    {savedIds.includes(scholarship.id) ? 'Saved вњ“' : 'Save'}
+                    {savedIds.includes(scholarship.id) ? detailUi.saved : detailUi.save}
                   </button>
                 </li>
                 <li className="min-w-0 flex-1 basis-0">
@@ -3320,37 +3325,36 @@ export default function ScholarshipDetailPageClient({
                     <button
                       type="button"
                       className={`${detailOfficialRestorePillClass} flex h-11 min-h-[2.75rem] items-center justify-center`}
-                      aria-label="Restore scholarship to matches"
+                      aria-label={detailUi.restoreAria}
                       onClick={() => {
                         setIgnoredIds(
                           removeIgnoredScholarship(scholarship.id)
                         );
                       }}
                     >
-                      Restore to matches
+                      {detailUi.restoreToMatches}
                     </button>
                   ) : (
                     <button
                       type="button"
                       className={`${detailOfficialNotRelevantPillClass} flex h-11 min-h-[2.75rem] items-center justify-center`}
-                      aria-label="Hide scholarship from matches"
+                      aria-label={detailUi.notRelevantAria}
                       onClick={() => {
                         setIgnoredIds(addIgnoredScholarship(scholarship.id));
                       }}
                     >
-                      Not relevant
+                      {detailUi.notRelevant}
                     </button>
                   )}
                 </li>
               </ul>
               {lastVerifiedLabel ? (
                 <p className="mt-4 text-xs text-zinc-500">
-                  Information last verified {lastVerifiedLabel}.
+                  {detailUi.lastVerifiedPrefix} {lastVerifiedLabel}.
                 </p>
               ) : null}
               <p className="mt-2 text-xs leading-relaxed text-zinc-500">
-                Always confirm deadlines, requirements, and application details
-                on the official page before you apply.
+                {detailUi.confirmOfficialNote}
               </p>
             </div>
           </div>
@@ -3377,7 +3381,7 @@ export default function ScholarshipDetailPageClient({
                 scroll
                 className={detailBackToMatchesLinkClass}
               >
-                ← Back to Matches
+                {detailUi.backToMatches}
               </Link>
               <div className="min-w-0 space-y-2">
                 <h2 className="text-lg font-semibold tracking-tight text-zinc-900">
@@ -3527,7 +3531,7 @@ export default function ScholarshipDetailPageClient({
                 scroll
                 className={detailBackToMatchesLinkClass}
               >
-                ← Back to Matches
+                {detailUi.backToMatches}
               </Link>
             </div>
           </div>
