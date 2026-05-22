@@ -1,7 +1,7 @@
-source_type,source_id,source_slug,locale,status,quality_score
-"provider_profile","1354dd69-2692-44e6-93a7-b3118b912a9f","loyola-university-chicago","es","review_required",""
-"provider_profile","1354dd69-2692-44e6-93a7-b3118b912a9f","loyola-university-chicago","fr","review_required",""
-"provider_profile","df149569-8fb4-496f-803e-9a1f636b9149","harvard-university","es","review_required",""
-"provider_profile","df149569-8fb4-496f-803e-9a1f636b9149","harvard-university","fr","review_required",""
-"provider_profile","6947807d-eeb5-45f8-9fd2-fe8c3eb0514f","university-of-michigan","es","review_required",""
-"provider_profile","6947807d-eeb5-45f8-9fd2-fe8c3eb0514f","university-of-michigan","fr","review_required",""
+source_type,source_id,source_slug,locale,status,quality_score,translated_title,translated_meta_title,machine_model
+"provider_profile","1354dd69-2692-44e6-93a7-b3118b912a9f","loyola-university-chicago","es","published","90","Becas Loyola University Chicago","Loyola University Chicago | Proveedor de becas | ScholarshipTop","stage5d-provider-manual-pilot"
+"provider_profile","1354dd69-2692-44e6-93a7-b3118b912a9f","loyola-university-chicago","fr","published","90","Bourses Loyola University Chicago","Loyola University Chicago | Fournisseur de bourses | ScholarshipTop","stage5d-provider-manual-pilot"
+"provider_profile","df149569-8fb4-496f-803e-9a1f636b9149","harvard-university","es","published","90","Becas Harvard University","Harvard University | Proveedor de becas | ScholarshipTop","stage5d-provider-manual-pilot"
+"provider_profile","df149569-8fb4-496f-803e-9a1f636b9149","harvard-university","fr","published","90","Bourses Harvard University","Harvard University | Fournisseur de bourses | ScholarshipTop","stage5d-provider-manual-pilot"
+"provider_profile","6947807d-eeb5-45f8-9fd2-fe8c3eb0514f","university-of-michigan","es","published","90","Becas University of Michigan","University of Michigan | Proveedor de becas | ScholarshipTop","stage5d-provider-manual-pilot"
+"provider_profile","6947807d-eeb5-45f8-9fd2-fe8c3eb0514f","university-of-michigan","fr","published","90","Bourses University of Michigan","University of Michigan | Fournisseur de bourses | ScholarshipTop","stage5d-provider-manual-pilot"

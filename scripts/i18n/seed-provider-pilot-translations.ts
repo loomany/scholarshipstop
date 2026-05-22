@@ -1,8 +1,11 @@
 /**
- * Stage 5D — Provider profile translation pilot (dry-run by default).
+ * Stage 5D-2 — Provider profile translation pilot (3 × ES/FR = 6 rows).
  *
+ * Dry-run (default):
  *   npx tsx scripts/i18n/seed-provider-pilot-translations.ts
- *   I18N_PILOT_ALLOW_DB_WRITES=1 I18N_PILOT_ALLOW_PRODUCTION=1 npx tsx ...
+ *
+ * Production apply:
+ *   I18N_PILOT_ALLOW_DB_WRITES=1 I18N_PILOT_ALLOW_PRODUCTION=1 npx tsx scripts/i18n/seed-provider-pilot-translations.ts
  */
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { readFileSync } from 'node:fs';
@@ -10,17 +13,18 @@ import { join } from 'node:path';
 
 import { createClient } from '@supabase/supabase-js';
 
+import {
+  buildProviderPilotSeedRows,
+  type ProviderPilotSeedRow
+} from '@/lib/i18n/providerPilot/providerPilotTranslationsData';
+import {
+  PROVIDER_PILOT_SLUGS,
+  PROVIDER_PILOT_STAGE_MAX_ROWS,
+  type ProviderPilotSlug
+} from '@/lib/i18n/providerPilot/providerPilotSlugs';
 import type { Database } from '@/types_db';
 
-const MAX_ROWS = 10;
-const PILOT_SLUGS = [
-  'loyola-university-chicago',
-  'harvard-university',
-  'stanford-university',
-  'university-of-michigan',
-  'yale-university'
-] as const;
-
+const MACHINE_MODEL = 'stage5d-provider-manual-pilot';
 const DATE = '2026-05-22';
 const ROWS_CSV = join(
   process.cwd(),
@@ -28,14 +32,8 @@ const ROWS_CSV = join(
   `i18n-stage5d-provider-pilot-rows-${DATE}.csv`
 );
 
-type PlannedRow = {
-  source_type: 'provider_profile';
-  source_id: string;
-  source_slug: string;
-  locale: 'es' | 'fr';
-  status: 'review_required' | 'draft_machine';
-  quality_score: number | null;
-};
+const UUID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 function loadEnvLocal(): void {
   const path = join(process.cwd(), '.env.local');
@@ -82,10 +80,53 @@ function escapeCsv(v: string) {
   return `"${String(v).replace(/"/g, '""')}"`;
 }
 
-function writeCsv(rows: PlannedRow[]) {
+function validateRows(rows: ProviderPilotSeedRow[]): void {
+  if (rows.length !== PROVIDER_PILOT_STAGE_MAX_ROWS) {
+    console.error(
+      `Refusing batch: expected exactly ${PROVIDER_PILOT_STAGE_MAX_ROWS} rows, got ${rows.length}`
+    );
+    process.exit(1);
+  }
+
+  const slugs = new Set<string>();
+  for (const row of rows) {
+    if (row.source_type !== 'provider_profile') {
+      console.error('Refusing: source_type must be provider_profile');
+      process.exit(1);
+    }
+    if (row.locale !== 'es' && row.locale !== 'fr') {
+      console.error('Refusing: locale must be es or fr', row.locale);
+      process.exit(1);
+    }
+    if (!UUID_RE.test(row.source_id)) {
+      console.error('Refusing: source_id must be provider UUID', row.source_slug);
+      process.exit(1);
+    }
+    if (row.status !== 'published') {
+      console.error('Refusing: stage 5D-2 requires published manual review', row);
+      process.exit(1);
+    }
+    if (row.quality_score < 85) {
+      console.error('Refusing: quality_score must be >= 85', row);
+      process.exit(1);
+    }
+    if (!row.translated_title.trim() || !row.translated_body.trim()) {
+      console.error('Refusing: missing translated title/body', row.source_slug, row.locale);
+      process.exit(1);
+    }
+    slugs.add(row.source_slug);
+  }
+
+  if (slugs.size !== PROVIDER_PILOT_SLUGS.length) {
+    console.error('Refusing: expected 3 distinct provider slugs');
+    process.exit(1);
+  }
+}
+
+function writeCsv(rows: ProviderPilotSeedRow[]) {
   mkdirSync(join(process.cwd(), 'reports/seo'), { recursive: true });
   const header =
-    'source_type,source_id,source_slug,locale,status,quality_score\n';
+    'source_type,source_id,source_slug,locale,status,quality_score,translated_title,translated_meta_title,machine_model\n';
   const body = rows
     .map((r) =>
       [
@@ -94,7 +135,10 @@ function writeCsv(rows: PlannedRow[]) {
         r.source_slug,
         r.locale,
         r.status,
-        r.quality_score == null ? '' : String(r.quality_score)
+        String(r.quality_score),
+        r.translated_title,
+        r.translated_meta_title,
+        MACHINE_MODEL
       ]
         .map(escapeCsv)
         .join(',')
@@ -104,42 +148,20 @@ function writeCsv(rows: PlannedRow[]) {
   console.log(`Wrote ${ROWS_CSV}`);
 }
 
-function plannedRows(slugToId: Map<string, string>): PlannedRow[] {
-  const rows: PlannedRow[] = [];
-  for (const slug of PILOT_SLUGS) {
-    const sourceId = slugToId.get(slug);
-    if (!sourceId) continue;
-    rows.push({
-      source_type: 'provider_profile',
-      source_id: sourceId,
-      source_slug: slug,
-      locale: 'es',
-      status: 'review_required',
-      quality_score: null
-    });
-    rows.push({
-      source_type: 'provider_profile',
-      source_id: sourceId,
-      source_slug: slug,
-      locale: 'fr',
-      status: 'review_required',
-      quality_score: null
-    });
-  }
-  return rows;
-}
-
 async function main() {
   if (process.env.I18N_PILOT_USE_SHELL_ENV !== '1') {
     loadEnvLocal();
   }
 
+  if (process.env.I18N_OPENAI_TRANSLATION_DRAFTS === '1') {
+    console.error('OpenAI drafts disabled for provider pilot.');
+    process.exit(1);
+  }
+
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
-  const key =
-    process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() ||
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim();
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
   if (!url || !key) {
-    console.error('Missing NEXT_PUBLIC_SUPABASE_URL and Supabase key.');
+    console.error('Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY.');
     process.exit(1);
   }
 
@@ -148,47 +170,47 @@ async function main() {
     assertAllowedTarget(url);
   }
 
-  const client = createClient<Database>(url, key, {
+  const admin = createClient<Database>(url, key, {
     auth: { persistSession: false, autoRefreshToken: false }
   });
 
-  const { data: providers, error } = await client
+  const { data: providers, error } = await admin
     .from('providers')
-    .select('id, slug')
-    .in('slug', [...PILOT_SLUGS]);
+    .select('id, slug, updated_at')
+    .in('slug', [...PROVIDER_PILOT_SLUGS]);
 
   if (error) {
     console.error('providers lookup failed:', error.message);
     process.exit(1);
   }
 
-  const slugToId = new Map<string, string>();
+  const slugToMeta = new Map<
+    ProviderPilotSlug,
+    { id: string; updated_at: string | null }
+  >();
   for (const row of providers ?? []) {
     const slug = String(row.slug ?? '').trim().toLowerCase();
     const id = String(row.id ?? '').trim();
-    if (slug && id) slugToId.set(slug, id);
+    if (slug && id && (PROVIDER_PILOT_SLUGS as readonly string[]).includes(slug)) {
+      slugToMeta.set(slug as ProviderPilotSlug, {
+        id,
+        updated_at: row.updated_at ?? null
+      });
+    }
   }
 
-  const missing = PILOT_SLUGS.filter((s) => !slugToId.has(s));
+  const missing = PROVIDER_PILOT_SLUGS.filter((s) => !slugToMeta.has(s));
   if (missing.length > 0) {
-    console.warn('Skipping slugs with no providers row:', missing.join(', '));
-  }
-  const resolvedSlugs = PILOT_SLUGS.filter((s) => slugToId.has(s));
-  if (resolvedSlugs.length === 0) {
-    console.error('No pilot provider slugs resolved in providers table.');
+    console.error('Missing providers rows for required slugs:', missing.join(', '));
     process.exit(1);
   }
 
-  const rows = plannedRows(slugToId);
-  if (rows.length > MAX_ROWS) {
-    console.error(`Refusing batch: ${rows.length} rows exceeds limit ${MAX_ROWS}`);
-    process.exit(1);
-  }
-
+  const rows = buildProviderPilotSeedRows(slugToMeta);
+  validateRows(rows);
   writeCsv(rows);
 
-  console.log(`Planned ${rows.length} provider_profile rows (max ${MAX_ROWS}).`);
-  console.log('Status default: review_required — not published, no sitemap exposure.\n');
+  console.log(`Planned ${rows.length} provider_profile rows (stage cap ${PROVIDER_PILOT_STAGE_MAX_ROWS}).`);
+  console.log(`machine_model=${MACHINE_MODEL} — no OpenAI in this script.\n`);
 
   for (const row of rows) {
     console.log(
@@ -197,7 +219,7 @@ async function main() {
         row.source_slug,
         `source_id=${row.source_id}`,
         `status=${row.status}`,
-        `quality_score=${row.quality_score ?? 'n/a'}`
+        `quality_score=${row.quality_score}`
       ].join(' | ')
     );
   }
@@ -209,15 +231,78 @@ async function main() {
     return;
   }
 
-  if (process.env.I18N_OPENAI_TRANSLATION_DRAFTS === '1') {
-    console.error('OpenAI drafts not enabled for provider pilot.');
+  const { error: probeErr } = await admin.from('content_translations').select('id').limit(1);
+  if (probeErr) {
+    console.error('content_translations not reachable:', probeErr.message);
     process.exit(1);
   }
 
-  console.error(
-    'DB upsert not wired: review CSV + publish manually after human QA.'
+  const { count: beforeCount } = await admin
+    .from('content_translations')
+    .select('id', { count: 'exact', head: true })
+    .eq('source_type', 'provider_profile');
+
+  let upserted = 0;
+  for (const row of rows) {
+    const { error: upsertErr } = await admin.from('content_translations').upsert(
+      {
+        source_type: row.source_type,
+        source_id: row.source_id,
+        locale: row.locale,
+        status: row.status,
+        source_hash: row.source_hash,
+        source_updated_at: row.source_updated_at,
+        quality_score: row.quality_score,
+        published_at: row.published_at,
+        translated_slug: row.translated_slug,
+        translated_title: row.translated_title,
+        translated_meta_title: row.translated_meta_title,
+        translated_meta_description: row.translated_meta_description,
+        translated_summary: row.translated_summary,
+        translated_body: row.translated_body,
+        translated_faq_json: row.translated_faq_json,
+        translated_extra_json: row.translated_extra_json,
+        machine_model: MACHINE_MODEL,
+        translated_by: 'stage5d-seed-script'
+      },
+      { onConflict: 'source_type,source_id,locale' }
+    );
+    if (upsertErr) {
+      console.error('Upsert failed', row.source_slug, row.locale, upsertErr.message);
+      process.exit(1);
+    }
+    upserted += 1;
+  }
+
+  const { count: afterCount } = await admin
+    .from('content_translations')
+    .select('id', { count: 'exact', head: true })
+    .eq('source_type', 'provider_profile');
+
+  const { count: catCount } = await admin
+    .from('content_translations')
+    .select('id', { count: 'exact', head: true })
+    .eq('source_type', 'scholarship_category');
+
+  const { count: resCount } = await admin
+    .from('content_translations')
+    .select('id', { count: 'exact', head: true })
+    .eq('source_type', 'resource_article');
+
+  console.log(
+    JSON.stringify(
+      {
+        upserted,
+        providerProfileBefore: beforeCount,
+        providerProfileAfter: afterCount,
+        scholarshipCategoryCount: catCount,
+        resourceArticleCount: resCount
+      },
+      null,
+      2
+    )
   );
-  process.exit(1);
+  console.log(`Seeded ${upserted} provider_profile rows.`);
 }
 
 main().catch((e) => {
