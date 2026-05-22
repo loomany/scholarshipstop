@@ -36,11 +36,15 @@ import { getCanonical } from '@/lib/seo/canonical';
 import {
   getProviderSeoQualityPolicy,
   type ProviderDataCompleteness,
-  type ProviderSourceStatus,
-  providerDataCompletenessLabel,
-  providerSourceStatusLabel
+  type ProviderSourceStatus
 } from '@/lib/seo/providerSeoQualityPolicy';
 import type { ProviderFaqItem } from '@/lib/providers/providerProfileTypes';
+import { getProviderDetailUiCopy } from '@/lib/i18n/providerDetailUiCopy';
+import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
+import {
+  getLocalizedProviderDataCompletenessLabel,
+  getLocalizedProviderSourceStatusLabel
+} from '@/lib/i18n/providerDisplayLabels';
 
 export const revalidate = 60;
 
@@ -333,6 +337,10 @@ export default async function ProviderProfilePage({
     routeResolves: true
   });
 
+  /** English-only route today; pass es/fr when /[locale]/providers/[slug] ships. */
+  const uiLocale: LocalizedUiLocale = 'en';
+  const detailUi = getProviderDetailUiCopy(uiLocale);
+
   const providerPath = `/providers/${encodeURIComponent(data.slug)}`;
   const providerUrl = getURL(providerPath);
   const resolvedDescription = providerMetaDescription(
@@ -385,29 +393,32 @@ export default async function ProviderProfilePage({
   const tocItems: Array<{ id: string; label: string }> = [];
 
   tocItems.push(
-    { id: 'provider-about', label: 'About Provider' },
-    { id: 'provider-source-status', label: 'Source status' },
-    { id: 'provider-explore-scholarships', label: 'Explore scholarships and guides' }
+    { id: 'provider-about', label: detailUi.toc.aboutProvider },
+    { id: 'provider-source-status', label: detailUi.toc.sourceStatus },
+    { id: 'provider-explore-scholarships', label: detailUi.toc.exploreScholarships }
   );
   if (officialHrefNormalized || sourceLinks.length > 0) {
     tocItems.push({
       id: 'provider-official-sources',
       label: officialHrefNormalized
-        ? 'Official website'
-        : 'Sources'
+        ? detailUi.toc.officialWebsite
+        : detailUi.toc.sources
     });
   }
   const providerTrustFaq = buildProviderTrustFaq(data.displayName);
   const faqItems = mergeProviderFaqItems(data.aiFaq, providerTrustFaq);
 
   if (faqItems.length > 0) {
-    tocItems.push({ id: 'provider-faq-heading', label: 'FAQ' });
+    tocItems.push({ id: 'provider-faq-heading', label: detailUi.toc.faq });
   }
-  tocItems.push({ id: 'provider-scholarships', label: 'Scholarships from this provider' });
+  tocItems.push({
+    id: 'provider-scholarships',
+    label: detailUi.toc.scholarshipsFromProvider
+  });
   if (data.similarProviders.length > 0) {
     tocItems.push({
       id: 'provider-similar-organizations',
-      label: 'Similar organizations'
+      label: detailUi.toc.similarOrganizations
     });
   }
 
@@ -463,13 +474,16 @@ export default async function ProviderProfilePage({
               </h1>
               <span className="inline-flex w-fit shrink-0 items-center gap-1.5 self-start rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold uppercase tracking-wide text-emerald-800 ring-1 ring-emerald-200/80 sm:self-center">
                 <Check className="h-3.5 w-3.5 text-emerald-600" strokeWidth={2.5} aria-hidden />
-                {providerSourceStatusLabel(providerQuality.sourceStatus)}
+                {getLocalizedProviderSourceStatusLabel(
+                  providerQuality.sourceStatus,
+                  uiLocale
+                )}
               </span>
             </div>
             <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
               <div className="rounded-2xl border border-gray-100 bg-gray-50/80 px-4 py-3">
                 <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-gray-500">
-                  Active scholarships
+                  {detailUi.stats.activeScholarships}
                 </p>
                 <p className="mt-1 tabular-nums text-xl font-bold text-gray-900">
                   {data.totalScholarshipCount.toLocaleString()}
@@ -478,20 +492,22 @@ export default async function ProviderProfilePage({
               {showAwardPool ? (
                 <div className="rounded-2xl border border-emerald-100 bg-emerald-50/80 px-4 py-3">
                   <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-emerald-700">
-                    Total listed award pool
+                    {detailUi.stats.totalAwardPool}
                   </p>
                   <p className="mt-1 tabular-nums text-xl font-bold text-emerald-950">
                     {formattedAwardPool}
                   </p>
                   <p className="mt-1 text-xs text-emerald-700/80">
-                    Known amounts for {data.knownAwardAmountCount.toLocaleString()} awards
+                    {detailUi.stats.knownAmountsFor(
+                      data.knownAwardAmountCount.toLocaleString()
+                    )}
                   </p>
                 </div>
               ) : null}
               {formattedLastUpdated ? (
                 <div className="rounded-2xl border border-gray-100 bg-gray-50/80 px-4 py-3">
                   <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-gray-500">
-                    Last updated
+                    {detailUi.stats.lastUpdated}
                   </p>
                   <p className="mt-1 text-xl font-bold text-gray-900">
                     {formattedLastUpdated}
@@ -500,16 +516,19 @@ export default async function ProviderProfilePage({
               ) : null}
               <div className="rounded-2xl border border-gray-100 bg-gray-50/80 px-4 py-3">
                 <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-gray-500">
-                  Data completeness
+                  {detailUi.stats.dataCompleteness}
                 </p>
                 <p className="mt-1 text-xl font-bold leading-snug text-gray-900">
-                  {providerDataCompletenessLabel(providerQuality.dataCompleteness)}
+                  {getLocalizedProviderDataCompletenessLabel(
+                    providerQuality.dataCompleteness,
+                    uiLocale
+                  )}
                 </p>
               </div>
               {profileLocationLine ? (
                 <div className="rounded-2xl border border-gray-100 bg-gray-50/80 px-4 py-3">
                   <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-gray-500">
-                    Location
+                    {detailUi.stats.location}
                   </p>
                   <p className="mt-1 text-xl font-bold leading-snug text-gray-900">
                     {profileLocationLine}
@@ -526,7 +545,7 @@ export default async function ProviderProfilePage({
           id="provider-about"
           className="scroll-mt-24 mt-10 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm sm:p-8"
         >
-          <h2 className="text-lg font-bold text-gray-900">About Provider</h2>
+          <h2 className="text-lg font-bold text-gray-900">{detailUi.about.heading}</h2>
           {aboutParas.length > 0 ? (
             <div className="mt-4 max-w-3xl space-y-4 text-sm leading-relaxed text-gray-700 sm:text-[0.9375rem]">
               {aboutParas.map((para, i) => (
@@ -534,10 +553,7 @@ export default async function ProviderProfilePage({
               ))}
             </div>
           ) : (
-            <p className="mt-4 text-sm text-gray-500">
-              We don&apos;t have a profile write-up for this organization yet. Browse the scholarships
-              below or open the official site when it&apos;s listed.
-            </p>
+            <p className="mt-4 text-sm text-gray-500">{detailUi.about.emptyBody}</p>
           )}
         </section>
 
@@ -547,9 +563,11 @@ export default async function ProviderProfilePage({
           dataCompleteness={providerQuality.dataCompleteness}
           officialHref={officialHrefNormalized}
           reasons={providerQuality.reasons}
+          uiLocale={uiLocale}
+          detailUi={detailUi}
         />
 
-        <ProviderProfileIqCta providerName={data.displayName} />
+        <ProviderProfileIqCta providerName={data.displayName} iqCta={detailUi.iqCta} />
 
         <ProviderProfileContextLinks />
 
@@ -559,13 +577,15 @@ export default async function ProviderProfilePage({
             className="scroll-mt-24 mt-6 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm sm:p-8"
           >
             <h2 className="text-lg font-bold text-gray-900">
-              {officialHrefNormalized ? 'Official Website' : 'Sources'}
+              {officialHrefNormalized
+                ? detailUi.toc.officialWebsite
+                : detailUi.toc.sources}
             </h2>
             {officialHrefNormalized ? (
               <div className="mt-4">
                 <ProviderOfficialWebsiteGate
                   href={officialHrefNormalized}
-                  label="Open official website"
+                  label={detailUi.official.openOfficialWebsite}
                   className="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-300 bg-white px-5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm transition hover:border-gray-400 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/55"
                 />
               </div>
@@ -575,7 +595,7 @@ export default async function ProviderProfilePage({
                 className={officialHrefNormalized ? 'mt-8' : 'mt-4'}
               >
                 {officialHrefNormalized ? (
-                  <h3 className="text-lg font-bold text-gray-900">Sources</h3>
+                  <h3 className="text-lg font-bold text-gray-900">{detailUi.toc.sources}</h3>
                 ) : null}
                 <ul
                   className={
@@ -640,7 +660,7 @@ export default async function ProviderProfilePage({
                 id="provider-similar-orgs-heading"
                 className="mb-3 text-xl font-bold text-gray-900 sm:mb-6"
               >
-                Explore similar organizations
+                {detailUi.similar.exploreHeading}
               </h2>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 {data.similarProviders.map((p) => (
@@ -654,7 +674,9 @@ export default async function ProviderProfilePage({
                       {p.displayName}
                     </p>
                     <p className="mt-1 text-xs text-gray-500">
-                      {p.scholarshipCount.toLocaleString()} scholarships
+                      {detailUi.similar.scholarshipsCount(
+                        p.scholarshipCount.toLocaleString()
+                      )}
                     </p>
                   </Link>
                 ))}
@@ -665,7 +687,7 @@ export default async function ProviderProfilePage({
           {data.totalScholarshipCount === 0 ? (
             <div className="rounded-2xl border border-zinc-200 bg-white p-8 text-center shadow-sm sm:p-10">
               <p className="text-base font-medium text-zinc-900">
-                No active scholarships found for this provider right now.
+                {detailUi.scholarships.noScholarships}
               </p>
               <p className="mt-3 text-sm leading-relaxed text-zinc-600">
                 Create a free account to get scholarship alerts and updates when new
@@ -708,13 +730,17 @@ function ProviderSourceStatusBlock({
   sourceStatus,
   dataCompleteness,
   officialHref,
-  reasons
+  reasons,
+  uiLocale,
+  detailUi
 }: {
   providerName: string;
   sourceStatus: ProviderSourceStatus;
   dataCompleteness: ProviderDataCompleteness;
   officialHref: string | null;
   reasons: string[];
+  uiLocale: LocalizedUiLocale;
+  detailUi: ReturnType<typeof getProviderDetailUiCopy>;
 }) {
   const host = providerHostLabel(officialHref);
   const verifyItems = [
@@ -732,28 +758,25 @@ function ProviderSourceStatusBlock({
       <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
         <div className="max-w-2xl">
           <p className="text-xs font-bold uppercase tracking-[0.16em] text-emerald-700">
-            Provider source status
+            {detailUi.sourceStatus.sectionEyebrow}
           </p>
           <h2
             id="provider-source-status-heading"
             className="mt-2 text-xl font-bold tracking-tight text-gray-900"
           >
-            What ScholarshipTop knows about {providerName}
+            {detailUi.sourceStatus.heading(providerName)}
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-gray-600 sm:text-[0.9375rem]">
-            This provider profile is based on ScholarshipTop listing data. If an
-            official provider URL is available, students should use it to confirm
-            application details directly. If source information is incomplete,
-            this page marks what still needs verification before applying.
+            {detailUi.sourceStatus.intro}
           </p>
         </div>
         <div className="grid min-w-0 gap-3 sm:grid-cols-2 lg:w-80 lg:grid-cols-1">
           <div className="rounded-2xl border border-gray-100 bg-gray-50/80 p-4">
             <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-gray-500">
-              Source
+              {detailUi.sourceStatus.sourceLabel}
             </p>
             <p className="mt-1 text-sm font-bold text-gray-950">
-              {providerSourceStatusLabel(sourceStatus)}
+              {getLocalizedProviderSourceStatusLabel(sourceStatus, uiLocale)}
             </p>
             {host ? (
               <p className="mt-1 break-words text-xs text-gray-500">{host}</p>
@@ -761,10 +784,10 @@ function ProviderSourceStatusBlock({
           </div>
           <div className="rounded-2xl border border-gray-100 bg-gray-50/80 p-4">
             <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-gray-500">
-              Completeness
+              {detailUi.sourceStatus.completenessLabel}
             </p>
             <p className="mt-1 text-sm font-bold text-gray-950">
-              {providerDataCompletenessLabel(dataCompleteness)}
+              {getLocalizedProviderDataCompletenessLabel(dataCompleteness, uiLocale)}
             </p>
           </div>
         </div>
@@ -821,7 +844,13 @@ function ProviderSourceStatusBlock({
   );
 }
 
-function ProviderProfileIqCta({ providerName }: { providerName: string }) {
+function ProviderProfileIqCta({
+  providerName,
+  iqCta
+}: {
+  providerName: string;
+  iqCta: ReturnType<typeof getProviderDetailUiCopy>['iqCta'];
+}) {
   return (
     <Link
       href="/iq/assessment?intent=provider_research"
@@ -846,25 +875,23 @@ function ProviderProfileIqCta({ providerName }: { providerName: string }) {
           <div className="mb-3 flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center gap-2 rounded-full border border-[#FFB875] bg-white/85 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.17em] text-[#B45309] shadow-sm">
               <BrainCircuit className="h-3.5 w-3.5 text-[#F97316]" aria-hidden />
-              Featured Tool
+              {iqCta.featuredTool}
             </span>
             <span className="rounded-full border border-slate-200 bg-slate-950 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white">
-              Provider fit
+              {iqCta.providerFit}
             </span>
           </div>
           <h2
             id="provider-profile-iq-cta-heading"
             className="text-balance text-2xl font-bold leading-tight tracking-tight text-slate-950 sm:text-3xl"
           >
-            Prioritize {providerName} with your Brain Archetype
+            {iqCta.prioritizeTitle(providerName)}
           </h2>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">
-            Take a comprehensive cognitive assessment to understand whether your
-            strengths fit research-heavy, essay-heavy, deadline-driven, or
-            fast-apply scholarship opportunities.
+            {iqCta.body}
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
-            {['Logic', 'Speed', 'Research', 'Essays'].map((item) => (
+            {iqCta.chips.map((item) => (
               <span
                 key={item}
                 className="rounded-full border border-white/80 bg-white/75 px-3 py-1 text-xs font-semibold text-slate-700 shadow-sm"
@@ -877,7 +904,7 @@ function ProviderProfileIqCta({ providerName }: { providerName: string }) {
 
         <div className="min-w-0 rounded-2xl border border-white/80 bg-white/70 p-3 shadow-sm backdrop-blur sm:w-48">
           <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">
-            Preview report
+            {iqCta.previewReport}
           </p>
           <div className="mt-2 grid grid-cols-2 gap-2">
             <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/80 px-2 py-2">
@@ -894,7 +921,7 @@ function ProviderProfileIqCta({ providerName }: { providerName: string }) {
             </div>
           </div>
           <span className="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-black px-3 py-2.5 text-center text-sm font-bold text-white shadow-[0_10px_24px_-14px_rgba(15,23,42,0.9)] transition group-hover:bg-slate-900">
-            Start IQ Test
+            {iqCta.cta}
             <ArrowRight className="h-4 w-4" aria-hidden />
           </span>
         </div>
