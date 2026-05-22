@@ -1,11 +1,14 @@
 import type { Metadata } from 'next';
 
 import IqLegalPage from '@/components/iq/IqLegalPage';
+import { getIqLocaleFromRequest } from '@/lib/iq/i18n/getIqLocaleFromRequest';
+import { getIqLegalMetadata } from '@/lib/iq/i18n/iqLegalShellCopy';
 
-export const metadata: Metadata = {
-  title: 'About IQ Profile',
-  description: 'About the IQ Profile cognitive report and its educational purpose.'
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = getIqLocaleFromRequest();
+  const meta = getIqLegalMetadata('about', locale);
+  return { title: meta.title, description: meta.description };
+}
 
 export default function IqAboutPage() {
   return (

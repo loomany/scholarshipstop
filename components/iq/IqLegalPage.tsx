@@ -1,7 +1,12 @@
+'use client';
+
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 
+import { useIqLocale } from '@/components/iq/IqLocaleProvider';
 import IqProductFooter from '@/components/iq/IqProductFooter';
+import { getIqLegalShellCopy } from '@/lib/iq/i18n/iqLegalShellCopy';
+import { getIqLocalizedHref } from '@/lib/iq/i18n/iqLocalizedHref';
 
 type IqLegalSection = {
   title: string;
@@ -17,25 +22,29 @@ type IqLegalPageProps = {
 };
 
 export default function IqLegalPage({
-  eyebrow = 'IQ Profile',
+  eyebrow,
   title,
   description,
   sections,
   closing
 }: IqLegalPageProps) {
+  const { locale } = useIqLocale();
+  const shell = getIqLegalShellCopy(locale);
+  const resolvedEyebrow = eyebrow ?? shell.eyebrow;
+
   return (
     <main className="iq-product-shell bg-[#f8fafc] text-slate-950">
       <article className="mx-auto max-w-3xl px-6 py-14 sm:py-20">
         <Link
-          href="/iq"
+          href={getIqLocalizedHref('/', locale, { onIqSubdomain: true })}
           className="inline-flex rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:text-slate-950"
         >
-          Back to IQ Profile
+          {shell.backToIq}
         </Link>
 
         <header className="mt-8 border-b border-slate-200 pb-10">
           <p className="text-sm font-bold uppercase tracking-[0.22em] text-indigo-600">
-            {eyebrow}
+            {resolvedEyebrow}
           </p>
           <h1 className="mt-4 text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
             {title}

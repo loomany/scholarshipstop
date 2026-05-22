@@ -1,11 +1,14 @@
 import type { Metadata } from 'next';
 
 import IqLegalPage from '@/components/iq/IqLegalPage';
+import { getIqLocaleFromRequest } from '@/lib/iq/i18n/getIqLocaleFromRequest';
+import { getIqLegalMetadata } from '@/lib/iq/i18n/iqLegalShellCopy';
 
-export const metadata: Metadata = {
-  title: 'IQ Profile Refund Policy',
-  description: 'Refund Policy for the IQ Profile one-time report purchase.'
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = getIqLocaleFromRequest();
+  const meta = getIqLegalMetadata('refund', locale);
+  return { title: meta.title, description: meta.description };
+}
 
 export default function IqRefundPolicyPage() {
   return (

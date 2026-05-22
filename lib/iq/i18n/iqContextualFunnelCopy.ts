@@ -45,9 +45,32 @@ export type IqContextualFunnelCopy = {
   loadingProgress: string;
   iqReadyTitle: string;
   iqReadyBody: string;
+  iqReadySubtitle: string;
+  iqReadyHighlights: [string, string, string];
   getReportCta: string;
   revealGrantsCta: string;
   startAgain: string;
+  checkingProfile: string;
+  preparingReportAccess: string;
+  strategyAccount: {
+    savingStrategy: string;
+    updatingProfile: string;
+    sessionFoundHint: string;
+    matchesFound: string;
+    saveBeforeUnlock: string;
+    finalStep: string;
+    saveMatchesBody: string;
+    emailLabel: string;
+    emailPlaceholder: string;
+    noPasswordHint: string;
+    savingMatches: string;
+    saveAndUnlock: string;
+    errors: {
+      invalidEmail: string;
+      profileUpdateFailed: string;
+      generic: string;
+    };
+  };
 };
 
 const EN_INTENTS: Record<UserIntent, ContextualIntentCopy> = {
@@ -366,26 +389,119 @@ function buildLocaleCopy(
           loadingProgress: 'Loading your progress...',
           iqReadyTitle: 'IQ profile generated',
           iqReadyBody: 'Your IQ profile is ready.',
+          iqReadySubtitle:
+            'You can unlock the full IQ-style report now, or add scholarship details to turn this cognitive profile into matched grants and next steps.',
+          iqReadyHighlights: [
+            'IQ-style score context saved',
+            'Brain Archetype prepared',
+            'Matched grants can be revealed next'
+          ] as [string, string, string],
           getReportCta: 'Get my IQ report now',
           revealGrantsCta: 'Reveal matched grants',
-          startAgain: 'Start again'
+          startAgain: 'Start again',
+          checkingProfile: 'Checking your saved scholarship profile...',
+          preparingReportAccess: 'Preparing your report access...',
+          strategyAccount: {
+            savingStrategy: 'Saving your strategy',
+            updatingProfile: 'Updating your scholarship profile...',
+            sessionFoundHint:
+              'We found your account, so there is no need to enter email again. Your new IQ result and scholarship answers are being saved.',
+            matchesFound: 'Matches found',
+            saveBeforeUnlock: 'Save them before unlocking your report.',
+            finalStep: 'Final step',
+            saveMatchesBody:
+              'We found your matched grants from your IQ profile and scholarship details. Enter your email so your grants, award amounts, deadlines, and reading path stay attached to your account.',
+            emailLabel: 'Email',
+            emailPlaceholder: 'you@example.com',
+            noPasswordHint:
+              'No password needed now. If you ever want one, you can set it later through forgot password.',
+            savingMatches: 'Saving matches...',
+            saveAndUnlock: 'Save and unlock report',
+            errors: {
+              invalidEmail: 'Enter a valid email address.',
+              profileUpdateFailed: 'Could not update your scholarship profile.',
+              generic: 'Something went wrong. Check your connection and try again.'
+            }
+          }
         }
       : locale === 'es'
         ? {
             loadingProgress: 'Cargando tu progreso...',
             iqReadyTitle: 'Perfil de CI generado',
             iqReadyBody: 'Tu perfil de CI está listo.',
+            iqReadySubtitle:
+              'Puedes desbloquear el informe completo tipo CI ahora o añadir datos de becas para convertir este perfil en coincidencias y próximos pasos.',
+            iqReadyHighlights: [
+              'Contexto de puntuación tipo CI guardado',
+              'Arquetipo cerebral preparado',
+              'Las becas coincidentes se pueden revelar después'
+            ] as [string, string, string],
             getReportCta: 'Obtener mi informe de CI',
             revealGrantsCta: 'Ver becas coincidentes',
-            startAgain: 'Empezar de nuevo'
+            startAgain: 'Empezar de nuevo',
+            checkingProfile: 'Comprobando tu perfil de becas guardado...',
+            preparingReportAccess: 'Preparando el acceso al informe...',
+            strategyAccount: {
+              savingStrategy: 'Guardando tu estrategia',
+              updatingProfile: 'Actualizando tu perfil de becas...',
+              sessionFoundHint:
+                'Encontramos tu cuenta; no hace falta volver a introducir el correo. Se guardan tu nuevo resultado de CI y tus respuestas de becas.',
+              matchesFound: 'Coincidencias encontradas',
+              saveBeforeUnlock: 'Guárdalas antes de desbloquear el informe.',
+              finalStep: 'Paso final',
+              saveMatchesBody:
+                'Encontramos becas coincidentes según tu perfil de CI y tus datos. Introduce tu correo para que premios, plazos y lecturas queden en tu cuenta.',
+              emailLabel: 'Correo electrónico',
+              emailPlaceholder: 'tu@ejemplo.com',
+              noPasswordHint:
+                'No hace falta contraseña ahora. Si la quieres más tarde, usa «olvidé mi contraseña».',
+              savingMatches: 'Guardando coincidencias...',
+              saveAndUnlock: 'Guardar y desbloquear informe',
+              errors: {
+                invalidEmail: 'Introduce un correo válido.',
+                profileUpdateFailed: 'No se pudo actualizar tu perfil de becas.',
+                generic: 'Algo salió mal. Comprueba la conexión e inténtalo de nuevo.'
+              }
+            }
           }
         : {
             loadingProgress: 'Chargement de votre progression...',
             iqReadyTitle: 'Profil de QI généré',
             iqReadyBody: 'Votre profil de QI est prêt.',
+            iqReadySubtitle:
+              'Vous pouvez débloquer le rapport type QI complet maintenant ou ajouter des détails de bourses pour obtenir des correspondances et des prochaines étapes.',
+            iqReadyHighlights: [
+              'Contexte de score type QI enregistré',
+              'Archétype cérébral préparé',
+              'Les bourses correspondantes peuvent être affichées ensuite'
+            ] as [string, string, string],
             getReportCta: 'Obtenir mon rapport de QI',
             revealGrantsCta: 'Afficher les bourses correspondantes',
-            startAgain: 'Recommencer'
+            startAgain: 'Recommencer',
+            checkingProfile: 'Vérification de votre profil de bourses enregistré...',
+            preparingReportAccess: 'Préparation de l’accès au rapport...',
+            strategyAccount: {
+              savingStrategy: 'Enregistrement de votre stratégie',
+              updatingProfile: 'Mise à jour de votre profil de bourses...',
+              sessionFoundHint:
+                'Nous avons trouvé votre compte : pas besoin de saisir l’e-mail à nouveau. Votre nouveau résultat de QI et vos réponses sont enregistrés.',
+              matchesFound: 'Correspondances trouvées',
+              saveBeforeUnlock: 'Enregistrez-les avant de débloquer le rapport.',
+              finalStep: 'Dernière étape',
+              saveMatchesBody:
+                'Nous avons trouvé des bourses selon votre profil de QI et vos détails. Saisissez votre e-mail pour conserver montants, délais et parcours de lecture.',
+              emailLabel: 'E-mail',
+              emailPlaceholder: 'vous@exemple.com',
+              noPasswordHint:
+                'Pas de mot de passe pour l’instant. Vous pourrez en définir un plus tard via « mot de passe oublié ».',
+              savingMatches: 'Enregistrement des correspondances...',
+              saveAndUnlock: 'Enregistrer et débloquer le rapport',
+              errors: {
+                invalidEmail: 'Saisissez une adresse e-mail valide.',
+                profileUpdateFailed: 'Impossible de mettre à jour votre profil de bourses.',
+                generic: 'Un problème est survenu. Vérifiez votre connexion et réessayez.'
+              }
+            }
           };
 
   return {

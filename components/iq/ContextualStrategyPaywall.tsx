@@ -19,6 +19,8 @@ import {
   scholarshipPublicPath,
   type Scholarship
 } from '@/app/scholarships/scholarshipsData';
+import { useIqLocale } from '@/components/iq/IqLocaleProvider';
+import { getIqContextualStrategyCopy } from '@/lib/iq/i18n/iqContextualStrategyCopy';
 import type {
   AssessmentResult,
   StrategyRecommendation
@@ -48,6 +50,8 @@ export default function ContextualStrategyPaywall({
   onRestart,
   premiumLocked = false
 }: ContextualStrategyPaywallProps) {
+  const { locale } = useIqLocale();
+  const copy = getIqContextualStrategyCopy(locale);
   const [localPreviewUnlocked, setLocalPreviewUnlocked] = useState(false);
   const sortedDomains = [...result.domainScores].sort((a, b) => b.score - a.score);
   const topDomain = sortedDomains[0];
@@ -70,10 +74,10 @@ export default function ContextualStrategyPaywall({
           <div className="relative p-6 sm:p-8 lg:p-10">
             <div className="inline-flex items-center gap-2 rounded-full bg-orange-50 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-orange-700 ring-1 ring-orange-100">
               <Sparkles className="h-4 w-4" aria-hidden />
-              Personalized strategy report
+              {copy.badge}
             </div>
             <p className="mt-6 text-sm font-bold uppercase tracking-[0.18em] text-slate-500">
-              Brain Archetype
+              {copy.brainArchetypeEyebrow}
             </p>
             <h1
               className={
@@ -91,9 +95,7 @@ export default function ContextualStrategyPaywall({
                   : 'mt-4 text-base leading-7 text-slate-600'
               }
             >
-              {strategy.hook_title}. Your assessment and goal profile point to a
-              strategy built around your strongest cognitive signals, not generic
-              scholarship advice.
+              {strategy.hook_title}. {copy.hookSuffix}
             </p>
 
             <div
@@ -103,19 +105,21 @@ export default function ContextualStrategyPaywall({
                   : 'mt-7 grid gap-3 sm:grid-cols-2'
               }
             >
-              <SnapshotCard label="Estimated IQ range" value={estimatedRange} />
+              <SnapshotCard label={copy.estimatedIqRange} value={estimatedRange} />
               <SnapshotCard
-                label="Top cognitive domain"
+                label={copy.topCognitiveDomain}
                 value={topDomain?.label ?? 'Cognitive Reasoning'}
               />
             </div>
-            {reportLocked ? <PremiumReportLockOverlay placement="numbers" /> : null}
+            {reportLocked ? (
+              <PremiumReportLockOverlay placement="numbers" copy={copy} />
+            ) : null}
 
             <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-4">
               <div className="flex items-center gap-2">
                 <BrainCircuit className="h-4 w-4 text-slate-500" aria-hidden />
                 <p className="text-sm font-bold text-slate-950">
-                  Top strengths
+                  {copy.topStrengths}
                 </p>
               </div>
               <div
@@ -146,7 +150,7 @@ export default function ContextualStrategyPaywall({
               <div className="flex items-center gap-2">
                 <Target className="h-5 w-5 text-orange-600" aria-hidden />
                 <p className="text-sm font-bold uppercase tracking-[0.18em] text-slate-500">
-                  Strategy summary
+                  {copy.strategySummary}
                 </p>
               </div>
               <p
@@ -174,12 +178,10 @@ export default function ContextualStrategyPaywall({
                   </div>
                   <div>
                     <p className="text-base font-semibold text-slate-950">
-                      Want to start the test again?
+                      {copy.restartTitle}
                     </p>
                     <p className="mt-2 text-sm leading-6 text-slate-600">
-                      Retake the IQ assessment and refill the scholarship details
-                      that affect your grants. Your account profile will update
-                      with the new answers.
+                      {copy.restartBody}
                     </p>
                   </div>
                 </div>
@@ -189,7 +191,7 @@ export default function ContextualStrategyPaywall({
                   disabled={reportLocked}
                   className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-slate-800"
                 >
-                  Start IQ test again
+                  {copy.restartCta}
                   <ArrowRight className="h-4 w-4" aria-hidden />
                 </button>
               </div>
@@ -201,10 +203,10 @@ export default function ContextualStrategyPaywall({
             <div className="rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-sm">
               <div className="flex items-center justify-between gap-4">
                 <p className="text-sm font-bold uppercase tracking-[0.18em] text-slate-500">
-                  Recommended grants
+                  {copy.recommendedGrants}
                 </p>
                 <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
-                  {recommendedGrants.length} matches
+                  {copy.matchesLabel(recommendedGrants.length)}
                 </span>
               </div>
 
@@ -213,7 +215,8 @@ export default function ContextualStrategyPaywall({
                   const deadlineDisplay =
                     getScholarshipDeadlineDisplayParts(grant).primary;
                   const awardDisplay = formatIqGrantAward(
-                    grant.amount ?? grant.awardAmount ?? null
+                    grant.amount ?? grant.awardAmount ?? null,
+                    copy.awardVaries
                   );
 
                   return (
@@ -253,8 +256,8 @@ export default function ContextualStrategyPaywall({
                           <div className="flex shrink-0 flex-col items-end gap-2">
                             <p className={unlockedMatchPillClass}>
                               {typeof grant.profileMatchPercent === 'number'
-                                ? `${grant.profileMatchPercent}% match`
-                                : 'Strong match'}
+                                ? copy.matchPercent(grant.profileMatchPercent)
+                                : copy.strongMatch}
                             </p>
                             <span className={unlockedAwardPillClass}>
                               {awardDisplay}
@@ -271,8 +274,7 @@ export default function ContextualStrategyPaywall({
                 })}
                 {recommendedGrants.length === 0 ? (
                   <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm font-medium leading-6 text-slate-600">
-                    We could not load live grants in this preview. Open the scholarship
-                    hub to see your saved recommendation set.
+                    {copy.emptyGrants}
                   </div>
                 ) : null}
               </div>
@@ -287,7 +289,7 @@ export default function ContextualStrategyPaywall({
                 rel={reportLocked ? undefined : 'noreferrer'}
                 className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-slate-800"
               >
-                {reportLocked ? 'Unlock matched grants' : 'View scholarships'}
+                {reportLocked ? copy.unlockMatchedGrants : copy.viewScholarships}
                 <ArrowRight className="h-4 w-4" aria-hidden />
               </Link>
 
@@ -295,7 +297,7 @@ export default function ContextualStrategyPaywall({
                 <div className="flex items-center gap-2">
                   <BookOpen className="h-4 w-4 text-slate-400" aria-hidden />
                   <p className="text-sm font-bold text-slate-950">
-                    Recommended reading path
+                    {copy.recommendedReading}
                   </p>
                 </div>
                 <div className="mt-4 space-y-3">
@@ -323,17 +325,17 @@ export default function ContextualStrategyPaywall({
                 <div className="flex items-center gap-2">
                   <Sparkles className="h-4 w-4 text-slate-400" aria-hidden />
                   <p className="text-sm font-bold text-slate-950">
-                    Improve essays
+                    {copy.improveEssays}
                   </p>
                 </div>
                 <div className="mt-4 space-y-3">
                   {[
                     {
-                      title: 'Open essay improvement tools',
+                      title: copy.essayToolsTitle,
                       href: '/essays'
                     },
                     {
-                      title: 'Start a scholarship essay draft',
+                      title: copy.essayDraftTitle,
                       href: '/essay'
                     }
                   ].map((item) => (
@@ -363,8 +365,11 @@ export default function ContextualStrategyPaywall({
   );
 }
 
-function formatIqGrantAward(raw: string | null | undefined): string {
-  const formatted = formatScholarshipAwardDisplay(raw) || 'Award varies';
+function formatIqGrantAward(
+  raw: string | null | undefined,
+  awardVariesLabel: string
+): string {
+  const formatted = formatScholarshipAwardDisplay(raw) || awardVariesLabel;
 
   return formatted.replace(/\d[\d,.]*/g, (value) => {
     const digits = value.replace(/[,.]/g, '');
@@ -374,9 +379,11 @@ function formatIqGrantAward(raw: string | null | undefined): string {
 }
 
 function PremiumReportLockOverlay({
-  placement = 'right'
+  placement = 'right',
+  copy
 }: {
   placement?: 'right' | 'numbers';
+  copy: ReturnType<typeof getIqContextualStrategyCopy>;
 }) {
   const wrapperClass =
     placement === 'numbers'
@@ -392,33 +399,30 @@ function PremiumReportLockOverlay({
           </div>
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-orange-600">
-              Premium report ready
+              {copy.premiumEyebrow}
             </p>
             <h2 className="mt-2 text-xl font-semibold tracking-tight text-slate-950">
-              Unlock your matched grants
+              {copy.premiumTitle}
             </h2>
             <p className="mt-2 text-sm leading-6 text-slate-600">
-              Your score is analyzed. Upgrade to reveal the grants, award
-              amounts, deadlines, and essay moves most likely to turn this
-              profile into funded applications.
+              {copy.premiumBody}
             </p>
           </div>
         </div>
 
         <div className="mt-4 grid gap-2 text-sm font-semibold text-slate-700">
-          <div className="rounded-2xl bg-slate-50 px-4 py-3">
-            Reveal 4 matched grants with money amounts and deadlines
-          </div>
-          <div className="rounded-2xl bg-slate-50 px-4 py-3">
-            Unlock your strategy summary, reading path, and essay next steps
-          </div>
+          {copy.premiumBullets.map((bullet) => (
+            <div key={bullet} className="rounded-2xl bg-slate-50 px-4 py-3">
+              {bullet}
+            </div>
+          ))}
         </div>
 
         <Link
           href="/subscription"
           className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-900/10 transition hover:-translate-y-0.5 hover:bg-slate-800"
         >
-          Unlock my matched grants
+          {copy.premiumCta}
           <ArrowRight className="h-4 w-4" aria-hidden />
         </Link>
       </div>

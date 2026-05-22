@@ -2,11 +2,14 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import IqLegalPage from '@/components/iq/IqLegalPage';
+import { getIqLocaleFromRequest } from '@/lib/iq/i18n/getIqLocaleFromRequest';
+import { getIqLegalMetadata } from '@/lib/iq/i18n/iqLegalShellCopy';
 
-export const metadata: Metadata = {
-  title: 'IQ Profile Terms of Service',
-  description: 'Terms of Service for the IQ Profile assessment and report.'
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = getIqLocaleFromRequest();
+  const meta = getIqLegalMetadata('terms', locale);
+  return { title: meta.title, description: meta.description };
+}
 
 export default function IqTermsPage() {
   return (

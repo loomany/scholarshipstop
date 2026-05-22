@@ -777,7 +777,7 @@ export default function ContextualAssessmentFunnelClient({
       return (
         <main className="fixed inset-0 z-[200] grid place-items-center bg-[#F8FAFC] px-4 text-slate-950">
           <div className="rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm font-semibold text-slate-600 shadow-sm">
-            Checking your saved scholarship profile...
+            {funnelCopy.checkingProfile}
           </div>
         </main>
       );
@@ -820,7 +820,7 @@ export default function ContextualAssessmentFunnelClient({
       return (
         <main className="fixed inset-0 z-[200] grid place-items-center bg-[#F8FAFC] px-4 text-slate-950">
           <div className="rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm font-semibold text-slate-600 shadow-sm">
-            Preparing your report access...
+            {funnelCopy.preparingReportAccess}
           </div>
         </main>
       );
@@ -1062,6 +1062,9 @@ function ContextualIqReadyChoice({
   onUnlockIqReport: () => void;
   onRestart: () => void;
 }) {
+  const { locale } = useIqLocale();
+  const copy = getIqContextualFunnelCopy(locale);
+
   return (
     <main className="bg-[radial-gradient(circle_at_15%_8%,#dbeafe_0,transparent_30%),radial-gradient(circle_at_85%_12%,#ffedd5_0,transparent_30%),#F8FAFC] text-slate-950">
       <section className="mx-auto min-h-[calc(100vh-9rem)] w-full max-w-5xl px-5 py-7 sm:px-6 sm:py-10 lg:px-8">
@@ -1070,23 +1073,18 @@ function ContextualIqReadyChoice({
             <BrainCircuit className="h-7 w-7" aria-hidden />
           </div>
           <p className="mt-5 text-xs font-bold uppercase tracking-[0.22em] text-indigo-600 sm:text-sm">
-            IQ profile generated
+            {copy.iqReadyTitle}
           </p>
           <h1 className="mx-auto mt-3 max-w-2xl text-4xl font-semibold tracking-tight text-slate-950 sm:text-5xl">
-            Your IQ profile is ready.
+            {copy.iqReadyBody}
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-600">
-            You can unlock the full IQ-style report now, or add scholarship details
-            to turn this cognitive profile into matched grants and next steps.
+            {copy.iqReadySubtitle}
           </p>
         </div>
 
         <div className="mx-auto mt-8 grid max-w-3xl gap-3 text-left sm:grid-cols-3">
-          {[
-            'IQ-style score context saved',
-            'Brain Archetype prepared',
-            'Matched grants can be revealed next'
-          ].map((item) => (
+          {copy.iqReadyHighlights.map((item) => (
             <div
               key={item}
               className="rounded-2xl border border-slate-200 bg-white/90 p-4 text-sm font-semibold text-slate-700 shadow-sm"
@@ -1103,7 +1101,7 @@ function ContextualIqReadyChoice({
               onClick={onUnlockIqReport}
               className="inline-flex items-center justify-center gap-2 rounded-full bg-slate-950 px-6 py-4 text-base font-semibold text-white shadow-lg shadow-slate-900/10 transition hover:-translate-y-0.5 hover:bg-slate-800"
             >
-              Get my IQ report now
+              {copy.getReportCta}
               <ArrowRight className="h-4 w-4" aria-hidden />
             </button>
             <button
@@ -1111,7 +1109,7 @@ function ContextualIqReadyChoice({
               onClick={onRevealMatches}
               className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-4 text-base font-semibold text-slate-950 shadow-sm transition hover:-translate-y-0.5 hover:border-slate-300 hover:bg-slate-50"
             >
-              Reveal matched grants
+              {copy.revealGrantsCta}
               <ArrowRight className="h-4 w-4" aria-hidden />
             </button>
           </div>
@@ -1120,7 +1118,7 @@ function ContextualIqReadyChoice({
             onClick={onRestart}
             className="mt-5 w-full text-center text-sm font-semibold text-slate-500 transition hover:text-slate-950 hover:underline"
           >
-            Start again
+            {copy.startAgain}
           </button>
         </div>
       </section>
@@ -1143,6 +1141,8 @@ function StrategyAccountGate({
     userId?: string
   ) => void;
 }) {
+  const { locale } = useIqLocale();
+  const { strategyAccount: gate } = getIqContextualFunnelCopy(locale);
   const [email, setEmail] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [checkingSession, setCheckingSession] = useState(true);
@@ -1175,7 +1175,7 @@ function StrategyAccountGate({
           qualificationDataToProfile(qualificationData)
         );
         if (!sync.ok) {
-          setError(sync.error ?? 'Could not update your scholarship profile.');
+          setError(sync.error ?? gate.errors.profileUpdateFailed);
           setCheckingSession(false);
           setSubmitting(false);
           return;
@@ -1184,7 +1184,7 @@ function StrategyAccountGate({
         const grants = await fetchRecommendedGrants();
         onComplete(grants, true, userId);
       } catch {
-        setError('Something went wrong while updating your profile. Try again.');
+        setError(gate.errors.generic);
         setCheckingSession(false);
         setSubmitting(false);
       }
@@ -1199,7 +1199,7 @@ function StrategyAccountGate({
 
     const normalizedEmail = email.trim().toLowerCase();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
-      setError('Enter a valid email address.');
+      setError(gate.errors.invalidEmail);
       return;
     }
 
@@ -1238,7 +1238,7 @@ function StrategyAccountGate({
 
       onComplete(grants, signup.signedIn, signup.userId);
     } catch {
-      setError('Something went wrong. Check your connection and try again.');
+      setError(gate.errors.generic);
       setSubmitting(false);
     }
   };
@@ -1252,14 +1252,13 @@ function StrategyAccountGate({
               <Save className="h-5 w-5" aria-hidden />
             </div>
             <p className="mt-5 text-xs font-bold uppercase tracking-[0.18em] text-slate-500">
-              Saving your strategy
+              {gate.savingStrategy}
             </p>
             <h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">
-              Updating your scholarship profile...
+              {gate.updatingProfile}
             </h2>
             <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-slate-500">
-              We found your account, so there is no need to enter email again.
-              Your new IQ result and scholarship answers are being saved.
+              {gate.sessionFoundHint}
             </p>
           </div>
         </section>
@@ -1276,28 +1275,26 @@ function StrategyAccountGate({
               <div>
                 <p className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-slate-500">
                   <Save className="h-4 w-4" aria-hidden />
-                  Matches found
+                  {gate.matchesFound}
                 </p>
                 <h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">
-                  Save them before unlocking your report.
+                  {gate.saveBeforeUnlock}
                 </h2>
               </div>
               <div className="rounded-full bg-slate-100 px-3 py-1.5 text-sm font-semibold text-slate-600">
-                Final step
+                {gate.finalStep}
               </div>
             </div>
 
             <p className="mt-4 max-w-2xl text-sm leading-6 text-slate-500">
-              We found your matched grants from your IQ profile and scholarship
-              details. Enter your email so your grants, award amounts, deadlines,
-              and reading path stay attached to your account.
+              {gate.saveMatchesBody}
             </p>
 
             <div className="mt-8">
               <label className="block">
                 <span className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
                   <Mail className="h-4 w-4" aria-hidden />
-                  Email
+                  {gate.emailLabel}
                 </span>
                 <input
                   type="text"
@@ -1305,7 +1302,7 @@ function StrategyAccountGate({
                   autoComplete="email"
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
-                  placeholder="you@example.com"
+                  placeholder={gate.emailPlaceholder}
                   className="min-h-12 w-full rounded-2xl border border-slate-200 bg-white px-4 text-sm font-medium text-slate-950 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-slate-400"
                 />
               </label>
@@ -1317,8 +1314,7 @@ function StrategyAccountGate({
               </p>
             ) : (
               <p className="mt-4 text-xs font-medium leading-5 text-slate-500">
-                No password needed now. If you ever want one, you can set it
-                later through forgot password.
+                {gate.noPasswordHint}
               </p>
             )}
 
@@ -1327,7 +1323,7 @@ function StrategyAccountGate({
               disabled={submitting}
               className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full bg-slate-950 px-6 py-4 text-base font-semibold text-white shadow-lg shadow-slate-900/10 transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {submitting ? 'Saving matches...' : 'Save and unlock report'}
+              {submitting ? gate.savingMatches : gate.saveAndUnlock}
               <ArrowRight className="h-4 w-4" aria-hidden />
             </button>
           </form>

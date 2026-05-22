@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 
 import { getIqContextualFunnelCopy } from '@/lib/iq/i18n/iqContextualFunnelCopy';
+import { getIqContextualStrategyCopy } from '@/lib/iq/i18n/iqContextualStrategyCopy';
+import { getIqLegalMetadata, getIqLegalShellCopy } from '@/lib/iq/i18n/iqLegalShellCopy';
 import { getIqFooterCopy } from '@/lib/iq/i18n/iqFooterCopy';
 import { getIqFunnelEmailCopy } from '@/lib/iq/i18n/iqFunnelEmailCopy';
 import { getIqLandingCopy } from '@/lib/iq/i18n/iqLandingCopy';
@@ -50,4 +52,13 @@ test('contextual funnel intents localized', () => {
 test('funnel email copy has ES strings', () => {
   const copy = getIqFunnelEmailCopy('es');
   assert.ok(copy.title.includes('perfil'));
+});
+
+test('contextual strategy and legal shell localized', () => {
+  const es = getIqContextualStrategyCopy('es');
+  assert.ok(es.recommendedGrants.includes('Becas'));
+  const frReady = getIqContextualFunnelCopy('fr');
+  assert.equal(frReady.iqReadyHighlights.length, 3);
+  assert.ok(getIqLegalShellCopy('es').backToIq.includes('perfil'));
+  assert.ok(getIqLegalMetadata('faq', 'fr').title.includes('QI'));
 });
