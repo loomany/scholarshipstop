@@ -76,6 +76,10 @@ export function hrefForLocalizedUiRequired(
   if (resourceSlug && locale !== 'en') {
     return `${localizedResourcePilotArticleHref(locale, resourceSlug)}${suffix}`;
   }
+  const providerSlug = providerProfileDetailSlug(pathOnly);
+  if (providerSlug && locale !== 'en') {
+    return `${localizedProviderProfileHref(locale, providerSlug)}${suffix}`;
+  }
   if (locale !== 'en') {
     if (pathOnly === '/') return `/${locale}${suffix}`;
     if (STAGE2_PILOT_HUB_PATHS.has(pathOnly)) {
@@ -194,6 +198,24 @@ export function localizedResourcePilotArticleHref(
   slug: string
 ): string {
   const path = `/resources/${slug}`;
+  if (locale === 'en') return normalizeCanonicalPath(path);
+  return normalizeCanonicalPath(`/${locale}${path}`);
+}
+
+/** Provider detail (`/providers/{slug}`) with published ES/FR translation gate on route. */
+function providerProfileDetailSlug(canonicalPath: string): string | null {
+  const match = canonicalPath.match(/^\/providers\/([^/]+)$/);
+  if (!match) return null;
+  const slug = match[1]!.trim().toLowerCase();
+  if (!slug || slug === 'page') return null;
+  return slug;
+}
+
+export function localizedProviderProfileHref(
+  locale: LocalizedUiLocale,
+  slug: string
+): string {
+  const path = `/providers/${slug}`;
   if (locale === 'en') return normalizeCanonicalPath(path);
   return normalizeCanonicalPath(`/${locale}${path}`);
 }

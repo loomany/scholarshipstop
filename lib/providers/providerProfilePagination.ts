@@ -20,3 +20,16 @@ export function buildProviderProfileScholarshipsHref(
   if (page <= 1) return `${base}${hash}`;
   return `${base}?page=${page}${hash}`;
 }
+
+/** ES/FR provider detail pagination (published translation gate on route). */
+export function buildLocalizedProviderProfileScholarshipsHref(
+  locale: 'es' | 'fr',
+  providerSlug: string,
+  page: number
+): string {
+  const id = encodeURIComponent(providerSlug);
+  const base = `/${locale}/providers/${id}`;
+  const hash = '#provider-scholarships';
+  if (page <= 1) return `${base}${hash}`;
+  return `${base}?page=${page}${hash}`;
+}
