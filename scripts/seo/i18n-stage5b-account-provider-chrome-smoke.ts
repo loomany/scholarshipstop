@@ -1,7 +1,7 @@
 /**
  * Stage 5B — account + provider chrome smoke.
  * Local: default http://127.0.0.1:3020
- * Prod:  SMOKE_BASE_URL=https://www.scholarshiptop.com
+ * Prod:  SMOKE_BASE_URL=https://scholarshiptop.com  (apex; www 301s to apex)
  */
 import { getAccountUiCopy } from '@/lib/i18n/accountUiCopy';
 import { getAccountProfileUiCopy } from '@/lib/i18n/accountProfileUiCopy';
