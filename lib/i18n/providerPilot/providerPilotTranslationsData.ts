@@ -308,6 +308,102 @@ L’établissement inscrit des dizaines de milliers d’étudiant·e·s chaque a
           }
         ]
       }
+    },
+    'princeton-university': {
+      es: {
+        translated_title: 'Becas Princeton University',
+        translated_meta_title: 'Princeton University | Proveedor de becas | ScholarshipTop',
+        translated_meta_description:
+          'Explore becas vinculadas a Princeton University en ScholarshipTop. Confirme elegibilidad y plazos en la fuente oficial.',
+        translated_summary:
+          'Perfil de becas de Princeton University según listados de ScholarshipTop; verifique detalles en princeton.edu.',
+        translated_body: `Princeton University es una institución de investigación privada en Princeton, Nueva Jersey. En ScholarshipTop, este perfil agrupa becas y ayudas financieras vinculadas a programas asociados con la universidad según los listados públicos del catálogo.
+
+ScholarshipTop no es Princeton University y no concede becas directamente. Use este perfil para revisar oportunidades conectadas y confirme requisitos, montos, plazos y enlaces de solicitud en las páginas oficiales del proveedor o del programa antes de postular.`,
+        translated_faq_json: [
+          {
+            question: '¿ScholarshipTop concede becas de Princeton?',
+            answer:
+              'No. ScholarshipTop es un directorio. Confirme siempre la fuente oficial del programa antes de enviar una solicitud.'
+          },
+          {
+            question: '¿Qué debo verificar antes de postular?',
+            answer:
+              'Confirme elegibilidad, fecha límite, documentos, monto, forma de pago y enlace oficial vigente en la página del proveedor.'
+          }
+        ]
+      },
+      fr: {
+        translated_title: 'Bourses Princeton University',
+        translated_meta_title: 'Princeton University | Financeur de bourses | ScholarshipTop',
+        translated_meta_description:
+          'Explorez les bourses liées à Princeton University sur ScholarshipTop. Vérifiez l’éligibilité sur la source officielle.',
+        translated_summary:
+          'Profil bourses Princeton University selon le catalogue ScholarshipTop ; vérifiez les détails sur princeton.edu.',
+        translated_body: `Princeton University est une université de recherche privée à Princeton, New Jersey. Sur ScholarshipTop, ce profil regroupe des bourses et aides financières liées à des programmes associés à l’université selon les annonces du catalogue.
+
+ScholarshipTop n’est pas Princeton University et n’accorde pas de bourses directement. Utilisez ce profil pour parcourir les opportunités reliées, puis confirmez critères, montants, dates et liens officiels avant de postuler.`,
+        translated_faq_json: [
+          {
+            question: 'ScholarshipTop accorde-t-il des bourses Princeton ?',
+            answer:
+              'Non. ScholarshipTop est un annuaire. Vérifiez toujours la source officielle du programme.'
+          },
+          {
+            question: 'Que dois-je vérifier avant de postuler ?',
+            answer:
+              'Éligibilité, date limite, pièces, montant, versement et lien officiel sur la page du financeur.'
+          }
+        ]
+      }
+    },
+    'columbia-university': {
+      es: {
+        translated_title: 'Becas Columbia University',
+        translated_meta_title: 'Columbia University | Proveedor de becas | ScholarshipTop',
+        translated_meta_description:
+          'Explore becas vinculadas a Columbia University en ScholarshipTop. Confirme elegibilidad y plazos en la fuente oficial.',
+        translated_summary:
+          'Perfil de becas de Columbia University según listados de ScholarshipTop; verifique detalles en columbia.edu.',
+        translated_body: `Columbia University es una universidad de investigación en la ciudad de Nueva York. Este perfil en ScholarshipTop reúne becas y ayudas financieras asociadas a programas vinculados a la institución según los listados disponibles en el catálogo.
+
+ScholarshipTop no es Columbia University y no concede becas. Revise cada oportunidad y confirme requisitos, montos, fechas límite y enlaces oficiales en el sitio del proveedor antes de postular.`,
+        translated_faq_json: [
+          {
+            question: '¿ScholarshipTop administra estas becas?',
+            answer:
+              'No. ScholarshipTop solo publica listados informativos. Valide todo en la fuente oficial del programa.'
+          },
+          {
+            question: '¿Qué debo confirmar en la página oficial?',
+            answer:
+              'Elegibilidad, documentación, plazo, monto del premio y procedimiento de solicitud vigente.'
+          }
+        ]
+      },
+      fr: {
+        translated_title: 'Bourses Columbia University',
+        translated_meta_title: 'Columbia University | Financeur de bourses | ScholarshipTop',
+        translated_meta_description:
+          'Explorez les bourses liées à Columbia University sur ScholarshipTop. Vérifiez les critères sur la source officielle.',
+        translated_summary:
+          'Profil bourses Columbia University selon ScholarshipTop ; vérifiez les détails sur columbia.edu.',
+        translated_body: `Columbia University est une université de recherche à New York. Ce profil ScholarshipTop regroupe des bourses et aides financières liées à des programmes associés à l’institution selon les annonces du catalogue.
+
+ScholarshipTop n’est pas Columbia University et n’accorde pas de bourses. Vérifiez chaque opportunité : éligibilité, montants, dates limites et liens officiels sur le site du financeur.`,
+        translated_faq_json: [
+          {
+            question: 'ScholarshipTop gère-t-il ces bourses ?',
+            answer:
+              'Non. ScholarshipTop publie des listages informatifs. Validez tout sur la source officielle.'
+          },
+          {
+            question: 'Que confirmer sur la page officielle ?',
+            answer:
+              'Éligibilité, pièces, date limite, montant et procédure de candidature à jour.'
+          }
+        ]
+      }
     }
   };
 
@@ -315,11 +411,13 @@ export function buildProviderPilotSeedRows(
   slugToMeta: Map<
     ProviderPilotSlug,
     { id: string; updated_at: string | null }
-  >
+  >,
+  slugs: readonly ProviderPilotSlug[] = PROVIDER_PILOT_SLUGS,
+  publishedAt: string = PUBLISHED_AT
 ): ProviderPilotSeedRow[] {
   const rows: ProviderPilotSeedRow[] = [];
 
-  for (const slug of PROVIDER_PILOT_SLUGS) {
+  for (const slug of slugs) {
     const meta = slugToMeta.get(slug);
     if (!meta) {
       throw new Error(`Missing providers row for pilot slug: ${slug}`);
@@ -337,7 +435,7 @@ export function buildProviderPilotSeedRows(
         source_hash: sourceHash,
         source_updated_at: meta.updated_at,
         quality_score: QUALITY_SCORE,
-        published_at: PUBLISHED_AT,
+        published_at: publishedAt,
         translated_slug: null,
         translated_title: content.translated_title,
         translated_meta_title: content.translated_meta_title,

@@ -1,0 +1,5 @@
+source_type,source_id,source_slug,locale,status,quality_score,machine_model
+"provider_profile","dfb1b3ba-61fc-4c41-8989-3796f0044a86","princeton-university","es","published","90","stage5d-provider-manual-pilot-2"
+"provider_profile","dfb1b3ba-61fc-4c41-8989-3796f0044a86","princeton-university","fr","published","90","stage5d-provider-manual-pilot-2"
+"provider_profile","9ddb75bf-c755-45a5-b818-3d57e0151926","columbia-university","es","published","90","stage5d-provider-manual-pilot-2"
+"provider_profile","9ddb75bf-c755-45a5-b818-3d57e0151926","columbia-university","fr","published","90","stage5d-provider-manual-pilot-2"

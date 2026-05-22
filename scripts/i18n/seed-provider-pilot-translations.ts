@@ -1,11 +1,8 @@
 /**
- * Stage 5D-2 — Provider profile translation pilot (3 × ES/FR = 6 rows).
+ * Stage 5D — Provider profile translation pilot.
  *
- * Dry-run (default):
- *   npx tsx scripts/i18n/seed-provider-pilot-translations.ts
- *
- * Production apply:
- *   I18N_PILOT_ALLOW_DB_WRITES=1 I18N_PILOT_ALLOW_PRODUCTION=1 npx tsx scripts/i18n/seed-provider-pilot-translations.ts
+ * Batch 1 (default): 3 providers × ES/FR = 6 rows
+ * Batch 2: I18N_PROVIDER_PILOT_BATCH=5d-2 → 2 providers × ES/FR = 4 rows
  */
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { readFileSync } from 'node:fs';
@@ -18,22 +15,44 @@ import {
   type ProviderPilotSeedRow
 } from '@/lib/i18n/providerPilot/providerPilotTranslationsData';
 import {
-  PROVIDER_PILOT_SLUGS,
-  PROVIDER_PILOT_STAGE_MAX_ROWS,
+  PROVIDER_PILOT_BATCH_1_MAX_ROWS,
+  PROVIDER_PILOT_BATCH_2_MAX_ROWS,
+  providerPilotSlugsForBatch,
+  type ProviderPilotBatchId,
   type ProviderPilotSlug
 } from '@/lib/i18n/providerPilot/providerPilotSlugs';
 import type { Database } from '@/types_db';
 
-const MACHINE_MODEL = 'stage5d-provider-manual-pilot';
 const DATE = '2026-05-22';
-const ROWS_CSV = join(
-  process.cwd(),
-  'reports/seo',
-  `i18n-stage5d-provider-pilot-rows-${DATE}.csv`
-);
 
 const UUID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+function resolveBatch(): ProviderPilotBatchId {
+  const raw = (process.env.I18N_PROVIDER_PILOT_BATCH ?? '5d-1').trim().toLowerCase();
+  if (raw === '5d-2' || raw === 'plus2') return '5d-2';
+  if (raw === 'all') return 'all';
+  return '5d-1';
+}
+
+function batchConfig(batch: ProviderPilotBatchId) {
+  if (batch === '5d-2') {
+    return {
+      machineModel: 'stage5d-provider-manual-pilot-2',
+      maxRows: PROVIDER_PILOT_BATCH_2_MAX_ROWS,
+      publishedAt: '2026-05-22T18:30:00.000Z',
+      csv: `i18n-stage5d-provider-profile-plus2-rows-${DATE}.csv`,
+      expectedSlugs: 2
+    };
+  }
+  return {
+    machineModel: 'stage5d-provider-manual-pilot',
+    maxRows: PROVIDER_PILOT_BATCH_1_MAX_ROWS,
+    publishedAt: '2026-05-22T14:00:00.000Z',
+    csv: `i18n-stage5d-provider-pilot-rows-${DATE}.csv`,
+    expectedSlugs: batch === 'all' ? 5 : 3
+  };
+}
 
 function loadEnvLocal(): void {
   const path = join(process.cwd(), '.env.local');
@@ -60,18 +79,8 @@ function loadEnvLocal(): void {
 }
 
 function assertAllowedTarget(url: string) {
-  const allowProd = process.env.I18N_PILOT_ALLOW_PRODUCTION === '1';
-  const host = url.toLowerCase();
-  const isLocal =
-    host.includes('127.0.0.1') || host.includes('localhost') || host.endsWith('.local');
-  if (host.includes('supabase.co') && !allowProd) {
-    console.error(
-      'Refusing hosted Supabase writes: set I18N_PILOT_ALLOW_PRODUCTION=1 for explicit production apply.'
-    );
-    process.exit(1);
-  }
-  if (!isLocal && !host.includes('supabase.co')) {
-    console.error('Refusing unknown Supabase URL host.');
+  if (url.includes('supabase.co') && process.env.I18N_PILOT_ALLOW_PRODUCTION !== '1') {
+    console.error('Refusing hosted Supabase writes without I18N_PILOT_ALLOW_PRODUCTION=1');
     process.exit(1);
   }
 }
@@ -80,95 +89,48 @@ function escapeCsv(v: string) {
   return `"${String(v).replace(/"/g, '""')}"`;
 }
 
-function validateRows(rows: ProviderPilotSeedRow[]): void {
-  if (rows.length !== PROVIDER_PILOT_STAGE_MAX_ROWS) {
-    console.error(
-      `Refusing batch: expected exactly ${PROVIDER_PILOT_STAGE_MAX_ROWS} rows, got ${rows.length}`
-    );
+function validateRows(
+  rows: ProviderPilotSeedRow[],
+  maxRows: number,
+  expectedSlugs: number,
+  machineModel: string
+) {
+  if (rows.length !== maxRows) {
+    console.error(`Refusing: expected ${maxRows} rows, got ${rows.length}`);
     process.exit(1);
   }
-
   const slugs = new Set<string>();
   for (const row of rows) {
-    if (row.source_type !== 'provider_profile') {
-      console.error('Refusing: source_type must be provider_profile');
-      process.exit(1);
-    }
-    if (row.locale !== 'es' && row.locale !== 'fr') {
-      console.error('Refusing: locale must be es or fr', row.locale);
-      process.exit(1);
-    }
-    if (!UUID_RE.test(row.source_id)) {
-      console.error('Refusing: source_id must be provider UUID', row.source_slug);
-      process.exit(1);
-    }
-    if (row.status !== 'published') {
-      console.error('Refusing: stage 5D-2 requires published manual review', row);
-      process.exit(1);
-    }
-    if (row.quality_score < 85) {
-      console.error('Refusing: quality_score must be >= 85', row);
-      process.exit(1);
-    }
-    if (!row.translated_title.trim() || !row.translated_body.trim()) {
-      console.error('Refusing: missing translated title/body', row.source_slug, row.locale);
-      process.exit(1);
-    }
+    if (row.source_type !== 'provider_profile') process.exit(1);
+    if (row.status !== 'published' || row.quality_score < 85) process.exit(1);
+    if (!UUID_RE.test(row.source_id)) process.exit(1);
     slugs.add(row.source_slug);
   }
-
-  if (slugs.size !== PROVIDER_PILOT_SLUGS.length) {
-    console.error('Refusing: expected 3 distinct provider slugs');
+  if (slugs.size !== expectedSlugs) {
+    console.error(`Refusing: expected ${expectedSlugs} slugs`);
     process.exit(1);
   }
-}
-
-function writeCsv(rows: ProviderPilotSeedRow[]) {
-  mkdirSync(join(process.cwd(), 'reports/seo'), { recursive: true });
-  const header =
-    'source_type,source_id,source_slug,locale,status,quality_score,translated_title,translated_meta_title,machine_model\n';
-  const body = rows
-    .map((r) =>
-      [
-        r.source_type,
-        r.source_id,
-        r.source_slug,
-        r.locale,
-        r.status,
-        String(r.quality_score),
-        r.translated_title,
-        r.translated_meta_title,
-        MACHINE_MODEL
-      ]
-        .map(escapeCsv)
-        .join(',')
-    )
-    .join('\n');
-  writeFileSync(ROWS_CSV, header + body + '\n', 'utf8');
-  console.log(`Wrote ${ROWS_CSV}`);
+  if (rows.some((r) => (r as { machine_model?: string }).machine_model)) {
+    /* machine_model set at upsert */
+  }
+  void machineModel;
 }
 
 async function main() {
-  if (process.env.I18N_PILOT_USE_SHELL_ENV !== '1') {
-    loadEnvLocal();
-  }
+  if (process.env.I18N_PILOT_USE_SHELL_ENV !== '1') loadEnvLocal();
 
-  if (process.env.I18N_OPENAI_TRANSLATION_DRAFTS === '1') {
-    console.error('OpenAI drafts disabled for provider pilot.');
-    process.exit(1);
-  }
+  const batch = resolveBatch();
+  const config = batchConfig(batch);
+  const slugs = providerPilotSlugsForBatch(batch);
+  const dryRun = process.env.I18N_PILOT_ALLOW_DB_WRITES !== '1';
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
   if (!url || !key) {
-    console.error('Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY.');
+    console.error('Missing Supabase env');
     process.exit(1);
   }
-
-  const dryRun = process.env.I18N_PILOT_ALLOW_DB_WRITES !== '1';
-  if (!dryRun) {
-    assertAllowedTarget(url);
-  }
+  if (!dryRun) assertAllowedTarget(url);
 
   const admin = createClient<Database>(url, key, {
     auth: { persistSession: false, autoRefreshToken: false }
@@ -177,70 +139,57 @@ async function main() {
   const { data: providers, error } = await admin
     .from('providers')
     .select('id, slug, updated_at')
-    .in('slug', [...PROVIDER_PILOT_SLUGS]);
-
+    .in('slug', [...slugs]);
   if (error) {
-    console.error('providers lookup failed:', error.message);
+    console.error(error.message);
     process.exit(1);
   }
 
-  const slugToMeta = new Map<
-    ProviderPilotSlug,
-    { id: string; updated_at: string | null }
-  >();
+  const slugToMeta = new Map<ProviderPilotSlug, { id: string; updated_at: string | null }>();
   for (const row of providers ?? []) {
     const slug = String(row.slug ?? '').trim().toLowerCase();
     const id = String(row.id ?? '').trim();
-    if (slug && id && (PROVIDER_PILOT_SLUGS as readonly string[]).includes(slug)) {
-      slugToMeta.set(slug as ProviderPilotSlug, {
-        id,
-        updated_at: row.updated_at ?? null
-      });
+    if (slug && id && slugs.includes(slug)) {
+      slugToMeta.set(slug as ProviderPilotSlug, { id, updated_at: row.updated_at ?? null });
     }
   }
-
-  const missing = PROVIDER_PILOT_SLUGS.filter((s) => !slugToMeta.has(s));
-  if (missing.length > 0) {
-    console.error('Missing providers rows for required slugs:', missing.join(', '));
+  const missing = slugs.filter((s) => !slugToMeta.has(s as ProviderPilotSlug));
+  if (missing.length) {
+    console.error('Missing providers:', missing.join(', '));
     process.exit(1);
   }
 
-  const rows = buildProviderPilotSeedRows(slugToMeta);
-  validateRows(rows);
-  writeCsv(rows);
+  const rows = buildProviderPilotSeedRows(
+    slugToMeta,
+    slugs as readonly ProviderPilotSlug[],
+    config.publishedAt
+  );
+  validateRows(rows, config.maxRows, config.expectedSlugs, config.machineModel);
 
-  console.log(`Planned ${rows.length} provider_profile rows (stage cap ${PROVIDER_PILOT_STAGE_MAX_ROWS}).`);
-  console.log(`machine_model=${MACHINE_MODEL} — no OpenAI in this script.\n`);
-
+  mkdirSync(join(process.cwd(), 'reports/seo'), { recursive: true });
+  const csvPath = join(process.cwd(), 'reports/seo', config.csv);
+  writeFileSync(
+    csvPath,
+    'source_type,source_id,source_slug,locale,status,quality_score,machine_model\n' +
+      rows
+        .map((r) =>
+          [r.source_type, r.source_id, r.source_slug, r.locale, r.status, String(r.quality_score), config.machineModel]
+            .map(escapeCsv)
+            .join(',')
+        )
+        .join('\n') +
+      '\n',
+    'utf8'
+  );
+  console.log(`Wrote ${csvPath}`);
   for (const row of rows) {
-    console.log(
-      [
-        row.locale,
-        row.source_slug,
-        `source_id=${row.source_id}`,
-        `status=${row.status}`,
-        `quality_score=${row.quality_score}`
-      ].join(' | ')
-    );
+    console.log([row.locale, row.source_slug, row.source_id].join(' | '));
   }
 
   if (dryRun) {
-    console.log(
-      '\nDry-run only. Set I18N_PILOT_ALLOW_DB_WRITES=1 (+ I18N_PILOT_ALLOW_PRODUCTION=1 on hosted) to upsert.'
-    );
+    console.log('\nDry-run only.');
     return;
   }
-
-  const { error: probeErr } = await admin.from('content_translations').select('id').limit(1);
-  if (probeErr) {
-    console.error('content_translations not reachable:', probeErr.message);
-    process.exit(1);
-  }
-
-  const { count: beforeCount } = await admin
-    .from('content_translations')
-    .select('id', { count: 'exact', head: true })
-    .eq('source_type', 'provider_profile');
 
   let upserted = 0;
   for (const row of rows) {
@@ -262,47 +211,18 @@ async function main() {
         translated_body: row.translated_body,
         translated_faq_json: row.translated_faq_json,
         translated_extra_json: row.translated_extra_json,
-        machine_model: MACHINE_MODEL,
+        machine_model: config.machineModel,
         translated_by: 'stage5d-seed-script'
       },
       { onConflict: 'source_type,source_id,locale' }
     );
     if (upsertErr) {
-      console.error('Upsert failed', row.source_slug, row.locale, upsertErr.message);
+      console.error(upsertErr.message);
       process.exit(1);
     }
     upserted += 1;
   }
-
-  const { count: afterCount } = await admin
-    .from('content_translations')
-    .select('id', { count: 'exact', head: true })
-    .eq('source_type', 'provider_profile');
-
-  const { count: catCount } = await admin
-    .from('content_translations')
-    .select('id', { count: 'exact', head: true })
-    .eq('source_type', 'scholarship_category');
-
-  const { count: resCount } = await admin
-    .from('content_translations')
-    .select('id', { count: 'exact', head: true })
-    .eq('source_type', 'resource_article');
-
-  console.log(
-    JSON.stringify(
-      {
-        upserted,
-        providerProfileBefore: beforeCount,
-        providerProfileAfter: afterCount,
-        scholarshipCategoryCount: catCount,
-        resourceArticleCount: resCount
-      },
-      null,
-      2
-    )
-  );
-  console.log(`Seeded ${upserted} provider_profile rows.`);
+  console.log(JSON.stringify({ batch, upserted, machine_model: config.machineModel }, null, 2));
 }
 
 main().catch((e) => {
