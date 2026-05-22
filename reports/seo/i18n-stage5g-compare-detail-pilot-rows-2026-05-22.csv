@@ -1,0 +1,9 @@
+source_type,source_id,source_slug,locale,status,quality_score,machine_model
+"compare_university","99031a7d-9e86-4e3f-88ec-7ba3316a1723","austin-community-college-vs-midlands-technical-college","es","published","90","stage5g-compare-university-manual-pilot"
+"compare_university","99031a7d-9e86-4e3f-88ec-7ba3316a1723","austin-community-college-vs-midlands-technical-college","fr","published","90","stage5g-compare-university-manual-pilot"
+"compare_university","d46b603d-f18c-4118-8fe8-b8fc2fff6b59","massachusetts-bay-community-college-massbay-vs-worcester-state-university","es","published","90","stage5g-compare-university-manual-pilot"
+"compare_university","d46b603d-f18c-4118-8fe8-b8fc2fff6b59","massachusetts-bay-community-college-massbay-vs-worcester-state-university","fr","published","90","stage5g-compare-university-manual-pilot"
+"compare_state","2916f756-78ab-463f-8458-6aa744c3cd94","california-vs-texas","es","published","90","stage5g-compare-state-manual-pilot"
+"compare_state","2916f756-78ab-463f-8458-6aa744c3cd94","california-vs-texas","fr","published","90","stage5g-compare-state-manual-pilot"
+"compare_state","5103ad4e-1c27-4b73-8190-4983c9cdee26","florida-vs-new-york","es","published","90","stage5g-compare-state-manual-pilot"
+"compare_state","5103ad4e-1c27-4b73-8190-4983c9cdee26","florida-vs-new-york","fr","published","90","stage5g-compare-state-manual-pilot"

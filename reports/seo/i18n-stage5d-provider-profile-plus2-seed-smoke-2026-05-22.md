@@ -1,35 +1,36 @@
-# Stage 5D — Provider profile +2 seed — 2026-05-22
+# Stage 5D-2 — provider profile +2 seed & smoke (2026-05-22)
 
-## Status: **not executed (production)**
+## Scope
 
-## Blocker
+- 2 providers × ES/FR = **4 rows**
+- `machine_model`: `stage5d-provider-manual-pilot-2`
+- Total provider pilot: **5** providers (10 ES+FR rows)
 
-- `scripts/i18n/seed-provider-pilot-translations.ts` enforces exactly **6** rows and `PROVIDER_PILOT_SLUGS` (3 universities).
-- No `stanford-university` / `yale-university` entries in `providerPilotTranslationsData.ts`.
-- Dry-run against production UUID resolution not run this session (requires explicit env + slug verification).
+## Slugs
 
-## Current production (unchanged)
+| slug | source_id |
+|------|-----------|
+| princeton-university | dfb1b3ba-61fc-4c41-8989-3796f0044a86 |
+| columbia-university | 9ddb75bf-c755-45a5-b818-3d57e0151926 |
 
-| Slug | ES/FR rows |
-|------|------------|
-| loyola-university-chicago | 2 |
-| harvard-university | 2 |
-| university-of-michigan | 2 |
+CSV: `i18n-stage5d-provider-profile-plus2-rows-2026-05-22.csv`
 
-**Total:** 6 rows, `machine_model = stage5d-provider-manual-pilot`
+## Production smoke
 
-## Rollback SQL (+2 batch — if ever applied)
+- `/providers/princeton-university` + ES/FR → 200
+- `/providers/columbia-university` + ES/FR → 200
+- `/es/providers/stanford-university` → 404
+- Legal provider names preserved; localized body only
+
+## Commit
+
+`5bbe6d5` feat(i18n): expand ES FR provider profile pilot
+
+## Rollback
 
 ```sql
 delete from public.content_translations
 where source_type = 'provider_profile'
   and locale in ('es', 'fr')
-  and machine_model in ('stage5d-provider-manual-pilot-2');
+  and machine_model = 'stage5d-provider-manual-pilot-2';
 ```
-
-## Recommended next step
-
-1. Read-only: confirm `providers.slug` for stanford/yale (or alternate high-value slugs).
-2. Add `PROVIDER_PILOT_PLUS2_SLUGS` + 4 rows in data module, `machine_model = stage5d-provider-manual-pilot-2`.
-3. Bump `PROVIDER_PILOT_STAGE_MAX_ROWS` to 10 or run isolated script with row cap 4.
-4. Dry-run → manual QA → production apply → smoke (5 EN + 5 ES + 5 FR sitemap URLs).
