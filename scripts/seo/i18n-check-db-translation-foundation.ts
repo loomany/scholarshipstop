@@ -68,12 +68,12 @@ function main() {
 
   const body = assertFile('app/scholarships/scholarshipsSlugPathPageBody.tsx');
   if (body) {
-    assertIncludes(body, 'gateLocalizedScholarshipDetailOrNotFound', 'slug path body uses gate');
+    assertIncludes(body, 'fetchPublishedScholarshipDetail', 'slug path body uses localized fetch');
   }
 
   const localePage = assertFile('app/[locale]/scholarships/[[...slugPath]]/page.tsx');
   if (localePage) {
-    assertIncludes(localePage, 'gateLocalizedScholarshipDetailOrNotFound', 'locale scholarships metadata uses gate');
+    assertIncludes(localePage, 'fetchPublishedScholarshipDetail', 'locale scholarships metadata uses fetch');
   }
 
   const sitemaps = assertFile('lib/seo/sitemaps.ts');

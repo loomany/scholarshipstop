@@ -2,9 +2,10 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 
 import ScholarshipsSlugPathPageBody from '@/app/scholarships/scholarshipsSlugPathPageBody';
-import { getScholarshipDetailServer } from '@/lib/scholarships/scholarshipDetailServer';
 import { resolveScholarshipSlugPath } from '@/lib/scholarships/seoScholarshipResolve';
-import { gateLocalizedScholarshipDetailOrNotFound } from '@/lib/i18n/localizedScholarshipDetailGate';
+import { getContentTranslationSeoDecision } from '@/lib/i18n/contentTranslationsServer';
+import { fetchPublishedScholarshipDetail } from '@/lib/i18n/scholarshipPilot/resolveLocalizedScholarshipDetail';
+import { buildScholarshipDetailAlternates } from '@/lib/i18n/scholarshipPilot/scholarshipTranslationAlternates';
 import { hubPathToTab } from '@/app/scholarships/scholarshipHubPath';
 import { buildScholarshipHubRouteMetadata } from '@/app/scholarships/scholarshipHubPageMetadata';
 import { normalizeScholarshipDynamicParam } from '@/app/scholarships/scholarshipLongTailPresets';
@@ -61,11 +62,46 @@ export async function generateMetadata({
   if (segments.length > 0 && !hubPathToTab(segments)) {
     const resolved = resolveScholarshipSlugPath(segments);
     if (resolved.kind === 'scholarship_detail' && segments.length === 1) {
-      const scholarship = await getScholarshipDetailServer(segments[0]!);
-      if (!scholarship) {
+      const slug = segments[0]!;
+      const published = await fetchPublishedScholarshipDetail(slug, locale);
+      if (!published) {
         return { title: 'Page not found', robots: { index: false, follow: false } };
       }
-      await gateLocalizedScholarshipDetailOrNotFound(locale, scholarship.id);
+      const englishIndexable = published.scholarship.isIndexable !== false;
+      const seo = getContentTranslationSeoDecision({
+        translation: published.translation,
+        englishIndexable,
+        hasLocalizedTitle: Boolean(published.seoCopy.metaTitle.trim()),
+        hasLocalizedH1: Boolean(published.scholarship.title.trim()),
+        hasLocalizedBody: Boolean(
+          published.scholarship.seoOverview?.trim() ||
+            published.scholarship.summaryShort?.trim()
+        )
+      });
+      const alternates = await buildScholarshipDetailAlternates({
+        slug: published.slug,
+        currentLocale: locale,
+        resolved: published
+      });
+      const title = published.seoCopy.metaTitle;
+      const description = published.seoCopy.metaDescription;
+      return {
+        title,
+        description,
+        alternates,
+        openGraph: {
+          title,
+          description,
+          url: alternates.canonical,
+          locale: locale === 'es' ? 'es_ES' : 'fr_FR'
+        },
+        twitter: { card: 'summary_large_image', title, description },
+        robots: hasNonCanonicalQuery
+          ? { index: false, follow: true }
+          : seo.indexable
+            ? { index: true, follow: true }
+            : { index: false, follow: true }
+      };
     }
     return {
       robots: hasNonCanonicalQuery

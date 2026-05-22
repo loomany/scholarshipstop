@@ -1,5 +1,6 @@
 import { isResourcePilotSlug } from '@/lib/i18n/resourcePilot/resourcePilotSlugs';
 import { isProviderPilotSlug } from '@/lib/i18n/providerPilot/providerPilotSlugs';
+import { isScholarshipDetailPilotSlug } from '@/lib/i18n/scholarshipPilot/scholarshipPilotSlugs';
 import { categoryIsPromotedSeo } from '@/lib/scholarships/categorySeoAllowlist';
 import {
   localizedCategorySeoHref,
@@ -72,11 +73,10 @@ export function detailLanguageClusterKind(
   return null;
 }
 
-/**
- * Published translation clusters for detail pages (static pilot lists).
- * Scholarship detail: empty until scholarship_detail seed — ES/FR omitted from switcher.
- */
-const PUBLISHED_SCHOLARSHIP_DETAIL_SLUGS = new Set<string>();
+/** Scholarship detail slugs with published ES/FR translations (pilot allowlist). */
+function scholarshipDetailHasPublishedTranslation(slug: string): boolean {
+  return isScholarshipDetailPilotSlug(slug);
+}
 
 function item(
   locale: Stage2PilotLocale | 'en',
@@ -121,7 +121,7 @@ export function getDetailLanguageSwitcherItems(
     const slug = scholarshipDetailSlugFromPath(canonicalPath);
     if (!slug) return [];
     const locales: Array<Stage2PilotLocale | 'en'> = ['en'];
-    if (PUBLISHED_SCHOLARSHIP_DETAIL_SLUGS.has(slug)) {
+    if (scholarshipDetailHasPublishedTranslation(slug)) {
       locales.push('es', 'fr');
     }
     return locales.map((locale) => {

@@ -27,11 +27,11 @@ async function main() {
   const scholarshipItems = getDetailLanguageSwitcherItems(
     '/scholarships/climate-stripes-scholarship-14487'
   );
-  if (scholarshipItems.length !== 1 || scholarshipItems[0]?.locale !== 'en') {
+  if (scholarshipItems.length !== 3) {
     failed += 1;
-    console.error('FAIL programmatic scholarship cluster', scholarshipItems);
+    console.error('FAIL programmatic scholarship pilot cluster', scholarshipItems);
   } else {
-    console.log('OK   scholarship detail cluster = EN only');
+    console.log('OK   scholarship pilot cluster en/es/fr');
   }
 
   const providerItems = getDetailLanguageSwitcherItems('/providers/loyola-university-chicago');
@@ -45,11 +45,11 @@ async function main() {
   const navItems = getStage2LanguageSwitcherItems({
     pathname: '/scholarships/climate-stripes-scholarship-14487'
   });
-  if (navItems.length !== 1) {
+  if (navItems.length !== 3) {
     failed += 1;
     console.error('FAIL navbar scholarship switcher', navItems);
   } else {
-    console.log('OK   navbar scholarship switcher visible (EN)');
+    console.log('OK   navbar scholarship switcher en/es/fr');
   }
 
   const enScholarship = await fetchHtml('/scholarships/climate-stripes-scholarship-14487');

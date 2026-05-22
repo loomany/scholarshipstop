@@ -74,7 +74,7 @@ import { createPublicClient } from '@/utils/supabase/public';
 import { createClient as createServerSupabase } from '@/utils/supabase/server';
 import { buildScholarshipListingJsonLd } from '@/app/scholarships/scholarshipListingJsonLd';
 import type { Stage2PilotLocale } from '@/lib/i18n/pilotRoutes';
-import { gateLocalizedScholarshipDetailOrNotFound } from '@/lib/i18n/localizedScholarshipDetailGate';
+import { fetchPublishedScholarshipDetail } from '@/lib/i18n/scholarshipPilot/resolveLocalizedScholarshipDetail';
 import {
   getScholarshipsCatalogIntroCopy,
   type ScholarshipsCatalogIntroCopy
@@ -438,12 +438,16 @@ export default async function ScholarshipsSlugPathPageBody({
   }
 
   if (segments.length === 1 && isScholarshipDetailUuidParam(segments[0]!)) {
-    const scholarship = await getScholarshipDetailServer(segments[0]!);
+    let scholarship = await getScholarshipDetailServer(segments[0]!);
     if (!scholarship) {
       notFound();
     }
     if (locale) {
-      await gateLocalizedScholarshipDetailOrNotFound(locale, scholarship.id);
+      const localized = await fetchPublishedScholarshipDetail(segments[0]!, locale);
+      if (!localized || localized.scholarship.id !== scholarship.id) {
+        notFound();
+      }
+      scholarship = localized.scholarship;
     }
     const matchSlug = scholarshipPublicSlugForMatching(scholarship);
     const initialRelatedArticles = matchSlug
@@ -489,7 +493,7 @@ export default async function ScholarshipsSlugPathPageBody({
   }
 
   if (resolved.kind === 'scholarship_detail') {
-    const scholarship =
+    let scholarship =
       segments.length === 1
         ? await getScholarshipDetailServer(segments[0]!)
         : null;
@@ -497,7 +501,11 @@ export default async function ScholarshipsSlugPathPageBody({
       notFound();
     }
     if (locale) {
-      await gateLocalizedScholarshipDetailOrNotFound(locale, scholarship.id);
+      const localized = await fetchPublishedScholarshipDetail(segments[0]!, locale);
+      if (!localized || localized.scholarship.id !== scholarship.id) {
+        notFound();
+      }
+      scholarship = localized.scholarship;
     }
     const matchSlug = scholarshipPublicSlugForMatching(scholarship);
     const initialRelatedArticles = matchSlug

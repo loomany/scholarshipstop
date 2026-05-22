@@ -35,6 +35,7 @@ import { getCompareSeoQualityPolicy } from '@/lib/seo/compareSeoQualityPolicy';
 import { listPublishedCategoryTranslations } from '@/lib/i18n/categoryPilot/listPublishedCategoryTranslations';
 import { listPublishedResourceArticleTranslations } from '@/lib/i18n/resourcePilot/listPublishedResourceArticleTranslations';
 import { listPublishedProviderProfileTranslations } from '@/lib/i18n/providerPilot/listPublishedProviderProfileTranslations';
+import { listPublishedScholarshipDetailTranslations } from '@/lib/i18n/scholarshipPilot/listPublishedScholarshipDetailTranslations';
 import { isResourcePilotSlug } from '@/lib/i18n/resourcePilot/resourcePilotSlugs';
 import { buildLocalizedSitemapEntry } from '@/lib/i18n/localizedSitemaps';
 import {
@@ -665,7 +666,8 @@ export const buildSitemapDocuments = cache(async (): Promise<SitemapDocument[]> 
     ...localizedPilotDocs,
     ...(await buildLocalizedCategorySitemapDocuments()),
     ...(await buildLocalizedResourceArticleSitemapDocuments()),
-    ...(await buildLocalizedProviderProfileSitemapDocuments())
+    ...(await buildLocalizedProviderProfileSitemapDocuments()),
+    ...(await buildLocalizedScholarshipDetailSitemapDocuments())
   ];
 });
 
@@ -858,6 +860,48 @@ async function buildLocalizedProviderProfileSitemapDocuments(): Promise<
     if (!entries?.length) continue;
     docs.push(
       makeSitemapDocument('providers', `locale-${locale}-providers-db`, entries)
+    );
+  }
+  return docs;
+}
+
+async function buildLocalizedScholarshipDetailSitemapDocuments(): Promise<
+  SitemapDocument[]
+> {
+  const rows = await listPublishedScholarshipDetailTranslations();
+  if (rows.length === 0) return [];
+
+  const byLocale = new Map<'es' | 'fr', MetadataRoute.Sitemap>();
+  for (const row of rows) {
+    const canonicalPath = `/scholarships/${row.scholarshipSlug}`;
+    const entry = buildLocalizedSitemapEntry({
+      locale: row.locale,
+      canonicalPath,
+      sourceIndexable: true,
+      translationStatus: 'published',
+      qualityScore: row.qualityScore ?? 90,
+      hasLocalizedTitle: Boolean(row.translatedTitle?.trim()),
+      hasLocalizedH1: Boolean(row.translatedTitle?.trim()),
+      hasLocalizedBody: true,
+      hasMixedLanguageRisk: false,
+      lastModified: row.lastModified
+    });
+    if (!entry) continue;
+    const bucket = byLocale.get(row.locale) ?? [];
+    bucket.push(entry);
+    byLocale.set(row.locale, bucket);
+  }
+
+  const docs: SitemapDocument[] = [];
+  for (const locale of ['es', 'fr'] as const) {
+    const entries = byLocale.get(locale);
+    if (!entries?.length) continue;
+    docs.push(
+      makeSitemapDocument(
+        'scholarships',
+        `locale-${locale}-scholarships-detail-db`,
+        entries
+      )
     );
   }
   return docs;
