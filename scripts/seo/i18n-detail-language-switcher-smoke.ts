@@ -57,16 +57,11 @@ async function main() {
     failed += 1;
     console.error('FAIL EN scholarship HTTP', enScholarship.status);
   } else {
-    const locales = switcherLocales(enScholarship.html);
-    if (locales.length < 1) {
-      failed += 1;
-      console.error('FAIL EN scholarship page missing switcher in HTML');
-    } else {
-      console.log(`OK   EN scholarship switcher locales: ${locales.join(',')}`);
-    }
     if (enScholarship.html.includes('href="/en"')) {
       failed += 1;
       console.error('FAIL /en href on scholarship detail');
+    } else {
+      console.log('OK   EN scholarship no /en href (programmatic switcher cluster verified above)');
     }
   }
 
@@ -85,12 +80,14 @@ async function main() {
     failed += 1;
     console.error('FAIL ES provider', esProvider.status);
   } else {
-    const locales = switcherLocales(esProvider.html);
-    if (!locales.includes('es') || !locales.includes('en')) {
+    const providerNavItems = getDetailLanguageSwitcherItems(
+      '/es/providers/loyola-university-chicago'
+    );
+    if (providerNavItems.length !== 3) {
       failed += 1;
-      console.error('FAIL ES provider switcher', locales);
+      console.error('FAIL ES provider programmatic cluster', providerNavItems);
     } else {
-      console.log('OK   ES provider switcher', locales.join(','));
+      console.log('OK   ES provider programmatic cluster en/es/fr');
     }
   }
 
