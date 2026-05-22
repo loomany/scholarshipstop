@@ -2,6 +2,7 @@ import 'server-only';
 
 import type { ContentTranslationLocale } from '@/lib/i18n/contentTranslationsTypes';
 import { isScholarshipDetailPilotSlug } from '@/lib/i18n/scholarshipPilot/scholarshipPilotSlugs';
+import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
 import { createPublicClient } from '@/utils/supabase/public';
 
 const PUBLISHED_SELECT =
@@ -36,7 +37,11 @@ export async function listPublishedScholarshipDetailTranslations(): Promise<
   const ids = [...new Set(data.map((r) => String(r.source_id ?? '').trim()).filter(Boolean))];
   if (ids.length === 0) return [];
 
-  const { data: scholarships, error: schErr } = await supabase
+  // Scholarships table is not readable by anon; service role is required for slug/indexable join.
+  const admin = createServiceRoleSupabaseClient();
+  if (!admin) return [];
+
+  const { data: scholarships, error: schErr } = await admin
     .from('scholarships')
     .select('id, slug, is_indexable')
     .in('id', ids);
