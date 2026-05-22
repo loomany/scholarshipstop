@@ -36,6 +36,8 @@ import { listPublishedCategoryTranslations } from '@/lib/i18n/categoryPilot/list
 import { listPublishedResourceArticleTranslations } from '@/lib/i18n/resourcePilot/listPublishedResourceArticleTranslations';
 import { listPublishedProviderProfileTranslations } from '@/lib/i18n/providerPilot/listPublishedProviderProfileTranslations';
 import { listPublishedScholarshipDetailTranslations } from '@/lib/i18n/scholarshipPilot/listPublishedScholarshipDetailTranslations';
+import { listPublishedEssayGuideTranslations } from '@/lib/i18n/essayPilot/listPublishedEssayGuideTranslations';
+import { listPublishedCompareTranslations } from '@/lib/i18n/comparePilot/listPublishedCompareTranslations';
 import { isResourcePilotSlug } from '@/lib/i18n/resourcePilot/resourcePilotSlugs';
 import { buildLocalizedSitemapEntry } from '@/lib/i18n/localizedSitemaps';
 import {
@@ -667,7 +669,9 @@ export const buildSitemapDocuments = cache(async (): Promise<SitemapDocument[]> 
     ...(await buildLocalizedCategorySitemapDocuments()),
     ...(await buildLocalizedResourceArticleSitemapDocuments()),
     ...(await buildLocalizedProviderProfileSitemapDocuments()),
-    ...(await buildLocalizedScholarshipDetailSitemapDocuments())
+    ...(await buildLocalizedScholarshipDetailSitemapDocuments()),
+    ...(await buildLocalizedEssayGuideSitemapDocuments()),
+    ...(await buildLocalizedCompareSitemapDocuments())
   ];
 });
 
@@ -902,6 +906,81 @@ async function buildLocalizedScholarshipDetailSitemapDocuments(): Promise<
         `locale-${locale}-scholarships-detail-db`,
         entries
       )
+    );
+  }
+  return docs;
+}
+
+async function buildLocalizedEssayGuideSitemapDocuments(): Promise<SitemapDocument[]> {
+  const rows = await listPublishedEssayGuideTranslations();
+  if (rows.length === 0) return [];
+
+  const byLocale = new Map<'es' | 'fr', MetadataRoute.Sitemap>();
+  for (const row of rows) {
+    const canonicalPath = `/essays/${row.essaySlug}`;
+    const entry = buildLocalizedSitemapEntry({
+      locale: row.locale,
+      canonicalPath,
+      sourceIndexable: true,
+      translationStatus: 'published',
+      qualityScore: row.qualityScore ?? 90,
+      hasLocalizedTitle: Boolean(row.translatedTitle?.trim()),
+      hasLocalizedH1: Boolean(row.translatedTitle?.trim()),
+      hasLocalizedBody: true,
+      hasMixedLanguageRisk: false,
+      lastModified: row.lastModified
+    });
+    if (!entry) continue;
+    const bucket = byLocale.get(row.locale) ?? [];
+    bucket.push(entry);
+    byLocale.set(row.locale, bucket);
+  }
+
+  const docs: SitemapDocument[] = [];
+  for (const locale of ['es', 'fr'] as const) {
+    const entries = byLocale.get(locale);
+    if (!entries?.length) continue;
+    docs.push(
+      makeSitemapDocument('essays', `locale-${locale}-essays-guide-db`, entries)
+    );
+  }
+  return docs;
+}
+
+async function buildLocalizedCompareSitemapDocuments(): Promise<SitemapDocument[]> {
+  const rows = await listPublishedCompareTranslations();
+  if (rows.length === 0) return [];
+
+  const byLocale = new Map<'es' | 'fr', MetadataRoute.Sitemap>();
+  for (const row of rows) {
+    const canonicalPath =
+      row.sourceType === 'compare_university'
+        ? `/compare/universities/${row.slug}`
+        : `/compare/states/${row.slug}`;
+    const entry = buildLocalizedSitemapEntry({
+      locale: row.locale,
+      canonicalPath,
+      sourceIndexable: true,
+      translationStatus: 'published',
+      qualityScore: row.qualityScore ?? 90,
+      hasLocalizedTitle: Boolean(row.translatedTitle?.trim()),
+      hasLocalizedH1: Boolean(row.translatedTitle?.trim()),
+      hasLocalizedBody: true,
+      hasMixedLanguageRisk: false,
+      lastModified: row.lastModified
+    });
+    if (!entry) continue;
+    const bucket = byLocale.get(row.locale) ?? [];
+    bucket.push(entry);
+    byLocale.set(row.locale, bucket);
+  }
+
+  const docs: SitemapDocument[] = [];
+  for (const locale of ['es', 'fr'] as const) {
+    const entries = byLocale.get(locale);
+    if (!entries?.length) continue;
+    docs.push(
+      makeSitemapDocument('compare', `locale-${locale}-compare-detail-db`, entries)
     );
   }
   return docs;

@@ -1,11 +1,16 @@
 import { isResourcePilotSlug } from '@/lib/i18n/resourcePilot/resourcePilotSlugs';
 import { isProviderPilotSlug } from '@/lib/i18n/providerPilot/providerPilotSlugs';
+import { isEssayPilotSlug } from '@/lib/i18n/essayPilot/essayPilotSlugs';
+import { isCompareUniversityPilotSlug, isCompareStatePilotSlug } from '@/lib/i18n/comparePilot/comparePilotSlugs';
 import { isScholarshipDetailPilotSlug } from '@/lib/i18n/scholarshipPilot/scholarshipPilotSlugs';
 import { categoryIsPromotedSeo } from '@/lib/scholarships/categorySeoAllowlist';
 import {
   localizedCategorySeoHref,
   localizedProviderProfileHref,
   localizedResourcePilotArticleHref,
+  localizedEssayGuideHref,
+  localizedCompareUniversityHref,
+  localizedCompareStateHref,
   type Stage2LanguageSwitcherItem
 } from '@/lib/i18n/localizedHref';
 import {
@@ -56,11 +61,29 @@ export function essayDetailSlugFromPath(canonicalPath: string): string | null {
   return slug;
 }
 
+export function compareUniversitySlugFromPath(canonicalPath: string): string | null {
+  const normalized = normalizeCanonicalPath(canonicalPath);
+  const match = normalized.match(/^\/compare\/universities\/([^/]+)$/);
+  if (!match) return null;
+  const slug = match[1]!.trim().toLowerCase();
+  return slug || null;
+}
+
+export function compareStateSlugFromPath(canonicalPath: string): string | null {
+  const normalized = normalizeCanonicalPath(canonicalPath);
+  const match = normalized.match(/^\/compare\/states\/([^/]+)$/);
+  if (!match) return null;
+  const slug = match[1]!.trim().toLowerCase();
+  return slug || null;
+}
+
 export type DetailLanguageClusterKind =
   | 'scholarship_detail'
   | 'provider_detail'
   | 'resource_detail'
   | 'essay_detail'
+  | 'compare_university_detail'
+  | 'compare_state_detail'
   | null;
 
 export function detailLanguageClusterKind(
@@ -70,6 +93,8 @@ export function detailLanguageClusterKind(
   if (providerDetailSlugFromPath(canonicalPath)) return 'provider_detail';
   if (resourceDetailSlugFromPath(canonicalPath)) return 'resource_detail';
   if (essayDetailSlugFromPath(canonicalPath)) return 'essay_detail';
+  if (compareUniversitySlugFromPath(canonicalPath)) return 'compare_university_detail';
+  if (compareStateSlugFromPath(canonicalPath)) return 'compare_state_detail';
   return null;
 }
 
@@ -136,7 +161,31 @@ export function getDetailLanguageSwitcherItems(
   if (kind === 'essay_detail') {
     const slug = essayDetailSlugFromPath(canonicalPath);
     if (!slug) return [];
-    return [item('en', `/essays/${encodeURIComponent(slug)}`, activeLocale)];
+    const locales: Array<Stage2PilotLocale | 'en'> = ['en'];
+    if (isEssayPilotSlug(slug)) locales.push('es', 'fr');
+    return locales.map((locale) =>
+      item(locale, localizedEssayGuideHref(locale, slug), activeLocale)
+    );
+  }
+
+  if (kind === 'compare_university_detail') {
+    const slug = compareUniversitySlugFromPath(canonicalPath);
+    if (!slug) return [];
+    const locales: Array<Stage2PilotLocale | 'en'> = ['en'];
+    if (isCompareUniversityPilotSlug(slug)) locales.push('es', 'fr');
+    return locales.map((locale) =>
+      item(locale, localizedCompareUniversityHref(locale, slug), activeLocale)
+    );
+  }
+
+  if (kind === 'compare_state_detail') {
+    const slug = compareStateSlugFromPath(canonicalPath);
+    if (!slug) return [];
+    const locales: Array<Stage2PilotLocale | 'en'> = ['en'];
+    if (isCompareStatePilotSlug(slug)) locales.push('es', 'fr');
+    return locales.map((locale) =>
+      item(locale, localizedCompareStateHref(locale, slug), activeLocale)
+    );
   }
 
   return [];
