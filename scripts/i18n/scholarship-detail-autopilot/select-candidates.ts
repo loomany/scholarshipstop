@@ -118,6 +118,8 @@ export async function selectCandidates(target: number, waveSize: number): Promis
     if (provider.length > 3) completeness += 10;
     if (row.category_slug) completeness += 5;
 
+    const amountPresent = amount !== 'See official source';
+    const deadlinePresent = deadline !== 'See official source';
     const include = risk <= 4 && title.length > 5 && hasBody;
     scored.push({
       rank: 0,
@@ -130,11 +132,16 @@ export async function selectCandidates(target: number, waveSize: number): Promis
       deadline,
       category: String(row.category_slug ?? '').trim(),
       source_url_present: hasUrl,
+      amount_present: amountPresent,
+      deadline_present: deadlinePresent,
+      content_completeness: completeness,
       en_url: `https://scholarshiptop.com/scholarships/${slug}`,
       indexable_en: row.is_indexable !== false,
       completeness_score: completeness,
       risk_score: risk,
+      tier: include && hasUrl && (amountPresent || deadlinePresent) ? 'A' : include ? 'B' : 'D',
       include_yes_no: include ? 'yes' : 'no',
+      publish_allowed_yes_no: include ? 'yes' : 'no',
       skip_reason: include ? '' : skipReasons.join('; ') || 'high risk'
     });
   }

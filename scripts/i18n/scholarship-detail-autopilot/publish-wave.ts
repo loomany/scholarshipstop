@@ -41,11 +41,13 @@ export type PublishResult = {
 export async function publishWave(
   waveNum: number,
   generated: GeneratedWave,
-  scholarshipCount: number
+  scholarshipCount: number,
+  options?: { reportPrefix?: string }
 ): Promise<PublishResult> {
   loadEnvLocal();
   const expectedRows = scholarshipCount * 2;
   const { rows, machineModel } = generated;
+  const prefix = options?.reportPrefix ?? `i18n-stage5e-6-autopilot-wave-${waveNum}`;
 
   if (rows.length !== expectedRows) {
     throw new Error(`Expected ${expectedRows} rows, got ${rows.length}`);
@@ -55,7 +57,7 @@ export async function publishWave(
   const csvPath = join(
     process.cwd(),
     'reports/seo',
-    `i18n-stage5e-6-autopilot-wave-${waveNum}-rows-${DATE}.csv`
+    `${prefix}-rows-${DATE}.csv`
   );
 
   writeFileSync(

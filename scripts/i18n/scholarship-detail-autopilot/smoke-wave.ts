@@ -142,15 +142,18 @@ export function writeSmokeReport(
   waveNum: number,
   candidates: AutopilotCandidate[],
   smoke: SmokeResult,
-  publishUpserted: number
+  publishUpserted: number,
+  options?: { reportPrefix?: string; label?: string }
 ) {
+  const prefix = options?.reportPrefix ?? `i18n-stage5e-6-autopilot-wave-${waveNum}`;
+  const label = options?.label ?? 'Autopilot';
   const path = join(
     process.cwd(),
     'reports/seo',
-    `i18n-stage5e-6-autopilot-wave-${waveNum}-seed-smoke-${DATE}.md`
+    `${prefix}-seed-smoke-${DATE}.md`
   );
   mkdirSync(join(process.cwd(), 'reports/seo'), { recursive: true });
-  const body = `# Autopilot wave ${waveNum} seed & smoke (${DATE})
+  const body = `# ${label} wave ${waveNum} seed & smoke (${DATE})
 
 - Scholarships in wave: ${candidates.length}
 - Rows upserted: ${publishUpserted}
@@ -170,13 +173,17 @@ ${smoke.issues.length ? smoke.issues.map((i) => `- ${i}`).join('\n') : '- no iss
   return path;
 }
 
-export async function verifyDbWave(waveNum: number, expectedRows: number): Promise<string[]> {
+export async function verifyDbWave(
+  waveNum: number,
+  expectedRows: number,
+  machineModel?: string
+): Promise<string[]> {
   loadEnvLocal();
   const db = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
-  const model = `stage5e-scholarship-autopilot-wave-${waveNum}`;
+  const model = machineModel ?? `stage5e-scholarship-autopilot-wave-${waveNum}`;
   const { data } = await db
     .from('content_translations')
     .select('locale, status, quality_score')

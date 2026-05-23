@@ -24,12 +24,14 @@ export type GeneratedWave = {
 
 export async function generateWaveOverlays(
   candidates: AutopilotCandidate[],
-  waveNum: number
+  waveNum: number,
+  options?: { machineModel?: string; publishedAt?: string }
 ): Promise<GeneratedWave> {
   loadEnvLocal();
   const slugs = candidates.map((c) => c.slug);
-  const machineModel = `stage5e-scholarship-autopilot-wave-${waveNum}`;
-  const publishedAt = `2026-05-23T${String(waveNum).padStart(2, '0')}:30:00.000Z`;
+  const machineModel = options?.machineModel ?? `stage5e-scholarship-autopilot-wave-${waveNum}`;
+  const hour = 10 + (waveNum % 14);
+  const publishedAt = options?.publishedAt ?? `2026-05-23T${String(hour).padStart(2, '0')}:30:00.000Z`;
 
   const admin = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
