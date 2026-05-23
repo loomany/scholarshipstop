@@ -17,13 +17,14 @@ test('language switcher shows English, Spanish, and French for translated routes
   );
 });
 
-test('programmatic scholarship detail shows English-only switcher', () => {
+test('programmatic scholarship detail offers en/es/fr switcher links', () => {
   const items = getStage2LanguageSwitcherItems({
     pathname: '/scholarships/not-pilot'
   });
-  assert.equal(items.length, 1);
+  assert.equal(items.length, 3);
   assert.equal(items[0]?.locale, 'en');
   assert.equal(items[0]?.current, true);
+  assert.ok(items.some((i) => i.locale === 'es'));
 });
 
 test('English pages link to available Spanish and French translations', () => {

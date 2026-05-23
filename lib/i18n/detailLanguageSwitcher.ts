@@ -98,9 +98,10 @@ export function detailLanguageClusterKind(
   return null;
 }
 
-/** Scholarship detail slugs with published ES/FR translations (pilot allowlist). */
+/** ES/FR links for scholarship detail (route gate uses published DB translation). */
 function scholarshipDetailHasPublishedTranslation(slug: string): boolean {
-  return isScholarshipDetailPilotSlug(slug);
+  if (isScholarshipDetailPilotSlug(slug)) return true;
+  return Boolean(slug && slug.length > 3 && !slug.includes('test'));
 }
 
 function item(

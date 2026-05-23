@@ -24,10 +24,11 @@ test('scholarship detail pilot shows en/es/fr switcher', () => {
   assert.equal(items[0]?.current, true);
 });
 
-test('non-pilot scholarship detail shows English-only switcher', () => {
+test('scholarship detail offers en/es/fr switcher links (route gate uses DB translation)', () => {
   const items = getDetailLanguageSwitcherItems('/scholarships/some-other-slug-999');
-  assert.equal(items.length, 1);
-  assert.equal(items[0]?.locale, 'en');
+  assert.equal(items.length, 3);
+  assert.ok(items.some((i) => i.locale === 'es'));
+  assert.ok(items.some((i) => i.locale === 'fr'));
 });
 
 test('provider pilot shows en/es/fr cluster', () => {

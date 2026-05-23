@@ -1,7 +1,6 @@
 import 'server-only';
 
 import type { ContentTranslationLocale } from '@/lib/i18n/contentTranslationsTypes';
-import { isScholarshipDetailPilotSlug } from '@/lib/i18n/scholarshipPilot/scholarshipPilotSlugs';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
 import { createPublicClient } from '@/utils/supabase/public';
 
@@ -64,7 +63,7 @@ export async function listPublishedScholarshipDetailTranslations(): Promise<
       typeof row.quality_score === 'number' ? row.quality_score : null;
     if (score != null && score < MIN_QUALITY_SCORE) continue;
     const scholarshipSlug = slugById.get(sourceId);
-    if (!scholarshipSlug || !isScholarshipDetailPilotSlug(scholarshipSlug)) {
+    if (!scholarshipSlug) {
       continue;
     }
     if (indexableById.get(sourceId) === false) continue;

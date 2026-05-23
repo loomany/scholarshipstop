@@ -10,7 +10,6 @@ import {
   isPublishedScholarshipDetailTranslation,
   type LocalizedScholarshipDetailSeoCopy
 } from '@/lib/i18n/scholarshipPilot/scholarshipDetailTranslationGate';
-import { isScholarshipDetailPilotSlug } from '@/lib/i18n/scholarshipPilot/scholarshipPilotSlugs';
 import { getScholarshipDetailServer } from '@/lib/scholarships/scholarshipDetailServer';
 
 export type PublishedScholarshipDetailContext = {
@@ -25,7 +24,7 @@ export async function fetchPublishedScholarshipDetail(
   locale: ContentTranslationLocale
 ): Promise<PublishedScholarshipDetailContext | null> {
   const normalizedSlug = decodeURIComponent(slug ?? '').trim().toLowerCase();
-  if (!normalizedSlug || !isScholarshipDetailPilotSlug(normalizedSlug)) {
+  if (!normalizedSlug) {
     return null;
   }
 
