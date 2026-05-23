@@ -1,3 +1,5 @@
+import { SCHOLARSHIP_SCALEUP_BATCH_SLUGS } from '@/lib/i18n/scholarshipPilot/scaleUpBatchSlugs';
+
 export const SCHOLARSHIP_DETAIL_PILOT_SLUGS_BATCH_1 = [
   'climate-stripes-scholarship-14487'
 ] as const;
@@ -13,11 +15,12 @@ export const SCHOLARSHIP_DETAIL_PILOT_SLUGS_BATCH_2 = [
 
 export const SCHOLARSHIP_DETAIL_PILOT_SLUGS = [
   ...SCHOLARSHIP_DETAIL_PILOT_SLUGS_BATCH_1,
-  ...SCHOLARSHIP_DETAIL_PILOT_SLUGS_BATCH_2
+  ...SCHOLARSHIP_DETAIL_PILOT_SLUGS_BATCH_2,
+  ...SCHOLARSHIP_SCALEUP_BATCH_SLUGS
 ] as const;
 
-export type ScholarshipDetailPilotSlug =
-  (typeof SCHOLARSHIP_DETAIL_PILOT_SLUGS)[number];
+/** Pilot slug allowlist (string union avoided — 50+ scale-up slugs). */
+export type ScholarshipDetailPilotSlug = string;
 
 export const SCHOLARSHIP_DETAIL_PILOT_BATCH_1_MAX_ROWS = 2;
 export const SCHOLARSHIP_DETAIL_PILOT_BATCH_2_MAX_ROWS = 10;
@@ -26,12 +29,17 @@ const PILOT_SLUG_SET = new Set<string>(SCHOLARSHIP_DETAIL_PILOT_SLUGS);
 
 export function isScholarshipDetailPilotSlug(
   slug: string | null | undefined
-): slug is ScholarshipDetailPilotSlug {
+): boolean {
   if (!slug) return false;
   return PILOT_SLUG_SET.has(slug.trim().toLowerCase());
 }
 
 export type ScholarshipPilotBatchId = '5e-1' | '5e-2' | 'all';
+
+export type ScholarshipScaleupBatchNumber = 1 | 2 | 3 | 4 | 5;
+
+export const SCHOLARSHIP_SCALEUP_BATCH_MAX_ROWS = 20;
+export const SCHOLARSHIP_SCALEUP_BATCH_MAX_SLUGS = 10;
 
 export function scholarshipPilotSlugsForBatch(
   batch: ScholarshipPilotBatchId
@@ -40,3 +48,5 @@ export function scholarshipPilotSlugsForBatch(
   if (batch === '5e-2') return SCHOLARSHIP_DETAIL_PILOT_SLUGS_BATCH_2;
   return SCHOLARSHIP_DETAIL_PILOT_SLUGS;
 }
+
+export { scaleupBatchSlugs } from '@/lib/i18n/scholarshipPilot/scaleUpBatchSlugs';

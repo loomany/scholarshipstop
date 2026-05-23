@@ -1,5 +1,6 @@
+import { createHash } from 'node:crypto';
+
 import type { ContentTranslationLocale } from '@/lib/i18n/contentTranslationsTypes';
-import { getTranslationSourceHash } from '@/lib/i18n/contentTranslationsServer';
 import {
   buildScholarshipPilotLocaleContent,
   type ScholarshipPilotFacts
@@ -18,7 +19,7 @@ export type ScholarshipDetailFaqTranslationItem = {
 export type ScholarshipDetailPilotSeedRow = {
   source_type: 'scholarship_detail';
   source_id: string;
-  source_slug: ScholarshipDetailPilotSlug;
+  source_slug: string;
   locale: ContentTranslationLocale;
   status: 'published';
   source_hash: string;
@@ -38,7 +39,8 @@ export type ScholarshipDetailPilotSeedRow = {
 
 const QUALITY_SCORE = 90;
 
-const SCHOLARSHIP_FACTS: Record<ScholarshipDetailPilotSlug, ScholarshipPilotFacts> = {
+/** Legacy 5E-1/5E-2 pilots only; scale-up batches load facts from DB at seed time. */
+const SCHOLARSHIP_FACTS: Partial<Record<ScholarshipDetailPilotSlug, ScholarshipPilotFacts>> = {
   'climate-stripes-scholarship-14487': {
     officialTitle: 'Climate Stripes Scholarship',
     provider: 'University of Reading',
@@ -77,39 +79,41 @@ const SCHOLARSHIP_FACTS: Record<ScholarshipDetailPilotSlug, ScholarshipPilotFact
   }
 };
 
-function buildSourceHash(slug: ScholarshipDetailPilotSlug, updatedAt: string | null): string {
-  const facts = SCHOLARSHIP_FACTS[slug];
-  return getTranslationSourceHash({
-    slug,
-    title: facts.officialTitle,
-    updated_at: updatedAt
-  });
+function buildSourceHash(
+  slug: string,
+  facts: ScholarshipPilotFacts,
+  updatedAt: string | null
+): string {
+  const stable = JSON.stringify(
+    { slug, title: facts.officialTitle, updated_at: updatedAt },
+    Object.keys({ slug, title: facts.officialTitle, updated_at: updatedAt }).sort()
+  );
+  return createHash('sha256').update(stable).digest('hex');
 }
 
-export function buildScholarshipDetailPilotSeedRows(
-  slugToMeta: Map<
-    ScholarshipDetailPilotSlug,
-    { id: string; updated_at: string | null }
-  >,
-  batch: ScholarshipPilotBatchId,
+export function buildScholarshipDetailPilotSeedRowsForSlugs(
+  slugToMeta: Map<string, { id: string; updated_at: string | null }>,
+  slugs: readonly string[],
+  factsBySlug: Map<string, ScholarshipPilotFacts>,
   machineModel: string,
   publishedAt: string
 ): ScholarshipDetailPilotSeedRow[] {
   const rows: ScholarshipDetailPilotSeedRow[] = [];
-  const slugs = scholarshipPilotSlugsForBatch(batch);
   for (const slug of slugs) {
-    const meta = slugToMeta.get(slug as ScholarshipDetailPilotSlug);
-    if (!meta) continue;
-    const facts = SCHOLARSHIP_FACTS[slug as ScholarshipDetailPilotSlug];
+    const meta = slugToMeta.get(slug);
+    const facts = factsBySlug.get(slug) ?? SCHOLARSHIP_FACTS[slug as ScholarshipDetailPilotSlug];
+    if (!meta || !facts) {
+      continue;
+    }
     for (const locale of ['es', 'fr'] as const) {
       const content = buildScholarshipPilotLocaleContent(facts, locale);
       rows.push({
         source_type: 'scholarship_detail',
         source_id: meta.id,
-        source_slug: slug as ScholarshipDetailPilotSlug,
+        source_slug: slug,
         locale,
         status: 'published',
-        source_hash: buildSourceHash(slug as ScholarshipDetailPilotSlug, meta.updated_at),
+        source_hash: buildSourceHash(slug, facts, meta.updated_at),
         source_updated_at: meta.updated_at,
         quality_score: QUALITY_SCORE,
         published_at: publishedAt,
@@ -126,4 +130,25 @@ export function buildScholarshipDetailPilotSeedRows(
     }
   }
   return rows;
+}
+
+export function buildScholarshipDetailPilotSeedRows(
+  slugToMeta: Map<string, { id: string; updated_at: string | null }>,
+  batch: ScholarshipPilotBatchId,
+  machineModel: string,
+  publishedAt: string
+): ScholarshipDetailPilotSeedRow[] {
+  const slugs = scholarshipPilotSlugsForBatch(batch);
+  const factsBySlug = new Map<string, ScholarshipPilotFacts>();
+  for (const slug of slugs) {
+    const f = SCHOLARSHIP_FACTS[slug as ScholarshipDetailPilotSlug];
+    if (f) factsBySlug.set(slug, f);
+  }
+  return buildScholarshipDetailPilotSeedRowsForSlugs(
+    slugToMeta,
+    slugs,
+    factsBySlug,
+    machineModel,
+    publishedAt
+  );
 }

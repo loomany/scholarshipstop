@@ -16,16 +16,28 @@ import { join } from 'node:path';
 import { createClient } from '@supabase/supabase-js';
 
 import {
+  scholarshipRowToPilotFacts,
+  type ScholarshipDbFactRow
+} from '@/lib/i18n/scholarshipPilot/fetchScholarshipPilotFacts';
+import {
   buildScholarshipDetailPilotSeedRows,
+  buildScholarshipDetailPilotSeedRowsForSlugs,
   type ScholarshipDetailPilotSeedRow
 } from '@/lib/i18n/scholarshipPilot/scholarshipPilotTranslationsData';
+import type { ScholarshipPilotFacts } from '@/lib/i18n/scholarshipPilot/scholarshipPilotContentFactory';
+import {
+  scaleupBatchSlugs,
+  type ScholarshipScaleupBatchId
+} from '@/lib/i18n/scholarshipPilot/scaleUpBatchSlugs';
 import {
   SCHOLARSHIP_DETAIL_PILOT_BATCH_1_MAX_ROWS,
   SCHOLARSHIP_DETAIL_PILOT_BATCH_2_MAX_ROWS,
+  SCHOLARSHIP_SCALEUP_BATCH_MAX_ROWS,
+  SCHOLARSHIP_SCALEUP_BATCH_MAX_SLUGS,
   scholarshipPilotSlugsForBatch,
-  type ScholarshipDetailPilotSlug,
   type ScholarshipPilotBatchId
 } from '@/lib/i18n/scholarshipPilot/scholarshipPilotSlugs';
+import { validateScholarshipPilotSeedRows } from '@/lib/i18n/scholarshipPilot/validateScholarshipPilotSeedRows';
 import type { Database } from '@/types_db';
 
 const DATE = '2026-05-22';
@@ -33,11 +45,31 @@ const DATE = '2026-05-22';
 const UUID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
-function resolveBatch(): ScholarshipPilotBatchId {
+type SeedMode =
+  | { kind: 'legacy'; batch: ScholarshipPilotBatchId }
+  | { kind: 'scaleup'; batch: ScholarshipScaleupBatchId };
+
+function resolveBatch(): SeedMode {
   const raw = (process.env.I18N_SCHOLARSHIP_PILOT_BATCH ?? '5e-1').trim().toLowerCase();
-  if (raw === '5e-2' || raw === 'plus5' || raw === '5e2') return '5e-2';
-  if (raw === 'all') return 'all';
-  return '5e-1';
+  const scaleMatch = raw.match(/^(?:scale|10h|batch)-?([1-5])$/);
+  if (scaleMatch) {
+    return { kind: 'scaleup', batch: Number(scaleMatch[1]) as ScholarshipScaleupBatchId };
+  }
+  if (raw === '5e-2' || raw === 'plus5' || raw === '5e2') {
+    return { kind: 'legacy', batch: '5e-2' };
+  }
+  if (raw === 'all') return { kind: 'legacy', batch: 'all' };
+  return { kind: 'legacy', batch: '5e-1' };
+}
+
+function scaleupConfig(batch: ScholarshipScaleupBatchId) {
+  return {
+    machineModel: `stage5e-scholarship-manual-batch-${batch}`,
+    maxRows: SCHOLARSHIP_SCALEUP_BATCH_MAX_ROWS,
+    maxSlugs: SCHOLARSHIP_SCALEUP_BATCH_MAX_SLUGS,
+    publishedAt: `2026-05-23T0${batch}:00:00.000Z`,
+    csvName: `i18n-stage5e-scholarship-detail-batch-${batch}-rows-2026-05-22.csv`
+  };
 }
 
 function batchConfig(batch: ScholarshipPilotBatchId) {
@@ -155,14 +187,43 @@ function validateRows(
   }
 }
 
+async function fetchFactsForSlugs(
+  admin: ReturnType<typeof createClient<Database>>,
+  slugs: readonly string[]
+): Promise<Map<string, ScholarshipPilotFacts>> {
+  const { data, error } = await admin
+    .from('scholarships')
+    .select(
+      'slug, title, provider_name, award_amount_text, award_amount_min, award_amount_max, currency, deadline_text, deadline_date'
+    )
+    .in('slug', [...slugs]);
+  if (error) {
+    console.error('facts lookup failed:', error.message);
+    process.exit(1);
+  }
+  const map = new Map<string, ScholarshipPilotFacts>();
+  for (const row of data ?? []) {
+    const slug = String(row.slug ?? '').trim().toLowerCase();
+    if (!slug) continue;
+    map.set(slug, scholarshipRowToPilotFacts(row as ScholarshipDbFactRow));
+  }
+  return map;
+}
+
 async function main() {
   if (process.env.I18N_PILOT_USE_SHELL_ENV !== '1') {
     loadEnvLocal();
   }
 
-  const batch = resolveBatch();
-  const config = batchConfig(batch);
-  const slugs = scholarshipPilotSlugsForBatch(batch);
+  const mode = resolveBatch();
+  const config =
+    mode.kind === 'scaleup' ? scaleupConfig(mode.batch) : batchConfig(mode.batch);
+  const slugs =
+    mode.kind === 'scaleup'
+      ? scaleupBatchSlugs(mode.batch)
+      : scholarshipPilotSlugsForBatch(mode.batch);
+  const expectedSlugCount =
+    mode.kind === 'scaleup' ? config.maxSlugs : (config as ReturnType<typeof batchConfig>).expectedSlugCount;
   const rowsCsv = join(process.cwd(), 'reports/seo', config.csvName);
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
@@ -191,34 +252,52 @@ async function main() {
     process.exit(1);
   }
 
-  const slugToMeta = new Map<
-    ScholarshipDetailPilotSlug,
-    { id: string; updated_at: string | null }
-  >();
+  const slugToMeta = new Map<string, { id: string; updated_at: string | null }>();
   for (const row of scholarships ?? []) {
     const slug = String(row.slug ?? '').trim().toLowerCase();
     const id = String(row.id ?? '').trim();
     if (slug && id && slugs.includes(slug)) {
-      slugToMeta.set(slug as ScholarshipDetailPilotSlug, {
-        id,
-        updated_at: row.updated_at ?? null
-      });
+      slugToMeta.set(slug, { id, updated_at: row.updated_at ?? null });
     }
   }
 
-  const missing = slugs.filter((s) => !slugToMeta.has(s as ScholarshipDetailPilotSlug));
+  const missing = slugs.filter((s) => !slugToMeta.has(s));
   if (missing.length > 0) {
     console.error('Missing scholarships rows for required slugs:', missing.join(', '));
     process.exit(1);
   }
 
-  const rows = buildScholarshipDetailPilotSeedRows(
-    slugToMeta,
-    batch === 'all' ? 'all' : batch,
-    config.machineModel,
-    config.publishedAt
-  );
-  validateRows(rows, config.maxRows, config.expectedSlugCount, config.machineModel);
+  if (slugs.length > SCHOLARSHIP_SCALEUP_BATCH_MAX_SLUGS && mode.kind === 'scaleup') {
+    console.error(`Refuse: more than ${SCHOLARSHIP_SCALEUP_BATCH_MAX_SLUGS} slugs in scaleup batch`);
+    process.exit(1);
+  }
+
+  const factsBySlug = await fetchFactsForSlugs(admin, slugs);
+
+  const rows =
+    mode.kind === 'scaleup'
+      ? buildScholarshipDetailPilotSeedRowsForSlugs(
+          slugToMeta,
+          slugs,
+          factsBySlug,
+          config.machineModel,
+          config.publishedAt
+        )
+      : buildScholarshipDetailPilotSeedRows(
+          slugToMeta,
+          mode.batch,
+          config.machineModel,
+          config.publishedAt
+        );
+
+  const validationErrors = validateScholarshipPilotSeedRows(rows, factsBySlug);
+  if (validationErrors.length) {
+    console.error('Content validation failed:');
+    for (const e of validationErrors) console.error(' -', e);
+    process.exit(1);
+  }
+
+  validateRows(rows, config.maxRows, expectedSlugCount, config.machineModel);
 
   mkdirSync(join(process.cwd(), 'reports/seo'), { recursive: true });
   const header =
@@ -246,8 +325,9 @@ async function main() {
     'utf8'
   );
   console.log(`Wrote ${rowsCsv}`);
+  const batchLabel = mode.kind === 'scaleup' ? `scale-${mode.batch}` : mode.batch;
   console.log(
-    `Batch ${batch}: planned ${rows.length} rows, machine_model=${config.machineModel}\n`
+    `Batch ${batchLabel}: planned ${rows.length} rows, machine_model=${config.machineModel}, OpenAI cost=$0\n`
   );
 
   for (const row of rows) {
@@ -294,7 +374,13 @@ async function main() {
     }
     upserted += 1;
   }
-  console.log(JSON.stringify({ batch, upserted, machine_model: config.machineModel }, null, 2));
+  console.log(
+    JSON.stringify(
+      { batch: batchLabel, upserted, machine_model: config.machineModel, openai_cost_usd: 0 },
+      null,
+      2
+    )
+  );
 }
 
 main().catch((e) => {
