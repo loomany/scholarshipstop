@@ -12,6 +12,7 @@ import { createClient } from '@supabase/supabase-js';
 import { DATE, isDryRun, loadEnvLocal } from './env';
 import { generateWaveOverlays } from './generate-overlays';
 import { publishWave } from './publish-wave';
+import { loadPersistedWaveSlugs, slugsToSmokeCandidates } from './load-persisted-wave';
 import { selectCandidates } from './select-candidates';
 import { smokeWave, verifyDbWave, writeSmokeReport } from './smoke-wave';
 import { validateWave, writeValidationReport } from './validate-overlays';
@@ -29,8 +30,10 @@ function parseArgs() {
     Number(process.argv.find((a) => a.startsWith('--wave-size='))?.split('=')[1] ?? '50')
   );
   const maxWaves = Number(process.argv.find((a) => a.startsWith('--max-waves='))?.split('=')[1] ?? '999');
+  const startWave = Number(process.argv.find((a) => a.startsWith('--start-wave='))?.split('=')[1] ?? '1');
   const dryRunOnly = process.argv.includes('--dry-run-only');
-  return { target, waveSize, maxWaves, dryRunOnly };
+  const smokeOnlyWave = Number(process.argv.find((a) => a.startsWith('--smoke-only-wave='))?.split('=')[1] ?? '0');
+  return { target, waveSize, maxWaves, startWave, dryRunOnly, smokeOnlyWave };
 }
 
 async function writeBaseline() {
@@ -87,10 +90,32 @@ function runRegression() {
 }
 
 async function main() {
-  const { target, waveSize, maxWaves, dryRunOnly } = parseArgs();
+  const { target, waveSize, maxWaves, startWave, dryRunOnly, smokeOnlyWave } = parseArgs();
   console.log('[autopilot] start', { target, waveSize, dryRunOnly, dryRun: isDryRun() });
 
   const baseline = await writeBaseline();
+
+  if (smokeOnlyWave > 0) {
+    const { slugs, source, audit } = await loadPersistedWaveSlugs(smokeOnlyWave);
+    console.log('[autopilot] smoke-only persisted wave', {
+      wave: smokeOnlyWave,
+      slugSource: source,
+      slugCount: slugs.length,
+      dbRows: audit.total,
+      machineModel: audit.machineModel
+    });
+    if (!slugs.length) {
+      console.error('No persisted slugs for wave', smokeOnlyWave);
+      process.exit(1);
+    }
+    const waveCandidates = slugsToSmokeCandidates(slugs, smokeOnlyWave);
+    const expectedTotal = STARTING_SCHOLARSHIPS + (smokeOnlyWave - 1) * waveSize + slugs.length;
+    const smoke = await smokeWave(smokeOnlyWave, waveCandidates, expectedTotal);
+    writeSmokeReport(smokeOnlyWave, waveCandidates, smoke, slugs.length * 2);
+    console.log(smoke.passed ? 'Smoke OK' : smoke.issues);
+    process.exit(smoke.passed ? 0 : 1);
+  }
+
   const allCandidates = await selectCandidates(target, waveSize);
   const maxWave = Math.min(Math.ceil(target / waveSize), maxWaves);
 
@@ -110,9 +135,9 @@ async function main() {
     openAiCost: 0
   };
 
-  let currentTotal = baseline.es;
+  let currentTotal = baseline.es + (startWave - 1) * waveSize;
 
-  for (let waveNum = 1; waveNum <= maxWave; waveNum++) {
+  for (let waveNum = startWave; waveNum <= maxWave; waveNum++) {
     const waveCandidates = allCandidates.filter((c) => c.wave === waveNum);
     if (!waveCandidates.length) break;
 

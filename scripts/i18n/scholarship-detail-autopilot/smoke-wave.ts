@@ -11,8 +11,21 @@ import { checkScholarshipDetailHtml } from '../../seo/i18n-scholarship-detail-ht
 import { BASE, DATE, IQ, loadEnvLocal } from './env';
 import type { AutopilotCandidate } from './types';
 
+async function fetchWithRetry(url: string, attempts = 4): Promise<Response> {
+  let lastErr: unknown;
+  for (let i = 0; i < attempts; i++) {
+    try {
+      return await fetch(url, { redirect: 'manual' });
+    } catch (e) {
+      lastErr = e;
+      await new Promise((r) => setTimeout(r, 1500 * (i + 1)));
+    }
+  }
+  throw lastErr;
+}
+
 async function status(path: string) {
-  const res = await fetch(`${BASE}${path}`, { redirect: 'manual' });
+  const res = await fetchWithRetry(`${BASE}${path}`);
   return res.status;
 }
 
@@ -59,8 +72,8 @@ export async function smokeWave(
     if (es !== 404 || fr !== 404) issues.push(`unseeded ${slug} es=${es} fr=${fr}`);
   }
 
-  const esXml = await (await fetch(`${BASE}/sitemaps/locale-es-scholarships-detail-db.xml`)).text();
-  const frXml = await (await fetch(`${BASE}/sitemaps/locale-fr-scholarships-detail-db.xml`)).text();
+  const esXml = await (await fetchWithRetry(`${BASE}/sitemaps/locale-es-scholarships-detail-db.xml`)).text();
+  const frXml = await (await fetchWithRetry(`${BASE}/sitemaps/locale-fr-scholarships-detail-db.xml`)).text();
   const esCount = (esXml.match(/<loc>/g) ?? []).length;
   const frCount = (frXml.match(/<loc>/g) ?? []).length;
 

@@ -1,0 +1,64 @@
+# Wave 1 DB audit (2026-05-23)
+
+- machine_model: `stage5e-scholarship-autopilot-wave-1`
+- total rows: **100**
+- ES: **50**
+- FR: **50**
+- distinct source_id: **50**
+- distinct slugs (db): **50**
+- quality < 85: **0**
+- statuses: {"published":100}
+- quality_score distribution: {"90":100}
+
+## Slugs
+
+- `alberta-graduate-excellence-scholarship-ages-at-university-of-calgary-20-alberta-graduate-excellence-scho`
+- `sekforde-house-trust-scholarship-at-queen-mary-university-of-london-2026-sekforde-house-trust-scholarship`
+- `mba-excellence-scholarship-for-continuing-students-at-ucw-2026-ucw-mba-excellence-scholarship-f`
+- `karsh-international-scholarships-program-at-duke-university-2026-karsh-international-scholarship-`
+- `anu-research-school-of-astronomy-astrophysics-masters-advanced-scholarsh-anu-research-school-of-astronomy`
+- `fong-computational-mathematics-graduate-award-at-university-of-waterloo--fong-computational-mathematics-g`
+- `international-recruitment-office-scholarship-at-bath-spa-university-2026-international-recruitment-office`
+- `reisher-transfer-scholarship-at-university-of-colorado-boulder-2026-reisher-transfer-scholarship-at-`
+- `articulation-scholarships-at-university-of-new-south-wales-2026-articulation-scholarships-at-uni`
+- `sports-scholarship-level-1-at-heriot-watt-university-2026-sports-scholarship-level-at-heri`
+- `international-alumni-discount-for-medicine-graduate-entry-bmbs-at-univer-international-alumni-discount-fo`
+- `economic-development-and-innovation-graduate-scholarship-at-university-o-economic-development-and-innovat`
+- `e-b-dumbroff-award-at-university-of-waterloo-2026-eb-dumbroff-award-at-university-`
+- `efrim-boritz-doctoral-scholarship-in-emerging-technologies-at-university-efrim-boritz-doctoral-scholarshi`
+- `fraser-award-for-graduate-student-research-at-university-of-waterloo-202-fraser-award-for-graduate-studen`
+- `professor-frank-monsour-am-scholarship-at-university-of-queensland-2026-professor-frank-monsour-am-schol`
+- `macquarie-leaders-and-achievers-scholarship-at-macquarie-university-2026-macquarie-leaders-and-achievers-`
+- `pony-chung-ku-gsis-invitation-scholarship-at-korea-university-2026-pony-chung-ku-gsis-invitation-sc`
+- `2026-amy-g-injury-firm-access-to-education-scholarship-amy-g-injury-firm-access-to-educ`
+- `faculty-of-mathematics-graduate-research-excellence-award-at-university--faculty-of-mathematics-graduate-`
+- `dean-of-engineering-doctoral-perseverance-award-at-university-of-waterlo-dean-of-engineering-doctoral-per`
+- `electrical-computer-engineering-master-of-engineering-award-of-excellenc-electrical-computer-engineering-`
+- `cambridge-trust-international-scholarship-at-university-of-cambridge-202-cambridge-international-scholars`
+- `fdu-family-grant-for-graduate-students-2026-fdu-family-grant-for-graduate-st`
+- `edmund-and-rosalie-appelt-graduate-scholarship-at-university-of-waterloo-edmund-and-rosalie-appelt-gradua`
+- `faculty-of-environment-graduate-student-research-dissemination-award-at--faculty-of-environment-graduate-`
+- `el-cafe-del-futuro-scholarship-el-cafe-del-futuro-scholarship`
+- `cultural-scholarship-at-king-s-college-2027-uq-cultural-scholarship-at-kings`
+- `evelyn-guderian-graduate-scholarship-in-germanic-slavic-studies-at-unive-evelyn-guderian-graduate-scholar`
+- `environment-student-athlete-award-at-university-of-waterloo-2026-environment-studentathlete-award`
+- `el-gabbani-scholarship-at-university-of-waterloo-2026-el-gabbani-scholarship-at-univer`
+- `faculty-of-health-teaching-assistant-award-at-university-of-waterloo-202-faculty-of-health-teaching-assis`
+- `fang-family-scholarship-for-undergraduate-scholarships-at-duke-kunshan-u-fang-family-scholarship-for-unde`
+- `monash-university-malaysia-graduate-research-excellence-scholarship-2026-monash-university-malaysia-schol`
+- `robert-krembil-scholarship-of-merit-at-schulich-school-of-business-2026-robert-krembil-scholarship-of-me`
+- `chappell-and-white-phd-scholarship-at-anu-2026-chappell-and-white-phd-scholarsh`
+- `international-student-services-scholarship-at-columbus-state-university--international-student-services-s`
+- `marang-gomke-jaipal-singh-munda-overseas-scholarship-2026-marang-gomke-jaipal-singh-munda-`
+- `the-centre-for-trauma-sciences-scholarship-at-queen-mary-university-of-l-the-centre-for-trauma-sciences-s`
+- `english-rhetoric-essay-award-at-university-of-waterloo-2026-english-rhetoric-essay-award-at-`
+- `english-ta-award-for-excellence-in-teaching-at-university-of-waterloo-20-english-ta-award-for-excellence-`
+- `david-zaharchuk-memorial-bursary-at-university-of-waterloo-2026-david-zaharchuk-memorial-bursary`
+- `engineering-deans-entrance-award-at-university-of-waterloo-2026-engineering-deans-entrance-award`
+- `english-independent-graduate-instructor-award-for-excellence-in-teaching-english-independent-graduate-ins`
+- `davis-memorial-scholarship-in-ecology-at-university-of-waterloo-2026-davis-memorial-scholarship-in-ec`
+- `david-r-cheriton-graduate-scholarships-in-computer-science-at-university-david-r-cheriton-graduate-schola`
+- `flora-t-t-ng-and-garry-l-rempel-doctoral-scholarship-in-sustainable-deve-flora-tt-ng-and-garry-l-rempel-d`
+- `faculty-of-arts-departmental-graduate-scholarship-at-university-of-water-faculty-of-arts-departmental-gra`
+- `environment-graduate-student-award-at-university-of-waterloo-2026-environment-graduate-student-awa`
+- `ellsworth-and-karen-ledrew-international-experience-award-at-university--ellsworth-and-karen-ledrew-inter`
