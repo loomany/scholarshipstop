@@ -9,7 +9,7 @@ import { execSync } from 'node:child_process';
 
 import { createClient } from '@supabase/supabase-js';
 
-import { DATE, isDryRun, loadEnvLocal } from './env';
+import { DATE, BASE, isDryRun, loadEnvLocal } from './env';
 import { fetchTranslatedScholarshipDetailSourceIds } from './fetch-translated-source-ids';
 import { generateWaveOverlays } from './generate-overlays';
 import { publishWave } from './publish-wave';
@@ -27,7 +27,9 @@ function relaxedMachineModel(waveNum: number) {
 }
 
 function reportStage(startWave: number): string {
-  return startWave >= 31 ? 'stage5e-11' : 'stage5e-9';
+  if (startWave >= 41) return 'stage5e-12';
+  if (startWave >= 31) return 'stage5e-11';
+  return 'stage5e-9';
 }
 
 function reportPrefix(waveNum: number, stage: string) {
@@ -36,7 +38,7 @@ function reportPrefix(waveNum: number, stage: string) {
 
 function parseArgs() {
   const target = Math.min(
-    1000,
+    5000,
     Number(process.argv.find((a) => a.startsWith('--target='))?.split('=')[1] ?? '500')
   );
   const waveSizeArg = Number(process.argv.find((a) => a.startsWith('--wave-size='))?.split('=')[1] ?? '0');
@@ -57,6 +59,58 @@ function runRegression() {
   console.log('[relaxed] regression: tsc + i18n tests');
   execSync('npx tsc --noEmit', { stdio: 'inherit', cwd: process.cwd() });
   execSync('npx tsx --test lib/i18n/__tests__/*.test.ts', { stdio: 'inherit', cwd: process.cwd() });
+}
+
+async function writeCheckpoint(
+  startWave: number,
+  endWave: number,
+  startEs: number,
+  startFr: number,
+  netNewSoFar: number
+) {
+  const es = await countSitemapEligibleEsScholarshipDetails();
+  const fr = await countSitemapEligibleFrScholarshipDetails();
+  const expectedEs = startEs + netNewSoFar;
+  const expectedFr = startFr + netNewSoFar;
+  const issues: string[] = [];
+  if (es !== expectedEs) issues.push(`ES ${es} != expected ${expectedEs}`);
+  if (fr !== expectedFr) issues.push(`FR ${fr} != expected ${expectedFr}`);
+  if ((await fetch(`${BASE}/sitemap.xml`, { redirect: 'manual' })).status !== 200) {
+    issues.push('sitemap index not 200');
+  }
+
+  let buildOk = true;
+  try {
+    execSync('npm run build', { stdio: 'pipe', cwd: process.cwd() });
+    execSync('npx tsc --noEmit', { stdio: 'pipe', cwd: process.cwd() });
+    execSync('npx tsx --test lib/i18n/__tests__/*.test.ts', { stdio: 'pipe', cwd: process.cwd() });
+  } catch {
+    buildOk = false;
+    issues.push('build/tsc/tests failed');
+  }
+
+  const passed = !issues.length && buildOk;
+  const body = `# 12-hour checkpoint waves ${startWave}–${endWave} (${DATE})
+
+| Metric | Value |
+|--------|-------|
+| Net-new scholarships (block) | ${netNewSoFar} |
+| ES sitemap | ${es} (expected ${expectedEs}) |
+| FR sitemap | ${fr} (expected ${expectedFr}) |
+| Build/tsc/tests | ${buildOk ? 'pass' : 'FAIL'} |
+
+## Verdict: **${passed ? 'PASS' : 'FAIL'}**
+
+${issues.length ? issues.map((i) => `- ${i}`).join('\n') : '- no issues'}
+`;
+  const path = join(
+    process.cwd(),
+    'reports/seo',
+    `i18n-12hour-scholarship-autopilot-waves-${startWave}-${endWave}-checkpoint-${DATE}.md`
+  );
+  writeFileSync(path, body, 'utf8');
+  console.log('[relaxed] checkpoint', path, passed ? 'PASS' : 'FAIL');
+  if (!passed) throw new Error(`checkpoint ${startWave}-${endWave} failed: ${issues.join('; ')}`);
 }
 
 async function main() {
@@ -248,6 +302,28 @@ async function main() {
         break;
       }
     }
+
+    if (
+      startWave >= 41 &&
+      summary.wavesAccepted > 0 &&
+      summary.wavesAccepted % 10 === 0 &&
+      !isDryRun()
+    ) {
+      const blockEnd = startWave + summary.wavesAccepted - 1;
+      const blockStart = blockEnd - 9;
+      try {
+        await writeCheckpoint(
+          blockStart,
+          blockEnd,
+          summary.startEs,
+          summary.startFr,
+          summary.netNewScholarships
+        );
+      } catch (e) {
+        summary.stoppedReason = String(e);
+        break;
+      }
+    }
   }
 
   if (!summary.stoppedReason) summary.stoppedReason = 'completed';
@@ -256,13 +332,17 @@ async function main() {
   const finalFr = await countSitemapEligibleFrScholarshipDetails();
 
   const masterName =
-    startWave >= 31
-      ? `i18n-stage5e-11-relaxed-autopilot-wave31-plus-master-report-${DATE}.md`
-      : `i18n-stage5e-9-scholarship-relaxed-autopilot-master-report-${DATE}.md`;
+    startWave >= 41
+      ? `i18n-12hour-scholarship-autopilot-master-report-2026-05-24.md`
+      : startWave >= 31
+        ? `i18n-stage5e-11-relaxed-autopilot-wave31-plus-master-report-${DATE}.md`
+        : `i18n-stage5e-9-scholarship-relaxed-autopilot-master-report-${DATE}.md`;
   const handoffName =
-    startWave >= 31
-      ? `i18n-stage5e-11-relaxed-autopilot-wave31-plus-chatgpt-handoff-${DATE}.md`
-      : `i18n-stage5e-9-scholarship-relaxed-autopilot-chatgpt-handoff-${DATE}.md`;
+    startWave >= 41
+      ? `i18n-12hour-scholarship-autopilot-chatgpt-handoff-2026-05-24.md`
+      : startWave >= 31
+        ? `i18n-stage5e-11-relaxed-autopilot-wave31-plus-chatgpt-handoff-${DATE}.md`
+        : `i18n-stage5e-9-scholarship-relaxed-autopilot-chatgpt-handoff-${DATE}.md`;
 
   const masterPath = join(process.cwd(), 'reports/seo', masterName);
   const handoffPath = join(process.cwd(), 'reports/seo', handoffName);
