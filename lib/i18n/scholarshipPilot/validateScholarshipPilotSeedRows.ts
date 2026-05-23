@@ -5,8 +5,10 @@ const FORBIDDEN_PHRASES = [
   /guaranteed\s+(award|win|admission)/i,
   /scholarshiptop\s+(awards|grants|pays)/i,
   /localhost/i,
-  /\/en\//i,
-  /127\.0\.0\.1/
+  /127\.0\.0\.1/,
+  /scholarshiptop\.com\/en\b/i,
+  /href=["']\/en\//i,
+  /["']\/en\/(?:scholarships|resources|providers|compare)/i
 ];
 
 export function validateScholarshipPilotSeedRows(
