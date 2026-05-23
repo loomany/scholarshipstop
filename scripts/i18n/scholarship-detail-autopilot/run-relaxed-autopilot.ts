@@ -1,13 +1,16 @@
 /**
- * Stage 5E-9 relaxed scholarship_detail autopilot (waves 21+).
+ * Relaxed scholarship_detail autopilot (waves 21+ / 31+ with net-new guard).
  * Usage:
- *   npx tsx scripts/i18n/scholarship-detail-autopilot/run-relaxed-autopilot.ts --target=500 --start-wave=21
+ *   npx tsx scripts/i18n/scholarship-detail-autopilot/run-relaxed-autopilot.ts --start-wave=31 --target=500 --wave-size=50
  */
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { execSync } from 'node:child_process';
 
+import { createClient } from '@supabase/supabase-js';
+
 import { DATE, isDryRun, loadEnvLocal } from './env';
+import { fetchTranslatedScholarshipDetailSourceIds } from './fetch-translated-source-ids';
 import { generateWaveOverlays } from './generate-overlays';
 import { publishWave } from './publish-wave';
 import {
@@ -23,8 +26,12 @@ function relaxedMachineModel(waveNum: number) {
   return `stage5e-scholarship-autopilot-relaxed-wave-${waveNum}`;
 }
 
-function reportPrefix(waveNum: number) {
-  return `i18n-stage5e-9-relaxed-wave-${waveNum}`;
+function reportStage(startWave: number): string {
+  return startWave >= 31 ? 'stage5e-11' : 'stage5e-9';
+}
+
+function reportPrefix(waveNum: number, stage: string) {
+  return `i18n-${stage}-relaxed-wave-${waveNum}`;
 }
 
 function parseArgs() {
@@ -36,7 +43,8 @@ function parseArgs() {
   const maxWaves = Number(process.argv.find((a) => a.startsWith('--max-waves='))?.split('=')[1] ?? '999');
   const startWave = Number(process.argv.find((a) => a.startsWith('--start-wave='))?.split('=')[1] ?? '21');
   const dryRunOnly = process.argv.includes('--dry-run-only');
-  return { target, waveSizeArg, maxWaves, startWave, dryRunOnly };
+  const requireFullWave = !process.argv.includes('--allow-partial-wave');
+  return { target, waveSizeArg, maxWaves, startWave, dryRunOnly, requireFullWave };
 }
 
 function pickWaveSize(candidates: AutopilotCandidate[], defaultSize: number): number {
@@ -51,27 +59,29 @@ function runRegression() {
   execSync('npx tsx --test lib/i18n/__tests__/*.test.ts', { stdio: 'inherit', cwd: process.cwd() });
 }
 
-async function writeBaseline() {
-  loadEnvLocal();
-  const es = await countSitemapEligibleEsScholarshipDetails();
-  const fr = await countSitemapEligibleFrScholarshipDetails();
-  return { es, fr };
-}
-
 async function main() {
-  const { target, waveSizeArg, maxWaves, startWave, dryRunOnly } = parseArgs();
+  const { target, waveSizeArg, maxWaves, startWave, dryRunOnly, requireFullWave } = parseArgs();
   const defaultWaveSize = Math.min(50, waveSizeArg || 50);
+  const stage = reportStage(startWave);
+  const netNewGuard = startWave >= 31;
 
-  console.log('[relaxed] start', { target, startWave, dryRun: isDryRun() });
+  loadEnvLocal();
+  const db = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
 
-  const startCounts = await writeBaseline();
-  console.log('[relaxed] start sitemap-eligible', startCounts);
+  console.log('[relaxed] start', { target, startWave, stage, netNewGuard, dryRun: isDryRun() });
+
+  const startEs = await countSitemapEligibleEsScholarshipDetails();
+  const startFr = await countSitemapEligibleFrScholarshipDetails();
+  console.log('[relaxed] start sitemap-eligible', { es: startEs, fr: startFr });
 
   const audit = await auditTieredPool();
   const csvPath = join(
     process.cwd(),
     'reports/seo',
-    `i18n-stage5e-9-scholarship-candidate-pool-expanded-${DATE}.csv`
+    `i18n-${stage}-scholarship-candidate-pool-expanded-${DATE}.csv`
   );
   writeTieredPoolCsv(audit.all, csvPath);
   console.log('[relaxed] tier counts', audit.tierCounts, 'publishable', audit.publishable.length);
@@ -83,41 +93,65 @@ async function main() {
   const summary = {
     wavesAttempted: 0,
     wavesAccepted: 0,
-    scholarshipsAdded: 0,
+    scholarshipsAttempted: 0,
+    netNewScholarships: 0,
     rowsAdded: 0,
     stoppedReason: '',
     openAiCost: 0,
     tierCounts: audit.tierCounts,
     publishablePool: publishableCount,
-    startEs: startCounts.es,
-    startFr: startCounts.fr
+    startEs,
+    startFr,
+    waveNetNew: [] as { wave: number; netNew: number; esDelta: number; frDelta: number }[]
   };
 
-  let currentEs = startCounts.es;
-  let currentFr = startCounts.fr;
+  let currentEs = startEs;
+  let currentFr = startFr;
   let candidateOffset = 0;
 
-  while (summary.scholarshipsAdded < effectiveTarget && summary.wavesAttempted < maxWaves) {
+  while (summary.netNewScholarships < effectiveTarget && summary.wavesAttempted < maxWaves) {
     const waveNum = startWave + summary.wavesAttempted;
-    const remaining = effectiveTarget - summary.scholarshipsAdded;
+    const remaining = effectiveTarget - summary.netNewScholarships;
     const bucketPreview = allCandidates.slice(candidateOffset, candidateOffset + defaultWaveSize);
-    const waveSize = Math.min(
-      pickWaveSize(bucketPreview, defaultWaveSize),
-      remaining,
-      50
-    );
+    const waveSize = Math.min(pickWaveSize(bucketPreview, defaultWaveSize), remaining, 50);
     const waveCandidates = allCandidates.slice(candidateOffset, candidateOffset + waveSize);
     if (!waveCandidates.length) {
       summary.stoppedReason = 'publishable pool exhausted';
       break;
     }
+
+    const translatedBefore = await fetchTranslatedScholarshipDetailSourceIds(db);
+    const dupes = waveCandidates.filter((c) => translatedBefore.has(c.scholarship_uuid));
+    if (dupes.length) {
+      summary.stoppedReason = `wave ${waveNum}: ${dupes.length} candidates already translated (${dupes.slice(0, 3).map((d) => d.slug).join(', ')})`;
+      break;
+    }
+    const slugDupes = new Set(waveCandidates.map((c) => c.slug));
+    if (slugDupes.size !== waveCandidates.length) {
+      summary.stoppedReason = `wave ${waveNum}: duplicate slugs in candidate batch`;
+      break;
+    }
+    if (requireFullWave && waveCandidates.length !== defaultWaveSize && remaining >= defaultWaveSize) {
+      summary.stoppedReason = `wave ${waveNum}: expected ${defaultWaveSize} net-new candidates, got ${waveCandidates.length}`;
+      break;
+    }
+  const invalidTier = waveCandidates.filter((c) => c.tier === 'C' || c.tier === 'D');
+    if (invalidTier.length) {
+      summary.stoppedReason = `wave ${waveNum}: Tier C/D in batch`;
+      break;
+    }
+
     candidateOffset += waveCandidates.length;
     summary.wavesAttempted++;
 
     const model = relaxedMachineModel(waveNum);
-    const prefix = reportPrefix(waveNum);
+    const prefix = reportPrefix(waveNum, stage);
+    const esBefore = currentEs;
+    const frBefore = currentFr;
+    const idsBefore = translatedBefore.size;
+
     console.log(
-      `\n[relaxed] === wave ${waveNum} (${waveCandidates.length} scholarships, tiers A=${waveCandidates.filter((c) => c.tier === 'A').length} B=${waveCandidates.filter((c) => c.tier === 'B').length}) ===`
+      `\n[relaxed] === wave ${waveNum} (${waveCandidates.length} net-new candidates, A=${waveCandidates.filter((c) => c.tier === 'A').length} B=${waveCandidates.filter((c) => c.tier === 'B').length}) ===`
     );
 
     let generated;
@@ -125,6 +159,11 @@ async function main() {
       generated = await generateWaveOverlays(waveCandidates, waveNum, { machineModel: model });
     } catch (e) {
       summary.stoppedReason = `wave ${waveNum} generate failed: ${e}`;
+      break;
+    }
+
+    if (generated.rows.length !== waveCandidates.length * 2) {
+      summary.stoppedReason = `wave ${waveNum} dry-run rows ${generated.rows.length} != ${waveCandidates.length * 2}`;
       break;
     }
 
@@ -142,7 +181,8 @@ async function main() {
 
     if (dryRunOnly) {
       summary.wavesAccepted++;
-      summary.scholarshipsAdded += waveCandidates.length;
+      summary.scholarshipsAttempted += waveCandidates.length;
+      summary.netNewScholarships += waveCandidates.length;
       continue;
     }
 
@@ -160,12 +200,30 @@ async function main() {
       break;
     }
 
+    const translatedAfter = await fetchTranslatedScholarshipDetailSourceIds(db);
+    const netNewIds = translatedAfter.size - idsBefore;
+    if (netNewIds !== waveCandidates.length) {
+      summary.stoppedReason = `wave ${waveNum}: net-new source_ids ${netNewIds} != ${waveCandidates.length}`;
+      break;
+    }
+
     currentEs = await countSitemapEligibleEsScholarshipDetails();
     currentFr = await countSitemapEligibleFrScholarshipDetails();
+    const esDelta = currentEs - esBefore;
+    const frDelta = currentFr - frBefore;
+
+    if (netNewGuard && (esDelta !== waveCandidates.length || frDelta !== waveCandidates.length)) {
+      summary.stoppedReason = `wave ${waveNum}: sitemap delta ES=${esDelta} FR=${frDelta} expected ${waveCandidates.length}`;
+      break;
+    }
+
     const smoke = await smokeWave(waveNum, waveCandidates, currentEs, currentFr);
     writeSmokeReport(waveNum, waveCandidates, smoke, publishResult.upserted, {
       reportPrefix: prefix,
-      label: 'Relaxed autopilot'
+      label: 'Relaxed autopilot',
+      netNew: waveCandidates.length,
+      esDelta,
+      frDelta
     });
 
     if (!smoke.passed) {
@@ -174,9 +232,13 @@ async function main() {
     }
 
     summary.wavesAccepted++;
-    summary.scholarshipsAdded += waveCandidates.length;
+    summary.scholarshipsAttempted += waveCandidates.length;
+    summary.netNewScholarships += waveCandidates.length;
     summary.rowsAdded += publishResult.upserted;
-    console.log(`[relaxed] wave ${waveNum} ACCEPTED (ES ~${currentEs} FR ~${currentFr})`);
+    summary.waveNetNew.push({ wave: waveNum, netNew: waveCandidates.length, esDelta, frDelta });
+    console.log(
+      `[relaxed] wave ${waveNum} ACCEPTED net-new=${waveCandidates.length} ES ${esBefore}->${currentEs} FR ${frBefore}->${currentFr}`
+    );
 
     if (summary.wavesAccepted % 2 === 0 && !isDryRun()) {
       try {
@@ -193,18 +255,19 @@ async function main() {
   const finalEs = await countSitemapEligibleEsScholarshipDetails();
   const finalFr = await countSitemapEligibleFrScholarshipDetails();
 
-  const masterPath = join(
-    process.cwd(),
-    'reports/seo',
-    `i18n-stage5e-9-scholarship-relaxed-autopilot-master-report-${DATE}.md`
-  );
-  const handoffPath = join(
-    process.cwd(),
-    'reports/seo',
-    `i18n-stage5e-9-scholarship-relaxed-autopilot-chatgpt-handoff-${DATE}.md`
-  );
+  const masterName =
+    startWave >= 31
+      ? `i18n-stage5e-11-relaxed-autopilot-wave31-plus-master-report-${DATE}.md`
+      : `i18n-stage5e-9-scholarship-relaxed-autopilot-master-report-${DATE}.md`;
+  const handoffName =
+    startWave >= 31
+      ? `i18n-stage5e-11-relaxed-autopilot-wave31-plus-chatgpt-handoff-${DATE}.md`
+      : `i18n-stage5e-9-scholarship-relaxed-autopilot-chatgpt-handoff-${DATE}.md`;
 
-  const master = `# Stage 5E-9 relaxed scholarship_detail autopilot — master report (${DATE})
+  const masterPath = join(process.cwd(), 'reports/seo', masterName);
+  const handoffPath = join(process.cwd(), 'reports/seo', handoffName);
+
+  const master = `# ${stage.toUpperCase()} relaxed scholarship_detail autopilot — master report (${DATE})
 
 ## Summary
 
@@ -212,15 +275,20 @@ async function main() {
 |--------|-------|
 | Start ES/FR sitemap | ${summary.startEs} / ${summary.startFr} |
 | Final ES/FR sitemap | ${finalEs} / ${finalFr} |
-| Target scholarships | ${target} |
-| Scholarships added | ${summary.scholarshipsAdded} |
+| Sitemap net-new ES/FR | ${finalEs - summary.startEs} / ${finalFr - summary.startFr} |
+| Target net-new scholarships | ${target} |
+| Net-new scholarships | ${summary.netNewScholarships} |
 | Rows added | ${summary.rowsAdded} |
 | Waves attempted | ${summary.wavesAttempted} |
 | Waves accepted | ${summary.wavesAccepted} |
 | OpenAI cost | $${summary.openAiCost} |
 | Stop reason | ${summary.stoppedReason} |
 
-## Tier audit (untranslated indexable)
+## Per-wave net-new
+
+${summary.waveNetNew.map((w) => `- Wave ${w.wave}: net-new=${w.netNew}, ES+${w.esDelta}, FR+${w.frDelta}`).join('\n') || '- none'}
+
+## Tier audit
 
 | Tier | Count |
 |------|-------|
@@ -238,29 +306,29 @@ where source_type = 'scholarship_detail'
   and locale in ('es', 'fr')
   and machine_model = 'stage5e-scholarship-autopilot-relaxed-wave-{N}';
 \`\`\`
-
-## Candidate pool CSV
-
-\`${csvPath}\`
 `;
 
-  const handoff = `# Stage 5E-9 relaxed autopilot handoff (${DATE})
+  const handoff = `# ${stage} relaxed autopilot handoff (${DATE})
 
 Copy for ChatGPT:
 
-- Start: ${summary.startEs}/${summary.startFr} ES/FR sitemap-eligible scholarship_detail pages
-- Added: ${summary.scholarshipsAdded} scholarships (${summary.rowsAdded} rows), waves ${summary.wavesAccepted}/${summary.wavesAttempted}
-- Final: ${finalEs}/${finalFr} ES/FR sitemap counts
-- Tier A/B pool remaining after run: ~${Math.max(0, summary.publishablePool - summary.scholarshipsAdded)}
+- Start sitemap: ${summary.startEs}/${summary.startFr} ES/FR
+- Final sitemap: ${finalEs}/${finalFr} ES/FR
+- Net-new scholarships: ${summary.netNewScholarships} (${summary.rowsAdded} rows)
+- Waves: ${summary.wavesAccepted}/${summary.wavesAttempted}
 - OpenAI: $0
 - Stop: ${summary.stoppedReason}
-- machine_model prefix: \`stage5e-scholarship-autopilot-relaxed-wave-N\`
+- Remaining Tier A pool: ~${Math.max(0, summary.publishablePool - summary.netNewScholarships)}
 `;
 
   writeFileSync(masterPath, master, 'utf8');
   writeFileSync(handoffPath, handoff, 'utf8');
   console.log('\n[relaxed] done', summary, { finalEs, finalFr });
   console.log('Wrote', masterPath, handoffPath);
+
+  if (summary.stoppedReason !== 'completed' && summary.stoppedReason !== 'target reached') {
+    process.exit(1);
+  }
 }
 
 main().catch((e) => {

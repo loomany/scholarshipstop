@@ -143,7 +143,7 @@ export function writeSmokeReport(
   candidates: AutopilotCandidate[],
   smoke: SmokeResult,
   publishUpserted: number,
-  options?: { reportPrefix?: string; label?: string }
+  options?: { reportPrefix?: string; label?: string; netNew?: number; esDelta?: number; frDelta?: number }
 ) {
   const prefix = options?.reportPrefix ?? `i18n-stage5e-6-autopilot-wave-${waveNum}`;
   const label = options?.label ?? 'Autopilot';
@@ -153,11 +153,15 @@ export function writeSmokeReport(
     `${prefix}-seed-smoke-${DATE}.md`
   );
   mkdirSync(join(process.cwd(), 'reports/seo'), { recursive: true });
+  const netBlock =
+    options?.netNew != null
+      ? `\n- Net-new scholarships: ${options.netNew}\n- Sitemap ES delta: +${options.esDelta ?? '?'}\n- Sitemap FR delta: +${options.frDelta ?? '?'}\n`
+      : '';
   const body = `# ${label} wave ${waveNum} seed & smoke (${DATE})
-
+${netBlock}
 - Scholarships in wave: ${candidates.length}
 - Rows upserted: ${publishUpserted}
-- machine_model: \`stage5e-scholarship-autopilot-wave-${waveNum}\`
+- machine_model: \`stage5e-scholarship-autopilot-relaxed-wave-${waveNum}\`
 - OpenAI: $0
 
 ## Sitemap
