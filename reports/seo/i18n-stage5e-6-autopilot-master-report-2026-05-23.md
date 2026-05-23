@@ -6,13 +6,13 @@
 |--------|-------|
 | Starting scholarships | 116 |
 | Target | 500 |
-| Scholarships added | 100 |
-| Rows added | 200 |
-| Waves attempted | 3 |
-| Waves accepted | 2 |
-| Final ES/FR (approx) | 366 each |
+| Scholarships added | 50 |
+| Rows added | 100 |
+| Waves attempted | 1 |
+| Waves accepted | 1 |
+| Final ES/FR (approx) | 551 each |
 | OpenAI cost | $0 |
-| Stop reason | wave 6 smoke failed: sitemap ES=0 FR=0 expected>=416; ES sitemap missing carn-congo-basin-aspire-grant-2026-congo-basin-grant-program; FR sitemap missing carn-congo-basin-aspire-grant-2026-congo-basin-grant-program; ES sitemap missing women-in-finance-and-accounting-scholarship-at-henley-business-school-20-women-in-finance-scholarship-at-; FR sitemap missing women-in-finance-and-accounting-scholarship-at-henley-business-school-20-women-in-finance-scholarship-at- |
+| Stop reason | completed |
 
 ## Rollback per wave
 

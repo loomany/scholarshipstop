@@ -146,6 +146,27 @@ export async function loadPersistedWaveSlugs(waveNum: number): Promise<{
   };
 }
 
+async function listSitemapEligibleByLocale(): Promise<{ es: number; fr: number }> {
+  const { listPublishedScholarshipDetailTranslations } = await import(
+    '@/lib/i18n/scholarshipPilot/listPublishedScholarshipDetailTranslations'
+  );
+  const listed = await listPublishedScholarshipDetailTranslations();
+  return {
+    es: new Set(listed.filter((r) => r.locale === 'es').map((r) => r.scholarshipSlug)).size,
+    fr: new Set(listed.filter((r) => r.locale === 'fr').map((r) => r.scholarshipSlug)).size
+  };
+}
+
+export async function countSitemapEligibleEsScholarshipDetails(): Promise<number> {
+  const counts = await listSitemapEligibleByLocale();
+  return counts.es;
+}
+
+export async function countSitemapEligibleFrScholarshipDetails(): Promise<number> {
+  const counts = await listSitemapEligibleByLocale();
+  return counts.fr;
+}
+
 export async function countPublishedEsScholarshipDetails(): Promise<number> {
   loadEnvLocal();
   const db = createClient(

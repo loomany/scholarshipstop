@@ -1,0 +1,64 @@
+# Wave 9 DB audit (2026-05-23)
+
+- machine_model: `stage5e-scholarship-autopilot-wave-9`
+- total rows: **100**
+- ES: **50**
+- FR: **50**
+- distinct source_id: **50**
+- distinct slugs (db): **50**
+- quality < 85: **0**
+- statuses: {"published":100}
+- quality_score distribution: {"90":100}
+
+## Slugs
+
+- `military-scholarship-at-bayes-business-school-2026-military-scholarship`
+- `ajca-directors-scholarship-getkhbl4dqtl`
+- `united-public-service-employees-union-scholarship-bvbtfduzro2o`
+- `college-support-scholarship-wnnkud6s4gdi`
+- `v-l-peterson-scholarship-otrezcsijlh2`
+- `scottish-qualifications-authority-sqa-advanced-diploma-scholarship-at-un-scottish-qualifications-authorit`
+- `paul-jackson-memorial-scholarship-k9kngykb0tpk`
+- `migrant-farmworker-baccalaureate-scholarship-z1dk2vczrb65`
+- `barb-miller-scholarship-rc5tiqhcfz27`
+- `va-acme-veteran-or-retiree-of-the-armed-forces-scholarship-urwapenjx8p4`
+- `permanently-disabled-military-or-their-family-or-family-of-service-membe-e4lc4r9kkdz0`
+- `cedarcrest-farms-scholarship-pmrrbt90mkyu`
+- `yankton-sioux-tribe-higher-education-scholarship-vmafrj5qsmso`
+- `morris-b-ewing-abs-genetic-performance-scholarship-bkmaohibmimr`
+- `neil-moodhe-scholarship-g5j8harpvemy`
+- `nbcuniversal-lnesc-media-scholarship-jdbmwlfvtbr3`
+- `gino-ricciardelli-scholarship-mjnwtm08lm8h`
+- `zonta-international-district-10-stem-scholarship-ttwwucvi0fiu`
+- `jack-c-nisbet-memorial-scholarship-a20r3zwphgf2`
+- `kenny-almeda-scholarship-zhghpebnpcyv`
+- `bob-toole-youth-award-scholarship-sykuxcl5iwjl`
+- `amvets-national-ladies-auxiliary-scholarship-ej6yziejp3zb`
+- `kb-delta-scholarship-lija5tdbu8d9`
+- `va-acme-active-duty-drilling-reservist-or-national-guard-member-scholars-nwmclhz9gqem`
+- `kansas-society-of-certified-public-accountants-undergraduate-scholarship-uscdjooxhojt`
+- `los-angeles-chapter-wts-community-college-trade-school-scholarship-drunpttfavz6`
+- `yavapai-apache-nation-higher-education-scholarship-nz2ultye53x0`
+- `napa-county-hispanic-network-college-scholarship-am7adbmov0nu`
+- `ava-doner-memorial-undergraduate-scholarship-qvuelwz1paaa`
+- `first-command-eangky-scholarship-oedwalj9ddas`
+- `william-a-russell-memorial-scholarship-sidaudwwdxlz`
+- `extremity-scholarship-x5vtcymzr20p`
+- `eth-zurich-branco-weiss-fellowships-at-university-of-melbourne-2026-eth-zurich-branco-weiss-fellowsh`
+- `reiff-law-firm-legal-scholarship-qup9vmyutwyp`
+- `jewish-family-and-children-s-services-scholarship-v7jugyn1bchr`
+- `robert-d-greenberg-scholarship-udjc5tl5xdi8`
+- `sna-foundation-scholarship-v5ervquxaagx`
+- `spouse-of-active-duty-member-drilling-reservist-national-guard-or-milita-qqx4yli0xtyw`
+- `society-of-broadcast-engineers-youth-scholarship-kfmzlwxscagn`
+- `thomas-pick-memorial-scholarship-o86zsexg9vls`
+- `john-foy-associates-strong-arm-leukemia-scholarship-gk7eaclh30ck`
+- `john-and-alice-egan-multi-year-scholarship-fuzzcsdgehb7`
+- `boris-p-stoicheff-memorial-scholarship-bnx0uxt9msmx`
+- `eileen-m-bonner-scholarship-award-for-medical-excellence-fmo2rksqia7s`
+- `kaiser-permanente-deloras-jones-rn-scholarship-c17ucaoj22o7`
+- `sure-oak-be-awesome-scholarship-dbriu6iy4wvs`
+- `child-of-active-duty-member-drilling-reservist-national-guard-or-militar-ih4qtctl9d7z`
+- `anne-shinal-cichy-memorial-award-dhfzwxl1ysrq`
+- `bob-rapp-memorial-scholarship-c4ujywoexzqc`
+- `rhode-island-association-of-admission-officers-scholarship-cjbxsvpnrfth`

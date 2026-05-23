@@ -1,0 +1,64 @@
+# Wave 8 DB audit (2026-05-23)
+
+- machine_model: `stage5e-scholarship-autopilot-wave-8`
+- total rows: **100**
+- ES: **50**
+- FR: **50**
+- distinct source_id: **50**
+- distinct slugs (db): **50**
+- quality < 85: **0**
+- statuses: {"published":100}
+- quality_score distribution: {"90":100}
+
+## Slugs
+
+- `avonte-oquendo-memorial-scholarship-for-autism-w2zvfrwpicmi`
+- `hawaii-korean-chamber-of-commerce-scholarship-938rdgggy32m`
+- `part-full-time-scholarship-bxygibwgnwco`
+- `abc-law-centers-cerebral-palsy-scholarship-htkvjivoho35`
+- `emergency-educational-grant-algbjzomaz3i`
+- `widiger-health-careers-endowed-scholarship-uwhyje03v6jf`
+- `fred-hoover-physics-scholarship-tji1if4esmcr`
+- `women-s-club-of-great-falls-scholarship-xrrdii6uc4df`
+- `the-rev-canon-james-b-prichard-memorial-scholarship-aqxjkuprrqo5`
+- `national-coal-transportation-association-scholarship-ugrffrt7mhwx`
+- `higher-education-equestrian-scholarship-3uzgoicx5t22`
+- `florida-eastern-star-student-higher-education-scholarship-zbzlztfxn1xv`
+- `william-m-fanning-maintenance-scholarship-gn9hmxxx3kte`
+- `barbara-a-philpitt-endowed-scholarship-ukdtzrt4nlbu`
+- `elizabeth-auger-annual-scholarship-for-students-with-type-1-or-type-2-di-ygvtnf9zwrrs`
+- `bailey-shipp-safety-scholarship-zhpaaqjqsf5i`
+- `christopher-w-keyser-scholarship-ejcvejofhqk5`
+- `thomas-j-watson-fellowship-oeshapjfp9xf`
+- `new-england-rubber-and-plastics-group-scholarship-arrip7avpaxi`
+- `aapina-scholarship-3vm7augpbhso`
+- `demetrios-agathangelides-scholarship-omjmxs6jdlbp`
+- `be-more-grant-scholarship-0h3gspgtmjpg`
+- `horatio-alger-indigenous-achievement-scholarship-lzqyyhio5nml`
+- `empire-beauty-school-high-school-scholarship-4btk9xbz4ayf`
+- `tylenol-future-care-scholarship-ipeprnjq2tde`
+- `golden-opportunity-scholarship-et92so4up88x`
+- `ferguson-vickaryous-endowed-scholarship-hozlamgvgy45`
+- `native-american-fish-and-wildlife-society-qvczjii0gcg2`
+- `palcus-scholarship-pg6znzv9nvvn`
+- `patsy-takemoto-mink-education-foundation-education-support-scholarship-fwvodcec8be9`
+- `missouri-society-of-professional-surveyors-non-traditional-student-schol-3cy3twaeag5b`
+- `miller-lite-brewed-to-be-bright-scholarship-zjnpemcj9gbq`
+- `selma-m-caisse-memorial-ged-scholarship-uukjqrlrkfa5`
+- `united-states-equestrian-federation-youth-sportsman-s-scholarship-b1jui73wxnso`
+- `lallemand-undergraduate-scholarship-gyckzkjnlivt`
+- `john-g-karrer-scholarship-ruoddiugrxcu`
+- `ahu-merit-scholarship-1ludhh2nsknn`
+- `support-our-troops-national-scholarship-program-98ekwyq9f7ek`
+- `cardrates-com-financial-futures-scholarship-ot7wzvj4k9wq`
+- `polish-legacy-scholarship-onzmvnjis3yi`
+- `alfred-thurston-child-jr-memorial-scholarship-cckdqzujjovg`
+- `leo-morgan-memorial-scholarship-td1pvdh49fdh`
+- `david-anelli-memorial-endowed-scholarship-cjj0fzjoqjha`
+- `palmetto-scholarship-hmdgwlloe378`
+- `pat-brown-memorial-scholarship-nwapjvfvyjyg`
+- `dixie-j-slater-scholarship-iczrqft9cx7g`
+- `enterprise-holdings-foundation-scholarship-qjljgjxd1vy5`
+- `private-business-association-of-seminole-pbas-endowed-scholarship-e5x7lh851oiz`
+- `moynihan-scholarship-fund-excellence-in-accounting-scholarships-mfisqlabwdqc`
+- `vietnam-veterans-of-america-frederick-r-harbot-chapter-811-endowed-schol-lhgdqtmewqfo`

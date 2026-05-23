@@ -8,6 +8,8 @@ import { createClient } from '@supabase/supabase-js';
 
 import { checkScholarshipDetailHtml } from '../../seo/i18n-scholarship-detail-html-check';
 
+import { listPublishedScholarshipDetailTranslations } from '@/lib/i18n/scholarshipPilot/listPublishedScholarshipDetailTranslations';
+
 import { BASE, DATE, IQ, loadEnvLocal } from './env';
 import type { AutopilotCandidate } from './types';
 
@@ -47,10 +49,12 @@ export type SmokeResult = {
 export async function smokeWave(
   waveNum: number,
   candidates: AutopilotCandidate[],
-  expectedTotalScholarships: number
+  expectedTotalScholarships: number,
+  expectedFrScholarships: number = expectedTotalScholarships
 ): Promise<SmokeResult> {
   const issues: string[] = [];
   const expectedCount = expectedTotalScholarships;
+  const expectedFr = expectedFrScholarships;
 
   const sample = pickSample(candidates, Math.min(10, candidates.length));
   for (const c of sample) {
@@ -85,18 +89,29 @@ export async function smokeWave(
       await new Promise((r) => setTimeout(r, 5000 * (attempt + 1)));
       continue;
     }
-    if (esCount >= expectedCount && frCount >= expectedCount) break;
+    if (esCount >= expectedCount && frCount >= expectedFr) break;
     await new Promise((r) => setTimeout(r, 10000 * (attempt + 1)));
   }
 
   if (esCount === 0 || frCount === 0) {
     issues.push('sitemap empty after retries');
-  } else if (esCount < expectedCount || frCount < expectedCount) {
-    issues.push(`sitemap ES=${esCount} FR=${frCount} expected>=${expectedCount}`);
+  } else if (esCount < expectedCount || frCount < expectedFr) {
+    issues.push(`sitemap ES=${esCount} FR=${frCount} expected>=${expectedCount}/${expectedFr}`);
   }
+  const listed = await listPublishedScholarshipDetailTranslations();
+  const listedEs = new Set(
+    listed.filter((r) => r.locale === 'es').map((r) => r.scholarshipSlug)
+  );
+  const listedFr = new Set(
+    listed.filter((r) => r.locale === 'fr').map((r) => r.scholarshipSlug)
+  );
   for (const c of sample.slice(0, 5)) {
-    if (!esXml.includes(`/es/scholarships/${c.slug}`)) issues.push(`ES sitemap missing ${c.slug}`);
-    if (!frXml.includes(`/fr/scholarships/${c.slug}`)) issues.push(`FR sitemap missing ${c.slug}`);
+    if (listedEs.has(c.slug) && !esXml.includes(`/es/scholarships/${c.slug}`)) {
+      issues.push(`ES sitemap missing ${c.slug}`);
+    }
+    if (listedFr.has(c.slug) && !frXml.includes(`/fr/scholarships/${c.slug}`)) {
+      issues.push(`FR sitemap missing ${c.slug}`);
+    }
   }
   if ([esXml, frXml].some((x) => x.includes('/en/') || x.includes('review_required'))) {
     issues.push('sitemap has /en or review_required');

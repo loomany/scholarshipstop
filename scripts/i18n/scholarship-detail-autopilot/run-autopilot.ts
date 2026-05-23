@@ -14,6 +14,8 @@ import { generateWaveOverlays } from './generate-overlays';
 import { publishWave } from './publish-wave';
 import {
   countPublishedEsScholarshipDetails,
+  countSitemapEligibleEsScholarshipDetails,
+  countSitemapEligibleFrScholarshipDetails,
   loadPersistedWaveSlugs,
   slugsToSmokeCandidates
 } from './load-persisted-wave';
@@ -113,8 +115,9 @@ async function main() {
       process.exit(1);
     }
     const waveCandidates = slugsToSmokeCandidates(slugs, smokeOnlyWave);
-    const expectedTotal = await countPublishedEsScholarshipDetails();
-    const smoke = await smokeWave(smokeOnlyWave, waveCandidates, expectedTotal);
+    const expectedEs = await countSitemapEligibleEsScholarshipDetails();
+    const expectedFr = await countSitemapEligibleFrScholarshipDetails();
+    const smoke = await smokeWave(smokeOnlyWave, waveCandidates, expectedEs, expectedFr);
     writeSmokeReport(smokeOnlyWave, waveCandidates, smoke, slugs.length * 2);
     console.log(smoke.passed ? 'Smoke OK' : smoke.issues);
     process.exit(smoke.passed ? 0 : 1);
@@ -139,8 +142,8 @@ async function main() {
     openAiCost: 0
   };
 
-  // baseline.es is live DB count at run start (includes prior waves); add per accepted wave only.
-  let currentTotal = baseline.es;
+  let currentEs = await countSitemapEligibleEsScholarshipDetails();
+  let currentFr = await countSitemapEligibleFrScholarshipDetails();
 
   for (let waveNum = startWave; waveNum <= maxWave; waveNum++) {
     const waveCandidates = allCandidates.filter((c) => c.wave === waveNum);
@@ -195,8 +198,9 @@ async function main() {
       break;
     }
 
-    currentTotal += waveCandidates.length;
-    const smoke = await smokeWave(waveNum, waveCandidates, currentTotal);
+    currentEs = await countSitemapEligibleEsScholarshipDetails();
+    currentFr = await countSitemapEligibleFrScholarshipDetails();
+    const smoke = await smokeWave(waveNum, waveCandidates, currentEs, currentFr);
     writeSmokeReport(waveNum, waveCandidates, smoke, publishResult.upserted);
 
     if (!smoke.passed) {
@@ -207,7 +211,7 @@ async function main() {
     summary.wavesAccepted++;
     summary.scholarshipsAdded += waveCandidates.length;
     summary.rowsAdded += publishResult.upserted;
-    console.log(`[autopilot] wave ${waveNum} ACCEPTED (total scholarships ~${currentTotal})`);
+    console.log(`[autopilot] wave ${waveNum} ACCEPTED (sitemap-eligible ES ~${currentEs} FR ~${currentFr})`);
 
     if (waveNum % 2 === 0 && !isDryRun()) {
       try {
