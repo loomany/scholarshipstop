@@ -19,6 +19,10 @@ import {
   scaleupBatchSlugs,
   type ScholarshipScaleupBatchId
 } from '@/lib/i18n/scholarshipPilot/scaleUpBatchSlugs';
+import {
+  scaleupBatchSlugsV2,
+  type ScholarshipScaleupBatchV2Id
+} from '@/lib/i18n/scholarshipPilot/scaleUpBatchSlugsV2';
 import { validateScholarshipPilotSeedRows } from '@/lib/i18n/scholarshipPilot/validateScholarshipPilotSeedRows';
 import type { Database } from '@/types_db';
 
@@ -44,14 +48,22 @@ function loadEnvLocal() {
   }
 }
 
-function parseBatch(): ScholarshipScaleupBatchId {
+function parseBatch(): number {
   const raw = (process.env.I18N_SCHOLARSHIP_PILOT_BATCH ?? 'scale-1').trim().toLowerCase();
-  const m = raw.match(/^(?:scale|10h|batch)-?([1-5])$/);
+  const m = raw.match(/^(?:scale|10h|batch)-?([1-9]|10)$/);
   if (!m) {
-    console.error('Set I18N_SCHOLARSHIP_PILOT_BATCH=scale-1..scale-5');
+    console.error('Set I18N_SCHOLARSHIP_PILOT_BATCH=scale-1..scale-10');
     process.exit(1);
   }
-  return Number(m[1]) as ScholarshipScaleupBatchId;
+  return Number(m[1]);
+}
+
+function slugsForGlobalBatch(batch: number): readonly string[] {
+  if (batch >= 1 && batch <= 5) return scaleupBatchSlugs(batch as ScholarshipScaleupBatchId);
+  if (batch >= 6 && batch <= 10) {
+    return scaleupBatchSlugsV2((batch - 5) as ScholarshipScaleupBatchV2Id);
+  }
+  return [];
 }
 
 async function main() {
@@ -59,7 +71,7 @@ async function main() {
   if (process.env.I18N_PILOT_USE_SHELL_ENV !== '1') loadEnvLocal();
 
   const batch = parseBatch();
-  const slugs = scaleupBatchSlugs(batch);
+  const slugs = slugsForGlobalBatch(batch);
   if (slugs.length !== 10) {
     console.error('Refusing: batch must have exactly 10 slugs');
     process.exit(1);
@@ -139,10 +151,11 @@ async function main() {
     if (!UUID_RE.test(row.source_id)) process.exit(1);
   }
 
+  const rowDate = process.env.REPORT_DATE ?? '2026-05-23';
   const csvPath = join(
     process.cwd(),
     'reports/seo',
-    `i18n-stage5e-scholarship-detail-batch-${batch}-rows-2026-05-22.csv`
+    `i18n-stage5e-scholarship-detail-batch-${batch}-rows-${rowDate}.csv`
   );
   mkdirSync(join(process.cwd(), 'reports/seo'), { recursive: true });
   writeFileSync(

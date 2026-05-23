@@ -5,12 +5,25 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { scaleupBatchSlugs } from '@/lib/i18n/scholarshipPilot/scaleUpBatchSlugs';
+import { scaleupBatchSlugs, type ScholarshipScaleupBatchId } from '@/lib/i18n/scholarshipPilot/scaleUpBatchSlugs';
+import {
+  scaleupBatchSlugsV2,
+  type ScholarshipScaleupBatchV2Id
+} from '@/lib/i18n/scholarshipPilot/scaleUpBatchSlugsV2';
 
 const BASE = (process.env.SMOKE_BASE_URL ?? 'https://scholarshiptop.com').replace(/\/$/, '');
+const LEGACY = Number(process.env.LEGACY_PILOT_COUNT ?? '6');
 const batchNum = Number(process.argv[2] ?? '1');
-const expectedEsTotal = 6 + batchNum * 10;
+const expectedEsTotal = LEGACY + batchNum * 10;
 const expectedFrTotal = expectedEsTotal;
+
+function slugsForBatch(batch: number): readonly string[] {
+  if (batch >= 1 && batch <= 5) return scaleupBatchSlugs(batch as ScholarshipScaleupBatchId);
+  if (batch >= 6 && batch <= 10) {
+    return scaleupBatchSlugsV2((batch - 5) as ScholarshipScaleupBatchV2Id);
+  }
+  return [];
+}
 
 async function status(path: string) {
   const res = await fetch(`${BASE}${path}`, { redirect: 'manual' });
@@ -18,11 +31,11 @@ async function status(path: string) {
 }
 
 async function main() {
-  if (!Number.isFinite(batchNum) || batchNum < 1 || batchNum > 5) {
-    console.error('Usage: batch number 1-5');
+  if (!Number.isFinite(batchNum) || batchNum < 1 || batchNum > 10) {
+    console.error('Usage: batch number 1-10');
     process.exit(1);
   }
-  const slugs = scaleupBatchSlugs(batchNum as 1 | 2 | 3 | 4 | 5);
+  const slugs = slugsForBatch(batchNum);
   let failed = 0;
 
   for (const slug of slugs) {

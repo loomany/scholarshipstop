@@ -1,4 +1,5 @@
 import { SCHOLARSHIP_SCALEUP_BATCH_SLUGS } from '@/lib/i18n/scholarshipPilot/scaleUpBatchSlugs';
+import { SCHOLARSHIP_SCALEUP_BATCH_V2_SLUGS } from '@/lib/i18n/scholarshipPilot/scaleUpBatchSlugsV2';
 
 export const SCHOLARSHIP_DETAIL_PILOT_SLUGS_BATCH_1 = [
   'climate-stripes-scholarship-14487'
@@ -13,10 +14,16 @@ export const SCHOLARSHIP_DETAIL_PILOT_SLUGS_BATCH_2 = [
   'vice-chancellor-s-scholarship-2905'
 ] as const;
 
-export const SCHOLARSHIP_DETAIL_PILOT_SLUGS = [
+/** Stage 5E-2 / overnight scale-up through batch 5 (56 scholarships). */
+export const SCHOLARSHIP_DETAIL_PILOT_SLUGS_V1 = [
   ...SCHOLARSHIP_DETAIL_PILOT_SLUGS_BATCH_1,
   ...SCHOLARSHIP_DETAIL_PILOT_SLUGS_BATCH_2,
   ...SCHOLARSHIP_SCALEUP_BATCH_SLUGS
+] as const;
+
+export const SCHOLARSHIP_DETAIL_PILOT_SLUGS = [
+  ...SCHOLARSHIP_DETAIL_PILOT_SLUGS_V1,
+  ...SCHOLARSHIP_SCALEUP_BATCH_V2_SLUGS
 ] as const;
 
 /** Pilot slug allowlist (string union avoided — 50+ scale-up slugs). */
@@ -36,7 +43,7 @@ export function isScholarshipDetailPilotSlug(
 
 export type ScholarshipPilotBatchId = '5e-1' | '5e-2' | 'all';
 
-export type ScholarshipScaleupBatchNumber = 1 | 2 | 3 | 4 | 5;
+export type ScholarshipScaleupBatchNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 
 export const SCHOLARSHIP_SCALEUP_BATCH_MAX_ROWS = 20;
 export const SCHOLARSHIP_SCALEUP_BATCH_MAX_SLUGS = 10;
