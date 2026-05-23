@@ -1,0 +1,64 @@
+# Wave 6 DB audit (2026-05-23)
+
+- machine_model: `stage5e-scholarship-autopilot-wave-6`
+- total rows: **100**
+- ES: **50**
+- FR: **50**
+- distinct source_id: **50**
+- distinct slugs (db): **50**
+- quality < 85: **0**
+- statuses: {"published":100}
+- quality_score distribution: {"90":100}
+
+## Slugs
+
+- `student-bursaries-at-university-of-melbourne-2026-student-grants-at-university-of-`
+- `alamo-colleges-scholarship-at-university-of-the-incarnate-word-2026-alamo-colleges-scholarship-at-un`
+- `open-europe-scholarship-at-brad-college-berlin-2026-open-europe-scholarship-at-brad-`
+- `california-forestry-challenge-scholarship-uhuusfxi41tq`
+- `ardent-mills-award-at-red-river-college-polytech-2026-ardent-mills-award-at-red-river-`
+- `south-carolina-state-fair-equine-scholarship-uqpd1degikyq`
+- `lea-marie-seguin-scholarship-for-students-at-bard-college-2026-lamarie-sguin-scholarship-for-st`
+- `richard-anschutz-prize-for-stage-i-ethics-and-political-philosophy-2026-richard-anschutz-prize-for-stage`
+- `first-generation-scholarship-at-bard-college-2026-first-generation-scholarship-at-`
+- `international-merit-scholarships-at-iowa-state-university-2026-international-merit-scholarships`
+- `international-scholarship-award-at-university-of-greenwich-2026-international-scholarships-award`
+- `scholarship-in-philosophy-politics-and-economics-at-bard-college-2026-scholarship-in-philosophy-politi`
+- `food-safety-auditing-scholarship-and-education-travel-grant-2026-food-safety-auditing-scholarship`
+- `john-monash-scholarship-at-university-of-york-2026-john-monash-scholarship-at-unive`
+- `scholarship-in-literary-arts-at-bard-college-berlin-2026-scholarship-in-literary-arts-for`
+- `dato-kho-hui-meng-scholarship-at-smu-2026-dato-kho-hui-meng-scholarship`
+- `carn-congo-basin-aspire-grant-2026-congo-basin-grant-program`
+- `iranian-student-memorial-engineering-graduate-scholarship-at-university--iranian-student-memorial-enginee`
+- `advertisemint-scholarship-hx2m6klxondn`
+- `imeche-first-year-undergraduate-scholarships-2026-imeche-first-year-undergraduate-`
+- `aecom-scholarships-at-red-river-college-polytech-2026-aecom-scholarships-at-red-river-`
+- `suffolk-cares-presidential-scholarship-at-umass-dartmouth-2026-suffolk-cares-presidential-schol`
+- `world-changers-glasgow-scholarship-ug-eu-2026-27-world-changers-glasgow-scholarsh`
+- `new-york-state-trappers-association-scholarship-i60logbilkac`
+- `sister-school-alumni-at-university-of-the-incarnate-word-2026-sister-school-alumni-at-universi`
+- `berlin-scholarship-at-bard-college-2026-berlin-scholarship-for-students-`
+- `rmit-accommodation-scholarship-2026-rmit-university-international-re`
+- `june-curran-porcaro-scholarship-gtoj5cfnk7fw`
+- `iqc-entrance-award-at-university-of-waterloo-2026-iqc-entrance-award-at-university`
+- `msc-marketing-and-retail-innovation-scholarships-at-ucd-dublin-2026-msc-marketing-and-retail-innovat`
+- `jacks-transfer-award-at-northern-arizona-university-2026-jacks-transfer-award-at-northern`
+- `architectural-technology-achievement-award-at-red-river-college-polytech-architectural-technology-achieve`
+- `women-in-finance-and-accounting-scholarship-at-henley-business-school-20-women-in-finance-scholarship-at-`
+- `riewoldt-family-afl-excellence-scholarship-at-bond-university-2026-riewoldt-family-afl-excellence-s`
+- `lummi-higher-education-grant-qgnpbxqawar4`
+- `h-h-sheikh-hamdan-bin-zayed-scholarship-at-abu-dhabi-university-2025-hh-sheikh-hamdan-bin-zayed-schol`
+- `nebraska-rural-radio-foundation-scholarship-in-honor-of-max-and-eric-bro-waq9gbumwhfj`
+- `lamber-goodnow-injury-law-team-nursing-scholarship-bjtvqxq077bh`
+- `applied-computer-education-outstanding-graduate-awards-at-red-river-coll-applied-computer-education-outst`
+- `cardiff-university-vice-chancellors-international-scholarship-2026-cardiff-university-vicechancello`
+- `iqc-david-johnston-award-for-scientific-outreach-at-university-of-waterl-iqc-david-johnston-award-for-sci`
+- `dr-mohammad-khalid-memorial-merit-award-for-healthcare-professional-stud-ptuze7idctwh`
+- `international-merit-based-scholarship-postgraduate-at-birmingham-city-un-international-meritbased-scholar`
+- `international-study-abroad-scholarship-qprhhbce0x6p`
+- `youth-conservation-leadership-award-u55qhefsv29w`
+- `joseph-k-lumsden-memorial-scholarship-w8vychebw3n1`
+- `utah-trappers-association-scholarship-pshfxlppf2lw`
+- `mary-and-harold-cub-mckerchie-tributary-scholarship-vvwebcfgjlas`
+- `regeneron-science-talent-search-program-rcerbfmqqwbo`
+- `uts-study-abroad-excellence-scholarship-2026-uts-study-abroad-excellence-scho`

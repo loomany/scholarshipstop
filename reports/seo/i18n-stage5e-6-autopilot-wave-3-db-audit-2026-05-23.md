@@ -1,0 +1,64 @@
+# Wave 3 DB audit (2026-05-23)
+
+- machine_model: `stage5e-scholarship-autopilot-wave-3`
+- total rows: **100**
+- ES: **50**
+- FR: **50**
+- distinct source_id: **50**
+- distinct slugs (db): **50**
+- quality < 85: **0**
+- statuses: {"published":100}
+- quality_score distribution: {"90":100}
+
+## Slugs
+
+- `evidence-based-practice-project-grant-dywt5oi6klw9`
+- `jean-m-heisner-medical-technician-scholarship-cnnghu8oaj1h`
+- `college-of-engineering-and-mines-giving-hearts-day-scholarship-10765`
+- `nora-cebotarev-memorial-graduate-scholarship-2392`
+- `elise-hammers-and-freida-rich-scholarship-10973`
+- `kerkyasharian-and-kayikian-fund-for-armenian-studies-14290`
+- `john-waller-doctoral-scholarship-11438`
+- `durward-and-borghild-balch-scholarship-10927`
+- `rotary-club-of-flushing-scholarship-cemlur7ie6yr`
+- `monash-humanitarian-scholarship-2026-monash-humanitarian-scholarship`
+- `british-bangladeshi-academic-futures-scholarship-at-university-of-oxford-british-bangladeshi-academic-fut`
+- `a-new-future-scholarship-a9rime7rertt`
+- `oxford-e-p-abraham-research-fund-graduate-scholarships-at-university-of--oxforde-p-abraham-research-fund-`
+- `david-a-hicks-scholarship-for-the-arts-fznbzmgbdzzc`
+- `ruth-ann-and-louis-harvey-benton-harbor-youth-hbcu-scholarship-crvnivibkrgb`
+- `steven-marsh-and-family-scholarship-agb2mov8mleq`
+- `creative-writing-award-10769`
+- `nncc-career-mobility-scholarship-g9fghebuei27`
+- `john-pierce-memorial-scholarship-6y7girxqnulm`
+- `meyer-wilson-werning-s-the-importance-of-personal-finance-education-scho-14403`
+- `international-scholarships-at-coe-college-2025-coe-college-meritbased-internati`
+- `ecole-polytechnique-montreal-women-s-memorial-scholarship-1119`
+- `graduate-school-karen-p-depauw-leadership-award-at-washington-state-univ-graduate-school-karen-p-depauw-l`
+- `amy-hui-mei-chen-hung-memorial-scholarship-10619`
+- `optiver-foundation-scholarships-at-university-of-oxford-2026-optiver-foundation-scholarships-`
+- `brickfield-exceptional-student-scholarship-at-queens-university-belfast--brickfield-exceptional-student-s`
+- `ken-and-jeanne-thomas-memorial-scholarship-hgcmjkuboegu`
+- `carol-a-oehlhaffen-youth-in-philanthropy-scholarship-hrw6a6yvsfya`
+- `london-book-fair-scholarship-at-oxford-brookes-university-2026-london-book-fair-scholarship-at-`
+- `montrose-community-schools-scholarship-gtxk34emxtje`
+- `dave-dornacker-and-jody-spencer-scholarship-10784`
+- `fox-international-fellowship-anu-to-yale-university-12081`
+- `f-a-mason-penwell-nursing-scholarship-ephfuwves7fp`
+- `university-of-waterloo-faculty-of-mathematics-global-scholarships-2026-university-of-waterloo-faculty-o`
+- `school-of-computing-science-postgraduate-research-excellence-bursaries-a-school-of-computing-science-post`
+- `lombardi-goldman-sachs-fund-at-the-university-college-london-2026-lombardigoldman-sachs-fund-at-th`
+- `excellent-new-degree-student-scholarships-at-gdufs-2026-guangdong-university-excellent-n`
+- `aboriginal-and-torres-strait-islander-research-scholarships-at-universit-aboriginal-and-torres-strait-isl`
+- `myfa-legacy-scholarship-lcej1mgavkao`
+- `the-prof-franciszek-ziejka-scholarship-fund-7940`
+- `anna-career-mobility-scholarship-rmrk2smrrtnt`
+- `edson-margaret-larson-foundation-cobpa-scholarship-10937`
+- `frederick-douglass-bicentennial-scholarship-kfzwue9d4o92`
+- `university-of-geneva-excellence-masters-fellowships-1596`
+- `vice-chancellor-s-future-leaders-award-9209`
+- `ralph-lauren-corporate-foundation-scholarship-ffkivvbc9li3`
+- `bbb-ethical-torch-essay-san-diego-imperial-counties-scholarship-ywgtcnpymqdm`
+- `pathway-to-justice-scholarship-jawmour3hor4`
+- `barbara-f-prowant-nursing-research-grant-nvuxensnxm2r`
+- `talented-athlete-development-scheme-9954`

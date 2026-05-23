@@ -146,6 +146,22 @@ export async function loadPersistedWaveSlugs(waveNum: number): Promise<{
   };
 }
 
+export async function countPublishedEsScholarshipDetails(): Promise<number> {
+  loadEnvLocal();
+  const db = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+  const { count, error } = await db
+    .from('content_translations')
+    .select('*', { count: 'exact', head: true })
+    .eq('source_type', 'scholarship_detail')
+    .eq('locale', 'es')
+    .eq('status', 'published');
+  if (error) throw new Error(error.message);
+  return count ?? 0;
+}
+
 export function slugsToSmokeCandidates(slugs: string[], waveNum: number): AutopilotCandidate[] {
   return slugs.map((slug, i) => ({
     rank: i + 1,

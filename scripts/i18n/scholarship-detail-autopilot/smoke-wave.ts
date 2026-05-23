@@ -72,12 +72,26 @@ export async function smokeWave(
     if (es !== 404 || fr !== 404) issues.push(`unseeded ${slug} es=${es} fr=${fr}`);
   }
 
-  const esXml = await (await fetchWithRetry(`${BASE}/sitemaps/locale-es-scholarships-detail-db.xml`)).text();
-  const frXml = await (await fetchWithRetry(`${BASE}/sitemaps/locale-fr-scholarships-detail-db.xml`)).text();
-  const esCount = (esXml.match(/<loc>/g) ?? []).length;
-  const frCount = (frXml.match(/<loc>/g) ?? []).length;
+  let esXml = '';
+  let frXml = '';
+  let esCount = 0;
+  let frCount = 0;
+  for (let attempt = 0; attempt < 8; attempt++) {
+    esXml = await (await fetchWithRetry(`${BASE}/sitemaps/locale-es-scholarships-detail-db.xml`)).text();
+    frXml = await (await fetchWithRetry(`${BASE}/sitemaps/locale-fr-scholarships-detail-db.xml`)).text();
+    esCount = (esXml.match(/<loc>/g) ?? []).length;
+    frCount = (frXml.match(/<loc>/g) ?? []).length;
+    if (esCount === 0 || frCount === 0) {
+      await new Promise((r) => setTimeout(r, 5000 * (attempt + 1)));
+      continue;
+    }
+    if (esCount >= expectedCount && frCount >= expectedCount) break;
+    await new Promise((r) => setTimeout(r, 10000 * (attempt + 1)));
+  }
 
-  if (esCount < expectedCount || frCount < expectedCount) {
+  if (esCount === 0 || frCount === 0) {
+    issues.push('sitemap empty after retries');
+  } else if (esCount < expectedCount || frCount < expectedCount) {
     issues.push(`sitemap ES=${esCount} FR=${frCount} expected>=${expectedCount}`);
   }
   for (const c of sample.slice(0, 5)) {

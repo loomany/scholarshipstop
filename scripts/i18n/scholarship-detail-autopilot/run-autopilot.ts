@@ -12,7 +12,11 @@ import { createClient } from '@supabase/supabase-js';
 import { DATE, isDryRun, loadEnvLocal } from './env';
 import { generateWaveOverlays } from './generate-overlays';
 import { publishWave } from './publish-wave';
-import { loadPersistedWaveSlugs, slugsToSmokeCandidates } from './load-persisted-wave';
+import {
+  countPublishedEsScholarshipDetails,
+  loadPersistedWaveSlugs,
+  slugsToSmokeCandidates
+} from './load-persisted-wave';
 import { selectCandidates } from './select-candidates';
 import { smokeWave, verifyDbWave, writeSmokeReport } from './smoke-wave';
 import { validateWave, writeValidationReport } from './validate-overlays';
@@ -109,7 +113,7 @@ async function main() {
       process.exit(1);
     }
     const waveCandidates = slugsToSmokeCandidates(slugs, smokeOnlyWave);
-    const expectedTotal = STARTING_SCHOLARSHIPS + (smokeOnlyWave - 1) * waveSize + slugs.length;
+    const expectedTotal = await countPublishedEsScholarshipDetails();
     const smoke = await smokeWave(smokeOnlyWave, waveCandidates, expectedTotal);
     writeSmokeReport(smokeOnlyWave, waveCandidates, smoke, slugs.length * 2);
     console.log(smoke.passed ? 'Smoke OK' : smoke.issues);
@@ -135,7 +139,8 @@ async function main() {
     openAiCost: 0
   };
 
-  let currentTotal = baseline.es + (startWave - 1) * waveSize;
+  // baseline.es is live DB count at run start (includes prior waves); add per accepted wave only.
+  let currentTotal = baseline.es;
 
   for (let waveNum = startWave; waveNum <= maxWave; waveNum++) {
     const waveCandidates = allCandidates.filter((c) => c.wave === waveNum);

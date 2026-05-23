@@ -7,6 +7,7 @@ import type { ScholarshipDetailPilotSeedRow } from '@/lib/i18n/scholarshipPilot/
 
 import { assertPublishGuards, DATE, isDryRun, loadEnvLocal } from './env';
 import type { GeneratedWave } from './generate-overlays';
+import { revalidateScholarshipDetailSitemaps } from './revalidate-detail-sitemaps';
 
 function upsertRow(row: ScholarshipDetailPilotSeedRow, machineModel: string) {
   return {
@@ -88,6 +89,8 @@ export async function publishWave(
     if (error) throw new Error(`${error.message} ${row.source_slug} ${row.locale}`);
     upserted++;
   }
+
+  await revalidateScholarshipDetailSitemaps();
 
   return { upserted, csvPath, dryRun: false };
 }

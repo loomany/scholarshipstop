@@ -17,7 +17,7 @@ type RouteContext = {
 };
 
 export async function GET(_request: Request, { params }: RouteContext) {
-  const slug = params?.slug?.trim();
+  const slug = params?.slug?.trim().replace(/\.xml$/i, '') ?? '';
   if (!slug) {
     return NextResponse.json({ error: 'Sitemap not found' }, { status: 404 });
   }

@@ -1,0 +1,64 @@
+# Wave 2 DB audit (2026-05-23)
+
+- machine_model: `stage5e-scholarship-autopilot-wave-2`
+- total rows: **100**
+- ES: **50**
+- FR: **50**
+- distinct source_id: **50**
+- distinct slugs (db): **50**
+- quality < 85: **0**
+- statuses: {"published":100}
+- quality_score distribution: {"90":100}
+
+## Slugs
+
+- `bradley-puddin-hill-scholarships-z5v4fblm7bqe`
+- `susan-p-barbour-scholarship-qjhcj1ccgzz0`
+- `r-shaw-pettigrew-scholarship-ktizxl308pg1`
+- `george-and-elynore-strait-social-sciences-endowment-scholarship-higz7rowsgji`
+- `stuart-forbes-polk-high-scholar-award-vzkf9yv7psdj`
+- `david-p-barbara-stayman-educational-scholarship-vgwdxkqz26xi`
+- `bigfuture-scholarships-start-your-scholarship-list-class-of-2027-vkiaxuikmnkd`
+- `nathaniel-m-constance-j-mcintyre-memorial-scholarship-vtyswdraqlky`
+- `blake-hanger-memorial-scholarship-4tzrhy7b6yti`
+- `jennifer-strietelmeier-memorial-scholarship-5ahv4ovi2idb`
+- `mary-evelyn-harry-laurent-scholarship-xtnjb5m3nmf6`
+- `greg-craft-workhorse-memorial-scholarship-4exgsuyzljhc`
+- `phil-jackson-memorial-fast-pitch-softball-scholarship-40upejr5lkra`
+- `john-mclachlan-soccer-scholarship-310kw5h85fcx`
+- `edward-jones-investments-scholarship-8hegcssn8tx6`
+- `fred-l-armstrong-future-leaders-scholarship-6vpjsljawhux`
+- `joy-taylor-communication-scholarship-n2wvchar7iz5`
+- `jack-h-albertson-educational-scholarship-ompml2ghwren`
+- `bradley-achievement-scholarship-w7qjvaseofzl`
+- `joseph-d-clancy-cpa-hfma-scholarship-ge27rn8f0vbv`
+- `robert-j-sonntag-memorial-scholarship-6hoafgao0i5k`
+- `j-harwood-cochrane-educational-scholarship-p1rfd5uvkbhe`
+- `priscilla-and-ellis-d-slater-merit-scholarship-rabgvym6mwzu`
+- `michael-r-rogers-memorial-scholarship-5estpwgssbqn`
+- `tara-atkins-memorial-scholarship-hdvwri1ejtfl`
+- `a-leg-up-scholarship-yjjtyvkfe7jg`
+- `hoyt-d-tyler-b-mcentire-scholarship-h0omiybdccbk`
+- `phil-j-hysham-scholarship-uafdwnkyvri9`
+- `realizing-the-dream-scholarship-rennitvv3wug`
+- `guilford-s-turner-jr-educational-scholarship-cpwzmw8xxots`
+- `william-f-claire-b-nelson-scholarship-uqgmswlvlkj5`
+- `g-mildred-steinbach-and-john-f-steinbach-scholarship-olwr3mjbmvb6`
+- `charles-d-shepherd-memorial-scholarship-5h6hdvt8tdtz`
+- `corrilla-b-lentz-scholarship-0tiiy7educ9s`
+- `kirby-endowment-fund-back-to-school-scholarship-for-adults-sdtnf7jpuugn`
+- `sara-henry-burrus-scholarship-y41vql1jusmx`
+- `columbus-business-and-professional-women-s-scholarship-5speffqxnqi3`
+- `g-freeman-and-elizabeth-m-brooks-scholarship-dz4vzjvm2nqj`
+- `bigfuture-scholarships-apply-to-colleges-class-of-2027-81q129pylxo2`
+- `tony-wallace-scholarship-u9iea4je1y6b`
+- `leah-justice-journalism-scholarship-hoilotosray7`
+- `dudley-smith-educational-scholarship-fpg38sn3mzs7`
+- `greek-underwood-scholarship-s9lsyze0hrrp`
+- `arthur-m-nelson-scholarship-rvn3vlxbpddn`
+- `edward-e-suzanne-k-plumly-scholarship-ria422fhbnwd`
+- `polly-c-and-carroll-g-bennett-scholarship-dquhhnvbfbfi`
+- `frances-o-john-w-wilson-fund-for-restart-scholarships-xikszvse19el`
+- `kirby-endowment-scholarship-for-college-students-kqsqwzm7e8xs`
+- `john-lewis-craddock-educational-scholarship-n6kiv96ivboq`
+- `community-tennis-association-scholarship-u9a1teub4ct4`
