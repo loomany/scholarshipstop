@@ -7,6 +7,8 @@ const PUBLISHED_SELECT =
   'source_id, locale, status, quality_score, translated_title, translated_slug, translated_body, translated_summary, updated_at, published_at';
 
 const MIN_QUALITY_SCORE = 85;
+/** Supabase/PostgREST default row cap per request. */
+const TRANSLATIONS_PAGE_SIZE = 1000;
 
 export type PublishedScholarshipDetailTranslationSummary = {
   sourceId: string;
@@ -25,14 +27,39 @@ export async function listPublishedScholarshipDetailTranslations(): Promise<
   const admin = createServiceRoleSupabaseClient();
   if (!admin) return [];
 
-  const { data, error } = await admin
-    .from('content_translations')
-    .select(PUBLISHED_SELECT)
-    .eq('source_type', 'scholarship_detail')
-    .eq('status', 'published')
-    .in('locale', ['es', 'fr']);
+  type Row = {
+    source_id: string;
+    locale: string;
+    status: string;
+    quality_score: number | null;
+    translated_title: string | null;
+    translated_slug: string | null;
+    translated_body: string | null;
+    translated_summary: string | null;
+    updated_at: string | null;
+    published_at: string | null;
+  };
 
-  if (error || !data?.length) return [];
+  const data: Row[] = [];
+
+  for (let offset = 0; ; offset += TRANSLATIONS_PAGE_SIZE) {
+    const { data: page, error } = await admin
+      .from('content_translations')
+      .select(PUBLISHED_SELECT)
+      .eq('source_type', 'scholarship_detail')
+      .eq('status', 'published')
+      .in('locale', ['es', 'fr'])
+      .order('source_id', { ascending: true })
+      .order('locale', { ascending: true })
+      .range(offset, offset + TRANSLATIONS_PAGE_SIZE - 1);
+
+    if (error) return [];
+    if (!page?.length) break;
+    data.push(...page);
+    if (page.length < TRANSLATIONS_PAGE_SIZE) break;
+  }
+
+  if (!data.length) return [];
 
   const ids = [...new Set(data.map((r) => String(r.source_id ?? '').trim()).filter(Boolean))];
   if (ids.length === 0) return [];

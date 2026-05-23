@@ -84,6 +84,9 @@ export async function generateWaveOverlays(
     if (!UUID_RE.test(row.source_id)) {
       validationErrors.push(`${row.source_slug}: invalid UUID`);
     }
+    if (!row.translated_title?.trim()) {
+      validationErrors.push(`${row.source_slug} ${row.locale}: empty translated_title`);
+    }
   }
 
   return { rows, factsBySlug, validationErrors, machineModel };

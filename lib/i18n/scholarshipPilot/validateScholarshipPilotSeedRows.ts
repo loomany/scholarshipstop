@@ -21,7 +21,11 @@ export function validateScholarshipPilotSeedRows(
       errors.push(`missing facts for ${row.source_slug}`);
       continue;
     }
-    if (row.translated_title !== facts.officialTitle) {
+    const officialTitle = facts.officialTitle.trim() || row.source_slug;
+    if (!row.translated_title?.trim()) {
+      errors.push(`${row.source_slug} ${row.locale}: translated_title is empty`);
+    }
+    if (row.translated_title !== officialTitle) {
       errors.push(`${row.source_slug} ${row.locale}: title must match official title`);
     }
     const blob = [

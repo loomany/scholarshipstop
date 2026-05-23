@@ -118,7 +118,7 @@ export function buildScholarshipDetailPilotSeedRowsForSlugs(
         quality_score: QUALITY_SCORE,
         published_at: publishedAt,
         translated_slug: null,
-        translated_title: facts.officialTitle,
+        translated_title: facts.officialTitle.trim() || slug,
         translated_meta_title: content.translated_meta_title,
         translated_meta_description: content.translated_meta_description,
         translated_summary: content.translated_summary,
