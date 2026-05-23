@@ -101,6 +101,10 @@ export async function listPublishedScholarshipDetailTranslations(): Promise<
         : '';
     if (!body && !summary) continue;
 
+    const title =
+      typeof row.translated_title === 'string' ? row.translated_title.trim() : '';
+    if (!title) continue;
+
     const scholarshipSlug = slugById.get(sourceId);
     if (!scholarshipSlug) continue;
     if (indexableById.get(sourceId) === false) continue;

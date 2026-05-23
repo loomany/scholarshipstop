@@ -8,6 +8,7 @@ import { join } from 'node:path';
 import { createClient } from '@supabase/supabase-js';
 
 import { DATE, loadEnvLocal } from './env';
+import { fetchTranslatedScholarshipDetailSourceIds } from './fetch-translated-source-ids';
 import type { AutopilotCandidate, CandidateTier } from './types';
 
 const PAGE = 1000;
@@ -308,12 +309,7 @@ export async function auditTieredPool(): Promise<TierAudit> {
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
 
-  const { data: existing } = await db
-    .from('content_translations')
-    .select('source_id')
-    .eq('source_type', 'scholarship_detail')
-    .in('locale', ['es', 'fr']);
-  const translatedIds = new Set((existing ?? []).map((r) => r.source_id));
+  const translatedIds = await fetchTranslatedScholarshipDetailSourceIds(db);
 
   const rows = await fetchAllScholarships(db);
   const all: AutopilotCandidate[] = [];

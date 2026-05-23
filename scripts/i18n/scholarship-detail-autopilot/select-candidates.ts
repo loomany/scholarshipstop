@@ -8,6 +8,7 @@ import { join } from 'node:path';
 import { createClient } from '@supabase/supabase-js';
 
 import { DATE, loadEnvLocal } from './env';
+import { fetchTranslatedScholarshipDetailSourceIds } from './fetch-translated-source-ids';
 import type { AutopilotCandidate } from './types';
 
 function escapeCsv(v: string) {
@@ -49,12 +50,7 @@ export async function selectCandidates(target: number, waveSize: number): Promis
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
 
-  const { data: existing } = await db
-    .from('content_translations')
-    .select('source_id')
-    .eq('source_type', 'scholarship_detail')
-    .in('locale', ['es', 'fr']);
-  const translatedIds = new Set((existing ?? []).map((r) => r.source_id));
+  const translatedIds = await fetchTranslatedScholarshipDetailSourceIds(db);
 
   const { data: rows, error } = await db
     .from('scholarships')
