@@ -886,7 +886,9 @@ async function buildLocalizedScholarshipDetailSitemapDocuments(): Promise<
       qualityScore: row.qualityScore ?? 90,
       hasLocalizedTitle: Boolean(row.translatedTitle?.trim()),
       hasLocalizedH1: Boolean(row.translatedTitle?.trim()),
-      hasLocalizedBody: true,
+      hasLocalizedBody: Boolean(
+        row.translatedBody?.trim() || row.translatedSummary?.trim()
+      ),
       hasMixedLanguageRisk: false,
       lastModified: row.lastModified
     });

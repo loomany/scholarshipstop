@@ -18,6 +18,8 @@ import { crossCountryListingRobotsFromManifest } from '@/lib/scholarships/seoCro
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import { scholarshipPublicPath } from '@/app/scholarships/scholarshipsData';
 import { getScholarshipDetailServer } from '@/lib/scholarships/scholarshipDetailServer';
+import { buildScholarshipDetailAlternates } from '@/lib/i18n/scholarshipPilot/scholarshipTranslationAlternates';
+import { ROOT_LOCALE } from '@/lib/i18n/locales';
 import { getCanonical } from '@/lib/seo/canonical';
 
 function withExplicitIndexFollowWhenUnset(meta: Metadata): Metadata {
@@ -329,13 +331,20 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
       priority: 7
     })) ?? fallbackDescription;
 
+  const normalizedSlug =
+    record.slug?.trim().toLowerCase() || raw.trim().toLowerCase();
+  const alternates = await buildScholarshipDetailAlternates({
+    slug: normalizedSlug,
+    currentLocale: ROOT_LOCALE
+  });
+
   const meta: Metadata = {
     title,
     description,
     openGraph: {
       title,
       description,
-      url: canonical,
+      url: alternates.canonical ?? canonical,
       type: 'article'
     },
     twitter: {
@@ -343,9 +352,7 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
       title,
       description
     },
-    alternates: {
-      canonical
-    }
+    alternates
   };
 
   if (record.isIndexable === false) {
