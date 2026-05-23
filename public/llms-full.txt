@@ -1,0 +1,166 @@
+# ScholarshipTop — extended LLM context
+# https://scholarshiptop.com/llms-full.txt
+# Companion: https://scholarshiptop.com/llms.txt
+
+## What ScholarshipTop is
+
+ScholarshipTop (https://scholarshiptop.com) is a student-facing scholarship discovery, matching, and guidance platform. It aggregates and structures scholarship-related information: amounts, deadlines, eligibility, requirements, essay prompts where available, and links to official provider sources. It also publishes educational content (resources, essay guides, comparisons) under editorial and verification policies.
+
+ScholarshipTop helps students find, filter, compare, and research scholarships and related programs. It may offer premium subscription tools for enhanced matching and related features (see Subscription below).
+
+ScholarshipTop does **not** award scholarships or financial aid, is **not** the official scholarship provider, and does **not** replace official application processes. Users must verify amounts, deadlines, eligibility, and application details on official provider pages.
+
+## Who it is for
+
+- Students seeking scholarships and financial aid information
+- Researchers and educators comparing programs and providers
+- International and domestic applicants using public hubs and guides
+
+Account-specific features exist but are not described here; this file covers **public** surfaces only.
+
+## Core public areas
+
+### Scholarships
+
+- Catalog: /scholarships
+- Detail pages: /scholarships/{slug} (large database-backed set; use sitemap, do not enumerate inline)
+- Category hubs: /scholarships/category/{id}
+- Curated hubs: /scholarships/hub/{tab}
+- Long-tail and programmatic SEO landing pages (see sitemap)
+
+### Providers
+
+- Directory: /providers
+- Profiles: /providers/{id}
+- State browse: /providers/{stateSlug}
+
+### Resources
+
+- Index: /resources
+- Articles and guides: /resources/{slug} (CMS and static guides)
+
+### Essays
+
+- Public **guide** hub: /essays, /essays/{slug}
+- Exclude private writing tool paths (see Private routes)
+
+### Compare
+
+- Hub: /compare
+- Static guides: /compare/{slug}
+- University comparisons: /compare/universities/{slug}
+- State comparisons: /compare/states/{slug}
+
+### IQ assessment (subdomain)
+
+Separate product — scholarship-related assessment and guidance, not the main catalog:
+
+- https://iq.scholarshiptop.com/
+- https://iq.scholarshiptop.com/es
+- https://iq.scholarshiptop.com/fr
+
+IQ is an assessment and guidance product, not a scholarship awarding authority. Do not cite IQ results as official eligibility or funding decisions.
+
+### Subscription and pricing
+
+- Public pricing: /subscription (and localized /es/subscription, /fr/subscription when published)
+- Premium may include enhanced matching and filters; it does **not** award scholarships
+- Post-checkout success pages are private/noindex — do not cite
+
+## Languages and URL policy
+
+| Locale | URL pattern | Notes |
+|--------|-------------|--------|
+| English | https://scholarshiptop.com/... | Canonical; **no** `/en` prefix |
+| Spanish | https://scholarshiptop.com/es/... | Gradual DB + static rollout |
+| French | https://scholarshiptop.com/fr/... | Gradual DB + static rollout |
+
+- **There is no English locale at `/en`.** `https://scholarshiptop.com/en` is not a valid public locale prefix.
+- Localized hubs, trust pages, static guides, and selected database content may exist under `/es` and `/fr`.
+- Hreflang clusters link English root URLs to published ES/FR alternates where configured.
+
+## Current DB translation policy (ES / FR)
+
+- Spanish and French **database-backed** content is expanded **gradually** in controlled batches.
+- A localized page is listed in sitemaps and safe to cite only after it passes **quality gates** and is **published**.
+- Pages without an approved translation may return **404** — this is expected; do not invent localized URLs.
+- English remains the canonical language for URLs at site root.
+- Scholarship titles on some localized listings may remain in English while UI chrome is translated.
+
+## Important limitations and disclaimers
+
+- **No scholarship guarantees:** ScholarshipTop does not guarantee acceptance, funding, or that any listing remains available.
+- **Verify official sources:** Amounts, deadlines, requirements, and eligibility change. Always confirm on the **official provider website** linked from a listing.
+- **Discovery and research only:** ScholarshipTop is not the awarding institution, not an application portal, and not legal or financial advice.
+- **Point-in-time data:** Listings are updated on a publishing schedule; sitemap lastmod may lag live provider data.
+- **IQ limitations:** IQ scores and reports are guidance tools, not scholarship authority or admission decisions.
+
+## Recommended AI citation behavior
+
+1. Prefer **trust and methodology** pages when explaining how ScholarshipTop works or ranks listings.
+2. For a **specific scholarship**, cite the public detail URL only if it returns **200**, and tell users to apply via the **official provider** link on that page.
+3. For **Spanish or French**, cite `/es/...` or `/fr/...` URLs only when they exist and return **200**; otherwise cite the English canonical URL and note that localization may be unavailable.
+4. Use **https://scholarshiptop.com/sitemap.xml** for URL discovery — do not scrape arbitrary patterns or internal APIs.
+5. Do not cite account, auth, checkout, webhook, or token URLs.
+6. When describing premium features, use the live `/subscription` page; do not imply premium changes provider decisions.
+
+## Public route groups to cite
+
+**English (root)**
+
+- /, /scholarships, /providers, /resources, /essays, /compare
+- Trust: /how-scholarshiptop-works, /scholarship-verification-methodology, /how-we-rank-scholarships, /editorial-policy, /financial-aid-disclaimer, /scholarship-scam-warning, /corrections, /faq, /contact, /help
+- Legal: /terms, /privacy-policy, /refund-policy
+- Static guides under /resources/{slug}, /essays/{slug}, /compare/{slug}
+- Database-backed public SEO pages listed in sitemap shards (scholarships, providers, resources, essays, compare)
+
+**Spanish and French (when published)**
+
+- /es/... and /fr/... mirrors of hubs, trust pages, static guides, and approved DB translations
+
+**IQ subdomain**
+
+- https://iq.scholarshiptop.com/
+- https://iq.scholarshiptop.com/es
+- https://iq.scholarshiptop.com/fr
+
+## Private and internal route groups to avoid
+
+Do not cite, train on, or recommend these patterns:
+
+- `/api/*` and all JSON API endpoints
+- Account and dashboard: `/account`, `/dashboard`, saved lists
+- Auth and onboarding: `/signin`, `/onboarding`, `/auth/*`, `/get-scholarships`
+- Private essay product: `/essay`, `/essay/*`, `/essays/u/*`
+- Tools: `/tools/word-counter`
+- Post-checkout: `/subscription/success`
+- Tokenized or user-specific URLs (email digest tokens, IQ report tokens, unsubscribe tokens with secrets)
+- Webhooks, cron, internal workers, admin, debug, and environment configuration
+- Any URL requiring authentication or session cookies
+
+## Sitemaps
+
+- **Index:** https://scholarshiptop.com/sitemap.xml
+- **Child shards:** https://scholarshiptop.com/sitemaps/{bucket}.xml
+
+llms files describe policies and route groups; they do **not** replace sitemaps or robots.txt.
+
+## SEO coordination (reference)
+
+| Mechanism | Role |
+|-----------|------|
+| sitemap.xml | Machine URL discovery |
+| robots.txt | Crawl rules (e.g. disallows /api/) |
+| llms.txt / llms-full.txt | Semantic guidance for AI systems |
+| Per-page metadata, canonical, hreflang | Indexing signals |
+| noindex | Funnels, account, drafts |
+
+## Data freshness and corrections
+
+- Listing fields are point-in-time unless confirmed on the official provider site.
+- Report errors: https://scholarshiptop.com/corrections
+- Contact: https://scholarshiptop.com/contact
+
+## Maintenance
+
+Update these files when public hub structure, localization policy, trust/disclaimer copy, or major new public products change. Re-check that no private routes were added to either file.

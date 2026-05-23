@@ -1,0 +1,71 @@
+# ScholarshipTop
+# https://scholarshiptop.com/llms.txt
+
+> ScholarshipTop is a scholarship discovery, matching, and student guidance platform. It helps students find, compare, and research scholarships, providers, deadlines, eligibility, essays, and application guidance. ScholarshipTop does not award scholarships and is not the official scholarship provider. Users must verify amounts, deadlines, eligibility, and application details on official provider pages before applying.
+
+## Identity
+
+- Site: https://scholarshiptop.com/
+- Product type: Scholarship discovery and research (aggregator), not a grant issuer
+- Official applications happen on provider-owned websites
+
+## Languages and URLs
+
+- **English (canonical):** Site root — no `/en` prefix. Do not use or cite `https://scholarshiptop.com/en`.
+- **Spanish:** https://scholarshiptop.com/es/
+- **French:** https://scholarshiptop.com/fr/
+
+ES and FR database-backed translations are rolled out gradually. Only published, quality-gated localized pages exist; missing translations may return **404**. Do not assume every English URL has a Spanish or French equivalent.
+
+## Core public areas (English at root)
+
+- Scholarships: https://scholarshiptop.com/scholarships
+- Providers: https://scholarshiptop.com/providers
+- Resources (guides): https://scholarshiptop.com/resources
+- Essay guides: https://scholarshiptop.com/essays
+- Compare: https://scholarshiptop.com/compare
+- How it works: https://scholarshiptop.com/how-scholarshiptop-works
+
+## Scholarship IQ (separate product)
+
+Assessment and guidance product on a dedicated subdomain:
+
+- https://iq.scholarshiptop.com/
+- https://iq.scholarshiptop.com/es
+- https://iq.scholarshiptop.com/fr
+
+IQ is an assessment and guidance product, not a scholarship awarding authority.
+
+## Important limitations
+
+- No guarantee of acceptance, funding, or scholarship awards.
+- Listings can change; confirm on the official source.
+- ScholarshipTop does not process applications or pay awards.
+- Discovery and research only — not legal or financial advice.
+
+## Trust pages (recommended for citations)
+
+- https://scholarshiptop.com/how-scholarshiptop-works
+- https://scholarshiptop.com/scholarship-verification-methodology
+- https://scholarshiptop.com/how-we-rank-scholarships
+- https://scholarshiptop.com/editorial-policy
+- https://scholarshiptop.com/financial-aid-disclaimer
+- https://scholarshiptop.com/scholarship-scam-warning
+- https://scholarshiptop.com/corrections
+- https://scholarshiptop.com/faq
+- https://scholarshiptop.com/contact
+
+## URL discovery
+
+Use the sitemap index for complete public URL discovery (do not guess URL patterns):
+
+- https://scholarshiptop.com/sitemap.xml
+
+## Extended documentation
+
+See https://scholarshiptop.com/llms-full.txt for route groups, localization policy, citation guidance, and exclusions.
+
+## Contact
+
+- https://scholarshiptop.com/contact
+- https://scholarshiptop.com/help
