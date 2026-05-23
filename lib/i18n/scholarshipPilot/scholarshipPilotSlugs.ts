@@ -1,5 +1,6 @@
 import { SCHOLARSHIP_SCALEUP_BATCH_SLUGS } from '@/lib/i18n/scholarshipPilot/scaleUpBatchSlugs';
 import { SCHOLARSHIP_SCALEUP_BATCH_V2_SLUGS } from '@/lib/i18n/scholarshipPilot/scaleUpBatchSlugsV2';
+import { SCHOLARSHIP_SCALEUP_BATCH_11_SLUGS } from '@/lib/i18n/scholarshipPilot/scaleUpBatch11Slugs';
 
 export const SCHOLARSHIP_DETAIL_PILOT_SLUGS_BATCH_1 = [
   'climate-stripes-scholarship-14487'
@@ -23,7 +24,8 @@ export const SCHOLARSHIP_DETAIL_PILOT_SLUGS_V1 = [
 
 export const SCHOLARSHIP_DETAIL_PILOT_SLUGS = [
   ...SCHOLARSHIP_DETAIL_PILOT_SLUGS_V1,
-  ...SCHOLARSHIP_SCALEUP_BATCH_V2_SLUGS
+  ...SCHOLARSHIP_SCALEUP_BATCH_V2_SLUGS,
+  ...SCHOLARSHIP_SCALEUP_BATCH_11_SLUGS
 ] as const;
 
 /** Pilot slug allowlist (string union avoided — 50+ scale-up slugs). */
@@ -43,7 +45,7 @@ export function isScholarshipDetailPilotSlug(
 
 export type ScholarshipPilotBatchId = '5e-1' | '5e-2' | 'all';
 
-export type ScholarshipScaleupBatchNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+export type ScholarshipScaleupBatchNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
 
 export const SCHOLARSHIP_SCALEUP_BATCH_MAX_ROWS = 20;
 export const SCHOLARSHIP_SCALEUP_BATCH_MAX_SLUGS = 10;

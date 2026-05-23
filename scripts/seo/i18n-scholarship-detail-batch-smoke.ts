@@ -6,6 +6,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { scaleupBatchSlugs, type ScholarshipScaleupBatchId } from '@/lib/i18n/scholarshipPilot/scaleUpBatchSlugs';
+import { scaleupBatch11Slugs } from '@/lib/i18n/scholarshipPilot/scaleUpBatch11Slugs';
 import {
   scaleupBatchSlugsV2,
   type ScholarshipScaleupBatchV2Id
@@ -19,6 +20,7 @@ const expectedFrTotal = expectedEsTotal;
 
 function slugsForBatch(batch: number): readonly string[] {
   if (batch >= 1 && batch <= 5) return scaleupBatchSlugs(batch as ScholarshipScaleupBatchId);
+  if (batch === 11) return scaleupBatch11Slugs();
   if (batch >= 6 && batch <= 10) {
     return scaleupBatchSlugsV2((batch - 5) as ScholarshipScaleupBatchV2Id);
   }
@@ -31,8 +33,8 @@ async function status(path: string) {
 }
 
 async function main() {
-  if (!Number.isFinite(batchNum) || batchNum < 1 || batchNum > 10) {
-    console.error('Usage: batch number 1-10');
+  if (!Number.isFinite(batchNum) || batchNum < 1 || batchNum > 11) {
+    console.error('Usage: batch number 1-11');
     process.exit(1);
   }
   const slugs = slugsForBatch(batchNum);

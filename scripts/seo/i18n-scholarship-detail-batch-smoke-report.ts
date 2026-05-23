@@ -7,6 +7,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { scaleupBatchSlugs, type ScholarshipScaleupBatchId } from '@/lib/i18n/scholarshipPilot/scaleUpBatchSlugs';
+import { scaleupBatch11Slugs } from '@/lib/i18n/scholarshipPilot/scaleUpBatch11Slugs';
 import { scaleupBatchSlugsV2 } from '@/lib/i18n/scholarshipPilot/scaleUpBatchSlugsV2';
 
 const BASE = (process.env.SMOKE_BASE_URL ?? 'https://scholarshiptop.com').replace(/\/$/, '');
@@ -20,7 +21,9 @@ const UNSEEDED = [
 
 function slugsForBatch(batch: number): readonly string[] {
   if (batch <= 5) return scaleupBatchSlugs(batch as ScholarshipScaleupBatchId);
-  return scaleupBatchSlugsV2((batch - 5) as 1 | 2 | 3 | 4 | 5);
+  if (batch === 11) return scaleupBatch11Slugs();
+  if (batch >= 6 && batch <= 10) return scaleupBatchSlugsV2((batch - 5) as 1 | 2 | 3 | 4 | 5);
+  return [];
 }
 
 function expectedSitemapTotal(batch: number): number {
@@ -34,8 +37,8 @@ async function status(path: string) {
 
 async function main() {
   const batchNum = Number(process.argv[2]);
-  if (!Number.isFinite(batchNum) || batchNum < 1 || batchNum > 10) {
-    console.error('Usage: batch number 1-10');
+  if (!Number.isFinite(batchNum) || batchNum < 1 || batchNum > 11) {
+    console.error('Usage: batch number 1-11');
     process.exit(1);
   }
 

@@ -19,6 +19,7 @@ import {
   scaleupBatchSlugs,
   type ScholarshipScaleupBatchId
 } from '@/lib/i18n/scholarshipPilot/scaleUpBatchSlugs';
+import { scaleupBatch11Slugs } from '@/lib/i18n/scholarshipPilot/scaleUpBatch11Slugs';
 import {
   scaleupBatchSlugsV2,
   type ScholarshipScaleupBatchV2Id
@@ -50,9 +51,9 @@ function loadEnvLocal() {
 
 function parseBatch(): number {
   const raw = (process.env.I18N_SCHOLARSHIP_PILOT_BATCH ?? 'scale-1').trim().toLowerCase();
-  const m = raw.match(/^(?:scale|10h|batch)-?([1-9]|10)$/);
+  const m = raw.match(/^(?:scale|10h|batch)-?(1[01]|[1-9])$/);
   if (!m) {
-    console.error('Set I18N_SCHOLARSHIP_PILOT_BATCH=scale-1..scale-10');
+    console.error('Set I18N_SCHOLARSHIP_PILOT_BATCH=scale-1..scale-11');
     process.exit(1);
   }
   return Number(m[1]);
@@ -63,6 +64,7 @@ function slugsForGlobalBatch(batch: number): readonly string[] {
   if (batch >= 6 && batch <= 10) {
     return scaleupBatchSlugsV2((batch - 5) as ScholarshipScaleupBatchV2Id);
   }
+  if (batch === 11) return scaleupBatch11Slugs();
   return [];
 }
 
