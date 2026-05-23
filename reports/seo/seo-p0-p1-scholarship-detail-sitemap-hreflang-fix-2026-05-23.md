@@ -16,7 +16,7 @@ Other child sitemaps (core, resources, providers, locale-es-providers-db, etc.) 
 
 ## Root cause (P0)
 
-`listPublishedScholarshipDetailTranslations()` used the **anon** Supabase client for `content_translations`, then required **service role** only for the `scholarships` slug join. If `SUPABASE_SERVICE_ROLE_KEY` was missing or the anon path returned rows that could not be joined, the function returned `[]`, so:
+`listPublishedScholarshipDetailTranslations()` previously used the **anon** Supabase client for `content_translations`, then required **service role** only for the `scholarships` slug join. If `SUPABASE_SERVICE_ROLE_KEY` was missing or the anon path returned rows that could not be joined, the function returned `[]`, so:
 
 - `buildLocalizedScholarshipDetailSitemapDocuments()` produced **no documents**
 - `getSitemapDocumentBySlug('locale-es-scholarships-detail-db')` → **404**
@@ -26,11 +26,14 @@ Other child sitemaps (core, resources, providers, locale-es-providers-db, etc.) 
 
 ## Fixes shipped
 
-### 1. `lib/i18n/scholarshipPilot/listPublishedScholarshipDetailTranslations.ts`
+### 1. Sitemap listing (commit `a0f3ef3`, autopilot — may not be on production yet)
 
-- Use **service role only** for both `content_translations` and `scholarships` queries (no anon fallback).
-- Select `translated_body` / `translated_summary`; exclude rows without body/summary (aligned with `isPublishedScholarshipDetailTranslation`).
-- Keep filters: `published`, `quality_score >= 85` (when set), slug match, `is_indexable !== false`.
+Already on `main` before this fix:
+
+- `listPublishedScholarshipDetailTranslations` — service role for both tables, body/summary gate
+- `app/sitemaps/[slug]/route.ts` — strip `.xml` suffix from slug param
+
+This commit (`ce6a42b`) adds hreflang + sitemap body gating only.
 
 ### 2. `lib/seo/sitemaps.ts`
 
@@ -100,11 +103,12 @@ Other child sitemaps (core, resources, providers, locale-es-providers-db, etc.) 
 
 ---
 
-## Files changed
+## Files changed (`ce6a42b`)
 
-- `lib/i18n/scholarshipPilot/listPublishedScholarshipDetailTranslations.ts`
 - `lib/seo/sitemaps.ts`
 - `app/scholarships/scholarshipSlugLayoutMetadata.ts`
 - `lib/i18n/__tests__/scholarshipDetailHreflang.test.ts`
 - `scripts/seo/seo-p0-p1-scholarship-detail-smoke.ts`
 - `reports/seo/seo-p0-p1-scholarship-detail-sitemap-hreflang-fix-2026-05-23.md`
+
+Related: `a0f3ef3` — sitemap list + route slug fix
