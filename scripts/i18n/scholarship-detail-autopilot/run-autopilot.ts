@@ -146,11 +146,16 @@ async function main() {
   let currentFr = await countSitemapEligibleFrScholarshipDetails();
 
   for (let waveNum = startWave; waveNum <= maxWave; waveNum++) {
-    const waveCandidates = allCandidates.filter((c) => c.wave === waveNum);
+    // Candidate `wave` is rank bucket from selectCandidates (1..N). When resuming
+    // with --start-wave>1, map publish wave 11 → candidate bucket 1, etc.
+    const candidateWave = startWave > 1 ? waveNum - startWave + 1 : waveNum;
+    const waveCandidates = allCandidates.filter((c) => c.wave === candidateWave);
     if (!waveCandidates.length) break;
 
     summary.wavesAttempted++;
-    console.log(`\n[autopilot] === wave ${waveNum} (${waveCandidates.length} scholarships) ===`);
+    console.log(
+      `\n[autopilot] === wave ${waveNum} (${waveCandidates.length} scholarships, candidate bucket ${candidateWave}) ===`
+    );
 
     let generated;
     try {
