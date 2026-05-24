@@ -10,6 +10,11 @@ import {
   isStage2PilotLocale,
   type Stage2PilotLocale
 } from '@/lib/i18n/pilotRoutes';
+import {
+  getCompareSeoQualityPolicy,
+  MIN_LOCALIZED_COMPARE_VISIBLE_WORDS
+} from '@/lib/seo/compareSeoQualityPolicy';
+import { countVisibleWords } from '@/lib/seo/visibleText';
 
 export const revalidate = 300;
 export const dynamicParams = true;
@@ -38,6 +43,25 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     hasLocalizedH1: Boolean(resolved.copy.headline.trim()),
     hasLocalizedBody: Boolean(resolved.copy.bodyHtml.trim())
   });
+  const quality = getCompareSeoQualityPolicy({
+    stablePublicRoute: true,
+    hasQueryParams: false,
+    hasSearchIntent: true,
+    hasUniqueComparisonTable: false,
+    hasVisibleFaq: resolved.copy.faq.length > 0,
+    hasRelatedInternalLinks: true,
+    meaningfulFactCount: resolved.copy.faq.length + 1,
+    localized: true,
+    hasLocalizedTitle: Boolean(resolved.copy.metaTitle.trim()),
+    hasLocalizedH1: Boolean(resolved.copy.headline.trim()),
+    hasLocalizedBody: Boolean(resolved.copy.bodyHtml.trim()),
+    visibleWordCount: countVisibleWords(
+      resolved.copy.headline,
+      resolved.copy.intro,
+      resolved.copy.bodyHtml
+    ),
+    minimumVisibleWords: MIN_LOCALIZED_COMPARE_VISIBLE_WORDS
+  });
 
   const alternates = await buildCompareUniversityAlternates({
     slug,
@@ -59,7 +83,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       locale: locale === 'es' ? 'es_ES' : 'fr_FR'
     },
     twitter: { card: 'summary_large_image', title, description },
-    robots: seo.indexable
+    robots: seo.indexable && quality.indexable
       ? { index: true, follow: true }
       : { index: false, follow: true }
   };

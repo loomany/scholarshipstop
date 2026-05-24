@@ -23,7 +23,7 @@ type Props = {
 
 export default function LocalizedEssayGuidePage({ locale, slug, essay, copy }: Props) {
   const essaysHubHref = hrefForLocalizedUiRequired(locale, ESSAYS_SECTION_PATH);
-  const title = essay.title?.trim() || copy.metaTitle;
+  const title = copy.headline || copy.metaTitle;
 
   return (
     <article className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:py-14">

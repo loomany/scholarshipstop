@@ -65,7 +65,7 @@ const EN: ScholarshipDetailUiCopy = {
   restoreAria: 'Restore scholarship to matches',
   lastVerifiedPrefix: 'Information last verified',
   confirmOfficialNote:
-    'Always confirm deadlines, requirements, and application details on the official page before you apply.',
+    'ScholarshipTop is an independent discovery platform. Save scholarships, compare options, and track deadlines here, then confirm deadlines, eligibility, and application links on the official provider page.',
   showMore: 'Show more',
   showLess: 'Show less',
   studyInPrefix: 'Study in:',
@@ -105,7 +105,7 @@ const ES: ScholarshipDetailUiCopy = {
   restoreAria: 'Restaurar beca en coincidencias',
   lastVerifiedPrefix: 'Información verificada por última vez',
   confirmOfficialNote:
-    'Confirma siempre plazos, requisitos y detalles de postulación en la página oficial antes de postular.',
+    'ScholarshipTop es una plataforma independiente de descubrimiento. Guarda becas, compara opciones y sigue plazos aquí; luego confirma fechas, elegibilidad y enlaces de postulación en la página oficial del proveedor.',
   showMore: 'Ver más',
   showLess: 'Ver menos',
   studyInPrefix: 'Estudiar en:',
@@ -145,7 +145,7 @@ const FR: ScholarshipDetailUiCopy = {
   restoreAria: 'Restaurer la bourse dans les correspondances',
   lastVerifiedPrefix: 'Informations vérifiées pour la dernière fois',
   confirmOfficialNote:
-    'Confirmez toujours les dates limites, exigences et détails sur la page officielle avant de postuler.',
+    'ScholarshipTop est une plateforme indépendante de découverte. Enregistrez des bourses, comparez les options et suivez les dates ici, puis confirmez les délais, critères et liens de candidature sur la page officielle du fournisseur.',
   showMore: 'Afficher plus',
   showLess: 'Afficher moins',
   studyInPrefix: 'Étudier en :',

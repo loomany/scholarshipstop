@@ -33,6 +33,11 @@ import {
 } from '@/lib/seo/compareThinVerdictNarrative';
 import { getURL } from '@/utils/helpers';
 import { getCanonical } from '@/lib/seo/canonical';
+import {
+  getCompareSeoQualityPolicy,
+  MIN_DYNAMIC_COMPARE_VISIBLE_WORDS
+} from '@/lib/seo/compareSeoQualityPolicy';
+import { countVisibleWords } from '@/lib/seo/visibleText';
 
 const COMPARE_YEAR = 2026;
 export const revalidate = 300;
@@ -226,7 +231,7 @@ function StateCompareIqCta({
             <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/80 px-2 py-2">
               <p className="text-[10px] font-medium text-slate-500">Type</p>
               <p className="mt-1 text-sm font-bold leading-none text-slate-950">
-                ???
+                Profile
               </p>
             </div>
           </div>
@@ -274,10 +279,31 @@ export async function generateMetadata({
       },
       priority: 6
     })) ?? fallbackDescription;
+  const content = stateContentJsonAsRecord(row.page.content_json);
+  const faq = content['faq'];
+  const quality = getCompareSeoQualityPolicy({
+    stablePublicRoute: true,
+    hasQueryParams: false,
+    hasSearchIntent: true,
+    hasUniqueComparisonTable: true,
+    hasVisibleFaq: Array.isArray(faq) && faq.length > 0,
+    hasRelatedInternalLinks: true,
+    meaningfulFactCount: Object.keys(content).length,
+    visibleWordCount: countVisibleWords(
+      title,
+      description,
+      row.page.ai_verdict,
+      content
+    ),
+    minimumVisibleWords: MIN_DYNAMIC_COMPARE_VISIBLE_WORDS
+  });
   return {
     title,
     description,
     alternates: { canonical },
+    robots: quality.indexable
+      ? { index: true, follow: true }
+      : { index: false, follow: true },
     openGraph: { title, description, url: canonical }
   };
 }

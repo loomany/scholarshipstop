@@ -11,6 +11,7 @@ import {
   fetchPublishedResourceTranslation,
   getStaticLocalizedResourcePilotPage
 } from '@/lib/i18n/resourcePilot/resolveLocalizedResourcePage';
+import { buildLocalizedPilotMetadata } from '@/lib/i18n/localizedMetadata';
 import {
   isStage2PilotLocale,
   type Stage2PilotLocale
@@ -21,9 +22,13 @@ export const dynamicParams = true;
 
 type PageProps = {
   params: { locale: string; slug: string };
+  searchParams?: Record<string, string | string[] | undefined>;
 };
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+  searchParams
+}: PageProps): Promise<Metadata> {
   if (!isStage2PilotLocale(params.locale)) {
     return { title: 'Page not found', robots: { index: false, follow: false } };
   }
@@ -32,7 +37,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const staticPage = getStaticLocalizedResourcePilotPage(locale, slug);
   if (staticPage) {
-    return { title: staticPage.title };
+    return buildLocalizedPilotMetadata({ page: staticPage, searchParams });
   }
 
   const resolved = await fetchPublishedResourceTranslation(

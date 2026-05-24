@@ -288,22 +288,40 @@ const ESSAYS_SITEMAP_BATCH = 500;
 
 /** All published essay slugs for sitemap generation. */
 export async function fetchAllPublishedEssaySitemapRows(): Promise<
-  { slug: string; updated_at: string | null }[]
+  {
+    slug: string;
+    title: string | null;
+    content_html: string | null;
+    meta_description: string | null;
+    updated_at: string | null;
+  }[]
 > {
-  const out: { slug: string; updated_at: string | null }[] = [];
+  const out: {
+    slug: string;
+    title: string | null;
+    content_html: string | null;
+    meta_description: string | null;
+    updated_at: string | null;
+  }[] = [];
   let from = 0;
   for (;;) {
     const supabase = createPublicClient();
     if (!supabase) return [];
     const { data, error } = await supabase
       .from('essays')
-      .select('slug, updated_at')
+      .select('slug, title, content_html, meta_description, updated_at')
       .eq('is_published', true)
       .order('updated_at', { ascending: false, nullsFirst: false })
       .range(from, from + ESSAYS_SITEMAP_BATCH - 1);
 
     if (error) throw new Error(error.message);
-    const batch = (data ?? []) as { slug: string; updated_at: string | null }[];
+    const batch = (data ?? []) as {
+      slug: string;
+      title: string | null;
+      content_html: string | null;
+      meta_description: string | null;
+      updated_at: string | null;
+    }[];
     const withSlug = batch.filter((r) => Boolean(r.slug?.trim()));
     out.push(...withSlug);
     if (batch.length < ESSAYS_SITEMAP_BATCH) break;

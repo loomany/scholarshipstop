@@ -31,7 +31,16 @@ import { allScholarshipCountrySeoRoutes } from '@/app/scholarships/scholarshipCo
 import { buildCrossCountrySeoSitemapEntries } from '@/lib/seo/crossCountrySitemapEntries';
 import { isCompareHubSeoGenerationCanonicalPath } from '@/lib/seo/sitemapProgrammaticHubPath';
 import { getProviderSeoQualityPolicy } from '@/lib/seo/providerSeoQualityPolicy';
-import { getCompareSeoQualityPolicy } from '@/lib/seo/compareSeoQualityPolicy';
+import {
+  getCompareSeoQualityPolicy,
+  MIN_DYNAMIC_COMPARE_VISIBLE_WORDS,
+  MIN_LOCALIZED_COMPARE_VISIBLE_WORDS
+} from '@/lib/seo/compareSeoQualityPolicy';
+import {
+  getEssaySeoQualityPolicy,
+  MIN_LOCALIZED_ESSAY_VISIBLE_WORDS
+} from '@/lib/seo/essaySeoQualityPolicy';
+import { countVisibleWords, hasRawPlaceholderText } from '@/lib/seo/visibleText';
 import { listPublishedCategoryTranslations } from '@/lib/i18n/categoryPilot/listPublishedCategoryTranslations';
 import { listPublishedResourceArticleTranslations } from '@/lib/i18n/resourcePilot/listPublishedResourceArticleTranslations';
 import { listPublishedProviderProfileTranslations } from '@/lib/i18n/providerPilot/listPublishedProviderProfileTranslations';
@@ -234,6 +243,10 @@ type SeoGenerationSitemapRow = {
 type CompareSitemapRow = {
   slug: string;
   updated_at: string;
+  content_json?: unknown | null;
+  ai_verdict?: string | null;
+  meta_title?: string | null;
+  meta_description?: string | null;
 };
 
 type UniversityHubSitemapRow = {
@@ -250,24 +263,72 @@ function createSitemapReadClient() {
 async function fetchCompareSitemapRows(): Promise<CompareSitemapRow[]> {
   const supabase = createSitemapReadClient();
   if (!supabase) return [];
-  const { data, error } = await supabase.rpc('compare_pages_sitemap_rows', {});
-  if (error) {
-    console.error('[sitemap] compare_pages_sitemap_rows failed:', error);
-    return [];
+  const out: CompareSitemapRow[] = [];
+  for (let offset = 0; ; offset += SITEMAP_DB_PAGE_SIZE) {
+    const { data, error } = await supabase
+      .from('compare_pages')
+      .select('slug, updated_at, content_json, ai_verdict, meta_title, meta_description')
+      .eq('status', 'published')
+      .order('updated_at', { ascending: false, nullsFirst: false })
+      .range(offset, offset + SITEMAP_DB_PAGE_SIZE - 1);
+    if (error) {
+      console.error('[sitemap] compare_pages sitemap query failed:', error);
+      return out;
+    }
+    const batch = (data ?? []) as CompareSitemapRow[];
+    out.push(...batch);
+    if (batch.length < SITEMAP_DB_PAGE_SIZE) break;
   }
-  return (data ?? []) as CompareSitemapRow[];
+  return out;
 }
 
 /** Published `/compare/states/[slug]` pages. */
 async function fetchStateCompareSitemapRows(): Promise<CompareSitemapRow[]> {
   const supabase = createSitemapReadClient();
   if (!supabase) return [];
-  const { data, error } = await supabase.rpc('state_compare_pages_sitemap_rows', {});
-  if (error) {
-    console.error('[sitemap] state_compare_pages_sitemap_rows failed:', error);
-    return [];
+  const out: CompareSitemapRow[] = [];
+  for (let offset = 0; ; offset += SITEMAP_DB_PAGE_SIZE) {
+    const { data, error } = await supabase
+      .from('state_compare_pages')
+      .select('slug, updated_at, content_json, ai_verdict, meta_title, meta_description')
+      .eq('status', 'published')
+      .order('updated_at', { ascending: false, nullsFirst: false })
+      .range(offset, offset + SITEMAP_DB_PAGE_SIZE - 1);
+    if (error) {
+      console.error('[sitemap] state_compare_pages sitemap query failed:', error);
+      return out;
+    }
+    const batch = (data ?? []) as CompareSitemapRow[];
+    out.push(...batch);
+    if (batch.length < SITEMAP_DB_PAGE_SIZE) break;
   }
-  return (data ?? []) as CompareSitemapRow[];
+  return out;
+}
+
+function compareSitemapRowPassesQuality(row: CompareSitemapRow): boolean {
+  const content =
+    row.content_json && typeof row.content_json === 'object'
+      ? (row.content_json as Record<string, unknown>)
+      : {};
+  const faq = content['faq'];
+  const hasFaq = Array.isArray(faq) && faq.length > 0;
+  const quality = getCompareSeoQualityPolicy({
+    stablePublicRoute: Boolean(row.slug?.trim()),
+    hasQueryParams: false,
+    hasSearchIntent: true,
+    hasUniqueComparisonTable: true,
+    hasVisibleFaq: hasFaq,
+    hasRelatedInternalLinks: true,
+    meaningfulFactCount: Object.keys(content).length,
+    visibleWordCount: countVisibleWords(
+      row.meta_title,
+      row.meta_description,
+      row.ai_verdict,
+      content
+    ),
+    minimumVisibleWords: MIN_DYNAMIC_COMPARE_VISIBLE_WORDS
+  });
+  return quality.includeInSitemap;
 }
 
 /** `/scholarships/{state}/{university}` hubs backed by `provider_hub_listing` + `states` + `providers`. */
@@ -456,6 +517,23 @@ export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
   const essayRows = await fetchAllPublishedEssaySitemapRows().catch(() => []);
   const essays: MetadataRoute.Sitemap = essayRows
     .filter((row) => Boolean(row.slug?.trim()))
+    .filter((row) => {
+      const title = row.title?.trim() || row.slug.trim();
+      const quality = getEssaySeoQualityPolicy({
+        stablePublicRoute: true,
+        hasQueryParams: false,
+        hasTitle: Boolean(title),
+        hasH1: Boolean(title),
+        hasBody: Boolean(row.content_html?.trim()),
+        visibleWordCount: countVisibleWords(
+          title,
+          row.meta_description,
+          row.content_html
+        ),
+        hasRawPlaceholder: hasRawPlaceholderText(title, row.content_html)
+      });
+      return quality.includeInSitemap;
+    })
     .map((row) => ({
       url: `${base}${essayHubArticlePath(row.slug.trim())}`,
       lastModified: row.updated_at ? new Date(row.updated_at) : new Date()
@@ -602,12 +680,14 @@ export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
     })),
     ...compareRows
       .filter((row) => Boolean(row.slug?.trim()))
+      .filter(compareSitemapRowPassesQuality)
       .map((row) => ({
         url: `${base}/compare/universities/${encodeURIComponent(row.slug.trim())}`,
         lastModified: row.updated_at ? new Date(row.updated_at) : new Date()
       })),
     ...stateCompareRows
       .filter((row) => Boolean(row.slug?.trim()))
+      .filter(compareSitemapRowPassesQuality)
       .map((row) => ({
         url: `${base}/compare/states/${encodeURIComponent(row.slug.trim())}`,
         lastModified: row.updated_at ? new Date(row.updated_at) : new Date()
@@ -781,7 +861,7 @@ async function buildLocalizedResourceArticleSitemapDocuments(): Promise<
       qualityScore: row.qualityScore ?? 90,
       hasLocalizedTitle: Boolean(row.translatedTitle?.trim()),
       hasLocalizedH1: Boolean(row.translatedTitle?.trim()),
-      hasLocalizedBody: true,
+      hasLocalizedBody: Boolean(row.translatedBody?.trim()),
       hasMixedLanguageRisk: false,
       lastModified: row.lastModified
     });
@@ -848,7 +928,7 @@ async function buildLocalizedProviderProfileSitemapDocuments(): Promise<
       qualityScore: row.qualityScore ?? 90,
       hasLocalizedTitle: Boolean(row.translatedTitle?.trim()),
       hasLocalizedH1: Boolean(row.translatedTitle?.trim()),
-      hasLocalizedBody: true,
+      hasLocalizedBody: Boolean(row.translatedBody?.trim()),
       hasMixedLanguageRisk: false,
       lastModified: row.lastModified
     });
@@ -920,15 +1000,37 @@ async function buildLocalizedEssayGuideSitemapDocuments(): Promise<SitemapDocume
   const byLocale = new Map<'es' | 'fr', MetadataRoute.Sitemap>();
   for (const row of rows) {
     const canonicalPath = `/essays/${row.essaySlug}`;
+    const quality = getEssaySeoQualityPolicy({
+      stablePublicRoute: true,
+      hasQueryParams: false,
+      hasTitle: Boolean(row.translatedTitle?.trim()),
+      hasH1: Boolean(row.translatedTitle?.trim()),
+      hasBody: Boolean(row.translatedBody?.trim()),
+      localized: true,
+      hasLocalizedTitle: Boolean(row.translatedTitle?.trim()),
+      hasLocalizedH1: Boolean(row.translatedTitle?.trim()),
+      hasLocalizedBody: Boolean(row.translatedBody?.trim()),
+      visibleWordCount: countVisibleWords(
+        row.translatedTitle,
+        row.translatedSummary,
+        row.translatedBody
+      ),
+      minimumVisibleWords: MIN_LOCALIZED_ESSAY_VISIBLE_WORDS,
+      hasRawPlaceholder: hasRawPlaceholderText(
+        row.translatedTitle,
+        row.translatedBody
+      )
+    });
+    if (!quality.includeInSitemap) continue;
     const entry = buildLocalizedSitemapEntry({
       locale: row.locale,
       canonicalPath,
-      sourceIndexable: true,
+      sourceIndexable: quality.indexable,
       translationStatus: 'published',
       qualityScore: row.qualityScore ?? 90,
       hasLocalizedTitle: Boolean(row.translatedTitle?.trim()),
       hasLocalizedH1: Boolean(row.translatedTitle?.trim()),
-      hasLocalizedBody: true,
+      hasLocalizedBody: Boolean(row.translatedBody?.trim()),
       hasMixedLanguageRisk: false,
       lastModified: row.lastModified
     });
@@ -959,15 +1061,35 @@ async function buildLocalizedCompareSitemapDocuments(): Promise<SitemapDocument[
       row.sourceType === 'compare_university'
         ? `/compare/universities/${row.slug}`
         : `/compare/states/${row.slug}`;
+    const quality = getCompareSeoQualityPolicy({
+      stablePublicRoute: true,
+      hasQueryParams: false,
+      hasSearchIntent: true,
+      hasUniqueComparisonTable: false,
+      hasVisibleFaq: false,
+      hasRelatedInternalLinks: true,
+      meaningfulFactCount: 1,
+      localized: true,
+      hasLocalizedTitle: Boolean(row.translatedTitle?.trim()),
+      hasLocalizedH1: Boolean(row.translatedTitle?.trim()),
+      hasLocalizedBody: Boolean(row.translatedBody?.trim()),
+      visibleWordCount: countVisibleWords(
+        row.translatedTitle,
+        row.translatedSummary,
+        row.translatedBody
+      ),
+      minimumVisibleWords: MIN_LOCALIZED_COMPARE_VISIBLE_WORDS
+    });
+    if (!quality.includeInSitemap) continue;
     const entry = buildLocalizedSitemapEntry({
       locale: row.locale,
       canonicalPath,
-      sourceIndexable: true,
+      sourceIndexable: quality.indexable,
       translationStatus: 'published',
       qualityScore: row.qualityScore ?? 90,
       hasLocalizedTitle: Boolean(row.translatedTitle?.trim()),
       hasLocalizedH1: Boolean(row.translatedTitle?.trim()),
-      hasLocalizedBody: true,
+      hasLocalizedBody: Boolean(row.translatedBody?.trim()),
       hasMixedLanguageRisk: false,
       lastModified: row.lastModified
     });

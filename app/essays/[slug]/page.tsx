@@ -36,6 +36,8 @@ import { fetchScholarshipsBySlugsOrIdsOrdered } from '@/lib/scholarships/supabas
 import { getURL } from '@/utils/helpers';
 import { getCanonical } from '@/lib/seo/canonical';
 import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
+import { getEssaySeoQualityPolicy } from '@/lib/seo/essaySeoQualityPolicy';
+import { countVisibleWords, hasRawPlaceholderText } from '@/lib/seo/visibleText';
 
 export const revalidate = 300;
 
@@ -221,10 +223,26 @@ export async function generateMetadata({
   const url = getCanonical(path);
   const published = essay.created_at || undefined;
   const modified = essay.updated_at || essay.created_at || undefined;
+  const quality = getEssaySeoQualityPolicy({
+    stablePublicRoute: true,
+    hasQueryParams: false,
+    hasTitle: Boolean(title.trim()),
+    hasH1: Boolean(title.trim()),
+    hasBody: Boolean(essay.content_html?.trim()),
+    visibleWordCount: countVisibleWords(
+      title,
+      description,
+      essay.content_html
+    ),
+    hasRawPlaceholder: hasRawPlaceholderText(title, essay.content_html)
+  });
   return {
     title,
     description,
     alternates: { canonical: url },
+    robots: quality.indexable
+      ? { index: true, follow: true }
+      : { index: false, follow: true },
     openGraph: {
       type: 'article',
       url,
@@ -635,7 +653,7 @@ function EssayIqCta() {
             <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/80 px-2 py-2">
               <p className="text-[10px] font-medium text-slate-500">Type</p>
               <p className="mt-1 text-sm font-bold leading-none text-slate-950">
-                ???
+                Profile
               </p>
             </div>
           </div>

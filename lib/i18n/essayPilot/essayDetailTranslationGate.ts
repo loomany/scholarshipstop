@@ -41,6 +41,7 @@ export function isPublishedEssayTranslation(
 export type LocalizedEssayPageCopy = {
   metaTitle: string;
   metaDescription: string;
+  headline: string;
   intro: string;
   bodyHtml: string;
   faq: EssayFaqItem[];
@@ -71,6 +72,7 @@ export function buildLocalizedEssayPageCopy(
   return {
     metaTitle: row.translated_meta_title?.trim() || row.translated_title?.trim() || '',
     metaDescription: row.translated_meta_description?.trim() || row.translated_summary?.trim() || '',
+    headline: row.translated_title?.trim() || '',
     intro: row.translated_summary?.trim() || paragraphs[0] || '',
     bodyHtml,
     faq: faqFromEssayTranslation(row),

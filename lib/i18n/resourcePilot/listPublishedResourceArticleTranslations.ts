@@ -8,13 +8,15 @@ import {
 import { createPublicClient } from '@/utils/supabase/public';
 
 const SELECT =
-  'source_id, locale, status, quality_score, translated_title, updated_at, published_at';
+  'source_id, locale, status, quality_score, translated_title, translated_body, translated_summary, updated_at, published_at';
 
 export type PublishedResourceArticleTranslationSummary = {
   sourceId: string;
   locale: ContentTranslationLocale;
   qualityScore: number | null;
   translatedTitle: string | null;
+  translatedBody: string | null;
+  translatedSummary: string | null;
   lastModified: string | null;
 };
 
@@ -47,6 +49,12 @@ export async function listPublishedResourceArticleTranslations(): Promise<
         qualityScore: score,
         translatedTitle:
           typeof row.translated_title === 'string' ? row.translated_title : null,
+        translatedBody:
+          typeof row.translated_body === 'string' ? row.translated_body : null,
+        translatedSummary:
+          typeof row.translated_summary === 'string'
+            ? row.translated_summary
+            : null,
         lastModified:
           (typeof row.published_at === 'string' ? row.published_at : null) ??
           (typeof row.updated_at === 'string' ? row.updated_at : null)

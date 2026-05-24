@@ -21,6 +21,7 @@ import { getScholarshipDetailServer } from '@/lib/scholarships/scholarshipDetail
 import { buildScholarshipDetailAlternates } from '@/lib/i18n/scholarshipPilot/scholarshipTranslationAlternates';
 import { ROOT_LOCALE } from '@/lib/i18n/locales';
 import { getCanonical } from '@/lib/seo/canonical';
+import { buildScholarshipDetailSeoTitle } from '@/lib/seo/scholarshipDetailSeoTitle';
 
 function withExplicitIndexFollowWhenUnset(meta: Metadata): Metadata {
   if (meta.robots !== undefined) return meta;
@@ -59,20 +60,6 @@ function metaDescription(s: Scholarship): string {
     0,
     160
   );
-}
-
-function buildScholarshipDetailSeoTitle(baseTitle: string): string {
-  const normalizedBase = baseTitle.replace(/\s+/g, ' ').trim() || 'Scholarship';
-  let title = `${normalizedBase} in USA 2026 - Apply Guide`;
-  if (title.length < 30) {
-    title = `${normalizedBase} Scholarship USA 2026 Apply`;
-  }
-  if (title.length > 65) {
-    const suffix = ' USA 2026 Apply';
-    const keep = Math.max(10, 65 - suffix.length);
-    title = `${normalizedBase.slice(0, keep).trimEnd()}${suffix}`;
-  }
-  return title;
 }
 
 /**
@@ -313,7 +300,7 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
     return { title: 'Scholarship' };
   }
 
-  const title = buildScholarshipDetailSeoTitle(record.title);
+  const title = buildScholarshipDetailSeoTitle(record);
   const fallbackDescription = metaDescription(record);
   const path = scholarshipPublicPath(record);
   const canonical = getCanonical(path);

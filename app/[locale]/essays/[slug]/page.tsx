@@ -11,6 +11,11 @@ import {
   isStage2PilotLocale,
   type Stage2PilotLocale
 } from '@/lib/i18n/pilotRoutes';
+import {
+  getEssaySeoQualityPolicy,
+  MIN_LOCALIZED_ESSAY_VISIBLE_WORDS
+} from '@/lib/seo/essaySeoQualityPolicy';
+import { countVisibleWords, hasRawPlaceholderText } from '@/lib/seo/visibleText';
 
 export const revalidate = 300;
 export const dynamicParams = true;
@@ -36,8 +41,29 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     translation: resolved.translation,
     englishIndexable: true,
     hasLocalizedTitle: Boolean(resolved.copy.metaTitle.trim()),
-    hasLocalizedH1: Boolean(resolved.essay.title?.trim()),
+    hasLocalizedH1: Boolean(resolved.copy.headline.trim()),
     hasLocalizedBody: Boolean(resolved.copy.bodyHtml.trim())
+  });
+  const quality = getEssaySeoQualityPolicy({
+    stablePublicRoute: true,
+    hasQueryParams: false,
+    hasTitle: Boolean(resolved.copy.metaTitle.trim()),
+    hasH1: Boolean(resolved.copy.headline.trim()),
+    hasBody: Boolean(resolved.copy.bodyHtml.trim()),
+    localized: true,
+    hasLocalizedTitle: Boolean(resolved.copy.metaTitle.trim()),
+    hasLocalizedH1: Boolean(resolved.copy.headline.trim()),
+    hasLocalizedBody: Boolean(resolved.copy.bodyHtml.trim()),
+    visibleWordCount: countVisibleWords(
+      resolved.copy.headline,
+      resolved.copy.intro,
+      resolved.copy.bodyHtml
+    ),
+    minimumVisibleWords: MIN_LOCALIZED_ESSAY_VISIBLE_WORDS,
+    hasRawPlaceholder: hasRawPlaceholderText(
+      resolved.copy.headline,
+      resolved.copy.bodyHtml
+    )
   });
 
   const alternates = await buildEssayGuideAlternates({
@@ -60,7 +86,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       locale: locale === 'es' ? 'es_ES' : 'fr_FR'
     },
     twitter: { card: 'summary_large_image', title, description },
-    robots: seo.indexable
+    robots: seo.indexable && quality.indexable
       ? { index: true, follow: true }
       : { index: false, follow: true }
   };

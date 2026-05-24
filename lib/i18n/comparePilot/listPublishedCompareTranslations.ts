@@ -8,7 +8,7 @@ import {
 import { createPublicClient } from '@/utils/supabase/public';
 
 const PUBLISHED_SELECT =
-  'source_id, source_type, locale, status, quality_score, translated_title, translated_slug, updated_at, published_at';
+  'source_id, source_type, locale, status, quality_score, translated_title, translated_slug, translated_body, translated_summary, updated_at, published_at';
 
 const MIN_QUALITY_SCORE = 85;
 
@@ -19,6 +19,8 @@ export type PublishedCompareTranslationSummary = {
   locale: ContentTranslationLocale;
   qualityScore: number | null;
   translatedTitle: string | null;
+  translatedBody: string | null;
+  translatedSummary: string | null;
   lastModified: string | null;
 };
 
@@ -103,6 +105,12 @@ export async function listPublishedCompareTranslations(): Promise<
       qualityScore: score,
       translatedTitle:
         typeof row.translated_title === 'string' ? row.translated_title : null,
+      translatedBody:
+        typeof row.translated_body === 'string' ? row.translated_body : null,
+      translatedSummary:
+        typeof row.translated_summary === 'string'
+          ? row.translated_summary
+          : null,
       lastModified:
         (typeof row.published_at === 'string' ? row.published_at : null) ??
         (typeof row.updated_at === 'string' ? row.updated_at : null)
