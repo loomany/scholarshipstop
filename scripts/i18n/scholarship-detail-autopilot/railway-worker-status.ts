@@ -1,0 +1,92 @@
+/**
+ * Read-only status for scholarship_detail autopilot / Railway worker.
+ */
+import { createClient } from '@supabase/supabase-js';
+
+import { BASE, loadEnvLocal } from './env';
+import { isScholarshipAutopilotLocked } from './scholarship-autopilot-lock';
+import {
+  countSitemapEligibleEsScholarshipDetails,
+  countSitemapEligibleFrScholarshipDetails
+} from './load-persisted-wave';
+
+async function fetchText(path: string): Promise<string> {
+  const res = await fetch(`${BASE}${path}`);
+  return res.ok ? res.text() : '';
+}
+
+async function latestRelaxedWave(db: ReturnType<typeof createClient>): Promise<number | null> {
+  const { data, error } = await db
+    .from('content_translations')
+    .select('machine_model')
+    .eq('source_type', 'scholarship_detail')
+    .like('machine_model', 'stage5e-scholarship-autopilot-relaxed-wave-%')
+    .order('published_at', { ascending: false })
+    .limit(50);
+  if (error) throw error;
+  let max = 0;
+  for (const row of data ?? []) {
+    const m = String(row.machine_model ?? '').match(/relaxed-wave-(\d+)$/);
+    if (m) max = Math.max(max, Number(m[1]));
+  }
+  return max > 0 ? max : null;
+}
+
+async function main() {
+  loadEnvLocal();
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
+  if (!url || !key) {
+    console.error('Missing Supabase env');
+    process.exit(2);
+  }
+  const db = createClient(url, key);
+
+  const esXml = await fetchText('/sitemaps/locale-es-scholarships-detail-db.xml');
+  const frXml = await fetchText('/sitemaps/locale-fr-scholarships-detail-db.xml');
+  const liveEs = (esXml.match(/<loc>/g) ?? []).length;
+  const liveFr = (frXml.match(/<loc>/g) ?? []).length;
+  const eligibleEs = await countSitemapEligibleEsScholarshipDetails();
+  const eligibleFr = await countSitemapEligibleFrScholarshipDetails();
+  const lock = await isScholarshipAutopilotLocked();
+  const latestWave = await latestRelaxedWave(db);
+
+  const { count: publishedRows } = await db
+    .from('content_translations')
+    .select('*', { count: 'exact', head: true })
+    .eq('source_type', 'scholarship_detail')
+    .in('locale', ['es', 'fr'])
+    .eq('status', 'published');
+
+  const badSitemap =
+    esXml.includes('/en/') ||
+    frXml.includes('/en/') ||
+    esXml.includes('review_required') ||
+    frXml.includes('review_required') ||
+    esXml.includes('draft') ||
+    frXml.includes('draft');
+
+  console.log(
+    JSON.stringify(
+      {
+        sitemapIndex: (await fetch(`${BASE}/sitemap.xml`)).status,
+        liveEs,
+        liveFr,
+        eligibleEs,
+        eligibleFr,
+        publishedEsFrRows: publishedRows,
+        latestRelaxedWave: latestWave,
+        advisoryLockHeld: lock.locked,
+        lockMessage: lock.message,
+        badSitemapContent: badSitemap
+      },
+      null,
+      2
+    )
+  );
+}
+
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});

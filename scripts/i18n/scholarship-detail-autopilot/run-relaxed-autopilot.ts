@@ -65,6 +65,19 @@ function runRegression() {
   execSync('npx tsx --test lib/i18n/__tests__/*.test.ts', { stdio: 'inherit', cwd: process.cwd() });
 }
 
+async function countSitemapWithRetry(label: string, attempts = 8): Promise<{ es: number; fr: number }> {
+  let last = { es: 0, fr: 0 };
+  for (let i = 0; i < attempts; i++) {
+    const es = await countSitemapEligibleEsScholarshipDetails();
+    const fr = await countSitemapEligibleFrScholarshipDetails();
+    last = { es, fr };
+    if (es > 0 && fr > 0) return last;
+    console.warn(`[relaxed] ${label}: transient sitemap count es=${es} fr=${fr}, retry ${i + 1}/${attempts}`);
+    await new Promise((r) => setTimeout(r, 5000 * (i + 1)));
+  }
+  return last;
+}
+
 function checkpointReportPath(stage: string, startWave: number, endWave: number): string {
   if (stage === 'stage5e-15') {
     return join(
@@ -96,8 +109,9 @@ async function writeCheckpoint(
   netNewSoFar: number,
   options?: { extendedProduction?: boolean }
 ) {
-  const es = await countSitemapEligibleEsScholarshipDetails();
-  const fr = await countSitemapEligibleFrScholarshipDetails();
+  const afterCp = await countSitemapWithRetry('checkpoint');
+  const es = afterCp.es;
+  const fr = afterCp.fr;
   const expectedEs = startEs + netNewSoFar;
   const expectedFr = startFr + netNewSoFar;
   const issues: string[] = [];
@@ -215,8 +229,9 @@ async function main() {
     dryRun: isDryRun()
   });
 
-  const startEs = await countSitemapEligibleEsScholarshipDetails();
-  const startFr = await countSitemapEligibleFrScholarshipDetails();
+  const startCounts = await countSitemapWithRetry('start');
+  const startEs = startCounts.es;
+  const startFr = startCounts.fr;
   console.log('[relaxed] start sitemap-eligible', { es: startEs, fr: startFr });
 
   const audit = await auditTieredPool();
@@ -351,13 +366,20 @@ async function main() {
       break;
     }
 
-    currentEs = await countSitemapEligibleEsScholarshipDetails();
-    currentFr = await countSitemapEligibleFrScholarshipDetails();
+    const afterCounts = await countSitemapWithRetry(`wave ${waveNum} post-publish`);
+    currentEs = afterCounts.es;
+    currentFr = afterCounts.fr;
     const esDelta = currentEs - esBefore;
     const frDelta = currentFr - frBefore;
 
-    if (netNewGuard && (esDelta !== waveCandidates.length || frDelta !== waveCandidates.length)) {
-      summary.stoppedReason = `wave ${waveNum}: sitemap delta ES=${esDelta} FR=${frDelta} expected ${waveCandidates.length}`;
+    if (
+      netNewGuard &&
+      (esDelta !== waveCandidates.length ||
+        frDelta !== waveCandidates.length ||
+        currentEs <= 0 ||
+        currentFr <= 0)
+    ) {
+      summary.stoppedReason = `wave ${waveNum}: sitemap delta ES=${esDelta} FR=${frDelta} expected ${waveCandidates.length} (es=${currentEs} fr=${currentFr})`;
       break;
     }
 
@@ -438,8 +460,9 @@ async function main() {
 
   if (!summary.stoppedReason) summary.stoppedReason = 'completed';
 
-  const finalEs = await countSitemapEligibleEsScholarshipDetails();
-  const finalFr = await countSitemapEligibleFrScholarshipDetails();
+  const finalCounts = await countSitemapWithRetry('final');
+  const finalEs = finalCounts.es;
+  const finalFr = finalCounts.fr;
 
   const masterName =
     stage === 'stage5e-15'
