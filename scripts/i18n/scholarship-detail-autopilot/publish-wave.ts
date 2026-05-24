@@ -85,10 +85,23 @@ export async function publishWave(
 
   let upserted = 0;
   for (const row of rows) {
-    const { error } = await admin.from('content_translations').upsert(upsertRow(row, machineModel), {
-      onConflict: 'source_type,source_id,locale'
-    });
-    if (error) throw new Error(`${error.message} ${row.source_slug} ${row.locale}`);
+    let lastError: Error | null = null;
+    for (let attempt = 0; attempt < 4; attempt++) {
+      try {
+        const { error } = await admin.from('content_translations').upsert(upsertRow(row, machineModel), {
+          onConflict: 'source_type,source_id,locale'
+        });
+        if (error) throw new Error(`${error.message} ${row.source_slug} ${row.locale}`);
+        lastError = null;
+        break;
+      } catch (e) {
+        lastError = e instanceof Error ? e : new Error(String(e));
+        if (attempt < 3) {
+          await new Promise((r) => setTimeout(r, 1500 * (attempt + 1)));
+        }
+      }
+    }
+    if (lastError) throw lastError;
     upserted++;
   }
 

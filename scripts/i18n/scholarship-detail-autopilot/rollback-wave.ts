@@ -13,11 +13,18 @@ function parseWave(): number {
   return n;
 }
 
+function machineModelForWave(wave: number): string {
+  if (process.argv.includes('--relaxed')) {
+    return `stage5e-scholarship-autopilot-relaxed-wave-${wave}`;
+  }
+  return `stage5e-scholarship-autopilot-wave-${wave}`;
+}
+
 async function main() {
   loadEnvLocal();
   assertPublishGuards();
   const wave = parseWave();
-  const model = `stage5e-scholarship-autopilot-wave-${wave}`;
+  const model = machineModelForWave(wave);
   const db = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!
