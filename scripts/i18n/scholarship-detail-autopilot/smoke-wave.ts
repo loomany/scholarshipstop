@@ -46,6 +46,18 @@ export type SmokeResult = {
   expectedCount: number;
 };
 
+function smokeSampleSizes(candidateCount: number) {
+  if (candidateCount >= 100) {
+    return { routes: 20, html: 10, sitemapSlugs: 8, unseeded: 10 };
+  }
+  return {
+    routes: Math.min(10, candidateCount),
+    html: Math.min(5, candidateCount),
+    sitemapSlugs: 5,
+    unseeded: 2
+  };
+}
+
 export async function smokeWave(
   waveNum: number,
   candidates: AutopilotCandidate[],
@@ -55,8 +67,9 @@ export async function smokeWave(
   const issues: string[] = [];
   const expectedCount = expectedTotalScholarships;
   const expectedFr = expectedFrScholarships;
+  const sizes = smokeSampleSizes(candidates.length);
 
-  const sample = pickSample(candidates, Math.min(10, candidates.length));
+  const sample = pickSample(candidates, sizes.routes);
   for (const c of sample) {
     const en = await status(`/scholarships/${c.slug}`);
     const es = await status(`/es/scholarships/${c.slug}`);
@@ -68,7 +81,8 @@ export async function smokeWave(
 
   const unseeded = [
     'how-to-apply-for-a-scholarship-step-by-step',
-    'fake-pilot-slug-not-in-allowlist-xyz'
+    'fake-pilot-slug-not-in-allowlist-xyz',
+    ...Array.from({ length: Math.max(0, sizes.unseeded - 2) }, (_, i) => `unseeded-wave-${waveNum}-${i}-xyz`)
   ];
   for (const slug of unseeded) {
     const es = await status(`/es/scholarships/${slug}`);
@@ -105,7 +119,7 @@ export async function smokeWave(
   const listedFr = new Set(
     listed.filter((r) => r.locale === 'fr').map((r) => r.scholarshipSlug)
   );
-  for (const c of sample.slice(0, 5)) {
+  for (const c of sample.slice(0, sizes.sitemapSlugs)) {
     if (listedEs.has(c.slug) && !esXml.includes(`/es/scholarships/${c.slug}`)) {
       issues.push(`ES sitemap missing ${c.slug}`);
     }
@@ -117,7 +131,7 @@ export async function smokeWave(
     issues.push('sitemap has /en or review_required');
   }
 
-  const htmlSample = pickSample(candidates, 5);
+  const htmlSample = pickSample(candidates, sizes.html);
   for (const c of htmlSample) {
     for (const loc of ['es', 'fr'] as const) {
       const r = await checkScholarshipDetailHtml(loc, `/${loc}/scholarships/${c.slug}`);

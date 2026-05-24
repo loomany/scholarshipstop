@@ -27,24 +27,27 @@ function relaxedMachineModel(waveNum: number) {
 }
 
 function reportStage(startWave: number): string {
+  if (startWave >= 161) return 'stage5e-15';
   if (startWave >= 81) return 'stage5e-14';
   if (startWave >= 41) return 'stage5e-12';
   if (startWave >= 31) return 'stage5e-11';
   return 'stage5e-9';
 }
 
-function reportPrefix(waveNum: number, stage: string) {
+function reportPrefix(waveNum: number, stage: string, proofWave161 = false) {
+  if (proofWave161 && waveNum === 161) return 'i18n-stage5e-15-wave-161-proof';
   return `i18n-${stage}-relaxed-wave-${waveNum}`;
 }
 
 function parseArgs() {
+  const startWave = Number(process.argv.find((a) => a.startsWith('--start-wave='))?.split('=')[1] ?? '21');
+  const targetCap = startWave >= 161 ? 20000 : 10000;
   const target = Math.min(
-    10000,
+    targetCap,
     Number(process.argv.find((a) => a.startsWith('--target='))?.split('=')[1] ?? '500')
   );
   const waveSizeArg = Number(process.argv.find((a) => a.startsWith('--wave-size='))?.split('=')[1] ?? '0');
   const maxWaves = Number(process.argv.find((a) => a.startsWith('--max-waves='))?.split('=')[1] ?? '999');
-  const startWave = Number(process.argv.find((a) => a.startsWith('--start-wave='))?.split('=')[1] ?? '21');
   const dryRunOnly = process.argv.includes('--dry-run-only');
   const requireFullWave = !process.argv.includes('--allow-partial-wave');
   return { target, waveSizeArg, maxWaves, startWave, dryRunOnly, requireFullWave };
@@ -62,7 +65,14 @@ function runRegression() {
   execSync('npx tsx --test lib/i18n/__tests__/*.test.ts', { stdio: 'inherit', cwd: process.cwd() });
 }
 
-function checkpointReportPath(startWave: number, endWave: number): string {
+function checkpointReportPath(stage: string, startWave: number, endWave: number): string {
+  if (stage === 'stage5e-15') {
+    return join(
+      process.cwd(),
+      'reports/seo',
+      `i18n-stage5e-15-waves-${startWave}-${endWave}-checkpoint-${DATE}.md`
+    );
+  }
   if (startWave >= 81) {
     return join(
       process.cwd(),
@@ -78,11 +88,13 @@ function checkpointReportPath(startWave: number, endWave: number): string {
 }
 
 async function writeCheckpoint(
+  stage: string,
   startWave: number,
   endWave: number,
   startEs: number,
   startFr: number,
-  netNewSoFar: number
+  netNewSoFar: number,
+  options?: { extendedProduction?: boolean }
 ) {
   const es = await countSitemapEligibleEsScholarshipDetails();
   const fr = await countSitemapEligibleFrScholarshipDetails();
@@ -105,11 +117,50 @@ async function writeCheckpoint(
     issues.push('build/tsc/tests failed');
   }
 
+  if (options?.extendedProduction && stage === 'stage5e-15') {
+    loadEnvLocal();
+    const db = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+    const { data: samples } = await db
+      .from('content_translations')
+      .select('translated_slug')
+      .eq('source_type', 'scholarship_detail')
+      .eq('locale', 'es')
+      .eq('status', 'published')
+      .limit(50);
+    for (const row of samples ?? []) {
+      const slug = String(row.translated_slug ?? '').trim();
+      if (!slug) continue;
+      for (const p of [`/scholarships/${slug}`, `/es/scholarships/${slug}`, `/fr/scholarships/${slug}`]) {
+        const st = (await fetch(`${BASE}${p}`, { redirect: 'manual' })).status;
+        if (st !== 200) issues.push(`sample ${p} ${st}`);
+      }
+    }
+    for (let i = 0; i < 15; i++) {
+      const slug = `unseeded-5e15-cp-${endWave}-${i}`;
+      for (const loc of ['es', 'fr']) {
+        const st = (await fetch(`${BASE}/${loc}/scholarships/${slug}`, { redirect: 'manual' })).status;
+        if (st !== 404) issues.push(`unseeded ${loc} ${slug} ${st}`);
+      }
+    }
+    if ((await fetch(`${BASE}/es/scholarships/category/stem`)).status !== 200) issues.push('category ES');
+    if ((await fetch(`${BASE}/es/resources/how-to-apply-for-scholarships`)).status !== 200) {
+      issues.push('resource ES');
+    }
+    if ((await fetch(`${BASE}/es/providers/loyola-university-chicago`)).status !== 200) {
+      issues.push('provider ES');
+    }
+  }
+
   const passed = !issues.length && buildOk;
   const title =
-    startWave >= 81
-      ? `Stage 5E-14 checkpoint waves ${startWave}–${endWave}`
-      : `12-hour checkpoint waves ${startWave}–${endWave}`;
+    stage === 'stage5e-15'
+      ? `Stage 5E-15 checkpoint waves ${startWave}–${endWave}`
+      : startWave >= 81
+        ? `Stage 5E-14 checkpoint waves ${startWave}–${endWave}`
+        : `12-hour checkpoint waves ${startWave}–${endWave}`;
   const body = `# ${title} (${DATE})
 
 | Metric | Value |
@@ -123,7 +174,7 @@ async function writeCheckpoint(
 
 ${issues.length ? issues.map((i) => `- ${i}`).join('\n') : '- no issues'}
 `;
-  const path = checkpointReportPath(startWave, endWave);
+  const path = checkpointReportPath(stage, startWave, endWave);
   mkdirSync(join(process.cwd(), 'reports/seo'), { recursive: true });
   writeFileSync(path, body, 'utf8');
   console.log('[relaxed] checkpoint', path, passed ? 'PASS' : 'FAIL');
@@ -132,9 +183,20 @@ ${issues.length ? issues.map((i) => `- ${i}`).join('\n') : '- no issues'}
 
 async function main() {
   const { target, waveSizeArg, maxWaves, startWave, dryRunOnly, requireFullWave } = parseArgs();
-  const defaultWaveSize = Math.min(50, waveSizeArg || 50);
   const stage = reportStage(startWave);
+  const defaultWaveSize = waveSizeArg > 0 ? waveSizeArg : 50;
+  const maxWaveSizeCap = stage === 'stage5e-15' ? defaultWaveSize : Math.min(50, defaultWaveSize);
+  const proofWave161 = stage === 'stage5e-15' && startWave === 161 && target <= 150;
   const netNewGuard = startWave >= 31;
+  const logPath = join(
+    process.cwd(),
+    'reports/seo',
+    stage === 'stage5e-15'
+      ? `i18n-stage5e-15-wave150-autopilot-run-log-${DATE}.txt`
+      : startWave >= 81
+        ? `i18n-stage5e-14-large-autopilot-run-log-${DATE}.txt`
+        : `i18n-relaxed-autopilot-run-log-${DATE}.txt`
+  );
 
   loadEnvLocal();
   const db = createClient(
@@ -142,7 +204,16 @@ async function main() {
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
 
-  console.log('[relaxed] start', { target, startWave, stage, netNewGuard, dryRun: isDryRun() });
+  console.log('[relaxed] start', {
+    target,
+    startWave,
+    stage,
+    defaultWaveSize,
+    maxWaveSizeCap,
+    netNewGuard,
+    logPath,
+    dryRun: isDryRun()
+  });
 
   const startEs = await countSitemapEligibleEsScholarshipDetails();
   const startFr = await countSitemapEligibleFrScholarshipDetails();
@@ -184,7 +255,9 @@ async function main() {
     const waveNum = startWave + summary.wavesAttempted;
     const remaining = effectiveTarget - summary.netNewScholarships;
     const bucketPreview = allCandidates.slice(candidateOffset, candidateOffset + defaultWaveSize);
-    const waveSize = Math.min(pickWaveSize(bucketPreview, defaultWaveSize), remaining, 50);
+    const tierAdjusted =
+      stage === 'stage5e-15' ? defaultWaveSize : pickWaveSize(bucketPreview, defaultWaveSize);
+    const waveSize = Math.min(tierAdjusted, remaining, maxWaveSizeCap);
     const waveCandidates = allCandidates.slice(candidateOffset, candidateOffset + waveSize);
     if (!waveCandidates.length) {
       summary.stoppedReason = 'publishable pool exhausted';
@@ -216,7 +289,7 @@ async function main() {
     summary.wavesAttempted++;
 
     const model = relaxedMachineModel(waveNum);
-    const prefix = reportPrefix(waveNum, stage);
+    const prefix = reportPrefix(waveNum, stage, proofWave161);
     const esBefore = currentEs;
     const frBefore = currentFr;
     const idsBefore = translatedBefore.size;
@@ -311,7 +384,7 @@ async function main() {
       `[relaxed] wave ${waveNum} ACCEPTED net-new=${waveCandidates.length} ES ${esBefore}->${currentEs} FR ${frBefore}->${currentFr}`
     );
 
-    if (summary.wavesAccepted % 2 === 0 && !isDryRun()) {
+    if (stage !== 'stage5e-15' && summary.wavesAccepted % 2 === 0 && !isDryRun()) {
       try {
         runRegression();
       } catch {
@@ -320,8 +393,27 @@ async function main() {
       }
     }
 
-    if (
+    if (stage === 'stage5e-15' && summary.wavesAccepted > 0 && summary.wavesAccepted % 5 === 0 && !isDryRun()) {
+      const blockEnd = startWave + summary.wavesAccepted - 1;
+      const blockStart = blockEnd - 4;
+      try {
+        runRegression();
+        await writeCheckpoint(
+          stage,
+          blockStart,
+          blockEnd,
+          summary.startEs,
+          summary.startFr,
+          summary.netNewScholarships,
+          { extendedProduction: summary.wavesAccepted % 10 === 0 }
+        );
+      } catch (e) {
+        summary.stoppedReason = String(e);
+        break;
+      }
+    } else if (
       startWave >= 41 &&
+      startWave < 161 &&
       summary.wavesAccepted > 0 &&
       summary.wavesAccepted % 10 === 0 &&
       !isDryRun()
@@ -330,6 +422,7 @@ async function main() {
       const blockStart = blockEnd - 9;
       try {
         await writeCheckpoint(
+          stage,
           blockStart,
           blockEnd,
           summary.startEs,
@@ -349,7 +442,9 @@ async function main() {
   const finalFr = await countSitemapEligibleFrScholarshipDetails();
 
   const masterName =
-    startWave >= 81
+    stage === 'stage5e-15'
+      ? `i18n-stage5e-15-wave150-scholarship-autopilot-master-report-${DATE}.md`
+      : startWave >= 81
       ? `i18n-stage5e-14-large-scholarship-autopilot-master-report-${DATE}.md`
       : startWave >= 41
         ? `i18n-12hour-scholarship-autopilot-master-report-2026-05-24.md`
@@ -357,7 +452,9 @@ async function main() {
           ? `i18n-stage5e-11-relaxed-autopilot-wave31-plus-master-report-${DATE}.md`
           : `i18n-stage5e-9-scholarship-relaxed-autopilot-master-report-${DATE}.md`;
   const handoffName =
-    startWave >= 81
+    stage === 'stage5e-15'
+      ? `i18n-stage5e-15-wave150-scholarship-autopilot-chatgpt-handoff-${DATE}.md`
+      : startWave >= 81
       ? `i18n-stage5e-14-large-scholarship-autopilot-chatgpt-handoff-${DATE}.md`
       : startWave >= 41
         ? `i18n-12hour-scholarship-autopilot-chatgpt-handoff-2026-05-24.md`
