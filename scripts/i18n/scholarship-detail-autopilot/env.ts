@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-export const DATE = process.env.REPORT_DATE ?? '2026-05-23';
+export const DATE = process.env.REPORT_DATE ?? '2026-05-24';
 export const BASE = (process.env.SMOKE_BASE_URL ?? 'https://scholarshiptop.com').replace(/\/$/, '');
 export const IQ = (process.env.IQ_SMOKE_BASE_URL ?? 'https://iq.scholarshiptop.com').replace(/\/$/, '');
 

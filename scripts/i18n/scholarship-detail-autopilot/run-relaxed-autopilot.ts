@@ -27,6 +27,7 @@ function relaxedMachineModel(waveNum: number) {
 }
 
 function reportStage(startWave: number): string {
+  if (startWave >= 81) return 'stage5e-14';
   if (startWave >= 41) return 'stage5e-12';
   if (startWave >= 31) return 'stage5e-11';
   return 'stage5e-9';
@@ -38,7 +39,7 @@ function reportPrefix(waveNum: number, stage: string) {
 
 function parseArgs() {
   const target = Math.min(
-    5000,
+    10000,
     Number(process.argv.find((a) => a.startsWith('--target='))?.split('=')[1] ?? '500')
   );
   const waveSizeArg = Number(process.argv.find((a) => a.startsWith('--wave-size='))?.split('=')[1] ?? '0');
@@ -59,6 +60,21 @@ function runRegression() {
   console.log('[relaxed] regression: tsc + i18n tests');
   execSync('npx tsc --noEmit', { stdio: 'inherit', cwd: process.cwd() });
   execSync('npx tsx --test lib/i18n/__tests__/*.test.ts', { stdio: 'inherit', cwd: process.cwd() });
+}
+
+function checkpointReportPath(startWave: number, endWave: number): string {
+  if (startWave >= 81) {
+    return join(
+      process.cwd(),
+      'reports/seo',
+      `i18n-stage5e-14-waves-${startWave}-${endWave}-checkpoint-${DATE}.md`
+    );
+  }
+  return join(
+    process.cwd(),
+    'reports/seo',
+    `i18n-12hour-scholarship-autopilot-waves-${startWave}-${endWave}-checkpoint-${DATE}.md`
+  );
 }
 
 async function writeCheckpoint(
@@ -90,7 +106,11 @@ async function writeCheckpoint(
   }
 
   const passed = !issues.length && buildOk;
-  const body = `# 12-hour checkpoint waves ${startWave}–${endWave} (${DATE})
+  const title =
+    startWave >= 81
+      ? `Stage 5E-14 checkpoint waves ${startWave}–${endWave}`
+      : `12-hour checkpoint waves ${startWave}–${endWave}`;
+  const body = `# ${title} (${DATE})
 
 | Metric | Value |
 |--------|-------|
@@ -103,11 +123,8 @@ async function writeCheckpoint(
 
 ${issues.length ? issues.map((i) => `- ${i}`).join('\n') : '- no issues'}
 `;
-  const path = join(
-    process.cwd(),
-    'reports/seo',
-    `i18n-12hour-scholarship-autopilot-waves-${startWave}-${endWave}-checkpoint-${DATE}.md`
-  );
+  const path = checkpointReportPath(startWave, endWave);
+  mkdirSync(join(process.cwd(), 'reports/seo'), { recursive: true });
   writeFileSync(path, body, 'utf8');
   console.log('[relaxed] checkpoint', path, passed ? 'PASS' : 'FAIL');
   if (!passed) throw new Error(`checkpoint ${startWave}-${endWave} failed: ${issues.join('; ')}`);
@@ -332,17 +349,21 @@ async function main() {
   const finalFr = await countSitemapEligibleFrScholarshipDetails();
 
   const masterName =
-    startWave >= 41
-      ? `i18n-12hour-scholarship-autopilot-master-report-2026-05-24.md`
-      : startWave >= 31
-        ? `i18n-stage5e-11-relaxed-autopilot-wave31-plus-master-report-${DATE}.md`
-        : `i18n-stage5e-9-scholarship-relaxed-autopilot-master-report-${DATE}.md`;
+    startWave >= 81
+      ? `i18n-stage5e-14-large-scholarship-autopilot-master-report-${DATE}.md`
+      : startWave >= 41
+        ? `i18n-12hour-scholarship-autopilot-master-report-2026-05-24.md`
+        : startWave >= 31
+          ? `i18n-stage5e-11-relaxed-autopilot-wave31-plus-master-report-${DATE}.md`
+          : `i18n-stage5e-9-scholarship-relaxed-autopilot-master-report-${DATE}.md`;
   const handoffName =
-    startWave >= 41
-      ? `i18n-12hour-scholarship-autopilot-chatgpt-handoff-2026-05-24.md`
-      : startWave >= 31
-        ? `i18n-stage5e-11-relaxed-autopilot-wave31-plus-chatgpt-handoff-${DATE}.md`
-        : `i18n-stage5e-9-scholarship-relaxed-autopilot-chatgpt-handoff-${DATE}.md`;
+    startWave >= 81
+      ? `i18n-stage5e-14-large-scholarship-autopilot-chatgpt-handoff-${DATE}.md`
+      : startWave >= 41
+        ? `i18n-12hour-scholarship-autopilot-chatgpt-handoff-2026-05-24.md`
+        : startWave >= 31
+          ? `i18n-stage5e-11-relaxed-autopilot-wave31-plus-chatgpt-handoff-${DATE}.md`
+          : `i18n-stage5e-9-scholarship-relaxed-autopilot-chatgpt-handoff-${DATE}.md`;
 
   const masterPath = join(process.cwd(), 'reports/seo', masterName);
   const handoffPath = join(process.cwd(), 'reports/seo', handoffName);
