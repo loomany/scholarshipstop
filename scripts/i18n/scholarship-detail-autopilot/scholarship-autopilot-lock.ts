@@ -53,9 +53,14 @@ export async function tryAcquireScholarshipAutopilotLock(runId: string): Promise
 
 export async function releaseScholarshipAutopilotLock(runId: string): Promise<void> {
   const db = supabaseAdmin();
-  const { data, error } = await db.rpc('i18n_scholarship_autopilot_unlock');
+  const { data, error } = await db.rpc('i18n_scholarship_autopilot_unlock_run', { p_run_id: runId });
   if (error) {
-    console.warn('[worker-lock] release error', { runId, message: error.message });
+    const fallback = await db.rpc('i18n_scholarship_autopilot_unlock');
+    if (fallback.error) {
+      console.warn('[worker-lock] release error', { runId, message: error.message });
+      return;
+    }
+    console.log('[worker-lock] released (fallback unlock)', { runId, unlocked: fallback.data === true });
     return;
   }
   console.log('[worker-lock] released', { runId, unlocked: data === true });
