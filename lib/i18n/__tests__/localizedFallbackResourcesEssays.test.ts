@@ -5,6 +5,7 @@ import { essayHubArticlePath } from '@/lib/essays/essayHubSection';
 import type { ContentPostRow } from '@/lib/content-hub/contentPostListTypes';
 import { resourcesArticlePath } from '@/lib/content-hub/resourcesSection';
 import { getEnglishFallbackNotice } from '@/lib/i18n/englishFallbackNotice';
+import { getNotFoundUiCopy } from '@/lib/i18n/notFoundUiCopy';
 import { buildEnglishFallbackPageMetadata } from '@/lib/i18n/localizedContentFallbackMetadata';
 import { getDetailLanguageSwitcherItems } from '@/lib/i18n/detailLanguageSwitcher';
 import {
@@ -13,6 +14,15 @@ import {
 } from '@/lib/i18n/localizedHref';
 import { buildEnglishFallbackEssayPageCopy } from '@/lib/i18n/essayPilot/essayDetailTranslationGate';
 import { buildEnglishFallbackResourcePageCopy } from '@/lib/i18n/resourcePilot/resourcePageCopy';
+
+test('not found UI copy for es and fr', () => {
+  assert.equal(getNotFoundUiCopy('es').title, 'Página no encontrada');
+  assert.match(getNotFoundUiCopy('es').body, /no existe o se ha movido/);
+  assert.equal(getNotFoundUiCopy('es').home, 'Volver al inicio');
+  assert.equal(getNotFoundUiCopy('fr').title, 'Page introuvable');
+  assert.match(getNotFoundUiCopy('fr').body, /n’existe pas ou a été déplacée/);
+  assert.equal(getNotFoundUiCopy('fr').home, 'Retour à l’accueil');
+});
 
 test('english fallback notice copy for es and fr', () => {
   assert.match(getEnglishFallbackNotice('es'), /inglés/i);
