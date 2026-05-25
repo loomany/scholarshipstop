@@ -184,4 +184,37 @@ npx tsx scripts/i18n/scholarship-detail-autopilot/audit-waves-181-plus.ts
 - [x] Sitemap **13051/13051**, no `/en` detail pollution
 - [x] Next run **`I18N_WORKER_START_WAVE=188`** after guard deploy
 - [x] **No rollback** required for public site health
-- [ ] Deploy guard code + Railway restart policy fix before any new run
+- [x] Guard code pushed to `main` — commit **`4fb3eb6`**
+- [ ] Railway worker service redeployed from `main` @ `4fb3eb6` (manual; CLI unauthorized)
+- [ ] Railway auto-deploy **OFF**, restart policy **Never**, public domain **OFF**
+- [ ] Railway env updated (see below); **do not** set `I18N_WORKER_FORCE_START_WAVE=1`
+
+## Wave 188+ deploy (2026-05-25)
+
+**Guard commit:** `4fb3eb6` on `main`
+
+**Pre-run status (local):**
+
+```json
+{
+  "liveEs": 13051,
+  "liveFr": 13051,
+  "advisoryLockHeld": false,
+  "nextSafeStartWave": 188,
+  "badSitemapContent": false
+}
+```
+
+**Railway variables (set before manual run):**
+
+```
+I18N_WORKER_START_WAVE=188
+I18N_WORKER_TARGET=900
+I18N_WORKER_WAVE_SIZE=150
+I18N_WORKER_MAX_RUNTIME_MINUTES=600
+I18N_WORKER_REQUIRE_LOCK=1
+```
+
+**Expected:** waves 188–193, sitemap 13051 → 13951, exit 0, lock released.
+
+**Stop run if:** same wave restarts, DB verify mismatch, lock stuck, sitemap delta wrong, `/en`/draft/review/English fallback.
