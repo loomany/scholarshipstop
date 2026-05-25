@@ -1,37 +1,40 @@
 import Link from 'next/link';
 
+import { HUB_INTERNATIONAL_SEGMENT } from '@/app/scholarships/scholarshipHubPath';
+import { getCompareStateDetailUiCopy } from '@/lib/i18n/compareStateDetailUiCopy';
 import {
-  HUB_INTERNATIONAL_SEGMENT,
-  tabToHubPath
-} from '@/app/scholarships/scholarshipHubPath';
-import {
-  RESOURCES_PAGE_TITLE,
-  RESOURCES_SECTION_PATH
-} from '@/lib/content-hub/resourcesSection';
-import {
-  ESSAYS_PAGE_TITLE,
-  ESSAYS_SECTION_PATH
-} from '@/lib/essays/essayHubSection';
+  hrefForLocalizedUiRequired,
+  localizedScholarshipHubTabHref,
+  type LocalizedUiLocale
+} from '@/lib/i18n/localizedHref';
 
-const hubExploreLinks = [
-  {
-    href: tabToHubPath('matches'),
-    label: 'Recommended matches browsing'
-  },
-  {
-    href: tabToHubPath(HUB_INTERNATIONAL_SEGMENT),
-    label: 'International-friendly spotlight'
-  },
-  {
-    href: tabToHubPath('easy-apply'),
-    label: 'Easier applications & streamlined forms'
-  }
-] as const;
+type CompareExploreRelatedScholarshipsProps = {
+  locale?: LocalizedUiLocale;
+};
 
 /**
  * Structured cross-links from compare detail pages into product hubs and editorial zones.
  */
-export default function CompareExploreRelatedScholarships() {
+export default function CompareExploreRelatedScholarships({
+  locale = 'en'
+}: CompareExploreRelatedScholarshipsProps) {
+  const ui = getCompareStateDetailUiCopy(locale);
+  const hubExploreLinks = [
+    {
+      href: localizedScholarshipHubTabHref(locale, 'matches'),
+      label: ui.exploreMatches
+    },
+    {
+      href: localizedScholarshipHubTabHref(locale, HUB_INTERNATIONAL_SEGMENT),
+      label: ui.exploreInternational
+    },
+    {
+      href: localizedScholarshipHubTabHref(locale, 'easy-apply'),
+      label: ui.exploreEasyApply
+    }
+  ] as const;
+  const resourcesHref = hrefForLocalizedUiRequired(locale, '/resources');
+
   return (
     <section
       id="compare-explore-related-scholarships"
@@ -42,12 +45,10 @@ export default function CompareExploreRelatedScholarships() {
         id="compare-explore-hub-heading"
         className="text-xl font-bold tracking-tight text-gray-900"
       >
-        Explore related scholarships
+        {ui.exploreHeading}
       </h2>
       <p className="mt-3 text-sm leading-relaxed text-gray-600 sm:text-base">
-        Continue from this comparison into ScholarshipTop hubs tuned for discovery speed, visas,
-        and lighter-touch applications—then deepen planning with evergreen essays and resource
-        articles when you need narrative or policy context.
+        {ui.exploreIntro}
       </p>
       <ul className="mt-5 space-y-3 text-sm leading-relaxed sm:text-base">
         {hubExploreLinks.map((entry) => (
@@ -63,16 +64,16 @@ export default function CompareExploreRelatedScholarships() {
       </ul>
       <div className="mt-6 flex flex-col gap-3 rounded-xl border border-gray-100 bg-white/80 p-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
         <Link
-          href={ESSAYS_SECTION_PATH}
+          href={hrefForLocalizedUiRequired(locale, '/essays')}
           className="inline-flex items-center gap-2 text-base font-semibold text-indigo-800 underline decoration-indigo-400/55 underline-offset-4 transition hover:text-indigo-950 hover:decoration-indigo-700"
         >
-          {ESSAYS_PAGE_TITLE}
+          {ui.exploreEssaysLink}
         </Link>
         <Link
-          href={RESOURCES_SECTION_PATH}
+          href={resourcesHref}
           className="inline-flex items-center gap-2 text-base font-semibold text-emerald-800 underline decoration-emerald-400/55 underline-offset-4 transition hover:text-emerald-950 hover:decoration-emerald-700"
         >
-          {RESOURCES_PAGE_TITLE}
+          {ui.exploreResourcesLink}
         </Link>
       </div>
     </section>

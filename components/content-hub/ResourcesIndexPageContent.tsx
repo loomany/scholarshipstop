@@ -42,16 +42,27 @@ import {
 } from '@/lib/i18n/localizedHref';
 import type { Stage2PilotLocale } from '@/lib/i18n/pilotRoutes';
 import {
-  buildStaticResourceGuideEntries,
-  filterStaticResourceGuides
-} from '@/lib/i18n/staticResourceHub';
-import {
-  RESOURCE_CATEGORY_ORDER,
-  type ResourceCategoryId
-} from '@/lib/content-hub/resourceTaxonomy';
-import { listPublishedResourceArticleTranslations } from '@/lib/i18n/resourcePilot/listPublishedResourceArticleTranslations';
+  listPublishedResourceArticleTranslations,
+  type PublishedResourceArticleTranslationSummary
+} from '@/lib/i18n/resourcePilot/listPublishedResourceArticleTranslations';
 
-const MIN_TRANSLATED_RESOURCES_FOR_LOCALE_GRID = 10;
+function overlayResourceListTranslations(
+  posts: ContentPostListFields[],
+  bySourceId: Map<string, PublishedResourceArticleTranslationSummary>
+): ContentPostListFields[] {
+  return posts.map((post) => {
+    const t = bySourceId.get(post.id);
+    if (!t) return post;
+    const title = t.translatedTitle?.trim();
+    const meta = t.translatedSummary?.trim();
+    if (!title && !meta) return post;
+    return {
+      ...post,
+      ...(title ? { title } : {}),
+      ...(meta ? { meta_description: meta } : {})
+    };
+  });
+}
 
 const baseTitle = `${RESOURCES_PAGE_TITLE} — Guides & Tips`;
 const baseDescription =
@@ -381,7 +392,9 @@ function ResourcesGrid({
   hrefForPath,
   iq,
   showIqPromoInGrid = true,
-  locale = 'en'
+  locale = 'en',
+  translatedSourceIds,
+  noMatchesLabel
 }: {
   posts: ContentPostListFields[];
   fallbackCoverByPostId: Map<string, string>;
@@ -390,6 +403,8 @@ function ResourcesGrid({
   /** AI pack hub (`?cat=ai`) hides the grid IQ card (avoids “Type ???” promo tile). */
   showIqPromoInGrid?: boolean;
   locale?: import('@/lib/i18n/localizedHref').LocalizedUiLocale;
+  translatedSourceIds?: Set<string>;
+  noMatchesLabel: string;
 }) {
   const readMore = getHubToolbarUiCopy(locale).readMore;
   const withSlug = rebalanceAdjacentDuplicateCovers(
@@ -398,9 +413,7 @@ function ResourcesGrid({
   );
   if (withSlug.length === 0) {
     return (
-      <p className="mt-12 text-center text-gray-600">
-        No guides match your filters. Try clearing search or categories.
-      </p>
+      <p className="mt-12 text-center text-gray-600">{noMatchesLabel}</p>
     );
   }
   return (
@@ -409,7 +422,12 @@ function ResourcesGrid({
         const slug = post.slug!.trim();
         const title = post.title?.trim() || 'Untitled';
         const desc = post.meta_description?.trim() || '';
-        const href = hrefForPath(resourcesArticlePath(slug));
+        const hasTranslation =
+          locale === 'en' ||
+          (translatedSourceIds?.has(post.id) ?? false);
+        const href = hasTranslation
+          ? hrefForPath(resourcesArticlePath(slug))
+          : resourcesArticlePath(slug);
         const coverSrc = resolveCoverSrc(post, fallbackCoverByPostId);
         return (
           <Fragment key={post.id}>
@@ -486,27 +504,19 @@ export async function ResourcesIndexPageContent({
       fetchAllPublishedContentPostsListFields(),
       fetchLatestPublishedEssayHubList(240),
       locale !== 'en'
-        ? listPublishedResourceArticleTranslations()
+        ? listPublishedResourceArticleTranslations({ locale })
         : Promise.resolve([])
     ]);
 
-  const translatedIdsForLocale = new Set(
-    resourceTranslationSummaries
-      .filter((row) => row.locale === locale)
-      .map((row) => row.sourceId)
+  const translationBySourceId = new Map(
+    resourceTranslationSummaries.map((row) => [row.sourceId, row])
   );
-  const translatedResourceCount = resourceTranslationSummaries.filter(
-    (row) => row.locale === locale
-  ).length;
+  const translatedIdsForLocale = new Set(translationBySourceId.keys());
 
   const postsForLocale =
     locale === 'en'
       ? allPosts
-      : allPosts.filter((post) => translatedIdsForLocale.has(post.id));
-
-  const showLocaleDbGrid =
-    locale === 'en' ||
-    translatedResourceCount >= MIN_TRANSLATED_RESOURCES_FOR_LOCALE_GRID;
+      : overlayResourceListTranslations(allPosts, translationBySourceId);
 
   const classified = classifyResourcePosts(postsForLocale);
   const essayCovers = latestEssays
@@ -551,22 +561,6 @@ export async function ResourcesIndexPageContent({
     total === 0 ? 0 : Math.min(currentPage * pageSize, total);
 
   const hasAnyPublished = postsForLocale.some((p) => p.slug?.trim());
-  const staticEntries =
-    locale !== 'en' ? buildStaticResourceGuideEntries(locale) : [];
-  const staticFiltered =
-    locale !== 'en'
-      ? filterStaticResourceGuides(staticEntries, queryState)
-      : [];
-  const staticGuideSlugs = staticFiltered.map((entry) => entry.slug);
-  const showStaticResourcesToolbar =
-    locale !== 'en' && !showLocaleDbGrid && staticEntries.length > 0;
-  const emptyStaticCategoryCounts = RESOURCE_CATEGORY_ORDER.reduce(
-    (acc, id) => {
-      acc[id] = 0;
-      return acc;
-    },
-    {} as Record<ResourceCategoryId, number>
-  );
   const breadcrumbsSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -656,137 +650,72 @@ export async function ResourcesIndexPageContent({
           </ol>
         </nav>
 
-        {/*
-          ES/FR: show DB grid only for content_posts with published resource_article
-          translations (Stage 4D pilot). Untranslated English CMS cards stay hidden.
-        */}
-        {locale === 'en' || showLocaleDbGrid ? (
-          <div
-            className={
-              hideIqPromoOnHub
-                ? 'mt-8'
-                : 'mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start xl:grid-cols-[minmax(0,1fr)_400px]'
-            }
-          >
-            <div className="min-w-0">
-              <header className="max-w-3xl">
-                <h1 className="text-[2.25rem] font-bold leading-[1.08] tracking-tight text-gray-900 sm:text-4xl lg:text-[2.5rem] lg:leading-[1.1]">
-                  {ui.h1}
-                </h1>
-                <p className="mt-4 text-lg leading-relaxed text-gray-600 sm:text-xl sm:leading-relaxed">
-                  {ui.intro}
-                </p>
-              </header>
+        <div
+          className={
+            hideIqPromoOnHub
+              ? 'mt-8'
+              : 'mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start xl:grid-cols-[minmax(0,1fr)_400px]'
+          }
+        >
+          <div className="min-w-0">
+            <header className="max-w-3xl">
+              <h1 className="text-[2.25rem] font-bold leading-[1.08] tracking-tight text-gray-900 sm:text-4xl lg:text-[2.5rem] lg:leading-[1.1]">
+                {ui.h1}
+              </h1>
+              <p className="mt-4 text-lg leading-relaxed text-gray-600 sm:text-xl sm:leading-relaxed">
+                {ui.intro}
+              </p>
+            </header>
 
-              {hasAnyPublished ? (
-                <Suspense
-                  fallback={
-                    <div
-                      className="mt-6 h-24 max-w-3xl animate-pulse rounded-2xl bg-gray-100"
-                      aria-hidden
-                    />
-                  }
-                >
-                  <ResourcesIndexToolbar
-                    locale={locale}
-                    categoryCounts={categoryCounts}
-                    resultCount={total}
-                    showingFrom={showingFrom}
-                    showingTo={showingTo}
+            {hasAnyPublished ? (
+              <Suspense
+                fallback={
+                  <div
+                    className="mt-6 h-24 max-w-3xl animate-pulse rounded-2xl bg-gray-100"
+                    aria-hidden
                   />
-                </Suspense>
-              ) : null}
-            </div>
-
-            {!hideIqPromoOnHub ? (
-              <aside className="min-w-0 lg:pt-8" aria-label="Cognitive assessment">
-                <ResourcesIqAssessmentCard iq={iqCopy} />
-              </aside>
+                }
+              >
+                <ResourcesIndexToolbar
+                  locale={locale}
+                  categoryCounts={categoryCounts}
+                  resultCount={total}
+                  showingFrom={showingFrom}
+                  showingTo={showingTo}
+                />
+              </Suspense>
             ) : null}
           </div>
-        ) : (
-          <div
-            className={
-              hideIqPromoOnHub
-                ? 'mt-8'
-                : 'mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start xl:grid-cols-[minmax(0,1fr)_400px]'
-            }
-          >
-            <div className="min-w-0">
-              <header className="max-w-3xl">
-                <h1 className="text-[2.25rem] font-bold leading-[1.08] tracking-tight text-gray-900 sm:text-4xl lg:text-[2.5rem] lg:leading-[1.1]">
-                  {ui.h1}
-                </h1>
-                <p className="mt-4 text-lg leading-relaxed text-gray-600 sm:text-xl sm:leading-relaxed">
-                  {ui.intro}
-                </p>
-              </header>
-              {showStaticResourcesToolbar ? (
-                <Suspense
-                  fallback={
-                    <div
-                      className="mt-6 h-24 max-w-3xl animate-pulse rounded-2xl bg-gray-100"
-                      aria-hidden
-                    />
-                  }
-                >
-                  <ResourcesIndexToolbar
-                    locale={locale}
-                    categoryCounts={emptyStaticCategoryCounts}
-                    resultCount={staticFiltered.length}
-                    showingFrom={staticFiltered.length === 0 ? 0 : 1}
-                    showingTo={staticFiltered.length}
-                  />
-                </Suspense>
-              ) : null}
-            </div>
-            {!hideIqPromoOnHub ? (
-              <aside className="min-w-0 lg:pt-8" aria-label="Cognitive assessment">
-                <ResourcesIqAssessmentCard iq={iqCopy} />
-              </aside>
-            ) : null}
-          </div>
-        )}
+
+          {!hideIqPromoOnHub ? (
+            <aside className="min-w-0 lg:pt-8" aria-label="Cognitive assessment">
+              <ResourcesIqAssessmentCard iq={iqCopy} />
+            </aside>
+          ) : null}
+        </div>
 
         <StaticScholarshipGuidesSection
           ui={ui}
           hrefForPath={hrefForPath}
           locale={locale}
-          guideSlugs={
-            locale !== 'en' && !showLocaleDbGrid ? staticGuideSlugs : undefined
-          }
         />
 
-        {locale === 'en' || showLocaleDbGrid ? (
-          !hasAnyPublished ? (
-            <p className="mt-12 text-center text-gray-600">
-              {ui.noPublished}
-            </p>
-          ) : (
-            <>
-              {locale !== 'en' && ui.translatedDbTitle ? (
-                <header className="mt-12 max-w-3xl">
-                  <p className="text-sm font-semibold uppercase tracking-wide text-orange-600">
-                    {ui.translatedDbEyebrow}
-                  </p>
-                  <h2 className="mt-2 text-2xl font-bold tracking-tight text-gray-900">
-                    {ui.translatedDbTitle}
-                  </h2>
-                </header>
-              ) : null}
-              <ResourcesGrid
-                posts={withSlug}
-                fallbackCoverByPostId={fallbackCoverByPostId}
-                hrefForPath={hrefForPath}
-                iq={iqCopy}
-                showIqPromoInGrid={!hideIqPromoOnHub}
-                locale={locale}
-              />
-            </>
-          )
-        ) : null}
+        {!hasAnyPublished ? (
+          <p className="mt-12 text-center text-gray-600">{ui.noPublished}</p>
+        ) : (
+          <ResourcesGrid
+            posts={withSlug}
+            fallbackCoverByPostId={fallbackCoverByPostId}
+            hrefForPath={hrefForPath}
+            iq={iqCopy}
+            showIqPromoInGrid={!hideIqPromoOnHub}
+            locale={locale}
+            translatedSourceIds={translatedIdsForLocale}
+            noMatchesLabel={ui.noMatches}
+          />
+        )}
 
-        {(locale === 'en' || showLocaleDbGrid) && hasAnyPublished && withSlug.length > 0 ? (
+        {hasAnyPublished && withSlug.length > 0 ? (
           <>
             {!hideIqPromoOnHub ? (
               <div className="mt-6 lg:hidden">
@@ -794,6 +723,7 @@ export async function ResourcesIndexPageContent({
               </div>
             ) : null}
             <ResourcesPagination
+              locale={locale}
               currentPage={currentPage}
               totalPages={totalPages}
               buildHref={(page) =>

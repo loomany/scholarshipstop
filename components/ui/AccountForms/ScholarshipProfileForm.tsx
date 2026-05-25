@@ -66,9 +66,11 @@ import {
   accountCitizenshipSelectOptions,
   accountFieldOfStudySelectOptions,
   accountGpaSelectOptions,
+  accountLocalizedSubscriptionBadge,
   accountSchoolLevelSelectOptions,
   getAccountProfileUiCopy
 } from '@/lib/i18n/accountProfileUiCopy';
+import { getLocalizedCountryLabel } from '@/lib/i18n/taxonomyLabels';
 
 type ProfilesRow = Database['public']['Tables']['profiles']['Row'];
 type Subscription = Tables<'subscriptions'>;
@@ -852,19 +854,28 @@ export default function ScholarshipProfileForm({
   }, []);
   useEffect(() => {
     if (includeUnspecifiedApplicantCountries) {
-      setApplicantCountryInput('Citizenship not specified');
+      setApplicantCountryInput(t.citizenshipNotSpecified);
       return;
     }
     if (selectedCountryCode) {
       setApplicantCountryInput(
         selectedCountryCode === 'US'
-          ? 'United States (America)'
-          : countryLabelFromCode(selectedCountryCode)
+          ? `${getLocalizedCountryLabel('US', uiLocale, countryLabelFromCode('US'))} (America)`
+          : getLocalizedCountryLabel(
+              selectedCountryCode,
+              uiLocale,
+              countryLabelFromCode(selectedCountryCode)
+            )
       );
       return;
     }
     setApplicantCountryInput('');
-  }, [includeUnspecifiedApplicantCountries, selectedCountryCode]);
+  }, [
+    includeUnspecifiedApplicantCountries,
+    selectedCountryCode,
+    t.citizenshipNotSpecified,
+    uiLocale
+  ]);
 
   useEffect(() => {
     if (!applicantCountryOpen) return;
@@ -892,10 +903,16 @@ export default function ScholarshipProfileForm({
         ? ''
         : raw;
     const rows = [
-      { value: 'CITIZENSHIP_NOT_SPECIFIED', label: 'Citizenship not specified' },
+      {
+        value: 'CITIZENSHIP_NOT_SPECIFIED',
+        label: t.citizenshipNotSpecified
+      },
       ...SCHOLARSHIP_COUNTRY_OPTIONS.map((country) => ({
         value: country.code,
-        label: country.code === 'US' ? 'United States (America)' : country.label
+        label:
+          country.code === 'US'
+            ? `${getLocalizedCountryLabel('US', uiLocale, country.label)} (America)`
+            : getLocalizedCountryLabel(country.code, uiLocale, country.label)
       }))
     ];
     if (!q) return rows;
@@ -904,7 +921,7 @@ export default function ScholarshipProfileForm({
       const code = row.value.toLowerCase();
       return label.includes(q) || code.includes(q);
     });
-  }, [applicantCountryInput, includeUnspecifiedApplicantCountries]);
+  }, [applicantCountryInput, includeUnspecifiedApplicantCountries, t.citizenshipNotSpecified, uiLocale]);
   const birthGridClass = `mt-2 grid w-full grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-3${
     isSaas ? '' : ' max-w-xl'
   }`;
@@ -988,7 +1005,7 @@ export default function ScholarshipProfileForm({
       {ACCOUNT_SHOW_DATE_OF_BIRTH_AND_PASSWORD_FIELDS ? birthDateFields : null}
 
       <label className={lc} htmlFor="spf-school">
-        School level
+        {t.labels.schoolLevel}
       </label>
       <div className={selectWrapClass}>
         <DarkSelect
@@ -1001,7 +1018,7 @@ export default function ScholarshipProfileForm({
       </div>
 
       <label className={lc} htmlFor="spf-major">
-        Field of study
+        {t.labels.fieldOfStudy}
       </label>
       <div className={selectWrapClass}>
         <DarkSelect
@@ -1016,12 +1033,12 @@ export default function ScholarshipProfileForm({
 
       <div className={eligibilityFieldBlockClass}>
         <label className={eligibilityLabelClass} htmlFor="spf-citizenship">
-          Citizenship
+          {t.labels.citizenship}
         </label>
         <div className={selectWrapClass}>
           <DarkSelect
             id="spf-citizenship"
-            ariaLabel="Citizenship"
+            ariaLabel={t.labels.citizenship}
             options={citizenshipSelectOptions}
             value={citizenshipStatus}
             onChange={setCitizenshipStatus}
@@ -1032,7 +1049,7 @@ export default function ScholarshipProfileForm({
 
       <div className={eligibilityFieldBlockClass}>
         <label className={eligibilityLabelClass} htmlFor="spf-country">
-          Applicant country
+          {t.labels.applicantCountry}
         </label>
         <div ref={applicantCountryRef} className={`${isSaas ? 'mt-0 w-full' : 'mt-0 w-full max-w-xl'} relative`}>
           <input
@@ -1095,10 +1112,11 @@ export default function ScholarshipProfileForm({
       </div>
       <div className={eligibilityFieldBlockClass}>
         <label className={eligibilityLabelClass} htmlFor="spf-study-dest-trigger">
-          Study in
+          {t.labels.studyIn}
         </label>
         <StudyDestinationCountriesField
           idPrefix="spf-study-dest"
+          uiLocale={uiLocale}
           disabled={submitting}
           selected={preferredStudyHostCountries}
           onChange={setPreferredStudyHostCountries}
@@ -1209,7 +1227,11 @@ export default function ScholarshipProfileForm({
       switch (subscriptionType) {
         case 'trial':
           return {
-            badgeLabel: subscriptionPresentation.label,
+            badgeLabel: accountLocalizedSubscriptionBadge(
+              uiLocale,
+              subscriptionPresentation.plan,
+              subscriptionPresentation.label
+            ),
             badgeClass: 'bg-orange-100 text-orange-700 font-medium ring-1 ring-orange-200',
             title: t.subscriptionUi.trial.title,
             subtitle: null,
@@ -1220,7 +1242,11 @@ export default function ScholarshipProfileForm({
           };
         case 'monthly':
           return {
-            badgeLabel: subscriptionPresentation.label,
+            badgeLabel: accountLocalizedSubscriptionBadge(
+              uiLocale,
+              subscriptionPresentation.plan,
+              subscriptionPresentation.label
+            ),
             badgeClass: 'bg-emerald-100 text-emerald-700 font-medium ring-1 ring-emerald-200',
             title: t.subscriptionUi.monthly.title,
             subtitle: t.subscriptionUi.monthly.subtitle,
@@ -1228,7 +1254,11 @@ export default function ScholarshipProfileForm({
           };
         case 'quarterly':
           return {
-            badgeLabel: subscriptionPresentation.label,
+            badgeLabel: accountLocalizedSubscriptionBadge(
+              uiLocale,
+              subscriptionPresentation.plan,
+              subscriptionPresentation.label
+            ),
             badgeClass: 'bg-blue-100 text-blue-700 font-medium ring-1 ring-blue-200',
             title: t.subscriptionUi.quarterly.title,
             subtitle: t.subscriptionUi.quarterly.subtitle,
@@ -1236,7 +1266,11 @@ export default function ScholarshipProfileForm({
           };
         case 'yearly':
           return {
-            badgeLabel: subscriptionPresentation.label,
+            badgeLabel: accountLocalizedSubscriptionBadge(
+              uiLocale,
+              subscriptionPresentation.plan,
+              subscriptionPresentation.label
+            ),
             badgeClass:
               'border border-amber-300 bg-violet-100 text-violet-800 font-medium ring-1 ring-violet-200',
             title: t.subscriptionUi.yearly.title,
@@ -1431,7 +1465,7 @@ export default function ScholarshipProfileForm({
                         : 'md:shrink-0 md:whitespace-nowrap'
                     }`}
                   >
-                    Subscription status
+                    {t.subscriptionStatusHeading}
                   </p>
                   <div
                     id="subscription-status"
@@ -1696,7 +1730,7 @@ export default function ScholarshipProfileForm({
                 autoComplete="family-name"
               />
               <label className={lc} htmlFor="spf-email">
-                Email
+                {t.labels.email}
               </label>
               <div className="relative mt-2 max-w-lg">
                 <input
@@ -1790,7 +1824,7 @@ export default function ScholarshipProfileForm({
             <h3 className="text-base font-semibold text-zinc-900">{t.sections.education}</h3>
             <div className="mt-4 space-y-1">
               <label className={lc} htmlFor="spf-school">
-                School level
+                {t.labels.schoolLevel}
               </label>
               <div className={selectWrapClass}>
                 <DarkSelect
@@ -1802,7 +1836,7 @@ export default function ScholarshipProfileForm({
                 />
               </div>
               <label className={lc} htmlFor="spf-major">
-                Field of study
+                {t.labels.fieldOfStudy}
               </label>
               <div className={selectWrapClass}>
                 <DarkSelect
@@ -1823,12 +1857,12 @@ export default function ScholarshipProfileForm({
             <div className="mt-4 space-y-1">
               <div className={eligibilityFieldBlockClass}>
                 <label className={eligibilityLabelClass} htmlFor="spf-citizenship">
-                  Citizenship
+                  {t.labels.citizenship}
                 </label>
                 <div className={selectWrapClass}>
                   <DarkSelect
                     id="spf-citizenship"
-                    ariaLabel="Citizenship"
+                    ariaLabel={t.labels.citizenship}
                     options={citizenshipSelectOptions}
                     value={citizenshipStatus}
                     onChange={setCitizenshipStatus}
@@ -1838,7 +1872,7 @@ export default function ScholarshipProfileForm({
               </div>
               <div className={eligibilityFieldBlockClass}>
                 <label className={eligibilityLabelClass} htmlFor="spf-country-saas">
-                  Applicant country
+                  {t.labels.applicantCountry}
                 </label>
                 <div ref={applicantCountryRef} className="relative mt-0 w-full">
                   <input
@@ -1874,7 +1908,9 @@ export default function ScholarshipProfileForm({
                   {applicantCountryOpen && !submitting ? (
                     <ul className="absolute left-0 right-0 top-[calc(100%+0.35rem)] z-[70] max-h-72 overflow-y-auto rounded-xl border border-zinc-200 bg-white py-1 shadow-lg ring-1 ring-black/5">
                       {applicantCountrySuggestions.length === 0 ? (
-                        <li className="px-4 py-2.5 text-sm text-zinc-500">No matches found.</li>
+                        <li className="px-4 py-2.5 text-sm text-zinc-500">
+                          {t.noMatchesFound}
+                        </li>
                       ) : (
                         applicantCountrySuggestions.map((option) => (
                           <li key={option.value}>
@@ -1903,10 +1939,11 @@ export default function ScholarshipProfileForm({
               </div>
               <div className={eligibilityFieldBlockClass}>
                 <label className={eligibilityLabelClass} htmlFor="spf-study-dest-saas-trigger">
-                  Study in
+                  {t.labels.studyIn}
                 </label>
                 <StudyDestinationCountriesField
                   idPrefix="spf-study-dest-saas"
+                  uiLocale={uiLocale}
                   disabled={submitting}
                   selected={preferredStudyHostCountries}
                   onChange={setPreferredStudyHostCountries}
@@ -1916,7 +1953,7 @@ export default function ScholarshipProfileForm({
               {showStateField ? (
                 <div className="mt-4">
                   <label className={lc} htmlFor="spf-state-saas" id="spf-state-saas-label">
-                    U.S. state
+                    {t.labels.usState}
                   </label>
                   <UsStateAutocomplete
                     id="spf-state-saas"
@@ -1929,18 +1966,18 @@ export default function ScholarshipProfileForm({
                     disabled={submitting}
                   />
                   <p className="mt-1 text-xs leading-5 text-zinc-500">
-                    Used for state-specific scholarships inside the U.S.
+                    {t.usStateHint}
                   </p>
                 </div>
               ) : null}
               <div className={eligibilityFieldBlockClass}>
                 <label className={eligibilityLabelClass} htmlFor="spf-gpa">
-                  GPA
+                  {t.labels.gpa}
                 </label>
                 <div className={selectWrapClass}>
                   <DarkSelect
                     id="spf-gpa"
-                    ariaLabel="GPA"
+                    ariaLabel={t.labels.gpa}
                     options={gpaProfileSelectOptions}
                     value={gpaChoice}
                     onChange={setGpaChoice}

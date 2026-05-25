@@ -41,7 +41,29 @@ import {
   sectionPathForLocale,
   type LocalizedUiLocale
 } from '@/lib/i18n/localizedHref';
+import {
+  listPublishedEssayGuideTranslations,
+  type PublishedEssayGuideTranslationSummary
+} from '@/lib/i18n/essayPilot/listPublishedEssayGuideTranslations';
 import type { Stage2PilotLocale } from '@/lib/i18n/pilotRoutes';
+
+function overlayEssayListTranslations(
+  posts: EssayListFields[],
+  bySourceId: Map<string, PublishedEssayGuideTranslationSummary>
+): EssayListFields[] {
+  return posts.map((post) => {
+    const t = bySourceId.get(post.id);
+    if (!t) return post;
+    const title = t.translatedTitle?.trim();
+    const meta = t.translatedSummary?.trim();
+    if (!title && !meta) return post;
+    return {
+      ...post,
+      ...(title ? { title } : {}),
+      ...(meta ? { meta_description: meta } : {})
+    };
+  });
+}
 
 const baseTitle = 'Scholarship Essay Guides & Examples (2026)';
 const baseDescription =
@@ -96,19 +118,33 @@ export async function EssaysIndexPageContent({
   const sectionPath = sectionPathForLocale(locale, ESSAYS_SECTION_PATH);
   const hrefForPath = (path: string) => hrefForLocalizedUiRequired(locale, path);
   const queryState = parseEssaysIndexSearchParams(searchParams);
+  const [hubPage, essayTranslationSummaries] = await Promise.all([
+    fetchEssaysHubIndexPage(queryState),
+    locale !== 'en'
+      ? listPublishedEssayGuideTranslations({ locale })
+      : Promise.resolve([])
+  ]);
   const {
     rows: indexRows,
     total,
     categoryOptions,
     anyPublished: hasAnyPublished
-  } = await fetchEssaysHubIndexPage(queryState);
+  } = hubPage;
+  const translationBySourceId = new Map(
+    essayTranslationSummaries.map((row) => [row.sourceId, row])
+  );
+  const translatedIdsForLocale = new Set(translationBySourceId.keys());
 
   const totalPages =
     total <= 0 ? 0 : Math.max(1, Math.ceil(total / ESSAYS_INDEX_PAGE_SIZE));
   const currentPage = queryState.page;
   const withSlug = indexRows.filter((p) => p.slug?.trim());
-  const displayRows =
+  const displayRowsRaw =
     currentPage === 1 ? prioritizeUniqueHeroImages(withSlug) : withSlug;
+  const displayRows =
+    locale === 'en'
+      ? displayRowsRaw
+      : overlayEssayListTranslations(displayRowsRaw, translationBySourceId);
 
   if (total > 0 && queryState.page > totalPages) {
     redirect(
@@ -135,8 +171,6 @@ export async function EssaysIndexPageContent({
     locale !== 'en'
       ? filterStaticEssayGuides(staticEntries, queryState)
       : [];
-  const showStaticEssaysToolbar = locale !== 'en' && staticEntries.length > 0;
-
   const breadcrumbsSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -216,7 +250,7 @@ export async function EssaysIndexPageContent({
           across English long-tail) would not apply. We render only the localized header
           + hero CTA video so users still see the essay command center / static guides.
         */}
-        {hasAnyPublished && locale === 'en' ? (
+        {hasAnyPublished ? (
           <Suspense
             fallback={
               <div
@@ -273,38 +307,7 @@ export async function EssaysIndexPageContent({
               </aside>
             </section>
           </Suspense>
-        ) : (
-          <section className="mt-4 flex flex-col gap-6 sm:mt-5 lg:grid lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start lg:gap-x-8 lg:gap-y-0 xl:gap-x-10">
-            <div className="min-w-0 space-y-4 sm:space-y-5">
-              <header>
-                <h1 className="text-[2.25rem] font-bold leading-[1.08] tracking-tight text-gray-900 sm:text-4xl lg:text-[2.5rem] lg:leading-[1.1]">
-                  {ui.h1}
-                </h1>
-                <p className="mt-4 text-lg leading-relaxed text-gray-600 sm:text-xl sm:leading-relaxed">
-                  {ui.intro}
-                </p>
-              </header>
-              {showStaticEssaysToolbar ? (
-                <EssaysIndexToolbar
-                  locale={locale}
-                  categoryOptions={[]}
-                  resultCount={staticFiltered.length}
-                  showingFrom={staticFiltered.length === 0 ? 0 : 1}
-                  showingTo={staticFiltered.length}
-                  className="mt-0 w-full max-w-none"
-                />
-              ) : null}
-            </div>
-            <aside className="w-full max-w-sm shrink-0 lg:max-w-none lg:w-full">
-              <EssaysIndexHeroMedia
-                youtubeVideoId={
-                  process.env.NEXT_PUBLIC_ESSAYS_HERO_YOUTUBE_ID?.trim() || null
-                }
-                ctaLabel={ui.tryEssayMentor}
-              />
-            </aside>
-          </section>
-        )}
+        ) : null}
 
         {!hasAnyPublished ? (
           <p className="mt-8 text-center text-gray-600 sm:mt-10">
@@ -333,37 +336,31 @@ export async function EssaysIndexPageContent({
               }
               showEssayMentor={locale === 'en'}
             />
-            {/*
-              DB-backed essay long-tail (`/essays/how-to-write-...`) is English-only; hide the
-              grid + pagination on ES/FR to avoid surfacing untranslated prominent CTA cards.
-              Localized static essay guides above remain accessible through `EssayCommandCenter`.
-            */}
-            {locale === 'en' ? (
-              <>
-                <EssaysGrid
-                  posts={displayRows}
-                  readGuideLabel={ui.readGuide}
-                  hrefForPath={hrefForPath}
-                  iq={iqCopy}
-                />
-                {total > 0 && displayRows.length > 0 ? (
-                  <ResourcesPagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    buildHref={(page) =>
-                      buildEssaysIndexHref(
-                        page,
-                        {
-                          q: queryState.q,
-                          categoryKey: queryState.categoryKey,
-                          sort: queryState.sort
-                        },
-                        sectionPath
-                      )
-                    }
-                  />
-                ) : null}
-              </>
+            <EssaysGrid
+              posts={displayRows}
+              readGuideLabel={ui.readGuide}
+              hrefForPath={hrefForPath}
+              iq={iqCopy}
+              locale={locale}
+              translatedSourceIds={translatedIdsForLocale}
+            />
+            {total > 0 && displayRows.length > 0 ? (
+              <ResourcesPagination
+                locale={locale}
+                currentPage={currentPage}
+                totalPages={totalPages}
+                buildHref={(page) =>
+                  buildEssaysIndexHref(
+                    page,
+                    {
+                      q: queryState.q,
+                      categoryKey: queryState.categoryKey,
+                      sort: queryState.sort
+                    },
+                    sectionPath
+                  )
+                }
+              />
             ) : null}
           </>
         )}
@@ -491,12 +488,16 @@ function EssaysGrid({
   posts,
   readGuideLabel,
   hrefForPath,
-  iq
+  iq,
+  locale = 'en',
+  translatedSourceIds
 }: {
   posts: EssayListFields[];
   readGuideLabel: string;
   hrefForPath: (path: string) => string;
   iq: ReturnType<typeof getHubIqPromoUiCopy>;
+  locale?: Stage2PilotLocale | 'en';
+  translatedSourceIds?: Set<string>;
 }) {
   if (posts.length === 0) {
     return (
@@ -516,7 +517,12 @@ function EssaysGrid({
         const slug = post.slug!.trim();
         const title = post.title?.trim() || 'Untitled';
         const desc = post.meta_description?.trim() || '';
-        const href = hrefForPath(essayHubArticlePath(slug));
+        const hasTranslation =
+          locale === 'en' ||
+          (translatedSourceIds?.has(post.id) ?? false);
+        const href = hasTranslation
+          ? hrefForPath(essayHubArticlePath(slug))
+          : essayHubArticlePath(slug);
         return (
           <li
             key={post.id}

@@ -13,7 +13,7 @@ import {
 } from '@/lib/guest/guestHubClickBudget';
 import type { CompareIndexItem } from '@/lib/seo/compareIndexFilters';
 import type { CompareHubGridIqCopy } from '@/lib/i18n/hubUiCopy';
-import { getHubToolbarUiCopy } from '@/lib/i18n/hubUiCopy';
+import { getCompareHubUiCopy, getHubToolbarUiCopy } from '@/lib/i18n/hubUiCopy';
 import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
 
 type CompareCardGridProps = {
@@ -97,6 +97,7 @@ export default function CompareCardGrid({
   iqHref = '/iq/assessment?intent=college_fit',
   locale = 'en'
 }: CompareCardGridProps) {
+  const compareUi = getCompareHubUiCopy(locale);
   const readMoreLabel = getHubToolbarUiCopy(locale).readMore;
   const [offerOpen, setOfferOpen] = useState(false);
   const [, hubTick] = useState(0);
@@ -127,8 +128,8 @@ export default function CompareCardGrid({
                 ? 'bg-sky-100 text-sky-800'
                 : 'bg-emerald-100 text-emerald-800';
               const eyebrow = isUniversity
-                ? 'University vs University'
-                : 'State vs State';
+                ? compareUi.toolbar.categoryUniversities
+                : compareUi.toolbar.categoryStates;
               const headingId = `compare-card-title-${item.id}`;
               const hubBudgetScope: HubBudgetScope =
                 isAuthenticated && authResolved && !hasSubscription

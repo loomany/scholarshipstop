@@ -1,5 +1,4 @@
 import ResourceGuideShell from '@/components/content-hub/resourceGuides/ResourceGuideShell';
-import LanguageSwitcher from '@/components/i18n/LanguageSwitcher';
 import { RESOURCES_SECTION_PATH } from '@/lib/content-hub/resourcesSection';
 import type { LocalizedPilotPage, LocalizedProseBlock } from '@/lib/i18n/staticTranslations';
 import { resourceGuideCardHref } from '@/lib/content-hub/resourceGuidePages';
@@ -10,7 +9,6 @@ type LocalizedResourceShellPageProps = {
   labels: {
     home: string;
     resources: string;
-    language: string;
     backToHome: string;
     continueReading: string;
     relatedGuides: string;
@@ -51,13 +49,6 @@ export function LocalizedResourceShellPage({
 
   return (
     <>
-      <div className="mx-auto flex max-w-3xl justify-end px-5 pt-6 sm:px-6">
-        <LanguageSwitcher
-          pathname={page.localizedPath}
-          currentLocale={page.locale}
-          label={labels.language}
-        />
-      </div>
       <ResourceGuideShell
         title={page.h1}
         subtitle={page.subtitle ?? page.intro}

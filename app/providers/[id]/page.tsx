@@ -11,7 +11,7 @@ import { ProviderProfileFaqAccordion } from '@/components/providers/ProviderProf
 import { ProviderOfficialWebsiteGate } from '@/components/providers/ProviderOfficialWebsiteGate';
 import { ProviderProfileScholarshipsScroll } from '@/components/providers/ProviderProfileScholarshipsScroll';
 import { ProvidersHubPageContent } from '@/components/providers/ProvidersHubPageContent';
-import HomePrimaryCtaClient from '@/components/home/HomePrimaryCtaClient';
+import ProviderScholarshipMatchCta from '@/components/providers/ProviderScholarshipMatchCta';
 import { US_STATE_CODE_TO_NAME } from '@/lib/constants/usStates';
 import {
   getCachedProviderProfilePage,
@@ -39,7 +39,10 @@ import {
   type ProviderSourceStatus
 } from '@/lib/seo/providerSeoQualityPolicy';
 import type { ProviderFaqItem } from '@/lib/providers/providerProfileTypes';
-import { getProviderDetailUiCopy } from '@/lib/i18n/providerDetailUiCopy';
+import {
+  getProviderContextLinkItems,
+  getProviderDetailUiCopy
+} from '@/lib/i18n/providerDetailUiCopy';
 import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
 import {
   getLocalizedProviderDataCompletenessLabel,
@@ -125,13 +128,11 @@ function providerProfileSourceLinks(urls: string[]): string[] {
   return out;
 }
 
-function providerProfileSourceLabel(href: string, index: number): string {
+function sourceHostFromHref(href: string): string {
   try {
-    const parsed = new URL(href);
-    const host = parsed.hostname.replace(/^www\./i, '');
-    return host ? `Source ${index + 1}: ${host}` : `Source ${index + 1}`;
+    return new URL(href).hostname.replace(/^www\./i, '') || '';
   } catch {
-    return `Source ${index + 1}`;
+    return '';
   }
 }
 
@@ -365,12 +366,17 @@ export default async function ProviderProfilePage({
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: getURL('/') },
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: detailUi.nav.home,
+        item: getURL('/')
+      },
       {
         '@type': 'ListItem',
         position: 2,
-        name: 'Providers',
-        item: getURL('providers')
+        name: detailUi.nav.providersHub,
+        item: getURL('/providers')
       },
       {
         '@type': 'ListItem',
@@ -539,7 +545,10 @@ export default async function ProviderProfilePage({
           </div>
         </header>
 
-        <ProviderProfileTableOfContents items={tocItems} />
+        <ProviderProfileTableOfContents
+          items={tocItems}
+          onThisPageLabel={detailUi.tocOnThisPage}
+        />
 
         <section
           id="provider-about"
@@ -569,7 +578,10 @@ export default async function ProviderProfilePage({
 
         <ProviderProfileIqCta providerName={data.displayName} iqCta={detailUi.iqCta} />
 
-        <ProviderProfileContextLinks />
+        <ProviderProfileContextLinks
+          copy={detailUi.contextLinks}
+          items={getProviderContextLinkItems(uiLocale)}
+        />
 
         {officialHrefNormalized || sourceLinks.length > 0 ? (
           <section
@@ -615,7 +627,7 @@ export default async function ProviderProfilePage({
                         rel="noopener noreferrer"
                         className="block break-words font-semibold text-emerald-900 transition hover:text-emerald-950"
                       >
-                        {providerProfileSourceLabel(href, index)}
+                        {detailUi.sourceLinkLabel(index, sourceHostFromHref(href))}
                       </a>
                     </li>
                   ))}
@@ -625,7 +637,7 @@ export default async function ProviderProfilePage({
           </section>
         ) : null}
 
-        <ProviderProfileFaqAccordion items={faqItems} />
+        <ProviderProfileFaqAccordion items={faqItems} heading={detailUi.toc.faq} />
 
         <section
           id="provider-scholarships"
@@ -633,21 +645,7 @@ export default async function ProviderProfilePage({
         >
           <ProviderProfileScholarshipsScroll page={currentPage} />
           <div className="mb-6 flex flex-col gap-4">
-            <div className="rounded-3xl border border-indigo-200 bg-indigo-50 px-5 py-4 text-center shadow-sm sm:px-6 sm:py-5">
-              <div className="flex items-center justify-center gap-2">
-                <span className="text-2xl leading-none sm:text-[1.7rem]" aria-hidden>
-                  🎯
-                </span>
-                <h3 className="text-xl font-bold leading-[1.08] tracking-tight text-indigo-950 sm:text-[1.65rem] md:text-[1.85rem] md:whitespace-nowrap">
-                  Get matched with scholarships in 2 minutes
-                </h3>
-              </div>
-              <HomePrimaryCtaClient
-                className="mt-3 inline-flex items-center justify-center rounded-full bg-black px-7 py-2 text-xl font-bold leading-none text-white shadow-[0_8px_20px_rgba(0,0,0,0.25)] transition hover:bg-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/45"
-              >
-                Find My Scholarships
-              </HomePrimaryCtaClient>
-            </div>
+            <ProviderScholarshipMatchCta locale={uiLocale} />
           </div>
 
           {data.similarProviders.length > 0 ? (
@@ -690,26 +688,29 @@ export default async function ProviderProfilePage({
                 {detailUi.scholarships.noScholarships}
               </p>
               <p className="mt-3 text-sm leading-relaxed text-zinc-600">
-                Create a free account to get scholarship alerts and updates when new
-                opportunities from this organization appear in the catalog.
+                {detailUi.scholarshipsEmpty.onboardingHint}
               </p>
               <Link
                 href="/onboarding"
                 className="mt-6 inline-flex items-center justify-center rounded-xl border border-zinc-200 bg-zinc-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/55"
               >
-                Get notified
+                {detailUi.scholarshipsEmpty.getNotified}
               </Link>
             </div>
           ) : (
             <>
               <p className="text-sm text-zinc-500">
-                Showing {showingFrom}-{showingTo} of{' '}
-                {data.totalScholarshipCount.toLocaleString()} scholarships
+                {detailUi.showingScholarships(
+                  showingFrom,
+                  showingTo,
+                  data.totalScholarshipCount.toLocaleString()
+                )}
               </p>
               <div className="mt-6 flex w-full min-w-0 flex-col gap-4">
                 <ProviderProfilePageAuthBridge scholarships={data.scholarships} />
               </div>
               <ResourcesPagination
+                locale={uiLocale}
                 currentPage={currentPage}
                 totalPages={totalPages}
                 buildHref={(p) => buildProviderProfileScholarshipsHref(slug, p)}
@@ -743,11 +744,6 @@ function ProviderSourceStatusBlock({
   detailUi: ReturnType<typeof getProviderDetailUiCopy>;
 }) {
   const host = providerHostLabel(officialHref);
-  const verifyItems = [
-    'Final eligibility rules and student profile requirements.',
-    'Current deadline, timezone, and application route.',
-    'Award amount, payout method, renewal rules, and required documents.'
-  ];
 
   return (
     <section
@@ -796,10 +792,10 @@ function ProviderSourceStatusBlock({
       <div className="mt-6 grid gap-5 lg:grid-cols-2">
         <div className="rounded-2xl border border-gray-100 bg-gray-50/70 p-5">
           <h3 className="text-sm font-bold text-gray-950">
-            What to verify before applying
+            {detailUi.trust.verifyBeforeApply}
           </h3>
           <ul className="mt-3 space-y-2 text-sm leading-6 text-gray-700">
-            {verifyItems.map((item) => (
+            {detailUi.trust.verifyItems.map((item) => (
               <li key={item} className="flex gap-2">
                 <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" />
                 <span>{item}</span>
@@ -825,13 +821,13 @@ function ProviderSourceStatusBlock({
           href="/scholarship-verification-methodology"
           className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-900 transition hover:border-emerald-300 hover:bg-white"
         >
-          Verification methodology
+          {detailUi.trust.verificationMethodology}
         </Link>
         <Link
           href="/corrections"
           className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-900 transition hover:border-emerald-300 hover:bg-white"
         >
-          Report a correction
+          {detailUi.trust.reportCorrection}
         </Link>
         <Link
           href="/financial-aid-disclaimer"

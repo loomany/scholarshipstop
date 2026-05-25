@@ -2,9 +2,11 @@ import type { ResourceArticleTocItem } from '@/lib/content-hub/resourceArticleBo
 
 /** “On this page” block for resource articles (matches essay hub pattern). */
 export default function ResourceArticleTableOfContents({
-  items
+  items,
+  headingLabel = 'On this page'
 }: {
   items: ResourceArticleTocItem[];
+  headingLabel?: string;
 }) {
   if (items.length < 2) return null;
 
@@ -17,7 +19,7 @@ export default function ResourceArticleTableOfContents({
         id="resource-article-toc-label"
         className="text-sm font-semibold tracking-tight text-gray-900"
       >
-        On this page
+        {headingLabel}
       </p>
       <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm text-gray-700">
         {items.map((item) => (

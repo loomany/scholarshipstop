@@ -28,6 +28,20 @@ export function readStoredUiLocale(): 'en' | Stage2PilotLocale {
   return 'en';
 }
 
+/** Persist UI locale for auth deep-links; `en` clears the stored pilot preference. */
+export function writeStoredUiLocale(locale: 'en' | Stage2PilotLocale): void {
+  if (typeof window === 'undefined') return;
+  try {
+    if (locale === 'en') {
+      sessionStorage.removeItem(STORAGE_KEY);
+    } else {
+      sessionStorage.setItem(STORAGE_KEY, locale);
+    }
+  } catch {
+    /* ignore */
+  }
+}
+
 export function localizedSigninPath(
   locale: 'en' | Stage2PilotLocale,
   signinSubpath: string

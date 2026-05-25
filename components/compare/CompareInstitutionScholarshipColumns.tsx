@@ -41,6 +41,8 @@ import { pickCanonicalSubscription } from '@/lib/payments/subscriptionAccess';
 import { scholarshipNeedsEmailConfirmation } from '@/lib/scholarships/scholarshipEmailConfirmationGate';
 import { createClient } from '@/utils/supabase/client';
 import type { Database } from '@/types_db';
+import { getCompareDetailUiCopy } from '@/lib/i18n/compareDetailUiCopy';
+import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
 
 type Column = {
   title: string;
@@ -51,12 +53,15 @@ type Column = {
 type CompareInstitutionScholarshipColumnsProps = {
   left: Column;
   right: Column;
+  locale?: LocalizedUiLocale;
 };
 
 export default function CompareInstitutionScholarshipColumns({
   left,
-  right
+  right,
+  locale = 'en'
 }: CompareInstitutionScholarshipColumnsProps) {
+  const ui = getCompareDetailUiCopy(locale);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [hasSubscription, setHasSubscription] = useState(false);
   const [authResolved, setAuthResolved] = useState(false);
@@ -289,7 +294,7 @@ export default function CompareInstitutionScholarshipColumns({
             href={href}
             className="underline decoration-orange-400/40 underline-offset-4 transition hover:text-orange-700 hover:decoration-orange-600"
           >
-            View all scholarships from this university →
+            {ui.universityGrants.viewAllFromUniversity}
           </Link>
         </p>
       ) : null}
@@ -324,13 +329,13 @@ export default function CompareInstitutionScholarshipColumns({
                 href={href}
                 className="underline decoration-orange-400/40 underline-offset-4 transition hover:text-orange-700 hover:decoration-orange-600"
               >
-                See all university scholarships
+                {ui.universityGrants.seeAllUniversityScholarships}
               </Link>
             </p>
           ) : null}
         </div>
         <span className="shrink-0 rounded-full bg-gray-100 px-2.5 py-1 text-xs font-medium text-gray-600">
-          Top {Math.min(3, scholarships.length)}
+          {ui.universityGrants.topCountLabel(Math.min(3, scholarships.length))}
         </span>
       </div>
     </div>
@@ -347,11 +352,10 @@ export default function CompareInstitutionScholarshipColumns({
             id="top-grants-heading"
             className="text-center text-xl font-bold tracking-tight text-gray-900"
           >
-            Top grants by university
+            {ui.universityGrants.heading}
           </h2>
           <p className="mt-2 text-sm leading-relaxed text-gray-600 sm:text-base">
-            Largest active university-linked grants first. Each side shows the top
-            three opportunities currently indexed for that school.
+            {ui.universityGrants.intro}
           </p>
         </div>
 

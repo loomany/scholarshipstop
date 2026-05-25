@@ -46,6 +46,7 @@ import { SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF } from '@/app/scholarships/sc
 import type { NavbarInitialAuth } from '@/lib/nav/getNavbarInitialAuth';
 import { stripLocalePrefix } from '@/lib/i18n/paths';
 import {
+  getStage2LanguageSwitcherItems,
   hrefForLocalizedUiRequired,
   localizedPilotHref,
   localizedSubscriptionHref
@@ -120,6 +121,7 @@ const LOCALIZED_NAV_COPY: Record<
     forOrganizations: string;
     openMenu: string;
     closeMenu: string;
+    language: string;
     mainNavigation: string;
     siteMenu: string;
     aboutMenu: string;
@@ -147,6 +149,7 @@ const LOCALIZED_NAV_COPY: Record<
     forOrganizations: 'For Organizations',
     openMenu: 'Open menu',
     closeMenu: 'Close menu',
+    language: 'Language',
     mainNavigation: 'Main navigation',
     siteMenu: 'Site menu',
     aboutMenu: 'About menu',
@@ -173,6 +176,7 @@ const LOCALIZED_NAV_COPY: Record<
     forOrganizations: 'Organizaciones',
     openMenu: 'Abrir menú',
     closeMenu: 'Cerrar menú',
+    language: 'Idioma',
     mainNavigation: 'Navegación principal',
     siteMenu: 'Menú del sitio',
     aboutMenu: 'Menú de confianza',
@@ -199,6 +203,7 @@ const LOCALIZED_NAV_COPY: Record<
     forOrganizations: 'Organisations',
     openMenu: 'Ouvrir le menu',
     closeMenu: 'Fermer le menu',
+    language: 'Langue',
     mainNavigation: 'Navigation principale',
     siteMenu: 'Menu du site',
     aboutMenu: 'Menu confiance',
@@ -353,6 +358,15 @@ export default function Navlinks({
   const pathname = usePathname() ?? '';
   const locale = resolveNavLocaleFromPathname(pathname);
   const navCopy = LOCALIZED_NAV_COPY[locale];
+  const languageSwitcherItems = useMemo(
+    () =>
+      getStage2LanguageSwitcherItems({
+        pathname: pathname || pilotNavHref('/'),
+        currentLocale: locale
+      }),
+    [pathname, locale]
+  );
+  const showLanguageSwitcher = languageSwitcherItems.length > 0;
   const canonicalPathname = stripLocalePrefix(pathname);
   const pilotNavHref = useCallback(
     (href: string) =>
@@ -787,10 +801,13 @@ export default function Navlinks({
             initialNavbarAuth={initialNavbarAuth}
             initialLocale={locale}
           />
-          <LanguageSwitcher
-            variant="dropdown"
-            pathname={pathname || pilotNavHref('/')}
-          />
+          {showLanguageSwitcher ? (
+            <LanguageSwitcher
+              variant="dropdown"
+              pathname={pathname || pilotNavHref('/')}
+              currentLocale={locale}
+            />
+          ) : null}
         </div>
       </div>
 
@@ -1192,6 +1209,19 @@ export default function Navlinks({
                   </Link>
                 ) : null}
               </>
+              {showLanguageSwitcher ? (
+                <div className="mt-3 border-t border-zinc-800 pt-3">
+                  <p className="px-1 pb-2 text-[10px] font-semibold uppercase tracking-wide text-zinc-500">
+                    {navCopy.language}
+                  </p>
+                  <LanguageSwitcher
+                    variant="inline"
+                    pathname={pathname || pilotNavHref('/')}
+                    currentLocale={locale}
+                    className="!border-zinc-700 !bg-zinc-900/80"
+                  />
+                </div>
+              ) : null}
               <NavbarUserSlot
                 pathname={pathname}
                 variant="drawer"

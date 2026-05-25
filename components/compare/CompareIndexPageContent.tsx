@@ -218,12 +218,27 @@ export async function CompareIndexPageContent({
     locale !== 'en'
       ? staticCompareCategoryCounts(staticEntries, queryState.q)
       : categoryCounts;
+  const usePublishedCompareToolbar = hasAnyPublished;
   const showCompareToolbar =
-    (locale === 'en' && hasAnyPublished) || staticEntries.length > 0;
+    usePublishedCompareToolbar || staticEntries.length > 0;
   const staticToolbarResultCount = staticFiltered.length;
   const staticShowingFrom =
     staticToolbarResultCount === 0 ? 0 : 1;
   const staticShowingTo = staticToolbarResultCount;
+  const toolbarCategoryCounts = usePublishedCompareToolbar
+    ? categoryCounts
+    : staticCategoryCounts;
+  const toolbarResultCount = usePublishedCompareToolbar
+    ? total
+    : staticToolbarResultCount;
+  const toolbarShowingFrom = usePublishedCompareToolbar
+    ? showingFrom
+    : staticShowingFrom;
+  const toolbarShowingTo = usePublishedCompareToolbar
+    ? showingTo
+    : staticShowingTo;
+  /** Battle pages are English DB content; keep canonical EN hrefs so cards work before per-locale compare copy ships. */
+  const gridItems = slice;
   const showStaticSubhubPromo =
     locale !== 'en' &&
     queryState.category !== 'all' &&
@@ -319,18 +334,12 @@ export async function CompareIndexPageContent({
                 }
               >
                 <CompareIndexToolbarClient
-                  categoryCounts={
-                    locale === 'en' ? categoryCounts : staticCategoryCounts
-                  }
-                  resultCount={
-                    locale === 'en' ? total : staticToolbarResultCount
-                  }
-                  showingFrom={
-                    locale === 'en' ? showingFrom : staticShowingFrom
-                  }
-                  showingTo={locale === 'en' ? showingTo : staticShowingTo}
+                  categoryCounts={toolbarCategoryCounts}
+                  resultCount={toolbarResultCount}
+                  showingFrom={toolbarShowingFrom}
+                  showingTo={toolbarShowingTo}
                   suggestionItems={
-                    locale === 'en' ? suggestionItems : []
+                    usePublishedCompareToolbar ? suggestionItems : []
                   }
                   basePath={sectionPath}
                   locale={locale}
@@ -364,22 +373,21 @@ export async function CompareIndexPageContent({
           />
         )}
 
-        {locale === 'en' ? (
-          !hasAnyPublished ? (
-            <p className="mt-12 text-center text-gray-600">
-              {ui.noPublished}
-            </p>
-          ) : (
-            <CompareCardGrid
-              items={slice}
-              emptyMessage={ui.noMatchesFilters}
-              gridIq={ui.gridIq}
-              iqHref={iqAssessmentHref}
-            />
-          )
-        ) : null}
+        {!hasAnyPublished ? (
+          locale === 'en' ? (
+            <p className="mt-12 text-center text-gray-600">{ui.noPublished}</p>
+          ) : null
+        ) : (
+          <CompareCardGrid
+            items={gridItems}
+            emptyMessage={ui.noMatchesFilters}
+            gridIq={ui.gridIq}
+            iqHref={iqAssessmentHref}
+            locale={locale}
+          />
+        )}
 
-        {locale === 'en' && hasAnyPublished && slice.length > 0 ? (
+        {hasAnyPublished && slice.length > 0 ? (
           <>
             <div className="mt-6 lg:hidden">
               <HubIqPromoAssessmentCard
@@ -388,6 +396,7 @@ export async function CompareIndexPageContent({
               />
             </div>
             <ResourcesPagination
+              locale={locale}
               currentPage={currentPage}
               totalPages={totalPages}
               buildHref={(page) =>

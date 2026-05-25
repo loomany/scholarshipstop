@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 import {
   sitePaginationActiveClass,
@@ -15,8 +18,9 @@ import {
 } from '@/lib/pagination/visiblePaginationItems';
 import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
 import { getSitePaginationCopy } from '@/lib/i18n/sitePaginationCopy';
+import { resolveNavLocaleFromPathname } from '@/lib/i18n/resolveNavLocale';
 
-export type ResourcesPaginationProps = {
+export type SitePaginationProps = {
   currentPage: number;
   totalPages: number;
   buildHref: (page: number) => string;
@@ -33,16 +37,17 @@ const activeClass = sitePaginationActiveClass;
 const disabledClass = sitePaginationDisabledClass;
 const defaultNavClassName = sitePaginationNavOuterClassName;
 
-/** Server-safe pagination (accepts `buildHref` from RSC parents). */
-export default function ResourcesPagination({
+export default function SitePagination({
   currentPage,
   totalPages,
   buildHref,
-  locale = 'en',
+  locale: localeProp,
   navClassName = defaultNavClassName,
   linkScroll = true,
   ariaLabel
-}: ResourcesPaginationProps) {
+}: SitePaginationProps) {
+  const pathname = usePathname() ?? '/';
+  const locale = localeProp ?? resolveNavLocaleFromPathname(pathname);
   const copy = getSitePaginationCopy(locale);
 
   if (totalPages <= 1) {
@@ -81,84 +86,50 @@ export default function ResourcesPagination({
       )
     );
 
+  const renderPrevNext = (layoutKey: string) => (
+    <>
+      {prevDisabled ? (
+        <span className={`${linkClass} ${disabledClass}`} aria-disabled="true">
+          {copy.previous}
+        </span>
+      ) : (
+        <Link
+          href={buildHref(currentPage - 1)}
+          className={linkClass}
+          scroll={linkScroll}
+          prefetch={false}
+        >
+          {copy.previous}
+        </Link>
+      )}
+      {renderItems(layoutKey === 'm' ? itemsMobile : itemsDesktop, layoutKey)}
+      {nextDisabled ? (
+        <span className={`${linkClass} ${disabledClass}`} aria-disabled="true">
+          {copy.next}
+        </span>
+      ) : (
+        <Link
+          href={buildHref(currentPage + 1)}
+          className={linkClass}
+          scroll={linkScroll}
+          prefetch={false}
+        >
+          {copy.next}
+        </Link>
+      )}
+    </>
+  );
+
   return (
     <nav className={navClassName} aria-label={ariaLabel ?? copy.ariaLabel}>
       <p className={sitePaginationPageMetaClass}>
         {copy.pageOf(currentPage, totalPages)}
       </p>
       <div className={`${paginationControlsRowClassName} lg:hidden`}>
-        {prevDisabled ? (
-          <span
-            className={`${linkClass} ${disabledClass}`}
-            aria-disabled="true"
-          >
-            {copy.previous}
-          </span>
-        ) : (
-          <Link
-            href={buildHref(currentPage - 1)}
-            className={linkClass}
-            scroll={linkScroll}
-            prefetch={false}
-          >
-            {copy.previous}
-          </Link>
-        )}
-        {renderItems(itemsMobile, 'm')}
-        {nextDisabled ? (
-          <span
-            className={`${linkClass} ${disabledClass}`}
-            aria-disabled="true"
-          >
-            {copy.next}
-          </span>
-        ) : (
-          <Link
-            href={buildHref(currentPage + 1)}
-            className={linkClass}
-            scroll={linkScroll}
-            prefetch={false}
-          >
-            {copy.next}
-          </Link>
-        )}
+        {renderPrevNext('m')}
       </div>
       <div className={`${paginationControlsRowClassName} hidden lg:flex`}>
-        {prevDisabled ? (
-          <span
-            className={`${linkClass} ${disabledClass}`}
-            aria-disabled="true"
-          >
-            {copy.previous}
-          </span>
-        ) : (
-          <Link
-            href={buildHref(currentPage - 1)}
-            className={linkClass}
-            scroll={linkScroll}
-            prefetch={false}
-          >
-            {copy.previous}
-          </Link>
-        )}
-        {renderItems(itemsDesktop, 'd')}
-        {nextDisabled ? (
-          <span
-            className={`${linkClass} ${disabledClass}`}
-            aria-disabled="true"
-          >
-            {copy.next}
-          </span>
-        ) : (
-          <Link
-            href={buildHref(currentPage + 1)}
-            className={linkClass}
-            scroll={linkScroll}
-            prefetch={false}
-          >
-            {copy.next}
-          </Link>
-        )}
+        {renderPrevNext('d')}
       </div>
     </nav>
   );

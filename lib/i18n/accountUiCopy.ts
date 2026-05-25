@@ -1,10 +1,18 @@
 import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
 
+export const ACCOUNT_CANONICAL_PATH = '/account';
+
 export type AccountUiCopy = {
   pageTitle: string;
   backToScholarships: string;
   savedRedirectNote: string;
 };
+
+/** Locale-aware account URL (`/account`, `/es/account`, `/fr/account`). */
+export function localizedAccountPath(locale: LocalizedUiLocale): string {
+  if (locale === 'en') return ACCOUNT_CANONICAL_PATH;
+  return `/${locale}${ACCOUNT_CANONICAL_PATH}`;
+}
 
 const EN: AccountUiCopy = {
   pageTitle: 'Account',

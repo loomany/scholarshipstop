@@ -1,7 +1,6 @@
 import 'server-only';
 
 import type { ContentTranslationLocale } from '@/lib/i18n/contentTranslationsTypes';
-import { isEssayPilotSlug } from '@/lib/i18n/essayPilot/essayPilotSlugs';
 import { createPublicClient } from '@/utils/supabase/public';
 
 const PUBLISHED_SELECT =
@@ -68,7 +67,7 @@ export async function listPublishedEssayGuideTranslations(
     const score = typeof row.quality_score === 'number' ? row.quality_score : null;
     if (score != null && score < MIN_QUALITY_SCORE) continue;
     const essaySlug = slugById.get(sourceId);
-    if (!essaySlug || !isEssayPilotSlug(essaySlug)) continue;
+    if (!essaySlug) continue;
     const translatedSlug = row.translated_slug?.trim().toLowerCase();
     if (translatedSlug && translatedSlug !== essaySlug) continue;
 

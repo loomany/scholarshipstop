@@ -17,14 +17,14 @@ import {
   mergeUniqueFaqItems
 } from '@/lib/content-hub/extractInlineFaqFromBodyHtml';
 import {
-  RESOURCES_PAGE_TITLE,
   RESOURCES_SECTION_PATH,
   resourcesArticlePath
 } from '@/lib/content-hub/resourcesSection';
 import { getURL } from '@/utils/helpers';
 import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
 import { buildResourcePilotAlternates } from '@/lib/i18n/resourcePilot/resourceTranslationAlternates';
-import { isResourcePilotSlug } from '@/lib/i18n/resourcePilot/resourcePilotSlugs';
+import { resourceArticleDateLine } from '@/lib/content-hub/resourceArticleDates';
+import { getResourceDetailUiCopy } from '@/lib/i18n/resourceDetailUiCopy';
 import { getCanonical } from '@/lib/seo/canonical';
 import { applyAutoInternalLinks } from '@/lib/content-hub/autoInternalLinks';
 import { deduplicateQuickSummaryBlocksInHtml } from '@/lib/content-hub/deduplicateQuickSummaryInHtml';
@@ -49,44 +49,6 @@ import { getStaticScholarshipGuide } from '@/lib/resources/staticScholarshipGuid
 export const revalidate = 300;
 
 type PageProps = { params: { slug: string } };
-
-const SAME_DAY_MS = 24 * 60 * 60 * 1000;
-
-function formatArticleDate(iso: string | null | undefined): string | null {
-  if (!iso) return null;
-  const date = new Date(iso);
-  if (!Number.isFinite(date.getTime())) return null;
-  return new Intl.DateTimeFormat('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric'
-  }).format(date);
-}
-
-function articleDateLine({
-  publishedAt,
-  updatedAt
-}: {
-  publishedAt: string | null | undefined;
-  updatedAt: string | null | undefined;
-}): string | null {
-  const publishedLabel = formatArticleDate(publishedAt);
-  const updatedLabel = formatArticleDate(updatedAt);
-  if (!publishedLabel && !updatedLabel) return null;
-
-  const publishedMs = publishedAt ? new Date(publishedAt).getTime() : NaN;
-  const updatedMs = updatedAt ? new Date(updatedAt).getTime() : NaN;
-  const updatedIsDistinct =
-    Number.isFinite(publishedMs) &&
-    Number.isFinite(updatedMs) &&
-    Math.abs(updatedMs - publishedMs) > SAME_DAY_MS;
-
-  if (publishedLabel && updatedLabel && updatedIsDistinct) {
-    return `Published ${publishedLabel} · Updated ${updatedLabel}`;
-  }
-  if (publishedLabel) return `Published ${publishedLabel}`;
-  return updatedLabel ? `Updated ${updatedLabel}` : null;
-}
 
 export async function generateMetadata({
   params
@@ -116,9 +78,10 @@ export async function generateMetadata({
   const description = post.meta_description?.trim() || undefined;
   const ogImage = post.cover_image_url?.trim();
   const path = resourcesArticlePath(slug);
-  const alternates = isResourcePilotSlug(slug)
-    ? await buildResourcePilotAlternates({ slug, currentLocale: 'en' })
-    : { canonical: getCanonical(path) };
+  const alternates = await buildResourcePilotAlternates({
+    slug,
+    currentLocale: 'en'
+  });
   return {
     title,
     description,
@@ -141,6 +104,7 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
   const post = await fetchPublishedContentPostBySlug(params.slug);
   if (!post || !post.slug?.trim()) notFound();
 
+  const ui = getResourceDetailUiCopy('en');
   const resourceClassification = classifyResourceArticle(post);
   const showResourceIqCta = shouldShowResourceArticleIqCta(
     resourceClassification,
@@ -181,7 +145,7 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
   const faqAccordionHeading =
     inlineFaqItems.length > 0 && inlineFaqSectionHeading
       ? inlineFaqSectionHeading
-      : 'FAQ';
+      : ui.faqSectionTitle;
 
   const {
     html: bodyHtmlAnchored,
@@ -221,13 +185,13 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
       {
         '@type': 'ListItem',
         position: 1,
-        name: 'Home',
+        name: ui.homeLabel,
         item: getURL('/')
       },
       {
         '@type': 'ListItem',
         position: 2,
-        name: RESOURCES_PAGE_TITLE,
+        name: ui.resourcesHubLabel,
         item: getURL(RESOURCES_SECTION_PATH)
       },
       {
@@ -260,10 +224,11 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
       url: getURL()
     }
   };
-  const visibleDateLine = articleDateLine({
-    publishedAt: post.published_at,
-    updatedAt: post.updated_at
-  });
+  const visibleDateLine = resourceArticleDateLine(
+    { publishedAt: post.published_at, updatedAt: post.updated_at },
+    ui,
+    'en'
+  );
 
   const faqSchema =
     faq.length > 0
@@ -303,18 +268,18 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
             href={RESOURCES_SECTION_PATH}
             className="text-sm font-semibold text-orange-600 underline-offset-2 hover:text-orange-700 hover:underline"
           >
-            ← Back to {RESOURCES_PAGE_TITLE}
+            {ui.backLabel}
           </Link>
         </p>
 
-        <nav className="mt-4 text-sm text-gray-500" aria-label="Breadcrumb">
+        <nav className="mt-4 text-sm text-gray-500" aria-label={ui.breadcrumbAria}>
           <ol className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
             <li>
               <Link
                 href="/"
                 className="font-medium text-gray-600 transition hover:text-gray-900"
               >
-                Home
+                {ui.homeLabel}
               </Link>
             </li>
             <li className="text-gray-300" aria-hidden>
@@ -325,7 +290,7 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
                 href={RESOURCES_SECTION_PATH}
                 className="font-medium text-gray-600 transition hover:text-gray-900"
               >
-                {RESOURCES_PAGE_TITLE}
+                {ui.resourcesHubLabel}
               </Link>
             </li>
             <li className="text-gray-300" aria-hidden>
@@ -358,7 +323,7 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
               src={post.cover_image_url.trim()}
               alt={
                 post.title?.trim()
-                  ? `Cover image for ${post.title.trim()}`
+                  ? ui.coverImageAlt(post.title.trim())
                   : 'Article cover image'
               }
               className="aspect-[16/9] w-full object-cover"
@@ -366,21 +331,24 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
           </div>
         ) : null}
 
-        <ResourceArticleTableOfContents items={tocItems} />
+        <ResourceArticleTableOfContents
+          items={tocItems}
+          headingLabel={ui.tocOnThisPage}
+        />
 
         {bodyHtmlAnchored ? (
           primarySplit ? (
             <>
               <SafeContentPostBody html={primarySplit.before} />
-              {showResourceIqCta ? <ResourceArticleIqCta /> : null}
+              {showResourceIqCta ? <ResourceArticleIqCta ui={ui} /> : null}
               {midSplit ? (
                 <>
                   <SafeContentPostBody html={midSplit.before} tightTop />
                   <ContentHubScholarshipCta
                     className="mt-4 sm:mt-5"
-                    title="💡 See scholarships you may qualify for"
-                    description="Use the scholarship directory to explore real opportunities that match your eligibility and academic goals."
-                    buttonText="Explore Scholarships"
+                    title={ui.exploreScholarshipsCta.title}
+                    description={ui.exploreScholarshipsCta.description}
+                    buttonText={ui.exploreScholarshipsCta.buttonText}
                   />
                   <SafeContentPostBody html={midSplit.after} tightTop />
                 </>
@@ -390,9 +358,9 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
                   {primarySplit.after.length > 650 ? (
                     <ContentHubScholarshipCta
                       className="mt-4 sm:mt-5"
-                      title="💡 See scholarships you may qualify for"
-                      description="Use the scholarship directory to explore real opportunities that match your eligibility and academic goals."
-                      buttonText="Explore Scholarships"
+                      title={ui.exploreScholarshipsCta.title}
+                      description={ui.exploreScholarshipsCta.description}
+                      buttonText={ui.exploreScholarshipsCta.buttonText}
                     />
                   ) : null}
                 </>
@@ -401,7 +369,7 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
           ) : (
             <>
               <SafeContentPostBody html={bodyHtmlAnchored} />
-              {showResourceIqCta ? <ResourceArticleIqCta /> : null}
+              {showResourceIqCta ? <ResourceArticleIqCta ui={ui} /> : null}
             </>
           )
         ) : null}
@@ -416,20 +384,25 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
           />
         ) : null}
 
-        <ResourceGuidesContinueSection currentSlug={post.slug.trim()} />
+        <ResourceGuidesContinueSection
+          currentSlug={post.slug.trim()}
+          heading={ui.continueReading.heading}
+        />
 
         {matchedRelatedScholarships.length > 0 ? (
           <ContentHubArticleMatchedScholarships
             items={matchedRelatedScholarships}
             hubScholarships={hubScholarships}
             showIqAdAfterFirst={showResourceIqCta}
+            heading={ui.matchedScholarships.heading}
+            subheading={ui.matchedScholarships.subheading}
           />
         ) : (
           <ContentHubScholarshipCta
             className="mt-4 sm:mt-5"
-            title="Browse Scholarships"
-            description="Explore verified opportunities in our scholarship directory."
-            buttonText="Browse Scholarships"
+            title={ui.browseScholarshipsCta.title}
+            description={ui.browseScholarshipsCta.description}
+            buttonText={ui.browseScholarshipsCta.buttonText}
           />
         )}
       </article>
@@ -437,7 +410,7 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
   );
 }
 
-function ResourceArticleIqCta() {
+function ResourceArticleIqCta({ ui }: { ui: ReturnType<typeof getResourceDetailUiCopy> }) {
   return (
     <Link
       href="/iq/assessment?intent=scholarship_match"
@@ -462,25 +435,23 @@ function ResourceArticleIqCta() {
           <div className="mb-3 flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center gap-2 rounded-full border border-[#FFB875] bg-white/85 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.17em] text-[#B45309] shadow-sm">
               <BrainCircuit className="h-3.5 w-3.5 text-[#F97316]" aria-hidden />
-              Featured Tool
+              {ui.iqCta.featuredTool}
             </span>
             <span className="rounded-full border border-slate-200 bg-slate-950 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white">
-              Strategy fit
+              {ui.iqCta.strategyBadge}
             </span>
           </div>
           <h2
             id="resource-article-iq-cta-heading"
             className="text-balance text-2xl font-bold leading-tight tracking-tight text-slate-950 sm:text-3xl"
           >
-            Build a smarter scholarship strategy
+            {ui.iqCta.title}
           </h2>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">
-            Take a comprehensive cognitive assessment to see whether your
-            strengths point toward essays, research, deadlines, or fast
-            applications.
+            {ui.iqCta.body}
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
-            {['Logic', 'Speed', 'Patterns', 'Strategy'].map((item) => (
+            {ui.iqCta.chips.map((item) => (
               <span
                 key={item}
                 className="rounded-full border border-white/80 bg-white/75 px-3 py-1 text-xs font-semibold text-slate-700 shadow-sm"
@@ -493,24 +464,24 @@ function ResourceArticleIqCta() {
 
         <div className="min-w-0 rounded-2xl border border-white/80 bg-white/70 p-3 shadow-sm backdrop-blur sm:w-48">
           <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">
-            Preview report
+            {ui.iqCta.previewReport}
           </p>
           <div className="mt-2 grid grid-cols-2 gap-2">
             <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/80 px-2 py-2">
-              <p className="text-[10px] font-medium text-slate-500">IQ</p>
+              <p className="text-[10px] font-medium text-slate-500">{ui.iqCta.iqLabel}</p>
               <p className="mt-1 text-base font-bold leading-none text-slate-950">
                 --
               </p>
             </div>
             <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/80 px-2 py-2">
-              <p className="text-[10px] font-medium text-slate-500">Type</p>
+              <p className="text-[10px] font-medium text-slate-500">{ui.iqCta.typeLabel}</p>
               <p className="mt-1 text-sm font-bold leading-none text-slate-950">
                 ???
               </p>
             </div>
           </div>
           <span className="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-black px-3 py-2.5 text-center text-sm font-bold text-white shadow-[0_10px_24px_-14px_rgba(15,23,42,0.9)] transition group-hover:bg-slate-900">
-            Start IQ Test
+            {ui.iqCta.startTest}
             <ArrowRight className="h-4 w-4" aria-hidden />
           </span>
         </div>

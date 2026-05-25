@@ -9,13 +9,20 @@ import {
   type Stage2PilotLocale
 } from '@/lib/i18n/pilotRoutes';
 import {
+  ACCOUNT_CANONICAL_PATH,
+  localizedAccountPath
+} from '@/lib/i18n/accountUiCopy';
+import {
   localizedSubscriptionPath,
   SUBSCRIPTION_CANONICAL_PATH
 } from '@/lib/i18n/subscriptionPageCopy';
 import { getLocalizedPilotPage } from '@/lib/i18n/staticTranslations';
 import { isResourcePilotSlug } from '@/lib/i18n/resourcePilot/resourcePilotSlugs';
 import { categoryIsPromotedSeo } from '@/lib/scholarships/categorySeoAllowlist';
-import { getDetailLanguageSwitcherItems } from '@/lib/i18n/detailLanguageSwitcher';
+import {
+  getDetailLanguageSwitcherItems,
+  resourceDetailSlugFromPath
+} from '@/lib/i18n/detailLanguageSwitcher';
 
 export type LocalizedUiLocale = Stage2PilotLocale | 'en';
 
@@ -73,7 +80,7 @@ export function hrefForLocalizedUiRequired(
   }
   const localized = hrefForLocalizedUi(locale, pathOnly);
   if (localized) return `${localized}${suffix}`;
-  const resourceSlug = resourcePilotArticleSlug(pathOnly);
+  const resourceSlug = resourceDetailSlugFromPath(pathOnly);
   if (resourceSlug && locale !== 'en') {
     return `${localizedResourcePilotArticleHref(locale, resourceSlug)}${suffix}`;
   }
@@ -264,6 +271,19 @@ export function localizedSubscriptionHref(locale: LocalizedUiLocale): string {
   return localizedSubscriptionPath(locale);
 }
 
+/** Locale-aware account settings (`/account`, `/es/account`, `/fr/account`). */
+export function localizedAccountHref(locale: LocalizedUiLocale): string {
+  return localizedAccountPath(locale);
+}
+
+export function isLocalizedAccountPath(path: string): boolean {
+  const normalized = normalizeCanonicalPath(path.split(/[?#]/, 1)[0] ?? path);
+  return (
+    normalized === ACCOUNT_CANONICAL_PATH ||
+    normalized.startsWith(`${ACCOUNT_CANONICAL_PATH}/`)
+  );
+}
+
 export function isLocalizedSubscriptionPath(path: string): boolean {
   const normalized = normalizeCanonicalPath(path.split(/[?#]/, 1)[0] ?? path);
   return (
@@ -298,12 +318,20 @@ export function getStage2LanguageSwitcherItems({
   const canonicalPath = stage2CanonicalPathFromPathname(pathname);
   const hubTab = hubTabSegment(canonicalPath);
   const categorySlug = categorySeoSlug(canonicalPath);
-  const resourceSlug = resourcePilotArticleSlug(canonicalPath);
+  const resourceSlug = resourceDetailSlugFromPath(canonicalPath);
   const isSubscription = isLocalizedSubscriptionPath(canonicalPath);
+  const isAccount = isLocalizedAccountPath(canonicalPath);
   const isPilot =
     isStage2PilotCanonicalPath(canonicalPath) ||
     isLocalizedCompareSubhubPath(canonicalPath);
-  if (!isPilot && !hubTab && !isSubscription && !categorySlug && !resourceSlug) {
+  if (
+    !isPilot &&
+    !hubTab &&
+    !isSubscription &&
+    !isAccount &&
+    !categorySlug &&
+    !resourceSlug
+  ) {
     return [];
   }
 
@@ -355,7 +383,9 @@ export function getStage2LanguageSwitcherItems({
 
   return locales
     .map((locale) => {
-      const href = isSubscription
+      const href = isAccount
+        ? localizedAccountHref(locale)
+        : isSubscription
         ? localizedSubscriptionHref(locale)
         : hubTab
           ? localizedScholarshipHubTabHref(locale, hubTab)
@@ -405,6 +435,7 @@ export function isExplicitEnglishOnlyInternalLink(href: string): boolean {
   if (path.startsWith('/providers/') && path !== '/providers') return true;
 
   if (isLocalizedSubscriptionPath(path)) return false;
+  if (isLocalizedAccountPath(path)) return false;
 
   return (
     path === '/account' ||

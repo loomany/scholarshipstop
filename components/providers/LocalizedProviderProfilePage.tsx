@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight, BrainCircuit, Check } from 'lucide-react';
 
-import LanguageSwitcher from '@/components/i18n/LanguageSwitcher';
 import ResourcesPagination from '@/components/content-hub/ResourcesPagination';
 import ProviderProfilePageAuthBridge from '@/app/providers/ProviderProfilePageAuthBridge';
 import { ProviderProfileContextLinks } from '@/components/providers/ProviderProfileContextLinks';
@@ -9,7 +8,6 @@ import { ProviderProfileTableOfContents } from '@/components/providers/ProviderP
 import { ProviderProfileFaqAccordion } from '@/components/providers/ProviderProfileFaqAccordion';
 import { ProviderOfficialWebsiteGate } from '@/components/providers/ProviderOfficialWebsiteGate';
 import { ProviderProfileScholarshipsScroll } from '@/components/providers/ProviderProfileScholarshipsScroll';
-import HomePrimaryCtaClient from '@/components/home/HomePrimaryCtaClient';
 import { formatProviderHqLocationLine } from '@/lib/providers/providerHubRegionLabel';
 import type { ProviderProfilePayload } from '@/lib/providers/providerProfileTypes';
 import {
@@ -21,7 +19,11 @@ import {
   type ProviderDataCompleteness,
   type ProviderSourceStatus
 } from '@/lib/seo/providerSeoQualityPolicy';
-import { getProviderDetailUiCopy } from '@/lib/i18n/providerDetailUiCopy';
+import {
+  getProviderContextLinkItems,
+  getProviderDetailUiCopy
+} from '@/lib/i18n/providerDetailUiCopy';
+import ProviderScholarshipMatchCta from '@/components/providers/ProviderScholarshipMatchCta';
 import type { LocalizedProviderPageCopy } from '@/lib/i18n/providerPilot/providerProfileTranslationGate';
 import {
   getLocalizedProviderDataCompletenessLabel,
@@ -62,13 +64,11 @@ function providerProfileSourceLinks(urls: string[]): string[] {
   return out;
 }
 
-function providerProfileSourceLabel(href: string, index: number): string {
+function sourceHostFromHref(href: string): string {
   try {
-    const parsed = new URL(href);
-    const host = parsed.hostname.replace(/^www\./i, '');
-    return host ? `Source ${index + 1}: ${host}` : `Source ${index + 1}`;
+    return new URL(href).hostname.replace(/^www\./i, '') || '';
   } catch {
-    return `Source ${index + 1}`;
+    return '';
   }
 }
 
@@ -170,9 +170,6 @@ export default function LocalizedProviderProfilePage({
   const showAwardPool =
     data.totalScholarshipCount > 3 && formattedAwardPool != null;
 
-  const homeLabel = locale === 'es' ? 'Inicio' : 'Accueil';
-  const providersHubLabel = locale === 'es' ? 'Proveedores' : 'Fournisseurs';
-
   const breadcrumbsLd = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -180,13 +177,13 @@ export default function LocalizedProviderProfilePage({
       {
         '@type': 'ListItem',
         position: 1,
-        name: homeLabel,
+        name: detailUi.nav.home,
         item: getURL(hrefForLocalizedUiRequired(locale, '/'))
       },
       {
         '@type': 'ListItem',
         position: 2,
-        name: providersHubLabel,
+        name: detailUi.nav.providersHub,
         item: getURL(hrefForLocalizedUiRequired(locale, '/providers'))
       },
       {
@@ -227,9 +224,7 @@ export default function LocalizedProviderProfilePage({
 
   const resolvedDescription =
     copy.metaDescription.trim() ||
-    (locale === 'es'
-      ? `Becas y perfil de ${data.displayName} en ScholarshipTop.`
-      : `Bourses et profil de ${data.displayName} sur ScholarshipTop.`);
+    detailUi.metaDescriptionFallback(data.displayName);
 
   const webPageLd = {
     '@context': 'https://schema.org',
@@ -270,13 +265,6 @@ export default function LocalizedProviderProfilePage({
         />
       ) : null}
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-4 flex flex-wrap items-center justify-end gap-3">
-          <LanguageSwitcher
-            pathname={providerPath}
-            currentLocale={locale}
-            variant="dropdown"
-          />
-        </div>
         <header className="rounded-2xl border border-gray-100 bg-white px-6 py-8 shadow-sm sm:px-10 sm:py-10">
           <div className="min-w-0 space-y-4">
             <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
@@ -350,7 +338,10 @@ export default function LocalizedProviderProfilePage({
           </div>
         </header>
 
-        <ProviderProfileTableOfContents items={tocItems} />
+        <ProviderProfileTableOfContents
+          items={tocItems}
+          onThisPageLabel={detailUi.tocOnThisPage}
+        />
 
         <section
           id="provider-about"
@@ -382,7 +373,10 @@ export default function LocalizedProviderProfilePage({
           iqCta={detailUi.iqCta}
         />
 
-        <ProviderProfileContextLinks />
+        <ProviderProfileContextLinks
+          copy={detailUi.contextLinks}
+          items={getProviderContextLinkItems(locale)}
+        />
 
         {officialHrefNormalized || sourceLinks.length > 0 ? (
           <section
@@ -422,7 +416,7 @@ export default function LocalizedProviderProfilePage({
                         rel="noopener noreferrer"
                         className="block break-words font-semibold text-emerald-900 transition hover:text-emerald-950"
                       >
-                        {providerProfileSourceLabel(href, index)}
+                        {detailUi.sourceLinkLabel(index, sourceHostFromHref(href))}
                       </a>
                     </li>
                   ))}
@@ -432,7 +426,7 @@ export default function LocalizedProviderProfilePage({
           </section>
         ) : null}
 
-        <ProviderProfileFaqAccordion items={faqItems} />
+        <ProviderProfileFaqAccordion items={faqItems} heading={detailUi.toc.faq} />
 
         <section
           id="provider-scholarships"
@@ -440,23 +434,7 @@ export default function LocalizedProviderProfilePage({
         >
           <ProviderProfileScholarshipsScroll page={currentPage} />
           <div className="mb-6 flex flex-col gap-4">
-            <div className="rounded-3xl border border-indigo-200 bg-indigo-50 px-5 py-4 text-center shadow-sm sm:px-6 sm:py-5">
-              <div className="flex items-center justify-center gap-2">
-                <span className="text-2xl leading-none sm:text-[1.7rem]" aria-hidden>
-                  🎯
-                </span>
-                <h3 className="text-xl font-bold leading-[1.08] tracking-tight text-indigo-950 sm:text-[1.65rem] md:text-[1.85rem] md:whitespace-nowrap">
-                  {locale === 'es'
-                    ? 'Encuentra becas en 2 minutos'
-                    : 'Trouvez des bourses en 2 minutes'}
-                </h3>
-              </div>
-              <HomePrimaryCtaClient
-                className="mt-3 inline-flex items-center justify-center rounded-full bg-black px-7 py-2 text-xl font-bold leading-none text-white shadow-[0_8px_20px_rgba(0,0,0,0.25)] transition hover:bg-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/45"
-              >
-                {locale === 'es' ? 'Encontrar mis becas' : 'Trouver mes bourses'}
-              </HomePrimaryCtaClient>
-            </div>
+            <ProviderScholarshipMatchCta locale={locale} />
           </div>
 
           {data.similarProviders.length > 0 ? (
@@ -498,24 +476,30 @@ export default function LocalizedProviderProfilePage({
               <p className="text-base font-medium text-zinc-900">
                 {detailUi.scholarships.noScholarships}
               </p>
+              <p className="mt-3 text-sm leading-relaxed text-zinc-600">
+                {detailUi.scholarshipsEmpty.onboardingHint}
+              </p>
               <Link
                 href={hrefForLocalizedUiRequired(locale, '/onboarding')}
                 className="mt-6 inline-flex items-center justify-center rounded-xl border border-zinc-200 bg-zinc-900 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/55"
               >
-                {locale === 'es' ? 'Recibir avisos' : 'Recevoir des alertes'}
+                {detailUi.scholarshipsEmpty.getNotified}
               </Link>
             </div>
           ) : (
             <>
               <p className="text-sm text-zinc-500">
-                {locale === 'es'
-                  ? `Mostrando ${showingFrom}-${showingTo} de ${data.totalScholarshipCount.toLocaleString()} becas`
-                  : `Affichage ${showingFrom}-${showingTo} sur ${data.totalScholarshipCount.toLocaleString()} bourses`}
+                {detailUi.showingScholarships(
+                  showingFrom,
+                  showingTo,
+                  data.totalScholarshipCount.toLocaleString()
+                )}
               </p>
               <div className="mt-6 flex w-full min-w-0 flex-col gap-4">
                 <ProviderProfilePageAuthBridge scholarships={data.scholarships} />
               </div>
               <ResourcesPagination
+                locale={locale}
                 currentPage={currentPage}
                 totalPages={totalPages}
                 buildHref={(p) =>
@@ -548,18 +532,6 @@ function LocalizedProviderSourceStatusBlock({
   detailUi: ReturnType<typeof getProviderDetailUiCopy>;
 }) {
   const host = providerHostLabel(officialHref);
-  const verifyItems =
-    locale === 'es'
-      ? [
-          'Reglas finales de elegibilidad y requisitos del perfil del estudiante.',
-          'Fecha límite actual, zona horaria y ruta de solicitud.',
-          'Monto del premio, método de pago, renovación y documentos requeridos.'
-        ]
-      : [
-          'Règles d’éligibilité finales et exigences du profil étudiant.',
-          'Date limite actuelle, fuseau horaire et voie de candidature.',
-          'Montant de la bourse, mode de versement, renouvellement et documents requis.'
-        ];
 
   return (
     <section
@@ -608,10 +580,10 @@ function LocalizedProviderSourceStatusBlock({
       <div className="mt-6 grid gap-5 lg:grid-cols-2">
         <div className="rounded-2xl border border-gray-100 bg-gray-50/70 p-5">
           <h3 className="text-sm font-bold text-gray-950">
-            {locale === 'es' ? 'Qué verificar antes de aplicar' : 'À vérifier avant de postuler'}
+            {detailUi.trust.verifyBeforeApply}
           </h3>
           <ul className="mt-3 space-y-2 text-sm leading-6 text-gray-700">
-            {verifyItems.map((item) => (
+            {detailUi.trust.verifyItems.map((item) => (
               <li key={item} className="flex gap-2">
                 <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" />
                 <span>{item}</span>
@@ -629,13 +601,13 @@ function LocalizedProviderSourceStatusBlock({
           )}
           className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-900 transition hover:border-emerald-300 hover:bg-white"
         >
-          {locale === 'es' ? 'Metodología de verificación' : 'Méthode de vérification'}
+          {detailUi.trust.verificationMethodology}
         </Link>
         <Link
           href={hrefForLocalizedUiRequired(locale, '/corrections')}
           className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-900 transition hover:border-emerald-300 hover:bg-white"
         >
-          {locale === 'es' ? 'Reportar corrección' : 'Signaler une correction'}
+          {detailUi.trust.reportCorrection}
         </Link>
       </div>
     </section>

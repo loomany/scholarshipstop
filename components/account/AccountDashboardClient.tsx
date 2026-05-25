@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { usePathname } from 'next/navigation';
 import type { User } from '@supabase/supabase-js';
 
@@ -10,6 +10,7 @@ import {
   isStage2PilotLocale
 } from '@/lib/i18n/pilotRoutes';
 import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
+import { writeStoredUiLocale } from '@/components/i18n/LocaleUiPreference';
 import { getAccountUiCopy } from '@/lib/i18n/accountUiCopy';
 
 import SubscriptionPausedBanner from '@/components/billing/SubscriptionPausedBanner';
@@ -68,10 +69,20 @@ export default function AccountDashboardClient({
   const pausedResumeUrl = resolveResumeSubscriptionHref(subscription, '/subscription');
   const resendConfirmationMode = pickResendConfirmationMode(user, profile);
   const pathname = usePathname() ?? '/account';
+  const pathLocale = getStage2LocaleFromPathname(pathname);
   const uiLocale = useMemo((): LocalizedUiLocale => {
-    const loc = getStage2LocaleFromPathname(pathname);
-    return loc && isStage2PilotLocale(loc) ? loc : 'en';
-  }, [pathname]);
+    if (pathLocale && isStage2PilotLocale(pathLocale)) return pathLocale;
+    return 'en';
+  }, [pathLocale]);
+
+  useEffect(() => {
+    if (pathLocale && isStage2PilotLocale(pathLocale)) {
+      writeStoredUiLocale(pathLocale);
+      return;
+    }
+    writeStoredUiLocale('en');
+  }, [pathLocale]);
+
   const ui = getAccountUiCopy(uiLocale);
 
   return (

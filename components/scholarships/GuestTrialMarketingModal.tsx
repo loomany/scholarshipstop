@@ -3,7 +3,11 @@
 import { dismissRouteProgress } from '@/lib/navigation/dismissRouteProgress';
 import { useCallback, useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Check, Lock, X } from 'lucide-react';
+
+import { getPremiumCompactModalCopy } from '@/lib/i18n/premiumCompactModalCopy';
+import { resolveNavLocaleFromPathname } from '@/lib/i18n/resolveNavLocale';
 
 export type GuestTrialMarketingModalProps = {
   open: boolean;
@@ -45,25 +49,6 @@ const ESSAY_BULLETS = [
   'Unlimited essay generations'
 ] as const;
 
-/** Same deck as `PremiumCompactModal` — signed-in users without a plan (e.g. save filters). */
-const SIGNED_IN_PREMIUM_ACCESS_BULLETS = [
-  {
-    id: 'ai-essay-mentor',
-    title: '🤖 AI Essay Mentor:',
-    body: 'Craft winning applications in minutes (on select plans).'
-  },
-  {
-    id: 'full-grant-visibility',
-    title: '🔑 Full Grant Visibility:',
-    body: 'Unblur all grant names, external links, and deadlines.'
-  },
-  {
-    id: 'exclusive-matches',
-    title: '🎯 Exclusive Matches:',
-    body: 'Lock in your criteria and get notified about matching opportunities.'
-  }
-] as const;
-
 export default function GuestTrialMarketingModal({
   open,
   onClose,
@@ -75,6 +60,10 @@ export default function GuestTrialMarketingModal({
   signedInWithoutSubscription = false,
   grantScholarshipPitch = false
 }: GuestTrialMarketingModalProps) {
+  const pathname = usePathname() ?? '/';
+  const premiumCopy = getPremiumCompactModalCopy(
+    resolveNavLocaleFromPathname(pathname)
+  );
   const dismiss = useCallback(() => {
     onSecondaryAction?.();
     onClose();
@@ -169,7 +158,7 @@ export default function GuestTrialMarketingModal({
                 id="guest-trial-modal-title"
                 className="flex items-center justify-center gap-2 pr-8 text-xl font-bold tracking-tight text-zinc-900 sm:text-2xl"
               >
-                Unlock Premium Access
+                {premiumCopy.title}
                 <Lock
                   className="h-4 w-4 shrink-0 text-[#ff7b00]"
                   strokeWidth={2.3}
@@ -177,12 +166,11 @@ export default function GuestTrialMarketingModal({
                 />
               </h2>
               <p className="mt-2 text-sm leading-relaxed text-zinc-600 sm:text-base">
-                This is a premium-only feature. Upgrade now to see all grants, access
-                advanced tools, and use our powerful AI Essay Mentor.
+                {premiumCopy.intro}
               </p>
 
               <ul className="mt-4 space-y-2.5 text-left text-zinc-700">
-                {SIGNED_IN_PREMIUM_ACCESS_BULLETS.map((feature) => (
+                {premiumCopy.features.map((feature) => (
                   <li key={feature.id} className="flex items-start gap-2.5 text-sm">
                     <Check
                       className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600"
@@ -206,12 +194,12 @@ export default function GuestTrialMarketingModal({
                   }}
                   className="inline-flex h-11 w-full items-center justify-center rounded-xl bg-[#FF7A1A] px-5 text-sm font-semibold text-white shadow-md shadow-orange-500/25 transition hover:bg-[#E6670C] focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/80 focus-visible:ring-offset-2 sm:text-base"
                 >
-                  🚀 View Premium Plans
+                  {premiumCopy.cta}
                 </Link>
               </div>
 
               <p className="mt-3 text-center text-xs text-zinc-400 sm:text-sm">
-                Secure payment • Cancel anytime
+                {premiumCopy.footer}
               </p>
             </>
           ) : (

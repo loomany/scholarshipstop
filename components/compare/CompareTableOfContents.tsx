@@ -6,10 +6,12 @@ import type { EssayTocItem } from '@/lib/essays/essayBodyToc';
 export default function CompareTableOfContents({
   items,
   labelId = 'compare-toc-label',
+  onThisPageLabel = 'On this page',
   className
 }: {
   items: EssayTocItem[];
   labelId?: string;
+  onThisPageLabel?: string;
   /** Extra classes on `<nav>` (e.g. layout inside a bordered section). */
   className?: string;
 }) {
@@ -27,7 +29,7 @@ export default function CompareTableOfContents({
         id={labelId}
         className="text-sm font-semibold tracking-tight text-gray-900"
       >
-        On this page
+        {onThisPageLabel}
       </p>
       <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm text-gray-700">
         {items.map((item) => (

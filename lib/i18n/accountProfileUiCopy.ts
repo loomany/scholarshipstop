@@ -1,4 +1,6 @@
+import type { AppSubscriptionPlan } from '@/lib/payments/subscriptionEntitlements';
 import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
+import { FIELD_OF_STUDY_LABEL_ES, FIELD_OF_STUDY_LABEL_FR } from '@/lib/i18n/accountFieldOfStudyLabels';
 import { CITIZENSHIP_OPTIONS } from '@/lib/constants/onboardingCitizenshipAndLocation';
 import {
   FIELD_OF_STUDY_OPTIONS,
@@ -25,6 +27,9 @@ export type AccountProfileUiCopy = {
     gpa: string;
     stateRegion: string;
     studyDestinations: string;
+    studyIn: string;
+    applicantCountry: string;
+    usState: string;
   };
   placeholders: {
     schoolLevel: string;
@@ -46,6 +51,31 @@ export type AccountProfileUiCopy = {
   saving: string;
   savedOk: string;
   savedHint: string;
+  citizenshipNotSpecified: string;
+  noMatchesFound: string;
+  usStateHint: string;
+  studyDestination: {
+    chooseCountries: string;
+    searchCountries: string;
+    clearAll: string;
+    pickUpTo: (max: number) => string;
+    moreCount: (count: number) => string;
+    noMatches: string;
+    save: string;
+    ariaTrigger: string;
+    ariaListbox: string;
+  };
+  subscriptionPlanBadges: {
+    free: string;
+    trial: string;
+    monthly_pro: string;
+    quarterly_pro: string;
+    yearly_pro: string;
+    trialMonthly: string;
+    trialQuarterly: string;
+    trialYearly: string;
+    canceledSuffix: string;
+  };
   subscriptionStatusHeading: string;
   trialCountdown: string;
   stopSearchingHeadline: string;
@@ -151,7 +181,10 @@ const EN: AccountProfileUiCopy = {
     citizenship: 'Citizenship status',
     gpa: 'GPA',
     stateRegion: 'State / region',
-    studyDestinations: 'Preferred study destinations'
+    studyDestinations: 'Preferred study destinations',
+    studyIn: 'Study in',
+    applicantCountry: 'Applicant country',
+    usState: 'U.S. state'
   },
   placeholders: {
     schoolLevel: 'Select your school level',
@@ -174,6 +207,33 @@ const EN: AccountProfileUiCopy = {
   saving: 'Saving…',
   savedOk: 'Saved.',
   savedHint: 'Saved to your account. We use this for scholarship matching.',
+  citizenshipNotSpecified: 'Citizenship not specified',
+  noMatchesFound: 'No matches found.',
+  usStateHint: 'Used for state-specific scholarships inside the U.S.',
+  studyDestination: {
+    chooseCountries: 'Choose countries (optional)',
+    searchCountries: 'Search countries',
+    clearAll: 'Clear all',
+    pickUpTo: (max) =>
+      `Pick up to ${max}. Leave empty if you have no preference yet.`,
+    moreCount: (count) => `+${count} more`,
+    noMatches: 'No matches.',
+    save: 'Save',
+    ariaTrigger:
+      'Study in — choose destination countries (optional). Opens a list to pick one or more.',
+    ariaListbox: 'Study in — destination countries'
+  },
+  subscriptionPlanBadges: {
+    free: 'Free Plan',
+    trial: '3-Day Trial',
+    monthly_pro: 'Monthly Pro',
+    quarterly_pro: 'Quarterly Pro',
+    yearly_pro: 'Yearly Pro',
+    trialMonthly: '3-Day Trial · Monthly',
+    trialQuarterly: '3-Day Trial · Quarterly',
+    trialYearly: '3-Day Trial · Yearly',
+    canceledSuffix: '(Canceled)'
+  },
   subscriptionStatusHeading: 'Subscription status',
   trialCountdown: 'Trial countdown',
   stopSearchingHeadline: 'Stop Searching. Start Winning.',
@@ -264,7 +324,10 @@ const ES: AccountProfileUiCopy = {
     citizenship: 'Estado de ciudadanía',
     gpa: 'GPA',
     stateRegion: 'Estado / región',
-    studyDestinations: 'Destinos de estudio preferidos'
+    studyDestinations: 'Destinos de estudio preferidos',
+    studyIn: 'Estudiar en',
+    applicantCountry: 'País del solicitante',
+    usState: 'Estado de EE. UU.'
   },
   placeholders: {
     schoolLevel: 'Selecciona tu nivel escolar',
@@ -286,6 +349,33 @@ const ES: AccountProfileUiCopy = {
   saving: 'Guardando…',
   savedOk: 'Guardado.',
   savedHint: 'Guardado en tu cuenta. Lo usamos para recomendar becas.',
+  citizenshipNotSpecified: 'Ciudadanía no especificada',
+  noMatchesFound: 'Sin coincidencias.',
+  usStateHint: 'Para becas específicas de un estado dentro de EE. UU.',
+  studyDestination: {
+    chooseCountries: 'Elegir países (opcional)',
+    searchCountries: 'Buscar países',
+    clearAll: 'Borrar todo',
+    pickUpTo: (max) =>
+      `Elige hasta ${max}. Déjalo vacío si aún no tienes preferencia.`,
+    moreCount: (count) => `+${count} más`,
+    noMatches: 'Sin coincidencias.',
+    save: 'Guardar',
+    ariaTrigger:
+      'Estudiar en — elegir países de destino (opcional). Abre una lista para elegir uno o más.',
+    ariaListbox: 'Estudiar en — países de destino'
+  },
+  subscriptionPlanBadges: {
+    free: 'Plan gratuito',
+    trial: 'Prueba de 3 días',
+    monthly_pro: 'Pro mensual',
+    quarterly_pro: 'Pro trimestral',
+    yearly_pro: 'Pro anual',
+    trialMonthly: 'Prueba 3 días · Mensual',
+    trialQuarterly: 'Prueba 3 días · Trimestral',
+    trialYearly: 'Prueba 3 días · Anual',
+    canceledSuffix: '(Cancelado)'
+  },
   subscriptionStatusHeading: 'Estado de suscripción',
   trialCountdown: 'Cuenta regresiva de prueba',
   stopSearchingHeadline: 'Deja de buscar. Empieza a ganar.',
@@ -408,7 +498,10 @@ const FR: AccountProfileUiCopy = {
     citizenship: 'Statut de citoyenneté',
     gpa: 'GPA',
     stateRegion: 'État / région',
-    studyDestinations: 'Destinations d’études préférées'
+    studyDestinations: 'Destinations d’études préférées',
+    studyIn: 'Étudier en',
+    applicantCountry: 'Pays du candidat',
+    usState: 'État américain'
   },
   placeholders: {
     schoolLevel: 'Sélectionnez votre niveau scolaire',
@@ -430,6 +523,33 @@ const FR: AccountProfileUiCopy = {
   saving: 'Enregistrement…',
   savedOk: 'Enregistré.',
   savedHint: 'Enregistré sur votre compte. Utilisé pour les recommandations de bourses.',
+  citizenshipNotSpecified: 'Citoyenneté non précisée',
+  noMatchesFound: 'Aucune correspondance.',
+  usStateHint: 'Pour les bourses propres à un État aux États-Unis.',
+  studyDestination: {
+    chooseCountries: 'Choisir des pays (facultatif)',
+    searchCountries: 'Rechercher des pays',
+    clearAll: 'Tout effacer',
+    pickUpTo: (max) =>
+      `Choisissez jusqu’à ${max}. Laissez vide si vous n’avez pas encore de préférence.`,
+    moreCount: (count) => `+${count} de plus`,
+    noMatches: 'Aucune correspondance.',
+    save: 'Enregistrer',
+    ariaTrigger:
+      'Étudier en — choisir les pays de destination (facultatif). Ouvre une liste pour en sélectionner un ou plusieurs.',
+    ariaListbox: 'Étudier en — pays de destination'
+  },
+  subscriptionPlanBadges: {
+    free: 'Forfait gratuit',
+    trial: 'Essai 3 jours',
+    monthly_pro: 'Pro mensuel',
+    quarterly_pro: 'Pro trimestriel',
+    yearly_pro: 'Pro annuel',
+    trialMonthly: 'Essai 3 jours · Mensuel',
+    trialQuarterly: 'Essai 3 jours · Trimestriel',
+    trialYearly: 'Essai 3 jours · Annuel',
+    canceledSuffix: '(Annulé)'
+  },
   subscriptionStatusHeading: 'Statut de l’abonnement',
   trialCountdown: 'Compte à rebours d’essai',
   stopSearchingHeadline: 'Arrêtez de chercher. Commencez à gagner.',
@@ -661,5 +781,32 @@ function accountProfileOptionLabel(
   if (group === 'citizenship') {
     return (locale === 'es' ? CITIZENSHIP_ES : CITIZENSHIP_FR)[value] ?? fallback;
   }
+  if (group === 'field') {
+    return (locale === 'es' ? FIELD_OF_STUDY_LABEL_ES : FIELD_OF_STUDY_LABEL_FR)[
+      value
+    ] ?? fallback;
+  }
   return fallback;
+}
+
+/** Maps English subscription badge text from billing to localized labels. */
+export function accountLocalizedSubscriptionBadge(
+  locale: LocalizedUiLocale,
+  plan: AppSubscriptionPlan,
+  englishLabel: string
+): string {
+  if (locale === 'en') return englishLabel;
+  const badges = getAccountProfileUiCopy(locale).subscriptionPlanBadges;
+  const canceled = /\(Canceled\)\s*$/i.test(englishLabel);
+  const base = englishLabel.replace(/\s*\(Canceled\)\s*$/i, '').trim();
+  let mapped: string;
+  if (base.startsWith('3-Day Trial · ')) {
+    if (base.includes('Yearly')) mapped = badges.trialYearly;
+    else if (base.includes('Quarterly')) mapped = badges.trialQuarterly;
+    else if (base.includes('Monthly')) mapped = badges.trialMonthly;
+    else mapped = badges.trial;
+  } else {
+    mapped = badges[plan] ?? base;
+  }
+  return canceled ? `${mapped} ${badges.canceledSuffix}` : mapped;
 }

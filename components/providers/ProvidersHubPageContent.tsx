@@ -359,6 +359,7 @@ export async function ProvidersHubPageContent({
               />
             </div>
             <ResourcesPagination
+              locale={locale}
               currentPage={currentPage}
               totalPages={totalPages}
               buildHref={buildPageHref}

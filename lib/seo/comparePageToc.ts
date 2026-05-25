@@ -1,10 +1,15 @@
 import type { EssayTocItem } from '@/lib/essays/essayBodyToc';
+import { getCompareDetailUiCopy } from '@/lib/i18n/compareDetailUiCopy';
+import { getCompareStateDetailUiCopy } from '@/lib/i18n/compareStateDetailUiCopy';
+import { getCompareUniversityDetailUiCopy } from '@/lib/i18n/compareUniversityDetailUiCopy';
+import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
 
 /**
  * Builds the full compare-page TOC (anchor order matches vertical layout):
  * skeleton sections rendered in JSX, then headings from CMS body HTML (`h2`/`h3`).
  */
 export function buildStateCompareTocMerged(args: {
+  locale?: LocalizedUiLocale;
   bodyToc: EssayTocItem[];
   hasClimateEssay: boolean;
   faqCount: number;
@@ -12,30 +17,38 @@ export function buildStateCompareTocMerged(args: {
   hasRelated: boolean;
 }): EssayTocItem[] {
   const {
+    locale = 'en',
     bodyToc,
     hasClimateEssay,
     faqCount,
     sourcesCount,
     hasRelated
   } = args;
+  const stateUi = getCompareStateDetailUiCopy(locale);
+  const detailUi = getCompareDetailUiCopy(locale);
 
   const rest: EssayTocItem[] = [
     ...(hasClimateEssay
       ? [
           {
             id: 'state-climate-heading',
-            text: 'Scholarship climate by state'
+            text: stateUi.climateHeading
           } satisfies EssayTocItem
         ]
       : []),
     ...(faqCount > 0
-      ? [{ id: 'state-compare-faq-heading', text: 'FAQ' } satisfies EssayTocItem]
+      ? [
+          {
+            id: 'state-compare-faq-heading',
+            text: stateUi.tocFaq
+          } satisfies EssayTocItem
+        ]
       : []),
     ...(sourcesCount > 0
       ? [
           {
             id: 'state-compare-sources-heading',
-            text: 'Sources and official pages'
+            text: stateUi.sourcesHeading
           } satisfies EssayTocItem
         ]
       : []),
@@ -43,20 +56,22 @@ export function buildStateCompareTocMerged(args: {
       ? [
           {
             id: 'state-related-guides-heading',
-            text:
-              'More guides around this State vs State comparison'
+            text: stateUi.relatedHeading
           } satisfies EssayTocItem
         ]
       : [])
   ];
 
   return [
-    { id: 'compare-state-quick-heading', text: 'Quick comparison' },
+    { id: 'compare-state-quick-heading', text: stateUi.quickComparison },
     ...bodyToc,
-    { id: 'compare-state-top-providers-heading', text: 'Top scholarship providers' },
+    {
+      id: 'compare-state-top-providers-heading',
+      text: stateUi.tocTopProviders
+    },
     {
       id: 'compare-state-cta-heading',
-      text: 'Get matched with scholarships in 2 minutes'
+      text: detailUi.scholarshipMatchCta.heading
     },
     ...rest
   ];
@@ -64,6 +79,7 @@ export function buildStateCompareTocMerged(args: {
 
 /** University vs university — JSX section order differs from state compare */
 export function buildUniversityCompareTocMerged(args: {
+  locale?: LocalizedUiLocale;
   bodyToc: EssayTocItem[];
   hasEssayInsights: boolean;
   hasStateBattle: boolean;
@@ -72,6 +88,7 @@ export function buildUniversityCompareTocMerged(args: {
   hasRelated: boolean;
 }): EssayTocItem[] {
   const {
+    locale = 'en',
     bodyToc,
     hasEssayInsights,
     hasStateBattle,
@@ -79,39 +96,41 @@ export function buildUniversityCompareTocMerged(args: {
     sourcesCount,
     hasRelated
   } = args;
+  const uniUi = getCompareUniversityDetailUiCopy(locale);
+  const detailUi = getCompareDetailUiCopy(locale);
 
   return [
-    { id: 'compare-uni-quick-heading', text: 'Quick comparison' },
+    { id: 'compare-uni-quick-heading', text: uniUi.quickComparison },
     ...bodyToc,
     ...(hasEssayInsights
       ? [
           {
             id: 'essay-insights-heading',
-            text: 'Writing efforts'
+            text: uniUi.tocWritingEfforts
           } satisfies EssayTocItem
         ]
       : []),
-    { id: 'top-grants-heading', text: 'Top grants by university' },
+    { id: 'top-grants-heading', text: detailUi.universityGrants.heading },
     {
       id: 'compare-uni-cta-heading',
-      text: 'Get matched with scholarships in 2 minutes'
+      text: detailUi.scholarshipMatchCta.heading
     },
     ...(hasStateBattle
       ? [
           {
             id: 'state-battle-link-heading',
-            text: 'Not sure about the location?'
+            text: uniUi.tocStateBattle
           } satisfies EssayTocItem
         ]
       : []),
     ...(faqCount > 0
-      ? [{ id: 'compare-faq-heading', text: 'FAQ' } satisfies EssayTocItem]
+      ? [{ id: 'compare-faq-heading', text: uniUi.tocFaq } satisfies EssayTocItem]
       : []),
     ...(sourcesCount > 0
       ? [
           {
             id: 'compare-sources-heading',
-            text: 'Sources and official pages'
+            text: uniUi.sourcesHeading
           } satisfies EssayTocItem
         ]
       : []),
@@ -119,7 +138,7 @@ export function buildUniversityCompareTocMerged(args: {
       ? [
           {
             id: 'compare-related-guides-heading',
-            text: 'More guides around this comparison'
+            text: uniUi.relatedHeading
           } satisfies EssayTocItem
         ]
       : [])

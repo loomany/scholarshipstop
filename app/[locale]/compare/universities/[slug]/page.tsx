@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
+import { UniversityCompareDetailPageBody } from '@/app/compare/universities/universityCompareDetailPageBody';
 import LocalizedCompareDetailPage from '@/components/compare/LocalizedCompareDetailPage';
 import { getContentTranslationSeoDecision } from '@/lib/i18n/contentTranslationsServer';
+import { fetchPublishedComparePageBySlug } from '@/lib/seo/universityCompareServer';
 import type { ContentTranslationLocale } from '@/lib/i18n/contentTranslationsTypes';
 import { buildCompareUniversityAlternates } from '@/lib/i18n/comparePilot/compareTranslationAlternates';
 import { fetchPublishedCompareUniversity } from '@/lib/i18n/comparePilot/resolveLocalizedCompare';
@@ -99,19 +101,25 @@ export default async function LocalizedUniversityCompareRoute({ params }: PagePr
     slug,
     locale as ContentTranslationLocale
   );
-  if (!resolved) notFound();
 
-  const canonicalPath = `/compare/universities/${slug}`;
-  const hubLabel =
-    locale === 'es' ? 'Ver comparaciones universitarias' : 'Voir comparaisons universités';
+  if (resolved) {
+    const canonicalPath = `/compare/universities/${slug}`;
+    const hubLabel =
+      locale === 'es' ? 'Ver comparaciones universitarias' : 'Voir comparaisons universités';
 
-  return (
-    <LocalizedCompareDetailPage
-      locale={locale}
-      canonicalPath={canonicalPath}
-      copy={resolved.copy}
-      hubLabel={hubLabel}
-      hubPath="/compare/universities"
-    />
-  );
+    return (
+      <LocalizedCompareDetailPage
+        locale={locale}
+        canonicalPath={canonicalPath}
+        copy={resolved.copy}
+        hubLabel={hubLabel}
+        hubPath="/compare/universities"
+      />
+    );
+  }
+
+  const englishRow = await fetchPublishedComparePageBySlug(slug);
+  if (!englishRow) notFound();
+
+  return <UniversityCompareDetailPageBody slug={slug} locale={locale} />;
 }

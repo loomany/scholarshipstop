@@ -1,24 +1,22 @@
 import Link from 'next/link';
 
+import type { ProviderDetailUiCopy } from '@/lib/i18n/providerDetailUiCopy';
+
 const cardClass =
   'block rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-orange-300 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/60 focus-visible:ring-offset-2';
 
-const items: { href: string; title: string }[] = [
-  { href: '/scholarships/hub/matches', title: 'Browse matching scholarships' },
-  { href: '/scholarships/hub/easy-apply', title: 'Easy apply scholarships' },
-  {
-    href: '/scholarships/hub/international-friendly',
-    title: 'Scholarships for international students'
-  },
-  { href: '/resources', title: 'Scholarship guides' },
-  { href: '/essays', title: 'Essay guides' },
-  { href: '/compare', title: 'Compare opportunities' }
-];
+type ProviderProfileContextLinksProps = {
+  copy: ProviderDetailUiCopy['contextLinks'];
+  items: ReadonlyArray<{ href: string; title: string }>;
+};
 
 /**
  * Cross-link SaaS block between About Provider and Official Website (SSR).
  */
-export function ProviderProfileContextLinks() {
+export function ProviderProfileContextLinks({
+  copy,
+  items
+}: ProviderProfileContextLinksProps) {
   return (
     <section
       id="provider-explore-scholarships"
@@ -30,11 +28,10 @@ export function ProviderProfileContextLinks() {
           id="provider-cross-links-heading"
           className="text-lg font-bold tracking-tight text-gray-900 sm:text-xl"
         >
-          Explore scholarships and guides
+          {copy.heading}
         </h2>
         <p className="mt-2 text-sm leading-relaxed text-slate-600 sm:text-[0.9375rem]">
-          Continue from this provider profile into matching scholarships, easy applications,
-          international-friendly options, and practical scholarship guides.
+          {copy.body}
         </p>
       </div>
 

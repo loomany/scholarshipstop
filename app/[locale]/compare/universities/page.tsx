@@ -2,7 +2,6 @@ import { notFound } from 'next/navigation';
 
 import { generateMetadata as generateEnglishMetadata } from '@/app/compare/universities/page';
 import { UniversityCompareHubPageBody } from '@/app/compare/universities/universityCompareHubPageBody';
-import { EnglishZoneNotice } from '@/components/i18n/EnglishZoneNotice';
 import {
   isStage2PilotLocale,
   type Stage2PilotLocale
@@ -27,14 +26,6 @@ export default function LocalizedUniversityCompareHubPage({
   if (!isStage2PilotLocale(params.locale)) notFound();
   const locale = params.locale as Stage2PilotLocale;
   return (
-    <>
-      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6">
-        <EnglishZoneNotice locale={locale} />
-      </div>
-      <UniversityCompareHubPageBody
-        searchParams={searchParams}
-        locale={locale}
-      />
-    </>
+    <UniversityCompareHubPageBody searchParams={searchParams} locale={locale} />
   );
 }

@@ -1,7 +1,6 @@
-import { isResourcePilotSlug } from '@/lib/i18n/resourcePilot/resourcePilotSlugs';
+import { getStaticScholarshipGuide } from '@/lib/resources/staticScholarshipGuides';
 import { isProviderPilotSlug } from '@/lib/i18n/providerPilot/providerPilotSlugs';
 import { isEssayPilotSlug } from '@/lib/i18n/essayPilot/essayPilotSlugs';
-import { isCompareUniversityPilotSlug, isCompareStatePilotSlug } from '@/lib/i18n/comparePilot/comparePilotSlugs';
 import { isScholarshipDetailPilotSlug } from '@/lib/i18n/scholarshipPilot/scholarshipPilotSlugs';
 import { categoryIsPromotedSeo } from '@/lib/scholarships/categorySeoAllowlist';
 import {
@@ -48,7 +47,9 @@ export function resourceDetailSlugFromPath(canonicalPath: string): string | null
   const match = normalized.match(/^\/resources\/([^/]+)$/);
   if (!match) return null;
   const slug = match[1]!.trim().toLowerCase();
-  return isResourcePilotSlug(slug) ? slug : null;
+  if (!slug) return null;
+  if (getStaticScholarshipGuide(slug)) return null;
+  return slug;
 }
 
 export function essayDetailSlugFromPath(canonicalPath: string): string | null {
@@ -172,9 +173,7 @@ export function getDetailLanguageSwitcherItems(
   if (kind === 'compare_university_detail') {
     const slug = compareUniversitySlugFromPath(canonicalPath);
     if (!slug) return [];
-    const locales: Array<Stage2PilotLocale | 'en'> = ['en'];
-    if (isCompareUniversityPilotSlug(slug)) locales.push('es', 'fr');
-    return locales.map((locale) =>
+    return (['en', 'es', 'fr'] as const).map((locale) =>
       item(locale, localizedCompareUniversityHref(locale, slug), activeLocale)
     );
   }
@@ -182,9 +181,7 @@ export function getDetailLanguageSwitcherItems(
   if (kind === 'compare_state_detail') {
     const slug = compareStateSlugFromPath(canonicalPath);
     if (!slug) return [];
-    const locales: Array<Stage2PilotLocale | 'en'> = ['en'];
-    if (isCompareStatePilotSlug(slug)) locales.push('es', 'fr');
-    return locales.map((locale) =>
+    return (['en', 'es', 'fr'] as const).map((locale) =>
       item(locale, localizedCompareStateHref(locale, slug), activeLocale)
     );
   }

@@ -16,17 +16,12 @@ import {
   scholarshipDetailCardPrimaryClass,
   scholarshipDetailCardSupportClass
 } from '@/lib/scholarships/scholarshipDetailLayoutClasses';
-import {
-  SCHOLARSHIP_BEFORE_APPLY_DETAILS_TO_CONFIRM_TITLE,
-  SCHOLARSHIP_BEFORE_APPLY_IMPORTANT_CHECKS_TITLE,
-  SCHOLARSHIP_BEFORE_APPLY_RED_FLAGS_TITLE
-} from '@/lib/constants/scholarshipBeforeApplyCopy';
+import type { ScholarshipDetailUiCopy } from '@/lib/i18n/scholarshipDetailUiCopy';
 
-export function AiLowConfidenceNote() {
+export function AiLowConfidenceNote({ copy }: { copy: ScholarshipDetailUiCopy }) {
   return (
     <p className="rounded-xl border border-amber-200/80 bg-amber-50/90 px-3 py-2 text-xs leading-relaxed text-amber-950">
-      AI summary is based on limited listing data. Double-check every detail on
-      the official source before you apply.
+      {copy.ai.lowConfidenceNote}
     </p>
   );
 }
@@ -35,10 +30,12 @@ const badgeBase =
   'inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide';
 
 export function HeroDecisionBadges({
+  copy,
   matchBadge,
   urgencyBadge,
   difficultyBadge
 }: {
+  copy: ScholarshipDetailUiCopy;
   matchBadge: { label: string; title?: string } | null;
   urgencyBadge: { label: string; variant: 'slate' | 'sky' | 'amber' | 'rose' } | null;
   difficultyBadge: { label: string } | null;
@@ -66,7 +63,7 @@ export function HeroDecisionBadges({
       ) : null}
       {urgencyBadge ? (
         <span className={`${badgeBase} ${urgencyClass}`}>
-          Urgency: {urgencyBadge.label}
+          {copy.urgencyPrefix} {urgencyBadge.label}
         </span>
       ) : null}
       {difficultyBadge ? (
@@ -116,12 +113,14 @@ function QuickCard({
 }
 
 export function ScholarshipQuickDecisionGrid({
+  copy,
   bestFor,
   highlights,
   whyApply,
   importantChecks,
   renderLine
 }: {
+  copy: ScholarshipDetailUiCopy;
   bestFor: string[];
   highlights: string[];
   whyApply: string[];
@@ -138,34 +137,34 @@ export function ScholarshipQuickDecisionGrid({
   return (
     <div className={`mt-10 ${ai.card}`}>
       <div className={ai.header}>
-        <h3 className={ai.title}>Quick decision</h3>
+        <h3 className={ai.title}>{copy.quickDecision.title}</h3>
         <span className={ai.badge}>
           <Sparkles className="h-3 w-3 shrink-0 text-zinc-600" aria-hidden />
-          AI insights
+          {copy.quickDecision.badge}
         </span>
       </div>
 
       <div className={ai.content}>
         <QuickCard
-          title="Best for"
+          title={copy.quickDecision.bestFor}
           items={bestFor}
           tone="teal"
           renderLine={renderLine}
         />
         <QuickCard
-          title="Key highlights"
+          title={copy.quickDecision.highlights}
           items={highlights}
           tone="violet"
           renderLine={renderLine}
         />
         <QuickCard
-          title="Why apply"
+          title={copy.quickDecision.whyApply}
           items={whyApply}
           tone="sky"
           renderLine={renderLine}
         />
         <QuickCard
-          title="Important checks"
+          title={copy.quickDecision.importantChecks}
           items={importantChecks}
           tone="amber"
           renderLine={renderLine}
@@ -176,12 +175,14 @@ export function ScholarshipQuickDecisionGrid({
 }
 
 export function ScholarshipTrustSignalsBlock({
+  copy,
   sourceStatus,
   difficulty,
   urgency,
   missingDataFlags,
   lastReviewedLabel
 }: {
+  copy: ScholarshipDetailUiCopy;
   sourceStatus: ScholarshipSourceStatus;
   difficulty: ScholarshipDifficulty;
   urgency: ScholarshipDeadlineUrgency;
@@ -190,24 +191,24 @@ export function ScholarshipTrustSignalsBlock({
 }) {
   const cards = [
     {
-      label: 'Official source status',
+      label: copy.trust.officialSourceStatus,
       value: sourceStatus.label,
       body: sourceStatus.description
     },
     {
-      label: 'Review status',
-      value: lastReviewedLabel ?? 'Last reviewed date unavailable',
+      label: copy.trust.reviewStatus,
+      value: lastReviewedLabel ?? copy.trust.reviewValueMissing,
       body: lastReviewedLabel
-        ? 'ScholarshipTop has a review timestamp for this listing.'
-        : 'This listing has not exposed a manual review date yet.'
+        ? copy.trust.reviewBodyWhenPresent
+        : copy.trust.reviewBodyWhenMissing
     },
     {
-      label: 'Deadline urgency',
+      label: copy.trust.deadlineUrgency,
       value: urgency.label,
       body: urgency.description
     },
     {
-      label: 'Application difficulty',
+      label: copy.trust.applicationDifficulty,
       value: difficulty.level,
       body: difficulty.reason
     }
@@ -221,17 +222,16 @@ export function ScholarshipTrustSignalsBlock({
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wide text-orange-700">
-            ScholarshipTop notes
+            {copy.trust.kicker}
           </p>
           <h2
             id="scholarshiptop-trust-signals-heading"
             className="mt-1 text-lg font-semibold tracking-tight text-zinc-900"
           >
-            What to verify before applying
+            {copy.trust.title}
           </h2>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-zinc-600">
-            Use these signals to decide whether this scholarship is worth your
-            time. The official provider page controls final rules.
+            {copy.trust.intro}
           </p>
         </div>
         <div className="flex flex-wrap gap-2 text-xs font-semibold">
@@ -239,13 +239,13 @@ export function ScholarshipTrustSignalsBlock({
             href="/scholarship-verification-methodology"
             className="rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1.5 text-zinc-700 transition hover:border-zinc-300 hover:bg-white"
           >
-            Methodology
+            {copy.trust.methodology}
           </Link>
           <Link
             href="/financial-aid-disclaimer"
             className="rounded-full border border-orange-200 bg-orange-50 px-3 py-1.5 text-orange-800 transition hover:border-orange-300 hover:bg-orange-100"
           >
-            Disclaimer
+            {copy.trust.disclaimer}
           </Link>
         </div>
       </div>
@@ -270,7 +270,7 @@ export function ScholarshipTrustSignalsBlock({
       {missingDataFlags.length > 0 ? (
         <div className="mt-5 rounded-xl border border-amber-200 bg-amber-50/75 p-4">
           <p className="text-xs font-semibold uppercase tracking-wide text-amber-900">
-            Missing or unclear details
+            {copy.trust.missingDetails}
           </p>
           <ul className="mt-3 grid gap-2 text-sm leading-6 text-amber-950 sm:grid-cols-2">
             {missingDataFlags.slice(0, 6).map((flag) => (
@@ -289,9 +289,7 @@ export function ScholarshipTrustSignalsBlock({
         </div>
       ) : (
         <p className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50/80 px-4 py-3 text-sm leading-6 text-emerald-950">
-          Core listing fields look reasonably complete, but you should still
-          confirm final eligibility, deadline, payout, and application steps on
-          the official source.
+          {copy.trust.completeListingNote}
         </p>
       )}
     </section>
@@ -299,10 +297,12 @@ export function ScholarshipTrustSignalsBlock({
 }
 
 export function AiInsightSection({
+  copy,
   title,
   subtitle,
   children
 }: {
+  copy: ScholarshipDetailUiCopy;
   title: string;
   subtitle?: string;
   children: React.ReactNode;
@@ -315,7 +315,7 @@ export function AiInsightSection({
         </h2>
         <span className="inline-flex items-center gap-1 rounded-full bg-orange-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-orange-950 ring-1 ring-orange-200/60">
           <Sparkles className="h-3 w-3" aria-hidden />
-          AI guidance
+          {copy.ai.guidanceBadge}
         </span>
       </div>
       {subtitle ? (
@@ -353,9 +353,11 @@ export function BulletList({
 }
 
 export function ScholarshipWhyApplyBlock({
+  copy,
   items,
   renderLine
 }: {
+  copy: ScholarshipDetailUiCopy;
   items: string[];
   renderLine?: (text: string) => ReactNode;
 }) {
@@ -363,8 +365,9 @@ export function ScholarshipWhyApplyBlock({
   const show = items.slice(0, 5);
   return (
     <AiInsightSection
-      title="Why this may be worth applying to"
-      subtitle="Student-friendly angle based on the listing — not official rules."
+      copy={copy}
+      title={copy.ai.whyApplyTitle}
+      subtitle={copy.ai.whyApplySubtitle}
     >
       <BulletList items={show} renderLine={renderLine} />
     </AiInsightSection>
@@ -372,17 +375,20 @@ export function ScholarshipWhyApplyBlock({
 }
 
 export function ScholarshipApplicationTipsBlock({
+  copy,
   items,
   renderLine
 }: {
+  copy: ScholarshipDetailUiCopy;
   items: string[];
   renderLine?: (text: string) => ReactNode;
 }) {
   if (items.length === 0) return null;
   return (
     <AiInsightSection
-      title="Application tips"
-      subtitle="Listing-specific ideas from our AI layer — not official rules. Skip anything that does not match the program page."
+      copy={copy}
+      title={copy.ai.applicationTipsTitle}
+      subtitle={copy.ai.applicationTipsSubtitle}
     >
       <BulletList items={items.slice(0, 3)} renderLine={renderLine} />
     </AiInsightSection>
@@ -390,17 +396,20 @@ export function ScholarshipApplicationTipsBlock({
 }
 
 export function ScholarshipNextStepsBlock({
+  copy,
   items,
   renderLine
 }: {
+  copy: ScholarshipDetailUiCopy;
   items: string[];
   renderLine?: (text: string) => ReactNode;
 }) {
   if (items.length === 0) return null;
   return (
     <AiInsightSection
-      title="Next steps"
-      subtitle="A short checklist so you know what to do after reading the listing."
+      copy={copy}
+      title={copy.ai.nextStepsTitle}
+      subtitle={copy.ai.nextStepsSubtitle}
     >
       <ol className="list-decimal space-y-2 pl-5 text-sm leading-relaxed text-zinc-800">
         {items.map((item, i) => (
@@ -414,11 +423,13 @@ export function ScholarshipNextStepsBlock({
 }
 
 export function ScholarshipBeforeYouApplyBlock({
+  copy,
   checks,
   detailsToConfirm,
   redFlags,
   renderLine
 }: {
+  copy: ScholarshipDetailUiCopy;
   checks: string[];
   detailsToConfirm: string[];
   redFlags: string[];
@@ -431,14 +442,15 @@ export function ScholarshipBeforeYouApplyBlock({
 
   return (
     <AiInsightSection
-      title="Before you apply"
-      subtitle="Things to double-check on the official page."
+      copy={copy}
+      title={copy.ai.beforeApplyTitle}
+      subtitle={copy.ai.beforeApplySubtitle}
     >
       <div className="space-y-6">
         {hasChecks ? (
           <div>
             <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">
-              {SCHOLARSHIP_BEFORE_APPLY_IMPORTANT_CHECKS_TITLE}
+              {copy.ai.importantChecks}
             </p>
             <BulletList items={checks} renderLine={renderLine} />
           </div>
@@ -446,7 +458,7 @@ export function ScholarshipBeforeYouApplyBlock({
         {hasDetailsToConfirm ? (
           <div>
             <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">
-              {SCHOLARSHIP_BEFORE_APPLY_DETAILS_TO_CONFIRM_TITLE}
+              {copy.ai.detailsToConfirm}
             </p>
             <BulletList items={detailsToConfirm} renderLine={renderLine} />
           </div>
@@ -454,7 +466,7 @@ export function ScholarshipBeforeYouApplyBlock({
         {hasFlags ? (
           <div>
             <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-rose-700">
-              {SCHOLARSHIP_BEFORE_APPLY_RED_FLAGS_TITLE}
+              {copy.ai.redFlags}
             </p>
             <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-rose-900">
               {redFlags.map((item, i) => (
@@ -470,11 +482,17 @@ export function ScholarshipBeforeYouApplyBlock({
   );
 }
 
-export function ScholarshipSeoApplicationBlock({ text }: { text: string }) {
+export function ScholarshipSeoApplicationBlock({
+  copy,
+  text
+}: {
+  copy: ScholarshipDetailUiCopy;
+  text: string;
+}) {
   return (
     <div className="mt-10">
       <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-zinc-500">
-        Applying
+        {copy.sections.applying}
       </h2>
       <div className={scholarshipDetailCardSupportClass}>
         <p className="whitespace-pre-line text-sm leading-relaxed text-zinc-700">
@@ -485,12 +503,19 @@ export function ScholarshipSeoApplicationBlock({ text }: { text: string }) {
   );
 }
 
-export function ScholarshipFaqAccordion({ items }: { items: ScholarshipSeoFaqItem[] }) {
+export function ScholarshipFaqAccordion({
+  copy,
+  items
+}: {
+  copy: ScholarshipDetailUiCopy;
+  items: ScholarshipSeoFaqItem[];
+}) {
   if (items.length === 0) return null;
 
   return (
     <SiteFaqAccordion
       items={items}
+      heading={copy.faqHeading}
       as="div"
       headingId="scholarship-useful-faq-heading"
       headingClassName="mb-3 text-lg font-semibold tracking-tight text-zinc-900"

@@ -1,14 +1,9 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
-import LanguageSwitcher from '@/components/i18n/LanguageSwitcher';
 import { EssayGuideCardImage } from '@/components/essays/EssayGuideCardImage';
 import { SiteFaqAccordion } from '@/components/ui/SiteFaqAccordion';
-import {
-  ESSAYS_PAGE_TITLE,
-  ESSAYS_SECTION_PATH,
-  essayHubArticlePath
-} from '@/lib/essays/essayHubSection';
+import { ESSAYS_PAGE_TITLE, ESSAYS_SECTION_PATH } from '@/lib/essays/essayHubSection';
 import type { EssayDetailRow } from '@/lib/essays/essaysServer';
 import type { LocalizedEssayPageCopy } from '@/lib/i18n/essayPilot/essayDetailTranslationGate';
 import { hrefForLocalizedUiRequired } from '@/lib/i18n/localizedHref';
@@ -36,10 +31,6 @@ export default function LocalizedEssayGuidePage({ locale, slug, essay, copy }: P
           {ESSAYS_PAGE_TITLE}
         </Link>
       </nav>
-
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <LanguageSwitcher pathname={essayHubArticlePath(slug)} />
-      </div>
 
       {essay.hero_image_url ? (
         <EssayGuideCardImage

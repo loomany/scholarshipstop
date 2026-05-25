@@ -1,142 +1,32 @@
 'use client';
 
-import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
-import {
-  sitePaginationActiveClass,
-  sitePaginationDisabledClass,
-  sitePaginationEllipsisClass,
-  sitePaginationLinkClass,
-  sitePaginationNavOuterClassName,
-  sitePaginationPageMetaClass
-} from '@/lib/pagination/sitePaginationClasses';
-import {
-  paginationControlsRowClassName,
-  visiblePaginationItems,
-  visiblePaginationItemsDesktop
-} from '@/lib/pagination/visiblePaginationItems';
+import SitePagination from '@/components/ui/pagination/SitePagination';
+import { getSitePaginationCopy } from '@/lib/i18n/sitePaginationCopy';
+import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
+import { resolveNavLocaleFromPathname } from '@/lib/i18n/resolveNavLocale';
 
 type ContentHubPaginationProps = {
   currentPage: number;
   totalPages: number;
   buildHref: (page: number) => string;
+  locale?: LocalizedUiLocale;
 };
 
-const linkClass = sitePaginationLinkClass;
-const activeClass = sitePaginationActiveClass;
-const disabledClass = sitePaginationDisabledClass;
-
 export default function ContentHubPagination({
-  currentPage,
-  totalPages,
-  buildHref
+  locale: localeProp,
+  ...props
 }: ContentHubPaginationProps) {
-  if (totalPages <= 1) {
-    return null;
-  }
-
-  const itemsMobile = visiblePaginationItems(currentPage, totalPages);
-  const itemsDesktop = visiblePaginationItemsDesktop(currentPage, totalPages);
-  const prevDisabled = currentPage <= 1;
-  const nextDisabled = currentPage >= totalPages;
-
-  const renderItems = (
-    items: (number | 'ellipsis')[],
-    keyPrefix: string
-  ) =>
-    items.map((item, i) =>
-      item === 'ellipsis' ? (
-        <span
-          key={`${keyPrefix}-e-${i}`}
-          className={sitePaginationEllipsisClass}
-          aria-hidden
-        >
-          …
-        </span>
-      ) : (
-        <Link
-          key={`${keyPrefix}-p-${item}`}
-          href={buildHref(item)}
-          className={`${linkClass} ${item === currentPage ? activeClass : ''}`}
-          aria-current={item === currentPage ? 'page' : undefined}
-          scroll
-          prefetch={false}
-        >
-          {item}
-        </Link>
-      )
-    );
+  const pathname = usePathname() ?? '/';
+  const locale = localeProp ?? resolveNavLocaleFromPathname(pathname);
+  const copy = getSitePaginationCopy(locale);
 
   return (
-    <nav
-      className={sitePaginationNavOuterClassName}
-      aria-label="Articles pagination"
-    >
-      <p className={sitePaginationPageMetaClass}>
-        Page {currentPage} of {totalPages}
-      </p>
-      <div className={`${paginationControlsRowClassName} lg:hidden`}>
-        {prevDisabled ? (
-          <span className={`${linkClass} ${disabledClass}`} aria-disabled="true">
-            Previous
-          </span>
-        ) : (
-          <Link
-            href={buildHref(currentPage - 1)}
-            className={linkClass}
-            scroll
-            prefetch={false}
-          >
-            Previous
-          </Link>
-        )}
-        {renderItems(itemsMobile, 'm')}
-        {nextDisabled ? (
-          <span className={`${linkClass} ${disabledClass}`} aria-disabled="true">
-            Next
-          </span>
-        ) : (
-          <Link
-            href={buildHref(currentPage + 1)}
-            className={linkClass}
-            scroll
-            prefetch={false}
-          >
-            Next
-          </Link>
-        )}
-      </div>
-      <div className={`${paginationControlsRowClassName} hidden lg:flex`}>
-        {prevDisabled ? (
-          <span className={`${linkClass} ${disabledClass}`} aria-disabled="true">
-            Previous
-          </span>
-        ) : (
-          <Link
-            href={buildHref(currentPage - 1)}
-            className={linkClass}
-            scroll
-            prefetch={false}
-          >
-            Previous
-          </Link>
-        )}
-        {renderItems(itemsDesktop, 'd')}
-        {nextDisabled ? (
-          <span className={`${linkClass} ${disabledClass}`} aria-disabled="true">
-            Next
-          </span>
-        ) : (
-          <Link
-            href={buildHref(currentPage + 1)}
-            className={linkClass}
-            scroll
-            prefetch={false}
-          >
-            Next
-          </Link>
-        )}
-      </div>
-    </nav>
+    <SitePagination
+      {...props}
+      locale={locale}
+      ariaLabel={copy.ariaLabelArticles}
+    />
   );
 }

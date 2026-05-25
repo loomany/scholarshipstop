@@ -3,7 +3,15 @@ import { notFound } from 'next/navigation';
 
 import { LocalizedProductionPage } from '@/components/i18n/LocalizedProductionPage';
 import LocalizedResourceArticlePage from '@/components/content-hub/LocalizedResourceArticlePage';
+import { classifyResourceArticle } from '@/lib/content-hub/resourceTaxonomy';
+import { getRelatedScholarshipsForResourceArticle } from '@/lib/content-hub/relatedScholarshipsForResourceArticle';
+import {
+  filterActiveHubScholarships,
+  filterActiveRelatedScholarshipItems,
+  shouldShowResourceArticleIqCta
+} from '@/lib/content-hub/filterResourceArticleRelatedScholarships';
 import type { ContentTranslationLocale } from '@/lib/i18n/contentTranslationsTypes';
+import { fetchScholarshipsBySlugsOrIdsOrdered } from '@/lib/scholarships/supabase';
 import { getContentTranslationSeoDecision } from '@/lib/i18n/contentTranslationsServer';
 import { buildResourcePilotAlternates } from '@/lib/i18n/resourcePilot/resourceTranslationAlternates';
 import {
@@ -110,12 +118,30 @@ export default async function LocalizedResourceArticleRoute({ params }: PageProp
     locale as ContentTranslationLocale
   );
 
+  const resourceClassification = classifyResourceArticle(resolved.post);
+  const showResourceIqCta = shouldShowResourceArticleIqCta(
+    resourceClassification,
+    slug
+  );
+  const matchedRelatedScholarships = filterActiveRelatedScholarshipItems(
+    await getRelatedScholarshipsForResourceArticle(resolved.post)
+  );
+  const hubScholarshipKeys = matchedRelatedScholarships.map((r) => r.slug.trim());
+  const hubScholarships = filterActiveHubScholarships(
+    hubScholarshipKeys.length > 0
+      ? await fetchScholarshipsBySlugsOrIdsOrdered(hubScholarshipKeys)
+      : []
+  );
+
   return (
     <LocalizedResourceArticlePage
       locale={locale}
       slug={slug}
       post={resolved.post}
       copy={copy}
+      matchedRelatedScholarships={matchedRelatedScholarships}
+      hubScholarships={hubScholarships}
+      showResourceIqCta={showResourceIqCta}
     />
   );
 }

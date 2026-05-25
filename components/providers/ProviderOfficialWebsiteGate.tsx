@@ -2,11 +2,13 @@
 
 import { useCallback, useState } from 'react';
 import type { MouseEvent } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { ExternalLink, Lock } from 'lucide-react';
 
 import AuthStatusProvider from '@/components/auth/AuthStatusProvider';
 import PremiumPaywallModal from '@/components/scholarships/PremiumPaywallModal';
+import { localizedSubscriptionHref } from '@/lib/i18n/localizedHref';
+import { resolveNavLocaleFromPathname } from '@/lib/i18n/resolveNavLocale';
 
 type ProviderOfficialWebsiteGateProps = {
   href: string;
@@ -27,6 +29,8 @@ function ProviderOfficialWebsiteGateInner({
   hasSubscription: boolean;
 }) {
   const router = useRouter();
+  const pathname = usePathname() ?? '/';
+  const locale = resolveNavLocaleFromPathname(pathname);
   const [paywallOpen, setPaywallOpen] = useState(false);
 
   const isBlocked = !hasSubscription;
@@ -50,8 +54,8 @@ function ProviderOfficialWebsiteGateInner({
 
   const handleUpgradeClick = useCallback(() => {
     setPaywallOpen(false);
-    router.push('/subscription');
-  }, [router]);
+    router.push(localizedSubscriptionHref(locale));
+  }, [router, locale]);
 
   const baseClassName =
     variant === 'inline'

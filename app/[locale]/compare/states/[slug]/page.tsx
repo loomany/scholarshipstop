@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
+import { StateCompareDetailPageBody } from '@/app/compare/states/stateCompareDetailPageBody';
 import LocalizedCompareDetailPage from '@/components/compare/LocalizedCompareDetailPage';
 import { getContentTranslationSeoDecision } from '@/lib/i18n/contentTranslationsServer';
+import { fetchPublishedStateComparePageBySlug } from '@/lib/seo/stateCompareServer';
 import type { ContentTranslationLocale } from '@/lib/i18n/contentTranslationsTypes';
 import { buildCompareStateAlternates } from '@/lib/i18n/comparePilot/compareTranslationAlternates';
 import { fetchPublishedCompareState } from '@/lib/i18n/comparePilot/resolveLocalizedCompare';
@@ -99,19 +101,25 @@ export default async function LocalizedStateCompareRoute({ params }: PageProps) 
     slug,
     locale as ContentTranslationLocale
   );
-  if (!resolved) notFound();
 
-  const canonicalPath = `/compare/states/${slug}`;
-  const hubLabel =
-    locale === 'es' ? 'Ver comparaciones por estado' : 'Voir comparaisons par État';
+  if (resolved) {
+    const canonicalPath = `/compare/states/${slug}`;
+    const hubLabel =
+      locale === 'es' ? 'Ver comparaciones por estado' : 'Voir comparaisons par État';
 
-  return (
-    <LocalizedCompareDetailPage
-      locale={locale}
-      canonicalPath={canonicalPath}
-      copy={resolved.copy}
-      hubLabel={hubLabel}
-      hubPath="/compare/states"
-    />
-  );
+    return (
+      <LocalizedCompareDetailPage
+        locale={locale}
+        canonicalPath={canonicalPath}
+        copy={resolved.copy}
+        hubLabel={hubLabel}
+        hubPath="/compare/states"
+      />
+    );
+  }
+
+  const englishRow = await fetchPublishedStateComparePageBySlug(slug);
+  if (!englishRow) notFound();
+
+  return <StateCompareDetailPageBody slug={slug} locale={locale} />;
 }

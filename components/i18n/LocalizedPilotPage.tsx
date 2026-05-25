@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight, CheckCircle2, FileCheck2, Search, ShieldCheck } from 'lucide-react';
 
-import LanguageSwitcher from '@/components/i18n/LanguageSwitcher';
 import StaticScholarshipGuidePage from '@/components/content-hub/StaticScholarshipGuidePage';
 import { StaticCompareGuidePage } from '@/components/compare/StaticCompareGuidePage';
 import { StaticEssayGuidePage } from '@/components/essays/StaticEssayGuidePage';
@@ -27,7 +26,6 @@ import { getLocalizedCanonical } from '@/lib/seo/canonical';
 const copy = {
   es: {
     home: 'Inicio',
-    language: 'Idioma',
     startHere: 'Empezar aquí',
     explore: 'Explorar',
     searchPlaceholder: 'Busca por elegibilidad, fecha, proveedor o tema',
@@ -103,7 +101,6 @@ const copy = {
     resourceShell: {
       home: 'Inicio',
       resources: 'Recursos',
-      language: 'Idioma',
       backToHome: 'Volver al inicio',
       continueReading: 'Seguir leyendo',
       relatedGuides: 'Guías relacionadas',
@@ -122,7 +119,6 @@ const copy = {
   },
   fr: {
     home: 'Accueil',
-    language: 'Langue',
     startHere: 'Commencer ici',
     explore: 'Explorer',
     searchPlaceholder: 'Cherchez par admissibilité, date, fournisseur ou sujet',
@@ -198,7 +194,6 @@ const copy = {
     resourceShell: {
       home: 'Accueil',
       resources: 'Ressources',
-      language: 'Langue',
       backToHome: 'Retour à l’accueil',
       continueReading: 'Pour aller plus loin',
       relatedGuides: 'Guides connexes',
@@ -498,12 +493,9 @@ function LocalizedHome({ page }: { page: LocalizedPilotPage }) {
       <section className="border-b border-zinc-100 bg-gradient-to-b from-white to-zinc-50 px-4 py-10 sm:px-6 sm:py-12 lg:py-14">
         <div className="mx-auto grid w-full max-w-7xl gap-8 lg:grid-cols-[minmax(0,1.02fr)_minmax(22rem,0.98fr)] lg:items-center">
           <div>
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="rounded-full border border-orange-200 bg-orange-50 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-orange-700">
-                {page.eyebrow}
-              </span>
-              <LanguageSwitcher pathname={page.localizedPath} label={c.language} />
-            </div>
+            <span className="inline-flex rounded-full border border-orange-200 bg-orange-50 px-3 py-1 text-xs font-bold uppercase tracking-[0.16em] text-orange-700">
+              {page.eyebrow}
+            </span>
             <h1 className="mt-5 max-w-4xl text-4xl font-bold leading-tight tracking-tight text-zinc-950 sm:text-5xl lg:text-6xl">
               {page.h1}
             </h1>
@@ -616,14 +608,11 @@ function LocalizedHub({ page }: { page: LocalizedPilotPage }) {
       <JsonLdForPilotPage page={page} />
       <section className="border-b border-zinc-100 bg-zinc-50 px-4 pb-8 pt-6 sm:px-6 lg:pb-10">
         <div className="mx-auto w-full max-w-7xl">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <nav className="text-sm text-zinc-500" aria-label="Breadcrumb">
-              <Link href={hrefForPage(page, '/')} className="font-medium text-zinc-600 hover:text-zinc-950">
-                {c.home}
-              </Link>
-            </nav>
-            <LanguageSwitcher pathname={page.localizedPath} label={c.language} />
-          </div>
+          <nav className="text-sm text-zinc-500" aria-label="Breadcrumb">
+            <Link href={hrefForPage(page, '/')} className="font-medium text-zinc-600 hover:text-zinc-950">
+              {c.home}
+            </Link>
+          </nav>
           <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,0.72fr)] lg:items-start">
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-orange-600">

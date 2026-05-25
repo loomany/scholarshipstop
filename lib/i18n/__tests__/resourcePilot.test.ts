@@ -65,9 +65,11 @@ test('language switcher for pilot resource article paths', () => {
   assert.equal(items.some((i) => i.href.includes('/en/')), false);
 });
 
-test('language switcher hidden for non-pilot resource slug', () => {
+test('language switcher for any cms resource article slug', () => {
   const items = getStage2LanguageSwitcherItems({
-    pathname: '/resources/some-random-unpiloted-slug'
+    pathname: '/resources/journalism-scholarships-school-students-usa'
   });
-  assert.equal(items.length, 0);
+  assert.equal(items.length, 3);
+  assert.ok(items.some((i) => i.locale === 'es'));
+  assert.ok(items.some((i) => i.locale === 'fr'));
 });

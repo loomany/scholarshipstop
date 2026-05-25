@@ -9,7 +9,7 @@ import type {
   ContentTranslationRow
 } from '@/lib/i18n/contentTranslationsTypes';
 import { shouldExposeTranslatedRoute } from '@/lib/i18n/contentTranslationsTypes';
-import { isResourcePilotSlug } from '@/lib/i18n/resourcePilot/resourcePilotSlugs';
+import { getResourceDetailUiCopy } from '@/lib/i18n/resourceDetailUiCopy';
 import { getLocalizedPilotPageBySegments } from '@/lib/i18n/staticTranslations';
 import { isStage2PilotLocale } from '@/lib/i18n/pilotRoutes';
 
@@ -72,48 +72,23 @@ function extraUi(
   };
 }
 
-const DEFAULT_UI: Record<
-  ContentTranslationLocale,
-  Omit<
-    LocalizedResourcePageCopy,
-    'title' | 'metaTitle' | 'metaDescription' | 'summary' | 'bodyHtml' | 'faq'
-  >
-> = {
-  es: {
-    faqSectionTitle: 'Preguntas frecuentes',
-    backLabel: '← Volver a recursos',
-    resourcesHubLabel: 'Recursos de becas',
-    homeLabel: 'Inicio',
-    disclaimer:
-      'ScholarshipTop no concede becas ni garantiza resultados. Verifica siempre requisitos, plazos y montos en la página oficial del proveedor.',
-    exploreScholarshipsCta: {
-      title: 'Explora becas que podrían encajar contigo',
-      description:
-        'Usa el directorio para revisar oportunidades reales según tu elegibilidad y objetivos académicos.',
-      buttonText: 'Explorar becas'
-    }
-  },
-  fr: {
-    faqSectionTitle: 'Questions fréquentes',
-    backLabel: '← Retour aux ressources',
-    resourcesHubLabel: 'Ressources bourses',
-    homeLabel: 'Accueil',
-    disclaimer:
-      'ScholarshipTop n’accorde pas de bourses et ne garantit aucun résultat. Vérifiez toujours critères, dates et montants sur la page officielle du financeur.',
-    exploreScholarshipsCta: {
-      title: 'Explorez des bourses adaptées à votre profil',
-      description:
-        'Utilisez l’annuaire pour comparer des opportunités réelles selon votre éligibilité et vos objectifs.',
-      buttonText: 'Parcourir les bourses'
-    }
-  }
-};
+function defaultUiForLocale(locale: ContentTranslationLocale) {
+  const ui = getResourceDetailUiCopy(locale);
+  return {
+    faqSectionTitle: ui.faqSectionTitle,
+    backLabel: ui.backLabel,
+    resourcesHubLabel: ui.resourcesHubLabel,
+    homeLabel: ui.homeLabel,
+    disclaimer: ui.disclaimer,
+    exploreScholarshipsCta: ui.exploreScholarshipsCta
+  };
+}
 
 export function buildLocalizedResourcePageCopy(
   row: ContentTranslationRow,
   locale: ContentTranslationLocale
 ): LocalizedResourcePageCopy {
-  const defaults = DEFAULT_UI[locale];
+  const defaults = defaultUiForLocale(locale);
   const extra = extraUi(row, locale);
   const title = row.translated_title?.trim() || '';
   return {
@@ -150,7 +125,7 @@ export async function fetchPublishedResourceTranslation(
   locale: ContentTranslationLocale
 ): Promise<{ post: ContentPostRow; translation: ContentTranslationRow } | null> {
   const normalized = slug.trim().toLowerCase();
-  if (!isResourcePilotSlug(normalized)) return null;
+  if (!normalized) return null;
 
   const post = await fetchPublishedContentPostBySlug(normalized);
   if (!post?.id) return null;

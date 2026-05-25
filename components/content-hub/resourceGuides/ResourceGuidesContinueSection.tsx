@@ -7,12 +7,16 @@ import {
 
 type Props = {
   currentSlug: string;
+  heading?: string;
 };
 
 /**
  * Fixed scholarship guide links at end of editorial articles (not random DB posts).
  */
-export default function ResourceGuidesContinueSection({ currentSlug }: Props) {
+export default function ResourceGuidesContinueSection({
+  currentSlug,
+  heading = 'Continue Reading'
+}: Props) {
   const items = resourceGuideContinueReadingForSlug(currentSlug);
   if (items.length === 0) return null;
 
@@ -25,7 +29,7 @@ export default function ResourceGuidesContinueSection({ currentSlug }: Props) {
         id="resources-continue-reading-heading"
         className="text-base font-semibold tracking-tight text-gray-900 sm:text-lg"
       >
-        Continue Reading
+        {heading}
       </h2>
       <ul className="mt-3 list-none space-y-2.5 p-0 sm:space-y-3">
         {items.map((item) => (

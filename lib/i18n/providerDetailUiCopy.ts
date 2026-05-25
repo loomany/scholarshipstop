@@ -1,6 +1,34 @@
-import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
+import { HUB_INTERNATIONAL_SEGMENT } from '@/app/scholarships/scholarshipHubPath';
+import {
+  hrefForLocalizedUiRequired,
+  localizedScholarshipHubTabHref,
+  type LocalizedUiLocale
+} from '@/lib/i18n/localizedHref';
 
 export type ProviderDetailUiCopy = {
+  nav: {
+    breadcrumbAria: string;
+    home: string;
+    providersHub: string;
+  };
+  tocOnThisPage: string;
+  scholarshipMatchCta: {
+    heading: string;
+    button: string;
+  };
+  scholarshipsEmpty: {
+    onboardingHint: string;
+    getNotified: string;
+  };
+  showingScholarships: (from: number, to: number, totalFormatted: string) => string;
+  trust: {
+    verifyBeforeApply: string;
+    verifyItems: [string, string, string];
+    verificationMethodology: string;
+    reportCorrection: string;
+  };
+  sourceLinkLabel: (index: number, host: string) => string;
+  metaDescriptionFallback: (providerName: string) => string;
   toc: {
     aboutProvider: string;
     sourceStatus: string;
@@ -52,9 +80,52 @@ export type ProviderDetailUiCopy = {
     sourceLabel: string;
     completenessLabel: string;
   };
+  contextLinks: {
+    heading: string;
+    body: string;
+    itemTitles: {
+      matches: string;
+      easyApply: string;
+      international: string;
+      resources: string;
+      essays: string;
+      compare: string;
+    };
+  };
 };
 
 const EN: ProviderDetailUiCopy = {
+  nav: {
+    breadcrumbAria: 'Breadcrumb',
+    home: 'Home',
+    providersHub: 'Providers'
+  },
+  tocOnThisPage: 'On this page',
+  scholarshipMatchCta: {
+    heading: 'Get matched with scholarships in 2 minutes',
+    button: 'Find My Scholarships'
+  },
+  scholarshipsEmpty: {
+    onboardingHint:
+      'Create a free account to get scholarship alerts and updates when new opportunities from this organization appear in the catalog.',
+    getNotified: 'Get notified'
+  },
+  showingScholarships: (from, to, total) =>
+    `Showing ${from}-${to} of ${total} scholarships`,
+  trust: {
+    verifyBeforeApply: 'What to verify before applying',
+    verifyItems: [
+      'Final eligibility rules and student profile requirements.',
+      'Current deadline, timezone, and application route.',
+      'Award amount, payment method, renewal, and required documents.'
+    ],
+    verificationMethodology: 'Verification methodology',
+    reportCorrection: 'Report a correction'
+  },
+  sourceLinkLabel: (index, host) =>
+    host ? `Source ${index + 1}: ${host}` : `Source ${index + 1}`,
+  metaDescriptionFallback: (name) =>
+    `Scholarships and profile for ${name} on ScholarshipTop.`,
   toc: {
     aboutProvider: 'About Provider',
     sourceStatus: 'Source status',
@@ -105,10 +176,54 @@ const EN: ProviderDetailUiCopy = {
       'This provider profile is based on ScholarshipTop listing data. If an official provider URL is available, students should use it to confirm application details directly. If source information is incomplete, this page marks what still needs verification before applying.',
     sourceLabel: 'Source',
     completenessLabel: 'Completeness'
+  },
+  contextLinks: {
+    heading: 'Explore scholarships and guides',
+    body:
+      'Continue from this provider profile into matching scholarships, easy applications, international-friendly options, and practical scholarship guides.',
+    itemTitles: {
+      matches: 'Browse matching scholarships',
+      easyApply: 'Easy apply scholarships',
+      international: 'Scholarships for international students',
+      resources: 'Scholarship guides',
+      essays: 'Essay guides',
+      compare: 'Compare opportunities'
+    }
   }
 };
 
 const ES: ProviderDetailUiCopy = {
+  nav: {
+    breadcrumbAria: 'Ruta de navegación',
+    home: 'Inicio',
+    providersHub: 'Proveedores'
+  },
+  tocOnThisPage: 'En esta página',
+  scholarshipMatchCta: {
+    heading: 'Encuentra becas en 2 minutos',
+    button: 'Encontrar mis becas'
+  },
+  scholarshipsEmpty: {
+    onboardingHint:
+      'Crea una cuenta gratuita para recibir alertas de becas cuando aparezcan nuevas oportunidades de esta organización.',
+    getNotified: 'Recibir avisos'
+  },
+  showingScholarships: (from, to, total) =>
+    `Mostrando ${from}-${to} de ${total} becas`,
+  trust: {
+    verifyBeforeApply: 'Qué verificar antes de aplicar',
+    verifyItems: [
+      'Reglas finales de elegibilidad y requisitos del perfil del estudiante.',
+      'Fecha límite actual, zona horaria y ruta de solicitud.',
+      'Monto del premio, método de pago, renovación y documentos requeridos.'
+    ],
+    verificationMethodology: 'Metodología de verificación',
+    reportCorrection: 'Reportar corrección'
+  },
+  sourceLinkLabel: (index, host) =>
+    host ? `Fuente ${index + 1}: ${host}` : `Fuente ${index + 1}`,
+  metaDescriptionFallback: (name) =>
+    `Becas y perfil de ${name} en ScholarshipTop.`,
   toc: {
     aboutProvider: 'Acerca del proveedor',
     sourceStatus: 'Estado de la fuente',
@@ -159,10 +274,54 @@ const ES: ProviderDetailUiCopy = {
       'Este perfil se basa en datos del catálogo de ScholarshipTop. Si hay URL oficial, úsala para confirmar los requisitos. Si falta información, esta página indica qué conviene verificar antes de solicitar.',
     sourceLabel: 'Fuente',
     completenessLabel: 'Completitud'
+  },
+  contextLinks: {
+    heading: 'Explorar becas y guías',
+    body:
+      'Continúa desde este perfil de proveedor hacia becas coincidentes, solicitudes fáciles, opciones para estudiantes internacionales y guías prácticas sobre becas.',
+    itemTitles: {
+      matches: 'Explorar becas coincidentes',
+      easyApply: 'Becas de solicitud fácil',
+      international: 'Becas para estudiantes internacionales',
+      resources: 'Guías de becas',
+      essays: 'Guías de ensayos',
+      compare: 'Comparar oportunidades'
+    }
   }
 };
 
 const FR: ProviderDetailUiCopy = {
+  nav: {
+    breadcrumbAria: "Fil d'Ariane",
+    home: 'Accueil',
+    providersHub: 'Fournisseurs'
+  },
+  tocOnThisPage: 'Sur cette page',
+  scholarshipMatchCta: {
+    heading: 'Trouvez des bourses en 2 minutes',
+    button: 'Trouver mes bourses'
+  },
+  scholarshipsEmpty: {
+    onboardingHint:
+      'Créez un compte gratuit pour recevoir des alertes lorsque de nouvelles bourses de cette organisation sont publiées.',
+    getNotified: 'Recevoir des alertes'
+  },
+  showingScholarships: (from, to, total) =>
+    `Affichage ${from}-${to} sur ${total} bourses`,
+  trust: {
+    verifyBeforeApply: 'À vérifier avant de postuler',
+    verifyItems: [
+      'Règles d’éligibilité finales et exigences du profil étudiant.',
+      'Date limite actuelle, fuseau horaire et voie de candidature.',
+      'Montant de la bourse, mode de versement, renouvellement et documents requis.'
+    ],
+    verificationMethodology: 'Méthode de vérification',
+    reportCorrection: 'Signaler une correction'
+  },
+  sourceLinkLabel: (index, host) =>
+    host ? `Source ${index + 1} : ${host}` : `Source ${index + 1}`,
+  metaDescriptionFallback: (name) =>
+    `Bourses et profil de ${name} sur ScholarshipTop.`,
   toc: {
     aboutProvider: 'À propos du fournisseur',
     sourceStatus: 'État de la source',
@@ -213,8 +372,53 @@ const FR: ProviderDetailUiCopy = {
       'Ce profil repose sur les données du catalogue ScholarshipTop. En cas d’URL officielle, utilisez-la pour confirmer les détails. Si des informations manquent, cette page indique ce qu’il reste à vérifier avant de postuler.',
     sourceLabel: 'Source',
     completenessLabel: 'Complétude'
+  },
+  contextLinks: {
+    heading: 'Explorer bourses et guides',
+    body:
+      'Poursuivez depuis ce profil fournisseur vers les bourses correspondantes, les candidatures faciles, les options favorables aux étudiants internationaux et les guides pratiques.',
+    itemTitles: {
+      matches: 'Parcourir les bourses correspondantes',
+      easyApply: 'Bourses à candidature facile',
+      international: 'Bourses pour étudiants internationaux',
+      resources: 'Guides de bourses',
+      essays: 'Guides de rédaction',
+      compare: 'Comparer les opportunités'
+    }
   }
 };
+
+export function getProviderContextLinkItems(
+  locale: LocalizedUiLocale
+): Array<{ href: string; title: string }> {
+  const titles = getProviderDetailUiCopy(locale).contextLinks.itemTitles;
+  return [
+    {
+      href: localizedScholarshipHubTabHref(locale, 'matches'),
+      title: titles.matches
+    },
+    {
+      href: localizedScholarshipHubTabHref(locale, 'easy-apply'),
+      title: titles.easyApply
+    },
+    {
+      href: localizedScholarshipHubTabHref(locale, HUB_INTERNATIONAL_SEGMENT),
+      title: titles.international
+    },
+    {
+      href: hrefForLocalizedUiRequired(locale, '/resources'),
+      title: titles.resources
+    },
+    {
+      href: hrefForLocalizedUiRequired(locale, '/essays'),
+      title: titles.essays
+    },
+    {
+      href: hrefForLocalizedUiRequired(locale, '/compare'),
+      title: titles.compare
+    }
+  ];
+}
 
 export function getProviderDetailUiCopy(
   locale: LocalizedUiLocale

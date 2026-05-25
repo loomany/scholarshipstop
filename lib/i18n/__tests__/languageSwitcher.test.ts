@@ -62,6 +62,20 @@ test('language switcher on /es/scholarships/hub/<tab> links to EN and FR equival
   );
 });
 
+test('language switcher covers /account cluster', () => {
+  const items = getStage2LanguageSwitcherItems({
+    pathname: '/es/account'
+  });
+  assert.deepEqual(
+    items.map((item) => [item.locale, item.href, item.current]),
+    [
+      ['en', '/account', false],
+      ['es', '/es/account', true],
+      ['fr', '/fr/account', false]
+    ]
+  );
+});
+
 test('language switcher covers /subscription cluster', () => {
   const items = getStage2LanguageSwitcherItems({
     pathname: '/es/subscription'

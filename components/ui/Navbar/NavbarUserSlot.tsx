@@ -8,6 +8,7 @@ import clsx from 'clsx';
 import { LogOut, UserCircle } from 'lucide-react';
 
 import MobileDrawerNavIcon from '@/components/ui/Navbar/MobileDrawerNavIcon';
+import { localizedAccountHref } from '@/lib/i18n/localizedHref';
 import {
   accountNavbarLabel,
   profileDisplayNameFromRow,
@@ -171,7 +172,7 @@ export default function NavbarUserSlot({
   }, [router]);
 
   const signInHref = locale === 'en' ? '/signin' : `/${locale}/signin`;
-  const accountHref = '/account';
+  const accountHref = localizedAccountHref(locale);
 
   if (variant === 'drawer') {
     if (!user) return null;

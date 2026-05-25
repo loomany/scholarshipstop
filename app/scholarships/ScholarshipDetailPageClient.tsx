@@ -45,7 +45,14 @@ import ScholarshipRegistrationWallModal, {
 } from '@/components/scholarships/ScholarshipRegistrationWallModal';
 import HomePrimaryCtaClient from '@/components/home/HomePrimaryCtaClient';
 import { breadcrumbCategoryLabel } from '@/app/scholarships/scholarshipCategories';
-import { getScholarshipDetailUiCopy } from '@/lib/i18n/scholarshipDetailUiCopy';
+import {
+  getScholarshipDetailUiCopy,
+  scholarshipDetailOfficialDocumentLabel,
+  scholarshipDetailPayoutLabel,
+  scholarshipDetailRequirementChips,
+  type ScholarshipDetailUiCopy
+} from '@/lib/i18n/scholarshipDetailUiCopy';
+import { localizedSubscriptionHref } from '@/lib/i18n/localizedHref';
 import { getStage2LocaleFromPathname } from '@/lib/i18n/pilotRoutes';
 import { buildScholarshipTagHubHref } from '@/app/scholarships/scholarshipTagHubLinks';
 import {
@@ -291,63 +298,6 @@ function shouldShowScholarshipSourceFallback(
   return !BLOCKED_SOURCE_FALLBACK_LABELS.has(normalizeSourceFallbackLabel(raw));
 }
 
-function payoutMethodDetailLabel(
-  method: string | null | undefined
-): string | null {
-  const m = method?.toLowerCase();
-  if (!m) return null;
-  const map: Record<string, string> = {
-    college: 'Paid to the college or financial aid office',
-    student: 'Paid directly to the student',
-    non_monetary: 'Non-monetary award (courses, equipment, or similar)',
-    not_stated: 'Not stated on the listing'
-  };
-  return map[m] ?? method;
-}
-
-function isGenericDocumentLinkTitle(
-  title: string | null | undefined,
-  url: string
-): boolean {
-  const normalized = title?.trim().toLowerCase().replace(/\s+/g, ' ') ?? '';
-  if (!normalized) return true;
-  if (normalized === url.trim().toLowerCase()) return true;
-  return (
-    normalized === 'document' ||
-    normalized === 'official document' ||
-    normalized === 'download' ||
-    normalized === 'download pdf' ||
-    normalized === 'pdf' ||
-    /^document\s+\d+$/.test(normalized) ||
-    /^download(?:\s+document)?$/.test(normalized)
-  );
-}
-
-function officialDocumentLinkLabel(
-  title: string | null | undefined,
-  url: string
-): string {
-  if (!isGenericDocumentLinkTitle(title, url)) return title!.trim();
-  return /\.pdf(?:$|[?#])/i.test(url) ? 'Download PDF' : 'Official Document';
-}
-
-function requirementChips(s: Scholarship): string[] {
-  const out: string[] = [];
-  if (s.essayRequired) out.push('Essay');
-  if (s.transcriptRequired) out.push('Transcript');
-  if (s.recommendationRequired) out.push('Recommendation letter');
-  if (s.documentRequired) out.push('Documents');
-  if (s.photoRequired) out.push('Photo');
-  if (s.videoRequired) out.push('Video');
-  if (s.linkRequired) out.push('Portfolio / link');
-  if (s.surveyRequired) out.push('Survey');
-  if (s.questionRequired) out.push('Short answers');
-  if (s.goalRequired) out.push('Goals statement');
-  if (s.specialEligibilityRequired) out.push('Special eligibility');
-  if (s.financialNeedConsidered) out.push('Financial need');
-  return out;
-}
-
 type ScholarshipGeoBadge = {
   key: string;
   text: string;
@@ -479,6 +429,7 @@ function AuthNoSubDetailStatsBlur() {
 }
 
 function SimilarScholarshipDetailListItem({
+  copy,
   scholarship: s,
   highlightPrimary,
   profileMatchPercent,
@@ -493,6 +444,7 @@ function SimilarScholarshipDetailListItem({
   onLockedScholarshipNavigate,
   onUnverifiedEmailDetailNavigate
 }: {
+  copy: ScholarshipDetailUiCopy;
   scholarship: Scholarship;
   highlightPrimary: boolean;
   profileMatchPercent: number | null;
@@ -711,7 +663,7 @@ function SimilarScholarshipDetailListItem({
             providerNameLockedSimilar ? (
               <span
                 className="mt-1.5 block text-left text-sm"
-                aria-label="Sponsor name hidden until you subscribe."
+                aria-label={copy.similar.sponsorHiddenAria}
               >
                 <span
                   className={`${deadlinePassed ? 'text-zinc-400' : 'text-zinc-600'} ${SCHOLARSHIP_PROVIDER_OBSCURE_CLASS}`}
@@ -755,7 +707,7 @@ function SimilarScholarshipDetailListItem({
               }
             >
               <span className="block text-[10px] font-medium uppercase tracking-wide text-zinc-500">
-                {deadlinePassed ? 'Deadline passed' : 'Deadline'}
+                {deadlinePassed ? copy.deadlinePassed : copy.deadline}
               </span>
               <span
                 className={`mt-0.5 block text-sm font-semibold ${deadlinePassed ? 'text-zinc-400' : 'text-zinc-800'}`}
@@ -777,7 +729,7 @@ function SimilarScholarshipDetailListItem({
       {grantLocationBadge || applicantCountryBadge ? (
         <div
           className="mt-2.5 flex w-full min-w-0 justify-end pb-0.5"
-          aria-label="Host location and eligibility"
+          aria-label={copy.similar.geoAria}
         >
           <div className="flex min-w-0 flex-nowrap justify-end gap-1.5 overflow-x-auto overscroll-x-contain [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden [&>*]:shrink-0">
             {grantLocationBadge ? (
@@ -785,8 +737,8 @@ function SimilarScholarshipDetailListItem({
                 <Link
                   href={grantLocationHubHref}
                   className={similarGeoHubLinkClass}
-                  title={`${grantLocationBadge.title} — browse matching scholarships`}
-                  aria-label={`Browse scholarships filtered by ${grantLocationBadge.text}`}
+                  title={copy.similar.browseMatchingTitle(grantLocationBadge.title)}
+                  aria-label={copy.similar.browseFilteredAria(grantLocationBadge.text)}
                 >
                   <span className="truncate">{grantLocationBadge.text}</span>
                 </Link>
@@ -804,8 +756,8 @@ function SimilarScholarshipDetailListItem({
                 <Link
                   href={applicantCountryHubHref}
                   className={similarGeoHubLinkClass}
-                  title={`${applicantCountryBadge.title} — browse matching scholarships`}
-                  aria-label={`Browse scholarships filtered by ${applicantCountryBadge.text}`}
+                  title={copy.similar.browseMatchingTitle(applicantCountryBadge.title)}
+                  aria-label={copy.similar.browseFilteredAria(applicantCountryBadge.text)}
                 >
                   <span className="truncate">{applicantCountryBadge.text}</span>
                 </Link>
@@ -866,12 +818,12 @@ function SimilarScholarshipDetailListItem({
   );
 }
 
-function SimilarScholarshipIqPromoCard() {
+function SimilarScholarshipIqPromoCard({ copy }: { copy: ScholarshipDetailUiCopy }) {
   return (
     <li className="min-w-0">
       <Link
         href="/iq/assessment?intent=scholarship_match"
-        aria-label="Start IQ assessment"
+        aria-label={copy.iq.startAria}
         className="group relative block h-full min-w-0 overflow-hidden rounded-xl border border-[#FFB875]/80 bg-gradient-to-br from-[#FFF7ED] via-white to-[#EEF6FF] p-3 text-left shadow-sm ring-1 ring-[#FFE2C2] transition hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB875] focus-visible:ring-offset-2 md:p-3.5"
       >
         <div
@@ -887,26 +839,25 @@ function SimilarScholarshipIqPromoCard() {
             <div className="mb-2 flex flex-wrap items-center gap-1.5">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-[#FFB875] bg-white/80 px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-[0.15em] text-[#B45309] shadow-sm">
                 <BrainCircuit className="h-3 w-3 text-[#F97316]" aria-hidden />
-                Featured Tool
+                {copy.iq.featuredTool}
               </span>
               <span className="rounded-full bg-slate-950 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.12em] text-white">
-                IQ
+                {copy.iq.iqBadge}
               </span>
             </div>
             <p className="text-base font-semibold leading-snug tracking-tight text-slate-950">
-              Find scholarships that fit how you think
+              {copy.iq.promoTitle}
             </p>
             <p className="mt-1 line-clamp-2 text-sm leading-5 text-slate-500">
-              See whether your strengths fit essays, research-heavy awards, or
-              fast applications.
+              {copy.iq.promoBody}
             </p>
           </div>
           <div className="mt-3 flex items-center justify-between gap-3 border-t border-orange-100 pt-2">
             <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">
-              Assessment
+              {copy.iq.assessment}
             </span>
             <span className="inline-flex items-center gap-1 text-xs font-bold text-slate-950 transition group-hover:text-[#B45309]">
-              Start IQ test
+              {copy.iq.startTest}
               <ArrowRight className="h-3.5 w-3.5" aria-hidden />
             </span>
           </div>
@@ -916,11 +867,11 @@ function SimilarScholarshipIqPromoCard() {
   );
 }
 
-function ScholarshipDetailIqDecisionCard() {
+function ScholarshipDetailIqDecisionCard({ copy }: { copy: ScholarshipDetailUiCopy }) {
   return (
     <Link
       href="/iq/assessment?intent=scholarship_match"
-      aria-label="Start IQ assessment"
+      aria-label={copy.iq.startAria}
       className="group relative mt-8 block overflow-hidden rounded-3xl border border-[#FFB875]/80 bg-gradient-to-br from-[#FFF7ED] via-white to-[#EEF6FF] p-5 text-left shadow-[0_18px_45px_-30px_rgba(234,88,12,0.58)] ring-1 ring-[#FFE2C2] transition hover:-translate-y-0.5 hover:shadow-[0_24px_58px_-34px_rgba(234,88,12,0.72)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB875] focus-visible:ring-offset-2 sm:p-6"
     >
       <div
@@ -936,22 +887,20 @@ function ScholarshipDetailIqDecisionCard() {
           <div className="mb-3 flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center gap-2 rounded-full border border-[#FFB875] bg-white/80 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.17em] text-[#B45309] shadow-sm">
               <BrainCircuit className="h-3.5 w-3.5 text-[#F97316]" aria-hidden />
-              Applicant intelligence
+              {copy.iq.applicantIntelligence}
             </span>
             <span className="rounded-full bg-slate-950 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white">
-              IQ assessment
+              {copy.iq.assessmentBadge}
             </span>
           </div>
           <p className="text-xl font-semibold tracking-tight text-slate-950 sm:text-2xl">
-            Is this scholarship worth your time?
+            {copy.iq.cardTitle}
           </p>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-[0.9375rem]">
-            Take a cognitive assessment to see whether your strengths fit
-            essay-heavy, research-heavy, fast-apply, or logic-based scholarship
-            opportunities.
+            {copy.iq.cardBody}
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
-            {['Essay fit', 'Fast apply', 'Priority clarity'].map((item) => (
+            {copy.iq.chips.map((item) => (
               <span
                 key={item}
                 className="rounded-full border border-white/80 bg-white/75 px-2.5 py-1 text-xs font-semibold text-slate-700 shadow-sm"
@@ -963,24 +912,24 @@ function ScholarshipDetailIqDecisionCard() {
         </div>
         <div className="rounded-2xl border border-white/80 bg-white/75 p-4 shadow-sm backdrop-blur">
           <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">
-            Cognitive preview
+            {copy.iq.cognitivePreview}
           </p>
           <div className="mt-3 grid grid-cols-2 gap-2">
             <div className="overflow-hidden rounded-xl border border-dashed border-slate-300 bg-slate-50/80 px-3 py-2">
-              <p className="text-[10px] font-medium text-slate-500">IQ</p>
+              <p className="text-[10px] font-medium text-slate-500">{copy.iq.iqLabel}</p>
               <p className="mt-1 text-base font-bold leading-none text-slate-950">
                 --
               </p>
             </div>
             <div className="overflow-hidden rounded-xl border border-dashed border-slate-300 bg-slate-50/80 px-3 py-2">
-              <p className="text-[10px] font-medium text-slate-500">Type</p>
+              <p className="text-[10px] font-medium text-slate-500">{copy.iq.typeLabel}</p>
               <p className="mt-1 truncate text-sm font-bold leading-none text-slate-950">
                 ???
               </p>
             </div>
           </div>
           <span className="mt-4 inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-black px-4 py-2.5 text-sm font-bold text-white shadow-[0_12px_28px_-14px_rgba(15,23,42,0.9)] transition group-hover:bg-slate-900">
-            Start IQ test
+            {copy.iq.startTest}
             <ArrowRight className="h-3.5 w-3.5" aria-hidden />
           </span>
         </div>
@@ -1179,8 +1128,8 @@ export default function ScholarshipDetailPageClient({
   }, []);
   const handlePremiumPaywallUpgrade = useCallback(() => {
     setPremiumPaywallOpen(false);
-    router.push('/subscription');
-  }, [router]);
+    router.push(localizedSubscriptionHref(detailUiLocale));
+  }, [router, detailUiLocale]);
   const [registrationWallOpen, setRegistrationWallOpen] = useState(false);
   const [emailConfirmModalOpen, setEmailConfirmModalOpen] = useState(false);
   const [registrationWallVariant, setRegistrationWallVariant] = useState<
@@ -1505,7 +1454,7 @@ export default function ScholarshipDetailPageClient({
           <div className={scholarshipDetailShellClass}>
             <ScholarshipsBrandLoading
               density="comfortable"
-              label="Loading scholarship…"
+              label={detailUi.loadingScholarship}
               showTopAccentBar
             />
           </div>
@@ -1590,7 +1539,7 @@ export default function ScholarshipDetailPageClient({
   const reqCleanLines = isSimplerGov
     ? simplerGrantsGovRequirementsLines(scholarship)
     : requirementsCleanLines(scholarship);
-  const reqChips = requirementChips(scholarship);
+  const reqChips = scholarshipDetailRequirementChips(detailUiLocale, scholarship);
 
   const reqCountFromDb =
     typeof scholarship.requirementsCount === 'number' &&
@@ -1737,7 +1686,7 @@ export default function ScholarshipDetailPageClient({
   const recurringExtra = scholarship.recurring ? (
     <span className="inline-flex items-center gap-0.5 rounded-full bg-emerald-50 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-emerald-700">
       <InfinityIcon className="h-3 w-3" aria-hidden />
-      recurring
+      {detailUi.recurring}
     </span>
   ) : null;
 
@@ -1784,7 +1733,10 @@ export default function ScholarshipDetailPageClient({
   const stateTerritoryText = scholarship.stateTerritoryText?.trim();
   const stateCodes = scholarship.stateCodes?.filter(Boolean) ?? [];
   const locationScope = scholarship.locationScope?.trim();
-  const payoutLabel = payoutMethodDetailLabel(scholarship.payoutMethod);
+  const payoutLabel = scholarshipDetailPayoutLabel(
+    detailUiLocale,
+    scholarship.payoutMethod
+  );
 
   const supportEmail = scholarship.supportEmail?.trim();
   const supportPhone = scholarship.supportPhone?.trim();
@@ -1804,7 +1756,11 @@ export default function ScholarshipDetailPageClient({
       return {
         key: `${url}-${index}`,
         url,
-        label: officialDocumentLinkLabel(item.title, url)
+        label: scholarshipDetailOfficialDocumentLabel(
+          detailUiLocale,
+          item.title,
+          url
+        )
       };
     })
     .filter(
@@ -1892,39 +1848,39 @@ export default function ScholarshipDetailPageClient({
   if (notificationPlain) {
     importantChunksRaw.push({
       key: 'n',
-      heading: 'Notification',
+      heading: detailUi.sections.notification,
       plain: notificationPlain
     });
   } else if (scholarship.notificationHtml?.trim()) {
     importantChunksRaw.push({
       key: 'nh',
-      heading: 'Notification',
+      heading: detailUi.sections.notification,
       html: scholarship.notificationHtml
     });
   }
   if (selectionPlain) {
     importantChunksRaw.push({
       key: 's',
-      heading: 'Selection criteria',
+      heading: detailUi.sections.selectionCriteria,
       plain: selectionPlain
     });
   } else if (scholarship.selectionCriteriaHtml?.trim()) {
     importantChunksRaw.push({
       key: 'sh',
-      heading: 'Selection criteria',
+      heading: detailUi.sections.selectionCriteria,
       html: scholarship.selectionCriteriaHtml
     });
   }
   if (!isSimplerGov && awardsPlain) {
     importantChunksRaw.push({
       key: 'a',
-      heading: 'Program details',
+      heading: detailUi.sections.programDetails,
       plain: awardsPlain
     });
   } else if (!isSimplerGov && scholarship.awardsHtml?.trim()) {
     importantChunksRaw.push({
       key: 'ah',
-      heading: 'Program details',
+      heading: detailUi.sections.programDetails,
       html: scholarship.awardsHtml
     });
   }
@@ -2044,7 +2000,7 @@ export default function ScholarshipDetailPageClient({
         </Link>
 
         <div className={`mt-4 ${scholarshipDetailHeroSurfaceClass}`}>
-        <nav aria-label="Breadcrumb" className="border-b border-zinc-100 pb-4">
+        <nav aria-label={detailUi.breadcrumbAria} className="border-b border-zinc-100 pb-4">
           <ol className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-sm text-zinc-500">
             <li>
               <Link
@@ -2103,6 +2059,7 @@ export default function ScholarshipDetailPageClient({
             </div>
           ) : null}
           <HeroDecisionBadges
+            copy={detailUi}
             matchBadge={ui.matchBadge}
             urgencyBadge={ui.urgencyBadge}
             difficultyBadge={ui.difficultyBadge}
@@ -2115,7 +2072,7 @@ export default function ScholarshipDetailPageClient({
           {detailGeoBadges.length > 0 ? (
             <div
               className="mt-4 flex flex-wrap items-center gap-2"
-              aria-label="Scholarship country eligibility and study destination"
+              aria-label={detailUi.premium.eligibilityAria}
             >
               {detailGeoBadges.map((badge) => {
                 const className =
@@ -2126,8 +2083,8 @@ export default function ScholarshipDetailPageClient({
                     key={badge.key}
                     href={badge.href}
                     className={`${className} no-underline hover:border-orange-300 hover:bg-orange-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/40 focus-visible:ring-offset-2`}
-                    title={`${badge.title} - browse matching scholarships`}
-                    aria-label={`Browse scholarships filtered by ${badge.text}`}
+                    title={detailUi.similar.browseMatchingTitle(badge.title)}
+                    aria-label={detailUi.similar.browseFilteredAria(badge.text)}
                   >
                     <span className="truncate">{badge.text}</span>
                   </Link>
@@ -2185,11 +2142,13 @@ export default function ScholarshipDetailPageClient({
         </div>
 
         <ScholarshipDetailGuestLockSection
+          copy={detailUi}
           locked={showLockedDetailOverlay}
           onSignIn={openLockedAccessWall}
         >
         {panelPick.showQuickDecision ? (
           <ScholarshipQuickDecisionGrid
+            copy={detailUi}
             bestFor={ui.quickDecision.bestFor}
             highlights={ui.quickDecision.highlights}
             whyApply={ui.quickDecision.whyApply}
@@ -2199,17 +2158,18 @@ export default function ScholarshipDetailPageClient({
         ) : null}
         {ui.lowConfidenceAi ? (
           <div className="mt-4 min-w-0">
-            <AiLowConfidenceNote />
+            <AiLowConfidenceNote copy={detailUi} />
           </div>
         ) : null}
         <ScholarshipTrustSignalsBlock
+          copy={detailUi}
           sourceStatus={detailSourceStatus}
           difficulty={detailDifficulty}
           urgency={detailUrgency}
           missingDataFlags={detailMissingDataFlags}
           lastReviewedLabel={lastVerifiedLabel}
         />
-        <ScholarshipDetailIqDecisionCard />
+        <ScholarshipDetailIqDecisionCard copy={detailUi} />
         {whoLines.length > 0 ? (
           <div className="mt-10">
             <SectionLabel>{detailUi.whoCanApply}</SectionLabel>
@@ -2232,7 +2192,7 @@ export default function ScholarshipDetailPageClient({
 
         {showEligibilityHtmlFallback ? (
             <ScholarshipRichSection
-            label="Eligibility"
+            label={detailUi.sections.eligibility}
             html={scholarship.eligibilityHtml}
             fallbackText={scholarship.eligibilityText ?? undefined}
           />
@@ -2245,13 +2205,13 @@ export default function ScholarshipDetailPageClient({
                 🎯
               </span>
               <p className="text-[1.65rem] font-bold leading-[1.08] tracking-tight text-indigo-950">
-                Get matched with scholarships in 2 minutes
+                {detailUi.matchCta.title}
               </p>
             </div>
             <HomePrimaryCtaClient
               className="mt-3 inline-flex items-center justify-center rounded-full bg-black px-7 py-2 text-xl font-bold leading-none text-white shadow-[0_8px_20px_rgba(0,0,0,0.25)] transition hover:bg-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/45"
             >
-              Find My Scholarships
+              {detailUi.matchCta.button}
             </HomePrimaryCtaClient>
           </div>
         ) : null}
@@ -2259,12 +2219,14 @@ export default function ScholarshipDetailPageClient({
         {hasQuickFacts ? (
           <div className={`mt-8 ${scholarshipDetailCardCompactClass}`}>
             <h2 className="mb-4 text-base font-semibold tracking-tight text-zinc-900">
-              Quick facts
+              {detailUi.quickFacts.title}
             </h2>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {statusDisplay ? (
                 <div>
-                  <p className="text-xs font-medium text-zinc-500">Status</p>
+                  <p className="text-xs font-medium text-zinc-500">
+                    {detailUi.quickFacts.status}
+                  </p>
                   <p className="mt-1 text-sm font-semibold text-zinc-900">
                     {statusDisplay}
                   </p>
@@ -2273,7 +2235,7 @@ export default function ScholarshipDetailPageClient({
               {studyLevelsList.length ? (
                 <div className="min-w-0 sm:col-span-2 lg:col-span-2">
                   <p className="text-xs font-medium text-zinc-500">
-                    Study levels
+                    {detailUi.quickFacts.studyLevels}
                   </p>
                   <p className="mt-1 text-sm text-zinc-700">
                     {studyLevelsList.join(', ')}
@@ -2283,7 +2245,7 @@ export default function ScholarshipDetailPageClient({
               {fieldOfStudyList.length ? (
                 <div className="min-w-0 sm:col-span-2 lg:col-span-2">
                   <p className="text-xs font-medium text-zinc-500">
-                    Field of study
+                    {detailUi.quickFacts.fieldOfStudy}
                   </p>
                   <p className="mt-1 text-sm text-zinc-700">
                     {fieldOfStudyList.join(', ')}
@@ -2293,13 +2255,13 @@ export default function ScholarshipDetailPageClient({
               {institutionsLine ? (
                 <div className="min-w-0 sm:col-span-2 lg:col-span-2">
                   <p className="text-xs font-medium text-zinc-500">
-                    Eligible institutions
+                    {detailUi.quickFacts.eligibleInstitutions}
                   </p>
                   <p
                     className="mt-1 text-sm leading-relaxed text-zinc-700"
                     title={
                       providerNameLocked
-                        ? 'Institution details may name the sponsor — hidden until you subscribe.'
+                        ? detailUi.quickFacts.institutionsLockedHint
                         : undefined
                     }
                   >
@@ -2310,7 +2272,7 @@ export default function ScholarshipDetailPageClient({
               {locationQuickFact ? (
                 <div className="min-w-0 sm:col-span-2">
                   <p className="text-xs font-medium text-zinc-500">
-                    Location
+                    {detailUi.quickFacts.location}
                   </p>
                   <p className="mt-1 text-sm text-zinc-700">
                     {locationQuickFact}
@@ -2320,7 +2282,7 @@ export default function ScholarshipDetailPageClient({
               {scholarship.numberOfAwards != null ? (
                 <div>
                   <p className="text-xs font-medium text-zinc-500">
-                    Number of awards
+                    {detailUi.quickFacts.numberOfAwards}
                   </p>
                   <p className="mt-1 text-sm font-semibold text-zinc-900">
                     {scholarship.numberOfAwards.toLocaleString()}
@@ -2330,7 +2292,7 @@ export default function ScholarshipDetailPageClient({
               {payoutLabel ? (
                 <div className="min-w-0 sm:col-span-2">
                   <p className="text-xs font-medium text-zinc-500">
-                    Payout method
+                    {detailUi.quickFacts.payoutMethod}
                   </p>
                   <p className="mt-1 text-sm text-zinc-700">{payoutLabel}</p>
                 </div>
@@ -2341,7 +2303,7 @@ export default function ScholarshipDetailPageClient({
 
         {showSupport ? (
           <div className="mt-10">
-            <SectionLabel>Scholarship Support</SectionLabel>
+            <SectionLabel>{detailUi.sections.scholarshipSupport}</SectionLabel>
             <div className={scholarshipDetailCardPrimaryClass}>
               <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-8">
                 {supportEmail ? (
@@ -2357,7 +2319,7 @@ export default function ScholarshipDetailPageClient({
                     type="button"
                     onClick={openPremiumPaywall}
                     className="inline-flex items-center gap-2 text-sm font-medium text-zinc-700"
-                    aria-label="Support email hidden. Upgrade to premium to see contact details."
+                    aria-label={detailUi.premium.supportEmailHiddenAria}
                   >
                     <Lock
                       className={`h-4 w-4 shrink-0 ${scholarshipGuestLockIconClass}`}
@@ -2386,7 +2348,7 @@ export default function ScholarshipDetailPageClient({
                     type="button"
                     onClick={openPremiumPaywall}
                     className="inline-flex items-center gap-2 text-sm font-medium text-zinc-700"
-                    aria-label="Support phone hidden. Upgrade to premium to see contact details."
+                    aria-label={detailUi.premium.supportPhoneHiddenAria}
                   >
                     <Lock
                       className={`h-4 w-4 shrink-0 ${scholarshipGuestLockIconClass}`}
@@ -2409,6 +2371,7 @@ export default function ScholarshipDetailPageClient({
 
         {panelPick.showBeforeYouApply ? (
           <ScholarshipBeforeYouApplyBlock
+            copy={detailUi}
             checks={normalizedBeforeYouApply.importantChecks}
             detailsToConfirm={normalizedBeforeYouApply.detailsToConfirm}
             redFlags={normalizedBeforeYouApply.redFlags}
@@ -2418,6 +2381,7 @@ export default function ScholarshipDetailPageClient({
 
         {showNextStepsBlock ? (
           <ScholarshipNextStepsBlock
+            copy={detailUi}
             items={nextStepActions}
             renderLine={obscureDetailLine}
           />
@@ -2432,10 +2396,10 @@ export default function ScholarshipDetailPageClient({
               id="scholarship-related-hubs-heading"
               className="mb-3 text-base font-semibold tracking-tight text-zinc-900"
             >
-              Related scholarship hubs
+              {detailUi.related.hubsTitle}
             </h2>
             <p className="mb-3 text-sm leading-relaxed text-zinc-600">
-              Browse curated listings that match this program’s state and field.
+              {detailUi.related.hubsIntro}
             </p>
             <ul className="flex flex-wrap gap-2" role="list">
               {initialRelatedHubLinks.map((link) => (
@@ -2461,11 +2425,10 @@ export default function ScholarshipDetailPageClient({
               id="scholarship-compare-peers-heading"
               className="mb-3 text-base font-semibold tracking-tight text-zinc-900"
             >
-              Compare with other universities
+              {detailUi.related.compareTitle}
             </h2>
             <p className="mb-3 text-sm leading-relaxed text-zinc-600">
-              See how aid and essay expectations differ when this provider is
-              stacked against other schools in our catalog.
+              {detailUi.related.compareIntro}
             </p>
             <ul className="flex flex-wrap gap-2" role="list">
               {initialComparePeers.map((peer) => (
@@ -2474,7 +2437,7 @@ export default function ScholarshipDetailPageClient({
                     href={`/compare/universities/${encodeURIComponent(peer.compareSlug)}`}
                     className="inline-flex rounded-full border border-sky-200 bg-sky-50/80 px-3 py-1.5 text-sm font-medium text-sky-950 transition hover:border-sky-300 hover:bg-sky-100"
                   >
-                    vs {peer.peerName}
+                    {detailUi.related.compareVs(peer.peerName)}
                   </Link>
                 </li>
               ))}
@@ -2498,11 +2461,10 @@ export default function ScholarshipDetailPageClient({
                   id="scholarship-related-resources-heading"
                   className="text-lg font-semibold tracking-tight text-zinc-900"
                 >
-                  From our resources
+                  {detailUi.related.resourcesTitle}
                 </h2>
                 <p className="text-sm leading-relaxed text-zinc-600">
-                  Articles and guides on this site that mention this program in
-                  context.
+                  {detailUi.related.resourcesIntro}
                 </p>
                 <ul className="space-y-2.5" role="list">
                   {initialRelatedArticles.map((post) => {
@@ -2549,7 +2511,7 @@ export default function ScholarshipDetailPageClient({
                   id="scholarship-related-essays-heading"
                   className="text-lg font-semibold tracking-tight text-zinc-900"
                 >
-                  Example essays & guides
+                  {detailUi.related.essaysTitle}
                 </h2>
                 {initialRelatedEssays.length > 0 ? (
                   <ul className="space-y-2.5" role="list">
@@ -2577,26 +2539,27 @@ export default function ScholarshipDetailPageClient({
                   </ul>
                 ) : (
                   <p className="text-sm text-zinc-600">
-                    A dedicated how-to guide for this program may be added over
-                    time. Browse all essay guides from the hub.
+                    {detailUi.related.essaysFallback}
                   </p>
                 )}
                 {scholarship?.essayRequired ? (
                   <div className="rounded-2xl border border-indigo-100 bg-indigo-50/60 p-4">
                     <p className="text-sm font-semibold text-indigo-950">
-                      Need an essay for this scholarship?
+                      {detailUi.related.essayRequiredTitle}
                     </p>
                     <p className="mt-1 text-xs leading-relaxed text-indigo-900/75">
-                      Start with a checklist, study examples for structure, and
-                      choose a prompt guide that matches the application.
+                      {detailUi.related.essayRequiredBody}
                     </p>
                     <div className="mt-3 flex flex-wrap gap-2">
                       {[
-                        ['Essay checklist', '/essays/checklist'],
-                        ['Essay examples', '/essays/examples'],
-                        ['Financial need essay', '/essays/financial-need'],
-                        ['Career goals essay', '/essays/career-goals'],
-                        ['Leadership essay', '/essays/leadership']
+                        [detailUi.related.essayChecklist, '/essays/checklist'],
+                        [detailUi.related.essayExamples, '/essays/examples'],
+                        [
+                          detailUi.related.essayFinancialNeed,
+                          '/essays/financial-need'
+                        ],
+                        [detailUi.related.essayCareerGoals, '/essays/career-goals'],
+                        [detailUi.related.essayLeadership, '/essays/leadership']
                       ].map(([label, href]) => (
                         <Link
                           key={href}
@@ -2611,14 +2574,13 @@ export default function ScholarshipDetailPageClient({
                 ) : null}
                 <div className="rounded-2xl border border-indigo-200 bg-gradient-to-br from-indigo-50 to-white p-4">
                   <p className="text-sm font-semibold text-indigo-950">
-                    Need to write an essay for this grant? Use our AI Essay
-                    Writer to draft a unique personal statement fast.
+                    {detailUi.related.aiWriterTitle}
                   </p>
                   <Link
                     href={`/essay?scholarship=${encodeURIComponent(scholarship.title)}`}
                     className="mt-2 inline-flex text-sm font-bold text-indigo-700 underline-offset-2 hover:text-indigo-900 hover:underline"
                   >
-                    Open AI Essay Writer →
+                    {detailUi.related.aiWriterLink}
                   </Link>
                 </div>
               </div>
@@ -2628,6 +2590,7 @@ export default function ScholarshipDetailPageClient({
 
         {showApplicationTips ? (
           <ScholarshipApplicationTipsBlock
+            copy={detailUi}
             items={filteredTips}
             renderLine={obscureDetailLine}
           />
@@ -2636,17 +2599,17 @@ export default function ScholarshipDetailPageClient({
         {mergeAppDetails &&
         (hasRequirementsSection || docs.length > 0 || showSeoApplication) ? (
           <div className="mt-10">
-            <SectionLabel>Application details</SectionLabel>
+            <SectionLabel>{detailUi.sections.applicationDetails}</SectionLabel>
             <div className={`${scholarshipDetailCardPrimaryClass} space-y-8`}>
               {hasRequirementsSection ? (
                 <div>
                   <h3 className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
-                    Key requirements ({keyRequirementsLabelCount})
+                    {detailUi.sections.keyRequirements(keyRequirementsLabelCount)}
                   </h3>
                   <p className="mb-4 mt-2 text-xs text-zinc-500">
                     {isSimplerGov
-                      ? 'Requirements and conditions as stated on the federal listing.'
-                      : 'Program rules and conditions; confirm uploads on the official application.'}
+                      ? detailUi.sections.keyRequirementsNoteGov
+                      : detailUi.sections.keyRequirementsNoteAlt}
                   </p>
                   {reqChips.length > 0 ? (
                     <div className="mb-5 flex flex-wrap gap-2">
@@ -2692,12 +2655,12 @@ export default function ScholarshipDetailPageClient({
               {docs.length > 0 ? (
                 <div>
                   <h3 className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
-                    Required documents
+                    {detailUi.sections.requiredDocuments}
                   </h3>
                   <p className="mb-4 mt-2 text-xs text-zinc-500">
                     {isSimplerGov
-                      ? 'Confirm the latest list on the official opportunity page.'
-                      : 'Check the official application for the final document list.'}
+                      ? detailUi.sections.requiredDocumentsNoteGov
+                      : detailUi.sections.requiredDocumentsNote}
                   </p>
                   <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-zinc-700 md:text-base">
                     {docs.map((d) => (
@@ -2709,7 +2672,7 @@ export default function ScholarshipDetailPageClient({
               {showSeoApplication ? (
                 <div>
                   <h3 className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
-                    Applying
+                    {detailUi.sections.applying}
                   </h3>
                   <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-zinc-700">
                     {scholarship.seoApplication!.trim()}
@@ -2723,13 +2686,13 @@ export default function ScholarshipDetailPageClient({
             {hasRequirementsSection ? (
               <div className="mt-10">
                 <SectionLabel>
-                  Key requirements ({keyRequirementsLabelCount})
+                  {detailUi.sections.keyRequirements(keyRequirementsLabelCount)}
                 </SectionLabel>
                 <div className={scholarshipDetailCardPrimaryClass}>
                   <p className="mb-4 text-xs text-zinc-500">
                     {isSimplerGov
-                      ? 'Requirements and conditions as stated on the federal listing.'
-                      : 'Program rules and conditions. Uploads and file types are listed under Required documents.'}
+                      ? detailUi.sections.keyRequirementsNoteGov
+                      : detailUi.sections.keyRequirementsNote}
                   </p>
                   {reqChips.length > 0 ? (
                     <div className="mb-5 flex flex-wrap gap-2">
@@ -2776,7 +2739,7 @@ export default function ScholarshipDetailPageClient({
 
             {docs.length > 0 || officialDocumentLinks.length > 0 ? (
               <div className="mt-10">
-                <SectionLabel>Required documents</SectionLabel>
+                <SectionLabel>{detailUi.sections.requiredDocuments}</SectionLabel>
                 <div className={scholarshipDetailCardPrimaryClass}>
                   <p className="mb-4 text-xs text-zinc-500">
                     {isSimplerGov
@@ -2818,6 +2781,7 @@ export default function ScholarshipDetailPageClient({
 
             {showSeoApplication ? (
               <ScholarshipSeoApplicationBlock
+                copy={detailUi}
                 text={scholarship.seoApplication!.trim()}
               />
             ) : null}
@@ -2826,7 +2790,7 @@ export default function ScholarshipDetailPageClient({
 
         {hasAwardPaymentBlock ? (
           <div className="mt-10">
-            <SectionLabel>Award &amp; payment</SectionLabel>
+            <SectionLabel>{detailUi.sections.awardPayment}</SectionLabel>
             <div
               className={`${scholarshipDetailCardPrimaryClass} space-y-4 text-sm text-zinc-700`}
             >
@@ -2874,7 +2838,7 @@ export default function ScholarshipDetailPageClient({
 
         {hasImportantNotes ? (
           <div className="mt-10">
-            <SectionLabel variant="support">Important notes</SectionLabel>
+            <SectionLabel variant="support">{detailUi.sections.importantNotes}</SectionLabel>
             <div
               className={`${scholarshipDetailCardPrimaryClass} space-y-6 text-sm leading-relaxed text-zinc-700`}
             >
@@ -2896,7 +2860,7 @@ export default function ScholarshipDetailPageClient({
 
         {hasVisibleProviderContent ? (
           <div className="mt-10">
-            <SectionLabel variant="support">About the provider</SectionLabel>
+            <SectionLabel variant="support">{detailUi.sections.aboutProvider}</SectionLabel>
             <div className={scholarshipDetailCardSupportClass}>
               <div className="flex min-w-0 flex-col gap-2 sm:gap-3">
                 {providerProfileHref ? (
@@ -2905,7 +2869,7 @@ export default function ScholarshipDetailPageClient({
                       type="button"
                       onClick={openLockedAccessWall}
                       className="group flex min-w-0 gap-3 rounded-xl p-1 -m-1 text-left outline-none transition hover:bg-zinc-50/90 focus-visible:ring-2 focus-visible:ring-orange-500/40 focus-visible:ring-offset-2 sm:gap-4"
-                      aria-label="Provider name hidden. Upgrade to premium to see the sponsor."
+                      aria-label={detailUi.premium.providerHiddenAria}
                     >
                       <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-zinc-200/80 bg-white shadow-sm">
                         {logoUrl ? (
@@ -2983,7 +2947,7 @@ export default function ScholarshipDetailPageClient({
                     type="button"
                     onClick={openLockedAccessWall}
                     className="flex min-w-0 gap-3 rounded-xl p-1 -m-1 text-left outline-none transition hover:bg-zinc-50/90 focus-visible:ring-2 focus-visible:ring-orange-500/40 focus-visible:ring-offset-2 sm:gap-4"
-                    aria-label="Provider name hidden. Upgrade to premium to see the sponsor."
+                    aria-label={detailUi.premium.providerHiddenAria}
                   >
                     <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-zinc-200/80 bg-white shadow-sm">
                       {logoUrl ? (
@@ -3131,10 +3095,10 @@ export default function ScholarshipDetailPageClient({
 
         {showSourceFallbackBlock && sourceFallbackLabel ? (
           <div className="mt-10">
-            <SectionLabel variant="support">Source</SectionLabel>
+            <SectionLabel variant="support">{detailUi.sections.source}</SectionLabel>
             <div className={scholarshipDetailCardSupportClass}>
               <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-400">
-                Source
+                {detailUi.sections.source}
               </p>
               <p className="mt-1 text-lg font-semibold text-zinc-900">
                 {sourceFallbackLabel}
@@ -3145,7 +3109,7 @@ export default function ScholarshipDetailPageClient({
 
         {showOverviewSection ? (
           <div className="mt-10">
-            <SectionLabel variant="support">Overview</SectionLabel>
+            <SectionLabel variant="support">{detailUi.sections.overview}</SectionLabel>
             <div className={scholarshipDetailCardSupportClass}>
               {showCredibilityInOverview ? (
                 <div
@@ -3306,8 +3270,8 @@ export default function ScholarshipDetailPageClient({
                         : await postUserSavedScholarship(id);
                       if (!ok) {
                         toast({
-                          title: 'Could not update saved scholarships',
-                          description: 'Check your connection and try again.',
+                          title: detailUi.toast.saveFailedTitle,
+                          description: detailUi.toast.saveFailedDescription,
                           variant: 'destructive'
                         });
                         return;
@@ -3362,7 +3326,7 @@ export default function ScholarshipDetailPageClient({
 
         {showFaqBlock ? (
           <div className="mt-8 border-t border-zinc-200 pt-6">
-            <ScholarshipFaqAccordion items={faqItemsOnPage} />
+            <ScholarshipFaqAccordion copy={detailUi} items={faqItemsOnPage} />
           </div>
         ) : null}
 
@@ -3385,19 +3349,20 @@ export default function ScholarshipDetailPageClient({
               </Link>
               <div className="min-w-0 space-y-2">
                 <h2 className="text-lg font-semibold tracking-tight text-zinc-900">
-                  Similar scholarships
+                  {detailUi.similar.title}
                 </h2>
                 <p className="text-sm leading-relaxed text-zinc-600">
-                  <span className="font-semibold text-zinc-800">Open deadlines first</span>{' '}
-                  — same category when possible, then active picks from the catalog. Up to three closed
-                  grants from this category are shown at the end for context.
+                  <span className="font-semibold text-zinc-800">
+                    {detailUi.similar.introBold}
+                  </span>{' '}
+                  {detailUi.similar.introRest}
                 </p>
                 <p className="text-xs font-medium text-zinc-500">
-                  Category:{' '}
+                  {detailUi.similar.categoryPrefix}{' '}
                   <span className="text-zinc-700">
                     {categorySlugForLinks
                       ? breadcrumbCategoryLabel(categorySlugForLinks)
-                      : 'All scholarships'}
+                      : detailUi.similar.allScholarships}
                   </span>
                 </p>
                 {categorySlugForLinks ? (
@@ -3406,7 +3371,9 @@ export default function ScholarshipDetailPageClient({
                       href={`/scholarships/category/${encodeURIComponent(categorySlugForLinks)}`}
                       className="font-semibold text-sky-700 underline-offset-2 hover:text-sky-800 hover:underline"
                     >
-                      More scholarships in {breadcrumbCategoryLabel(categorySlugForLinks)}
+                      {detailUi.similar.moreInCategory(
+                        breadcrumbCategoryLabel(categorySlugForLinks)
+                      )}
                     </Link>
                   </p>
                 ) : (
@@ -3414,7 +3381,7 @@ export default function ScholarshipDetailPageClient({
                     <ScholarshipCatalogEntryLink
                       className="font-semibold text-sky-700 underline-offset-2 hover:text-sky-800 hover:underline"
                     >
-                      Browse all scholarships
+                      {detailUi.similar.browseAll}
                     </ScholarshipCatalogEntryLink>
                   </p>
                 )}
@@ -3429,18 +3396,21 @@ export default function ScholarshipDetailPageClient({
                       id="similar-open-heading"
                       className="text-sm font-semibold tracking-tight text-emerald-900"
                     >
-                      Open now
+                      {detailUi.similar.openNow}
                     </h3>
                     <span className="text-xs font-medium tabular-nums text-emerald-800/80">
                       {similarOpenList.length}{' '}
-                      {similarOpenList.length === 1 ? 'scholarship' : 'scholarships'}
+                      {similarOpenList.length === 1
+                        ? detailUi.similar.scholarship
+                        : detailUi.similar.scholarships}
                     </span>
                   </div>
                   <ul className={`${similarScholarshipsGridClass} mt-3`} role="list">
-                    <SimilarScholarshipIqPromoCard />
+                    <SimilarScholarshipIqPromoCard copy={detailUi} />
                     {similarOpenList.map((s) => (
                       <SimilarScholarshipDetailListItem
                         key={s.id}
+                        copy={detailUi}
                         scholarship={s}
                         highlightPrimary={s.id === similarFirstOpenId}
                         profileMatchPercent={s.profileMatchPercent ?? null}
@@ -3467,14 +3437,17 @@ export default function ScholarshipDetailPageClient({
                       id="similar-closed-heading"
                       className="text-sm font-semibold tracking-tight text-zinc-600"
                     >
-                      Past deadline
+                      {detailUi.similar.pastDeadline}
                     </h3>
-                    <span className="text-xs text-zinc-500">Same category · reference only</span>
+                    <span className="text-xs text-zinc-500">
+                      {detailUi.similar.pastDeadlineNote}
+                    </span>
                   </div>
                   <ul className={`${similarScholarshipsGridClass} mt-3`} role="list">
                     {similarClosedList.map((s) => (
                       <SimilarScholarshipDetailListItem
                         key={s.id}
+                        copy={detailUi}
                         scholarship={s}
                         highlightPrimary={false}
                         profileMatchPercent={s.profileMatchPercent ?? null}
@@ -3497,13 +3470,14 @@ export default function ScholarshipDetailPageClient({
               </div>
             ) : (
               <ul className={`${similarScholarshipsGridClass} mt-5`} role="list">
-                <SimilarScholarshipIqPromoCard />
+                <SimilarScholarshipIqPromoCard copy={detailUi} />
                 {similarScholarshipsWithMatch.map((s) => {
                   const isOpen = !scholarshipDeadlineHasPassed(s);
                   const isPrimaryOpen = isOpen && s.id === similarFirstOpenId;
                   return (
                     <SimilarScholarshipDetailListItem
                       key={s.id}
+                      copy={detailUi}
                       scholarship={s}
                       highlightPrimary={Boolean(isPrimaryOpen)}
                       profileMatchPercent={s.profileMatchPercent ?? null}

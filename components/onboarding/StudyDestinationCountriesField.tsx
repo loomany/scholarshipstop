@@ -4,9 +4,11 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 
 import { SITE_INPUT_FOCUS_CLASS } from '@/lib/constants/siteInputFocus';
+import { getAccountProfileUiCopy } from '@/lib/i18n/accountProfileUiCopy';
+import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
+import { getLocalizedCountryLabel } from '@/lib/i18n/taxonomyLabels';
 import {
   compareCountryOptionsForStudyDestination,
-  countryLabelFromCode,
   SCHOLARSHIP_COUNTRY_OPTIONS
 } from '@/lib/scholarships/countryEligibility/countries';
 import { cn } from '@/utils/cn';
@@ -19,22 +21,13 @@ const checkboxClass =
 const panelScrollClass =
   '[scrollbar-width:thin] [scrollbar-color:rgba(161,161,170,0.55)_transparent] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-zinc-400/70 [&::-webkit-scrollbar-track]:bg-transparent';
 
-function triggerSummary(selected: string[]): string {
-  if (selected.length === 0) return 'Choose countries (optional)';
-  if (selected.length === 1) return countryLabelFromCode(selected[0]);
-  if (selected.length === 2) {
-    return `${countryLabelFromCode(selected[0])}, ${countryLabelFromCode(selected[1])}`;
-  }
-  const [a, b] = selected;
-  return `${countryLabelFromCode(a)}, ${countryLabelFromCode(b)} +${selected.length - 2} more`;
-}
-
 type Props = {
   selected: string[];
   onChange: (next: string[]) => void;
   onSave?: () => void | Promise<void>;
   disabled?: boolean;
   idPrefix?: string;
+  uiLocale?: LocalizedUiLocale;
 };
 
 export function StudyDestinationCountriesField({
@@ -42,8 +35,24 @@ export function StudyDestinationCountriesField({
   onChange,
   onSave,
   disabled = false,
-  idPrefix = 'study-dest'
+  idPrefix = 'study-dest',
+  uiLocale = 'en'
 }: Props) {
+  const copy = getAccountProfileUiCopy(uiLocale).studyDestination;
+
+  const countryLabel = (code: string, fallback: string) =>
+    getLocalizedCountryLabel(code, uiLocale, fallback);
+
+  const triggerSummary = (codes: string[]): string => {
+    if (codes.length === 0) return copy.chooseCountries;
+    if (codes.length === 1) return countryLabel(codes[0], codes[0]);
+    if (codes.length === 2) {
+      return `${countryLabel(codes[0], codes[0])}, ${countryLabel(codes[1], codes[1])}`;
+    }
+    const [a, b] = codes;
+    return `${countryLabel(a, a)}, ${countryLabel(b, b)} ${copy.moreCount(codes.length - 2)}`;
+  };
+
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const rootRef = useRef<HTMLDivElement>(null);
@@ -61,11 +70,11 @@ export function StudyDestinationCountriesField({
     const q = query.trim().toLowerCase();
     if (!q) return sortedOptions;
     return sortedOptions.filter((c) => {
-      const label = c.label.toLowerCase();
+      const label = countryLabel(c.code, c.label).toLowerCase();
       const code = c.code.toLowerCase();
       return label.includes(q) || code.includes(q);
     });
-  }, [query, sortedOptions]);
+  }, [query, sortedOptions, uiLocale]);
 
   useEffect(() => {
     if (!open) return;
@@ -108,7 +117,7 @@ export function StudyDestinationCountriesField({
       <button
         type="button"
         id={triggerId}
-        aria-label="Study in — choose destination countries (optional). Opens a list to pick one or more."
+        aria-label={copy.ariaTrigger}
         aria-expanded={open}
         aria-haspopup="listbox"
         disabled={disabled}
@@ -153,8 +162,8 @@ export function StudyDestinationCountriesField({
                 type="search"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search countries"
-                aria-label="Search countries"
+                placeholder={copy.searchCountries}
+                aria-label={copy.searchCountries}
                 className={cn(
                   'min-w-0 flex-1 rounded-lg border border-orange-200 bg-white px-3 py-2 text-sm text-zinc-900 placeholder:text-zinc-400',
                   SITE_INPUT_FOCUS_CLASS
@@ -166,13 +175,13 @@ export function StudyDestinationCountriesField({
                 onClick={() => onChange([])}
                 className="shrink-0 text-sm font-semibold text-[#D97736] underline-offset-2 hover:text-[#C2672E] hover:underline disabled:cursor-not-allowed disabled:opacity-40"
               >
-                Clear all
+                {copy.clearAll}
               </button>
             </div>
           </div>
           <ul
             role="listbox"
-            aria-label="Study in — destination countries"
+            aria-label={copy.ariaListbox}
             aria-multiselectable="true"
             className={cn(
               'max-h-[min(18rem,calc(100dvh-12rem))] overflow-y-auto py-1',
@@ -180,12 +189,13 @@ export function StudyDestinationCountriesField({
             )}
           >
             {filtered.length === 0 ? (
-              <li className="px-4 py-3 text-sm text-zinc-500">No matches.</li>
+              <li className="px-4 py-3 text-sm text-zinc-500">{copy.noMatches}</li>
             ) : (
               filtered.map((c) => {
                 const id = `${idPrefix}-opt-${c.code}`;
                 const checked = selectedSet.has(c.code);
                 const atCap = !checked && selected.length >= MAX_DESTINATIONS;
+                const displayLabel = countryLabel(c.code, c.label);
                 return (
                   <li key={c.code} role="option" aria-selected={checked}>
                     <label
@@ -204,7 +214,7 @@ export function StudyDestinationCountriesField({
                         onChange={() => toggle(c.code)}
                         className={checkboxClass}
                       />
-                      <span className="font-medium">{c.label}</span>
+                      <span className="font-medium">{displayLabel}</span>
                       <span className="ml-auto tabular-nums text-xs text-zinc-400">
                         {c.code}
                       </span>
@@ -217,7 +227,7 @@ export function StudyDestinationCountriesField({
           <div className="border-t border-orange-100 px-3 py-2">
             <div className="flex items-center justify-between gap-3">
               <p className="text-xs leading-relaxed text-zinc-500">
-                Pick up to {MAX_DESTINATIONS}. Leave empty if you have no preference yet.
+                {copy.pickUpTo(MAX_DESTINATIONS)}
               </p>
               <button
                 type="button"
@@ -228,7 +238,7 @@ export function StudyDestinationCountriesField({
                 disabled={disabled}
                 className="shrink-0 rounded-lg border border-orange-300 bg-orange-50 px-3 py-1.5 text-xs font-semibold text-[#D97736] transition hover:border-orange-400 hover:bg-orange-100 hover:text-[#C2672E] disabled:cursor-not-allowed disabled:opacity-50"
               >
-                Save
+                {copy.save}
               </button>
             </div>
           </div>

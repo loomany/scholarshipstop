@@ -7,9 +7,11 @@ export type ProviderProfileTocEntry = {
  * SSR “On this page” block — mirrors essay/resource article TOC styling.
  */
 export function ProviderProfileTableOfContents({
-  items
+  items,
+  onThisPageLabel = 'On this page'
 }: {
   items: ProviderProfileTocEntry[];
+  onThisPageLabel?: string;
 }) {
   if (items.length < 2) return null;
 
@@ -22,7 +24,7 @@ export function ProviderProfileTableOfContents({
         id="provider-profile-toc-label"
         className="text-sm font-semibold tracking-tight text-gray-900"
       >
-        On this page
+        {onThisPageLabel}
       </p>
       <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm text-gray-700">
         {items.map((item) => (

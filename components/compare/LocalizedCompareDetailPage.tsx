@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
-import LanguageSwitcher from '@/components/i18n/LanguageSwitcher';
 import { SiteFaqAccordion } from '@/components/ui/SiteFaqAccordion';
 import type { LocalizedComparePageCopy } from '@/lib/i18n/comparePilot/compareDetailTranslationGate';
 import { hrefForLocalizedUiRequired } from '@/lib/i18n/localizedHref';
@@ -26,10 +25,6 @@ export default function LocalizedCompareDetailPage({
 
   return (
     <article className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:py-14">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <LanguageSwitcher pathname={canonicalPath} />
-      </div>
-
       <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
         {copy.headline}
       </h1>

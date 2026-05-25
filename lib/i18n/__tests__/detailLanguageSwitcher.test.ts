@@ -48,3 +48,42 @@ test('navbar switcher delegates to detail cluster', () => {
   assert.equal(items.length, 3);
   assert.equal(items.find((i) => i.current)?.locale, 'es');
 });
+
+test('compare state detail offers en/es/fr for any published slug', () => {
+  const items = getDetailLanguageSwitcherItems('/compare/states/nebraska-vs-utah');
+  assert.equal(items.length, 3);
+  assert.deepEqual(
+    items.map((i) => [i.locale, i.href, i.current]),
+    [
+      ['en', '/compare/states/nebraska-vs-utah', true],
+      ['es', '/es/compare/states/nebraska-vs-utah', false],
+      ['fr', '/fr/compare/states/nebraska-vs-utah', false]
+    ]
+  );
+});
+
+test('compare university detail offers en/es/fr for localized path', () => {
+  const items = getStage2LanguageSwitcherItems({
+    pathname:
+      '/es/compare/universities/florida-gateway-college-vs-waubonsee-community-college'
+  });
+  assert.equal(items.length, 3);
+  assert.equal(items.find((i) => i.current)?.locale, 'es');
+  assert.ok(
+    items.some(
+      (i) =>
+        i.locale === 'en' &&
+        i.href ===
+          '/compare/universities/florida-gateway-college-vs-waubonsee-community-college'
+    )
+  );
+});
+
+test('cms resource article offers en/es/fr switcher (non-pilot slug)', () => {
+  const items = getDetailLanguageSwitcherItems(
+    '/resources/can-chatgpt-help-find-scholarships'
+  );
+  assert.equal(items.length, 3);
+  assert.ok(items.some((i) => i.locale === 'es' && i.href.includes('/es/resources/')));
+  assert.ok(items.some((i) => i.locale === 'fr' && i.href.includes('/fr/resources/')));
+});
