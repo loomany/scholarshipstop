@@ -30,7 +30,11 @@ import {
   resourcesArticlePath
 } from '@/lib/content-hub/resourcesSection';
 import { hrefForLocalizedUiRequired } from '@/lib/i18n/localizedHref';
-import type { LocalizedResourcePageCopy } from '@/lib/i18n/resourcePilot/resolveLocalizedResourcePage';
+import { getEnglishFallbackNotice } from '@/lib/i18n/englishFallbackNotice';
+import type {
+  LocalizedResourcePageCopy,
+  LocalizedResourceResolveMode
+} from '@/lib/i18n/resourcePilot/resolveLocalizedResourcePage';
 import type { Stage2PilotLocale } from '@/lib/i18n/pilotRoutes';
 import { getURL } from '@/utils/helpers';
 
@@ -39,6 +43,7 @@ type LocalizedResourceArticlePageProps = {
   slug: string;
   post: ContentPostRow;
   copy: LocalizedResourcePageCopy;
+  mode?: LocalizedResourceResolveMode;
   matchedRelatedScholarships?: RelatedScholarshipStored[];
   hubScholarships?: Scholarship[];
   showResourceIqCta?: boolean;
@@ -49,10 +54,12 @@ export default function LocalizedResourceArticlePage({
   slug,
   post,
   copy,
+  mode = 'translated',
   matchedRelatedScholarships = [],
   hubScholarships = [],
   showResourceIqCta = false
 }: LocalizedResourceArticlePageProps) {
+  const isEnglishFallback = mode === 'englishFallback';
   const ui = getResourceDetailUiCopy(locale);
   const sectionPath = hrefForLocalizedUiRequired(locale, RESOURCES_SECTION_PATH);
   const visibleDateLine = resourceArticleDateLine(
@@ -123,7 +130,7 @@ export default function LocalizedResourceArticlePage({
     url: articleUrl,
     datePublished: post.published_at || undefined,
     dateModified: post.updated_at || post.published_at || undefined,
-    inLanguage: locale === 'es' ? 'es' : 'fr',
+    inLanguage: isEnglishFallback ? 'en' : locale === 'es' ? 'es' : 'fr',
     ...(post.cover_image_url?.trim()
       ? { image: [post.cover_image_url.trim()] }
       : {}),
@@ -206,6 +213,15 @@ export default function LocalizedResourceArticlePage({
             </li>
           </ol>
         </nav>
+
+        {isEnglishFallback ? (
+          <p
+            className="mt-6 rounded-lg border border-sky-200 bg-sky-50 px-4 py-3 text-sm leading-relaxed text-sky-950"
+            role="status"
+          >
+            {getEnglishFallbackNotice(locale)}
+          </p>
+        ) : null}
 
         <header className="mt-8">
           <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl lg:text-[2.25rem] lg:leading-tight">

@@ -2,10 +2,12 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import LocalizedEssayGuidePage from '@/components/essays/LocalizedEssayGuidePage';
+import { essayHubArticlePath } from '@/lib/essays/essayHubSection';
 import { getContentTranslationSeoDecision } from '@/lib/i18n/contentTranslationsServer';
 import type { ContentTranslationLocale } from '@/lib/i18n/contentTranslationsTypes';
+import { buildEnglishFallbackPageMetadata } from '@/lib/i18n/localizedContentFallbackMetadata';
 import { buildEssayGuideAlternates } from '@/lib/i18n/essayPilot/essayTranslationAlternates';
-import { fetchPublishedEssayGuide } from '@/lib/i18n/essayPilot/resolveLocalizedEssayGuide';
+import { resolveLocalizedEssayGuidePage } from '@/lib/i18n/essayPilot/resolveLocalizedEssayGuide';
 import { getStaticEssayGuide } from '@/lib/essays/staticEssayGuides';
 import {
   isStage2PilotLocale,
@@ -32,9 +34,21 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     return { title: 'Page not found', robots: { index: false, follow: false } };
   }
 
-  const resolved = await fetchPublishedEssayGuide(slug, locale);
+  const resolved = await resolveLocalizedEssayGuidePage(
+    slug,
+    locale as ContentTranslationLocale
+  );
   if (!resolved) {
     return { title: 'Page not found', robots: { index: false, follow: false } };
+  }
+
+  if (resolved.mode === 'englishFallback') {
+    return buildEnglishFallbackPageMetadata({
+      englishCanonicalPath: essayHubArticlePath(slug),
+      title: resolved.copy.metaTitle,
+      description: resolved.copy.metaDescription,
+      openGraphLocale: locale === 'es' ? 'es_ES' : 'fr_FR'
+    });
   }
 
   const seo = getContentTranslationSeoDecision({
@@ -69,7 +83,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const alternates = await buildEssayGuideAlternates({
     slug,
     currentLocale: locale,
-    resolved
+    resolved: {
+      slug: resolved.slug,
+      essay: resolved.essay,
+      translation: resolved.translation,
+      copy: resolved.copy
+    }
   });
 
   const title = resolved.copy.metaTitle;
@@ -98,7 +117,7 @@ export default async function LocalizedEssayGuideRoute({ params }: PageProps) {
   const slug = decodeURIComponent(params.slug ?? '').trim().toLowerCase();
   if (!slug || getStaticEssayGuide(slug)) notFound();
 
-  const resolved = await fetchPublishedEssayGuide(
+  const resolved = await resolveLocalizedEssayGuidePage(
     slug,
     locale as ContentTranslationLocale
   );
@@ -110,6 +129,7 @@ export default async function LocalizedEssayGuideRoute({ params }: PageProps) {
       slug={slug}
       essay={resolved.essay}
       copy={resolved.copy}
+      mode={resolved.mode}
     />
   );
 }

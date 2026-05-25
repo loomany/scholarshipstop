@@ -517,12 +517,10 @@ function EssaysGrid({
         const slug = post.slug!.trim();
         const title = post.title?.trim() || 'Untitled';
         const desc = post.meta_description?.trim() || '';
-        const hasTranslation =
-          locale === 'en' ||
-          (translatedSourceIds?.has(post.id) ?? false);
-        const href = hasTranslation
-          ? hrefForPath(essayHubArticlePath(slug))
-          : essayHubArticlePath(slug);
+        const href =
+          locale === 'en'
+            ? essayHubArticlePath(slug)
+            : hrefForPath(essayHubArticlePath(slug));
         return (
           <li
             key={post.id}

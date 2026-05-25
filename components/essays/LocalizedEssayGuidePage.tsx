@@ -5,7 +5,10 @@ import { EssayGuideCardImage } from '@/components/essays/EssayGuideCardImage';
 import { SiteFaqAccordion } from '@/components/ui/SiteFaqAccordion';
 import { ESSAYS_PAGE_TITLE, ESSAYS_SECTION_PATH } from '@/lib/essays/essayHubSection';
 import type { EssayDetailRow } from '@/lib/essays/essaysServer';
+import { getEnglishFallbackNotice } from '@/lib/i18n/englishFallbackNotice';
 import type { LocalizedEssayPageCopy } from '@/lib/i18n/essayPilot/essayDetailTranslationGate';
+import type { LocalizedEssayResolveMode } from '@/lib/i18n/essayPilot/resolveLocalizedEssayGuide';
+import { getResourceDetailUiCopy } from '@/lib/i18n/resourceDetailUiCopy';
 import { hrefForLocalizedUiRequired } from '@/lib/i18n/localizedHref';
 import type { Stage2PilotLocale } from '@/lib/i18n/pilotRoutes';
 
@@ -14,23 +17,41 @@ type Props = {
   slug: string;
   essay: EssayDetailRow;
   copy: LocalizedEssayPageCopy;
+  mode?: LocalizedEssayResolveMode;
 };
 
-export default function LocalizedEssayGuidePage({ locale, slug, essay, copy }: Props) {
+export default function LocalizedEssayGuidePage({
+  locale,
+  slug: _slug,
+  essay,
+  copy,
+  mode = 'translated'
+}: Props) {
+  const isEnglishFallback = mode === 'englishFallback';
+  const ui = getResourceDetailUiCopy(locale);
   const essaysHubHref = hrefForLocalizedUiRequired(locale, ESSAYS_SECTION_PATH);
   const title = copy.headline || copy.metaTitle;
 
   return (
     <article className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:py-14">
-      <nav className="mb-6 text-sm text-gray-600">
+      <nav className="mb-6 text-sm text-gray-600" aria-label={ui.breadcrumbAria}>
         <Link href={hrefForLocalizedUiRequired(locale, '/')} className="hover:text-indigo-700">
-          Home
+          {ui.homeLabel}
         </Link>
         <span className="mx-2">/</span>
         <Link href={essaysHubHref} className="hover:text-indigo-700">
           {ESSAYS_PAGE_TITLE}
         </Link>
       </nav>
+
+      {isEnglishFallback ? (
+        <p
+          className="mb-6 rounded-lg border border-sky-200 bg-sky-50 px-4 py-3 text-sm leading-relaxed text-sky-950"
+          role="status"
+        >
+          {getEnglishFallbackNotice(locale)}
+        </p>
+      ) : null}
 
       {essay.hero_image_url ? (
         <EssayGuideCardImage

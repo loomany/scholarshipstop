@@ -422,12 +422,10 @@ function ResourcesGrid({
         const slug = post.slug!.trim();
         const title = post.title?.trim() || 'Untitled';
         const desc = post.meta_description?.trim() || '';
-        const hasTranslation =
-          locale === 'en' ||
-          (translatedSourceIds?.has(post.id) ?? false);
-        const href = hasTranslation
-          ? hrefForPath(resourcesArticlePath(slug))
-          : resourcesArticlePath(slug);
+        const href =
+          locale === 'en'
+            ? resourcesArticlePath(slug)
+            : hrefForPath(resourcesArticlePath(slug));
         const coverSrc = resolveCoverSrc(post, fallbackCoverByPostId);
         return (
           <Fragment key={post.id}>

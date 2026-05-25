@@ -1,4 +1,6 @@
+import type { EssayDetailRow } from '@/lib/essays/essaysServer';
 import type { ContentTranslationRow } from '@/lib/i18n/contentTranslationsTypes';
+import type { ContentTranslationLocale } from '@/lib/i18n/contentTranslationsTypes';
 import { shouldExposeTranslatedRoute } from '@/lib/i18n/contentTranslationsTypes';
 
 export type EssayFaqItem = { question: string; answer: string };
@@ -48,6 +50,39 @@ export type LocalizedEssayPageCopy = {
   disclaimer: string;
 };
 
+function essayBodyHtmlFromPlainText(body: string): string {
+  const trimmed = body.trim();
+  if (!trimmed) return '';
+  if (/<[a-z][\s\S]*>/i.test(trimmed)) return trimmed;
+  const paragraphs = trimmed
+    .split(/\n\n+/)
+    .map((p) => p.trim())
+    .filter(Boolean);
+  return paragraphs.map((p) => `<p>${p}</p>`).join('');
+}
+
+export function buildEnglishFallbackEssayPageCopy(
+  essay: EssayDetailRow,
+  locale: ContentTranslationLocale
+): LocalizedEssayPageCopy {
+  const disclaimer =
+    locale === 'es'
+      ? 'Verifique siempre los detalles en las fuentes oficiales. ScholarshipTop no garantiza resultados.'
+      : 'Vérifiez toujours les détails sur les sources officielles. ScholarshipTop ne garantit aucun résultat.';
+  const title = essay.title?.trim() || '';
+  const bodyHtml = essayBodyHtmlFromPlainText(essay.content_html?.trim() || '');
+  const intro = essay.meta_description?.trim() || '';
+  return {
+    metaTitle: title,
+    metaDescription: essay.meta_description?.trim() || '',
+    headline: title,
+    intro,
+    bodyHtml,
+    faq: [],
+    disclaimer
+  };
+}
+
 export function buildLocalizedEssayPageCopy(
   row: ContentTranslationRow,
   locale: 'es' | 'fr'
@@ -63,17 +98,17 @@ export function buildLocalizedEssayPageCopy(
       : null;
 
   const body = row.translated_body?.trim() || row.translated_summary?.trim() || '';
-  const paragraphs = body
+  const bodyHtml = essayBodyHtmlFromPlainText(body);
+  const introFallback = body
     .split(/\n\n+/)
     .map((p) => p.trim())
-    .filter(Boolean);
-  const bodyHtml = paragraphs.map((p) => `<p>${p}</p>`).join('');
+    .filter(Boolean)[0];
 
   return {
     metaTitle: row.translated_meta_title?.trim() || row.translated_title?.trim() || '',
     metaDescription: row.translated_meta_description?.trim() || row.translated_summary?.trim() || '',
     headline: row.translated_title?.trim() || '',
-    intro: row.translated_summary?.trim() || paragraphs[0] || '',
+    intro: row.translated_summary?.trim() || introFallback || '',
     bodyHtml,
     faq: faqFromEssayTranslation(row),
     disclaimer:

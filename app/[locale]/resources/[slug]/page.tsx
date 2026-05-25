@@ -10,20 +10,22 @@ import {
   filterActiveRelatedScholarshipItems,
   shouldShowResourceArticleIqCta
 } from '@/lib/content-hub/filterResourceArticleRelatedScholarships';
+import { resourcesArticlePath } from '@/lib/content-hub/resourcesSection';
 import type { ContentTranslationLocale } from '@/lib/i18n/contentTranslationsTypes';
-import { fetchScholarshipsBySlugsOrIdsOrdered } from '@/lib/scholarships/supabase';
 import { getContentTranslationSeoDecision } from '@/lib/i18n/contentTranslationsServer';
+import { buildEnglishFallbackPageMetadata } from '@/lib/i18n/localizedContentFallbackMetadata';
 import { buildResourcePilotAlternates } from '@/lib/i18n/resourcePilot/resourceTranslationAlternates';
 import {
   buildLocalizedResourcePageCopy,
-  fetchPublishedResourceTranslation,
-  getStaticLocalizedResourcePilotPage
+  getStaticLocalizedResourcePilotPage,
+  resolveLocalizedResourceArticlePage
 } from '@/lib/i18n/resourcePilot/resolveLocalizedResourcePage';
 import { buildLocalizedPilotMetadata } from '@/lib/i18n/localizedMetadata';
 import {
   isStage2PilotLocale,
   type Stage2PilotLocale
 } from '@/lib/i18n/pilotRoutes';
+import { fetchScholarshipsBySlugsOrIdsOrdered } from '@/lib/scholarships/supabase';
 
 export const revalidate = 300;
 export const dynamicParams = true;
@@ -48,12 +50,22 @@ export async function generateMetadata({
     return buildLocalizedPilotMetadata({ page: staticPage, searchParams });
   }
 
-  const resolved = await fetchPublishedResourceTranslation(
+  const resolved = await resolveLocalizedResourceArticlePage(
     slug,
     locale as ContentTranslationLocale
   );
   if (!resolved) {
     return { title: 'Page not found', robots: { index: false, follow: false } };
+  }
+
+  if (resolved.mode === 'englishFallback') {
+    const copy = resolved.copy;
+    return buildEnglishFallbackPageMetadata({
+      englishCanonicalPath: resourcesArticlePath(slug),
+      title: copy.metaTitle,
+      description: copy.metaDescription || copy.summary,
+      openGraphLocale: locale === 'es' ? 'es_ES' : 'fr_FR'
+    });
   }
 
   const copy = buildLocalizedResourcePageCopy(
@@ -105,7 +117,7 @@ export default async function LocalizedResourceArticleRoute({ params }: PageProp
     return <LocalizedProductionPage page={staticPage} />;
   }
 
-  const resolved = await fetchPublishedResourceTranslation(
+  const resolved = await resolveLocalizedResourceArticlePage(
     slug,
     locale as ContentTranslationLocale
   );
@@ -113,10 +125,7 @@ export default async function LocalizedResourceArticleRoute({ params }: PageProp
     notFound();
   }
 
-  const copy = buildLocalizedResourcePageCopy(
-    resolved.translation,
-    locale as ContentTranslationLocale
-  );
+  const copy = resolved.copy;
 
   const resourceClassification = classifyResourceArticle(resolved.post);
   const showResourceIqCta = shouldShowResourceArticleIqCta(
@@ -139,6 +148,7 @@ export default async function LocalizedResourceArticleRoute({ params }: PageProp
       slug={slug}
       post={resolved.post}
       copy={copy}
+      mode={resolved.mode}
       matchedRelatedScholarships={matchedRelatedScholarships}
       hubScholarships={hubScholarships}
       showResourceIqCta={showResourceIqCta}
