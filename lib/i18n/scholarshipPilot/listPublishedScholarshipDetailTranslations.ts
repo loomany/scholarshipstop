@@ -9,6 +9,8 @@ const PUBLISHED_SELECT =
 const MIN_QUALITY_SCORE = 85;
 /** Supabase/PostgREST default row cap per request. */
 const TRANSLATIONS_PAGE_SIZE = 1000;
+const SCHOLARSHIP_LOOKUP_CHUNK_SIZE = 200;
+const SCHOLARSHIP_LOOKUP_CONCURRENCY = 8;
 
 export type PublishedScholarshipDetailTranslationSummary = {
   sourceId: string;
@@ -21,7 +23,36 @@ export type PublishedScholarshipDetailTranslationSummary = {
   lastModified: string | null;
 };
 
-export async function listPublishedScholarshipDetailTranslations(): Promise<
+export type PublishedScholarshipDetailTranslationFilters = {
+  locale?: ContentTranslationLocale;
+};
+
+async function mapWithConcurrency<T, R>(
+  items: T[],
+  concurrency: number,
+  mapper: (item: T) => Promise<R>
+): Promise<R[]> {
+  const results: R[] = [];
+  let nextIndex = 0;
+  const workerCount = Math.max(1, Math.min(concurrency, items.length));
+
+  await Promise.all(
+    Array.from({ length: workerCount }, async () => {
+      for (;;) {
+        const currentIndex = nextIndex;
+        nextIndex += 1;
+        if (currentIndex >= items.length) return;
+        results[currentIndex] = await mapper(items[currentIndex]);
+      }
+    })
+  );
+
+  return results;
+}
+
+export async function listPublishedScholarshipDetailTranslations(
+  filters: PublishedScholarshipDetailTranslationFilters = {}
+): Promise<
   PublishedScholarshipDetailTranslationSummary[]
 > {
   const admin = createServiceRoleSupabaseClient();
@@ -43,12 +74,17 @@ export async function listPublishedScholarshipDetailTranslations(): Promise<
   const data: Row[] = [];
 
   for (let offset = 0; ; offset += TRANSLATIONS_PAGE_SIZE) {
-    const { data: page, error } = await admin
+    let query = admin
       .from('content_translations')
       .select(PUBLISHED_SELECT)
       .eq('source_type', 'scholarship_detail')
-      .eq('status', 'published')
-      .in('locale', ['es', 'fr'])
+      .eq('status', 'published');
+
+    query = filters.locale
+      ? query.eq('locale', filters.locale)
+      : query.in('locale', ['es', 'fr']);
+
+    const { data: page, error } = await query
       .order('source_id', { ascending: true })
       .order('locale', { ascending: true })
       .range(offset, offset + TRANSLATIONS_PAGE_SIZE - 1);
@@ -66,15 +102,31 @@ export async function listPublishedScholarshipDetailTranslations(): Promise<
 
   const slugById = new Map<string, string>();
   const indexableById = new Map<string, boolean>();
-  const chunkSize = 200;
-  for (let i = 0; i < ids.length; i += chunkSize) {
-    const slice = ids.slice(i, i + chunkSize);
-    const { data: scholarships, error: schErr } = await admin
-      .from('scholarships')
-      .select('id, slug, is_indexable')
-      .in('id', slice);
+  const idChunks = Array.from(
+    { length: Math.ceil(ids.length / SCHOLARSHIP_LOOKUP_CHUNK_SIZE) },
+    (_unused, index) =>
+      ids.slice(
+        index * SCHOLARSHIP_LOOKUP_CHUNK_SIZE,
+        (index + 1) * SCHOLARSHIP_LOOKUP_CHUNK_SIZE
+      )
+  );
+  const scholarshipPages = await mapWithConcurrency(
+    idChunks,
+    SCHOLARSHIP_LOOKUP_CONCURRENCY,
+    async (slice) => {
+      const { data: scholarships, error: schErr } = await admin
+        .from('scholarships')
+        .select('id, slug, is_indexable')
+        .in('id', slice);
 
-    if (schErr) return [];
+      if (schErr) return null;
+      return scholarships ?? [];
+    }
+  );
+
+  if (scholarshipPages.some((page) => page == null)) return [];
+
+  for (const scholarships of scholarshipPages) {
     for (const s of scholarships ?? []) {
       const id = String(s.id);
       slugById.set(id, String(s.slug ?? '').trim().toLowerCase());

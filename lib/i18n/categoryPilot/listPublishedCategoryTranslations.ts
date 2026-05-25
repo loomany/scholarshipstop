@@ -19,18 +19,29 @@ export type PublishedCategoryTranslationSummary = {
   lastModified: string | null;
 };
 
-export async function listPublishedCategoryTranslations(): Promise<
+export type PublishedCategoryTranslationFilters = {
+  locale?: ContentTranslationLocale;
+};
+
+export async function listPublishedCategoryTranslations(
+  filters: PublishedCategoryTranslationFilters = {}
+): Promise<
   PublishedCategoryTranslationSummary[]
 > {
   const supabase = createPublicClient();
   if (!supabase) return [];
 
-  const { data, error } = await supabase
+  let query = supabase
     .from('content_translations')
     .select(PUBLISHED_CATEGORY_SELECT)
     .eq('source_type', 'scholarship_category')
-    .eq('status', 'published')
-    .in('locale', ['es', 'fr']);
+    .eq('status', 'published');
+
+  query = filters.locale
+    ? query.eq('locale', filters.locale)
+    : query.in('locale', ['es', 'fr']);
+
+  const { data, error } = await query;
 
   if (error || !data?.length) return [];
 

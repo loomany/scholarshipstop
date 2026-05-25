@@ -19,18 +19,29 @@ export type PublishedProviderProfileTranslationSummary = {
   lastModified: string | null;
 };
 
-export async function listPublishedProviderProfileTranslations(): Promise<
+export type PublishedProviderProfileTranslationFilters = {
+  locale?: ContentTranslationLocale;
+};
+
+export async function listPublishedProviderProfileTranslations(
+  filters: PublishedProviderProfileTranslationFilters = {}
+): Promise<
   PublishedProviderProfileTranslationSummary[]
 > {
   const supabase = createPublicClient();
   if (!supabase) return [];
 
-  const { data, error } = await supabase
+  let query = supabase
     .from('content_translations')
     .select(PUBLISHED_PROVIDER_SELECT)
     .eq('source_type', 'provider_profile')
-    .eq('status', 'published')
-    .in('locale', ['es', 'fr']);
+    .eq('status', 'published');
+
+  query = filters.locale
+    ? query.eq('locale', filters.locale)
+    : query.in('locale', ['es', 'fr']);
+
+  const { data, error } = await query;
 
   if (error || !data?.length) return [];
 

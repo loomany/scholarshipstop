@@ -24,18 +24,29 @@ export type PublishedCompareTranslationSummary = {
   lastModified: string | null;
 };
 
-export async function listPublishedCompareTranslations(): Promise<
+export type PublishedCompareTranslationFilters = {
+  locale?: ContentTranslationLocale;
+};
+
+export async function listPublishedCompareTranslations(
+  filters: PublishedCompareTranslationFilters = {}
+): Promise<
   PublishedCompareTranslationSummary[]
 > {
   const supabase = createPublicClient();
   if (!supabase) return [];
 
-  const { data, error } = await supabase
+  let query = supabase
     .from('content_translations')
     .select(PUBLISHED_SELECT)
     .in('source_type', ['compare_university', 'compare_state'])
-    .eq('status', 'published')
-    .in('locale', ['es', 'fr']);
+    .eq('status', 'published');
+
+  query = filters.locale
+    ? query.eq('locale', filters.locale)
+    : query.in('locale', ['es', 'fr']);
+
+  const { data, error } = await query;
 
   if (error || !data?.length) return [];
 

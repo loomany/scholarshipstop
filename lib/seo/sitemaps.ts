@@ -993,8 +993,19 @@ function buildLocalizedPilotSitemapDocuments(): SitemapDocument[] {
   return docs;
 }
 
-async function buildLocalizedCategorySitemapDocuments(): Promise<SitemapDocument[]> {
-  const rows = await listPublishedCategoryTranslations();
+type LocalizedSitemapLocale = 'es' | 'fr';
+const LOCALIZED_SITEMAP_LOCALES = ['es', 'fr'] as const;
+
+function localizedSitemapLocales(
+  locale?: LocalizedSitemapLocale
+): readonly LocalizedSitemapLocale[] {
+  return locale ? [locale] : LOCALIZED_SITEMAP_LOCALES;
+}
+
+async function buildLocalizedCategorySitemapDocuments(
+  locale?: LocalizedSitemapLocale
+): Promise<SitemapDocument[]> {
+  const rows = await listPublishedCategoryTranslations({ locale });
   if (rows.length === 0) return [];
 
   const byLocale = new Map<'es' | 'fr', MetadataRoute.Sitemap>();
@@ -1019,18 +1030,26 @@ async function buildLocalizedCategorySitemapDocuments(): Promise<SitemapDocument
   }
 
   const docs: SitemapDocument[] = [];
-  for (const locale of ['es', 'fr'] as const) {
-    const entries = byLocale.get(locale);
+  for (const currentLocale of localizedSitemapLocales(locale)) {
+    const entries = byLocale.get(currentLocale);
     if (!entries?.length) continue;
-    docs.push(makeSitemapDocument('categories', `locale-${locale}-categories`, entries));
+    docs.push(
+      makeSitemapDocument(
+        'categories',
+        `locale-${currentLocale}-categories`,
+        entries
+      )
+    );
   }
   return docs;
 }
 
-async function buildLocalizedResourceArticleSitemapDocuments(): Promise<
+async function buildLocalizedResourceArticleSitemapDocuments(
+  locale?: LocalizedSitemapLocale
+): Promise<
   SitemapDocument[]
 > {
-  const rows = await listPublishedResourceArticleTranslations();
+  const rows = await listPublishedResourceArticleTranslations({ locale });
   if (rows.length === 0) return [];
 
   const supabase = createPublicClient();
@@ -1073,20 +1092,26 @@ async function buildLocalizedResourceArticleSitemapDocuments(): Promise<
   }
 
   const docs: SitemapDocument[] = [];
-  for (const locale of ['es', 'fr'] as const) {
-    const entries = byLocale.get(locale);
+  for (const currentLocale of localizedSitemapLocales(locale)) {
+    const entries = byLocale.get(currentLocale);
     if (!entries?.length) continue;
     docs.push(
-      makeSitemapDocument('resources', `locale-${locale}-resources-db`, entries)
+      makeSitemapDocument(
+        'resources',
+        `locale-${currentLocale}-resources-db`,
+        entries
+      )
     );
   }
   return docs;
 }
 
-async function buildLocalizedProviderProfileSitemapDocuments(): Promise<
+async function buildLocalizedProviderProfileSitemapDocuments(
+  locale?: LocalizedSitemapLocale
+): Promise<
   SitemapDocument[]
 > {
-  const rows = await listPublishedProviderProfileTranslations();
+  const rows = await listPublishedProviderProfileTranslations({ locale });
   if (rows.length === 0) return [];
 
   const supabase = createPublicClient();
@@ -1140,20 +1165,26 @@ async function buildLocalizedProviderProfileSitemapDocuments(): Promise<
   }
 
   const docs: SitemapDocument[] = [];
-  for (const locale of ['es', 'fr'] as const) {
-    const entries = byLocale.get(locale);
+  for (const currentLocale of localizedSitemapLocales(locale)) {
+    const entries = byLocale.get(currentLocale);
     if (!entries?.length) continue;
     docs.push(
-      makeSitemapDocument('providers', `locale-${locale}-providers-db`, entries)
+      makeSitemapDocument(
+        'providers',
+        `locale-${currentLocale}-providers-db`,
+        entries
+      )
     );
   }
   return docs;
 }
 
-async function buildLocalizedScholarshipDetailSitemapDocuments(): Promise<
+async function buildLocalizedScholarshipDetailSitemapDocuments(
+  locale?: LocalizedSitemapLocale
+): Promise<
   SitemapDocument[]
 > {
-  const rows = await listPublishedScholarshipDetailTranslations();
+  const rows = await listPublishedScholarshipDetailTranslations({ locale });
   if (rows.length === 0) return [];
 
   const byLocale = new Map<'es' | 'fr', MetadataRoute.Sitemap>();
@@ -1180,13 +1211,13 @@ async function buildLocalizedScholarshipDetailSitemapDocuments(): Promise<
   }
 
   const docs: SitemapDocument[] = [];
-  for (const locale of ['es', 'fr'] as const) {
-    const entries = byLocale.get(locale);
+  for (const currentLocale of localizedSitemapLocales(locale)) {
+    const entries = byLocale.get(currentLocale);
     if (!entries?.length) continue;
     docs.push(
       makeSitemapDocument(
         'scholarships',
-        `locale-${locale}-scholarships-detail-db`,
+        `locale-${currentLocale}-scholarships-detail-db`,
         entries
       )
     );
@@ -1194,8 +1225,10 @@ async function buildLocalizedScholarshipDetailSitemapDocuments(): Promise<
   return docs;
 }
 
-async function buildLocalizedEssayGuideSitemapDocuments(): Promise<SitemapDocument[]> {
-  const rows = await listPublishedEssayGuideTranslations();
+async function buildLocalizedEssayGuideSitemapDocuments(
+  locale?: LocalizedSitemapLocale
+): Promise<SitemapDocument[]> {
+  const rows = await listPublishedEssayGuideTranslations({ locale });
   if (rows.length === 0) return [];
 
   const byLocale = new Map<'es' | 'fr', MetadataRoute.Sitemap>();
@@ -1242,18 +1275,24 @@ async function buildLocalizedEssayGuideSitemapDocuments(): Promise<SitemapDocume
   }
 
   const docs: SitemapDocument[] = [];
-  for (const locale of ['es', 'fr'] as const) {
-    const entries = byLocale.get(locale);
+  for (const currentLocale of localizedSitemapLocales(locale)) {
+    const entries = byLocale.get(currentLocale);
     if (!entries?.length) continue;
     docs.push(
-      makeSitemapDocument('essays', `locale-${locale}-essays-guide-db`, entries)
+      makeSitemapDocument(
+        'essays',
+        `locale-${currentLocale}-essays-guide-db`,
+        entries
+      )
     );
   }
   return docs;
 }
 
-async function buildLocalizedCompareSitemapDocuments(): Promise<SitemapDocument[]> {
-  const rows = await listPublishedCompareTranslations();
+async function buildLocalizedCompareSitemapDocuments(
+  locale?: LocalizedSitemapLocale
+): Promise<SitemapDocument[]> {
+  const rows = await listPublishedCompareTranslations({ locale });
   if (rows.length === 0) return [];
 
   const byLocale = new Map<'es' | 'fr', MetadataRoute.Sitemap>();
@@ -1301,11 +1340,15 @@ async function buildLocalizedCompareSitemapDocuments(): Promise<SitemapDocument[
   }
 
   const docs: SitemapDocument[] = [];
-  for (const locale of ['es', 'fr'] as const) {
-    const entries = byLocale.get(locale);
+  for (const currentLocale of localizedSitemapLocales(locale)) {
+    const entries = byLocale.get(currentLocale);
     if (!entries?.length) continue;
     docs.push(
-      makeSitemapDocument('compare', `locale-${locale}-compare-detail-db`, entries)
+      makeSitemapDocument(
+        'compare',
+        `locale-${currentLocale}-compare-detail-db`,
+        entries
+      )
     );
   }
   return docs;
@@ -1372,8 +1415,6 @@ const ENGLISH_SITEMAP_DOCUMENT_PLANS: readonly EnglishSitemapDocumentPlan[] = [
     buildEntries: buildCompareSitemapEntries
   }
 ] as const;
-
-type LocalizedDbSitemapDocumentsBuilder = () => Promise<SitemapDocument[]>;
 
 function slugMatchesDocumentPlan(
   slug: string,
@@ -1452,37 +1493,29 @@ function buildLocalizedPilotSitemapDocumentBySlug(
   return makeSitemapDocument(bucket, slug, entries);
 }
 
-function getLocalizedDbSitemapDocumentsBuilder(
-  slug: string
-): LocalizedDbSitemapDocumentsBuilder | null {
-  if (/^locale-(es|fr)-categories$/.test(slug)) {
-    return buildLocalizedCategorySitemapDocuments;
-  }
-  if (/^locale-(es|fr)-resources-db$/.test(slug)) {
-    return buildLocalizedResourceArticleSitemapDocuments;
-  }
-  if (/^locale-(es|fr)-providers-db$/.test(slug)) {
-    return buildLocalizedProviderProfileSitemapDocuments;
-  }
-  if (/^locale-(es|fr)-scholarships-detail-db$/.test(slug)) {
-    return buildLocalizedScholarshipDetailSitemapDocuments;
-  }
-  if (/^locale-(es|fr)-essays-guide-db$/.test(slug)) {
-    return buildLocalizedEssayGuideSitemapDocuments;
-  }
-  if (/^locale-(es|fr)-compare-detail-db$/.test(slug)) {
-    return buildLocalizedCompareSitemapDocuments;
-  }
-  return null;
-}
-
 async function buildLocalizedDbSitemapDocumentBySlug(
   slug: string
 ): Promise<SitemapDocument | null> {
-  const builder = getLocalizedDbSitemapDocumentsBuilder(slug);
-  if (!builder) return null;
+  const match =
+    /^locale-(es|fr)-(categories|resources-db|providers-db|scholarships-detail-db|essays-guide-db|compare-detail-db)$/.exec(
+      slug
+    );
+  if (!match) return null;
 
-  const documents = await builder();
+  const locale = match[1] as LocalizedSitemapLocale;
+  const suffix = match[2];
+  const documents =
+    suffix === 'categories'
+      ? await buildLocalizedCategorySitemapDocuments(locale)
+      : suffix === 'resources-db'
+        ? await buildLocalizedResourceArticleSitemapDocuments(locale)
+        : suffix === 'providers-db'
+          ? await buildLocalizedProviderProfileSitemapDocuments(locale)
+          : suffix === 'scholarships-detail-db'
+            ? await buildLocalizedScholarshipDetailSitemapDocuments(locale)
+            : suffix === 'essays-guide-db'
+              ? await buildLocalizedEssayGuideSitemapDocuments(locale)
+              : await buildLocalizedCompareSitemapDocuments(locale);
   return documents.find((doc) => doc.slug === slug) ?? null;
 }
 
