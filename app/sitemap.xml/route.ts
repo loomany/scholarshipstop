@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
 import {
-  buildSitemapDocuments,
+  buildSitemapIndexDocuments,
   renderSitemapIndexXml,
   SITEMAP_REVALIDATE_SECONDS
 } from '@/lib/seo/sitemaps';
@@ -9,7 +9,7 @@ import {
 export const revalidate = SITEMAP_REVALIDATE_SECONDS;
 
 export async function GET() {
-  const documents = await buildSitemapDocuments();
+  const documents = await buildSitemapIndexDocuments();
   const body = renderSitemapIndexXml(documents);
 
   return new NextResponse(body, {

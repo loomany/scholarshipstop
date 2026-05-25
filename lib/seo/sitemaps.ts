@@ -5,7 +5,12 @@ import { fetchAllPublishedContentPostsForSitemap } from '@/lib/content-hub/conte
 import { STATIC_SCHOLARSHIP_GUIDES } from '@/lib/resources/staticScholarshipGuides';
 import { STATIC_ESSAY_GUIDES } from '@/lib/essays/staticEssayGuides';
 import { STATIC_COMPARE_GUIDES } from '@/lib/compare/staticCompareGuides';
-import { fetchAllPublishedEssaySitemapRows } from '@/lib/essays/essaysServer';
+import {
+  countPublishedEssaySitemapRows,
+  fetchAllPublishedEssaySitemapRows,
+  fetchPublishedEssaySitemapRowsRange,
+  type EssaySitemapRow
+} from '@/lib/essays/essaysServer';
 import { essayHubArticlePath } from '@/lib/essays/essayHubSection';
 import { resourcesArticlePath } from '@/lib/content-hub/resourcesSection';
 import { createPublicClient } from '@/utils/supabase/public';
@@ -40,7 +45,17 @@ import {
   getEssaySeoQualityPolicy,
   MIN_LOCALIZED_ESSAY_VISIBLE_WORDS
 } from '@/lib/seo/essaySeoQualityPolicy';
-import { countVisibleWords, hasRawPlaceholderText } from '@/lib/seo/visibleText';
+import {
+  getSitemapDocumentSlugPlan,
+  normalizeSitemapSlug,
+  slugMatchesSitemapGroup,
+  type SitemapSlugMode
+} from '@/lib/seo/sitemapSlugDispatcher';
+import {
+  countVisibleWords,
+  countVisibleWordsUpTo,
+  hasRawPlaceholderText
+} from '@/lib/seo/visibleText';
 import { listPublishedCategoryTranslations } from '@/lib/i18n/categoryPilot/listPublishedCategoryTranslations';
 import { listPublishedResourceArticleTranslations } from '@/lib/i18n/resourcePilot/listPublishedResourceArticleTranslations';
 import { listPublishedProviderProfileTranslations } from '@/lib/i18n/providerPilot/listPublishedProviderProfileTranslations';
@@ -94,6 +109,9 @@ export const SITEMAP_MAX_URLS_PER_FILE = 50_000;
 
 /** Page size for Supabase `.range()` pagination (not a cap on total rows). */
 export const SITEMAP_DB_PAGE_SIZE = 1000;
+
+/** Row-range shard size for the large essay sitemap surface. */
+export const ESSAY_SITEMAP_ROWS_PER_DOCUMENT = 250;
 
 const IQ_SEO_BASE_URL = 'https://iq.scholarshiptop.com';
 const IQ_SEO_SITEMAP_PATHS = [
@@ -212,9 +230,27 @@ function makeSitemapDocument(
   };
 }
 
-type SitemapSlugMode = 'single-or-indexed' | 'always-indexed';
+function makeSitemapIndexDocument(
+  bucket: SitemapBucket,
+  slug: string
+): SitemapDocument {
+  return {
+    slug,
+    path: buildSitemapDocumentPath(slug),
+    bucket,
+    lastModified: new Date().toISOString(),
+    entries: []
+  };
+}
 
-/** Split URL lists into multiple documents if needed (≤ {@link SITEMAP_MAX_URLS_PER_FILE} each). */
+function stripSitemapEntriesForIndex(document: SitemapDocument): SitemapDocument {
+  return {
+    ...document,
+    entries: []
+  };
+}
+
+/** Split URL lists into multiple documents if needed (<= {@link SITEMAP_MAX_URLS_PER_FILE} each). */
 function buildDocumentsForBucket(
   bucket: SitemapBucket,
   slugBase: string,
@@ -462,15 +498,8 @@ export function getVisibleSeoRoutes(): string[] {
   return getVisibleSeoRoutesFromDrip();
 }
 
-/**
- * SEO listing URLs use {@link canonicalPathAllowedInSeoSitemap}, which matches the drip window when active
- * ({@link getVisibleSeoRoutes} / `SEO_DRIP_START_DATE` + `SEO_PAGES_PER_HOUR`; disabled via `SEO_DRIP_ENABLED=false`).
- * Sitemap builders call `getVisibleSeoRoutes()` so the drip module runs on each sitemap build.
- */
-export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
-  const base = sitemapBaseUrl();
-
-  const core: MetadataRoute.Sitemap = [
+function buildCoreSitemapEntries(base: string): MetadataRoute.Sitemap {
+  return dedupeSitemapEntries([
     { url: `${base}/`, lastModified: new Date() },
     ...IQ_SEO_SITEMAP_PATHS.map((path) => ({
       url: `${IQ_SEO_BASE_URL}${path === '/' ? '' : path}`,
@@ -498,10 +527,15 @@ export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
       lastModified: new Date()
     },
     { url: `${base}${tabToHubPath('hot-deadlines')}`, lastModified: new Date() }
-  ];
+  ]);
+}
 
+async function buildResourcesSitemapEntries(
+  base: string
+): Promise<MetadataRoute.Sitemap> {
   const resourcePosts = await fetchAllPublishedContentPostsForSitemap();
-  const resources: MetadataRoute.Sitemap = resourcePosts
+  return dedupeSitemapEntries(
+    resourcePosts
     .filter((post) => Boolean(post.slug?.trim()))
     .map((post) => ({
       url: `${base}${resourcesArticlePath(post.slug!.trim())}`,
@@ -512,47 +546,90 @@ export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
         url: `${base}${resourcesArticlePath(guide.slug)}`,
         lastModified: new Date('2026-05-16T00:00:00.000Z')
       }))
-    );
+    )
+  );
+}
 
-  const essayRows = await fetchAllPublishedEssaySitemapRows().catch(() => []);
-  const essays: MetadataRoute.Sitemap = essayRows
-    .filter((row) => Boolean(row.slug?.trim()))
-    .filter((row) => {
-      const title = row.title?.trim() || row.slug.trim();
-      const quality = getEssaySeoQualityPolicy({
-        stablePublicRoute: true,
-        hasQueryParams: false,
-        hasTitle: Boolean(title),
-        hasH1: Boolean(title),
-        hasBody: Boolean(row.content_html?.trim()),
-        visibleWordCount: countVisibleWords(
-          title,
-          row.meta_description,
-          row.content_html
-        ),
-        hasRawPlaceholder: hasRawPlaceholderText(title, row.content_html)
-      });
-      return quality.includeInSitemap;
-    })
-    .map((row) => ({
-      url: `${base}${essayHubArticlePath(row.slug.trim())}`,
-      lastModified: row.updated_at ? new Date(row.updated_at) : new Date()
-    }))
-    .concat(
-      STATIC_ESSAY_GUIDES.map((guide) => ({
-        url: `${base}${essayHubArticlePath(guide.slug)}`,
-        lastModified: new Date(guide.updatedAt)
+type EssaySitemapRowRange = {
+  from: number;
+  to: number;
+  includeStaticGuides?: boolean;
+};
+
+const STATIC_ESSAY_GUIDE_SLUGS = new Set(
+  STATIC_ESSAY_GUIDES.map((guide) => guide.slug.trim().toLowerCase())
+);
+
+function essaySitemapRowPassesQuality(row: EssaySitemapRow): boolean {
+  if (!row.slug?.trim()) return false;
+  if (STATIC_ESSAY_GUIDE_SLUGS.has(row.slug.trim().toLowerCase())) {
+    return false;
+  }
+
+  const title = row.title?.trim() || row.slug.trim();
+  const quality = getEssaySeoQualityPolicy({
+    stablePublicRoute: true,
+    hasQueryParams: false,
+    hasTitle: Boolean(title),
+    hasH1: Boolean(title),
+    hasBody: Boolean(row.content_html?.trim()),
+    visibleWordCount: countVisibleWordsUpTo(
+      600,
+      title,
+      row.meta_description,
+      row.content_html
+    ),
+    hasRawPlaceholder: hasRawPlaceholderText(title, row.content_html)
+  });
+  return quality.includeInSitemap;
+}
+
+async function buildEssaysSitemapEntries(
+  base: string,
+  rowRange?: EssaySitemapRowRange
+): Promise<MetadataRoute.Sitemap> {
+  const essayRows = await (rowRange
+    ? fetchPublishedEssaySitemapRowsRange(rowRange.from, rowRange.to)
+    : fetchAllPublishedEssaySitemapRows()
+  ).catch(() => []);
+  const includeStaticGuides = rowRange?.includeStaticGuides ?? true;
+  return dedupeSitemapEntries(
+    essayRows
+      .filter(essaySitemapRowPassesQuality)
+      .map((row) => ({
+        url: `${base}${essayHubArticlePath(row.slug.trim())}`,
+        lastModified: row.updated_at ? new Date(row.updated_at) : new Date()
       }))
-    );
+      .concat(
+        includeStaticGuides
+          ? STATIC_ESSAY_GUIDES.map((guide) => ({
+              url: `${base}${essayHubArticlePath(guide.slug)}`,
+              lastModified: new Date(guide.updatedAt)
+            }))
+          : []
+      )
+  );
+}
 
+function buildCategoriesSitemapEntries(base: string): MetadataRoute.Sitemap {
   const promotedCategorySlugs = new Set(getPromotedSeoCategorySlugs());
-  const categories: MetadataRoute.Sitemap = SCHOLARSHIP_CATEGORY_ORDER.filter((id) =>
-    promotedCategorySlugs.has(id)
-  ).map((id) => ({
-    url: `${base}/scholarships/category/${id}`,
-    lastModified: new Date()
-  }));
+  return dedupeSitemapEntries(
+    SCHOLARSHIP_CATEGORY_ORDER.filter((id) =>
+      promotedCategorySlugs.has(id)
+    ).map((id) => ({
+      url: `${base}/scholarships/category/${id}`,
+      lastModified: new Date()
+    }))
+  );
+}
 
+/**
+ * SEO listing URLs use {@link canonicalPathAllowedInSeoSitemap}, which matches the drip window when active
+ * ({@link getVisibleSeoRoutes} / `SEO_DRIP_START_DATE` + `SEO_PAGES_PER_HOUR`; disabled via `SEO_DRIP_ENABLED=false`).
+ * Sitemap builders call `getVisibleSeoRoutes()` so the drip module runs on each sitemap build.
+ */
+async function buildSeoSitemapEntries(base: string): Promise<MetadataRoute.Sitemap> {
+  void getVisibleSeoRoutes();
   const manifestSeoPaths = getAllIndexableSeoManifestPathsForSitemap(3).filter(
     (p) => canonicalPathAllowedInSeoSitemap(p)
   );
@@ -633,7 +710,7 @@ export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
 
   const crossCountrySeoPages = buildCrossCountrySeoSitemapEntries(base);
 
-  const seo = dedupeSitemapEntries([
+  return dedupeSitemapEntries([
     ...manifestSeoPages,
     ...longTailPages,
     ...stateListingPages,
@@ -642,16 +719,30 @@ export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
     ...countrySeoPages,
     ...crossCountrySeoPages
   ]);
+}
 
-  const [scholarships, providers, compareRows, stateCompareRows] = await Promise.all([
-    fetchScholarshipSitemapEntries(base).catch((err) => {
-      console.error('[sitemap] fetchScholarshipSitemapEntries failed:', err);
-      return [];
-    }),
-    fetchProviderSitemapEntries(base).catch((err) => {
-      console.error('[sitemap] fetchProviderSitemapEntries failed:', err);
-      return [];
-    }),
+async function buildScholarshipsSitemapEntries(
+  base: string
+): Promise<MetadataRoute.Sitemap> {
+  return fetchScholarshipSitemapEntries(base).catch((err) => {
+    console.error('[sitemap] fetchScholarshipSitemapEntries failed:', err);
+    return [];
+  });
+}
+
+async function buildProvidersSitemapEntries(
+  base: string
+): Promise<MetadataRoute.Sitemap> {
+  return fetchProviderSitemapEntries(base).catch((err) => {
+    console.error('[sitemap] fetchProviderSitemapEntries failed:', err);
+    return [];
+  });
+}
+
+async function buildCompareSitemapEntries(
+  base: string
+): Promise<MetadataRoute.Sitemap> {
+  const [compareRows, stateCompareRows] = await Promise.all([
     fetchCompareSitemapRows().catch((err) => {
       console.error('[sitemap] fetchCompareSitemapRows failed:', err);
       return [];
@@ -662,7 +753,7 @@ export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
     })
   ]);
 
-  const compare: MetadataRoute.Sitemap = [
+  return dedupeSitemapEntries([
     ...STATIC_COMPARE_GUIDES.filter((guide) => {
       const quality = getCompareSeoQualityPolicy({
         stablePublicRoute: true,
@@ -692,17 +783,37 @@ export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
         url: `${base}/compare/states/${encodeURIComponent(row.slug.trim())}`,
         lastModified: row.updated_at ? new Date(row.updated_at) : new Date()
       }))
-  ];
+  ]);
+}
+
+export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
+  const base = sitemapBaseUrl();
+
+  const [
+    resources,
+    essays,
+    seo,
+    scholarships,
+    providers,
+    compare
+  ] = await Promise.all([
+    buildResourcesSitemapEntries(base),
+    buildEssaysSitemapEntries(base),
+    buildSeoSitemapEntries(base),
+    buildScholarshipsSitemapEntries(base),
+    buildProvidersSitemapEntries(base),
+    buildCompareSitemapEntries(base)
+  ]);
 
   return {
-    core: dedupeSitemapEntries(core),
-    resources: dedupeSitemapEntries(resources),
-    essays: dedupeSitemapEntries(essays),
-    providers: dedupeSitemapEntries(providers),
-    categories: dedupeSitemapEntries(categories),
+    core: buildCoreSitemapEntries(base),
+    resources,
+    essays,
+    providers,
+    categories: buildCategoriesSitemapEntries(base),
     seo,
     scholarships: dedupeSitemapEntries(scholarships),
-    compare: dedupeSitemapEntries(compare)
+    compare
   };
 });
 
@@ -719,7 +830,7 @@ export const buildSitemapDocuments = cache(async (): Promise<SitemapDocument[]> 
       buckets.resources,
       'single-or-indexed'
     ),
-    ...buildDocumentsForBucket('essays', 'essays', buckets.essays, 'single-or-indexed'),
+    ...buildDocumentsForBucket('essays', 'essays', buckets.essays, 'always-indexed'),
     ...buildDocumentsForBucket(
       'providers',
       'providers',
@@ -754,6 +865,96 @@ export const buildSitemapDocuments = cache(async (): Promise<SitemapDocument[]> 
     ...(await buildLocalizedCompareSitemapDocuments())
   ];
 });
+
+async function fetchScholarshipSitemapDocumentCount(): Promise<number> {
+  const supabase = createSitemapReadClient();
+  if (!supabase) return 1;
+
+  const { count, error } = await supabase
+    .from('scholarships')
+    .select('id', { count: 'exact', head: true })
+    .eq('is_active', true)
+    .or('is_indexable.is.null,is_indexable.eq.true');
+
+  if (error) {
+    console.error('[sitemap] scholarship sitemap count failed:', error);
+    return 1;
+  }
+
+  return Math.max(1, Math.ceil((count ?? 0) / SITEMAP_MAX_URLS_PER_FILE));
+}
+
+async function buildScholarshipSitemapIndexDocuments(): Promise<
+  SitemapDocument[]
+> {
+  const documentCount = await fetchScholarshipSitemapDocumentCount();
+  return Array.from({ length: documentCount }, (_unused, index) =>
+    makeSitemapIndexDocument('scholarships', `scholarships-${index}`)
+  );
+}
+
+async function fetchEssaySitemapDocumentCount(): Promise<number> {
+  const count = await countPublishedEssaySitemapRows().catch((error) => {
+    console.error('[sitemap] essay sitemap count failed:', error);
+    return 0;
+  });
+
+  return Math.max(1, Math.ceil(count / ESSAY_SITEMAP_ROWS_PER_DOCUMENT));
+}
+
+async function buildEssaySitemapIndexDocuments(): Promise<SitemapDocument[]> {
+  const documentCount = await fetchEssaySitemapDocumentCount();
+  return Array.from({ length: documentCount }, (_unused, index) =>
+    makeSitemapIndexDocument('essays', `essays-${index}`)
+  );
+}
+
+function buildLocalizedDbSitemapIndexDocuments(): SitemapDocument[] {
+  const docs: SitemapDocument[] = [];
+  const dbShards: Array<{ bucket: SitemapBucket; suffix: string }> = [
+    { bucket: 'categories', suffix: 'categories' },
+    { bucket: 'resources', suffix: 'resources-db' },
+    { bucket: 'providers', suffix: 'providers-db' },
+    { bucket: 'scholarships', suffix: 'scholarships-detail-db' }
+  ];
+
+  for (const locale of ['es', 'fr'] as const) {
+    for (const shard of dbShards) {
+      docs.push(
+        makeSitemapIndexDocument(
+          shard.bucket,
+          `locale-${locale}-${shard.suffix}`
+        )
+      );
+    }
+  }
+
+  return docs;
+}
+
+export const buildSitemapIndexDocuments = cache(
+  async (): Promise<SitemapDocument[]> => {
+    void getVisibleSeoRoutes();
+
+    const [essayDocs, scholarshipDocs] = await Promise.all([
+      buildEssaySitemapIndexDocuments(),
+      buildScholarshipSitemapIndexDocuments()
+    ]);
+
+    return [
+      makeSitemapIndexDocument('core', 'core'),
+      makeSitemapIndexDocument('resources', 'resources'),
+      ...essayDocs,
+      makeSitemapIndexDocument('providers', 'providers'),
+      makeSitemapIndexDocument('categories', 'categories'),
+      makeSitemapIndexDocument('seo', 'seo'),
+      ...scholarshipDocs,
+      makeSitemapIndexDocument('compare', 'compare'),
+      ...buildLocalizedPilotSitemapDocuments().map(stripSitemapEntriesForIndex),
+      ...buildLocalizedDbSitemapIndexDocuments()
+    ];
+  }
+);
 
 function buildLocalizedPilotSitemapDocuments(): SitemapDocument[] {
   const docs: SitemapDocument[] = [];
@@ -1110,10 +1311,198 @@ async function buildLocalizedCompareSitemapDocuments(): Promise<SitemapDocument[
   return docs;
 }
 
+type SitemapEntriesBuilder = (
+  base: string
+) => MetadataRoute.Sitemap | Promise<MetadataRoute.Sitemap>;
+
+type EnglishSitemapDocumentPlan = {
+  bucket: SitemapBucket;
+  slugBase: string;
+  slugMode: SitemapSlugMode;
+  buildEntries: SitemapEntriesBuilder;
+};
+
+const ENGLISH_SITEMAP_DOCUMENT_PLANS: readonly EnglishSitemapDocumentPlan[] = [
+  {
+    bucket: 'core',
+    slugBase: 'core',
+    slugMode: 'single-or-indexed',
+    buildEntries: buildCoreSitemapEntries
+  },
+  {
+    bucket: 'resources',
+    slugBase: 'resources',
+    slugMode: 'single-or-indexed',
+    buildEntries: buildResourcesSitemapEntries
+  },
+  {
+    bucket: 'essays',
+    slugBase: 'essays',
+    slugMode: 'always-indexed',
+    buildEntries: buildEssaysSitemapEntries
+  },
+  {
+    bucket: 'providers',
+    slugBase: 'providers',
+    slugMode: 'single-or-indexed',
+    buildEntries: buildProvidersSitemapEntries
+  },
+  {
+    bucket: 'categories',
+    slugBase: 'categories',
+    slugMode: 'single-or-indexed',
+    buildEntries: buildCategoriesSitemapEntries
+  },
+  {
+    bucket: 'seo',
+    slugBase: 'seo',
+    slugMode: 'single-or-indexed',
+    buildEntries: buildSeoSitemapEntries
+  },
+  {
+    bucket: 'scholarships',
+    slugBase: 'scholarships',
+    slugMode: 'always-indexed',
+    buildEntries: buildScholarshipsSitemapEntries
+  },
+  {
+    bucket: 'compare',
+    slugBase: 'compare',
+    slugMode: 'single-or-indexed',
+    buildEntries: buildCompareSitemapEntries
+  }
+] as const;
+
+type LocalizedDbSitemapDocumentsBuilder = () => Promise<SitemapDocument[]>;
+
+function slugMatchesDocumentPlan(
+  slug: string,
+  plan: EnglishSitemapDocumentPlan
+): boolean {
+  return slugMatchesSitemapGroup(slug, plan.slugBase, plan.slugMode);
+}
+
+async function buildEssaySitemapDocumentBySlug(
+  slug: string
+): Promise<SitemapDocument | null> {
+  const match = /^essays-(\d+)$/.exec(slug);
+  if (!match) return null;
+
+  const index = Number.parseInt(match[1], 10);
+  if (!Number.isSafeInteger(index) || index < 0) return null;
+
+  const from = index * ESSAY_SITEMAP_ROWS_PER_DOCUMENT;
+  const to = from + ESSAY_SITEMAP_ROWS_PER_DOCUMENT - 1;
+  const entries = await buildEssaysSitemapEntries(sitemapBaseUrl(), {
+    from,
+    to,
+    includeStaticGuides: index === 0
+  });
+
+  return makeSitemapDocument('essays', slug, entries);
+}
+
+async function buildEnglishSitemapDocumentBySlug(
+  slug: string
+): Promise<SitemapDocument | null> {
+  const essayDocument = await buildEssaySitemapDocumentBySlug(slug);
+  if (essayDocument) return essayDocument;
+
+  const plan = ENGLISH_SITEMAP_DOCUMENT_PLANS.find((candidate) =>
+    slugMatchesDocumentPlan(slug, candidate)
+  );
+  if (!plan) return null;
+
+  const entries = await plan.buildEntries(sitemapBaseUrl());
+  const documents = buildDocumentsForBucket(
+    plan.bucket,
+    plan.slugBase,
+    entries,
+    plan.slugMode
+  );
+  return documents.find((doc) => doc.slug === slug) ?? null;
+}
+
+function buildLocalizedPilotSitemapDocumentBySlug(
+  slug: string
+): SitemapDocument | null {
+  const match = /^locale-(es|fr)-(core|essays|compare|resources)$/.exec(slug);
+  if (!match) return null;
+
+  const locale = match[1] as 'es' | 'fr';
+  const bucket = match[2] as LocalizedPilotPageBucket;
+  const entries = listLocalizedPilotPages({ locale, bucket })
+    .map((page) =>
+      buildLocalizedSitemapEntry({
+        locale: page.locale,
+        canonicalPath: page.canonicalPath,
+        sourceIndexable: true,
+        translationStatus: page.status,
+        qualityScore: page.qualityScore,
+        hasLocalizedTitle: Boolean(page.title.trim()),
+        hasLocalizedH1: Boolean(page.h1.trim()),
+        hasLocalizedBody: Boolean(page.intro.trim()),
+        hasMixedLanguageRisk: false,
+        lastModified: page.updatedAt
+      })
+    )
+    .filter((entry): entry is MetadataRoute.Sitemap[number] => Boolean(entry));
+
+  if (entries.length === 0) return null;
+  return makeSitemapDocument(bucket, slug, entries);
+}
+
+function getLocalizedDbSitemapDocumentsBuilder(
+  slug: string
+): LocalizedDbSitemapDocumentsBuilder | null {
+  if (/^locale-(es|fr)-categories$/.test(slug)) {
+    return buildLocalizedCategorySitemapDocuments;
+  }
+  if (/^locale-(es|fr)-resources-db$/.test(slug)) {
+    return buildLocalizedResourceArticleSitemapDocuments;
+  }
+  if (/^locale-(es|fr)-providers-db$/.test(slug)) {
+    return buildLocalizedProviderProfileSitemapDocuments;
+  }
+  if (/^locale-(es|fr)-scholarships-detail-db$/.test(slug)) {
+    return buildLocalizedScholarshipDetailSitemapDocuments;
+  }
+  if (/^locale-(es|fr)-essays-guide-db$/.test(slug)) {
+    return buildLocalizedEssayGuideSitemapDocuments;
+  }
+  if (/^locale-(es|fr)-compare-detail-db$/.test(slug)) {
+    return buildLocalizedCompareSitemapDocuments;
+  }
+  return null;
+}
+
+async function buildLocalizedDbSitemapDocumentBySlug(
+  slug: string
+): Promise<SitemapDocument | null> {
+  const builder = getLocalizedDbSitemapDocumentsBuilder(slug);
+  if (!builder) return null;
+
+  const documents = await builder();
+  return documents.find((doc) => doc.slug === slug) ?? null;
+}
+
+export { getSitemapDocumentSlugPlan };
+
 export const getSitemapDocumentBySlug = cache(
   async (slug: string): Promise<SitemapDocument | null> => {
-    const docs = await buildSitemapDocuments();
-    return docs.find((doc) => doc.slug === slug) ?? null;
+    const normalizedSlug = normalizeSitemapSlug(slug);
+    if (!normalizedSlug) return null;
+
+    const englishDocument = await buildEnglishSitemapDocumentBySlug(
+      normalizedSlug
+    );
+    if (englishDocument) return englishDocument;
+
+    const localizedPilotDocument =
+      buildLocalizedPilotSitemapDocumentBySlug(normalizedSlug);
+    if (localizedPilotDocument) return localizedPilotDocument;
+
+    return buildLocalizedDbSitemapDocumentBySlug(normalizedSlug);
   }
 );
 

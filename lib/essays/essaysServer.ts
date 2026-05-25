@@ -285,47 +285,83 @@ const fetchScholarshipRowsForEssayCached = unstable_cache(
 export const fetchScholarshipRowsForEssay = cache(fetchScholarshipRowsForEssayCached);
 
 const ESSAYS_SITEMAP_BATCH = 500;
+const ESSAYS_SITEMAP_MIN_PARALLEL_PAGES = 1;
+
+export type EssaySitemapRow = {
+  slug: string;
+  title: string | null;
+  content_html: string | null;
+  meta_description: string | null;
+  updated_at: string | null;
+};
+
+function applyPublishedEssaySitemapFilters(query: any) {
+  return query
+    .eq('is_published', true)
+    .not('slug', 'is', null)
+    .neq('slug', '')
+    .not('content_html', 'is', null)
+    .neq('content_html', '');
+}
+
+export async function countPublishedEssaySitemapRows(): Promise<number> {
+  const supabase = createPublicClient();
+  if (!supabase) return 0;
+
+  const { count, error } = await applyPublishedEssaySitemapFilters(
+    supabase.from('essays').select('id', { count: 'exact', head: true })
+  );
+
+  if (error) throw new Error(error.message);
+  return count ?? 0;
+}
+
+export async function fetchPublishedEssaySitemapRowsRange(
+  from: number,
+  to: number
+): Promise<EssaySitemapRow[]> {
+  const start = Math.max(0, Math.floor(from));
+  const end = Math.max(start, Math.floor(to));
+  const supabase = createPublicClient();
+  if (!supabase) return [];
+
+  const { data, error } = await applyPublishedEssaySitemapFilters(
+    supabase
+      .from('essays')
+      .select('slug, title, content_html, meta_description, updated_at')
+  )
+    .order('updated_at', { ascending: false, nullsFirst: false })
+    .range(start, end);
+
+  if (error) throw new Error(error.message);
+  return (data ?? []) as EssaySitemapRow[];
+}
 
 /** All published essay slugs for sitemap generation. */
 export async function fetchAllPublishedEssaySitemapRows(): Promise<
-  {
-    slug: string;
-    title: string | null;
-    content_html: string | null;
-    meta_description: string | null;
-    updated_at: string | null;
-  }[]
+  EssaySitemapRow[]
 > {
-  const out: {
-    slug: string;
-    title: string | null;
-    content_html: string | null;
-    meta_description: string | null;
-    updated_at: string | null;
-  }[] = [];
-  let from = 0;
-  for (;;) {
-    const supabase = createPublicClient();
-    if (!supabase) return [];
-    const { data, error } = await supabase
-      .from('essays')
-      .select('slug, title, content_html, meta_description, updated_at')
-      .eq('is_published', true)
-      .order('updated_at', { ascending: false, nullsFirst: false })
-      .range(from, from + ESSAYS_SITEMAP_BATCH - 1);
+  const out: EssaySitemapRow[] = [];
+  const count = await countPublishedEssaySitemapRows();
+  const ranges = Array.from(
+    {
+      length: Math.max(
+        Math.ceil(count / ESSAYS_SITEMAP_BATCH),
+        ESSAYS_SITEMAP_MIN_PARALLEL_PAGES
+      )
+    },
+    (_unused, index) => {
+      const from = index * ESSAYS_SITEMAP_BATCH;
+      return [from, from + ESSAYS_SITEMAP_BATCH - 1] as const;
+    }
+  );
 
-    if (error) throw new Error(error.message);
-    const batch = (data ?? []) as {
-      slug: string;
-      title: string | null;
-      content_html: string | null;
-      meta_description: string | null;
-      updated_at: string | null;
-    }[];
-    const withSlug = batch.filter((r) => Boolean(r.slug?.trim()));
-    out.push(...withSlug);
-    if (batch.length < ESSAYS_SITEMAP_BATCH) break;
-    from += ESSAYS_SITEMAP_BATCH;
+  const pages = await Promise.all(
+    ranges.map(([from, to]) => fetchPublishedEssaySitemapRowsRange(from, to))
+  );
+
+  for (const batch of pages) {
+    out.push(...batch);
   }
   return out;
 }

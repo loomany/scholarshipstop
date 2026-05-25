@@ -66,7 +66,7 @@ export async function listPublishedScholarshipDetailTranslations(): Promise<
 
   const slugById = new Map<string, string>();
   const indexableById = new Map<string, boolean>();
-  const chunkSize = 80;
+  const chunkSize = 200;
   for (let i = 0; i < ids.length; i += chunkSize) {
     const slice = ids.slice(i, i + chunkSize);
     const { data: scholarships, error: schErr } = await admin
