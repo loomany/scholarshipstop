@@ -423,7 +423,7 @@ export default function ScholarshipCard({
     : 'grid min-w-0 grid-cols-1 items-center gap-2 xl:grid-cols-[minmax(0,1fr)_auto] xl:gap-x-3';
   const desktopGeoBadgesWrapClass = desktopHasSingleGeoBadge
     ? 'pointer-events-auto hidden min-w-0 flex-col items-stretch gap-2 xl:col-start-3 xl:flex xl:w-full xl:max-w-[200px] xl:justify-self-start'
-    : 'pointer-events-auto hidden min-w-0 flex-col items-stretch gap-2 xl:flex xl:w-full xl:max-w-full xl:justify-self-stretch';
+    : 'pointer-events-auto hidden min-w-0 flex-row flex-wrap items-center justify-end gap-2 xl:flex xl:w-auto xl:max-w-[min(100%,28rem)] xl:justify-self-end';
 
   const gridShell = stackedListing
     ? 'grid min-w-0 flex-1 grid-cols-1 content-start gap-x-5 gap-y-3 px-4 py-4 sm:px-5 sm:py-5'
@@ -456,20 +456,35 @@ export default function ScholarshipCard({
   const cardActionBtnBase = `w-full rounded-lg px-2.5 py-1.5 text-center text-xs font-semibold text-white transition ${SCHOLARSHIP_ACTION_FOCUS_VISIBLE}`;
   const cardActionSaveClass = `${cardActionBtnBase} ${SCHOLARSHIP_ACTION_FILL}`;
   const cardActionSavedClass = `${cardActionBtnBase} ${SCHOLARSHIP_ACTION_FILL_PRESSED}`;
-  const geoBadgeBase =
-    'inline-flex min-h-9 w-full max-w-full items-center justify-center rounded-full border px-4 py-2 text-center text-xs font-extrabold leading-snug tracking-tight shadow-sm';
-  const countryBadgeClass = `${geoBadgeBase} border-orange-200 bg-orange-50 text-orange-700 ring-1 ring-orange-100`;
-  const locationBadgeClass = `${geoBadgeBase} border-orange-200 bg-white text-orange-700 ring-1 ring-orange-100`;
-  const missingLocationBadgeClass = `${geoBadgeBase} border-slate-200 bg-slate-50 text-slate-600 ring-1 ring-slate-100`;
+  const geoBadgeShell =
+    'inline-flex min-h-9 items-center justify-center rounded-full border px-4 py-2 text-center text-xs font-extrabold leading-snug tracking-tight shadow-sm';
+  const geoBadgeWidthBlock = 'w-full max-w-full';
+  const geoBadgeWidthInline = 'w-auto shrink-0 max-w-[13.5rem]';
+  const geoBadgeClass = (widthClass: string, tone: 'country' | 'location' | 'missing') => {
+    const toneClass =
+      tone === 'country'
+        ? 'border-orange-200 bg-orange-50 text-orange-700 ring-1 ring-orange-100'
+        : tone === 'location'
+          ? 'border-orange-200 bg-white text-orange-700 ring-1 ring-orange-100'
+          : 'border-slate-200 bg-slate-50 text-slate-600 ring-1 ring-slate-100';
+    return `${geoBadgeShell} ${widthClass} ${toneClass}`;
+  };
   const geoBadgesColumnClass =
     'flex w-full min-w-0 flex-col items-stretch gap-2';
 
   const geoFilterLinkClass =
     'pointer-events-auto relative z-20 cursor-pointer no-underline transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50 focus-visible:ring-offset-1';
 
-  const renderGeoBadgeLinks = (truncateLabels = false) => {
+  const renderGeoBadgeLinks = (
+    truncateLabels = false,
+    inlineRow = false
+  ) => {
     const geoLabel = (text: string) =>
       truncateLabels ? <span className="truncate">{text}</span> : text;
+    const badgeWidth = inlineRow ? geoBadgeWidthInline : geoBadgeWidthBlock;
+    const countryBadgeClass = geoBadgeClass(badgeWidth, 'country');
+    const locationBadgeClass = geoBadgeClass(badgeWidth, 'location');
+    const missingLocationBadgeClass = geoBadgeClass(badgeWidth, 'missing');
 
     return (
       <>
@@ -1355,7 +1370,7 @@ export default function ScholarshipCard({
               </div>
               {!stackedListing && showGeoBadges ? (
                 <div className={desktopGeoBadgesWrapClass}>
-                  {renderGeoBadgeLinks(true)}
+                  {renderGeoBadgeLinks(true, !desktopHasSingleGeoBadge)}
                 </div>
               ) : null}
             </div>

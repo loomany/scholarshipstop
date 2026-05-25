@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Check, Lock, X } from 'lucide-react';
 
+import { getGuestGrantSignupModalCopy } from '@/lib/i18n/guestGrantSignupModalCopy';
 import { getPremiumCompactModalCopy } from '@/lib/i18n/premiumCompactModalCopy';
 import { resolveNavLocaleFromPathname } from '@/lib/i18n/resolveNavLocale';
 
@@ -61,9 +62,9 @@ export default function GuestTrialMarketingModal({
   grantScholarshipPitch = false
 }: GuestTrialMarketingModalProps) {
   const pathname = usePathname() ?? '/';
-  const premiumCopy = getPremiumCompactModalCopy(
-    resolveNavLocaleFromPathname(pathname)
-  );
+  const navLocale = resolveNavLocaleFromPathname(pathname);
+  const premiumCopy = getPremiumCompactModalCopy(navLocale);
+  const grantSignupCopy = getGuestGrantSignupModalCopy(navLocale);
   const dismiss = useCallback(() => {
     onSecondaryAction?.();
     onClose();
@@ -131,10 +132,10 @@ export default function GuestTrialMarketingModal({
                 id="guest-trial-modal-title"
                 className="text-lg font-bold tracking-tight text-zinc-900 sm:text-xl"
               >
-                Create a free account to view scholarship details
+                {grantSignupCopy.title}
               </h2>
               <p className="mt-3 text-sm leading-relaxed text-zinc-600 sm:text-[0.9375rem]">
-                To continue, create your free account. It takes 10 seconds.
+                {grantSignupCopy.intro}
               </p>
               <div className="mt-6">
                 <Link
@@ -145,11 +146,11 @@ export default function GuestTrialMarketingModal({
                   }}
                   className="inline-flex h-11 w-full items-center justify-center rounded-xl bg-[#FF7A1A] px-5 text-sm font-semibold text-white shadow-md shadow-orange-500/25 transition hover:bg-[#E6670C] focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/80 focus-visible:ring-offset-2 sm:text-base"
                 >
-                  Create Free Account
+                  {grantSignupCopy.cta}
                 </Link>
               </div>
               <p className="mt-3 text-xs text-zinc-400 sm:text-sm">
-                Free account • 10 seconds
+                {grantSignupCopy.footer}
               </p>
             </>
           ) : isSignedInUpsell ? (
