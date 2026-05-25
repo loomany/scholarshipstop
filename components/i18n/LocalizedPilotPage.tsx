@@ -112,11 +112,9 @@ const copy = {
       ctaButton: 'Buscar becas'
     },
     legal: {
-      backToHome: 'Volver al inicio',
-      language: 'Idioma'
+      backToHome: 'Volver al inicio'
     },
     marketing: {
-      language: 'Idioma',
       primaryCta: 'Encontrar becas',
       secondaryCta: 'Explorar becas',
       faqHeading: 'Preguntas frecuentes'
@@ -209,11 +207,9 @@ const copy = {
       ctaButton: 'Trouver des bourses'
     },
     legal: {
-      backToHome: 'Retour à l’accueil',
-      language: 'Langue'
+      backToHome: 'Retour à l’accueil'
     },
     marketing: {
-      language: 'Langue',
       primaryCta: 'Trouver des bourses',
       secondaryCta: 'Explorer les bourses',
       faqHeading: 'Questions fréquentes'
@@ -846,7 +842,6 @@ export function LocalizedPilotPageView({
         <LegalDocumentPage
           page={page}
           backToHomeLabel={copy[page.locale].legal.backToHome}
-          languageLabel={copy[page.locale].legal.language}
           hrefForPath={(path) => hrefForPage(page, path)}
         />
       </>

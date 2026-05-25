@@ -44,6 +44,11 @@
   transform: scaleX(1);
 }
 
+/* FR pilot: longer labels (e.g. Chercher des bourses) — keep header links from overlapping Sign In */
+.darkLocaleCompact {
+  @apply !text-xs !leading-5 xl:!text-sm;
+}
+
 .darkAccount {
   @apply max-w-[10rem] truncate sm:max-w-[14rem] md:max-w-[18rem];
 }

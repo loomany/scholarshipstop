@@ -17,3 +17,7 @@
 .inlineNav {
   @apply hidden items-center gap-2 sm:gap-3 lg:flex;
 }
+
+.inlineNavLocaleCompact {
+  @apply gap-1 sm:gap-1.5;
+}

@@ -214,7 +214,12 @@ export default function NavbarUserSlot({
       {user ? (
         <Link
           href={accountHref}
-          className={clsx(nav.dark, nav.darkAccount, accountActive && nav.darkActive)}
+          className={clsx(
+            nav.dark,
+            locale === 'fr' && nav.darkLocaleCompact,
+            nav.darkAccount,
+            accountActive && nav.darkActive
+          )}
           title={accountLabel}
         >
           {accountLabel}
@@ -222,7 +227,11 @@ export default function NavbarUserSlot({
       ) : (
         <Link
           href={signInHref}
-          className={clsx(nav.dark, signInActive && nav.darkActive)}
+          className={clsx(
+            nav.dark,
+            locale === 'fr' && nav.darkLocaleCompact,
+            signInActive && nav.darkActive
+          )}
         >
           {authCopy.signIn}
         </Link>

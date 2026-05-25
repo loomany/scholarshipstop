@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { Check } from 'lucide-react';
 
-import LanguageSwitcher from '@/components/i18n/LanguageSwitcher';
 import { SiteFaqAccordion } from '@/components/ui/SiteFaqAccordion';
 import { homePrimaryCtaClass } from '@/components/home/homeMarketingCtaClasses';
 import type { LocalizedPilotPage } from '@/lib/i18n/staticTranslations';
@@ -18,7 +17,6 @@ const h2Section =
 type LocalizedMarketingPageProps = {
   page: LocalizedPilotPage;
   labels: {
-    language: string;
     primaryCta: string;
     secondaryCta?: string;
     faqHeading: string;
@@ -39,9 +37,6 @@ export function LocalizedMarketingPage({ page, labels }: LocalizedMarketingPageP
         className={`border-b border-gray-100 bg-white pt-10 pb-12 sm:pt-12 sm:pb-14 lg:pt-14 lg:pb-16 ${homeSectionPadX}`}
       >
         <div className={`${container} max-w-4xl text-center`}>
-          <div className="mb-6 flex justify-center">
-            <LanguageSwitcher pathname={page.localizedPath} label={labels.language} />
-          </div>
           {page.eyebrow ? (
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-orange-600">
               {page.eyebrow}

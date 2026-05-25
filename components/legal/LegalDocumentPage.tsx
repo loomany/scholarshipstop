@@ -1,14 +1,12 @@
 import Link from 'next/link';
 import clsx from 'clsx';
 
-import LanguageSwitcher from '@/components/i18n/LanguageSwitcher';
 import { siteNavLink as nav } from '@/components/ui/nav/siteNavLink';
 import type { LocalizedPilotPage } from '@/lib/i18n/staticTranslations';
 
 type LegalDocumentPageProps = {
   page: LocalizedPilotPage;
   backToHomeLabel: string;
-  languageLabel: string;
   hrefForPath: (path: string) => string;
 };
 
@@ -21,17 +19,13 @@ const listClass =
 export default function LegalDocumentPage({
   page,
   backToHomeLabel,
-  languageLabel,
   hrefForPath
 }: LegalDocumentPageProps) {
   return (
     <article className="mx-auto max-w-[52rem] px-6 py-16 sm:py-20">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <Link href={hrefForPath('/')} className={clsx(nav.legal)}>
-          ← {backToHomeLabel}
-        </Link>
-        <LanguageSwitcher pathname={page.localizedPath} label={languageLabel} />
-      </div>
+      <Link href={hrefForPath('/')} className={clsx(nav.legal, 'mb-6 inline-flex')}>
+        ← {backToHomeLabel}
+      </Link>
 
       <header className="border-b border-zinc-200 pb-10">
         <h1 className="text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl">

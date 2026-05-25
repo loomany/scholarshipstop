@@ -75,9 +75,20 @@ const ABOUT_SUBLINKS = [
   { href: IQ_TEST_HOME_HREF, label: 'IQ Test' }
 ] as const;
 
-const MOBILE_ABOUT_SUBLINKS = ABOUT_SUBLINKS.filter(
-  ({ href }) => href !== '/for-organizations' && href !== IQ_TEST_HOME_HREF
-);
+function isExternalAboutHref(href: string): boolean {
+  return href.startsWith('http://') || href.startsWith('https://');
+}
+
+const MOBILE_ABOUT_EXCLUDED = new Set<string>([
+  '/for-organizations',
+  IQ_TEST_HOME_HREF
+]);
+
+function filterMobileAboutSublinks(
+  items: ReadonlyArray<{ href: string; label: string }>
+) {
+  return items.filter(({ href }) => !MOBILE_ABOUT_EXCLUDED.has(href));
+}
 
 const ESSAY_MENTOR_PATH = '/essay';
 const VERSUS_HUB_PATH = '/compare';
@@ -204,29 +215,28 @@ const LOCALIZED_NAV_COPY: Record<
   }
 };
 
+/** Same canonical targets as {@link ABOUT_SUBLINKS} — labels only differ by locale. */
 const LOCALIZED_ABOUT_SUBLINKS: Record<
   Stage2PilotLocale,
   Array<{ href: string; label: string }>
 > = {
   es: [
-    { href: '/about', label: 'Acerca de' },
-    { href: '/how-scholarshiptop-works', label: 'Cómo funciona' },
-    { href: '/scholarship-verification-methodology', label: 'Verificación' },
-    { href: '/how-we-rank-scholarships', label: 'Recomendaciones' },
-    { href: '/editorial-policy', label: 'Política editorial' },
-    { href: '/corrections', label: 'Correcciones' },
-    { href: '/financial-aid-disclaimer', label: 'Aviso financiero' },
-    { href: '/how-we-make-money', label: 'Cómo ganamos dinero' }
+    { href: '/help', label: 'Ayuda' },
+    { href: '/privacy-policy', label: 'Política de privacidad' },
+    { href: '/terms', label: 'Términos' },
+    { href: '/faq', label: 'FAQ' },
+    { href: '/refund-policy', label: 'Política de reembolso' },
+    { href: '/for-organizations', label: 'Para organizaciones' },
+    { href: IQ_TEST_HOME_HREF, label: 'Prueba IQ' }
   ],
   fr: [
-    { href: '/about', label: 'À propos' },
-    { href: '/how-scholarshiptop-works', label: 'Fonctionnement' },
-    { href: '/scholarship-verification-methodology', label: 'Vérification' },
-    { href: '/how-we-rank-scholarships', label: 'Recommandations' },
-    { href: '/editorial-policy', label: 'Politique éditoriale' },
-    { href: '/corrections', label: 'Corrections' },
-    { href: '/financial-aid-disclaimer', label: 'Avertissement' },
-    { href: '/how-we-make-money', label: 'Revenus' }
+    { href: '/help', label: 'Aide' },
+    { href: '/privacy-policy', label: 'Politique de confidentialité' },
+    { href: '/terms', label: 'Conditions' },
+    { href: '/faq', label: 'FAQ' },
+    { href: '/refund-policy', label: 'Politique de remboursement' },
+    { href: '/for-organizations', label: 'Pour les organisations' },
+    { href: IQ_TEST_HOME_HREF, label: 'Test IQ' }
   ]
 };
 
@@ -365,10 +375,12 @@ export default function Navlinks({
       : pilotNavHref('/scholarships');
   const aboutSublinks =
     locale === 'en' ? ABOUT_SUBLINKS : LOCALIZED_ABOUT_SUBLINKS[locale];
-  const mobileAboutSublinks =
-    locale === 'en'
-      ? MOBILE_ABOUT_SUBLINKS
-      : LOCALIZED_ABOUT_SUBLINKS[locale];
+  const mobileAboutSublinks = filterMobileAboutSublinks(aboutSublinks);
+  const resolveAboutSublinkHref = useCallback(
+    (href: string) =>
+      isExternalAboutHref(href) ? href : pilotNavHref(href),
+    [pilotNavHref]
+  );
   const versusSublinks =
     locale === 'en' ? VERSUS_SUBLINKS : LOCALIZED_COMPARE_SUBLINKS[locale];
   const essayGuideSublinks = (
@@ -377,6 +389,15 @@ export default function Navlinks({
       : LOCALIZED_ESSAYS_GUIDE_SUBLINKS[locale]
   ).filter(
     (item) => locale === 'en' || localizedPilotHref(locale, item.href) != null
+  );
+  const headerNavLink = useCallback(
+    (active?: boolean) =>
+      clsx(
+        nav.dark,
+        locale === 'fr' && nav.darkLocaleCompact,
+        active && nav.darkActive
+      ),
+    [locale]
   );
   const isIqSubdomain =
     isIqSubdomainHost ||
@@ -577,16 +598,16 @@ export default function Navlinks({
             <Logo variant="header" />
           </Link>
           <nav
-            className={s.inlineNav}
+            className={clsx(
+              s.inlineNav,
+              locale === 'fr' && s.inlineNavLocaleCompact
+            )}
             aria-label={navCopy.mainNavigation}
           >
             <div className="group/about relative">
               <Link
                 href={pilotNavHref('/about')}
-                className={clsx(
-                  nav.dark,
-                  aboutSectionActive && nav.darkActive
-                )}
+                className={headerNavLink(aboutSectionActive)}
                 aria-haspopup="menu"
               >
                 {navCopy.about}
@@ -604,7 +625,7 @@ export default function Navlinks({
                     return (
                       <Link
                         key={href}
-                        href={pilotNavHref(href)}
+                        href={resolveAboutSublinkHref(href)}
                         className={clsx(
                           nav.lightPanel,
                           active && nav.lightPanelActive
@@ -619,20 +640,20 @@ export default function Navlinks({
             </div>
             <Link
               href={findScholarshipsHref}
-              className={clsx(nav.dark, scholarshipsActive && nav.darkActive)}
+              className={headerNavLink(scholarshipsActive)}
             >
               {navCopy.findScholarships}
             </Link>
             <Link
               href={pilotNavHref('/providers')}
-              className={clsx(nav.dark, providersActive && nav.darkActive)}
+              className={headerNavLink(providersActive)}
             >
               {navCopy.providers}
             </Link>
             <div className="group/versus relative">
               <Link
                 href={pilotNavHref(VERSUS_HUB_PATH)}
-                className={clsx(nav.dark, versusActive && nav.darkActive)}
+                className={headerNavLink(versusActive)}
                 aria-haspopup="menu"
               >
                 {navCopy.compare}
@@ -670,10 +691,7 @@ export default function Navlinks({
             </div>
             <Link
               href={pilotNavHref(RESOURCES_SECTION_PATH)}
-              className={clsx(
-                nav.dark,
-                resourcesSectionActive && nav.darkActive
-              )}
+              className={headerNavLink(resourcesSectionActive)}
             >
               {navCopy.resources}
             </Link>
@@ -683,10 +701,7 @@ export default function Navlinks({
             >
               <Link
                 href={pilotNavHref(ESSAYS_SECTION_PATH)}
-                className={clsx(
-                  nav.dark,
-                  essayGuidesNavActive && nav.darkActive
-                )}
+                className={headerNavLink(essayGuidesNavActive)}
                 aria-haspopup="menu"
               >
                 {navCopy.essayGuides}
@@ -759,7 +774,7 @@ export default function Navlinks({
             </div>
             <Link
               href={subscriptionHref}
-              className={clsx(nav.dark, pricingActive && nav.darkActive)}
+              className={headerNavLink(pricingActive)}
             >
               {navCopy.pricing}
             </Link>
@@ -884,7 +899,7 @@ export default function Navlinks({
                         return (
                           <Link
                             key={href}
-                            href={pilotNavHref(href)}
+                            href={resolveAboutSublinkHref(href)}
                             className={clsx(
                               nav.darkDrawerSub,
                               active && nav.darkDrawerSubActive
