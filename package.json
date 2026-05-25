@@ -130,6 +130,7 @@
     "i18n:scholarship-autopilot:railway": "tsx scripts/i18n/scholarship-detail-autopilot/run-railway-worker.ts",
     "i18n:scholarship-autopilot:dry-run": "tsx scripts/i18n/scholarship-detail-autopilot/run-railway-worker.ts",
     "i18n:scholarship-autopilot:status": "tsx scripts/i18n/scholarship-detail-autopilot/railway-worker-status.ts",
+    "i18n:scholarship-autopilot:audit-repeat": "tsx scripts/i18n/scholarship-detail-autopilot/audit-railway-repeat-startwave.ts",
     "seo:refresh-university-compare-sources": "dotenv -e .env.local -- npx tsx scripts/refresh-university-compare-sources.ts",
     "seo:refresh-state-compare-pages": "dotenv -e .env.local -- npx tsx scripts/refresh-state-compare-pages.ts",
     "seo:daily-digest-telegram": "dotenv -e .env.local -- node scripts/post-seo-daily-digest-telegram.mjs",

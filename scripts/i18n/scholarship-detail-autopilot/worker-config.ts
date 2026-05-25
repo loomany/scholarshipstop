@@ -14,6 +14,8 @@ export type ScholarshipAutopilotWorkerConfig = {
   maxWaves: number;
   requireLock: boolean;
   lockExitZeroOnHeld: boolean;
+  /** Allow re-running a start wave that already has relaxed machine_model rows in DB. */
+  forceStartWave: boolean;
   smokeBaseUrl: string;
   siteUrl: string;
   supabaseUrlPresent: boolean;
@@ -62,6 +64,7 @@ export function parseScholarshipAutopilotWorkerConfig(): ScholarshipAutopilotWor
     maxWaves,
     requireLock: process.env.I18N_WORKER_REQUIRE_LOCK?.trim() !== '0',
     lockExitZeroOnHeld: process.env.I18N_WORKER_LOCK_EXIT_ZERO_ON_HELD?.trim() === '1',
+    forceStartWave: process.env.I18N_WORKER_FORCE_START_WAVE?.trim() === '1',
     smokeBaseUrl: (process.env.SMOKE_BASE_URL ?? process.env.SITE_URL ?? 'https://scholarshiptop.com').replace(
       /\/$/,
       ''
@@ -103,6 +106,7 @@ export function printWorkerConfig(config: ScholarshipAutopilotWorkerConfig): voi
     maxRuntimeMinutes: config.maxRuntimeMinutes,
     maxWaves: config.maxWaves,
     requireLock: config.requireLock,
+    forceStartWave: config.forceStartWave,
     smokeBaseUrl: config.smokeBaseUrl,
     siteUrl: config.siteUrl,
     supabaseUrlPresent: config.supabaseUrlPresent,

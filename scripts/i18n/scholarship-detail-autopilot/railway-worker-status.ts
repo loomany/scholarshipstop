@@ -4,7 +4,8 @@
 import { createClient } from '@supabase/supabase-js';
 
 import { BASE, loadEnvLocal } from './env';
-import { isScholarshipAutopilotLocked } from './scholarship-autopilot-lock';
+import { getScholarshipAutopilotLockRow, isScholarshipAutopilotLocked } from './scholarship-autopilot-lock';
+import { suggestNextSafeStartWave } from './worker-start-wave-guard';
 import {
   countSitemapEligibleEsScholarshipDetails,
   countSitemapEligibleFrScholarshipDetails
@@ -49,6 +50,8 @@ async function main() {
   const eligibleEs = await countSitemapEligibleEsScholarshipDetails();
   const eligibleFr = await countSitemapEligibleFrScholarshipDetails();
   const lock = await isScholarshipAutopilotLocked();
+  const lockRow = await getScholarshipAutopilotLockRow();
+  const nextSafeStartWave = await suggestNextSafeStartWave(181);
   const latestWave = await latestRelaxedWave(db);
 
   const { count: publishedRows } = await db
@@ -63,8 +66,8 @@ async function main() {
     frXml.includes('/en/') ||
     esXml.includes('review_required') ||
     frXml.includes('review_required') ||
-    esXml.includes('draft') ||
-    frXml.includes('draft');
+    esXml.includes('/draft/') ||
+    frXml.includes('/draft/');
 
   console.log(
     JSON.stringify(
@@ -77,7 +80,11 @@ async function main() {
         publishedEsFrRows: publishedRows,
         latestRelaxedWave: latestWave,
         advisoryLockHeld: lock.locked,
+        lockRunId: lock.runId ?? lockRow.row?.run_id,
+        lockExpiresAt: lock.expiresAt ?? lockRow.row?.expires_at,
+        lockLockedAt: lock.lockedAt ?? lockRow.row?.locked_at,
         lockMessage: lock.message,
+        nextSafeStartWave,
         badSitemapContent: badSitemap
       },
       null,

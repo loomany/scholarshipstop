@@ -66,10 +66,40 @@ export async function releaseScholarshipAutopilotLock(runId: string): Promise<vo
   console.log('[worker-lock] released', { runId, unlocked: data === true });
 }
 
-export async function isScholarshipAutopilotLocked(): Promise<{
+export type AutopilotLockStatus = {
   locked: boolean | null;
   message?: string;
+  runId?: string;
+  lockedAt?: string;
+  expiresAt?: string;
+};
+
+export async function getScholarshipAutopilotLockRow(): Promise<{
+  row: { run_id: string; locked_at: string; expires_at: string } | null;
+  error?: string;
 }> {
+  const db = supabaseAdmin();
+  const { data, error } = await db
+    .from('i18n_scholarship_worker_lock')
+    .select('run_id, locked_at, expires_at')
+    .eq('lock_key', 'scholarship_detail_autopilot')
+    .maybeSingle();
+  if (error) return { row: null, error: error.message };
+  if (!data) return { row: null };
+  const expiresAt = String(data.expires_at ?? '');
+  if (expiresAt && new Date(expiresAt).getTime() <= Date.now()) {
+    return { row: null };
+  }
+  return {
+    row: {
+      run_id: String(data.run_id ?? ''),
+      locked_at: String(data.locked_at ?? ''),
+      expires_at: expiresAt
+    }
+  };
+}
+
+export async function isScholarshipAutopilotLocked(): Promise<AutopilotLockStatus> {
   const db = supabaseAdmin();
   const { data, error } = await db.rpc('i18n_scholarship_autopilot_is_locked');
   if (error) {
@@ -78,5 +108,14 @@ export async function isScholarshipAutopilotLocked(): Promise<{
     }
     return { locked: null, message: error.message };
   }
-  return { locked: data === true };
+  const status: AutopilotLockStatus = { locked: data === true };
+  if (data === true) {
+    const row = await getScholarshipAutopilotLockRow();
+    if (row.row) {
+      status.runId = row.row.run_id;
+      status.lockedAt = row.row.locked_at;
+      status.expiresAt = row.row.expires_at;
+    }
+  }
+  return status;
 }

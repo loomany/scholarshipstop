@@ -68,16 +68,24 @@ npm run i18n:scholarship-autopilot:status
 7. **Manual deploy/run once** — do not enable cron until first run passes.
 8. Watch logs + `npm run i18n:scholarship-autopilot:status` from local.
 
-## 7. First safe production run
+## 7. Next production run (Stage 5E-17, wave 188+)
+
+**Prerequisites:** guard commit on `main` deployed to `scholarship-i18n-worker`; auto-deploy **OFF**; restart policy **Never**; worker **stopped** until manual run.
 
 | Setting | Value |
 |---------|-------|
-| `I18N_WORKER_WAVE_SIZE` | **50** (or 100) |
-| `I18N_WORKER_TARGET` | **100–300** |
-| `I18N_WORKER_START_WAVE` | **181** (next after 10701 / wave 180) |
-| `I18N_WORKER_MAX_RUNTIME_MINUTES` | **60–90** |
+| `I18N_WORKER_START_WAVE` | **188** |
+| `I18N_WORKER_TARGET` | **900** |
+| `I18N_WORKER_WAVE_SIZE` | **150** |
+| `I18N_WORKER_MAX_RUNTIME_MINUTES` | **600** |
+| `I18N_WORKER_REQUIRE_LOCK` | **1** |
+| `I18N_WORKER_FORCE_START_WAVE` | **unset** (do not set `=1`) |
 
-After success: wave_size **150**, target **1000+**, optional Railway cron.
+Pre-run: `npm run i18n:scholarship-autopilot:status` — lock not held, sitemap **13051/13051**, `nextSafeStartWave` **188**.
+
+Expected: waves **188–193**, sitemap **13051 → 13951**, clean exit, lock released.
+
+**Do not** leave `I18N_WORKER_START_WAVE=183` in Railway after repeat-start incident.
 
 ## 8. Resume / rollback
 
@@ -98,9 +106,9 @@ Then revalidate sitemaps via existing publish/revalidate path.
 
 - Do not add worker to main web service start command
 - Do not run two workers/cron overlaps without lock migration
-- Do not first-run with target 4000+ or wave_size 150
 - Do not commit `.env` / secrets
-- Do not enable cron before manual run approval
+- Do not enable auto-deploy or **restart-on-failure** on worker (one-shot manual only)
+- Do not rerun a wave without `I18N_WORKER_FORCE_START_WAVE=1` when DB rows exist
 - Do not switch to provider/resource/essay/compare
 
 ## 10. Ready to create Railway service?
@@ -114,4 +122,4 @@ Blockers before first prod run:
 3. Explicit user approval for first manual Railway run
 4. Confirm no local autopilot running
 
-Current production baseline: **10701/10701** ES/FR; next wave **181**; ~**6838** Tier A remaining.
+Current production baseline: **13051/13051** ES/FR; next wave **188**; see `i18n-stage5e-17-railway-worker-repeat-startwave-audit-2026-05-24.md`.

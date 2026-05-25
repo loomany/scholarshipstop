@@ -1,6 +1,7 @@
 /**
- * Railway/cron-safe wrapper for relaxed scholarship_detail autopilot.
+ * Railway one-shot wrapper for relaxed scholarship_detail autopilot.
  * Spawns run-relaxed-autopilot.ts once, enforces lock + max runtime, then exits.
+ * Configure Railway restart policy to NEVER — non-zero exit must not auto-restart with the same start wave.
  *
  * Usage (Railway start command):
  *   npm run i18n:scholarship-autopilot:railway
@@ -20,6 +21,7 @@ import {
   printWorkerConfig,
   validateScholarshipAutopilotWorkerConfig
 } from './worker-config';
+import { assertSafeStartWave, suggestNextSafeStartWave } from './worker-start-wave-guard';
 
 const RUNNER = join(process.cwd(), 'scripts/i18n/scholarship-detail-autopilot/run-relaxed-autopilot.ts');
 
@@ -113,6 +115,26 @@ async function main() {
   if (issues.length) {
     console.error('[worker] config invalid:', issues.join('; '));
     process.exit(2);
+  }
+
+  if (config.productionMode && config.startWave >= 1) {
+    const nextSafe = await suggestNextSafeStartWave(181);
+    console.log('[worker] next safe start wave (DB audit):', nextSafe);
+    if (config.startWave < nextSafe && !config.forceStartWave) {
+      console.error(
+        `[worker] start wave ${config.startWave} is behind next safe wave ${nextSafe}. ` +
+          `Update I18N_WORKER_START_WAVE or set I18N_WORKER_FORCE_START_WAVE=1.`
+      );
+      process.exit(6);
+    }
+    const guard = await assertSafeStartWave(config.startWave, {
+      forceStartWave: config.forceStartWave,
+      dryRun: config.dryRun
+    });
+    if (!guard.ok) {
+      console.error('[worker] start wave guard:', guard.message);
+      process.exit(6);
+    }
   }
 
   if (config.requireLock) {

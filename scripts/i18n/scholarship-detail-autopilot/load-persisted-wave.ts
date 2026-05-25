@@ -10,6 +10,11 @@ import { DATE, loadEnvLocal } from './env';
 import type { AutopilotCandidate } from './types';
 
 const MACHINE_PREFIX = 'stage5e-scholarship-autopilot-wave-';
+export const RELAXED_MACHINE_PREFIX = 'stage5e-scholarship-autopilot-relaxed-wave-';
+
+export function relaxedMachineModel(waveNum: number): string {
+  return `${RELAXED_MACHINE_PREFIX}${waveNum}`;
+}
 
 type TranslationRow = {
   source_id: string;
@@ -77,6 +82,65 @@ async function slugsFromScholarshipIds(
     }
   }
   return [...slugs];
+}
+
+export async function countRelaxedWaveRows(waveNum: number): Promise<number> {
+  loadEnvLocal();
+  const db = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+  const { count, error } = await db
+    .from('content_translations')
+    .select('*', { count: 'exact', head: true })
+    .eq('source_type', 'scholarship_detail')
+    .in('locale', ['es', 'fr'])
+    .eq('machine_model', relaxedMachineModel(waveNum));
+  if (error) throw new Error(error.message);
+  return count ?? 0;
+}
+
+export async function auditRelaxedWaveInDb(waveNum: number): Promise<PersistedWaveAudit> {
+  loadEnvLocal();
+  const machineModel = relaxedMachineModel(waveNum);
+  const db = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+
+  const { data, error } = await db
+    .from('content_translations')
+    .select('source_id, locale, status, quality_score, machine_model')
+    .eq('source_type', 'scholarship_detail')
+    .in('locale', ['es', 'fr'])
+    .eq('machine_model', machineModel);
+
+  if (error) throw new Error(error.message);
+
+  const rows = (data ?? []) as TranslationRow[];
+  const sourceIds = [...new Set(rows.map((r) => String(r.source_id).trim()).filter(Boolean))];
+  const distinctSlugs = await slugsFromScholarshipIds(db, sourceIds);
+
+  const statuses: Record<string, number> = {};
+  const qualityScores: Record<string, number> = {};
+  for (const r of rows) {
+    const s = String(r.status ?? 'unknown');
+    statuses[s] = (statuses[s] ?? 0) + 1;
+    const q = String(r.quality_score ?? 'null');
+    qualityScores[q] = (qualityScores[q] ?? 0) + 1;
+  }
+
+  return {
+    total: rows.length,
+    es: rows.filter((r) => r.locale === 'es').length,
+    fr: rows.filter((r) => r.locale === 'fr').length,
+    distinctSourceIds: sourceIds.length,
+    distinctSlugs,
+    statuses,
+    qualityScores,
+    qualityBelow85: rows.filter((r) => (r.quality_score ?? 0) < 85).length,
+    machineModel
+  };
 }
 
 export async function auditWaveInDb(waveNum: number): Promise<PersistedWaveAudit> {
