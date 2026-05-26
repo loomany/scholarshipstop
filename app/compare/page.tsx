@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 import { CompareIndexPageContent } from '@/components/compare/CompareIndexPageContent';
-import { parseCompareIndexSearchParams } from '@/lib/seo/compareIndexFilters';
+import { compareIndexHasNonCanonicalView } from '@/lib/seo/compareIndexFilters';
 import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
 import { getCanonical } from '@/lib/seo/canonical';
 
@@ -15,12 +15,7 @@ export function generateMetadata({
 }: {
   searchParams?: Record<string, string | string[] | undefined>;
 }): Metadata {
-  const queryState = parseCompareIndexSearchParams(searchParams);
-  const hasNonCanonicalView =
-    queryState.page > 1 ||
-    queryState.q.length > 0 ||
-    queryState.category !== 'all' ||
-    queryState.sort !== 'latest';
+  const hasNonCanonicalView = compareIndexHasNonCanonicalView(searchParams);
   const canonical = getCanonical('/compare');
 
   return {

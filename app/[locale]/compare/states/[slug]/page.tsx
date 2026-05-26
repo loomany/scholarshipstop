@@ -9,6 +9,10 @@ import type { ContentTranslationLocale } from '@/lib/i18n/contentTranslationsTyp
 import { buildCompareStateAlternates } from '@/lib/i18n/comparePilot/compareTranslationAlternates';
 import { fetchPublishedCompareState } from '@/lib/i18n/comparePilot/resolveLocalizedCompare';
 import {
+  METADATA_NOT_FOUND,
+  resolveStage2PilotLocaleFromParams
+} from '@/lib/i18n/metadataRouteParams';
+import {
   isStage2PilotLocale,
   type Stage2PilotLocale
 } from '@/lib/i18n/pilotRoutes';
@@ -23,12 +27,14 @@ export const dynamicParams = true;
 
 type PageProps = { params: { locale: string; slug: string } };
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  if (!isStage2PilotLocale(params.locale)) {
-    return { title: 'Page not found', robots: { index: false, follow: false } };
-  }
-  const locale = params.locale as Stage2PilotLocale;
-  const slug = decodeURIComponent(params.slug ?? '').trim().toLowerCase();
+export async function generateMetadata({
+  params
+}: {
+  params?: { locale?: string; slug?: string };
+}): Promise<Metadata> {
+  const locale = resolveStage2PilotLocaleFromParams(params);
+  if (!locale) return METADATA_NOT_FOUND;
+  const slug = decodeURIComponent(params?.slug ?? '').trim().toLowerCase();
   if (!slug) {
     return { title: 'Page not found', robots: { index: false, follow: false } };
   }

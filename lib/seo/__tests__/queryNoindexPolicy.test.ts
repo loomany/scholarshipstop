@@ -4,7 +4,10 @@ import test from 'node:test';
 import {
   providersHubNationalIsSeoIndexable
 } from '@/lib/providers/providersHubSearchParams';
-import { parseCompareIndexSearchParams } from '@/lib/seo/compareIndexFilters';
+import {
+  compareIndexHasNonCanonicalView,
+  parseCompareIndexSearchParams
+} from '@/lib/seo/compareIndexFilters';
 import { parseEssaysIndexSearchParams } from '@/lib/essays/essaysIndexFilters';
 
 test('providers query, filter, and pagination views remain non-canonical', () => {
@@ -25,4 +28,5 @@ test('essay query state flags non-canonical views for metadata callers', () => {
 test('compare query state keeps query-param pages separate from canonical route', () => {
   assert.equal(parseCompareIndexSearchParams({ page: '2' }).page > 1, true);
   assert.equal(parseCompareIndexSearchParams({ q: 'test' }).q, 'test');
+  assert.equal(compareIndexHasNonCanonicalView({ state: 'texas' }), true);
 });

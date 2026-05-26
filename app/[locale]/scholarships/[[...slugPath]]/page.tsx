@@ -14,6 +14,10 @@ import { isSeoNoiseQuery } from '@/app/scholarships/scholarshipSeoNoiseQuery';
 import { buildLocalizedAlternates } from '@/lib/i18n/alternates';
 import { hrefForLocalizedUiRequired } from '@/lib/i18n/localizedHref';
 import {
+  METADATA_NOT_FOUND,
+  resolveStage2PilotLocaleFromParams
+} from '@/lib/i18n/metadataRouteParams';
+import {
   isStage2PilotLocale,
   STAGE2_PILOT_LOCALES,
   type Stage2PilotLocale
@@ -35,12 +39,14 @@ const SCHOLARSHIPS_ROOT_DESCRIPTION =
 export async function generateMetadata({
   params,
   searchParams
-}: PageProps): Promise<Metadata> {
-  if (!isStage2PilotLocale(params.locale)) {
-    return { title: 'Page not found', robots: { index: false, follow: false } };
-  }
-  const locale = params.locale as Stage2PilotLocale;
-  const segments = (params.slugPath ?? []).map((s) =>
+}: {
+  params?: { locale?: string; slugPath?: string[] };
+  searchParams?: Record<string, string | string[] | undefined>;
+}): Promise<Metadata> {
+  const locale = resolveStage2PilotLocaleFromParams(params);
+  if (!locale) return METADATA_NOT_FOUND;
+
+  const segments = (params?.slugPath ?? []).map((s) =>
     normalizeScholarshipDynamicParam(decodeURIComponent(s))
   );
   const localizedRoot = hrefForLocalizedUiRequired(locale, '/scholarships');

@@ -21,6 +21,10 @@ import {
 import { getContentTranslationSeoDecision } from '@/lib/i18n/contentTranslationsServer';
 import { hrefForLocalizedUiRequired } from '@/lib/i18n/localizedHref';
 import {
+  METADATA_NOT_FOUND,
+  resolveStage2PilotLocaleFromParams
+} from '@/lib/i18n/metadataRouteParams';
+import {
   isStage2PilotLocale,
   type Stage2PilotLocale
 } from '@/lib/i18n/pilotRoutes';
@@ -55,13 +59,14 @@ function toSearchParamsString(
 export async function generateMetadata({
   params,
   searchParams
-}: PageProps): Promise<Metadata> {
-  if (!isStage2PilotLocale(params.locale)) {
-    return { title: 'Page not found', robots: { index: false, follow: false } };
-  }
-  const locale = params.locale as Stage2PilotLocale;
+}: {
+  params?: { locale?: string; slug?: string };
+  searchParams?: Record<string, string | string[] | undefined>;
+}): Promise<Metadata> {
+  const locale = resolveStage2PilotLocaleFromParams(params);
+  if (!locale) return METADATA_NOT_FOUND;
   const { canonicalSlug, categoryId, promoted } = resolveCategorySlugParam(
-    params.slug
+    params?.slug ?? ''
   );
   if (!promoted) {
     return { title: 'Page not found', robots: { index: false, follow: false } };

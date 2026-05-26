@@ -6,6 +6,10 @@ import { SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF } from '@/app/scholarships/sc
 import { localizedScholarshipHubTabHref } from '@/lib/i18n/localizedHref';
 import { localizedPath } from '@/lib/i18n/paths';
 import {
+  METADATA_NOT_FOUND,
+  resolveStage2PilotLocaleFromParams
+} from '@/lib/i18n/metadataRouteParams';
+import {
   isStage2PilotLocale,
   type Stage2PilotLocale
 } from '@/lib/i18n/pilotRoutes';
@@ -19,12 +23,10 @@ const TITLE: Record<Stage2PilotLocale, string> = {
 export function generateMetadata({
   params
 }: {
-  params: { locale: string };
+  params?: { locale?: string };
 }): Metadata {
-  if (!isStage2PilotLocale(params.locale)) {
-    return { title: 'Page not found', robots: { index: false, follow: false } };
-  }
-  const locale = params.locale;
+  const locale = resolveStage2PilotLocaleFromParams(params);
+  if (!locale) return METADATA_NOT_FOUND;
   return {
     title: TITLE[locale],
     robots: { index: false, follow: true },

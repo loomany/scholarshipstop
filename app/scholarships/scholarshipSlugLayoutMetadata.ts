@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { buildScholarshipHubRouteMetadata } from '@/app/scholarships/scholarshipHubPageMetadata';
 import { hubPathToTab } from '@/app/scholarships/scholarshipHubPath';
 import {
   getLongTailPreset,
@@ -76,12 +75,13 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
     return { title: 'Find Scholarships' };
   }
 
-  /** Product hub: canonical/title/description from layout (Next 14: layout `generateMetadata` has no `searchParams`). */
+  /**
+   * Hub robots/canonical/query rules live in `[[...slugPath]]/page.tsx` (and localized
+   * scholarship page) where `searchParams` is available. Layout metadata cannot read
+   * query strings; emitting hub `index` here overwrote page-level `noindex` for pagination.
+   */
   if (hubPathToTab(segments)) {
-    return buildScholarshipHubRouteMetadata({
-      hubSegment: segments[1]!,
-      searchParams: undefined
-    });
+    return {};
   }
 
   const resolved = resolveScholarshipSlugPath(segments);

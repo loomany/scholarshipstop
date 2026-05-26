@@ -2,6 +2,10 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 
 import { GetScholarshipsQuizWizard } from '@/components/get-scholarships/GetScholarshipsQuizWizard';
+import {
+  METADATA_NOT_FOUND,
+  resolveStage2PilotLocaleFromParams
+} from '@/lib/i18n/metadataRouteParams';
 import { isStage2PilotLocale } from '@/lib/i18n/pilotRoutes';
 
 type Props = {
@@ -29,14 +33,14 @@ const META_BY_LOCALE: Record<'es' | 'fr', Metadata> = {
   }
 };
 
-export function generateMetadata({ params }: Props): Metadata {
-  if (!isStage2PilotLocale(params.locale)) {
-    return {
-      title: 'Page not found',
-      robots: { index: false, follow: false }
-    };
-  }
-  return META_BY_LOCALE[params.locale];
+export function generateMetadata({
+  params
+}: {
+  params?: { locale?: string };
+}): Metadata {
+  const locale = resolveStage2PilotLocaleFromParams(params);
+  if (!locale) return METADATA_NOT_FOUND;
+  return META_BY_LOCALE[locale];
 }
 
 export default function LocalizedGetScholarshipsPage({ params }: Props) {

@@ -5,6 +5,10 @@ import SubscriptionSuccessContent from '@/components/subscription/SubscriptionSu
 import { getSubscriptionSuccessUiCopy } from '@/lib/i18n/subscriptionSuccessPageCopy';
 import { localizedPath } from '@/lib/i18n/paths';
 import {
+  METADATA_NOT_FOUND,
+  resolveStage2PilotLocaleFromParams
+} from '@/lib/i18n/metadataRouteParams';
+import {
   isStage2PilotLocale,
   type Stage2PilotLocale
 } from '@/lib/i18n/pilotRoutes';
@@ -12,12 +16,10 @@ import {
 export function generateMetadata({
   params
 }: {
-  params: { locale: string };
+  params?: { locale?: string };
 }): Metadata {
-  if (!isStage2PilotLocale(params.locale)) {
-    return { title: 'Page not found', robots: { index: false, follow: false } };
-  }
-  const locale = params.locale as Stage2PilotLocale;
+  const locale = resolveStage2PilotLocaleFromParams(params);
+  if (!locale) return METADATA_NOT_FOUND;
   const ui = getSubscriptionSuccessUiCopy(locale);
   return {
     title: ui.metaTitle,

@@ -2,6 +2,10 @@ import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { notFound } from 'next/navigation';
 
+import {
+  METADATA_NOT_FOUND,
+  resolveStage2PilotLocaleFromParams
+} from '@/lib/i18n/metadataRouteParams';
 import { isStage2PilotLocale } from '@/lib/i18n/pilotRoutes';
 
 const TITLE_BY_LOCALE: Record<'es' | 'fr', string> = {
@@ -12,16 +16,15 @@ const TITLE_BY_LOCALE: Record<'es' | 'fr', string> = {
 export function generateMetadata({
   params
 }: {
-  params: { locale: string };
+  params?: { locale?: string };
 }): Metadata {
-  if (!isStage2PilotLocale(params.locale)) {
-    return { title: 'Page not found', robots: { index: false, follow: false } };
-  }
+  const locale = resolveStage2PilotLocaleFromParams(params);
+  if (!locale) return METADATA_NOT_FOUND;
   return {
-    title: TITLE_BY_LOCALE[params.locale],
+    title: TITLE_BY_LOCALE[locale],
     robots: { index: false, follow: true },
     alternates: {
-      canonical: `/${params.locale}/signin`
+      canonical: `/${locale}/signin`
     }
   };
 }

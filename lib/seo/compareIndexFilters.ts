@@ -24,6 +24,23 @@ function firstValue(value: string | string[] | undefined): string {
   return Array.isArray(value) ? value[0] ?? '' : value ?? '';
 }
 
+function hasNonEmptySearchParamValue(
+  value: string | string[] | undefined
+): boolean {
+  if (Array.isArray(value)) {
+    return value.some((part) => typeof part === 'string' && part.trim().length > 0);
+  }
+  return typeof value === 'string' && value.trim().length > 0;
+}
+
+/** Allowed compare hub query keys; any other non-empty param is a non-canonical view. */
+const COMPARE_INDEX_CANONICAL_QUERY_KEYS = new Set([
+  'q',
+  'cat',
+  'sort',
+  'page'
+]);
+
 function parsePositiveInt(value: string, fallback: number): number {
   const parsed = Number.parseInt(value, 10);
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
@@ -50,6 +67,33 @@ export function parseCompareIndexSearchParams(
     sort,
     page: parsePositiveInt(rawPage, 1)
   };
+}
+
+/**
+ * True when the compare hub URL should be `noindex, follow` (filters, pagination, or
+ * unknown query keys such as `state` that are not part of the canonical index document).
+ */
+export function compareIndexHasNonCanonicalView(
+  searchParams?: Record<string, string | string[] | undefined>
+): boolean {
+  const queryState = parseCompareIndexSearchParams(searchParams);
+  if (
+    queryState.page > 1 ||
+    queryState.q.length > 0 ||
+    queryState.category !== 'all' ||
+    queryState.sort !== 'latest'
+  ) {
+    return true;
+  }
+
+  if (!searchParams) return false;
+
+  for (const key of Object.keys(searchParams)) {
+    if (COMPARE_INDEX_CANONICAL_QUERY_KEYS.has(key)) continue;
+    if (hasNonEmptySearchParamValue(searchParams[key])) return true;
+  }
+
+  return false;
 }
 
 export function buildCompareIndexHref(
