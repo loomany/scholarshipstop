@@ -38,8 +38,10 @@ test('pathname header constant and locale from path prefix', () => {
 });
 
 test('localized not found metadata uses translated title', () => {
-  assert.equal(localizedNotFoundMetadata('es').title, 'Página no encontrada');
-  assert.equal(localizedNotFoundMetadata('fr').title, 'Page introuvable');
+  const es = localizedNotFoundMetadata('es').title;
+  const fr = localizedNotFoundMetadata('fr').title;
+  assert.deepEqual(es, { absolute: 'Página no encontrada' });
+  assert.deepEqual(fr, { absolute: 'Page introuvable' });
 });
 
 test('not found UI copy for es and fr', () => {

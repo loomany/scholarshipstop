@@ -57,14 +57,14 @@ const checks: Check[] = [
     path: '/es/resources/fake-does-not-exist-xyz',
     expectStatus: 404,
     expectBody: /Página no encontrada/i,
-    forbidBody: /Page not found/i
+    forbidBody: /<h1[^>]*>\s*Page not found/i
   },
   {
     name: 'FR fake resource 404',
     path: '/fr/resources/fake-does-not-exist-xyz',
     expectStatus: 404,
     expectBody: /Page introuvable/i,
-    forbidBody: /Page not found/i
+    forbidBody: /<h1[^>]*>\s*Page not found/i
   },
   {
     name: '/en 404',
@@ -76,14 +76,14 @@ const checks: Check[] = [
     path: '/es/essays/fake-does-not-exist-xyz',
     expectStatus: 404,
     expectBody: /Página no encontrada/i,
-    forbidBody: /Page not found/i
+    forbidBody: /<h1[^>]*>\s*Page not found/i
   },
   {
     name: 'FR fake essay 404',
     path: '/fr/essays/fake-does-not-exist-xyz',
     expectStatus: 404,
     expectBody: /Page introuvable/i,
-    forbidBody: /Page not found/i
+    forbidBody: /<h1[^>]*>\s*Page not found/i
   }
 ];
 

@@ -9,7 +9,7 @@ export function localizedNotFoundMetadata(
 ): Metadata {
   const copy = getNotFoundUiCopy(locale);
   return {
-    title: copy.title,
+    title: { absolute: copy.title },
     robots: { index: false, follow: false }
   };
 }
