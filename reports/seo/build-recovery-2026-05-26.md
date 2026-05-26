@@ -32,6 +32,7 @@ Full failed log: `reports/seo/build-recovery-failed-log-2026-05-26.txt`
 - `lib/i18n/metadataRouteParams.ts` — safe locale resolution + `METADATA_NOT_FOUND`
 - Localized `generateMetadata` callers updated (optional `params` during prerender)
 - P1 noisy-query noindex (hub pagination + compare `?state=`)
+- **Follow-up:** removed `generateMetadata` from `app/scholarships/[[...slugPath]]/layout.tsx` (layout cannot read `searchParams`; its hub metadata overrode page-level pagination `noindex`). Slug metadata now resolves only in `page.tsx`.
 
 ## Verification
 

@@ -4,7 +4,7 @@
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { createClient } from '@supabase/supabase-js';
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
 import { DATE, loadEnvLocal } from './env';
 import type { AutopilotCandidate } from './types';
@@ -66,7 +66,7 @@ function resolveWaveCsvPath(waveNum: number): string | null {
 }
 
 async function slugsFromScholarshipIds(
-  db: ReturnType<typeof createClient>,
+  db: SupabaseClient,
   sourceIds: string[]
 ): Promise<string[]> {
   if (!sourceIds.length) return [];
@@ -76,7 +76,7 @@ async function slugsFromScholarshipIds(
     const slice = sourceIds.slice(i, i + chunk);
     const { data, error } = await db.from('scholarships').select('id, slug').in('id', slice);
     if (error) throw new Error(error.message);
-    for (const row of data ?? []) {
+    for (const row of (data ?? []) as { slug?: string | null }[]) {
       const slug = String(row.slug ?? '').trim().toLowerCase();
       if (slug) slugs.add(slug);
     }
@@ -259,11 +259,16 @@ export function slugsToSmokeCandidates(slugs: string[], waveNum: number): Autopi
     deadline: '',
     category: '',
     source_url_present: true,
+    amount_present: false,
+    deadline_present: false,
+    content_completeness: 0,
     en_url: `https://scholarshiptop.com/scholarships/${slug}`,
     indexable_en: true,
     completeness_score: 0,
     risk_score: 0,
+    tier: 'C',
     include_yes_no: 'yes',
+    publish_allowed_yes_no: 'yes',
     skip_reason: ''
   }));
 }

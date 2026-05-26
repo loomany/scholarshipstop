@@ -8,6 +8,7 @@ import { scholarshipHubQueryStringFromNextSearchParamsRecord } from '@/app/schol
 import { isSeoNoiseQuery } from '@/app/scholarships/scholarshipSeoNoiseQuery';
 import { getCanonical } from '@/lib/seo/canonical';
 import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
+import { generateScholarshipSlugLayoutMetadata } from '@/app/scholarships/scholarshipSlugLayoutMetadata';
 
 export const revalidate = 300;
 
@@ -33,16 +34,22 @@ export async function generateMetadata({
   }
   const hasNonCanonicalQuery = isSeoNoiseQuery(searchParams);
   if (segments.length > 0) {
+    const layoutMeta = await generateScholarshipSlugLayoutMetadata(params);
+    if (!hasNonCanonicalQuery) {
+      return layoutMeta;
+    }
     const canonical = getCanonical(`/scholarships/${segments.join('/')}`);
-    return hasNonCanonicalQuery
-      ? {
-          alternates: { canonical },
-          robots: {
-            index: false,
-            follow: true
-          }
-        }
-      : {};
+    return {
+      ...layoutMeta,
+      alternates: {
+        ...layoutMeta.alternates,
+        canonical
+      },
+      robots: {
+        index: false,
+        follow: true
+      }
+    };
   }
 
   const canonical = getCanonical('/scholarships');

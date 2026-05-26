@@ -1,4 +1,3 @@
-import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { breadcrumbCategoryLabel } from '@/app/scholarships/scholarshipCategories';
 import { normalizeScholarshipDynamicParam } from '@/app/scholarships/scholarshipLongTailPresets';
@@ -16,7 +15,6 @@ import {
 } from '@/lib/scholarships/scholarshipDetailServer';
 import { resolveScholarshipCategorySlug } from '@/lib/scholarships/similarScholarships';
 import { getURL } from '@/utils/helpers';
-import { generateScholarshipSlugLayoutMetadata } from '@/app/scholarships/scholarshipSlugLayoutMetadata';
 import { parseScholarshipDeadlineAnchor } from '@/lib/scholarships/scholarshipDeadlineTrust';
 
 type LayoutProps = {
@@ -298,12 +296,6 @@ function jsonLdDocument(s: Scholarship) {
     '@context': 'https://schema.org',
     '@graph': graph
   };
-}
-
-export async function generateMetadata({
-  params
-}: Pick<LayoutProps, 'params'>): Promise<Metadata> {
-  return generateScholarshipSlugLayoutMetadata(params);
 }
 
 export default async function ScholarshipsSlugPathLayout({
