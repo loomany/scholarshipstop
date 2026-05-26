@@ -33,6 +33,7 @@ Full failed log: `reports/seo/build-recovery-failed-log-2026-05-26.txt`
 - Localized `generateMetadata` callers updated (optional `params` during prerender)
 - P1 noisy-query noindex (hub pagination + compare `?state=`)
 - **Follow-up:** removed `generateMetadata` from `app/scholarships/[[...slugPath]]/layout.tsx` (layout cannot read `searchParams`; its hub metadata overrode page-level pagination `noindex`). Slug metadata now resolves only in `page.tsx`.
+- **Hub P1 live gap:** `/scholarships/hub/matches` is served by `app/scholarships/[state]/[university]/page.tsx` (`state=hub`, `university=matches`), not the catch-all. That route called `buildScholarshipHubRouteMetadata` without `searchParams`; fixed by passing `searchParams` there.
 
 ## Verification
 

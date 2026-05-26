@@ -17,6 +17,7 @@ import {
 } from '@/lib/scholarships/universityHubServer';
 import { getURL } from '@/utils/helpers';
 import { createPublicClient } from '@/utils/supabase/public';
+import { scholarshipHubQueryStringFromNextSearchParamsRecord } from '@/app/scholarships/scholarshipHubCanonicalQueryString';
 import { getCanonical } from '@/lib/seo/canonical';
 
 export const revalidate = 300;
@@ -33,14 +34,17 @@ function normalizeParams(raw: PageParams): { state: string; university: string }
 }
 
 export async function generateMetadata({
-  params
+  params,
+  searchParams
 }: {
   params: PageParams;
+  searchParams?: Record<string, string | string[] | undefined>;
 }): Promise<Metadata> {
   const { state, university } = normalizeParams(params);
   if (state === HUB_PATH_PREFIX && hubPathToTab([state, university])) {
     return buildScholarshipHubRouteMetadata({
-      hubSegment: university
+      hubSegment: university,
+      searchParams
     });
   }
   const hub = await fetchUniversityHubRow(state, university);
@@ -76,13 +80,22 @@ export async function generateMetadata({
 }
 
 export default async function UniversityScholarshipsPage({
-  params
+  params,
+  searchParams
 }: {
   params: PageParams;
+  searchParams?: Record<string, string | string[] | undefined>;
 }) {
   const { state, university } = normalizeParams(params);
   if (state === HUB_PATH_PREFIX && hubPathToTab([state, university])) {
-    return <ScholarshipsSlugPathPageBody segments={[state, university]} />;
+    return (
+      <ScholarshipsSlugPathPageBody
+        segments={[state, university]}
+        searchParamsString={scholarshipHubQueryStringFromNextSearchParamsRecord(
+          searchParams
+        )}
+      />
+    );
   }
   const hub = await fetchUniversityHubRow(state, university);
 
