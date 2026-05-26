@@ -1,5 +1,8 @@
-import { LocalizedNotFoundContent } from '@/components/i18n/LocalizedNotFoundContent';
+import { NotFoundPageContent } from '@/components/i18n/NotFoundPageContent';
+import { getNotFoundLocaleFromHeaders } from '@/lib/i18n/getNotFoundLocaleFromHeaders';
 
+/** Root/global 404 — same header-based locale as `app/[locale]/not-found`. */
 export default function NotFound() {
-  return <LocalizedNotFoundContent />;
+  const locale = getNotFoundLocaleFromHeaders();
+  return <NotFoundPageContent locale={locale} />;
 }

@@ -5,6 +5,7 @@ import { essayHubArticlePath } from '@/lib/essays/essayHubSection';
 import type { ContentPostRow } from '@/lib/content-hub/contentPostListTypes';
 import { resourcesArticlePath } from '@/lib/content-hub/resourcesSection';
 import { getEnglishFallbackNotice } from '@/lib/i18n/englishFallbackNotice';
+import { notFoundLocaleFromHeaderValue } from '@/lib/i18n/getNotFoundLocaleFromHeaders';
 import { getNotFoundUiCopy } from '@/lib/i18n/notFoundUiCopy';
 import { buildEnglishFallbackPageMetadata } from '@/lib/i18n/localizedContentFallbackMetadata';
 import { getDetailLanguageSwitcherItems } from '@/lib/i18n/detailLanguageSwitcher';
@@ -14,6 +15,14 @@ import {
 } from '@/lib/i18n/localizedHref';
 import { buildEnglishFallbackEssayPageCopy } from '@/lib/i18n/essayPilot/essayDetailTranslationGate';
 import { buildEnglishFallbackResourcePageCopy } from '@/lib/i18n/resourcePilot/resourcePageCopy';
+
+test('not found locale from middleware header value', () => {
+  assert.equal(notFoundLocaleFromHeaderValue('es'), 'es');
+  assert.equal(notFoundLocaleFromHeaderValue('fr'), 'fr');
+  assert.equal(notFoundLocaleFromHeaderValue('en'), 'en');
+  assert.equal(notFoundLocaleFromHeaderValue(null), 'en');
+  assert.equal(notFoundLocaleFromHeaderValue('de'), 'en');
+});
 
 test('not found UI copy for es and fr', () => {
   assert.equal(getNotFoundUiCopy('es').title, 'Página no encontrada');
