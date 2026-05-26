@@ -5,10 +5,15 @@ import LocalizedEssayGuidePage from '@/components/essays/LocalizedEssayGuidePage
 import { essayHubArticlePath } from '@/lib/essays/essayHubSection';
 import { getContentTranslationSeoDecision } from '@/lib/i18n/contentTranslationsServer';
 import type { ContentTranslationLocale } from '@/lib/i18n/contentTranslationsTypes';
+import { localizedNotFoundMetadata } from '@/lib/i18n/localizedNotFoundMetadata';
 import { buildEnglishFallbackPageMetadata } from '@/lib/i18n/localizedContentFallbackMetadata';
 import { buildEssayGuideAlternates } from '@/lib/i18n/essayPilot/essayTranslationAlternates';
 import { resolveLocalizedEssayGuidePage } from '@/lib/i18n/essayPilot/resolveLocalizedEssayGuide';
 import { getStaticEssayGuide } from '@/lib/essays/staticEssayGuides';
+import {
+  METADATA_NOT_FOUND,
+  resolveStage2PilotLocaleFromParams
+} from '@/lib/i18n/metadataRouteParams';
 import {
   isStage2PilotLocale,
   type Stage2PilotLocale
@@ -24,14 +29,16 @@ export const dynamicParams = true;
 
 type PageProps = { params: { locale: string; slug: string } };
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  if (!isStage2PilotLocale(params.locale)) {
-    return { title: 'Page not found', robots: { index: false, follow: false } };
-  }
-  const locale = params.locale as Stage2PilotLocale;
-  const slug = decodeURIComponent(params.slug ?? '').trim().toLowerCase();
+export async function generateMetadata({
+  params
+}: {
+  params?: { locale?: string; slug?: string };
+}): Promise<Metadata> {
+  const locale = resolveStage2PilotLocaleFromParams(params);
+  if (!locale) return METADATA_NOT_FOUND;
+  const slug = decodeURIComponent(params?.slug ?? '').trim().toLowerCase();
   if (!slug || getStaticEssayGuide(slug)) {
-    return { title: 'Page not found', robots: { index: false, follow: false } };
+    return localizedNotFoundMetadata(locale);
   }
 
   const resolved = await resolveLocalizedEssayGuidePage(
@@ -39,7 +46,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     locale as ContentTranslationLocale
   );
   if (!resolved) {
-    return { title: 'Page not found', robots: { index: false, follow: false } };
+    return localizedNotFoundMetadata(locale);
   }
 
   if (resolved.mode === 'englishFallback') {

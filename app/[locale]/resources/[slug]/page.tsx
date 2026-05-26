@@ -20,7 +20,12 @@ import {
   getStaticLocalizedResourcePilotPage,
   resolveLocalizedResourceArticlePage
 } from '@/lib/i18n/resourcePilot/resolveLocalizedResourcePage';
+import { localizedNotFoundMetadata } from '@/lib/i18n/localizedNotFoundMetadata';
 import { buildLocalizedPilotMetadata } from '@/lib/i18n/localizedMetadata';
+import {
+  METADATA_NOT_FOUND,
+  resolveStage2PilotLocaleFromParams
+} from '@/lib/i18n/metadataRouteParams';
 import {
   isStage2PilotLocale,
   type Stage2PilotLocale
@@ -38,12 +43,13 @@ type PageProps = {
 export async function generateMetadata({
   params,
   searchParams
-}: PageProps): Promise<Metadata> {
-  if (!isStage2PilotLocale(params.locale)) {
-    return { title: 'Page not found', robots: { index: false, follow: false } };
-  }
-  const locale = params.locale as Stage2PilotLocale;
-  const slug = decodeURIComponent(params.slug).trim().toLowerCase();
+}: {
+  params?: { locale?: string; slug?: string };
+  searchParams?: Record<string, string | string[] | undefined>;
+}): Promise<Metadata> {
+  const locale = resolveStage2PilotLocaleFromParams(params);
+  if (!locale) return METADATA_NOT_FOUND;
+  const slug = decodeURIComponent(params?.slug ?? '').trim().toLowerCase();
 
   const staticPage = getStaticLocalizedResourcePilotPage(locale, slug);
   if (staticPage) {
@@ -55,7 +61,7 @@ export async function generateMetadata({
     locale as ContentTranslationLocale
   );
   if (!resolved) {
-    return { title: 'Page not found', robots: { index: false, follow: false } };
+    return localizedNotFoundMetadata(locale);
   }
 
   if (resolved.mode === 'englishFallback') {

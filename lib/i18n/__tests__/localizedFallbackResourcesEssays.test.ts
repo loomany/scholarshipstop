@@ -5,7 +5,12 @@ import { essayHubArticlePath } from '@/lib/essays/essayHubSection';
 import type { ContentPostRow } from '@/lib/content-hub/contentPostListTypes';
 import { resourcesArticlePath } from '@/lib/content-hub/resourcesSection';
 import { getEnglishFallbackNotice } from '@/lib/i18n/englishFallbackNotice';
-import { notFoundLocaleFromHeaderValue } from '@/lib/i18n/getNotFoundLocaleFromHeaders';
+import {
+  notFoundLocaleFromHeaderValue,
+  SCHOLARSHIPTOP_PATHNAME_HEADER
+} from '@/lib/i18n/getNotFoundLocaleFromHeaders';
+import { localizedNotFoundMetadata } from '@/lib/i18n/localizedNotFoundMetadata';
+import { getStage2LocaleFromPathname } from '@/lib/i18n/pilotRoutes';
 import { getNotFoundUiCopy } from '@/lib/i18n/notFoundUiCopy';
 import { buildEnglishFallbackPageMetadata } from '@/lib/i18n/localizedContentFallbackMetadata';
 import { getDetailLanguageSwitcherItems } from '@/lib/i18n/detailLanguageSwitcher';
@@ -22,6 +27,19 @@ test('not found locale from middleware header value', () => {
   assert.equal(notFoundLocaleFromHeaderValue('en'), 'en');
   assert.equal(notFoundLocaleFromHeaderValue(null), 'en');
   assert.equal(notFoundLocaleFromHeaderValue('de'), 'en');
+});
+
+test('pathname header constant and locale from path prefix', () => {
+  assert.equal(SCHOLARSHIPTOP_PATHNAME_HEADER, 'x-scholarshiptop-pathname');
+  assert.equal(
+    getStage2LocaleFromPathname('/es/resources/fake'),
+    'es'
+  );
+});
+
+test('localized not found metadata uses translated title', () => {
+  assert.equal(localizedNotFoundMetadata('es').title, 'Página no encontrada');
+  assert.equal(localizedNotFoundMetadata('fr').title, 'Page introuvable');
 });
 
 test('not found UI copy for es and fr', () => {

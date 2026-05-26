@@ -140,6 +140,7 @@ export async function middleware(request: NextRequest) {
   if (host !== IQ_SUBDOMAIN_HOST && isStage2PilotLocale(localeSegment)) {
     const requestHeaders = new Headers(request.headers);
     requestHeaders.set('x-scholarshiptop-locale', localeSegment);
+    requestHeaders.set('x-scholarshiptop-pathname', pathname);
     return NextResponse.next({
       request: {
         headers: requestHeaders
