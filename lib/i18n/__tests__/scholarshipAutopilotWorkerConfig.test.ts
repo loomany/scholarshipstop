@@ -17,6 +17,7 @@ const ENV_KEYS = [
   'I18N_WORKER_WAVE_SIZE',
   'I18N_WORKER_REQUIRE_LOCK',
   'I18N_WORKER_FORCE_START_WAVE',
+  'I18N_WORKER_RESUME_MODE',
   'NEXT_PUBLIC_SUPABASE_URL',
   'SUPABASE_SERVICE_ROLE_KEY'
 ] as const;
@@ -79,5 +80,21 @@ describe('scholarshipAutopilotWorkerConfig', () => {
     process.env.SUPABASE_SERVICE_ROLE_KEY = 'service-role';
     const cfg = parseScholarshipAutopilotWorkerConfig();
     assert.equal(cfg.forceStartWave, true);
+  });
+
+  it('defaults resume mode to auto', () => {
+    delete process.env.I18N_WORKER_RESUME_MODE;
+    process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://example.supabase.co';
+    process.env.SUPABASE_SERVICE_ROLE_KEY = 'service-role';
+    const cfg = parseScholarshipAutopilotWorkerConfig();
+    assert.equal(cfg.resumeMode, 'auto');
+  });
+
+  it('parses strict resume mode', () => {
+    process.env.I18N_WORKER_RESUME_MODE = 'strict';
+    process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://example.supabase.co';
+    process.env.SUPABASE_SERVICE_ROLE_KEY = 'service-role';
+    const cfg = parseScholarshipAutopilotWorkerConfig();
+    assert.equal(cfg.resumeMode, 'strict');
   });
 });

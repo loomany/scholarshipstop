@@ -3,11 +3,17 @@
  */
 import { randomUUID } from 'node:crypto';
 
+import { parseResumeMode, type ResumeMode } from './worker-resume';
+
 export type ScholarshipAutopilotWorkerConfig = {
   runId: string;
   dryRun: boolean;
   productionMode: boolean;
+  /** Env I18N_WORKER_START_WAVE — minimum / requested wave, not authoritative after restart. */
   startWave: number;
+  /** Resolved at runtime: max(requested, nextSafeFromStateDb). */
+  actualStartWave: number;
+  resumeMode: ResumeMode;
   target: number;
   waveSize: number;
   maxRuntimeMinutes: number;
@@ -53,11 +59,15 @@ export function parseScholarshipAutopilotWorkerConfig(): ScholarshipAutopilotWor
   const maxRuntimeMinutes = envInt('I18N_WORKER_MAX_RUNTIME_MINUTES', 600, 5, 720);
   const maxWaves = envInt('I18N_WORKER_MAX_WAVES', 999, 1, 999);
 
+  const resumeMode = parseResumeMode(process.env.I18N_WORKER_RESUME_MODE);
+
   return {
     runId: process.env.I18N_WORKER_RUN_ID?.trim() || randomUUID(),
     dryRun,
     productionMode,
     startWave,
+    actualStartWave: startWave,
+    resumeMode,
     target,
     waveSize,
     maxRuntimeMinutes,
@@ -101,6 +111,8 @@ export function printWorkerConfig(config: ScholarshipAutopilotWorkerConfig): voi
     dryRun: config.dryRun,
     productionMode: config.productionMode,
     startWave: config.startWave,
+    actualStartWave: config.actualStartWave,
+    resumeMode: config.resumeMode,
     target: config.target,
     waveSize: config.waveSize,
     maxRuntimeMinutes: config.maxRuntimeMinutes,

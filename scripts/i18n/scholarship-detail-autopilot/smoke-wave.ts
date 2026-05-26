@@ -194,7 +194,8 @@ ${smoke.issues.length ? smoke.issues.map((i) => `- ${i}`).join('\n') : '- no iss
 export async function verifyDbWave(
   waveNum: number,
   expectedRows: number,
-  machineModel?: string
+  machineModel?: string,
+  expectedSourceIds?: string[]
 ): Promise<string[]> {
   loadEnvLocal();
   const db = createClient(
@@ -202,13 +203,55 @@ export async function verifyDbWave(
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
   const model = machineModel ?? `stage5e-scholarship-autopilot-wave-${waveNum}`;
+  const issues: string[] = [];
+
+  if (expectedSourceIds?.length) {
+    const uniqueIds = [...new Set(expectedSourceIds.map((id) => id.trim()).filter(Boolean))];
+    const { data, error } = await db
+      .from('content_translations')
+      .select('source_id, locale, status, quality_score')
+      .eq('source_type', 'scholarship_detail')
+      .eq('machine_model', model)
+      .in('source_id', uniqueIds);
+    if (error) {
+      issues.push(`DB query failed: ${error.message}`);
+      return issues;
+    }
+    const rows = data ?? [];
+    const expectedForBatch = uniqueIds.length * 2;
+    if (rows.length !== expectedForBatch) {
+      issues.push(`DB batch rows ${rows.length} != ${expectedForBatch} for ${uniqueIds.length} source_ids`);
+    }
+    const es = rows.filter((r) => r.locale === 'es').length;
+    const fr = rows.filter((r) => r.locale === 'fr').length;
+    if (es !== uniqueIds.length || fr !== uniqueIds.length) {
+      issues.push(`DB batch es=${es} fr=${fr} expected ${uniqueIds.length} each`);
+    }
+    if (rows.some((r) => r.status !== 'published')) issues.push('non-published in wave batch');
+    if (rows.some((r) => (r.quality_score ?? 0) < 85)) issues.push('quality < 85 in wave batch');
+
+    const { count: totalForModel, error: countErr } = await db
+      .from('content_translations')
+      .select('*', { count: 'exact', head: true })
+      .eq('source_type', 'scholarship_detail')
+      .in('locale', ['es', 'fr'])
+      .eq('machine_model', model);
+    if (countErr) {
+      issues.push(`machine_model count failed: ${countErr.message}`);
+    } else if ((totalForModel ?? 0) > expectedForBatch) {
+      issues.push(
+        `machine_model pollution: ${totalForModel} total rows under ${model}, ${expectedForBatch} belong to this wave batch`
+      );
+    }
+    return issues;
+  }
+
   const { data } = await db
     .from('content_translations')
     .select('locale, status, quality_score')
     .eq('source_type', 'scholarship_detail')
     .eq('machine_model', model);
 
-  const issues: string[] = [];
   const rows = data ?? [];
   if (rows.length !== expectedRows) issues.push(`DB rows ${rows.length} != ${expectedRows}`);
   const es = rows.filter((r) => r.locale === 'es').length;

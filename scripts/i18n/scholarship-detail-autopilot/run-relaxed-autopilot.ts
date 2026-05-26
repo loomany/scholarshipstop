@@ -14,9 +14,12 @@ import { fetchTranslatedScholarshipDetailSourceIds } from './fetch-translated-so
 import { generateWaveOverlays } from './generate-overlays';
 import { publishWave } from './publish-wave';
 import {
+  countRelaxedWaveRows,
   countSitemapEligibleEsScholarshipDetails,
   countSitemapEligibleFrScholarshipDetails
 } from './load-persisted-wave';
+import { markWorkerFailed, markWorkerWaveAccepted, touchWorkerHeartbeat } from './worker-progress-state';
+import { classifyRelaxedWaveInDb } from './worker-start-wave-guard';
 import { auditTieredPool, selectTieredCandidates, writeTieredPoolCsv } from './select-candidates-tiered';
 import { smokeWave, verifyDbWave, writeSmokeReport } from './smoke-wave';
 import { validateWave, writeValidationReport } from './validate-overlays';
@@ -39,8 +42,18 @@ function reportPrefix(waveNum: number, stage: string, proofWave161 = false) {
   return `i18n-${stage}-relaxed-wave-${waveNum}`;
 }
 
+function workerRunId(): string | undefined {
+  return process.env.I18N_WORKER_RUN_ID?.trim() || undefined;
+}
+
+function forceStartWave(): boolean {
+  return process.env.I18N_WORKER_FORCE_START_WAVE?.trim() === '1';
+}
+
 function parseArgs() {
-  const startWave = Number(process.argv.find((a) => a.startsWith('--start-wave='))?.split('=')[1] ?? '21');
+  const envStart = process.env.I18N_WORKER_ACTUAL_START_WAVE?.trim();
+  const cliStart = process.argv.find((a) => a.startsWith('--start-wave='))?.split('=')[1];
+  const startWave = Number(envStart || cliStart || '21');
   const targetCap = startWave >= 161 ? 20000 : 10000;
   const target = Math.min(
     targetCap,
@@ -304,6 +317,43 @@ async function main() {
     summary.wavesAttempted++;
 
     const model = relaxedMachineModel(waveNum);
+    const preExistingRows = await countRelaxedWaveRows(waveNum);
+    if (preExistingRows > 0 && !forceStartWave()) {
+      const { classification } = await classifyRelaxedWaveInDb(waveNum, waveCandidates.length);
+      if (classification === 'complete' || classification === 'polluted_valid') {
+        console.log(
+          `[relaxed] wave ${waveNum} skipped (${classification}, ${preExistingRows} rows already in DB)`
+        );
+        summary.wavesAccepted++;
+        if (workerRunId()) {
+          const afterCounts = await countSitemapWithRetry(`wave ${waveNum} skip-existing`);
+          await markWorkerWaveAccepted({
+            wave: waveNum,
+            netNew: 0,
+            sitemapEs: afterCounts.es,
+            sitemapFr: afterCounts.fr,
+            runId: workerRunId()
+          });
+        }
+        continue;
+      }
+      summary.stoppedReason = `wave ${waveNum}: ${preExistingRows} existing rows (${classification}); manual audit required`;
+      if (workerRunId()) {
+        await markWorkerFailed({
+          error: summary.stoppedReason,
+          currentWave: waveNum,
+          runId: workerRunId()
+        });
+      }
+      break;
+    }
+    if (preExistingRows > 0 && forceStartWave()) {
+      console.warn(`[relaxed] wave ${waveNum}: FORCE rerun with ${preExistingRows} existing rows`);
+    }
+
+    if (workerRunId()) {
+      await touchWorkerHeartbeat(workerRunId());
+    }
     const prefix = reportPrefix(waveNum, stage, proofWave161);
     const esBefore = currentEs;
     const frBefore = currentFr;
@@ -353,9 +403,22 @@ async function main() {
       break;
     }
 
-    const dbIssues = await verifyDbWave(waveNum, waveCandidates.length * 2, model);
+    const sourceIds = waveCandidates.map((c) => c.scholarship_uuid);
+    const dbIssues = await verifyDbWave(
+      waveNum,
+      waveCandidates.length * 2,
+      model,
+      sourceIds
+    );
     if (dbIssues.length) {
       summary.stoppedReason = `wave ${waveNum} DB verify: ${dbIssues.join('; ')}`;
+      if (workerRunId()) {
+        await markWorkerFailed({
+          error: summary.stoppedReason,
+          currentWave: waveNum,
+          runId: workerRunId()
+        });
+      }
       break;
     }
 
@@ -405,6 +468,16 @@ async function main() {
     console.log(
       `[relaxed] wave ${waveNum} ACCEPTED net-new=${waveCandidates.length} ES ${esBefore}->${currentEs} FR ${frBefore}->${currentFr}`
     );
+
+    if (workerRunId()) {
+      await markWorkerWaveAccepted({
+        wave: waveNum,
+        netNew: waveCandidates.length,
+        sitemapEs: currentEs,
+        sitemapFr: currentFr,
+        runId: workerRunId()
+      });
+    }
 
     if (stage !== 'stage5e-15' && summary.wavesAccepted % 2 === 0 && !isDryRun()) {
       try {
