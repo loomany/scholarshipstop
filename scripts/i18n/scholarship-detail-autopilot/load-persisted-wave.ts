@@ -7,7 +7,7 @@ import { join } from 'node:path';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
 import { DATE, loadEnvLocal } from './env';
-import type { AutopilotCandidate } from './types';
+import type { AutopilotCandidate, CandidateTier } from './types';
 
 const MACHINE_PREFIX = 'stage5e-scholarship-autopilot-wave-';
 export const RELAXED_MACHINE_PREFIX = 'stage5e-scholarship-autopilot-relaxed-wave-';
@@ -266,7 +266,7 @@ export function slugsToSmokeCandidates(slugs: string[], waveNum: number): Autopi
     indexable_en: true,
     completeness_score: 0,
     risk_score: 0,
-    tier: 'C',
+    tier: 'C' as CandidateTier,
     include_yes_no: 'yes',
     publish_allowed_yes_no: 'yes',
     skip_reason: ''

@@ -5,6 +5,8 @@ import { createClient } from '@supabase/supabase-js';
 
 import { BASE, loadEnvLocal } from './env';
 import { getScholarshipAutopilotLockRow, isScholarshipAutopilotLocked } from './scholarship-autopilot-lock';
+import { loadWorkerProgressState } from './worker-progress-state';
+import { mergeNextSafeStartWave } from './worker-resume';
 import { suggestNextSafeStartWave } from './worker-start-wave-guard';
 import {
   countSitemapEligibleEsScholarshipDetails,
@@ -51,7 +53,9 @@ async function main() {
   const eligibleFr = await countSitemapEligibleFrScholarshipDetails();
   const lock = await isScholarshipAutopilotLocked();
   const lockRow = await getScholarshipAutopilotLockRow();
-  const nextSafeStartWave = await suggestNextSafeStartWave(181);
+  const dbNextSafe = await suggestNextSafeStartWave(181);
+  const progress = await loadWorkerProgressState();
+  const nextSafeStartWave = mergeNextSafeStartWave(progress.row?.next_wave, dbNextSafe);
   const latestWave = await latestRelaxedWave(db);
 
   const { count: publishedRows } = await db
@@ -84,7 +88,21 @@ async function main() {
         lockExpiresAt: lock.expiresAt ?? lockRow.row?.expires_at,
         lockLockedAt: lock.lockedAt ?? lockRow.row?.locked_at,
         lockMessage: lock.message,
+        dbNextSafeStartWave: dbNextSafe,
         nextSafeStartWave,
+        workerProgress: progress.available
+          ? {
+              initialized: Boolean(progress.row),
+              available: true,
+              status: progress.row?.status ?? 'idle',
+              nextWave: progress.row?.next_wave ?? null,
+              lastAcceptedWave: progress.row?.last_accepted_wave ?? null,
+              currentWave: progress.row?.current_wave ?? null,
+              lastError: progress.row?.last_error ?? null,
+              heartbeatAt: progress.row?.heartbeat_at ?? null,
+              updatedAt: progress.row?.updated_at ?? null
+            }
+          : { available: false, message: progress.message },
         badSitemapContent: badSitemap
       },
       null,
