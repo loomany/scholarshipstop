@@ -33,7 +33,7 @@ const DEFAULT_COPY: StaticScholarshipGuidePageCopy = {
   relatedPages: 'Related ScholarshipTop pages',
   faq: 'FAQ',
   disclaimer:
-    'ScholarshipTop does not provide scholarships directly. Always confirm final requirements, deadlines, payout, and application steps on the official provider page.'
+    'ScholarshipTop organizes scholarship research and application planning in one place, including eligibility signals, deadlines, shortlisting tools, AI support, and provider application paths when available.'
 };
 
 type StaticScholarshipGuidePageProps = {

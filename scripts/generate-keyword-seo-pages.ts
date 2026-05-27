@@ -285,12 +285,12 @@ function deterministicSeoBundle(
     seo_title: `${title} | Updated Scholarship List`,
     seo_description: `Explore ${count} USA scholarship opportunities for ${human.toLowerCase()}. Compare award amounts, deadlines, and eligibility before applying.`,
     h1: title,
-    intro: `This page brings together scholarship opportunities related to ${human.toLowerCase()} and keeps the live list tied to ScholarshipTop's current catalog. Use it to compare award amounts, deadlines, eligibility details, and official application links without jumping between generic search results.`,
-    supporting: `Start with the strongest fit, then verify the final rules on the official scholarship page. International applicants should pay close attention to citizenship language, visa wording, school location, award payout rules, and document requirements. ${examples.length ? `Examples currently surfaced in this topic include ${examples.join(', ')}.` : ''}`,
+    intro: `This page brings together scholarship opportunities related to ${human.toLowerCase()} and keeps the live list tied to ScholarshipTop's current catalog. Use it to compare award amounts, deadlines, eligibility details, and provider application links without jumping between generic search results.`,
+    supporting: `Start with the strongest fit, then compare provider-path context for citizenship language, visa wording, school location, award payout rules, and document requirements. ${examples.length ? `Examples currently surfaced in this topic include ${examples.join(', ')}.` : ''}`,
     related_intro: `If this page is too narrow, widen your search to international student scholarships or combine the filters with deadline and award amount pages.`,
     how_to_use: [
       'Sort the live scholarship list by deadline or match strength',
-      'Open each official listing before preparing documents',
+      'Open provider application paths before preparing documents',
       'Check citizenship, visa, GPA, and school-level requirements',
       'Save strong matches so you can return before the deadline',
       'Use the related scholarship guides for application strategy'
@@ -304,12 +304,12 @@ function deterministicSeoBundle(
       {
         question: `Who should use this ${human.toLowerCase()} page?`,
         answer:
-          'Use it if the topic matches your status, degree level, field, or application constraint. The list is built from current ScholarshipTop catalog data, but final eligibility always comes from the official provider.'
+          'Use it if the topic matches your status, degree level, field, or application constraint. The list is built from current ScholarshipTop catalog data and organized around eligibility signals, deadlines, and provider application paths.'
       },
       {
         question: 'Do international students qualify for every scholarship listed here?',
         answer:
-          'No. Some scholarships are international-friendly while others have narrower school, visa, location, or citizenship rules. Open the official page and confirm before applying.'
+          'No. Some scholarships are international-friendly while others have narrower school, visa, location, or citizenship rules. Compare the provider application path before prioritizing an application.'
       },
       {
         question: 'How often should I check this list?',
@@ -341,16 +341,16 @@ function deterministicResourcePayload(
   const body = [
     `<p>${title} is a practical topic for international students because scholarship rules can vary by visa status, citizenship, school, deadline, and provider policy. This guide explains how to make a safer decision before you spend time on an application.</p>`,
     '<h2>Start with the real application requirement</h2>',
-    '<p>Do not rely only on a search-result title or a copied scholarship list. Open the official provider page, find the eligibility section, and confirm who can apply, what documents are required, and whether international students are explicitly allowed.</p>',
-    '<h2>Use ScholarshipTop as a shortlist, not the final authority</h2>',
-    `<p>ScholarshipTop can help you discover relevant opportunities and compare deadlines quickly. ${examples.length ? `Current related examples include ${examples.join(', ')}.` : 'Use the scholarship catalog to find live opportunities related to this topic.'} Always verify the final details on the provider site.</p>`,
+    '<p>Do not rely only on a search-result title or a copied scholarship list. Use organized provider-path context to understand who can apply, what documents are required, and whether international students are explicitly included.</p>',
+    '<h2>Use ScholarshipTop as your application-planning workspace</h2>',
+    `<p>ScholarshipTop can help you compare relevant opportunities, eligibility signals, deadlines, award details, and provider application paths quickly. ${examples.length ? `Current related examples include ${examples.join(', ')}.` : 'Use the scholarship catalog to find live opportunities related to this topic.'}</p>`,
     comparison
-      ? '<h2>Compare tools by coverage, freshness, and friction</h2><p>A useful scholarship tool should show clear deadlines, award amounts, eligibility signals, and official links. Be cautious with sites that hide source links, require unnecessary personal data, or keep expired listings live without clear labeling.</p>'
-      : '<h2>Build a repeatable research checklist</h2><p>For each opportunity, track the provider name, official URL, deadline, award amount, required documents, essay prompts, citizenship wording, and whether you have already submitted the application.</p>',
+      ? '<h2>Compare tools by coverage, freshness, and friction</h2><p>A useful scholarship tool should show clear deadlines, award amounts, eligibility signals, and provider application links. Be cautious with sites that hide source links, require unnecessary personal data, or keep expired listings live without clear labeling.</p>'
+      : '<h2>Build a repeatable research checklist</h2><p>For each opportunity, track the provider name, provider URL, deadline, award amount, required documents, essay prompts, citizenship wording, and whether you have already submitted the application.</p>',
     safety
       ? '<h2>Watch for scam signals</h2><p>Be careful with scholarships that ask for upfront fees, guarantee awards, request banking details too early, use a suspicious email domain, or pressure you to act immediately. Legitimate scholarships should have a verifiable organization and clear terms.</p>'
       : '<h2>Prioritize the applications with the best fit</h2><p>Strong fit usually matters more than applying everywhere. Focus first on scholarships where your background, field, school level, and story match the stated purpose of the award.</p>',
-    '<h2>Next steps</h2><ul><li>Save promising scholarships in your account.</li><li>Check official eligibility before drafting essays.</li><li>Prepare reusable documents early.</li><li>Review deadlines every week until you submit.</li></ul>'
+    '<h2>Next steps</h2><ul><li>Save promising scholarships in your account.</li><li>Review eligibility signals before drafting essays.</li><li>Prepare reusable documents early.</li><li>Review deadlines every week until you submit.</li></ul>'
   ].join('\n');
   const out: ResourcePayload = {
     title,
@@ -361,17 +361,17 @@ function deterministicResourcePayload(
       {
         question: 'Can international students use this advice?',
         answer:
-          'Yes. The guide is written for international students, but you should still confirm each scholarship’s official eligibility rules before applying.'
+          'Yes. The guide is written for international students and is designed to help you organize eligibility signals, deadlines, award details, and provider application paths before applying.'
       },
       {
-        question: 'Should I trust scholarship lists without official links?',
+        question: 'How should I use scholarship lists without provider links?',
         answer:
-          'Treat them as leads only. A reliable application decision should be based on the provider’s official page and current deadline.'
+          'Use them as lower-confidence research context until you can connect the award to a named provider, current deadline, and application path.'
       },
       {
         question: 'What should I do after finding a promising scholarship?',
         answer:
-          'Save the listing, verify the requirements, collect documents, and draft any essays early enough to revise before the deadline.'
+          'Save the listing, review the requirements, collect documents, and draft any essays early enough to revise before the deadline.'
       }
     ]
   };
@@ -448,9 +448,9 @@ function fitSeoDescription(input: string): string {
     if (!/[.!?]$/.test(s)) s += '.';
   }
   const addenda = [
-    ' Compare live deadlines, award amounts, and official eligibility on ScholarshipTop.',
+    ' Compare live deadlines, award amounts, and eligibility signals on ScholarshipTop.',
     ' Use filters to match USA scholarships to your school, degree level, and goals.',
-    ' See official links, requirements, and current deadlines in one catalog.'
+    ' See provider links, requirements, and current deadlines in one workspace.'
   ];
   let n = 0;
   while (s.length < SEO_DESC_MIN && n < 8) {

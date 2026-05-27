@@ -113,11 +113,11 @@ const EN: ProviderDetailUiCopy = {
   showingScholarships: (from, to, total) =>
     `Showing ${from}-${to} of ${total} scholarships`,
   trust: {
-    verifyBeforeApply: 'What to verify before applying',
+    verifyBeforeApply: 'Application readiness',
     verifyItems: [
-      'Final eligibility rules and student profile requirements.',
-      'Current deadline, timezone, and application route.',
-      'Award amount, payment method, renewal, and required documents.'
+      'Eligibility signals and student profile requirements.',
+      'Deadline context, timezone notes, and application route.',
+      'Award amount, payment method, renewal, and required materials.'
     ],
     verificationMethodology: 'Verification methodology',
     reportCorrection: 'Report a correction'
@@ -130,7 +130,7 @@ const EN: ProviderDetailUiCopy = {
     aboutProvider: 'About Provider',
     sourceStatus: 'Source status',
     exploreScholarships: 'Explore scholarships and guides',
-    officialWebsite: 'Official website',
+    officialWebsite: 'Provider link',
     sources: 'Sources',
     faq: 'FAQ',
     scholarshipsFromProvider: 'Scholarships from this provider',
@@ -147,9 +147,9 @@ const EN: ProviderDetailUiCopy = {
   about: {
     heading: 'About Provider',
     emptyBody:
-      "We don't have a profile write-up for this organization yet. Browse the scholarships below or open the official site when it's listed."
+      "We don't have a profile write-up for this organization yet. Browse the scholarships below and use provider links when they are available."
   },
-  official: { openOfficialWebsite: 'Open official website' },
+  official: { openOfficialWebsite: 'Open provider link' },
   scholarships: {
     heading: 'Scholarships from this provider',
     viewScholarship: 'View scholarship',
@@ -173,7 +173,7 @@ const EN: ProviderDetailUiCopy = {
     sectionEyebrow: 'Provider source status',
     heading: (name) => `What ScholarshipTop knows about ${name}`,
     intro:
-      'This provider profile is based on ScholarshipTop listing data. If an official provider URL is available, students should use it to confirm application details directly. If source information is incomplete, this page marks what still needs verification before applying.',
+      'This provider profile is based on ScholarshipTop listing data. When a provider URL or application route is available, ScholarshipTop includes it alongside source-quality and data-completeness signals for planning.',
     sourceLabel: 'Source',
     completenessLabel: 'Completeness'
   },
@@ -211,11 +211,11 @@ const ES: ProviderDetailUiCopy = {
   showingScholarships: (from, to, total) =>
     `Mostrando ${from}-${to} de ${total} becas`,
   trust: {
-    verifyBeforeApply: 'Qué verificar antes de aplicar',
+    verifyBeforeApply: 'Preparacion para aplicar',
     verifyItems: [
-      'Reglas finales de elegibilidad y requisitos del perfil del estudiante.',
-      'Fecha límite actual, zona horaria y ruta de solicitud.',
-      'Monto del premio, método de pago, renovación y documentos requeridos.'
+      'Senales de elegibilidad y requisitos del perfil del estudiante.',
+      'Contexto de fecha limite, zona horaria y ruta de solicitud.',
+      'Monto del premio, metodo de pago, renovacion y materiales requeridos.'
     ],
     verificationMethodology: 'Metodología de verificación',
     reportCorrection: 'Reportar corrección'
@@ -228,7 +228,7 @@ const ES: ProviderDetailUiCopy = {
     aboutProvider: 'Acerca del proveedor',
     sourceStatus: 'Estado de la fuente',
     exploreScholarships: 'Explorar becas y guías',
-    officialWebsite: 'Sitio web oficial',
+    officialWebsite: 'Enlace del proveedor',
     sources: 'Fuentes',
     faq: 'Preguntas frecuentes',
     scholarshipsFromProvider: 'Becas de este proveedor',
@@ -245,9 +245,9 @@ const ES: ProviderDetailUiCopy = {
   about: {
     heading: 'Acerca del proveedor',
     emptyBody:
-      'Aún no tenemos una ficha para esta organización. Explora las becas abajo o abre el sitio oficial cuando esté listado.'
+      'Aun no tenemos una ficha para esta organizacion. Explora las becas abajo y usa los enlaces del proveedor cuando esten disponibles.'
   },
-  official: { openOfficialWebsite: 'Abrir sitio web oficial' },
+  official: { openOfficialWebsite: 'Abrir enlace del proveedor' },
   scholarships: {
     heading: 'Becas de este proveedor',
     viewScholarship: 'Ver beca',
@@ -271,7 +271,7 @@ const ES: ProviderDetailUiCopy = {
     sectionEyebrow: 'Estado de la fuente del proveedor',
     heading: (name) => `Qué sabe ScholarshipTop sobre ${name}`,
     intro:
-      'Este perfil se basa en datos del catálogo de ScholarshipTop. Si hay URL oficial, úsala para confirmar los requisitos. Si falta información, esta página indica qué conviene verificar antes de solicitar.',
+      'Este perfil se basa en datos del catalogo de ScholarshipTop. Cuando hay URL o ruta de solicitud del proveedor, ScholarshipTop la muestra junto con senales de calidad de fuente y completitud de datos.',
     sourceLabel: 'Fuente',
     completenessLabel: 'Completitud'
   },
@@ -309,11 +309,11 @@ const FR: ProviderDetailUiCopy = {
   showingScholarships: (from, to, total) =>
     `Affichage ${from}-${to} sur ${total} bourses`,
   trust: {
-    verifyBeforeApply: 'À vérifier avant de postuler',
+    verifyBeforeApply: 'Preparation de candidature',
     verifyItems: [
-      'Règles d’éligibilité finales et exigences du profil étudiant.',
-      'Date limite actuelle, fuseau horaire et voie de candidature.',
-      'Montant de la bourse, mode de versement, renouvellement et documents requis.'
+      'Signaux d eligibilite et exigences du profil etudiant.',
+      'Contexte de date limite, fuseau horaire et voie de candidature.',
+      'Montant de la bourse, versement, renouvellement et documents requis.'
     ],
     verificationMethodology: 'Méthode de vérification',
     reportCorrection: 'Signaler une correction'
@@ -326,7 +326,7 @@ const FR: ProviderDetailUiCopy = {
     aboutProvider: 'À propos du fournisseur',
     sourceStatus: 'État de la source',
     exploreScholarships: 'Explorer bourses et guides',
-    officialWebsite: 'Site officiel',
+    officialWebsite: 'Lien fournisseur',
     sources: 'Sources',
     faq: 'FAQ',
     scholarshipsFromProvider: 'Bourses de ce fournisseur',
@@ -343,9 +343,9 @@ const FR: ProviderDetailUiCopy = {
   about: {
     heading: 'À propos du fournisseur',
     emptyBody:
-      'Nous n’avons pas encore de fiche pour cette organisation. Parcourez les bourses ci-dessous ou le site officiel lorsqu’il est indiqué.'
+      'Nous n avons pas encore de fiche pour cette organisation. Parcourez les bourses ci-dessous et utilisez les liens fournisseur quand ils sont disponibles.'
   },
-  official: { openOfficialWebsite: 'Ouvrir le site officiel' },
+  official: { openOfficialWebsite: 'Ouvrir le lien fournisseur' },
   scholarships: {
     heading: 'Bourses de ce fournisseur',
     viewScholarship: 'Voir la bourse',
@@ -369,7 +369,7 @@ const FR: ProviderDetailUiCopy = {
     sectionEyebrow: 'État de la source du fournisseur',
     heading: (name) => `Ce que ScholarshipTop sait sur ${name}`,
     intro:
-      'Ce profil repose sur les données du catalogue ScholarshipTop. En cas d’URL officielle, utilisez-la pour confirmer les détails. Si des informations manquent, cette page indique ce qu’il reste à vérifier avant de postuler.',
+      'Ce profil repose sur les donnees du catalogue ScholarshipTop. Quand une URL ou une voie de candidature fournisseur existe, ScholarshipTop l affiche avec les signaux de qualite de source et de completude.',
     sourceLabel: 'Source',
     completenessLabel: 'Complétude'
   },

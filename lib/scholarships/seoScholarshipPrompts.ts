@@ -45,7 +45,7 @@ const SHARED_RULES = `Hard rules:
 - Mention USA context where relevant for clarity.
 - It is allowed to mention the year 2026 when it helps search intent.
 - Facts: use ONLY what appears in the CONTEXT block for themes (filters, topics, sample titles). Never invent GPA rules, sponsor names, approval odds, or calendar dates not present in context.
-- Dollar amounts: do not invent award numbers. If needed, say amounts vary by listing and must be verified on official pages.
+- Dollar amounts: do not invent award numbers. If needed, say amounts vary by listing and ScholarshipTop organizes the available award context for comparison.
 - Deadlines: never fabricate a single deadline for the whole page; speak in generalities (“deadlines differ by program”) unless CONTEXT explicitly includes a dated fact you are quoting verbatim (still without adding new digits—prefer “vary by row”).
 - Tone: clear, practical, human, confident but not salesy. No keyword stuffing. Not robotic.
 - Avoid generic landing-page filler and “AI obvious” transitions.
@@ -60,7 +60,7 @@ export function buildSeoMetaPrompt(input: SeoPagePromptInput): string {
     input.sampleTitles.length > 0
       ? input.sampleTitles.map((t) => `- ${t}`).join('\n')
       : '(none)';
-  return `You write SEO title, meta description, and on-page H1 for a USA scholarship directory filter page.
+  return `You write SEO title, meta description, and on-page H1 for a USA scholarship search workspace filter page.
 
 ${SHARED_RULES}
 
@@ -137,7 +137,7 @@ export function buildSeoPagePrompt(input: SeoPagePromptInput): string {
     input.sampleTitles.length > 0
       ? input.sampleTitles.map((t) => `- ${t}`).join('\n')
       : '(none)';
-  return `You write the main on-page copy for ONE USA scholarship catalog filter view.
+  return `You write the main on-page copy for ONE USA scholarship search workspace filter view.
 
 ${SHARED_RULES}
 
@@ -146,7 +146,7 @@ Field specs:
 - supporting: single paragraph, ~60–120 words. Add practical value: how to interpret the list, what to compare, why this slice is worth scanning—without repeating the intro.
 - related_intro: one short paragraph (40–90 words) OR JSON null if it would repeat the supporting text. Should tee up “related pages” navigation in plain language (not generic “explore more opportunities”).
 - who_for: array of EXACTLY 3–5 bullet strings. Each bullet starts with a capital letter, no leading "•" in the string. Concrete reader profiles tied to this filter (e.g. state, topic, no-essay, education level)—never empty platitudes.
-- how_to_use: array of EXACTLY 3–5 bullet strings. Action-oriented steps: compare deadlines, scan award text, read requirement lines, open official pages, shortlist, verify on sponsor site.
+- how_to_use: array of EXACTLY 3–5 bullet strings. Action-oriented steps: compare eligibility signals, scan award details, review deadline and effort signals, shortlist relevant scholarships, prepare materials, and continue to the provider application path when ready.
 
 --- CONTEXT ---
 ${input.contextBlock}
@@ -237,9 +237,9 @@ ${reasonBlock}
 ${warnBlock}
 Hit these targets so validation passes:
 - intro: at least ${SEO_AI_INTRO_WORDS_MIN} words; lead with search intent or a concrete observation about THIS filter; **no digits**; use qualitative scale (“this filtered slice”, “the rows below”) when CONTEXT implies listings exist.
-- supporting: at least ${SEO_AI_SUPPORTING_WORDS_MIN} words; new angle vs intro (how to read rows, compare deadlines/awards, verify on sponsor sites).
+- supporting: at least ${SEO_AI_SUPPORTING_WORDS_MIN} words; new angle vs intro (how to read rows, compare eligibility/deadline/award signals, shortlist, and prepare next steps).
 - who_for: exactly 3–5 bullets; each bullet at least ${SEO_AI_WHO_BULLET_WORDS_MIN} words; specific reader profiles for this slice.
-- how_to_use: exactly 3–5 bullets; each at least ${SEO_AI_HOW_BULLET_WORDS_MIN} words; concrete actions (sort, read requirement line, open official page, shortlist).
+- how_to_use: exactly 3–5 bullets; each at least ${SEO_AI_HOW_BULLET_WORDS_MIN} words; concrete actions (sort, read requirement lines, shortlist, prepare materials, use provider application paths).
 - Never write $ amounts or other digits in intro/supporting/bullets.
 - No calendar dates in intro/supporting unless present in CONTEXT (and still avoid adding new digits).
 
@@ -291,7 +291,7 @@ export function buildSeoFaqPrompt(input: SeoPagePromptInput): string {
 
 ${SHARED_RULES}
 
-Each answer: 1–3 short sentences, practical, grounded in “catalog + official sources” framing. Prefer guidance on how to use the list, what varies row-to-row, and how to verify details.
+Each answer: 1–3 short sentences, practical, grounded in ScholarshipTop's organized workspace framing. Prefer guidance on how to use the filtered view, what varies row-to-row, and how to compare eligibility signals, award details, deadlines, effort level, and application paths.
 
 --- CONTEXT ---
 ${input.contextBlock}

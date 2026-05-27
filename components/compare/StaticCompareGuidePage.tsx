@@ -36,7 +36,7 @@ const DEFAULT_COPY: StaticCompareGuidePageCopy = {
   findScholarships: 'Find scholarships',
   faq: 'FAQ',
   disclaimer:
-    'Scholarship details, eligibility rules, and provider terminology can change. Always confirm final requirements on the official provider or institution page before applying.'
+    'ScholarshipTop helps students compare opportunities, organize eligibility and deadline signals, and plan next steps with provider application paths when available.'
 };
 
 export function StaticCompareGuidePage({

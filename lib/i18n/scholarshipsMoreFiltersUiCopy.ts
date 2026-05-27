@@ -169,7 +169,7 @@ const EN: ScholarshipsMoreFiltersUiCopy = {
   deadlineGt4w: 'More than 4 weeks',
   citizenshipEligibility: 'Citizenship & eligibility',
   citizenshipEligibilityHint:
-    'Narrow listings that explicitly mention international students, foreign nationals, or similar in our catalog fields. Always confirm rules on the official program page—this is not legal or visa advice.',
+    'Narrow listings that explicitly mention international students, foreign nationals, or similar in our catalog fields so you can build a more relevant shortlist faster.',
   citizenshipAll: 'All applicants (default)',
   citizenshipInternational: 'International Friendly (best effort)',
   filterByAmount: 'Filter by scholarship amount',
@@ -213,7 +213,7 @@ const EN: ScholarshipsMoreFiltersUiCopy = {
   detailedListingBody: 'Richer structured fields from the public listing.',
   verifiedListing: 'Verified listing',
   verifiedListingBody:
-    'Marked verified — always confirm on the official site.',
+    'Structured source-quality and provider-path signals are available.',
   payoutMethod: 'Filter by payout method',
   payoutCollege: 'College',
   payoutCollegeBody:
@@ -266,7 +266,7 @@ const ES: ScholarshipsMoreFiltersUiCopy = {
   deadlineGt4w: 'Más de 4 semanas',
   citizenshipEligibility: 'Ciudadanía y elegibilidad',
   citizenshipEligibilityHint:
-    'Reduce las listas que mencionan estudiantes internacionales o similares en nuestros campos. Confirma siempre en la página oficial: no es asesoría legal ni de visado.',
+    'Reduce las listas que mencionan estudiantes internacionales o similares en nuestros campos para crear una lista mas relevante con mayor rapidez.',
   citizenshipAll: 'Todos los solicitantes (predeterminado)',
   citizenshipInternational: 'Apto para internacionales (mejor esfuerzo)',
   filterByAmount: 'Filtrar por monto de beca',
@@ -306,7 +306,7 @@ const ES: ScholarshipsMoreFiltersUiCopy = {
   detailedListing: 'Listado detallado',
   detailedListingBody: 'Campos estructurados más ricos del listado público.',
   verifiedListing: 'Listado verificado',
-  verifiedListingBody: 'Marcado como verificado: confirma siempre en el sitio oficial.',
+  verifiedListingBody: 'Senales estructuradas de calidad de fuente y ruta del proveedor disponibles.',
   payoutMethod: 'Filtrar por método de pago',
   payoutCollege: 'Universidad',
   payoutCollegeBody: 'Los fondos se pagan a la oficina de ayuda financiera en tu nombre.',
@@ -408,7 +408,7 @@ const FR: ScholarshipsMoreFiltersUiCopy = {
   deadlineGt4w: 'Plus de 4 semaines',
   citizenshipEligibility: 'Citoyenneté et admissibilité',
   citizenshipEligibilityHint:
-    'Affinez les listes mentionnant explicitement les étudiants internationaux dans nos champs. Confirmez toujours sur la page officielle — ce n’est pas un conseil juridique ou visa.',
+    'Affinez les listes mentionnant explicitement les etudiants internationaux dans nos champs afin de construire une shortlist plus pertinente plus vite.',
   citizenshipAll: 'Tous les candidats (par défaut)',
   citizenshipInternational: 'International (meilleur effort)',
   filterByAmount: 'Filtrer par montant de bourse',
@@ -449,7 +449,7 @@ const FR: ScholarshipsMoreFiltersUiCopy = {
   detailedListing: 'Fiche détaillée',
   detailedListingBody: 'Champs structurés plus riches issus de la fiche publique.',
   verifiedListing: 'Fiche vérifiée',
-  verifiedListingBody: 'Marquée vérifiée — confirmez toujours sur le site officiel.',
+  verifiedListingBody: 'Signaux structures de qualite de source et de voie fournisseur disponibles.',
   payoutMethod: 'Filtrer par mode de versement',
   payoutCollege: 'Établissement',
   payoutCollegeBody: 'Les fonds sont versés au bureau d’aide financière pour vous.',

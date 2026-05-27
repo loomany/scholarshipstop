@@ -24,14 +24,14 @@ const DEFAULT_COPY = {
   methodology: 'Verification methodology',
   studentFirstRule: 'Student-first rule',
   studentFirstHeadline:
-    'Confirm every final requirement on the official provider page before applying.',
+    'Use organized details, fit signals, deadlines, and provider paths to plan your next step.',
   studentFirstBody:
-    'ScholarshipTop helps students search and plan. Official providers control final eligibility, deadlines, selection, and award payment.',
+    'ScholarshipTop helps students compare opportunities, prepare materials, and move toward application with less guesswork.',
   relatedTrustPages: 'Related trust pages',
   quickReminder: 'Quick reminder',
   quickReminderBody:
-    'Recommendations do not guarantee eligibility, selection, or award payment.',
-  disclaimer: 'Read disclaimer'
+    'Final scholarship decisions are made by the relevant provider; ScholarshipTop organizes the research and preparation workflow.',
+  disclaimer: 'See legal boundaries'
 } as const;
 
 export default function TrustPageTemplate({

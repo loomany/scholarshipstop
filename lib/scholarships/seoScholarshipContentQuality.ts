@@ -300,30 +300,30 @@ export function buildDeterministicSeoBody(
     : 'Matches in this view change as listings are added or updated.';
 
   const awardSentence =
-    ' Award sizes and payout wording vary by row; use each card as a starting point and confirm every amount on the official program page.';
+    ' Award sizes and payout wording vary by row; use each card to compare available award context, eligibility signals, and application effort.';
 
   const topicLabel =
     stripNumericTokensFromSeoProse(h1Fallback).trim() || h1Fallback;
-  const intro = `If you’re hunting awards that fit “${topicLabel},” this view keeps the signal high. ${countSentence}${awardSentence} Deadlines and requirement lines differ row to row—use them to shortlist, then verify every rule on the sponsor’s site.`;
+  const intro = `If you’re hunting awards that fit “${topicLabel},” this view keeps the signal high. ${countSentence}${awardSentence} Deadlines and requirement lines differ row to row—use them to shortlist, prepare materials, and continue toward the provider application path when ready.`;
 
-  const supporting = `Start with sort (deadline or amount) to surface what matters today, then read the requirement snippet under each title before you click through. When two listings look alike, compare their deadline and award rows side by side. Nothing here replaces the official program page: use this list to narrow, then re-read eligibility and dates at the source before you apply.`;
+  const supporting = `Start with sort (deadline or amount) to surface what matters today, then read the requirement snippet under each title before you decide what to save. When two listings look alike, compare their deadline, award, eligibility, and effort rows side by side. Use this list to narrow your shortlist, plan documents, and move toward the application path with more context.`;
 
   const who_for = [
     `Anyone who wants a tighter set of options for ${h1Fallback} than the full open catalog`,
     `Students stacking several applications and needing a fast way to compare effort versus payoff`,
-    `Applicants who like scanning structured rows before opening long sponsor pages`
+    `Applicants who like scanning structured rows before planning provider submissions`
   ];
 
   const how_to_use = [
     `Pick a sort order so urgent deadlines or larger award text float to the top`,
     `Skim the requirement line on each card for a quick fit check`,
-    `Open the official listing from the card and re-confirm dates, amounts, and eligibility`,
+    `Use the provider application path when the listing fits your plan`,
     `Keep a short shortlist instead of spreading thin across weak matches`,
-    `Assume catalog fields can lag—treat sponsor pages as the final word`
+    `Use ScholarshipTop signals to plan documents, essays, and next steps`
   ];
 
   const related_intro =
-    'Below are related filter pages—different state, topic, or requirement angle—if you want to widen the net without losing this starting point.';
+    'Below are related filter pages—different state, topic, or requirement angle—if you want to widen your shortlist while keeping the same structured comparison workflow.';
 
   return {
     intro,

@@ -102,7 +102,7 @@ const EN: HomePageCopy = {
     'Answer a few quick questions and find scholarships you can apply for today',
   ctaFind: 'Find My Scholarships',
   heroTrustLine:
-    'Verified listings • Updated regularly • Official-source application links. Takes less than a minute to get started.',
+    'Structured listings • Updated regularly • Provider application links. Takes less than a minute to get started.',
   howWorksTitle: 'How ScholarshipTop works',
   howWorksSubtext:
     'A simpler workflow for finding scholarships worth your time.',
@@ -120,18 +120,18 @@ const EN: HomePageCopy = {
     {
       step: '3',
       title: 'Track and apply',
-      text: 'Save opportunities, watch deadlines, and apply through official provider websites.'
+      text: 'Save opportunities, watch deadlines, and use provider application paths when ready.'
     }
   ],
   intelligenceEyebrow: 'Scholarship intelligence',
   intelligenceTitle: 'What ScholarshipTop adds on top of raw listings',
   intelligenceBody:
-    'We organize scholarships by fit, deadline, requirements, award value, source status, and application effort so students can decide what is worth checking before they apply.',
-  verifyCta: 'How we verify scholarships',
+    'We organize scholarships by fit, deadline, requirements, award value, source status, and application effort so students can decide what is worth saving and preparing.',
+  verifyCta: 'See our data standards',
   rankCta: 'How recommendations work',
   dataStandardsTitle: 'Scholarship data standards',
   dataStandardItems: [
-    'Official source status',
+    'Provider path status',
     'Last reviewed or review status',
     'Deadline clarity',
     'Eligibility clarity',
@@ -187,16 +187,16 @@ const EN: HomePageCopy = {
         href: '/corrections'
       },
       {
-        title: 'Official-source workflow',
+        title: 'Application-path workflow',
         body:
-          "In most cases, you apply through the provider's official site, not a mystery portal.",
-        cta: 'Read disclaimer',
-        href: '/financial-aid-disclaimer'
+          'Provider links and application-path signals are organized with each listing when available.',
+        cta: 'How ScholarshipTop works',
+        href: '/how-scholarshiptop-works'
       }
     ]
   },
   whatWeVerify: {
-    title: 'What we verify',
+    title: 'What we organize',
     subtitle:
       'Clear signals so you can evaluate opportunities quickly — before you invest time in an application.',
     items: [
@@ -213,7 +213,7 @@ const EN: HomePageCopy = {
       {
         title: 'Where to apply next',
         body:
-          'We prioritize pathways that point to official program pages and provider-hosted applications.'
+          'We prioritize provider-hosted application paths and next-step links when available.'
       }
     ],
     cta: 'See how ScholarshipTop works',
@@ -241,7 +241,7 @@ const EN: HomePageCopy = {
     subtitle:
       'Build your profile once — then focus on deadlines and applications that fit.',
     trustLine:
-      'Verified listings • Updated regularly • Official-source application links'
+      'Structured listings • Updated regularly • Provider application links'
   },
   internationalGrants: {
     badge: 'US & International programs',
@@ -288,7 +288,7 @@ const ES: HomePageCopy = {
     'Responde unas preguntas rápidas y descubre becas a las que puedes aplicar hoy',
   ctaFind: 'Encontrar mis becas',
   heroTrustLine:
-    'Listados verificados • Actualizados con frecuencia • Enlaces oficiales de solicitud. Empieza en menos de un minuto.',
+    'Listados estructurados • Actualizados con frecuencia • Enlaces de solicitud del proveedor. Empieza en menos de un minuto.',
   howWorksTitle: 'Cómo funciona ScholarshipTop',
   howWorksSubtext:
     'Un flujo más simple para encontrar becas que valgan tu tiempo.',
@@ -306,19 +306,19 @@ const ES: HomePageCopy = {
     {
       step: '3',
       title: 'Haz seguimiento y aplica',
-      text: 'Guarda oportunidades, vigila fechas y aplica en sitios oficiales.'
+      text: 'Guarda oportunidades, vigila fechas y usa rutas de solicitud del proveedor cuando estes listo.'
     }
   ],
   intelligenceEyebrow: 'Inteligencia de becas',
   intelligenceTitle: 'Qué añade ScholarshipTop a los listados',
   intelligenceBody:
-    'Organizamos becas por ajuste, fecha, requisitos, monto, fuente y esfuerzo para decidir qué revisar antes de aplicar.',
-  verifyCta: 'Cómo verificamos becas',
+    'Organizamos becas por ajuste, fecha, requisitos, monto, fuente y esfuerzo para decidir que guardar y preparar.',
+  verifyCta: 'Ver estandares de datos',
   rankCta: 'Cómo funcionan las recomendaciones',
   dataStandardsTitle: 'Estándares de datos de becas',
   dataStandardItems: EN.dataStandardItems.map((item) =>
     item
-      .replace('Official source status', 'Estado de fuente oficial')
+      .replace('Provider path status', 'Estado de ruta del proveedor')
       .replace('Last reviewed or review status', 'Última revisión o estado')
       .replace('Deadline clarity', 'Claridad de fecha límite')
       .replace('Eligibility clarity', 'Claridad de elegibilidad')
@@ -374,16 +374,16 @@ const ES: HomePageCopy = {
         href: '/corrections'
       },
       {
-        title: 'Flujo con fuente oficial',
+        title: 'Flujo con ruta de solicitud',
         body:
-          'En la mayoría de casos, aplicas en el sitio oficial del proveedor, no en un portal desconocido.',
-        cta: 'Leer aviso',
-        href: '/financial-aid-disclaimer'
+          'Los enlaces del proveedor y las senales de ruta de solicitud se organizan con cada listado cuando estan disponibles.',
+        cta: 'Como funciona ScholarshipTop',
+        href: '/how-scholarshiptop-works'
       }
     ]
   },
   whatWeVerify: {
-    title: 'Qué verificamos',
+    title: 'Que organizamos',
     subtitle:
       'Señales claras para evaluar oportunidades rápido — antes de invertir tiempo en una solicitud.',
     items: [
@@ -400,7 +400,7 @@ const ES: HomePageCopy = {
       {
         title: 'Dónde aplicar',
         body:
-          'Priorizamos rutas hacia páginas oficiales del programa y solicitudes del proveedor.'
+          'Priorizamos rutas alojadas por el proveedor y enlaces de siguiente paso cuando estan disponibles.'
       }
     ],
     cta: 'Ver cómo funciona ScholarshipTop',
@@ -428,7 +428,7 @@ const ES: HomePageCopy = {
     subtitle:
       'Crea tu perfil una vez — luego enfócate en fechas y solicitudes que encajen.',
     trustLine:
-      'Listados verificados • Actualizados con frecuencia • Enlaces oficiales de solicitud'
+      'Listados estructurados • Actualizados con frecuencia • Enlaces de solicitud del proveedor'
   },
   internationalGrants: {
     badge: 'Programas en EE. UU. e internacionales',
@@ -475,7 +475,7 @@ const FR: HomePageCopy = {
     'Répondez à quelques questions et découvrez des bourses auxquelles vous pouvez postuler aujourd’hui',
   ctaFind: 'Trouver mes bourses',
   heroTrustLine:
-    'Listes vérifiées • Mises à jour régulièrement • Liens officiels de candidature. Commencez en moins d’une minute.',
+    'Listes structurees • Mises a jour regulierement • Liens de candidature fournisseur. Commencez en moins d une minute.',
   howWorksTitle: 'Comment fonctionne ScholarshipTop',
   howWorksSubtext:
     'Un parcours plus simple pour trouver des bourses qui valent votre temps.',
@@ -493,18 +493,18 @@ const FR: HomePageCopy = {
     {
       step: '3',
       title: 'Suivez et postulez',
-      text: 'Enregistrez les opportunités, surveillez les dates et postulez sur les sites officiels.'
+      text: 'Enregistrez les opportunites, surveillez les dates et utilisez les voies de candidature fournisseur quand vous etes pret.'
     }
   ],
   intelligenceEyebrow: 'Intelligence bourses',
   intelligenceTitle: 'Ce que ScholarshipTop ajoute aux listes brutes',
   intelligenceBody:
-    'Nous organisons les bourses par adéquation, date, exigences, montant, source et effort pour décider quoi vérifier avant de postuler.',
-  verifyCta: 'Comment nous vérifions les bourses',
+    'Nous organisons les bourses par adequation, date, exigences, montant, source et effort pour decider quoi enregistrer et preparer.',
+  verifyCta: 'Voir nos standards de donnees',
   rankCta: 'Comment fonctionnent les recommandations',
   dataStandardsTitle: 'Standards de données',
   dataStandardItems: [
-    'Statut de source officielle',
+    'Statut de voie fournisseur',
     'Dernière révision ou statut',
     'Clarté des dates',
     'Clarté d’admissibilité',
@@ -560,16 +560,16 @@ const FR: HomePageCopy = {
         href: '/corrections'
       },
       {
-        title: 'Parcours source officielle',
+        title: 'Parcours de candidature',
         body:
-          'Dans la plupart des cas, vous postulez sur le site officiel du fournisseur, pas un portail inconnu.',
-        cta: 'Lire l’avertissement',
-        href: '/financial-aid-disclaimer'
+          'Les liens fournisseur et les signaux de voie de candidature sont organises avec chaque fiche quand ils sont disponibles.',
+        cta: 'Comment fonctionne ScholarshipTop',
+        href: '/how-scholarshiptop-works'
       }
     ]
   },
   whatWeVerify: {
-    title: 'Ce que nous vérifions',
+    title: 'Ce que nous organisons',
     subtitle:
       'Des signaux clairs pour évaluer rapidement — avant d’investir du temps dans une candidature.',
     items: [
@@ -586,7 +586,7 @@ const FR: HomePageCopy = {
       {
         title: 'Où postuler ensuite',
         body:
-          'Nous priorisons les pages officielles du programme et les candidatures hébergées par le fournisseur.'
+          'Nous priorisons les voies de candidature hebergees par le fournisseur et les liens de prochaine etape quand ils sont disponibles.'
       }
     ],
     cta: 'Voir comment fonctionne ScholarshipTop',
@@ -614,7 +614,7 @@ const FR: HomePageCopy = {
     subtitle:
       'Créez votre profil une fois — puis concentrez-vous sur les dates et candidatures adaptées.',
     trustLine:
-      'Listes vérifiées • Mises à jour régulièrement • Liens officiels de candidature'
+      'Listes structurees • Mises a jour regulierement • Liens de candidature fournisseur'
   },
   internationalGrants: {
     badge: 'Programmes aux États-Unis et internationaux',

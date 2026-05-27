@@ -29,12 +29,12 @@ function buildFallbackFaqItems(opts: {
     {
       question: `Does ${universityDisplayName} give scholarships to international students?`,
       answer: anyIntl
-        ? `This hub lists awards associated with ${universityDisplayName} in ${stateName}. Several current listings reference international eligibility, but rules differ by program—always confirm on the provider’s official page before you apply.`
-        : `Many U.S. colleges offer aid that may include international students, but eligibility is program-specific. Use the listings below and verify citizenship, visa, and residency rules on each provider’s official site.`
+        ? `This hub lists awards associated with ${universityDisplayName} in ${stateName}. Several current listings reference international eligibility, and ScholarshipTop organizes eligibility signals, deadlines, award context, and provider application paths when available.`
+        : `Many U.S. colleges offer aid that may include international students, but eligibility is program-specific. Use the listings below to compare citizenship, visa, residency, deadline, and provider-path signals.`
     },
     {
       question: `How do I apply for scholarships at ${universityDisplayName}?`,
-      answer: `Open a scholarship below to review deadlines, requirements, and the official application link. Prepare transcripts, essays, or documents early, and submit through the provider’s stated process—not through this directory.`
+      answer: `Open a scholarship below to review deadlines, requirements, award details, and the provider application path when available. Prepare transcripts, essays, or documents early, then continue toward the provider's stated process when ready.`
     },
     {
       question: `Are these ${universityDisplayName} scholarships fully funded?`,
@@ -42,7 +42,7 @@ function buildFallbackFaqItems(opts: {
     },
     {
       question: `How often is this ${universityDisplayName}, ${stateName} scholarship list updated?`,
-      answer: `We refresh catalog data regularly. This page currently surfaces ${count} active matches tied to this provider slug; deadlines and amounts can change, so double-check the official source before applying.`
+      answer: `We refresh catalog data regularly. This page currently surfaces ${count} active matches tied to this provider slug, with deadline, amount, eligibility, and application-path context organized for comparison.`
     }
   ];
 }

@@ -21,7 +21,7 @@ export const STATIC_SCHOLARSHIP_GUIDES: StaticScholarshipGuide[] = [
     description:
       'A practical scholarship search guide for finding realistic opportunities, checking eligibility, and building a useful shortlist.',
     intro:
-      'A strong scholarship search is not about applying to every award you see. Start broad, check eligibility early, compare effort against award value, and save only opportunities where the official rules support your profile.',
+      'A strong scholarship search is not about applying to every award you see. Start broad, review eligibility early, compare effort against award value, and save opportunities where the structured details support your profile.',
     sections: [
       {
         title: 'Start with fit, not volume',
@@ -29,7 +29,7 @@ export const STATIC_SCHOLARSHIP_GUIDES: StaticScholarshipGuide[] = [
           'The fastest way to waste time is applying from a title alone. Use filters to check student level, field, country, citizenship, GPA, institution, and special status before reading the essay prompt.',
         bullets: [
           'Build one broad search first, then narrow by eligibility.',
-          'Prioritize official-source listings and clear deadlines.',
+          'Prioritize listings with source-quality signals, provider paths, and clear deadlines.',
           'Keep a separate list for promising but incomplete leads.'
         ]
       },
@@ -45,16 +45,16 @@ export const STATIC_SCHOLARSHIP_GUIDES: StaticScholarshipGuide[] = [
       }
     ],
     checklist: [
-      'Confirm official source',
-      'Confirm eligibility',
-      'Confirm deadline and timezone',
-      'Confirm required documents',
+      'Review source-quality signal',
+      'Review eligibility fit',
+      'Track deadline and timezone',
+      'Prepare required documents',
       'Save realistic options',
-      'Apply through the provider'
+      'Use the provider path when ready'
     ],
     examples: [
       'A STEM student should check field, level, citizenship, and essay requirements before starting.',
-      'An international student should confirm whether the provider accepts non-citizens or only domestic applicants.'
+      'An international student should compare whether the provider accepts non-citizens or only domestic applicants.'
     ],
     links: [
       { href: '/scholarships', label: 'Browse the scholarship catalog' },
@@ -70,7 +70,7 @@ export const STATIC_SCHOLARSHIP_GUIDES: StaticScholarshipGuide[] = [
       {
         question: 'Should I apply if the listing has missing information?',
         answer:
-          'Use it as a lead, but confirm the missing deadline, eligibility, award value, and application route on the official provider page first.'
+          'Use it as a lower-confidence shortlist item and prioritize listings with clearer deadline, eligibility, award value, and application-route context first.'
       }
     ]
   },
@@ -80,7 +80,7 @@ export const STATIC_SCHOLARSHIP_GUIDES: StaticScholarshipGuide[] = [
     description:
       'A step-by-step checklist for preparing scholarship applications without missing documents, deadlines, or provider rules.',
     intro:
-      'Scholarship applications become easier when you separate the process into eligibility checks, document prep, essay drafting, official-source review, and final submission.',
+      'Scholarship applications become easier when you separate the process into eligibility checks, document prep, essay drafting, provider-path review, and final submission.',
     sections: [
       {
         title: 'Before you write anything',
@@ -95,25 +95,25 @@ export const STATIC_SCHOLARSHIP_GUIDES: StaticScholarshipGuide[] = [
       {
         title: 'Before you submit',
         body:
-          'A final review should catch missed fields, outdated transcripts, weak file names, and unofficial application routes.',
+          'A final review should catch missed fields, outdated transcripts, weak file names, and unclear application routes.',
         bullets: [
-          'Use the official provider page for final rules.',
+          'Use the provider application path for submission steps.',
           'Proofread essays against the prompt.',
-          'Save confirmation pages or emails.'
+          'Save submission pages or emails.'
         ]
       }
     ],
     checklist: [
-      'Eligibility confirmed',
-      'Deadline confirmed',
+      'Eligibility fit reviewed',
+      'Deadline tracked',
       'Essay prompt copied into your plan',
       'Transcript or proof of enrollment requested',
-      'Recommendation timeline confirmed',
-      'Official application link verified',
-      'Submission confirmation saved'
+      'Recommendation timeline planned',
+      'Provider application link saved',
+      'Submission receipt saved'
     ],
     examples: [
-      'If a recommendation is required, ask early and include the official prompt.',
+      'If a recommendation is required, ask early and include the scholarship prompt.',
       'If the award is renewable, check whether you must reapply each year.'
     ],
     links: [
@@ -125,12 +125,12 @@ export const STATIC_SCHOLARSHIP_GUIDES: StaticScholarshipGuide[] = [
       {
         question: 'What should I do first?',
         answer:
-          'Confirm eligibility and deadline before writing. Those two checks prevent most wasted applications.'
+          'Review eligibility and deadline before writing. Those two checks prevent most wasted applications.'
       },
       {
         question: 'Can ScholarshipTop submit my application?',
         answer:
-          'No. ScholarshipTop helps you search and plan. Applications should be submitted through the official provider route.'
+          'ScholarshipTop helps you search, compare, save, and prepare. When a provider application route is available, use it to continue toward submission.'
       }
     ]
   },
@@ -145,10 +145,10 @@ export const STATIC_SCHOLARSHIP_GUIDES: StaticScholarshipGuide[] = [
       {
         title: 'Why no essay awards are different',
         body:
-          'Lower effort usually means more applicants. The main task is confirming that the listing is legitimate and that you match the basic rules.',
+          'Lower effort usually means more applicants. The main task is using source-quality, eligibility, and application-route signals to decide whether the listing belongs on your shortlist.',
         bullets: [
           'Check source status before entering personal data.',
-          'Confirm whether the award is sweepstakes-style or merit-based.',
+          'Compare whether the award is sweepstakes-style or merit-based.',
           'Do not pay fees to unlock a scholarship claim.'
         ]
       },
@@ -157,21 +157,21 @@ export const STATIC_SCHOLARSHIP_GUIDES: StaticScholarshipGuide[] = [
         body:
           'Use no essay scholarships as quick additions after you complete stronger-fit applications that require essays or documents.',
         bullets: [
-          'Apply only when the source is clear.',
+          'Apply only when the provider path is clear.',
           'Save deadlines so quick awards do not distract from bigger applications.',
           'Balance easy entries with targeted scholarships.'
         ]
       }
     ],
     checklist: [
-      'Official source visible',
+      'Provider path visible',
       'No fee required',
       'Eligibility rules clear',
       'Deadline clear',
       'Privacy expectations acceptable'
     ],
     examples: [
-      'A no essay award with unclear provider identity should be treated as a lead to verify, not an automatic application.',
+      'A no essay award with unclear provider identity should be treated as a lower-confidence shortlist item, not an automatic application.',
       'A quick application from a known provider can be worth saving if the deadline is close.'
     ],
     links: [
@@ -183,7 +183,7 @@ export const STATIC_SCHOLARSHIP_GUIDES: StaticScholarshipGuide[] = [
       {
         question: 'Are no essay scholarships real?',
         answer:
-          'Some are real, but students should verify the provider, application route, privacy terms, deadline, and award rules before applying.'
+          'Some are real, and stronger listings make the provider, application route, privacy terms, deadline, and award rules easier to compare before applying.'
       },
       {
         question: 'Are no essay scholarships easier to win?',
@@ -196,17 +196,17 @@ export const STATIC_SCHOLARSHIP_GUIDES: StaticScholarshipGuide[] = [
     slug: 'easy-scholarships-guide',
     title: 'Easy Scholarships Guide',
     description:
-      'How to decide whether easy scholarships are worth applying to and what to verify before submitting.',
+      'How to decide whether easy scholarships are worth applying to and what to organize before submitting.',
     intro:
-      'Easy scholarships are useful when they save time without hiding risk. The key is to separate low-effort legitimate applications from vague listings that need confirmation.',
+      'Easy scholarships are useful when they save time without hiding risk. The key is to separate low-effort legitimate applications from vague listings with thin source-quality or application-route context.',
     sections: [
       {
         title: 'What easy should mean',
         body:
-          'Easy should mean fewer required materials, clearer rules, and a direct application route. It should not mean unclear source, guaranteed award, or suspicious payment request.',
+          'Easy should mean fewer required materials, clearer rules, and a direct application route. It should not mean unclear source context, guaranteed award, or suspicious payment request.',
         bullets: [
           'Look for few required materials.',
-          'Confirm the official source.',
+          'Check the provider path.',
           'Check privacy and data-sharing expectations.'
         ]
       },
@@ -215,7 +215,7 @@ export const STATIC_SCHOLARSHIP_GUIDES: StaticScholarshipGuide[] = [
         body:
           'Skip an easy listing when eligibility is unclear, the provider is unknown, the deadline is missing, or the page pressures you to pay or share sensitive data.',
         bullets: [
-          'No official source',
+          'No clear provider path',
           'No clear award value',
           'No clear application rules'
         ]
@@ -225,11 +225,11 @@ export const STATIC_SCHOLARSHIP_GUIDES: StaticScholarshipGuide[] = [
       'Effort level checked',
       'Documents checked',
       'Deadline checked',
-      'Source checked',
+      'Source-quality signal reviewed',
       'Award rules checked'
     ],
     examples: [
-      'A short form from an official provider may be a good easy application.',
+      'A short form from a clear provider path may be a good easy application.',
       'A guaranteed award claim from an unknown site should be treated as unsafe.'
     ],
     links: [
@@ -241,7 +241,7 @@ export const STATIC_SCHOLARSHIP_GUIDES: StaticScholarshipGuide[] = [
       {
         question: 'What makes a scholarship easy?',
         answer:
-          'A scholarship may be easier when it has few required materials, clear eligibility, a simple form, and an official application route.'
+          'A scholarship may be easier when it has few required materials, clear eligibility, a simple form, and a provider application route.'
       },
       {
         question: 'Should easy scholarships be my main strategy?',
@@ -264,7 +264,7 @@ export const STATIC_SCHOLARSHIP_GUIDES: StaticScholarshipGuide[] = [
           'Providers may restrict awards to specific majors, engineering branches, computer science, healthcare, data science, research tracks, or underrepresented groups.',
         bullets: [
           'Check exact field or major wording.',
-          'Confirm level: high school, undergraduate, graduate, or PhD.',
+          'Review level: high school, undergraduate, graduate, or PhD.',
           'Look for GPA, research, internship, or project evidence requirements.'
         ]
       },
@@ -313,17 +313,17 @@ export const STATIC_SCHOLARSHIP_GUIDES: StaticScholarshipGuide[] = [
     slug: 'scholarships-in-usa-for-international-students',
     title: 'Scholarships in the USA for International Students',
     description:
-      'How international students can search for USA scholarships, check eligibility, and verify provider rules.',
+      'How international students can search for USA scholarships, compare eligibility, and plan provider application steps.',
     intro:
       'USA scholarships for international students require careful eligibility checks. Some awards are open to non-citizens, while others require US residency, citizenship, FAFSA eligibility, or enrollment at a specific institution.',
     sections: [
       {
         title: 'Eligibility checks that matter',
         body:
-          'International students should confirm citizenship, visa status, institution, level, field, and whether the award requires FAFSA or domestic residency.',
+          'International students should compare citizenship, visa status, institution, level, field, and whether the award requires FAFSA or domestic residency.',
         bullets: [
           'Check non-citizen eligibility wording.',
-          'Confirm whether F-1 or other visa students can apply.',
+          'Review whether F-1 or other visa students can apply.',
           'Read school-specific restrictions carefully.'
         ]
       },
@@ -333,17 +333,17 @@ export const STATIC_SCHOLARSHIP_GUIDES: StaticScholarshipGuide[] = [
           'Common materials include transcripts, proof of enrollment, essays, financial need documentation, recommendations, and sometimes visa or residency details.',
         bullets: [
           'Do not upload sensitive documents to unclear sources.',
-          'Confirm official application domain.',
+          'Review the provider application domain.',
           'Check whether translated documents are accepted.'
         ]
       }
     ],
     checklist: [
-      'Non-citizen eligibility confirmed',
-      'School enrollment rules confirmed',
+      'Non-citizen eligibility reviewed',
+      'School enrollment rules reviewed',
       'Visa or residency language checked',
       'FAFSA requirement checked',
-      'Official source verified'
+      'Provider path reviewed'
     ],
     examples: [
       'A scholarship may say "international" but still require enrollment at a US college.',
@@ -358,7 +358,7 @@ export const STATIC_SCHOLARSHIP_GUIDES: StaticScholarshipGuide[] = [
       {
         question: 'Can international students get USA scholarships?',
         answer:
-          'Yes, but eligibility varies. Always confirm citizenship, visa, enrollment, and provider requirements on the official scholarship page.'
+          'Yes, but eligibility varies. Use ScholarshipTop to organize citizenship, visa, enrollment, deadline, and provider-path signals before you prepare applications.'
       },
       {
         question: 'Do international students need FAFSA?',
@@ -392,7 +392,7 @@ export const STATIC_SCHOLARSHIP_GUIDES: StaticScholarshipGuide[] = [
         bullets: [
           'Keep one activity list ready.',
           'Save reusable essay evidence.',
-          'Track submission confirmations.'
+          'Track submission receipts.'
         ]
       }
     ],
@@ -422,7 +422,7 @@ export const STATIC_SCHOLARSHIP_GUIDES: StaticScholarshipGuide[] = [
       {
         question: 'Do seniors need college enrollment proof?',
         answer:
-          'Some scholarships require proof of admission or enrollment, while others accept intended enrollment. Check the official rules.'
+          'Some scholarships require proof of admission or enrollment, while others accept intended enrollment. Review the listed requirements before planning documents.'
       }
     ]
   },
@@ -447,9 +447,9 @@ export const STATIC_SCHOLARSHIP_GUIDES: StaticScholarshipGuide[] = [
       {
         title: 'When eligibility is unclear',
         body:
-          'If a listing does not clearly explain eligibility, verify the official source or contact the provider before investing major effort.',
+          'If a listing does not clearly explain eligibility, treat it as lower-confidence and prioritize opportunities with clearer provider-path and requirement context before investing major effort.',
         bullets: [
-          'Look for official FAQ or rules PDF.',
+          'Look for provider FAQ or rules PDF.',
           'Check current-year terms.',
           'Do not rely on third-party summaries alone.'
         ]
@@ -465,7 +465,7 @@ export const STATIC_SCHOLARSHIP_GUIDES: StaticScholarshipGuide[] = [
       'Documents'
     ],
     examples: [
-      'A scholarship for "US students" may mean citizens, residents, or students enrolled in the US. Confirm the exact rule.',
+      'A scholarship for "US students" may mean citizens, residents, or students enrolled in the US. Review the exact rule before planning materials.',
       'A STEM scholarship may include only certain majors.'
     ],
     links: [
@@ -477,12 +477,12 @@ export const STATIC_SCHOLARSHIP_GUIDES: StaticScholarshipGuide[] = [
       {
         question: 'Should I apply if I almost meet eligibility?',
         answer:
-          'Usually no unless the provider says exceptions are allowed. Confirm with the official source before spending time.'
+          'Usually no unless the provider says exceptions are allowed. Prioritize listings where your eligibility fit is clear before spending time.'
       },
       {
         question: 'Can eligibility change?',
         answer:
-          'Yes. Providers can change rules between cycles, so always check current official requirements.'
+          'Yes. Providers can change rules between cycles, so use current requirement and provider-path signals when planning.'
       }
     ]
   },
@@ -509,7 +509,7 @@ export const STATIC_SCHOLARSHIP_GUIDES: StaticScholarshipGuide[] = [
       {
         title: 'Document safety',
         body:
-          'Only upload sensitive documents through trusted official routes. Be careful with unofficial forms, unexpected payment requests, or links from unknown emails.',
+          'Only upload sensitive documents through trusted provider routes. Be careful with unclear forms, unexpected payment requests, or links from unknown emails.',
         bullets: [
           'Check the application domain.',
           'Avoid sending bank details early.',

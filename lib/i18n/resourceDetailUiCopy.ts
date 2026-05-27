@@ -54,16 +54,16 @@ const EN: ResourceDetailUiCopy = {
   faqSectionTitle: 'FAQ',
   tocOnThisPage: 'On this page',
   disclaimer:
-    'ScholarshipTop does not award scholarships or guarantee outcomes. Always verify requirements, deadlines, and award amounts on the official provider page.',
+    'ScholarshipTop organizes scholarship research and application planning in one place, with eligibility signals, deadlines, shortlisting tools, AI support, and provider application paths when available.',
   exploreScholarshipsCta: {
     title: 'See scholarships you may qualify for',
     description:
-      'Use the scholarship directory to explore real opportunities that match your eligibility and academic goals.',
+      'Use ScholarshipTop to compare organized opportunities that match your eligibility and academic goals.',
     buttonText: 'Explore Scholarships'
   },
   browseScholarshipsCta: {
     title: 'Browse Scholarships',
-    description: 'Explore verified opportunities in our scholarship directory.',
+    description: 'Explore structured opportunities in the ScholarshipTop workspace.',
     buttonText: 'Browse Scholarships'
   },
   matchedScholarships: {
@@ -100,16 +100,16 @@ const ES: ResourceDetailUiCopy = {
   faqSectionTitle: 'Preguntas frecuentes',
   tocOnThisPage: 'En esta página',
   disclaimer:
-    'ScholarshipTop no concede becas ni garantiza resultados. Verifica siempre requisitos, plazos y montos en la página oficial del proveedor.',
+    'ScholarshipTop organiza investigacion y planificacion de solicitudes con senales de elegibilidad, fechas, listas guardadas, apoyo de IA y rutas de solicitud del proveedor cuando estan disponibles.',
   exploreScholarshipsCta: {
     title: 'Explora becas que podrían encajar contigo',
     description:
-      'Usa el directorio para revisar oportunidades reales según tu elegibilidad y objetivos académicos.',
+      'Usa ScholarshipTop para comparar oportunidades organizadas segun tu elegibilidad y objetivos academicos.',
     buttonText: 'Explorar becas'
   },
   browseScholarshipsCta: {
     title: 'Explorar becas',
-    description: 'Consulta oportunidades verificadas en nuestro directorio de becas.',
+    description: 'Consulta oportunidades estructuradas en el workspace de ScholarshipTop.',
     buttonText: 'Ver directorio'
   },
   matchedScholarships: {
@@ -147,17 +147,17 @@ const FR: ResourceDetailUiCopy = {
   faqSectionTitle: 'Questions fréquentes',
   tocOnThisPage: 'Sur cette page',
   disclaimer:
-    'ScholarshipTop n’accorde pas de bourses et ne garantit aucun résultat. Vérifiez toujours critères, dates et montants sur la page officielle du financeur.',
+    'ScholarshipTop organise la recherche et la planification des candidatures avec signaux d eligibilite, dates, favoris, aide IA et voies de candidature fournisseur quand elles sont disponibles.',
   exploreScholarshipsCta: {
     title: 'Explorez des bourses adaptées à votre profil',
     description:
-      'Utilisez l’annuaire pour comparer des opportunités réelles selon votre éligibilité et vos objectifs.',
+      'Utilisez ScholarshipTop pour comparer des opportunites organisees selon votre eligibilite et vos objectifs.',
     buttonText: 'Parcourir les bourses'
   },
   browseScholarshipsCta: {
     title: 'Parcourir les bourses',
     description:
-      'Découvrez des opportunités vérifiées dans notre annuaire de bourses.',
+      'Decouvrez des opportunites structurees dans le workspace ScholarshipTop.',
     buttonText: 'Voir l’annuaire'
   },
   matchedScholarships: {

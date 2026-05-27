@@ -52,7 +52,7 @@ const faqItems: { question: string; answer: string }[] = [
   {
     question: 'What is ScholarshipTop and how does it help find scholarships?',
     answer:
-      'ScholarshipTop is a platform designed to help students find scholarships more efficiently. Instead of manually searching through hundreds of websites, users can explore scholarship listings, filter opportunities, and discover scholarships that better match their profile and preferences.'
+      'ScholarshipTop is a scholarship search and application workspace for students. It organizes scholarship details, eligibility signals, deadlines, award information, provider application paths, saved lists, smart filters, and AI support so you can move faster from search to shortlist to application planning.'
   },
   {
     question: 'How can I find scholarships that match me?',
@@ -67,7 +67,7 @@ const faqItems: { question: string; answer: string }[] = [
   {
     question: 'Does ScholarshipTop guarantee that I will get a scholarship?',
     answer:
-      'No. ScholarshipTop helps you find and organize scholarship opportunities, but it does not guarantee eligibility or acceptance. All scholarship decisions are made by the scholarship providers.'
+      'ScholarshipTop helps you build stronger shortlists, understand fit signals, track deadlines, and prepare application materials with more context. Final scholarship decisions are made by the relevant provider.'
   },
   {
     question: 'What does “Best recommendations” mean?',
@@ -92,12 +92,12 @@ const faqItems: { question: string; answer: string }[] = [
   {
     question: 'Are the scholarships on ScholarshipTop real and verified?',
     answer:
-      'ScholarshipTop aims to provide real and useful scholarship listings. However, users should always verify scholarship details and requirements directly with the official provider before applying.'
+      'ScholarshipTop organizes provider-facing scholarship information into structured listings with eligibility, deadline, award, source-quality, and application-path signals. When details are incomplete, the product flags what context is available so you can prioritize stronger opportunities.'
   },
   {
     question: 'Can I apply for scholarships directly on the platform?',
     answer:
-      'In most cases, ScholarshipTop helps you discover scholarships, but the application process is handled by the scholarship provider. You will typically apply through their official website or application system.'
+      'ScholarshipTop helps you discover, compare, save, and prepare for scholarships in one place. When a provider application path is available, ScholarshipTop includes it so you can continue toward submission from an organized listing.'
   },
   {
     question: 'Is ScholarshipTop free?',
@@ -107,7 +107,7 @@ const faqItems: { question: string; answer: string }[] = [
   {
     question: 'How do I increase my chances of getting a scholarship?',
     answer:
-      'To improve your chances of getting a scholarship, focus on applying to relevant opportunities, completing your profile accurately, meeting all requirements, and applying early when possible.'
+      'Focus on relevant opportunities, complete your profile accurately, save the strongest-fit scholarships, prepare essays and documents early, and use deadline and application-path signals to stay organized.'
   }
 ];
 

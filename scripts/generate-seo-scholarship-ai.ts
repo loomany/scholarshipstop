@@ -194,17 +194,17 @@ function defaultListingFaq(entry: SeoScholarshipRouteManifestEntry): Array<{ que
     {
       question: `Who should apply for ${label}?`,
       answer:
-        'Students who match the eligibility notes and program focus shown in the listings should apply after checking each official sponsor page.'
+        'Students who match the eligibility notes and program focus shown in the listings can use ScholarshipTop to compare award details, deadlines, and provider application paths before prioritizing applications.'
     },
     {
       question: `How do I check deadlines for ${label}?`,
       answer:
-        'Use the listing deadline fields as a starting point, then confirm the final deadline and timezone directly on the official program page.'
+        'Use the listing deadline fields alongside provider-path context so you can plan timing, documents, and reminders in one workflow.'
     },
     {
       question: `What is the best application process for ${label}?`,
       answer:
-        'Shortlist relevant programs, prepare required documents early, and submit through official links after verifying eligibility and award terms.'
+        'Shortlist relevant programs, prepare required documents early, and continue through provider application links when you are ready to submit.'
     }
   ];
 }

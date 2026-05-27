@@ -1,13 +1,13 @@
 # ScholarshipTop
 # https://scholarshiptop.com/llms.txt
 
-> ScholarshipTop is a scholarship discovery, matching, and student guidance platform. It helps students find, compare, and research scholarships, providers, deadlines, eligibility, essays, and application guidance. ScholarshipTop does not award scholarships and is not the official scholarship provider. Users must verify amounts, deadlines, eligibility, and application details on official provider pages before applying.
+> ScholarshipTop is a scholarship search and application workspace for international students. It organizes scholarship details, eligibility signals, deadlines, award information, provider application paths, shortlisting tools, and AI support so students can move faster toward application.
 
 ## Identity
 
 - Site: https://scholarshiptop.com/
-- Product type: Scholarship discovery and research (aggregator), not a grant issuer
-- Official applications happen on provider-owned websites
+- Product type: Scholarship search, comparison, shortlisting, and application-planning workspace
+- Core value: organized scholarship details, smart filters, eligibility signals, deadlines, award context, provider application paths, and AI application support
 
 ## Languages and URLs
 
@@ -36,12 +36,12 @@ Assessment and guidance product on a dedicated subdomain:
 
 IQ is an assessment and guidance product, not a scholarship awarding authority.
 
-## Important limitations
+## Boundaries
 
-- No guarantee of acceptance, funding, or scholarship awards.
-- Listings can change; confirm on the official source.
-- ScholarshipTop does not process applications or pay awards.
-- Discovery and research only — not legal or financial advice.
+- ScholarshipTop helps students discover, compare, shortlist, and prepare for scholarships.
+- Final selection decisions and award disbursement are made by the relevant scholarship provider.
+- Provider application paths are included when available so students can continue toward submission from organized ScholarshipTop context.
+- ScholarshipTop content is not legal, immigration, tax, or financial aid advice.
 
 ## Trust pages (recommended for citations)
 

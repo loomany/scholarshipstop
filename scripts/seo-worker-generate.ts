@@ -97,7 +97,7 @@ function enforceSeoMeta(base: string, fallback: string): string {
   let seeded = normalizeWhitespace(
     base ||
       fallback ||
-      'Compare scholarship opportunities, understand eligibility and deadlines, and apply through official sources.'
+      'Compare scholarship opportunities, understand eligibility and deadlines, and continue through provider application paths.'
   );
   if (!/\b(compare|find|explore|apply|review)\b/i.test(seeded)) {
     seeded = `${seeded} Compare options and apply.`;
@@ -106,7 +106,7 @@ function enforceSeoMeta(base: string, fallback: string): string {
     value: seeded,
     min: 120,
     max: 160,
-    padSuffix: 'Review eligibility, compare deadlines, and apply through official pages.'
+    padSuffix: 'Review eligibility, compare deadlines, and continue through provider pages.'
   });
 }
 
@@ -443,7 +443,7 @@ async function runUniversityCompareFlow(args: {
       meta_description:
         `Compare ${left.name} and ${right.name} scholarships, review funding context, and choose the campus that fits your academic and financial goals.`,
       content_json: {
-        body_html: `<article><h2>Financial Aid Overview for ${year}</h2><p>Compare ${left.name} and ${right.name} by scholarship volume, award patterns, and eligibility expectations. Use official pages to verify deadlines and final requirements before applying.</p></article>`,
+        body_html: `<article><h2>Financial Aid Overview for ${year}</h2><p>Compare ${left.name} and ${right.name} by scholarship volume, award patterns, eligibility expectations, deadlines, and provider application paths before applying.</p></article>`,
         essay_insights: {
           inst_a: `For ${left.name}, review prompt expectations and align your essay with academic fit and funding goals.`,
           inst_b: `For ${right.name}, focus your essay on program fit, impact, and readiness for the application process.`
@@ -455,11 +455,11 @@ async function runUniversityCompareFlow(args: {
           },
           {
             q: `How do I compare scholarship deadlines between these universities?`,
-            a: 'Use each official scholarship page to verify deadlines and required materials, then build a shared checklist for both schools.'
+            a: 'Use ScholarshipTop and provider-path context to compare deadlines and required materials, then build a shared checklist for both schools.'
           },
           {
             q: 'What is the best application process for this comparison?',
-            a: 'Shortlist your best-fit programs, prepare required documents early, and apply through official university scholarship channels.'
+            a: 'Shortlist your best-fit programs, prepare required documents early, and continue through provider or university application channels.'
           }
         ],
         sources: sourceCandidates.slice(0, 5)
@@ -727,12 +727,12 @@ async function runStateCompareFlow(args: {
 
   if (!generated) {
     generated = {
-      ai_verdict: `${left.name} and ${right.name} serve different applicant goals. Compare scholarship volume, award profiles, and official criteria before applying.`,
+      ai_verdict: `${left.name} and ${right.name} serve different applicant goals. Compare scholarship volume, award profiles, eligibility signals, and provider-path context before applying.`,
       meta_title: `${left.name} vs ${right.name} Scholarships 2026`,
       meta_description:
-        `Compare ${left.name} and ${right.name} scholarship climate, review opportunity volume, and plan applications using verified state-level sources.`,
+        `Compare ${left.name} and ${right.name} scholarship climate, review opportunity volume, and plan applications using state-level provider context.`,
       content_json: {
-        body_html: `<article><h2>Financial Aid Overview for ${year}</h2><p>Compare scholarship climate in ${left.name} and ${right.name} by opportunity volume, funding context, and eligibility patterns from official sources.</p></article>`,
+        body_html: `<article><h2>Financial Aid Overview for ${year}</h2><p>Compare scholarship climate in ${left.name} and ${right.name} by opportunity volume, funding context, eligibility patterns, and provider application paths.</p></article>`,
         climate_summary: {
           state_a: `${left.name} offers its own scholarship climate with varying opportunity depth and eligibility criteria by program.`,
           state_b: `${right.name} has a different scholarship climate, so applicants should compare funding context and deadlines before applying.`
@@ -744,11 +744,11 @@ async function runStateCompareFlow(args: {
           },
           {
             q: `How do I check scholarship deadlines in ${left.name} and ${right.name}?`,
-            a: 'Deadlines vary by scholarship provider. Verify each date on official scholarship pages for both states before submission.'
+            a: 'Deadlines vary by scholarship provider. Use provider-path context and your ScholarshipTop shortlist to plan dates for both states before submission.'
           },
           {
             q: 'What is the best application process after state comparison?',
-            a: 'Build a shortlist, prepare required documents early, and submit applications through official channels for your selected state programs.'
+            a: 'Build a shortlist, prepare required documents early, and continue through provider channels for your selected state programs.'
           }
         ],
         sources: sourceCandidates.slice(0, 5)
@@ -763,12 +763,12 @@ async function runStateCompareFlow(args: {
   );
   generated.meta_description = enforceSeoMeta(
     generated.meta_description,
-    `Compare ${left.name} and ${right.name} scholarship climate, evaluate opportunities, and apply through official sources.`
+    `Compare ${left.name} and ${right.name} scholarship climate, evaluate opportunities, and continue through provider application paths.`
   );
   generated.content_json.faq = ensureFaqAtLeastThree(generated.content_json.faq, [
     {
       q: `Who is eligible for scholarships in ${left.name} and ${right.name}?`,
-      a: 'Eligibility varies by program and provider. Review each official listing to confirm academic and residency requirements.'
+      a: 'Eligibility varies by program and provider. Use provider-path context to compare academic and residency requirements.'
     },
     {
       q: `When are scholarship deadlines in ${left.name} and ${right.name}?`,
@@ -960,8 +960,8 @@ export async function runSeoWorkerGenerate(
         title: `${ctx.stateLabel} Scholarships`,
         h1: `${ctx.stateLabel}${ctx.topicLabel ? ` ${ctx.topicLabel}` : ''} Scholarships`,
         meta_description:
-          `Explore ${ctx.stateLabel}${ctx.topicLabel ? ` ${ctx.topicLabel}` : ''} scholarships, compare eligibility and deadlines, and apply through official listings.`,
-        content_html: `<article><h2>Scholarship Guide</h2><p>Use this page to compare scholarship opportunities${ctx.topicLabel ? ` in ${ctx.topicLabel}` : ''} for ${ctx.stateLabel}. Check eligibility, verify deadlines, and apply through official provider pages.</p></article>`,
+          `Explore ${ctx.stateLabel}${ctx.topicLabel ? ` ${ctx.topicLabel}` : ''} scholarships, compare eligibility and deadlines, and continue through provider listings.`,
+        content_html: `<article><h2>Scholarship Guide</h2><p>Use this page to compare scholarship opportunities${ctx.topicLabel ? ` in ${ctx.topicLabel}` : ''} for ${ctx.stateLabel}. Review eligibility signals, deadlines, and provider application paths.</p></article>`,
         cost_of_living: {
           average_room_rent_usd_monthly: null,
           typical_lunch_usd: null,
@@ -978,14 +978,14 @@ export async function runSeoWorkerGenerate(
     );
     generated.meta_description = enforceSeoMeta(
       generated.meta_description ?? '',
-      `Find ${ctx.stateLabel}${ctx.topicLabel ? ` ${ctx.topicLabel}` : ''} scholarships, compare eligibility and deadlines, and apply through official pages.`
+      `Find ${ctx.stateLabel}${ctx.topicLabel ? ` ${ctx.topicLabel}` : ''} scholarships, compare eligibility and deadlines, and continue through provider pages.`
     );
     generated.h1 = enforceSeoTitle(
       generated.h1 ?? generated.title,
       `${ctx.stateLabel} Scholarships`
     );
     if (!generated.content_html?.trim()) {
-      generated.content_html = `<article><h2>Scholarship Guide</h2><p>Find scholarships for ${ctx.stateLabel}${ctx.topicLabel ? ` in ${ctx.topicLabel}` : ''}, review eligibility, and apply through official sources.</p></article>`;
+      generated.content_html = `<article><h2>Scholarship Guide</h2><p>Find scholarships for ${ctx.stateLabel}${ctx.topicLabel ? ` in ${ctx.topicLabel}` : ''}, review eligibility, and continue through provider application paths.</p></article>`;
     }
 
     const { error: upErr } = await admin.from('seo_hub_content').upsert(

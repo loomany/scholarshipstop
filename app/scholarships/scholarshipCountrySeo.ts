@@ -114,18 +114,18 @@ function buildCountrySeoRoute(
     ? `Scholarships for Students from ${label}`
     : `Scholarships to Study in ${label}`;
   const metaDescription = applicant
-    ? `Browse scholarships that may be open to students from ${label}. Compare deadlines, award amounts, eligibility requirements, and official application links.`
-    : `Browse scholarships hosted in ${label}. Compare award amounts, deadlines, eligibility requirements, and official application links.`;
+    ? `Browse scholarships that may be open to students from ${label}. Compare deadlines, award amounts, eligibility requirements, and provider application links.`
+    : `Browse scholarships hosted in ${label}. Compare award amounts, deadlines, eligibility requirements, and provider application links.`;
   const intro = applicant
-    ? `Explore scholarships that list ${label} as an eligible applicant country or citizenship/home-country signal. Use the filters below to compare deadlines, award amounts, study levels, and requirements before opening the official application page.`
+    ? `Explore scholarships that list ${label} as an eligible applicant country or citizenship/home-country signal. Use the filters below to compare deadlines, award amounts, study levels, requirements, and provider application paths.`
     : `Explore scholarships and funding opportunities hosted in ${label}. This page focuses on grants with a ${label} host-country signal so you can compare local, university, and organization-backed opportunities in one place.`;
   const contextBullets = countrySeoContextBullets(kind, normalized, label);
   const contextHtml = contextBullets.length
     ? `<ul>${contextBullets.map((item) => `<li>${item}</li>`).join('')}</ul>`
     : '';
   const supporting = applicant
-    ? `<p>Use this country page as a starting point, then narrow the list by field of study, education level, deadline, GPA, and application effort. Always confirm citizenship, residency, and enrollment requirements on the official scholarship page before applying.</p>${contextHtml}`
-    : `<p>Use this study destination page to compare opportunities by deadline, award amount, institution, and eligibility. Host-country signals can describe where the scholarship is based, where study takes place, or where the provider operates, so review each official listing before applying.</p>${contextHtml}`;
+    ? `<p>Use this country page to compare organized opportunities by field of study, education level, deadline, GPA, application effort, and provider application path. Review citizenship, residency, and enrollment signals as you build your shortlist.</p>${contextHtml}`
+    : `<p>Use this study destination page to compare opportunities by deadline, award amount, institution, eligibility, and provider path. Host-country signals can describe where the scholarship is based, where study takes place, or where the provider operates.</p>${contextHtml}`;
   const faq = applicant
     ? [
         {
@@ -133,9 +133,9 @@ function buildCountrySeoRoute(
           answer: `This page is for students from ${label} looking for scholarships that may include their country, citizenship, or home-country eligibility.`
         },
         {
-          question: `Are all scholarships here guaranteed for ${label} students?`,
+          question: `Are all scholarships here automatic matches for ${label} students?`,
           answer:
-            'No. The list is based on catalog country signals, so you should always verify citizenship, residency, school level, and program requirements on the official scholarship page.'
+            'No. The list is based on catalog country signals, so use ScholarshipTop to compare citizenship, residency, school level, program requirements, and provider application paths before prioritizing applications.'
         },
         {
           question: 'How should I narrow the list?',
@@ -151,7 +151,7 @@ function buildCountrySeoRoute(
         {
           question: `Can international students apply for scholarships in ${label}?`,
           answer:
-            'Some listed scholarships may be open to international students, while others may be limited by citizenship, residency, university, or program. Check the official eligibility rules before applying.'
+            'Some listed scholarships may be open to international students, while others may be limited by citizenship, residency, university, or program. Compare the eligibility signals and provider application path before prioritizing an application.'
         },
         {
           question: 'What should I compare first?',
@@ -186,8 +186,8 @@ function countrySeoContextBullets(
       'Many international awards require transcripts, proof of enrollment, and English-language or program-specific documents.'
     ],
     NG: [
-      'Students from Nigeria should verify whether the award is open by citizenship, country of residence, or current institution.',
-      'If financial need is considered, confirm whether the provider accepts local financial documents, school financial aid records, or separate statements.'
+      'Students from Nigeria should review whether the award is open by citizenship, country of residence, or current institution.',
+      'If financial need is considered, compare whether the provider accepts local financial documents, school financial aid records, or separate statements.'
     ],
     PH: [
       'Students from the Philippines should check whether eligibility is based on citizenship, home country, current school, or destination country.',
@@ -203,20 +203,20 @@ function countrySeoContextBullets(
     ],
     GB: [
       'UK applicant eligibility may distinguish citizenship, ordinary residence, home-fee status, and current institution.',
-      'Confirm whether the scholarship is for UK-based study or allows international study destinations.'
+      'Review whether the scholarship is for UK-based study or allows international study destinations.'
     ]
   };
   const host: Record<string, string[]> = {
     US: [
       'For study in the United States, check whether the scholarship requires US citizenship, permanent residency, FAFSA eligibility, state residency, or enrollment at a US institution.',
-      'International students should verify visa, non-citizen, and school-specific rules before preparing documents.'
+      'International students should review visa, non-citizen, and school-specific rules before preparing documents.'
     ],
     CA: [
       'For study in Canada, check whether the award is tied to a province, Canadian institution, citizenship or permanent residency, or a specific study level.',
-      'International applicants should confirm whether the provider accepts non-Canadian students and where funds are paid.'
+      'International applicants should compare whether the provider accepts non-Canadian students and where funds are paid.'
     ],
     GB: [
-      'For study in the United Kingdom, verify home/international fee status, university enrollment rules, and whether the award is course-specific.',
+      'For study in the United Kingdom, review home/international fee status, university enrollment rules, and whether the award is course-specific.',
       'Deadlines may align with admission cycles, so compare scholarship timing against course application dates.'
     ],
     DE: [

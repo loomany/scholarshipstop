@@ -322,7 +322,7 @@ export function formatAiContextForPrompt(ctx: SeoManifestAiContext): string {
           ? 'Many sampled rows suggest essays may be involved—stay non-absolute.'
           : 'Essay requirement data is inconclusive in the sample—stay vague.',
     rq.lowRequirementSignalRows >= 3
-      ? `${rq.lowRequirementSignalRows} rows show lighter requirement-signal counts in metadata—some programs may be comparatively lighter-touch (still verify each listing).`
+      ? `${rq.lowRequirementSignalRows} rows show lighter requirement-signal counts in metadata—some programs may be comparatively lighter-touch when provider-path context is clear.`
       : ''
   ].filter(Boolean);
 

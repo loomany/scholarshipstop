@@ -61,7 +61,7 @@ export function sanitizeMetaDescription(raw: string): string {
     cleaned = `${cleaned} Compare options and apply.`;
   }
   if (cleaned.length < META_MIN_LEN) {
-    cleaned = `${cleaned} Review eligibility, compare deadlines, and apply through official sources.`;
+    cleaned = `${cleaned} Review eligibility, compare deadlines, and continue through provider application paths.`;
   }
   cleaned = stripUnsafeChars(cleaned);
   if (cleaned.length > META_MAX_LEN) {

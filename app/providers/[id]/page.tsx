@@ -163,19 +163,19 @@ function mergeProviderFaqItems(
 function buildProviderTrustFaq(providerName: string): ProviderFaqItem[] {
   return [
     {
-      question: 'Is ScholarshipTop the scholarship provider?',
+      question: `How does ScholarshipTop help with ${providerName} scholarships?`,
       answer:
-        `No. ScholarshipTop is not ${providerName} and does not provide scholarships directly. Use the provider profile to review connected listings, then confirm final rules on the official provider page when available.`
+        `ScholarshipTop organizes connected listings, eligibility signals, deadlines, award details, source-quality context, and provider application paths when available so students can compare opportunities tied to ${providerName} in one workspace.`
     },
     {
-      question: 'What should I verify before applying?',
+      question: 'What details can I use to plan my application?',
       answer:
-        'Confirm the official source, eligibility rules, deadline, required documents, award amount, payout terms, renewal rules, and application route before submitting.'
+        'Use the provider profile to review eligibility patterns, deadline context, required documents, award details, renewal notes, and the available application route before adding opportunities to your shortlist.'
     },
     {
       question: 'Why might a provider profile have incomplete data?',
       answer:
-        'Provider profiles are based on available ScholarshipTop listing data. Some listings do not expose a clear official URL, current deadline, or full eligibility details, so ScholarshipTop flags incomplete data instead of inventing it.'
+        'Provider profiles are based on available ScholarshipTop listing data. Some listings do not expose a clear provider URL, current deadline, or full eligibility details, so ScholarshipTop flags the available source-quality context instead of inventing it.'
     }
   ];
 }

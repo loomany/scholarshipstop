@@ -191,7 +191,7 @@ export async function ProvidersHubPageContent({
     name: stateName ? `Scholarship providers in ${stateName}` : 'Scholarship Providers',
     description: stateName
       ? `Organizations and foundations with active scholarship listings tied to ${stateName}.`
-      : 'Scholarship provider directory based on ScholarshipTop listing data.',
+      : 'Scholarship provider hubs based on ScholarshipTop listing data, connected scholarships, source-quality signals, and application-path context.',
     url: getURL(listingBasePath.replace(/^\/+/, ''))
   };
 
@@ -389,18 +389,19 @@ function ProviderDirectoryTrustSection({
     >
       <div>
         <p className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-700">
-          Scholarship provider directory
+          Scholarship provider hubs
         </p>
         <h2
           id="provider-directory-trust-heading"
           className="mt-2 text-2xl font-bold tracking-tight text-zinc-950"
         >
-          Use providers to verify source context, not just names
+          Compare providers, connected scholarships, and application paths
         </h2>
         <p className="mt-3 text-sm leading-7 text-zinc-700 sm:text-base">
-          ScholarshipTop builds {directoryLabel} from live listing data. When an
-          official source is missing or unclear, the profile should show that
-          status instead of treating the provider as fully verified.
+          ScholarshipTop builds {directoryLabel} from listing data so students
+          can see connected scholarships, eligibility patterns, deadline
+          context, source-quality signals, and provider application paths when
+          available.
         </p>
         <div className="mt-4 flex flex-wrap gap-2">
           {[
@@ -422,8 +423,8 @@ function ProviderDirectoryTrustSection({
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
         {[
           ['Active scholarships', 'How many live listings are connected to the provider.'],
-          ['Source status', 'Whether an official URL is available or needs confirmation.'],
-          ['Data completeness', 'How much public context the profile can safely show.'],
+          ['Source status', 'Whether a provider URL or application path is available.'],
+          ['Data completeness', 'How much structured context the profile can show.'],
           ['Corrections path', 'Students can report broken links or inaccurate eligibility.']
         ].map(([title, body]) => (
           <div key={title} className="rounded-2xl border border-white/80 bg-white p-4 shadow-sm">

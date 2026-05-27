@@ -75,17 +75,17 @@ const trustLinks = {
   ranking: {
     href: '/how-we-rank-scholarships',
     label: 'How rankings work',
-    body: 'Understand recommendation factors, fit signals, deadline urgency, and why matches never guarantee awards.'
+    body: 'Understand recommendation factors, fit signals, deadline urgency, source-quality signals, and shortlist planning.'
   },
   disclaimer: {
     href: '/financial-aid-disclaimer',
     label: 'Financial aid disclaimer',
-    body: 'Review important limitations before relying on any scholarship listing.'
+    body: 'See the legal boundaries behind scholarship research and application planning.'
   },
   corrections: {
     href: '/corrections',
     label: 'Corrections',
-    body: 'Report inaccurate deadlines, broken official links, wrong eligibility notes, or scam concerns.'
+    body: 'Report inaccurate deadlines, application paths, eligibility notes, or scam concerns.'
   }
 } as const;
 
@@ -97,7 +97,7 @@ export const TRUST_PAGE_CONTENT: Record<TrustPageKey, TrustPageContent> = {
     eyebrow: 'About ScholarshipTop',
     h1: 'A scholarship search and application-planning platform',
     intro:
-      'ScholarshipTop helps students find relevant scholarships, compare eligibility and deadlines, understand application requirements, save opportunities, and apply through official provider sources.',
+      'ScholarshipTop helps students find relevant scholarships, compare eligibility and deadlines, understand application requirements, save opportunities, prepare materials, and continue toward provider application paths when ready.',
     cards: [
       {
         title: 'Search by fit',
@@ -110,18 +110,18 @@ export const TRUST_PAGE_CONTENT: Record<TrustPageKey, TrustPageContent> = {
           'Listings are organized into practical summaries, eligibility notes, missing-data flags, and next-step checklists.'
       },
       {
-        title: 'Act through official sources',
+        title: 'Move toward application paths',
         body:
-          'ScholarshipTop is not the award provider. Students should confirm final rules and apply through the official provider page.'
+          'Provider application links and submission paths are included when available so students can move from shortlist to application planning faster.'
       }
     ],
     sections: [
       {
         title: 'What makes ScholarshipTop different',
         body:
-          'ScholarshipTop is built to be more than a directory. The product adds a decision-support layer on top of scholarship data so students can spend less time guessing and more time applying to realistic opportunities.',
+          'ScholarshipTop is built as a scholarship workspace. The product adds a decision-support layer on top of scholarship data so students can spend less time guessing and more time preparing realistic applications.',
         bullets: [
-          'Source status and official-source prompts',
+          'Source-quality and provider-path signals',
           'Deadline clarity and urgency signals',
           'Eligibility summaries written in plain language',
           'Application effort and required-materials signals',
@@ -129,9 +129,9 @@ export const TRUST_PAGE_CONTENT: Record<TrustPageKey, TrustPageContent> = {
         ]
       },
       {
-        title: 'What ScholarshipTop does not do',
+        title: 'What providers decide',
         body:
-          'ScholarshipTop does not provide scholarships directly, select winners, guarantee eligibility, guarantee award payment, or replace the official rules of a provider.'
+          'Final selection decisions and award disbursement are made by the relevant provider. ScholarshipTop focuses on organized research, comparison, shortlisting, and application preparation.'
       }
     ],
     links: [
@@ -164,7 +164,7 @@ export const TRUST_PAGE_CONTENT: Record<TrustPageKey, TrustPageContent> = {
       {
         title: 'Transparent uncertainty',
         body:
-          'When data is incomplete, the site flags what students should verify instead of filling gaps with assumptions.'
+          'When data is incomplete, the site flags source-quality context and available provider-path signals instead of filling gaps with assumptions.'
       }
     ],
     sections: [
@@ -173,14 +173,14 @@ export const TRUST_PAGE_CONTENT: Record<TrustPageKey, TrustPageContent> = {
         bullets: [
           'We structure public scholarship facts into searchable fields and readable summaries.',
           'We write plain-English guidance for eligibility, required documents, and application planning.',
-          'We link students back to official provider pages for final rules and submission.',
+          'We include provider application paths when available so students can plan the next step from organized context.',
           'AI tools may help organize data or draft wording, but facts must come from available listing evidence and should not be invented.'
         ]
       },
       {
         title: 'How incomplete data is handled',
         body:
-          'If a deadline, award value, eligibility rule, payout method, document list, or source route is unclear, ScholarshipTop should mark that uncertainty visibly and tell students what to confirm before applying.'
+          'If a deadline, award value, eligibility rule, payout method, document list, or application route is unclear, ScholarshipTop should mark that uncertainty visibly and show the available context for planning.'
       },
       {
         title: 'Corrections',
@@ -194,11 +194,11 @@ export const TRUST_PAGE_CONTENT: Record<TrustPageKey, TrustPageContent> = {
   verificationMethodology: {
     title: 'Scholarship Verification Methodology',
     description:
-      'How ScholarshipTop checks official sources, deadlines, award values, eligibility, required materials, and application routes.',
+      'How ScholarshipTop organizes source-quality signals, deadlines, award values, eligibility, required materials, and application routes.',
     eyebrow: 'Verification methodology',
     h1: 'How ScholarshipTop verifies scholarship listings',
     intro:
-      'ScholarshipTop checks whether a listing has enough evidence for students to evaluate it safely. Verification is about source clarity and student usefulness, not a guarantee that a student will qualify or win.',
+      'ScholarshipTop checks whether a listing has enough evidence for students to evaluate fit and plan next steps. Verification is about source clarity, structured context, and student usefulness.',
     cards: [
       {
         title: 'Verified source',
@@ -206,9 +206,9 @@ export const TRUST_PAGE_CONTENT: Record<TrustPageKey, TrustPageContent> = {
           'An official provider or application destination is available and the listing has enough core details to guide the student.'
       },
       {
-        title: 'Needs confirmation',
+        title: 'Provider path signal',
         body:
-          'A sponsor or source is present, but the official application path or final rule set should be checked before applying.'
+          'A sponsor or source is present, and ScholarshipTop highlights the available application route context for planning.'
       },
       {
         title: 'Partial data',
@@ -225,27 +225,27 @@ export const TRUST_PAGE_CONTENT: Record<TrustPageKey, TrustPageContent> = {
           'Award amount, payout method, renewal notes, and number of awards when available',
           'Eligibility rules such as level, field, citizenship, residency, institution, GPA, or special status',
           'Required materials such as essays, transcripts, recommendations, forms, portfolios, videos, or proof of enrollment',
-          'Application route and whether students should apply through the provider'
+          'Application route and whether a provider application path is available'
         ]
       },
       {
         title: 'Status labels',
         bullets: [
-          'Verified official source: an official-source destination is available.',
-          'Official source available: a provider/application route exists but students should still confirm final rules.',
-          'Needs confirmation: source information exists but the final application route or facts need checking.',
-          'Source unclear: current data is not enough to rely on the listing without additional verification.',
+          'Structured provider path: a provider or application destination is available.',
+          'Provider source available: a provider/application route exists with useful context for planning.',
+          'Application path signal: source information exists and can guide next-step planning.',
+          'Limited source context: current data is not enough to show a complete provider path.',
           'Expired or check next cycle: the listed deadline appears old or the provider may reopen a future cycle.'
         ]
       },
       {
-        title: 'Student rule',
+        title: 'Application readiness',
         body:
-          'Always confirm final requirements, deadlines, timezone, payout method, and submission steps on the official provider page before applying.'
+          'Use organized deadlines, eligibility signals, award details, required materials, and provider application paths to decide what belongs on your shortlist and what to prepare next.'
       }
     ],
     links: [trustLinks.editorial, trustLinks.ranking, trustLinks.corrections],
-    cta: { href: '/scholarships', label: 'Find verified leads' }
+    cta: { href: '/scholarships', label: 'Find structured listings' }
   },
   ranking: {
     title: 'How ScholarshipTop Ranks Scholarships',
@@ -254,7 +254,7 @@ export const TRUST_PAGE_CONTENT: Record<TrustPageKey, TrustPageContent> = {
     eyebrow: 'Ranking transparency',
     h1: 'How recommendations work',
     intro:
-      'ScholarshipTop recommendations are designed to help students build a realistic shortlist. They do not guarantee eligibility, selection, or award payment.',
+      'ScholarshipTop recommendations are designed to help students build a realistic shortlist, compare fit, and prioritize application preparation.',
     cards: [
       {
         title: 'Profile fit',
@@ -264,12 +264,12 @@ export const TRUST_PAGE_CONTENT: Record<TrustPageKey, TrustPageContent> = {
       {
         title: 'Application timing',
         body:
-          'Deadline clarity and urgency help students prioritize what to check and prepare first.'
+          'Deadline clarity and urgency help students prioritize what to save and prepare first.'
       },
       {
         title: 'Data confidence',
         body:
-          'Source status, missing fields, and application-route clarity help distinguish strong leads from listings that need more checking.'
+          'Source status, missing fields, and application-route clarity help distinguish stronger workspace signals from thinner listings.'
       }
     ],
     sections: [
@@ -277,18 +277,18 @@ export const TRUST_PAGE_CONTENT: Record<TrustPageKey, TrustPageContent> = {
         title: 'Ranking factors',
         bullets: [
           'Eligibility and profile match signals',
-          'Deadline urgency and whether the date is trustworthy',
+          'Deadline urgency and whether the date is clear enough for planning',
           'Application effort, including essays, transcripts, recommendations, and special documents',
           'Award value and payout clarity when available',
-          'Source confidence and official application path',
+          'Source confidence and provider application path',
           'Data completeness and missing-data flags',
           'Student behavior such as saved, ignored, or viewed opportunities'
         ]
       },
       {
-        title: 'What rankings do not mean',
+        title: 'What providers decide',
         body:
-          'A high match or visible recommendation is not a guarantee. The official provider controls eligibility, selection, deadlines, payment, and final application rules.'
+          'A high match or visible recommendation is a planning signal, not a provider decision. Final selection and award disbursement are made by the relevant provider.'
       }
     ],
     links: [trustLinks.methodology, trustLinks.disclaimer, trustLinks.editorial],
@@ -297,11 +297,11 @@ export const TRUST_PAGE_CONTENT: Record<TrustPageKey, TrustPageContent> = {
   howItWorks: {
     title: 'How ScholarshipTop Works',
     description:
-      'How students use ScholarshipTop to answer questions, get matches, compare scholarships, save deadlines, verify official sources, and apply.',
+      'How students use ScholarshipTop to answer questions, get matches, compare scholarships, save deadlines, prepare materials, and move toward application paths.',
     eyebrow: 'How it works',
     h1: 'From scholarship search to application shortlist',
     intro:
-      'ScholarshipTop turns a broad scholarship search into a practical workflow: answer questions, review matches, compare requirements, save realistic options, verify official sources, and apply.',
+      'ScholarshipTop turns a broad scholarship search into a practical workflow: answer questions, review matches, compare requirements, save realistic options, prepare materials, and continue toward provider application paths.',
     cards: [
       {
         title: '1. Answer questions',
@@ -314,25 +314,25 @@ export const TRUST_PAGE_CONTENT: Record<TrustPageKey, TrustPageContent> = {
           'Use deadlines, award values, requirements, source status, and application effort to decide what deserves your time.'
       },
       {
-        title: '3. Apply through providers',
+        title: '3. Prepare and submit',
         body:
-          'Open the official source, confirm final rules, prepare documents, and submit through the provider application path.'
+          'Prepare documents, essays, and required materials, then use the provider application path when you are ready to submit.'
       }
     ],
     sections: [
       {
         title: 'Why the workflow matters',
         body:
-          'Students often lose time applying from a title alone. ScholarshipTop encourages the opposite: confirm fit first, then evaluate effort, then apply only when the official source supports the listing.'
+          'Students often lose time applying from a title alone. ScholarshipTop encourages the opposite: compare fit first, evaluate effort, prepare the right materials, and keep provider application paths tied to the saved opportunity.'
       },
       {
-        title: 'What to check before applying',
+        title: 'Application readiness checklist',
         bullets: [
           'Eligibility rules and whether they match your profile',
           'Deadline, timezone, and whether the cycle is still open',
           'Award value, payout route, renewal rules, and number of awards',
           'Required documents and how long they take to prepare',
-          'Official application route and provider contact information'
+          'Provider application route and contact information when available'
         ]
       }
     ],
@@ -525,7 +525,7 @@ export const TRUST_PAGE_CONTENT: Record<TrustPageKey, TrustPageContent> = {
   howWeMakeMoney: {
     title: 'How ScholarshipTop Makes Money',
     description:
-      'How free and paid ScholarshipTop features work, and why payment does not guarantee scholarship results.',
+      'How free and paid ScholarshipTop features help students search, organize, compare, save, and plan scholarship applications.',
     eyebrow: 'Business transparency',
     h1: 'How ScholarshipTop makes money',
     intro:
@@ -542,9 +542,9 @@ export const TRUST_PAGE_CONTENT: Record<TrustPageKey, TrustPageContent> = {
           'Subscriptions may unlock additional matching, planning, research, or productivity features depending on the current product plan.'
       },
       {
-        title: 'No award guarantee',
+        title: 'Provider decisions',
         body:
-          'Payment to ScholarshipTop does not guarantee eligibility, selection, award payment, or provider approval.'
+          'Paid tools improve organization, matching, filtering, and planning; final award decisions remain with the relevant provider.'
       }
     ],
     sections: [
@@ -556,10 +556,10 @@ export const TRUST_PAGE_CONTENT: Record<TrustPageKey, TrustPageContent> = {
       {
         title: 'What students should know',
         bullets: [
-          'ScholarshipTop is not the scholarship provider.',
-          'Official provider rules control final eligibility and selection.',
-          'Paid tools can help organize the search, but they cannot guarantee results.',
-          'Students should confirm every final requirement on the official source before applying.'
+          'ScholarshipTop organizes scholarship details, deadlines, and application signals.',
+          'Provider application paths are included when available.',
+          'Paid tools can help organize the search, compare fit, and prepare materials.',
+          'Final selection and award disbursement are made by the relevant provider.'
         ]
       }
     ],
