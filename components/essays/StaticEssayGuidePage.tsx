@@ -41,7 +41,7 @@ const DEFAULT_COPY: StaticEssayGuidePageCopy = {
   relatedPages: 'Related ScholarshipTop pages',
   faq: 'FAQ',
   disclaimer:
-    'ScholarshipTop provides writing guidance and planning support, but it does not guarantee eligibility, selection, or award payment. Always confirm final rules on the official provider page.'
+    'ScholarshipTop helps students plan, draft, refine, and align essays with scholarship requirements so they can prepare stronger applications faster.'
 };
 
 type StaticEssayGuidePageProps = {

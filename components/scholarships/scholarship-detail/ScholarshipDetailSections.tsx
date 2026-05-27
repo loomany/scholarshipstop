@@ -242,7 +242,7 @@ export function ScholarshipTrustSignalsBlock({
             {copy.trust.methodology}
           </Link>
           <Link
-            href="/financial-aid-disclaimer"
+            href="/scholarships/hub/matches"
             className="rounded-full border border-orange-200 bg-orange-50 px-3 py-1.5 text-orange-800 transition hover:border-orange-300 hover:bg-orange-100"
           >
             {copy.trust.disclaimer}

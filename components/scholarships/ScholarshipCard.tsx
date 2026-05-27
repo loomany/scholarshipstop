@@ -613,6 +613,8 @@ export default function ScholarshipCard({
     cardDifficulty.level,
     uiLocale
   );
+  const sourceSignalPrefix =
+    uiLocale === 'en' ? 'Signal:' : cardChrome.sourcePrefix;
   const intelligenceBadges = [
     {
       key: 'best-for',
@@ -626,7 +628,7 @@ export default function ScholarshipCard({
     },
     {
       key: 'source',
-      label: `${cardChrome.sourcePrefix} ${localizedSourceShort}`,
+      label: `${sourceSignalPrefix} ${localizedSourceShort}`,
       title: cardSourceStatus.description
     }
   ] as const;

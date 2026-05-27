@@ -1714,7 +1714,7 @@ export default function ScholarshipDetailPageClient({
         type="button"
         className={detailApplyPrimaryClass}
         onClick={openPremiumPaywall}
-        title="Premium subscription required to visit the provider website"
+        title={detailUi.applyPremiumTitle}
       >
         <Lock
           className="h-4 w-4 shrink-0 text-white stroke-white"

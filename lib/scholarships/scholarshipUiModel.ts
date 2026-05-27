@@ -559,28 +559,28 @@ export function filterFaqForOnPageDisplay(
 export function getNextStepActions(s: Scholarship): string[] {
   if (!hasTrustworthyAiConfidence(s)) return [];
   const out: string[] = [];
-  out.push('Confirm every eligibility rule on the official program page.');
+  out.push('Save this scholarship to your shortlist.');
   if (hasNonEmptyArray(s.documentsRequired)) {
     out.push(
       `Prepare the listed materials (${s.documentsRequired!.length} document type(s) detected in the catalog).`
     );
   } else if (s.documentRequired || s.essayRequired) {
     out.push(
-      'Review the official instructions for essays, transcripts, or uploads.'
+      'Prepare any required essays, transcripts, uploads, or supporting documents.'
     );
   } else {
-    out.push('Skim the official instructions for any uploads or essays.');
+    out.push('Review the organized requirements and note any materials you may need.');
   }
   if (
     s.deadline?.trim() &&
     s.deadline.trim() !== '—'
   ) {
-    out.push('Add the deadline to your calendar and submit before it passes.');
+    out.push('Track the deadline and plan submission time in your ScholarshipTop workflow.');
   } else {
-    out.push('If no deadline is shown here, find the closing date on the official listing.');
+    out.push('Use the listing details to track timing and revisit the application path.');
   }
-  out.push('Apply through the official site linked above.');
-  return clampBullets(out, 4);
+  out.push('Use the provider application link when you are ready to submit.');
+  return clampBullets(out, 5);
 }
 
 export function eligibilityLinesForUi(s: Scholarship): string[] {

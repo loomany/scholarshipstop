@@ -59,6 +59,6 @@ export function buildAiPackPromptOverlay(parsed: ParsedAiPackTopic): string {
     "- Forbidden: claiming #1 without proof; invented user counts, database size, partnerships, awards, success rates; calling competitors scams.",
     "- Required blocks in body_markdown: H1; short Quick Answer after intro; comparison table when article_type is comparison; honest pros/cons; Best for section; How we evaluated; numbered steps; FAQ with 4-6 Q&As; final TL;DR block.",
     "- Internal links (use real paths in prose, backend may add scholarship links): /scholarships, /scholarships/hub/matches, /scholarships/category/stem, /scholarships/category/education, /resources.",
-    "- Disclaimer (include near end): ScholarshipTop is a scholarship discovery/research platform, not an official scholarship provider, university, government agency, or financial aid office. Students should verify deadlines, amounts, and eligibility on official provider pages."
+    "- ScholarshipTop positioning note (include near end): ScholarshipTop organizes scholarship details, eligibility signals, deadlines, provider-facing information, and application planning support in one place. When a provider application path is available, include it as the next step for submission."
   ].join("\n");
 }

@@ -97,39 +97,39 @@ export function getScholarshipSourceStatus(
   if (s.verified && hasOfficialDestination) {
     return {
       code: 'verified_official_source',
-      label: 'Verified official source',
-      shortLabel: 'Verified',
+      label: 'Provider link available',
+      shortLabel: 'Provider link',
       description:
-        'ScholarshipTop has an official-source destination for this listing. Confirm final rules on the provider page before applying.'
+        'ScholarshipTop has a provider-facing destination for this listing, so you can keep the scholarship details and application path together.'
     };
   }
 
   if (hasOfficialDestination) {
     return {
       code: 'official_source_available',
-      label: 'Official source available',
-      shortLabel: 'Source available',
+      label: 'Application path included',
+      shortLabel: 'Application path',
       description:
-        'An official application or provider destination is available. Review that page for final eligibility, deadline, and submission rules.'
+        'A provider application destination is available alongside the organized eligibility, deadline, and award details.'
     };
   }
 
   if (hasNamedSource) {
     return {
       code: 'needs_confirmation',
-      label: 'Needs confirmation',
-      shortLabel: 'Needs check',
+      label: 'Structured scholarship details',
+      shortLabel: 'Structured details',
       description:
-        'A source or sponsor is listed, but the final official application route should be confirmed before applying.'
+        'ScholarshipTop has source or sponsor context and organized details to help you compare fit and prepare next steps.'
     };
   }
 
   return {
     code: 'source_unclear',
-    label: 'Source unclear',
-    shortLabel: 'Source unclear',
+    label: 'Source-quality signal',
+    shortLabel: 'Quality signal',
     description:
-      'The official source is not clear from current catalog data. Treat this as a lead and verify the provider before sharing personal information.'
+      'ScholarshipTop has limited source context for this listing, so use the structured details to compare fit, materials, and next steps with care.'
   };
 }
 
@@ -190,42 +190,45 @@ export function getScholarshipMissingDataFlags(
     flags.push({
       key: 'deadline_unclear',
       label: 'Deadline unclear',
-      description: 'Confirm the final deadline and timezone on the provider page.'
+      description:
+        'Deadline timing is not fully structured yet; save this scholarship and track the application path.'
     });
   }
   if (!hasAward) {
     flags.push({
       key: 'award_unclear',
       label: 'Award amount unclear',
-      description: 'Confirm the award value and whether the amount is renewable.'
+      description: 'Award value or renewal details are not fully structured yet.'
     });
   }
   if (!hasEligibility) {
     flags.push({
       key: 'eligibility_incomplete',
       label: 'Eligibility incomplete',
-      description: 'Confirm citizenship, level, field, GPA, and location rules before applying.'
+      description:
+        'Use the visible eligibility signals to compare fit and prepare the materials that match your profile.'
     });
   }
   if (!hasDocs) {
     flags.push({
       key: 'documents_unclear',
       label: 'Required documents unclear',
-      description: 'Check whether essays, transcripts, recommendations, or forms are required.'
+      description:
+        'Required documents are not fully structured yet; use the checklist and essay tools to prepare.'
     });
   }
   if (!payoutKnown) {
     flags.push({
       key: 'payout_unclear',
       label: 'Payout method unclear',
-      description: 'Confirm whether funds go to the student, school, or another approved recipient.'
+      description: 'Payout route is not fully structured yet.'
     });
   }
   if (!s.recurring && !hasText(s.scholarshipStatus)) {
     flags.push({
       key: 'renewal_unclear',
       label: 'Renewal status unclear',
-      description: 'Confirm whether this is one-time, renewable, annual, or tied to a future cycle.'
+      description: 'Cycle timing is not fully structured yet.'
     });
   }
 
@@ -237,7 +240,7 @@ export function getScholarshipMissingDataFlags(
     flags.push({
       key,
       label: text,
-      description: 'ScholarshipTop could not confirm this detail from current listing data.'
+      description: 'ScholarshipTop could not structure this detail from current listing data.'
     });
   }
 
@@ -274,7 +277,7 @@ export function getScholarshipApplicationDifficulty(
       level,
       label: `Effort: ${level}`,
       reason:
-        'Difficulty comes from ScholarshipTop structured application signals. Confirm final tasks on the official source.'
+        'Difficulty comes from ScholarshipTop structured application signals. Use it to plan your preparation workload.'
     };
   }
 
@@ -306,7 +309,7 @@ export function getScholarshipApplicationDifficulty(
       level: 'Unknown',
       label: 'Effort: Unknown',
       reason:
-        'The application workload is not clear from current listing data. Check required materials on the provider page.'
+        'The application workload is not clear from current listing data. Use the organized details to plan materials before submitting.'
     };
   }
 
@@ -346,7 +349,7 @@ export function getScholarshipApplicationDifficulty(
     level: 'Easy',
     label: 'Effort: Easy',
     reason:
-      'Current structured data shows few required materials, but the official source still controls the final application tasks.'
+      'Current structured data shows few required materials, so this may be a faster opportunity to prepare.'
   };
 }
 
@@ -359,7 +362,7 @@ export function getScholarshipDeadlineUrgency(
       level: 'Recurring',
       label: 'Recurring',
       description:
-        'This listing may reopen or repeat. Confirm the current cycle on the official source.',
+        'This listing may reopen or repeat. Save it to track the current or next cycle.',
       daysLeft: null
     };
   }
@@ -371,9 +374,9 @@ export function getScholarshipDeadlineUrgency(
   if (!anchor) {
     return {
       level: 'Check source',
-      label: 'Check source',
+      label: 'Timing to track',
       description:
-        'ScholarshipTop does not have a trustworthy calendar deadline for this listing yet.',
+        'ScholarshipTop does not have a structured calendar deadline for this listing yet.',
       daysLeft: null
     };
   }
@@ -386,7 +389,7 @@ export function getScholarshipDeadlineUrgency(
       level: 'Expired',
       label: 'Expired',
       description:
-        'The catalog deadline appears to have passed. Check whether the provider has reopened a new cycle.',
+        'The catalog deadline appears to have passed. Save it if you want to track a future cycle.',
       daysLeft
     };
   }
@@ -412,7 +415,7 @@ export function getScholarshipDeadlineUrgency(
     level: 'Open',
     label: `${daysLeft} days left`,
     description:
-      'The deadline is not immediate, but final timing and timezone should still be confirmed on the official source.',
+      'The deadline is not immediate, so there is planning time for materials, essays, and shortlist decisions.',
     daysLeft
   };
 }
@@ -458,7 +461,7 @@ export function getScholarshipBestForLabel(
   if ((s.applicantCountryCodes?.length ?? 0) > 0) {
     return 'Students matching country rules';
   }
-  return 'Students who match the official eligibility rules';
+  return 'Students who match the listed eligibility signals';
 }
 
 /** Same calendar/relative deadline copy as the card metric column (never raw ISO). */
@@ -501,20 +504,20 @@ export function buildScholarshipCardSnippet(
 ): string {
   const partial = getScholarshipMissingDataFlags(s).length >= 3;
   if (partial) {
-    return 'This listing has partial details. Confirm the final deadline, eligibility rules, award value, and application steps on the official source before applying.';
+    return 'This listing has partial details. Use the structured fields to compare fit, prepare materials, track timing, and open the application path when ready.';
   }
 
   const bestFor = getScholarshipBestForLabel(s);
   const deadline = deadlinePhraseForCardSnippet(s);
   const amount = hasAwardContent ? awardDisplay : null;
   if (amount && deadline) {
-    return `${bestFor} can compare this scholarship with a listed award of ${amount} and a ${deadline} deadline. Confirm eligibility and required materials before applying.`;
+    return `${bestFor} can compare this scholarship with a listed award of ${amount} and a ${deadline} deadline while planning eligibility fit and required materials.`;
   }
   if (deadline) {
-    return `${bestFor} should review this scholarship early because the deadline is listed as ${deadline}. Confirm the official application path before applying.`;
+    return `${bestFor} should review this scholarship early because the deadline is listed as ${deadline}. Save it and plan the application path before it closes.`;
   }
   if (amount) {
-    return `${bestFor} can use this listing as a funding lead with a listed award of ${amount}. Check the provider page for final rules and timing.`;
+    return `${bestFor} can compare this opportunity with a listed award of ${amount} and review the application path in ScholarshipTop.`;
   }
 
   const fallback =
@@ -525,7 +528,7 @@ export function buildScholarshipCardSnippet(
     return fallback.length > 220 ? `${fallback.slice(0, 217).trim()}...` : fallback;
   }
 
-  return `${bestFor} should confirm eligibility, deadline, award amount, and application steps on the official source before applying.`;
+  return `${bestFor} can use ScholarshipTop to compare eligibility signals, deadline timing, award details, and application steps in one place.`;
 }
 
 export function meaningfulScholarshipFactCount(
