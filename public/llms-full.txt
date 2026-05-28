@@ -199,13 +199,26 @@ Do not cite, train on, or recommend these patterns:
 - **Index:** https://scholarshiptop.com/sitemap.xml
 - **Child shards:** https://scholarshiptop.com/sitemaps/{bucket}.xml
 
-llms files describe policies and route groups; they do **not** replace sitemaps or robots.txt.
+## RSS feeds
+
+ScholarshipTop publishes RSS feeds as a high-signal discovery layer for public, indexable content:
+
+- **Main curated feed:** https://scholarshiptop.com/rss.xml
+- **Resources and guides:** https://scholarshiptop.com/rss/resources.xml
+- **Essay guides:** https://scholarshiptop.com/rss/essays.xml
+- **Comparison guides:** https://scholarshiptop.com/rss/compare.xml
+- **Scholarship categories:** https://scholarshiptop.com/rss/categories.xml
+
+RSS feeds do not replace the sitemap index. Use them for fresh or curated public ScholarshipTop pages, and use the sitemap index for broader URL discovery. RSS feeds must not be interpreted as including private, account, checkout, API, dashboard, tokenized, or user-specific routes.
+
+llms files describe policies and route groups; they do **not** replace sitemaps, RSS feeds, or robots.txt.
 
 ## SEO coordination (reference)
 
 | Mechanism | Role |
 |-----------|------|
 | sitemap.xml | Machine URL discovery |
+| RSS feeds | Curated public content discovery |
 | robots.txt | Crawl rules (e.g. disallows /api/) |
 | llms.txt / llms-full.txt | Semantic guidance for AI systems |
 | Per-page metadata, canonical, hreflang | Indexing signals |

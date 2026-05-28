@@ -61,6 +61,18 @@ Use the sitemap index for complete public URL discovery (do not guess URL patter
 
 - https://scholarshiptop.com/sitemap.xml
 
+## RSS feeds
+
+ScholarshipTop publishes RSS feeds for public, indexable discovery surfaces:
+
+- Main curated feed: https://scholarshiptop.com/rss.xml
+- Resources and guides: https://scholarshiptop.com/rss/resources.xml
+- Essay guides: https://scholarshiptop.com/rss/essays.xml
+- Comparison guides: https://scholarshiptop.com/rss/compare.xml
+- Scholarship categories: https://scholarshiptop.com/rss/categories.xml
+
+These feeds contain public ScholarshipTop URLs only. They do not include account, checkout, API, private essay, dashboard, or user-specific pages.
+
 ## Extended documentation
 
 See https://scholarshiptop.com/llms-full.txt for route groups, localization policy, citation guidance, and exclusions.

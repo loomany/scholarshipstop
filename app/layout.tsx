@@ -206,6 +206,36 @@ export default async function RootLayout({ children }: PropsWithChildren) {
         />
         <meta name="yandex-verification" content="a42f95878903e0dc" />
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000000" />
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title="ScholarshipTop RSS"
+          href={`${canonicalSiteUrl}/rss.xml`}
+        />
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title="ScholarshipTop Resources RSS"
+          href={`${canonicalSiteUrl}/rss/resources.xml`}
+        />
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title="ScholarshipTop Essay Guides RSS"
+          href={`${canonicalSiteUrl}/rss/essays.xml`}
+        />
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title="ScholarshipTop Comparison Guides RSS"
+          href={`${canonicalSiteUrl}/rss/compare.xml`}
+        />
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title="ScholarshipTop Scholarship Categories RSS"
+          href={`${canonicalSiteUrl}/rss/categories.xml`}
+        />
       </head>
       <body
         className={`${fontSans.className} font-sans bg-zinc-50 text-zinc-900 antialiased`}

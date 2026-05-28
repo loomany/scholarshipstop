@@ -1,12 +1,15 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
+import { LocalizedProductionPage } from '@/components/i18n/LocalizedProductionPage';
 import LocalizedEssayGuidePage from '@/components/essays/LocalizedEssayGuidePage';
 import { essayHubArticlePath } from '@/lib/essays/essayHubSection';
 import { getContentTranslationSeoDecision } from '@/lib/i18n/contentTranslationsServer';
 import type { ContentTranslationLocale } from '@/lib/i18n/contentTranslationsTypes';
 import { localizedNotFoundMetadata } from '@/lib/i18n/localizedNotFoundMetadata';
 import { buildEnglishFallbackPageMetadata } from '@/lib/i18n/localizedContentFallbackMetadata';
+import { buildLocalizedPilotMetadata } from '@/lib/i18n/localizedMetadata';
+import { getLocalizedPilotPageBySegments } from '@/lib/i18n/staticTranslations';
 import { buildEssayGuideAlternates } from '@/lib/i18n/essayPilot/essayTranslationAlternates';
 import { resolveLocalizedEssayGuidePage } from '@/lib/i18n/essayPilot/resolveLocalizedEssayGuide';
 import { getStaticEssayGuide } from '@/lib/essays/staticEssayGuides';
@@ -37,9 +40,14 @@ export async function generateMetadata({
   const locale = resolveStage2PilotLocaleFromParams(params);
   if (!locale) return METADATA_NOT_FOUND;
   const slug = decodeURIComponent(params?.slug ?? '').trim().toLowerCase();
-  if (!slug || getStaticEssayGuide(slug)) {
+  if (!slug) {
     return localizedNotFoundMetadata(locale);
   }
+
+  const staticPage = getStaticEssayGuide(slug)
+    ? getLocalizedPilotPageBySegments(locale, ['essays', slug])
+    : null;
+  if (staticPage) return buildLocalizedPilotMetadata({ page: staticPage });
 
   const resolved = await resolveLocalizedEssayGuidePage(
     slug,
@@ -122,7 +130,12 @@ export default async function LocalizedEssayGuideRoute({ params }: PageProps) {
   if (!isStage2PilotLocale(params.locale)) notFound();
   const locale = params.locale as Stage2PilotLocale;
   const slug = decodeURIComponent(params.slug ?? '').trim().toLowerCase();
-  if (!slug || getStaticEssayGuide(slug)) notFound();
+  if (!slug) notFound();
+
+  const staticPage = getStaticEssayGuide(slug)
+    ? getLocalizedPilotPageBySegments(locale, ['essays', slug])
+    : null;
+  if (staticPage) return <LocalizedProductionPage page={staticPage} />;
 
   const resolved = await resolveLocalizedEssayGuidePage(
     slug,
