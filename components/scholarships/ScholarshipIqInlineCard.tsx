@@ -5,6 +5,7 @@ import {
   getScholarshipsHubUiCopy,
   type ScholarshipsHubUiCopy
 } from '@/lib/i18n/scholarshipsHubUiCopy';
+import { isIqSitePromoVisible } from '@/lib/iq/iqSitePromoVisibility';
 
 type ScholarshipIqInlineCardProps = {
   copy?: ScholarshipsHubUiCopy['inlineIq'];
@@ -13,6 +14,8 @@ type ScholarshipIqInlineCardProps = {
 export default function ScholarshipIqInlineCard({
   copy = getScholarshipsHubUiCopy('en').inlineIq
 }: ScholarshipIqInlineCardProps) {
+  if (!isIqSitePromoVisible()) return null;
+
   return (
     <Link
       href="/iq/assessment?intent=scholarship_match"

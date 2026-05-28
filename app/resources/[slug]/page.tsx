@@ -25,6 +25,7 @@ import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates'
 import { buildResourcePilotAlternates } from '@/lib/i18n/resourcePilot/resourceTranslationAlternates';
 import { resourceArticleDateLine } from '@/lib/content-hub/resourceArticleDates';
 import { getResourceDetailUiCopy } from '@/lib/i18n/resourceDetailUiCopy';
+import { isIqSitePromoVisible } from '@/lib/iq/iqSitePromoVisibility';
 import { getCanonical } from '@/lib/seo/canonical';
 import { applyAutoInternalLinks } from '@/lib/content-hub/autoInternalLinks';
 import { deduplicateQuickSummaryBlocksInHtml } from '@/lib/content-hub/deduplicateQuickSummaryInHtml';
@@ -411,6 +412,8 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
 }
 
 function ResourceArticleIqCta({ ui }: { ui: ReturnType<typeof getResourceDetailUiCopy> }) {
+  if (!isIqSitePromoVisible()) return null;
+
   return (
     <Link
       href="/iq/assessment?intent=scholarship_match"

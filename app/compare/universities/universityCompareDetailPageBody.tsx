@@ -41,6 +41,7 @@ import {
 import { getURL } from '@/utils/helpers';
 import { getCompareDetailUiCopy } from '@/lib/i18n/compareDetailUiCopy';
 import { getCompareUniversityDetailUiCopy } from '@/lib/i18n/compareUniversityDetailUiCopy';
+import { isIqSitePromoVisible } from '@/lib/iq/iqSitePromoVisibility';
 import {
   hrefForLocalizedUiRequired,
   type LocalizedUiLocale
@@ -811,6 +812,8 @@ function UniversityCompareIqCta({
   institutionB: string;
   copy: ReturnType<typeof getCompareUniversityDetailUiCopy>['iqCta'];
 }) {
+  if (!isIqSitePromoVisible()) return null;
+
   return (
     <Link
       href="/iq/assessment?intent=college_fit"

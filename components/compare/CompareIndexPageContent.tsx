@@ -26,6 +26,10 @@ import { fetchAllPublishedUniversityComparePages } from '@/lib/seo/universityCom
 import { getURL } from '@/utils/helpers';
 import { getCompareHubUiCopy, type CompareHubUiCopy } from '@/lib/i18n/hubUiCopy';
 import { getCompareHubIqPromoCopy } from '@/lib/i18n/hubIqPromoByHub';
+import {
+  hubGridContentPageSize,
+  isIqSitePromoVisible
+} from '@/lib/iq/iqSitePromoVisibility';
 import { getStaticCompareGuideCardCopy } from '@/lib/i18n/staticCompareGuideCards';
 import {
   buildStaticCompareGuideEntries,
@@ -166,6 +170,8 @@ export async function CompareIndexPageContent({
 }: CompareIndexPageContentProps) {
   const ui = uiProp ?? getCompareHubUiCopy(locale);
   const iqCopy = getCompareHubIqPromoCopy(locale);
+  const showIqPromo = isIqSitePromoVisible();
+  const compareGridPageSize = hubGridContentPageSize(COMPARE_INDEX_PAGE_SIZE);
   const sectionPath = sectionPathForLocale(locale, '/compare');
   const hrefForPath = (path: string) => hrefForLocalizedUiRequired(locale, path);
   const iqAssessmentHref = '/iq/assessment?intent=college_fit';
@@ -186,7 +192,7 @@ export async function CompareIndexPageContent({
   const { slice, total, totalPages, currentPage } = paginateCompareIndexItems(
     filtered,
     queryState.page,
-    COMPARE_INDEX_PAGE_SIZE
+    compareGridPageSize
   );
 
   if (total > 0 && queryState.page > totalPages) {
@@ -204,9 +210,9 @@ export async function CompareIndexPageContent({
   }
 
   const showingFrom =
-    total === 0 ? 0 : (currentPage - 1) * COMPARE_INDEX_PAGE_SIZE + 1;
+    total === 0 ? 0 : (currentPage - 1) * compareGridPageSize + 1;
   const showingTo =
-    total === 0 ? 0 : Math.min(currentPage * COMPARE_INDEX_PAGE_SIZE, total);
+    total === 0 ? 0 : Math.min(currentPage * compareGridPageSize, total);
   const hasAnyPublished = allItems.length > 0;
   const staticEntries =
     locale !== 'en' ? buildStaticCompareGuideEntries(locale) : [];
@@ -313,7 +319,13 @@ export async function CompareIndexPageContent({
           </ol>
         </nav>
 
-        <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start xl:grid-cols-[minmax(0,1fr)_400px]">
+        <div
+          className={
+            showIqPromo
+              ? 'mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start xl:grid-cols-[minmax(0,1fr)_400px]'
+              : 'mt-8'
+          }
+        >
           <div className="min-w-0">
             <header className="max-w-3xl">
               <h1 className="text-[2.25rem] font-bold leading-[1.08] tracking-tight text-gray-900 sm:text-4xl lg:text-[2.5rem] lg:leading-[1.1]">
@@ -349,12 +361,14 @@ export async function CompareIndexPageContent({
             ) : null}
           </div>
 
-          <aside className="min-w-0 lg:pt-8" aria-label="Cognitive assessment">
-            <HubIqPromoAssessmentCard
-              href={iqAssessmentHref}
-              iq={iqCopy}
-            />
-          </aside>
+          {showIqPromo ? (
+            <aside className="min-w-0 lg:pt-8" aria-label="Cognitive assessment">
+              <HubIqPromoAssessmentCard
+                href={iqAssessmentHref}
+                iq={iqCopy}
+              />
+            </aside>
+          ) : null}
         </div>
 
         {showStaticSubhubPromo &&
@@ -389,12 +403,14 @@ export async function CompareIndexPageContent({
 
         {hasAnyPublished && slice.length > 0 ? (
           <>
-            <div className="mt-6 lg:hidden">
-              <HubIqPromoAssessmentCard
-                href={iqAssessmentHref}
-                iq={iqCopy}
-              />
-            </div>
+            {showIqPromo ? (
+              <div className="mt-6 lg:hidden">
+                <HubIqPromoAssessmentCard
+                  href={iqAssessmentHref}
+                  iq={iqCopy}
+                />
+              </div>
+            ) : null}
             <ResourcesPagination
               locale={locale}
               currentPage={currentPage}

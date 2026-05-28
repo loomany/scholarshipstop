@@ -20,6 +20,10 @@ import { getURL } from '@/utils/helpers';
 import { getProvidersHubUiCopy, type ProvidersHubUiCopy } from '@/lib/i18n/hubUiCopy';
 import { getProviderCardUiCopy } from '@/lib/i18n/providerDisplayLabels';
 import { getProvidersHubIqPromoCopy } from '@/lib/i18n/hubIqPromoByHub';
+import {
+  hubGridContentPageSize,
+  isIqSitePromoVisible
+} from '@/lib/iq/iqSitePromoVisibility';
 import { hrefForLocalizedUiRequired } from '@/lib/i18n/localizedHref';
 import type { Stage2PilotLocale } from '@/lib/i18n/pilotRoutes';
 
@@ -70,6 +74,8 @@ export async function ProvidersHubPageContent({
   const ui = uiProp ?? getProvidersHubUiCopy(locale);
   const providerCardCopy = getProviderCardUiCopy(locale);
   const iqCopy = getProvidersHubIqPromoCopy(locale);
+  const showIqPromo = isIqSitePromoVisible();
+  const providersGridPageSize = hubGridContentPageSize(PROVIDERS_HUB_PAGE_SIZE);
   const hrefForPath = (path: string) => hrefForLocalizedUiRequired(locale, path);
   const iqProviderResearchHref = '/iq/assessment?intent=provider_research';
   const { q, countryBucket, stateCode, currentPage } =
@@ -95,11 +101,11 @@ export async function ProvidersHubPageContent({
     stateRaw: stateCode || undefined,
     country: countryBucket,
     page: currentPage,
-    pageSize: PROVIDERS_HUB_PAGE_SIZE
+    pageSize: providersGridPageSize
   });
 
   const totalPages =
-    total === 0 ? 1 : Math.ceil(total / PROVIDERS_HUB_PAGE_SIZE);
+    total === 0 ? 1 : Math.ceil(total / providersGridPageSize);
 
   if (total > 0 && currentPage > totalPages) {
     redirect(
@@ -123,11 +129,11 @@ export async function ProvidersHubPageContent({
       : '/providers';
 
   const showingFrom =
-    total === 0 ? 0 : (currentPage - 1) * PROVIDERS_HUB_PAGE_SIZE + 1;
+    total === 0 ? 0 : (currentPage - 1) * providersGridPageSize + 1;
   const showingTo =
     total === 0
       ? 0
-      : Math.min(currentPage * PROVIDERS_HUB_PAGE_SIZE, total);
+      : Math.min(currentPage * providersGridPageSize, total);
 
   const buildPageHref = (page: number) =>
     hrefForPath(
@@ -275,7 +281,13 @@ export async function ProvidersHubPageContent({
           </ol>
         </nav>
 
-        <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start xl:grid-cols-[minmax(0,1fr)_400px]">
+        <div
+          className={
+            showIqPromo
+              ? 'mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start xl:grid-cols-[minmax(0,1fr)_400px]'
+              : 'mt-8'
+          }
+        >
           <div className="min-w-0">
             <header className="max-w-3xl">
               <h1 className="text-4xl font-bold leading-[1.08] tracking-tight text-zinc-900 sm:text-5xl sm:leading-[1.06]">
@@ -311,12 +323,14 @@ export async function ProvidersHubPageContent({
             </div>
           </div>
 
-          <aside className="min-w-0 lg:pt-8" aria-label="Cognitive assessment">
-            <HubIqPromoAssessmentCard
-              href={iqProviderResearchHref}
-              iq={iqCopy}
-            />
-          </aside>
+          {showIqPromo ? (
+            <aside className="min-w-0 lg:pt-8" aria-label="Cognitive assessment">
+              <HubIqPromoAssessmentCard
+                href={iqProviderResearchHref}
+                iq={iqCopy}
+              />
+            </aside>
+          ) : null}
         </div>
 
         <ProviderDirectoryTrustSection
@@ -352,12 +366,14 @@ export async function ProvidersHubPageContent({
               iqHref={iqProviderResearchHref}
               locale={locale}
             />
-            <div className="mt-6 lg:hidden">
-              <HubIqPromoAssessmentCard
-                href={iqProviderResearchHref}
-                iq={iqCopy}
-              />
-            </div>
+            {showIqPromo ? (
+              <div className="mt-6 lg:hidden">
+                <HubIqPromoAssessmentCard
+                  href={iqProviderResearchHref}
+                  iq={iqCopy}
+                />
+              </div>
+            ) : null}
             <ResourcesPagination
               locale={locale}
               currentPage={currentPage}

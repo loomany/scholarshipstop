@@ -104,7 +104,8 @@ function mapRpcEssayIndexRow(r: RpcEssaysHubRow): EssayIndexRow {
 /** Single RPC: paginated rows, totals, category facets — replaces full-table fetch + in-memory filter. */
 export const fetchEssaysHubIndexPage = cache(
   async (
-    state: EssaysHubIndexRequest
+    state: EssaysHubIndexRequest,
+    pageSize = ESSAYS_INDEX_PAGE_SIZE
   ): Promise<{
     rows: EssayIndexRow[];
     total: number;
@@ -125,7 +126,7 @@ export const fetchEssaysHubIndexPage = cache(
       p_category: state.categoryKey,
       p_sort: state.sort,
       p_page: state.page,
-      p_page_size: ESSAYS_INDEX_PAGE_SIZE
+      p_page_size: pageSize
     });
 
     if (error) throw new Error(error.message);

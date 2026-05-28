@@ -7,6 +7,7 @@ import { ArrowRight, BrainCircuit } from 'lucide-react';
 import type { ProviderHubRow } from '@/lib/providers/providerHubTypes';
 import type { ProvidersHubGridIqCopy } from '@/lib/i18n/hubUiCopy';
 import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
+import { isIqSitePromoVisible } from '@/lib/iq/iqSitePromoVisibility';
 
 import { ProvidersHubCard } from './ProvidersHubCard';
 
@@ -24,6 +25,8 @@ function ProvidersGridIqAssessmentCard({
   iq: ProvidersHubGridIqCopy;
   href: string;
 }) {
+  if (!isIqSitePromoVisible()) return null;
+
   return (
     <li className="h-full">
       <Link
@@ -91,12 +94,14 @@ export function ProvidersHubCardsGrid({
   iqHref = '/iq/assessment?intent=provider_research',
   locale = 'en'
 }: Props) {
+  const showIqPromoInGrid = isIqSitePromoVisible();
+
   return (
     <ul className="mt-10 grid list-none grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
       {rows.map((row, index) => (
         <Fragment key={row.slug}>
           <ProvidersHubCard row={row} locale={locale} />
-          {index === 2 ? (
+          {showIqPromoInGrid && index === 2 ? (
             <ProvidersGridIqAssessmentCard iq={gridIq} href={iqHref} />
           ) : null}
         </Fragment>

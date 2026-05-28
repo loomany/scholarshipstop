@@ -37,6 +37,7 @@ import {
   getCompareStateDetailUiCopy,
   type CompareStateDetailUiCopy
 } from '@/lib/i18n/compareStateDetailUiCopy';
+import { isIqSitePromoVisible } from '@/lib/iq/iqSitePromoVisibility';
 import {
   hrefForLocalizedUiRequired,
   type LocalizedUiLocale
@@ -76,6 +77,8 @@ function StateCompareIqCta({
   stateB: string;
   copy: CompareStateDetailUiCopy['iqCta'];
 }) {
+  if (!isIqSitePromoVisible()) return null;
+
   return (
     <Link
       href="/iq/assessment?intent=college_fit"

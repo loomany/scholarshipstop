@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { ArrowRight, BrainCircuit } from 'lucide-react';
 
+import { isIqSitePromoVisible } from '@/lib/iq/iqSitePromoVisibility';
+
 type CompareIqAssessmentCardProps = {
   variant?: 'all' | 'universities' | 'states';
 };
@@ -35,6 +37,8 @@ const intentByVariant = {
 export default function CompareIqAssessmentCard({
   variant = 'all'
 }: CompareIqAssessmentCardProps) {
+  if (!isIqSitePromoVisible()) return null;
+
   const c = copy[variant];
   const href = `/iq/assessment?intent=${intentByVariant[variant]}`;
 

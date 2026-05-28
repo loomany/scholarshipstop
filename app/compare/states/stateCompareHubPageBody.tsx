@@ -21,6 +21,10 @@ import { fetchAllPublishedStateComparePages } from '@/lib/seo/stateCompareServer
 import { getURL } from '@/utils/helpers';
 import { getCompareSubhubUiCopy } from '@/lib/i18n/compareSubhubUiCopy';
 import {
+  hubGridContentPageSize,
+  isIqSitePromoVisible
+} from '@/lib/iq/iqSitePromoVisibility';
+import {
   hrefForLocalizedUiRequired,
   type LocalizedUiLocale
 } from '@/lib/i18n/localizedHref';
@@ -52,10 +56,11 @@ export async function StateCompareHubPageBody({
     category: 'all',
     sort: queryState.sort
   });
+  const compareGridPageSize = hubGridContentPageSize(COMPARE_INDEX_PAGE_SIZE);
   const { slice, total, totalPages, currentPage } = paginateCompareIndexItems(
     filtered,
     queryState.page,
-    COMPARE_INDEX_PAGE_SIZE
+    compareGridPageSize
   );
 
   if (total > 0 && queryState.page > totalPages) {
@@ -69,10 +74,11 @@ export async function StateCompareHubPageBody({
   }
 
   const showingFrom =
-    total === 0 ? 0 : (currentPage - 1) * COMPARE_INDEX_PAGE_SIZE + 1;
+    total === 0 ? 0 : (currentPage - 1) * compareGridPageSize + 1;
   const showingTo =
-    total === 0 ? 0 : Math.min(currentPage * COMPARE_INDEX_PAGE_SIZE, total);
+    total === 0 ? 0 : Math.min(currentPage * compareGridPageSize, total);
   const hasAnyPublished = items.length > 0;
+  const showIqPromo = isIqSitePromoVisible();
 
   const breadcrumbsSchema = {
     '@context': 'https://schema.org',
@@ -160,7 +166,13 @@ export async function StateCompareHubPageBody({
           </ol>
         </nav>
 
-        <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start xl:grid-cols-[minmax(0,1fr)_400px]">
+        <div
+          className={
+            showIqPromo
+              ? 'mt-8 grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start xl:grid-cols-[minmax(0,1fr)_400px]'
+              : 'mt-8'
+          }
+        >
           <div className="min-w-0">
             <header className="max-w-3xl">
               <h1 className="text-[2.25rem] font-bold leading-[1.08] tracking-tight text-gray-900 sm:text-4xl lg:text-[2.5rem] lg:leading-[1.1]">
@@ -196,9 +208,11 @@ export async function StateCompareHubPageBody({
             ) : null}
           </div>
 
-          <aside className="min-w-0 lg:pt-8" aria-label="Cognitive assessment">
-            <CompareIqAssessmentCard variant="states" />
-          </aside>
+          {showIqPromo ? (
+            <aside className="min-w-0 lg:pt-8" aria-label="Cognitive assessment">
+              <CompareIqAssessmentCard variant="states" />
+            </aside>
+          ) : null}
         </div>
 
         {!hasAnyPublished ? (

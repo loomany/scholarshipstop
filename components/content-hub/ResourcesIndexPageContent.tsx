@@ -4,6 +4,11 @@ import { redirect } from 'next/navigation';
 import { Fragment, Suspense } from 'react';
 import { ArrowRight, BrainCircuit } from 'lucide-react';
 
+import {
+  hubGridContentPageSize,
+  isIqSitePromoVisible
+} from '@/lib/iq/iqSitePromoVisibility';
+
 import ResourcesIndexToolbar from '@/components/content-hub/ResourcesIndexToolbar';
 import ResourcesPagination from '@/components/content-hub/ResourcesPagination';
 import {
@@ -73,6 +78,8 @@ function ResourcesIqAssessmentCard({
 }: {
   iq: ReturnType<typeof getHubIqPromoUiCopy>;
 }) {
+  if (!isIqSitePromoVisible()) return null;
+
   return (
     <Link
       href="/iq/assessment?intent=scholarship_match"
@@ -303,6 +310,8 @@ function ResourcesGridIqAssessmentCard({
 }: {
   iq: ReturnType<typeof getHubIqPromoUiCopy>;
 }) {
+  if (!isIqSitePromoVisible()) return null;
+
   return (
     <li>
       <Link
@@ -496,7 +505,8 @@ export async function ResourcesIndexPageContent({
   const sectionPath = sectionPathForLocale(locale, RESOURCES_SECTION_PATH);
   const hrefForPath = (path: string) => hrefForLocalizedUiRequired(locale, path);
   const queryState = parseResourcesIndexSearchParams(searchParams);
-  const hideIqPromoOnHub = queryState.categoryId === 'ai';
+  const hideIqPromoOnHub =
+    queryState.categoryId === 'ai' || !isIqSitePromoVisible();
   const [allPosts, latestEssays, resourceTranslationSummaries] =
     await Promise.all([
       fetchAllPublishedContentPostsListFields(),
@@ -530,10 +540,11 @@ export async function ResourcesIndexPageContent({
   );
 
   const filtered = filterAndSortResourcePosts(classified, queryState);
+  const resourcesGridPageSize = hubGridContentPageSize(RESOURCES_INDEX_PAGE_SIZE);
   const { slice, total, totalPages, currentPage } = paginateResources(
     filtered,
     queryState.page,
-    RESOURCES_INDEX_PAGE_SIZE
+    resourcesGridPageSize
   );
 
   if (total > 0 && queryState.page > totalPages) {
@@ -552,7 +563,7 @@ export async function ResourcesIndexPageContent({
   }
 
   const withSlug = slice.filter((p) => p.slug?.trim());
-  const pageSize = RESOURCES_INDEX_PAGE_SIZE;
+  const pageSize = resourcesGridPageSize;
   const showingFrom =
     total === 0 ? 0 : (currentPage - 1) * pageSize + 1;
   const showingTo =

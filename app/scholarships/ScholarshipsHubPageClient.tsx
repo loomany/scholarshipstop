@@ -22,6 +22,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { ScholarshipsHubQueryProvider } from '@/components/providers/ScholarshipsHubQueryProvider';
 import ScholarshipCard from '@/components/scholarships/ScholarshipCard';
 import ScholarshipIqInlineCard from '@/components/scholarships/ScholarshipIqInlineCard';
+import { isIqSitePromoVisible } from '@/lib/iq/iqSitePromoVisibility';
 import ScholarshipsListHeader from '@/components/scholarships/ScholarshipsListHeader';
 import ScholarshipsMoreFiltersPanel, {
   type ScholarshipsMoreFiltersContextNotice
@@ -224,6 +225,7 @@ const SIGNED_IN_BEST_PERSONALIZATION_RETRY_DELAY_MS = 1_200;
 const SIGNED_IN_BEST_PERSONALIZATION_MAX_RETRIES = 5;
 
 function shouldShowIqInlineCard(index: number): boolean {
+  if (!isIqSitePromoVisible()) return false;
   return index % 4 === 0;
 }
 

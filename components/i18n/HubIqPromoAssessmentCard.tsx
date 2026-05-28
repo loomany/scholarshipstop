@@ -3,6 +3,7 @@ import { ArrowRight, BrainCircuit } from 'lucide-react';
 
 import type { HubSpecificIqPromoCopy } from '@/lib/i18n/hubIqPromoByHub';
 import type { HubIqPromoUiCopy } from '@/lib/i18n/hubUiCopy';
+import { isIqSitePromoVisible } from '@/lib/iq/iqSitePromoVisibility';
 
 type HubIqPromoAssessmentCardProps = {
   href: string;
@@ -15,6 +16,8 @@ export function HubIqPromoAssessmentCard({
   iq,
   className = 'group relative block overflow-hidden rounded-3xl border border-[#FFB875]/80 bg-gradient-to-br from-[#FFF7ED] via-white to-[#EEF6FF] p-5 text-left shadow-[0_18px_45px_-30px_rgba(234,88,12,0.58)] ring-1 ring-[#FFE2C2] transition hover:-translate-y-0.5 hover:shadow-[0_24px_58px_-34px_rgba(234,88,12,0.72)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB875] focus-visible:ring-offset-2 lg:min-h-[13.25rem]'
 }: HubIqPromoAssessmentCardProps) {
+  if (!isIqSitePromoVisible()) return null;
+
   const title =
     'title' in iq && iq.title ? iq.title : iq.buildSmarterStrategy;
   const body =

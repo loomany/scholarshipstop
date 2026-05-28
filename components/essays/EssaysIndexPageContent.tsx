@@ -4,6 +4,12 @@ import { redirect } from 'next/navigation';
 import { Suspense, type CSSProperties } from 'react';
 import { ArrowRight, BrainCircuit, CheckCircle2, ClipboardCheck } from 'lucide-react';
 
+import {
+  ESSAYS_GRID_IQ_SLOT_COUNT,
+  hubGridContentPageSize,
+  isIqSitePromoVisible
+} from '@/lib/iq/iqSitePromoVisibility';
+
 import { EssayGuideCardImage } from '@/components/essays/EssayGuideCardImage';
 import { EssaysIndexHeroMedia } from '@/components/essays/EssaysIndexHeroMedia';
 import { EssaysIndexResultSummary } from '@/components/essays/EssaysIndexResultSummary';
@@ -118,8 +124,12 @@ export async function EssaysIndexPageContent({
   const sectionPath = sectionPathForLocale(locale, ESSAYS_SECTION_PATH);
   const hrefForPath = (path: string) => hrefForLocalizedUiRequired(locale, path);
   const queryState = parseEssaysIndexSearchParams(searchParams);
+  const essaysGridPageSize = hubGridContentPageSize(
+    ESSAYS_INDEX_PAGE_SIZE,
+    ESSAYS_GRID_IQ_SLOT_COUNT
+  );
   const [hubPage, essayTranslationSummaries] = await Promise.all([
-    fetchEssaysHubIndexPage(queryState),
+    fetchEssaysHubIndexPage(queryState, essaysGridPageSize),
     locale !== 'en'
       ? listPublishedEssayGuideTranslations({ locale })
       : Promise.resolve([])
@@ -136,7 +146,7 @@ export async function EssaysIndexPageContent({
   const translatedIdsForLocale = new Set(translationBySourceId.keys());
 
   const totalPages =
-    total <= 0 ? 0 : Math.max(1, Math.ceil(total / ESSAYS_INDEX_PAGE_SIZE));
+    total <= 0 ? 0 : Math.max(1, Math.ceil(total / essaysGridPageSize));
   const currentPage = queryState.page;
   const withSlug = indexRows.filter((p) => p.slug?.trim());
   const displayRowsRaw =
@@ -160,7 +170,7 @@ export async function EssaysIndexPageContent({
     );
   }
 
-  const pageSize = ESSAYS_INDEX_PAGE_SIZE;
+  const pageSize = essaysGridPageSize;
   const showingFrom =
     total === 0 ? 0 : (currentPage - 1) * pageSize + 1;
   const showingTo =
@@ -499,6 +509,8 @@ function EssaysGrid({
   locale?: Stage2PilotLocale | 'en';
   translatedSourceIds?: Set<string>;
 }) {
+  const showIqPromo = isIqSitePromoVisible();
+
   if (posts.length === 0) {
     return (
       <ul className="mt-6 grid list-none gap-6 sm:mt-8 sm:grid-cols-2 lg:grid-cols-3" />
@@ -507,12 +519,14 @@ function EssaysGrid({
 
   return (
     <ul className="mt-6 grid list-none gap-6 sm:mt-8 sm:grid-cols-2 lg:grid-cols-3">
-      <EssaysHubIqPromoLi
-        key="essays-hub-iq-promo-first"
-        iq={iq}
-        variant="first"
-        listClassName="order-2 lg:order-1"
-      />
+      {showIqPromo ? (
+        <EssaysHubIqPromoLi
+          key="essays-hub-iq-promo-first"
+          iq={iq}
+          variant="first"
+          listClassName="order-2 lg:order-1"
+        />
+      ) : null}
       {posts.map((post, index) => {
         const slug = post.slug!.trim();
         const title = post.title?.trim() || 'Untitled';
@@ -524,8 +538,12 @@ function EssaysGrid({
         return (
           <li
             key={post.id}
-            className={index === 0 ? 'order-1 lg:order-2' : undefined}
-            style={index > 0 ? { order: index + 2 } : undefined}
+            className={
+              showIqPromo && index === 0 ? 'order-1 lg:order-2' : undefined
+            }
+            style={
+              showIqPromo && index > 0 ? { order: index + 2 } : undefined
+            }
           >
             <Link
               href={href}
@@ -553,12 +571,14 @@ function EssaysGrid({
           </li>
         );
       })}
-      <EssaysHubIqPromoLi
-        key="essays-hub-iq-promo-last"
-        iq={iq}
-        variant="last"
-        listStyle={{ order: posts.length + 2 }}
-      />
+      {showIqPromo ? (
+        <EssaysHubIqPromoLi
+          key="essays-hub-iq-promo-last"
+          iq={iq}
+          variant="last"
+          listStyle={{ order: posts.length + 2 }}
+        />
+      ) : null}
     </ul>
   );
 }
@@ -574,6 +594,8 @@ function EssaysHubIqPromoLi({
   listClassName?: string;
   listStyle?: CSSProperties;
 }) {
+  if (!isIqSitePromoVisible()) return null;
+
   const heroSub =
     variant === 'first'
       ? iq.mapCognitiveDnaBodyFirst

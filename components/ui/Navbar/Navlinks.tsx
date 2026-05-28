@@ -56,6 +56,7 @@ import type { Stage2PilotLocale } from '@/lib/i18n/pilotRoutes';
 import type { SupportedLocale } from '@/lib/i18n/types';
 import NavbarUserSlot from './NavbarUserSlot';
 import s from './Navbar.module.css';
+import { isIqSitePromoVisible } from '@/lib/iq/iqSitePromoVisibility';
 
 type NavlinksProps = {
   initialNavbarAuth?: NavbarInitialAuth;
@@ -80,15 +81,24 @@ function isExternalAboutHref(href: string): boolean {
   return href.startsWith('http://') || href.startsWith('https://');
 }
 
+/** Hidden from About nav UI; entries remain in {@link ABOUT_SUBLINKS}. */
+const ABOUT_NAV_UI_HIDDEN = new Set<string>(
+  isIqSitePromoVisible() ? [] : [IQ_TEST_HOME_HREF]
+);
+
 const MOBILE_ABOUT_EXCLUDED = new Set<string>([
   '/for-organizations',
-  IQ_TEST_HOME_HREF
+  ...ABOUT_NAV_UI_HIDDEN
 ]);
 
-function filterMobileAboutSublinks(
-  items: ReadonlyArray<{ href: string; label: string }>
+/** Hidden from mobile drawer menu; desktop header language switcher unchanged. */
+const SHOW_MOBILE_DRAWER_LANGUAGE_SWITCHER = false;
+
+function filterAboutSublinks(
+  items: ReadonlyArray<{ href: string; label: string }>,
+  hidden: Set<string>
 ) {
-  return items.filter(({ href }) => !MOBILE_ABOUT_EXCLUDED.has(href));
+  return items.filter(({ href }) => !hidden.has(href));
 }
 
 const ESSAY_MENTOR_PATH = '/essay';
@@ -389,7 +399,14 @@ export default function Navlinks({
       : pilotNavHref('/scholarships');
   const aboutSublinks =
     locale === 'en' ? ABOUT_SUBLINKS : LOCALIZED_ABOUT_SUBLINKS[locale];
-  const mobileAboutSublinks = filterMobileAboutSublinks(aboutSublinks);
+  const visibleAboutSublinks = filterAboutSublinks(
+    aboutSublinks,
+    ABOUT_NAV_UI_HIDDEN
+  );
+  const mobileAboutSublinks = filterAboutSublinks(
+    aboutSublinks,
+    MOBILE_ABOUT_EXCLUDED
+  );
   const resolveAboutSublinkHref = useCallback(
     (href: string) =>
       isExternalAboutHref(href) ? href : pilotNavHref(href),
@@ -634,7 +651,7 @@ export default function Navlinks({
                   className="min-w-[240px] max-w-[280px] rounded-2xl border border-gray-200 bg-white p-3 shadow-lg"
                   aria-label={navCopy.aboutMenu}
                 >
-                  {aboutSublinks.map(({ href, label }) => {
+                  {visibleAboutSublinks.map(({ href, label }) => {
                     const active = sublinkActive(href, canonicalPathname);
                     return (
                       <Link
@@ -1167,17 +1184,19 @@ export default function Navlinks({
                   </div>
                 </div>
               </div>
-              <Link
-                href={IQ_TEST_HOME_HREF}
-                className={clsx(
-                  nav.darkDrawer,
-                  'flex w-full max-w-full items-center gap-3'
-                )}
-                onClick={closeMenu}
-              >
-                <MobileDrawerNavIcon icon={Sparkles} active={false} />
-                <span className="min-w-0">{navCopy.iqTest}</span>
-              </Link>
+              {isIqSitePromoVisible() ? (
+                <Link
+                  href={IQ_TEST_HOME_HREF}
+                  className={clsx(
+                    nav.darkDrawer,
+                    'flex w-full max-w-full items-center gap-3'
+                  )}
+                  onClick={closeMenu}
+                >
+                  <MobileDrawerNavIcon icon={Sparkles} active={false} />
+                  <span className="min-w-0">{navCopy.iqTest}</span>
+                </Link>
+              ) : null}
               <>
                 <Link
                   href={subscriptionHref}
@@ -1209,7 +1228,7 @@ export default function Navlinks({
                   </Link>
                 ) : null}
               </>
-              {showLanguageSwitcher ? (
+              {showLanguageSwitcher && SHOW_MOBILE_DRAWER_LANGUAGE_SWITCHER ? (
                 <div className="mt-3 border-t border-zinc-800 pt-3">
                   <p className="px-1 pb-2 text-[10px] font-semibold uppercase tracking-wide text-zinc-500">
                     {navCopy.language}

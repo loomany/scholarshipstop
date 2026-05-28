@@ -15,6 +15,7 @@ import type { CompareIndexItem } from '@/lib/seo/compareIndexFilters';
 import type { CompareHubGridIqCopy } from '@/lib/i18n/hubUiCopy';
 import { getCompareHubUiCopy, getHubToolbarUiCopy } from '@/lib/i18n/hubUiCopy';
 import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
+import { isIqSitePromoVisible } from '@/lib/iq/iqSitePromoVisibility';
 
 type CompareCardGridProps = {
   items: CompareIndexItem[];
@@ -31,6 +32,8 @@ function CompareGridIqAssessmentCard({
   iq: CompareHubGridIqCopy;
   href: string;
 }) {
+  if (!isIqSitePromoVisible()) return null;
+
   return (
     <Link
       href={href}
@@ -117,6 +120,8 @@ export default function CompareCardGrid({
     return <p className="mt-12 text-center text-gray-600">{emptyMessage}</p>;
   }
 
+  const showIqPromoInGrid = isIqSitePromoVisible();
+
   return (
     <AuthStatusProvider>
       {({ isAuthenticated, hasSubscription, authResolved }) => (
@@ -197,7 +202,7 @@ export default function CompareCardGrid({
                       </div>
                     </Link>
                   </li>
-                  {index === 2 ? (
+                  {showIqPromoInGrid && index === 2 ? (
                     <li key="compare-grid-iq-assessment">
                       <CompareGridIqAssessmentCard iq={gridIq} href={iqHref} />
                     </li>

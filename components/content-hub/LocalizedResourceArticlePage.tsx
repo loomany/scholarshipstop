@@ -12,6 +12,7 @@ import { resourceArticleDateLine } from '@/lib/content-hub/resourceArticleDates'
 import type { RelatedScholarshipStored } from '@/lib/content-hub/articleScholarshipMatching/types';
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import { getResourceDetailUiCopy } from '@/lib/i18n/resourceDetailUiCopy';
+import { isIqSitePromoVisible } from '@/lib/iq/iqSitePromoVisibility';
 import {
   extractInlineFaqFromBodyHtml,
   mergeUniqueFaqItems
@@ -336,6 +337,8 @@ export default function LocalizedResourceArticlePage({
 }
 
 function ResourceArticleIqCta({ locale }: { locale: Stage2PilotLocale }) {
+  if (!isIqSitePromoVisible()) return null;
+
   const ui = getResourceDetailUiCopy(locale);
   const iqHref = hrefForLocalizedUiRequired(locale, '/iq/assessment?intent=scholarship_match');
 

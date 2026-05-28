@@ -114,6 +114,7 @@ import {
   scholarshipSaveButtonClass
 } from '@/lib/constants/scholarshipActionUi';
 import { SHOW_SCHOLARSHIP_APPLICANT_COUNT_UI } from '@/lib/constants/scholarshipApplicantCountUi';
+import { isIqSitePromoVisible } from '@/lib/iq/iqSitePromoVisibility';
 import { useScholarshipDetailInitialData } from '@/app/scholarships/ScholarshipDetailInitialDataContext';
 import { postScholarshipsList } from '@/app/scholarships/scholarshipListFetch';
 import { markScholarshipViewed } from '@/app/scholarships/viewedScholarships';
@@ -819,6 +820,8 @@ function SimilarScholarshipDetailListItem({
 }
 
 function SimilarScholarshipIqPromoCard({ copy }: { copy: ScholarshipDetailUiCopy }) {
+  if (!isIqSitePromoVisible()) return null;
+
   return (
     <li className="min-w-0">
       <Link
@@ -868,6 +871,8 @@ function SimilarScholarshipIqPromoCard({ copy }: { copy: ScholarshipDetailUiCopy
 }
 
 function ScholarshipDetailIqDecisionCard({ copy }: { copy: ScholarshipDetailUiCopy }) {
+  if (!isIqSitePromoVisible()) return null;
+
   return (
     <Link
       href="/iq/assessment?intent=scholarship_match"

@@ -23,6 +23,7 @@ import {
   getProviderContextLinkItems,
   getProviderDetailUiCopy
 } from '@/lib/i18n/providerDetailUiCopy';
+import { isIqSitePromoVisible } from '@/lib/iq/iqSitePromoVisibility';
 import ProviderScholarshipMatchCta from '@/components/providers/ProviderScholarshipMatchCta';
 import type { LocalizedProviderPageCopy } from '@/lib/i18n/providerPilot/providerProfileTranslationGate';
 import {
@@ -621,6 +622,8 @@ function LocalizedProviderProfileIqCta({
   providerName: string;
   iqCta: ReturnType<typeof getProviderDetailUiCopy>['iqCta'];
 }) {
+  if (!isIqSitePromoVisible()) return null;
+
   return (
     <Link
       href="/iq/assessment?intent=provider_research"

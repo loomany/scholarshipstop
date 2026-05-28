@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowRight, BrainCircuit } from 'lucide-react';
 
+import { isIqSitePromoVisible } from '@/lib/iq/iqSitePromoVisibility';
+
 import { scholarshipPublicPath } from '@/app/scholarships/scholarshipsData';
 import ContentHubArticleMatchedScholarships from '@/components/content-hub/ContentHubArticleMatchedScholarships';
 import SafeContentPostBody from '@/components/content-hub/SafeContentPostBody';
@@ -586,6 +588,8 @@ export default async function EssayGuidePage({ params }: PageProps) {
 }
 
 function EssayIqCta() {
+  if (!isIqSitePromoVisible()) return null;
+
   return (
     <Link
       href="/iq/assessment?intent=essay_prep"

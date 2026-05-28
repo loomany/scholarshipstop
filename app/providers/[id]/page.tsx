@@ -43,6 +43,7 @@ import {
   getProviderContextLinkItems,
   getProviderDetailUiCopy
 } from '@/lib/i18n/providerDetailUiCopy';
+import { isIqSitePromoVisible } from '@/lib/iq/iqSitePromoVisibility';
 import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
 import {
   getLocalizedProviderDataCompletenessLabel,
@@ -847,6 +848,8 @@ function ProviderProfileIqCta({
   providerName: string;
   iqCta: ReturnType<typeof getProviderDetailUiCopy>['iqCta'];
 }) {
+  if (!isIqSitePromoVisible()) return null;
+
   return (
     <Link
       href="/iq/assessment?intent=provider_research"
