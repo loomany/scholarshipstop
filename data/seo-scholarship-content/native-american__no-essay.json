@@ -10,7 +10,7 @@
     "Check the award amounts to find opportunities that fit your financial needs",
     "Compare deadlines to prioritize your applications",
     "Read the requirements carefully to ensure eligibility",
-    "Visit official scholarship pages for the most accurate information"
+    "Use the provider application path when you are ready to submit"
   ],
   "who_for": [
     "Native American students seeking financial aid",
@@ -34,7 +34,7 @@
     },
     {
       "question": "What are the application requirements for these scholarships?",
-      "answer": "Most of the scholarships in this category do not require essays, making the application process generally lighter. However, it's important to verify the specific requirements for each scholarship, as they may vary."
+      "answer": "Most of the scholarships in this category do not require essays, making the application process generally lighter. However, it's important to review the specific requirements for each scholarship, as they may vary."
     }
   ],
   "_meta": {

@@ -9,8 +9,8 @@
     "Compare deadlines across listings to prioritize applications",
     "Scan award amounts to identify the most beneficial opportunities",
     "Read requirement lines to understand eligibility criteria",
-    "Open official pages for detailed application instructions",
-    "Shortlist scholarships that align with your goals and verify on sponsor sites"
+    "Use the provider application path when you are ready to submit",
+    "Use the provider application path when you are ready to submit"
   ],
   "who_for": [
     "High school seniors in New Hampshire",
@@ -30,7 +30,7 @@
     },
     {
       "question": "Are there any essay requirements for these scholarships?",
-      "answer": "Most of the scholarships listed do not require an essay, though it's advisable to check each individual listing for specific requirements. Many programs tend to have lighter application processes, but verifying the details is essential."
+      "answer": "Most of the scholarships listed do not require an essay, though it's advisable to check each individual listing for specific requirements. Many programs tend to have lighter application processes, but reviewing the details is essential."
     },
     {
       "question": "When should I check the deadlines for these scholarships?",

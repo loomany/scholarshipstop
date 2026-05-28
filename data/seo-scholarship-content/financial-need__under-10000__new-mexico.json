@@ -1,16 +1,16 @@
 {
   "seo_title": "Find New Mexico Need-Based Scholarships | USA",
-  "seo_description": "New Mexico need-based scholarships in the USA: compare award ranges, deadlines, and requirements, then apply through each official listing.",
-  "intro": "Trying to find New Mexico scholarships in the USA that consider financial need and stay on the lower-award side? This filtered slice brings together a focused set of listings so you can apply with more direction instead of sorting through unrelated programs. The rows below span areas such as STEM, education, community, disability, and biology, with examples that can fit both high school seniors and early college students. Awards, deadlines, essay expectations, and eligibility details vary by listing, so it is worth reading each row closely rather than assuming the same rules apply across the page. Some programs may be comparatively lighter-touch, but you should still verify every requirement on the official source before you apply.",
+  "seo_description": "New Mexico need-based scholarships in the USA: compare award ranges, deadlines, and requirements, then continue toward provider application paths when you are ready to submit.",
+  "intro": "Trying to find New Mexico scholarships in the USA that consider financial need and stay on the lower-award side? This filtered slice brings together a focused set of listings so you can apply with more direction instead of sorting through unrelated programs. The rows below span areas such as STEM, education, community, disability, and biology, with examples that can fit both high school seniors and early college students. Awards, deadlines, essay expectations, and eligibility details vary by listing, so it is worth reading each row closely rather than assuming the same rules apply across the page. When a provider application path is available, ScholarshipTop includes it so you can move from shortlist to submission more easily.",
   "h1": "Explore Need-Based Scholarships in New Mexico USA",
-  "supporting": "Use this view to compare more than just the scholarship title. Check how each listing describes financial need, look at the study level and field tags, and note whether the opportunity appears tied to community service, disability, education, or technical subjects. Because deadlines differ across these rows and some may be coming up soon, it makes sense to shortlist promising options early. Award amounts vary by listing and should be confirmed on the official page before you make plans around them.",
+  "supporting": "Use this view to compare more than just the scholarship title. Check how each listing describes financial need, look at the study level and field tags, and note whether the opportunity appears tied to community service, disability, education, or technical subjects. Because deadlines differ across these rows and some may be coming up soon, it makes sense to shortlist promising options early. ScholarshipTop highlights available deadline and award details in a structured format so you can prioritize opportunities and plan your next step.",
   "related_intro": "If these New Mexico results feel close but not quite right, related pages can help you compare nearby filter combinations. You may want to explore other financial-need scholarship views, broader New Mexico scholarship pages, or adjacent award ranges to find programs that better match your major, study level, or application preferences.",
   "how_to_use": [
     "Compare deadline text across the rows",
     "Read each requirement line carefully",
-    "Open the official page before applying",
+    "Use the provider application path when you are ready to submit",
     "Shortlist listings that match your level and field",
-    "Verify award details and essay expectations"
+    "Use structured deadline and award details to prioritize your next step"
   ],
   "who_for": [
     "New Mexico applicants with financial need",
@@ -22,7 +22,7 @@
   "faq": [
     {
       "question": "Can I compare award amounts and deadlines on this USA scholarship list?",
-      "answer": "Yes—these New Mexico scholarship rows include listed award amounts and deadline text, but they are not the same across every program. In this slice, amounts shown range from smaller awards to several thousand dollars, and deadlines differ by row, so check dates promptly and verify on official sources."
+      "answer": "Yes—these New Mexico scholarship rows include listed award amounts and deadline text, but they are not the same across every program. In this slice, amounts shown range from smaller awards to several thousand dollars, and deadlines differ by row, so check dates promptly and review on provider-path context."
     },
     {
       "question": "Who should explore these scholarships?",
@@ -30,7 +30,7 @@
     },
     {
       "question": "Are the application requirements the same for every scholarship here?",
-      "answer": "No—requirements can change from one listing to the next. Some programs in this catalog slice may be lighter-touch, while others can ask for more materials, so review each row and the official application page before you apply."
+      "answer": "No—requirements can change from one listing to the next. Some programs in this ScholarshipTop workspace may be lighter-touch, while others can ask for more materials, so review each row and the provider application path page before you apply."
     }
   ],
   "page_data": {

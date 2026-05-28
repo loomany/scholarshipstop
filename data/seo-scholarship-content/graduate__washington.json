@@ -9,7 +9,7 @@
     "Compare deadlines for each scholarship",
     "Scan the award amounts listed",
     "Read through the requirements for each opportunity",
-    "Open official pages for detailed information",
+    "Use the provider application path when you are ready to submit",
     "Shortlist scholarships that fit your profile"
   ],
   "who_for": [
@@ -30,7 +30,7 @@
     },
     {
       "question": "Are there any deadlines I should be aware of?",
-      "answer": "Yes, all six scholarships have deadlines, but they vary from one listing to another. Some deadlines are approaching within the next 45 days, so it’s advisable to verify the dates promptly to ensure you don’t miss any opportunities."
+      "answer": "Yes, all six scholarships have deadlines, but they vary from one listing to another. Some deadlines are approaching within the next 45 days, so it’s advisable to review the dates promptly to ensure you don’t miss any opportunities."
     },
     {
       "question": "Do I need to submit essays for these scholarships?",

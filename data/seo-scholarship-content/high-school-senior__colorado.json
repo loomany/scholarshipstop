@@ -10,7 +10,7 @@
     "Compare deadlines and prioritize those that are approaching",
     "Examine award amounts to identify the best opportunities",
     "Read the requirements for each scholarship",
-    "Visit the official pages for detailed application instructions"
+    "Use the provider application path when you are ready to submit"
   ],
   "who_for": [
     "High school seniors in Colorado",
@@ -34,7 +34,7 @@
     },
     {
       "question": "When are the deadlines for these scholarships?",
-      "answer": "All 13 scholarships have deadlines, but they vary by program. Some deadlines are approaching within the next 45 days, so it's essential to verify the dates for each scholarship promptly."
+      "answer": "All 13 scholarships have deadlines, but they vary by program. Some deadlines are approaching within the next 45 days, so it's essential to review the dates for each scholarship promptly."
     }
   ],
   "_meta": {

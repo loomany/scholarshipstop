@@ -1,15 +1,15 @@
 {
   "seo_title": "Find Scholarships for Women in the USA",
-  "seo_description": "Scholarships for women in the USA with deadlines, amounts, and requirements that vary by listing. Compare options and apply on official pages.",
+  "seo_description": "Scholarships for women in the USA with deadlines, amounts, and requirements that vary by listing. Compare options and apply on provider application paths.",
   "intro": "Trying to find USA scholarships for women usually means sorting through very different rules, study levels, and subject areas at once. This filtered slice brings those listings into one place so you can compare options across education, STEM, arts, law, community, and other categories without jumping between unrelated results. The rows below include opportunities for profiles such as high school seniors, college students, graduate students, and adult non traditional learners, with some listings tied to fields like education, business, engineering, computer and information sciences, or legal studies. Awards vary by listing, deadlines differ by program, and requirement details are not uniform, so it is worth reading each row closely before you apply.",
   "h1": "Compare Scholarships for Women in the USA",
-  "supporting": "Use this list to compare more than just the title. Scan the category tags, study level, citizenship or residency language, and field of study notes to see which programs actually match your situation in the USA. Some listings may look broader, while others are clearly aimed at women in leadership, media, law, education, or technical fields. As you browse, compare award text and deadline wording side by side, then open the official page for any scholarship you want to pursue so you can verify current requirements, materials, and submission details.",
+  "supporting": "Use this list to compare more than just the title. Scan the category tags, study level, citizenship or residency language, and field of study notes to see which programs actually match your situation in the USA. Some listings may look broader, while others are clearly aimed at women in leadership, media, law, education, or technical fields. As you browse, compare award text and deadline wording side by side, then open the provider application path for any scholarship you want to pursue so you can review current requirements, materials, and submission details.",
   "related_intro": "If these results feel close but not quite right, check related scholarship pages by subject, study level, or other eligibility filters. That can help you find programs for women that also match a specific major, academic stage, or application preference.",
   "how_to_use": [
     "Compare deadline wording across the rows",
     "Read each requirement line carefully",
     "Check study level and field tags",
-    "Open the official page to verify details",
+    "Use the provider application path when you are ready to submit",
     "Shortlist the programs that fit best"
   ],
   "who_for": [
@@ -22,7 +22,7 @@
   "faq": [
     {
       "question": "How can I find scholarships for women in the USA that fit my background or major?",
-      "answer": "Use this filtered view to compare rows by category, study level, and any citizenship or residency notes shown in each listing. In this USA-focused set, details can differ a lot by program, so confirm eligibility on the official scholarship page before you apply."
+      "answer": "Use this filtered view to compare rows by category, study level, and any citizenship or residency notes shown in each listing. When a provider application path is available, ScholarshipTop includes it so you can move from shortlist to submission more easily."
     },
     {
       "question": "Are these scholarships only for college students, or can I explore options at other study levels?",
@@ -30,7 +30,7 @@
     },
     {
       "question": "Do all scholarships for women here require an essay?",
-      "answer": "No single requirement applies to every listing on this page. Some programs may ask for an essay and others may not, so compare the rows and verify the application requirements on the official scholarship page before you apply."
+      "answer": "No single requirement applies to every listing on this page. Some programs may ask for an essay and others may not, so compare the rows and review the application requirements on the provider application path before you apply."
     },
     {
       "question": "What kinds of subjects can I browse in these scholarships for women?",

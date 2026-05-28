@@ -1,16 +1,16 @@
 {
   "seo_title": "Find First-Generation Undergraduate Scholarships in Massachusett…",
-  "seo_description": "First-generation undergraduate scholarships in Massachusetts, USA. Compare awards, deadlines, and requirements, then apply on official program pages.",
+  "seo_description": "First-generation undergraduate scholarships in Massachusetts, USA. compare organized eligibility signals, award details, deadlines, requirements, effort level, and application paths, then apply on provider application paths.",
   "intro": "Trying to find first generation undergraduate scholarships in Massachusetts usually means narrowing fast by eligibility, school level, and location before you apply. This filtered slice brings together a focused set of USA listings where those signals already overlap, so you can compare options without wading through unrelated awards. The programs below span areas such as STEM, biology, education, humanities, and miscellaneous topics, which makes this view useful if your major is set or still flexible. Award amounts, deadlines, and requirement details vary by listing, and many rows appear to have lighter application asks, often with no essay noted in the data. Because deadline text differs across these rows and some dates may be coming up soon, it is smart to check each listing promptly.",
   "h1": "Find First-Generation Undergraduate Scholarships in Massachusett…",
-  "supporting": "Use these rows to compare more than the title alone. Look at the category tags, study level cues, and field references to see which scholarships fit your academic path in Massachusetts, then open the official source to confirm current rules. This slice is especially worth scanning if you want to find options that may be simpler to apply for while still matching first generation undergraduate status. Amounts vary by listing, so treat the catalog as a starting point and verify every detail before you submit.",
+  "supporting": "Use these rows to compare more than the title alone. When a provider application path is available, ScholarshipTop includes it so you can move from shortlist to submission more easily. This slice is especially worth scanning if you want to find options that may be simpler to apply for while still matching first generation undergraduate status. Amounts vary by listing, so treat the catalog as a organized ScholarshipTop workspace and review eligibility signals and provider-path context before you submit.",
   "related_intro": "If you do not find enough matches here, compare nearby scholarship pages by changing one filter at a time, such as the location, the undergraduate preset, or the first generation eligibility tag. That makes it easier to spot similar USA opportunities that may fit your profile from a different angle.",
   "how_to_use": [
     "Compare deadline text across each row",
     "Read category and field tags carefully",
-    "Open the official page before you apply",
+    "Use the provider application path when you are ready to submit",
     "Shortlist listings that match your Massachusetts and undergraduate status",
-    "Verify award details and requirement lines on the sponsor site"
+    "Use structured deadline and award details to prioritize your next step"
   ],
   "who_for": [
     "First generation undergraduates studying in Massachusetts",
@@ -21,11 +21,11 @@
   "faq": [
     {
       "question": "How can I find first-generation undergraduate scholarships in Massachusetts that fit my major?",
-      "answer": "Use this filtered view to compare the rows by category and field, then open the official source for the ones that match your plans. In this USA slice, you may see listings tied to STEM, Biology, Education, Humanities, and related subjects."
+      "answer": "Use this filtered view to compare the rows by category and field, then review provider-path context in ScholarshipTop for the ones that match your plans. In this USA slice, you may see listings tied to STEM, Biology, Education, Humanities, and related subjects."
     },
     {
       "question": "Can I apply to every scholarship listed on this Massachusetts page?",
-      "answer": "Not automatically—each listing has its own eligibility details, application steps, and official rules. Use the catalog to find likely matches, then verify first-generation, undergraduate, and Massachusetts requirements on the program page before you apply."
+      "answer": "Not automatically—each listing has its own eligibility details, application steps, and application rules. Use the catalog to find likely matches, then review first-generation, undergraduate, and Massachusetts requirements on the program page before you apply."
     },
     {
       "question": "Are these Massachusetts scholarships mostly for certain subjects?",
@@ -33,7 +33,7 @@
     },
     {
       "question": "Do first-generation undergraduate scholarships in this filter usually require an essay?",
-      "answer": "Many listings in this slice appear to have lighter requirement signals, and several sampled rows show no essay flag in the catalog. Still, requirements can change row to row, so always confirm what you need on the official application page."
+      "answer": "Many listings in this slice appear to have lighter requirement signals, and several sampled rows show no essay flag in the catalog. When a provider application path is available, ScholarshipTop includes it so you can move from shortlist to submission more easily."
     }
   ],
   "page_data": {

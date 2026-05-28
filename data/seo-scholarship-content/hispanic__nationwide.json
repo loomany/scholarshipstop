@@ -9,7 +9,7 @@
     "Review the award amounts to find suitable options",
     "Check deadlines closely, especially for upcoming submissions",
     "Note the essay requirements for each scholarship",
-    "Open the official pages for complete details",
+    "Use the provider application path when you are ready to submit",
     "Shortlist your favorites for easier tracking"
   ],
   "who_for": [
@@ -28,7 +28,7 @@
     },
     {
       "question": "How can I find out the deadlines for these scholarships?",
-      "answer": "Each scholarship has its own deadline, and all 8 listings currently have deadline information available. Be sure to review the deadlines closely, as some may be approaching soon, and verify the details for each opportunity."
+      "answer": "Each scholarship has its own deadline, and all 8 listings currently have deadline information available. Be sure to review the deadlines closely, as some may be approaching soon, and review the details for each opportunity."
     },
     {
       "question": "What are the typical award amounts for these scholarships?",

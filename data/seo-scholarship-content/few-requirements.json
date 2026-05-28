@@ -9,8 +9,8 @@
     "Compare deadlines to prioritize applications",
     "Scan award amounts to find suitable funding options",
     "Read requirement lines to understand what each scholarship entails",
-    "Open official pages for detailed information and application processes",
-    "Shortlist scholarships that align with your goals and verify on sponsor sites"
+    "Use the provider application path when you are ready to submit",
+    "Use the provider application path when you are ready to submit"
   ],
   "who_for": [
     "Students seeking funding with few application hurdles",
@@ -28,7 +28,7 @@
     },
     {
       "question": "Are there deadlines I should be aware of?",
-      "answer": "Yes, nearly all of the scholarships in this category have deadlines, with many listings showing dates within the next 45 days. Be sure to verify the deadline for each scholarship you're interested in to ensure you submit your application on time."
+      "answer": "Yes, nearly all of the scholarships in this category have deadlines, with many listings showing dates within the next 45 days. Be sure to review the deadline for each scholarship you're interested in to ensure you submit your application on time."
     },
     {
       "question": "What are the award amounts for these scholarships?",

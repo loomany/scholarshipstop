@@ -9,7 +9,7 @@
     "Check the deadlines for each scholarship carefully",
     "Compare the award amounts listed for each opportunity",
     "Review the application requirements for each scholarship",
-    "Visit the official pages linked for more details",
+    "Use the provider application path when you are ready to submit",
     "Shortlist the scholarships that best match your profile"
   ],
   "who_for": [
@@ -30,7 +30,7 @@
     },
     {
       "question": "Are there any essay requirements for these scholarships?",
-      "answer": "Many of the scholarships listed do not require essays, making them more accessible. However, it's best to verify the specific requirements for each scholarship, as details can vary."
+      "answer": "Many of the scholarships listed do not require essays, making them more accessible. However, it's best to review the specific requirements for each scholarship, as details can vary."
     },
     {
       "question": "What are the award amounts for these scholarships?",

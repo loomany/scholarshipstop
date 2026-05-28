@@ -9,8 +9,8 @@
     "Compare deadlines across listings to prioritize applications",
     "Scan award amounts to find the best fit for your needs",
     "Read requirement lines carefully to ensure eligibility",
-    "Open official pages for detailed application instructions",
-    "Shortlist scholarships that align with your goals and verify details on sponsor sites"
+    "Use the provider application path when you are ready to submit",
+    "Use the provider application path when you are ready to submit"
   ],
   "who_for": [
     "High school seniors in New Jersey",
@@ -26,7 +26,7 @@
     },
     {
       "question": "Are there any essay requirements for these scholarships?",
-      "answer": "Most of the scholarships in this listing do not require essays, though it's important to verify each individual listing for specific requirements. Many programs tend to have lighter application processes, making them accessible for students."
+      "answer": "Most of the scholarships in this listing do not require essays, though it's important to review each individual listing for specific requirements. Many programs tend to have lighter application processes, making them accessible for students."
     },
     {
       "question": "How can I find out the deadlines for these scholarships?",

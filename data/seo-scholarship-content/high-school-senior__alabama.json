@@ -3,13 +3,13 @@
   "seo_description": "Explore 4 scholarships for Alabama high school seniors with varying deadlines and award amounts. Check details for eligibility and requirements.",
   "intro": "Finding financial support for college can be a challenge, especially for high school seniors in Alabama. This collection features 4 scholarships specifically tailored for students in your state, with award amounts ranging from approximately $1,000 to $7,000. Each opportunity has its own requirements and deadlines, so it's essential to review the details carefully to identify which ones align with your goals and timeline.",
   "h1": "Scholarships for High School Seniors in Alabama",
-  "supporting": "As you explore these scholarships, pay attention to the varying requirements and deadlines. Some may require essays, while others could have lighter application processes. This list includes a mix of categories, including STEM and education, offering a range of options to suit different interests. Make sure to check the deadlines, as some applications may be due soon, and verify all details on the official scholarship pages.",
+  "supporting": "As you explore these scholarships, pay attention to the varying requirements and deadlines. Some may require essays, while others could have lighter application processes. This list includes a mix of categories, including STEM and education, offering a range of options to suit different interests. Make sure to check the deadlines, as some applications may be due soon, and review all details on the provider application paths.",
   "related_intro": "For more tailored options, consider checking out scholarships for specific majors or those that don't require essays.",
   "how_to_use": [
     "Compare deadlines for each scholarship",
     "Scan the award amounts listed",
     "Read through the requirement details",
-    "Open the official scholarship pages for full information",
+    "Use the provider application path when you are ready to submit",
     "Shortlist the scholarships that fit your profile"
   ],
   "who_for": [
@@ -34,7 +34,7 @@
     },
     {
       "question": "What are the award amounts for these scholarships?",
-      "answer": "Award sizes for the scholarships in this listing generally range from approximately $1,000 to $7,000. However, it's best to verify the specific amounts for each scholarship, as they can vary significantly."
+      "answer": "Award sizes for the scholarships in this listing generally range from approximately $1,000 to $7,000. However, it's best to review the specific amounts for each scholarship, as they can vary significantly."
     }
   ],
   "_meta": {

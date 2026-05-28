@@ -9,7 +9,7 @@
     "Compare deadlines across listings to prioritize applications",
     "Scan award amounts to identify the best financial fit",
     "Read requirement lines for eligibility details",
-    "Open official pages for the most accurate information",
+    "Use the provider application path when you are ready to submit",
     "Shortlist potential scholarships that align with your goals"
   ],
   "who_for": [
@@ -26,15 +26,15 @@
     },
     {
       "question": "Are there any essay requirements for these scholarships?",
-      "answer": "Most of the scholarships listed in this category do not require an essay, making the application process potentially easier for applicants. However, it's important to verify the specific requirements for each scholarship, as they can vary."
+      "answer": "Most of the scholarships listed in this category do not require an essay, making the application process potentially easier for applicants. However, it's important to review the specific requirements for each scholarship, as they can vary."
     },
     {
       "question": "How can I find the deadlines for these scholarships?",
       "answer": "All 39 scholarships in this listing have deadlines, which can differ significantly from one to another. Be sure to check the deadline details for each scholarship promptly, as some may be approaching within the next 45 days."
     },
     {
-      "question": "How do I verify the details of a specific scholarship?",
-      "answer": "To confirm details such as eligibility, award amounts, and application requirements, click on the individual scholarship listings. This will provide you with the most accurate and up-to-date information directly from the scholarship providers."
+      "question": "How do I review the details of a specific scholarship?",
+      "answer": "ScholarshipTop highlights available deadline and award details in a structured format so you can prioritize opportunities and plan your next step. ScholarshipTop highlights available deadline and award details in a structured format so you can prioritize opportunities and plan your next step."
     }
   ],
   "_meta": {

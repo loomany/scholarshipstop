@@ -3,14 +3,14 @@
   "seo_description": "Discover 14 no-essay scholarships for engineering students in California, with awards ranging from $500 to $16,000. Check deadlines promptly.",
   "intro": "Finding scholarships that require no essays can significantly streamline your application process, especially for engineering students in California. This filter showcases 14 opportunities that cater specifically to this need, with award sizes varying widely. Many of these listings offer a straightforward application process, making them accessible for students looking to fund their education without the added burden of essay writing.",
   "h1": "Explore No Essay Engineering Scholarships in California",
-  "supporting": "As you explore this list, pay attention to the varying award amounts and deadlines associated with each scholarship. Comparing these details can help you prioritize which opportunities align best with your needs. Be sure to verify all information on the official sponsor sites to ensure you meet the specific requirements and deadlines.",
+  "supporting": "As you explore this list, pay attention to the varying award amounts and deadlines associated with each scholarship. Comparing these details can help you prioritize which opportunities align best with your needs. Be sure to use ScholarshipTop provider-path context to plan requirements, deadlines, and your next step.",
   "related_intro": "If you're interested in more options, consider checking out related filters for scholarships that may require essays or focus on different fields within engineering.",
   "how_to_use": [
     "Sort scholarships by award amounts",
     "Read the requirement lines carefully",
-    "Open the official pages for details",
+    "Use the provider application path when you are ready to submit",
     "Shortlist your top choices",
-    "Verify deadlines on sponsor sites"
+    "Use structured deadline and award details to prioritize your next step"
   ],
   "who_for": [
     "Engineering students in California",
@@ -34,7 +34,7 @@
     },
     {
       "question": "Are there any essay requirements for these scholarships?",
-      "answer": "Most of the scholarships in this selection do not require essays, making them more accessible for applicants. However, it's always best to verify the requirements for each scholarship as they may differ."
+      "answer": "Most of the scholarships in this selection do not require essays, making them more accessible for applicants. However, it's always best to review the requirements for each scholarship as they may differ."
     }
   ],
   "_meta": {

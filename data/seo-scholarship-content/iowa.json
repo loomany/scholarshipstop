@@ -9,8 +9,8 @@
     "Review the list for scholarship amounts and categories",
     "Check each listing for specific deadlines",
     "Note which scholarships require essays or have lighter requirements",
-    "Open official pages for detailed application instructions",
-    "Shortlist your favorites and verify details on sponsor sites"
+    "Use the provider application path when you are ready to submit",
+    "Use the provider application path when you are ready to submit"
   ],
   "who_for": [
     "Iowa residents seeking scholarships",
@@ -30,7 +30,7 @@
     },
     {
       "question": "Are there scholarships that require essays?",
-      "answer": "Requirements for essays vary among the scholarships listed. While some scholarships may not require an essay, approximately six of the listings do include this as a requirement, so be sure to verify the details for each individual scholarship."
+      "answer": "Requirements for essays vary among the scholarships listed. While some scholarships may not require an essay, approximately six of the listings do include this as a requirement, so be sure to review the details for each individual scholarship."
     },
     {
       "question": "What are the typical award amounts for scholarships in Iowa?",

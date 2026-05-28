@@ -9,7 +9,7 @@
     "Compare deadlines across listings to prioritize applications",
     "Scan award amounts to identify funding potential",
     "Read the requirement lines for application specifics",
-    "Open official pages for detailed information",
+    "Use the provider application path when you are ready to submit",
     "Shortlist scholarships that align with your profile"
   ],
   "who_for": [
@@ -30,7 +30,7 @@
     },
     {
       "question": "Are there essay requirements for these scholarships?",
-      "answer": "Requirements vary among the scholarships listed. While some may require essays, others may not, so it's essential to verify the specific requirements for each scholarship you're interested in."
+      "answer": "Requirements vary among the scholarships listed. While some may require essays, others may not, so it's essential to review the specific requirements for each scholarship you're interested in."
     },
     {
       "question": "What is the range of award amounts for Minnesota scholarships?",

@@ -9,7 +9,7 @@
     "Check individual deadlines for each scholarship",
     "Compare award amounts across different listings",
     "Review the requirements for each opportunity",
-    "Open official pages for detailed application instructions",
+    "Use the provider application path when you are ready to submit",
     "Shortlist scholarships that align with your goals"
   ],
   "who_for": [
@@ -32,7 +32,7 @@
     },
     {
       "question": "When should I check the deadlines for these scholarships?",
-      "answer": "All 224 scholarships in this category have deadlines, and some are approaching within the next 45 days. Be sure to verify the specific deadlines for each scholarship to ensure timely applications."
+      "answer": "All 224 scholarships in this category have deadlines, and some are approaching within the next 45 days. Be sure to review the specific deadlines for each scholarship to ensure timely applications."
     }
   ],
   "_meta": {

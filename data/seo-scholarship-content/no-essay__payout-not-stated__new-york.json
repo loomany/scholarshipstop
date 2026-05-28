@@ -8,9 +8,9 @@
   "how_to_use": [
     "Sort listings by award size",
     "Read the requirement lines carefully",
-    "Open official pages for details",
+    "Use the provider application path when you are ready to submit",
     "Shortlist your top choices",
-    "Verify deadlines on sponsor sites"
+    "Use structured deadline and award details to prioritize your next step"
   ],
   "who_for": [
     "High school seniors in New York",
@@ -33,8 +33,8 @@
       "answer": "The award sizes for the scholarships listed here vary significantly, with amounts ranging from approximately $500 to $20,000. However, not every scholarship will have specific amounts listed, so be sure to review each entry for details."
     },
     {
-      "question": "How do I verify the details of a specific scholarship?",
-      "answer": "To verify details such as eligibility, award amounts, and application requirements, click on each scholarship listing. This will provide you with the most accurate and up-to-date information directly from the source."
+      "question": "How do I review the details of a specific scholarship?",
+      "answer": "To review details such as eligibility, award amounts, and application requirements, click on each scholarship listing. This will provide you with the most accurate and up-to-date information directly from the source."
     }
   ],
   "_meta": {

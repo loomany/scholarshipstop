@@ -9,7 +9,7 @@
     "Compare deadlines for each scholarship",
     "Scan award amounts to find suitable options",
     "Read through eligibility requirements carefully",
-    "Open official scholarship pages for detailed information",
+    "Use the provider application path when you are ready to submit",
     "Shortlist potential scholarships that match your profile"
   ],
   "who_for": [
@@ -34,7 +34,7 @@
     },
     {
       "question": "Who can apply for these scholarships?",
-      "answer": "These scholarships are exclusively for women interested in engineering fields. Applicants should carefully read each listing to confirm eligibility criteria and any additional requirements."
+      "answer": "These scholarships are exclusively for women interested in engineering fields. Use ScholarshipTop to compare fit, save relevant opportunities, prepare materials, track deadlines, and continue toward the provider application path when you are ready to submit."
     }
   ],
   "_meta": {

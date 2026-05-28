@@ -9,7 +9,7 @@
     "Check individual deadlines for each scholarship",
     "Compare award amounts to prioritize applications",
     "Review eligibility requirements carefully",
-    "Open official scholarship pages for detailed information",
+    "Use the provider application path when you are ready to submit",
     "Shortlist scholarships that align with your profile"
   ],
   "who_for": [
@@ -31,7 +31,7 @@
       "answer": "While many listings indicate lighter requirements, it's essential to review each scholarship's details individually. Most scholarships are geared toward high school seniors in Florida, and some may have specific criteria related to engineering or community involvement."
     },
     {
-      "question": "How do I verify the details of each scholarship?",
+      "question": "How do I review the details of each scholarship?",
       "answer": "To ensure you have the most accurate information, click on each scholarship listing for comprehensive details regarding eligibility, award amounts, and application requirements. This will help you understand what is needed for each opportunity."
     }
   ],

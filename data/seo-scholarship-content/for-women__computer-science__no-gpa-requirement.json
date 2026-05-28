@@ -9,7 +9,7 @@
     "Review the list for suitable scholarship options",
     "Compare award amounts and requirements",
     "Check deadlines for each scholarship",
-    "Open official pages for detailed application instructions",
+    "Use the provider application path when you are ready to submit",
     "Shortlist your top choices for further consideration"
   ],
   "who_for": [
@@ -27,7 +27,7 @@
       "answer": "Yes, all 7 scholarships listed have deadlines, but they vary by program. It's advisable to check the specific dates for each scholarship promptly, as some deadlines are approaching within the next 45 days."
     },
     {
-      "question": "How can I verify the details of each scholarship?",
+      "question": "How can I review the details of each scholarship?",
       "answer": "You can click on each scholarship listing to view detailed information, including eligibility criteria, application requirements, and specific deadlines. This will help ensure you have the most accurate and up-to-date information."
     },
     {

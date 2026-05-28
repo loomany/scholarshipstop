@@ -9,8 +9,8 @@
     "Compare deadlines across different listings",
     "Scan the award amounts to find suitable options",
     "Read the requirement lines for each scholarship",
-    "Open official pages for detailed information",
-    "Shortlist promising opportunities and verify on sponsor sites"
+    "Use the provider application path when you are ready to submit",
+    "Use the provider application path when you are ready to submit"
   ],
   "who_for": [
     "Students with disabilities seeking financial aid",
@@ -30,7 +30,7 @@
     },
     {
       "question": "Are there essay requirements for these scholarships?",
-      "answer": "Requirements for essays differ among the scholarships in this category. Approximately half of the listings may require essays, while the others might not, so be sure to verify the details for each individual scholarship."
+      "answer": "Requirements for essays differ among the scholarships in this category. Approximately half of the listings may require essays, while the others might not, so be sure to review the details for each individual scholarship."
     },
     {
       "question": "What is the range of award amounts for these scholarships?",

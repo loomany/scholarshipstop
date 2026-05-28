@@ -1,16 +1,16 @@
 {
   "seo_title": "Find Maine Scholarships for Women Under Five Thousand | USA",
-  "seo_description": "Maine scholarships for women under five thousand: compare awards, deadlines, and requirements in this USA filter, then apply on official pages.",
+  "seo_description": "Maine scholarships for women under five thousand: compare organized eligibility signals, award details, deadlines, requirements, effort level, and application paths in this USA filter, then apply on provider application paths.",
   "intro": "Trying to find Maine scholarships for women with smaller award sizes usually means balancing fit, effort, and timing. This filtered USA view narrows the search to programs in Maine that fall under the under-five-thousand range, so you can compare a focused set of listings without wading through unrelated results. The rows here lean toward areas such as education and STEM, with some overlap into business, architecture, construction trades, and engineering. Awards, deadlines, and eligibility details still vary by program, and many listings appear to have lighter application requirements, often with no essay shown in the metadata. If you plan to apply soon, it is worth checking each row promptly because deadline text differs across these programs.",
   "h1": "Compare Maine Scholarships for Women Under Five Thousand USA",
-  "supporting": "Use this slice to compare more than just the title. Read the category tags, field-of-study clues, and requirement lines to see which scholarships match your background before you open the official source. Because award sizes in this range can differ by listing, and deadline wording is not the same across the rows, it helps to scan for the best fit first, then verify details on the sponsor page. This is also a useful view if you want to browse Maine options that may be more manageable to complete than longer, essay-heavy applications.",
+  "supporting": "Use this slice to compare more than just the title. Read the category tags, field-of-study clues, and requirement lines to see which scholarships match your background before you review provider-path context in ScholarshipTop. Because award sizes in this range can differ by listing, and deadline wording is not the same across the rows, it helps to scan for the best fit first, then review details on the provider page. This is also a useful view if you want to browse Maine options that may be more manageable to complete than longer, essay-heavy applications.",
   "related_intro": "If these Maine scholarships are close to what you want but not quite right, related pages can help you compare nearby paths, such as other women-focused listings, other Maine scholarship filters, or broader under-five-thousand results across the USA.",
   "how_to_use": [
     "Compare deadline text across the rows",
     "Read requirement lines before you apply",
-    "Open the official page for each listing",
+    "Use the provider application path when you are ready to submit",
     "Shortlist the programs that match your field",
-    "Verify award details on sponsor sites"
+    "Use structured deadline and award details to prioritize your next step"
   ],
   "who_for": [
     "Women seeking Maine-based scholarships",
@@ -21,7 +21,7 @@
   "faq": [
     {
       "question": "Can I apply to every scholarship listed here if I’m a woman in Maine?",
-      "answer": "Not automatically—this catalog page narrows the list, but each program can still have its own rules. Check the official listing page for location, study area, and any other requirements before you apply."
+      "answer": "Not automatically—this catalog page narrows the list, but each program can still have its own rules. Check the structured listing detail page for location, study area, and any other requirements before you apply."
     },
     {
       "question": "What should I compare when I explore these USA scholarship listings?",
@@ -29,7 +29,7 @@
     },
     {
       "question": "Are these Maine scholarships usually simple to apply for?",
-      "answer": "Many listings in this filtered set appear to have lighter requirements, and many sampled rows show no essay flag. Still, you should verify every application requirement on the official source before you apply."
+      "answer": "Many listings in this filtered set appear to have lighter requirements, and many sampled rows show no essay flag. When a provider application path is available, ScholarshipTop includes it so you can move from shortlist to submission more easily."
     }
   ],
   "page_data": {

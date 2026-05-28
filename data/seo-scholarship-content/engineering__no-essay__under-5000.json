@@ -9,8 +9,8 @@
     "Review the list for scholarship titles that interest you",
     "Compare the award amounts and eligibility criteria",
     "Check the deadlines for each scholarship carefully",
-    "Open the official pages for detailed application instructions",
-    "Shortlist your favorites and verify on the sponsor sites"
+    "Use the provider application path when you are ready to submit",
+    "Use the provider application path when you are ready to submit"
   ],
   "who_for": [
     "Engineering students looking for financial aid",
@@ -30,7 +30,7 @@
     },
     {
       "question": "Are there any specific requirements for these scholarships?",
-      "answer": "Most scholarships in this category do not require essays, making the application process simpler. However, it's best to verify the specific requirements for each listing, as some may have additional criteria."
+      "answer": "Most scholarships in this category do not require essays, making the application process simpler. However, it's best to review the specific requirements for each listing, as some may have additional criteria."
     },
     {
       "question": "Who can apply for these scholarships?",

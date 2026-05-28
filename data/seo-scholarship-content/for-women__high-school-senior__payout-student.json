@@ -10,7 +10,7 @@
     "Compare award amounts to prioritize your applications",
     "Check deadlines closely to ensure timely submissions",
     "Note the essay requirements for each scholarship",
-    "Visit official scholarship pages for the most accurate information"
+    "Use the provider application path when you are ready to submit"
   ],
   "who_for": [
     "Women pursuing higher education",
@@ -34,7 +34,7 @@
     },
     {
       "question": "Who can apply for these scholarships?",
-      "answer": "These scholarships are exclusively for women who are high school seniors. Make sure to review the eligibility criteria for each scholarship to confirm that you meet the requirements."
+      "answer": "These scholarships are exclusively for women who are high school seniors. Use ScholarshipTop to compare fit, save relevant opportunities, prepare materials, track deadlines, and continue toward the provider application path when you are ready to submit."
     }
   ],
   "_meta": {

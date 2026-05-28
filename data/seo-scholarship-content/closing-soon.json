@@ -1,7 +1,7 @@
 {
   "seo_title": "Find Closing Soon Scholarships in the USA",
-  "seo_description": "Closing Soon scholarships in the USA: compare deadlines, award ranges, and requirements, then apply fast after verifying each listing.",
-  "intro": "Trying to apply before opportunities close is the whole point of this USA scholarship filter: it pulls together a focused set of listings with deadline text already in view, so you can find options that may need attention soon. The programs below span areas such as education, community, STEM, arts, medicine, and other miscellaneous categories, with examples that reach from high school seniors to graduate students and adult non-traditional applicants. Award amounts vary by listing and should be verified on each official page, and deadlines differ by program rather than following one shared cutoff. Requirements also vary, including whether an essay is needed, so it makes sense to compare each row carefully instead of assuming the same application workload across the list.",
+  "seo_description": "Closing Soon scholarships in the USA: compare deadlines, award ranges, and requirements, then prioritize urgent next steps with organized details and provider-path context.",
+  "intro": "Trying to apply before opportunities close is the whole point of this USA scholarship filter: it pulls together a focused set of listings with deadline text already in view, so you can find options that may need attention soon. The programs below span areas such as education, community, STEM, arts, medicine, and other miscellaneous categories, with examples that reach from high school seniors to graduate students and adult non-traditional applicants. ScholarshipTop structures award details by listing so you can prioritize urgent next steps, and deadlines differ by program rather than following one shared cutoff. Requirements also vary, including whether an essay is needed, so it makes sense to compare each row carefully instead of assuming the same application workload across the list.",
   "h1": "Apply for Closing Soon USA Scholarships",
   "supporting": "Use this filtered view to compare urgency first, then fit. Scan the deadline text, open the listings that match your study level or field, and read the requirement lines before you start an application. You can also compare category mix and audience labels, including common USA eligibility signals such as U.S. citizen or permanent resident. Because some rows may be lighter-touch while others ask for more materials, this slice is worth checking when you want to act quickly without skipping scholarships that still match your background.",
   "related_intro": "After you review the most time-sensitive rows here, related scholarship pages can help you widen the search by category, study level, or field of study. That is useful if you want to compare fast-moving options with broader USA scholarship matches in education, STEM, community, arts, medicine, or other topics.",
@@ -9,7 +9,7 @@
     "Compare the deadline text across rows first and shortlist the programs that need action soonest",
     "Scan award text, category labels, study level, and field of study to find the closest matches",
     "Read each requirement line carefully, including whether an essay or other materials may be needed",
-    "Open the official scholarship page for every shortlist item and verify amount, eligibility, and deadline details before you apply"
+    "Use structured deadline and award details to prioritize your next step"
   ],
   "who_for": [
     "High school seniors who want to find USA scholarships with approaching deadlines",
@@ -20,11 +20,11 @@
   "faq": [
     {
       "question": "How do I find scholarships in the USA that are closing soon?",
-      "answer": "Use this filtered view to compare the deadline text on each row first, then open the official source for any program you want to apply to. Deadlines differ by listing, and some dates are close enough that it makes sense to verify them promptly."
+      "answer": "Use this filtered view to compare the deadline text on each row first, then review provider-path context in ScholarshipTop for any program you want to apply to. Deadlines differ by listing, and some dates are close enough that it makes sense to review them promptly."
     },
     {
       "question": "Can I compare award amounts on these closing-soon scholarship listings?",
-      "answer": "Yes—many rows show an amount, but awards vary by listing and should be confirmed on the official page before you apply. If you are comparing options, check both the posted amount and the eligibility details side by side."
+      "answer": "ScholarshipTop highlights available deadline and award details in a structured format so you can prioritize opportunities and plan your next step. If you are comparing options, check both the posted amount and the eligibility details side by side."
     },
     {
       "question": "Who should explore these closing-soon scholarships?",
@@ -32,7 +32,7 @@
     },
     {
       "question": "Do all of these scholarships have the same requirements or essay rules?",
-      "answer": "No—requirements vary row to row. Some programs may be lighter-touch, while others can ask for more materials, so review each catalog entry and verify the full application checklist on the official source."
+      "answer": "No—requirements vary row to row. Use this ScholarshipTop view to compare organized opportunities by eligibility signals, award details, deadlines, effort level, and application path."
     }
   ],
   "page_data": {

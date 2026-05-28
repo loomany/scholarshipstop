@@ -9,7 +9,7 @@
     "Compare deadlines across different listings",
     "Scan award amounts to find suitable options",
     "Read the requirement lines for eligibility details",
-    "Open official pages for each scholarship for more information",
+    "Use the provider application path when you are ready to submit",
     "Shortlist scholarships that align with your profile and goals"
   ],
   "who_for": [
@@ -33,8 +33,8 @@
       "answer": "The scholarships in this filter are exclusively for women in engineering. Each listing may have additional criteria, so reviewing the details of each scholarship is essential to ensure you meet all requirements."
     },
     {
-      "question": "How do I verify the details of each scholarship?",
-      "answer": "You can click on each scholarship listing to access detailed information, including award amounts, deadlines, and eligibility criteria. This will help you confirm the specifics and ensure you have the most accurate information for your applications."
+      "question": "How do I review the details of each scholarship?",
+      "answer": "You can click on each scholarship listing to access detailed information, including award amounts, deadlines, and eligibility criteria. This will help you compare the specifics and ensure you have the most accurate information for your applications."
     }
   ],
   "_meta": {

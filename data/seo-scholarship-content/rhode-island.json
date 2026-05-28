@@ -9,7 +9,7 @@
     "Check the deadlines for each scholarship to prioritize applications",
     "Compare award amounts to identify the most beneficial options",
     "Read the eligibility requirements carefully for each listing",
-    "Open the official pages linked for detailed application instructions",
+    "Use the provider application path when you are ready to submit",
     "Shortlist scholarships that align with your academic and career goals"
   ],
   "who_for": [
@@ -26,11 +26,11 @@
     },
     {
       "question": "How can I find out the deadlines for these scholarships?",
-      "answer": "Each scholarship listing has its own deadline, so it's important to check each one individually. Currently, all 32 scholarships have deadlines, with some approaching within the next 45 days, so be sure to verify the dates promptly."
+      "answer": "Each scholarship listing has its own deadline, so it's important to check each one individually. Currently, all 32 scholarships have deadlines, with some approaching within the next 45 days, so be sure to review the dates promptly."
     },
     {
       "question": "Are there any scholarships that require essays?",
-      "answer": "Requirements vary among the scholarships, with some requiring essays and others not. While the majority of listings do not have essay requirements, it's advisable to review each scholarship's details to confirm what is needed."
+      "answer": "Requirements vary among the scholarships, with some requiring essays and others not. While the majority of listings do not have essay requirements, it's advisable to review each scholarship's details to compare what is needed."
     },
     {
       "question": "What are the typical award amounts for Rhode Island scholarships?",

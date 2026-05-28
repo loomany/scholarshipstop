@@ -1,7 +1,7 @@
 {
   "seo_title": "Find Last-Minute Scholarships for International Students USA",
-  "seo_description": "Last-minute scholarships for international students in the USA. Compare deadlines, award details, and eligibility, then apply on official pages.",
-  "intro": "Trying to apply before a near-term cutoff changes how you search. This USA scholarship view pulls together a focused set of listings that match international student intent and last-minute timing, so you can find options that may still be open soon and compare them quickly. The programs below span areas such as Education, STEM, Medicine, Humanities, Community, and more, with examples touching engineering, medical mission work, public service, and coding. Award amounts vary by listing and should be verified on the official page, and deadlines differ by program rather than following one shared date. Requirements also vary: some listings may ask for essays, while others appear lighter-touch, so it is worth reading each row closely before you apply.",
+  "seo_description": "Last-minute scholarships for international students in the USA. Compare deadlines, award details, and eligibility, then apply on provider application paths.",
+  "intro": "Trying to apply before a near-term cutoff changes how you search. This USA scholarship view pulls together a focused set of listings that match international student intent and last-minute timing, so you can find options that may still be open soon and compare them quickly. The programs below span areas such as Education, STEM, Medicine, Humanities, Community, and more, with examples touching engineering, medical mission work, public service, and coding. Award amounts vary by listing and should be structured on the provider application path, and deadlines differ by program rather than following one shared date. Requirements also vary: some listings may ask for essays, while others appear lighter-touch, so it is worth reading each row closely before you apply.",
   "h1": "Apply for Last-Minute Scholarships in the USA",
   "supporting": "Use this filtered list to separate urgent opportunities from ones that only look relevant at first glance. Compare the deadline text first, then check who the scholarship is open to, the study level, and any field tags that match your plans in the USA. If you are deciding between several rows, look at the requirement lines and award details side by side instead of assuming similar titles mean similar rules. This slice is especially useful when you need to move fast but still want to browse across different subjects and applicant profiles.",
   "related_intro": "If these listings are close but not quite right, related pages can help you narrow by study level, subject area, or other international-student scholarship filters in the USA catalog. That is often the fastest way to find alternatives with a better fit before deadlines pass.",
@@ -9,31 +9,31 @@
     "Sort your attention by the deadline text first, since cutoff dates vary by row",
     "Compare eligibility details such as citizenship or residency labels, study level, and field tags before you apply",
     "Scan each listing for essay expectations, requirement lines, and award wording rather than assuming the same rules across this slice",
-    "Open the official scholarship page for every shortlist item to confirm amount, deadline, and submission instructions",
+    "Use structured deadline and award details to prioritize your next step",
     "Keep a short list of the best-fit programs and submit the fastest viable applications first"
   ],
   "who_for": [
     "International students looking for USA scholarships with nearer-term deadlines",
     "Applicants comparing late-cycle options across Education, STEM, Medicine, Humanities, or Community categories",
     "Graduate students, high school seniors, juniors, sophomores, and adult non-traditional learners checking current fits",
-    "Students who want to find scholarships that may still be open soon and verify requirements case by case"
+    "Students who want to find scholarships that may still be open soon and review requirements case by case"
   ],
   "faq": [
     {
       "question": "How can I find last-minute scholarships for international students in the USA?",
-      "answer": "Use this filtered view to compare rows that match international-student eligibility and near-term deadlines. Then open the official source for each listing to confirm current rules, required documents, and whether the program is open to applicants studying in the USA."
+      "answer": "Use this filtered view to compare rows that match international-student eligibility and near-term deadlines. When a provider application path is available, ScholarshipTop includes it so you can move from shortlist to submission more easily."
     },
     {
       "question": "Can I apply if I’m an international student but not a U.S. citizen?",
-      "answer": "Possibly—this slice includes listings tied to international_student, while some rows may also mention us_citizen or us_permanent_resident. Check each scholarship’s official page before you apply, because eligibility varies by program."
+      "answer": "Possibly—this slice includes listings tied to international_student, while some rows may also mention us_citizen or us_permanent_resident. Check each scholarship’s provider application path before you apply, because eligibility varies by program."
     },
     {
       "question": "What should I compare before I apply to these scholarships?",
-      "answer": "Focus on deadline text, study level, field of study, and any essay or requirement details shown in the catalog. Amounts vary by listing, so verify the award and application steps on the official scholarship page."
+      "answer": "Focus on deadline text, study level, field of study, and any essay or requirement details shown in the catalog. Amounts vary by listing, so review the award and application steps on the provider application path."
     },
     {
       "question": "Can I browse these listings by major or study level?",
-      "answer": "Yes—this focused set includes mixed study levels and topics such as education, STEM, medicine, humanities, business, engineering, and communication. Explore the rows that match your background, then verify fit directly with the scholarship provider’s official details."
+      "answer": "Yes—this focused set includes mixed study levels and topics such as education, STEM, medicine, humanities, business, engineering, and communication. When a provider application path is available, ScholarshipTop includes it so you can move from shortlist to submission more easily."
     }
   ],
   "page_data": {

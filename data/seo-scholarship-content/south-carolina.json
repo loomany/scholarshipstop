@@ -3,14 +3,14 @@
   "seo_description": "Explore 25 scholarships in South Carolina with awards up to $18,000. Check deadlines and requirements for each opportunity.",
   "intro": "Finding financial support for education in South Carolina can be a crucial step for many students. This catalog features 25 scholarships specifically for residents of the state, with award sizes varying significantly. As you explore these options, keep in mind that requirements and deadlines differ, so it's essential to check each listing carefully to find the best fit for your needs.",
   "h1": "Explore 25 Scholarships Available in South Carolina",
-  "supporting": "When reviewing the scholarships, pay attention to the specific award amounts and the nature of the requirements. Some scholarships may require essays, while others might have lighter application processes. Comparing deadlines will also help you prioritize which opportunities to pursue first. Always verify details on the official sponsor pages to ensure you have the most accurate information.",
+  "supporting": "When reviewing the scholarships, pay attention to the specific award amounts and the nature of the requirements. Some scholarships may require essays, while others might have lighter application processes. Comparing deadlines will also help you prioritize which opportunities to pursue first. When a provider application path is available, ScholarshipTop includes it so you can move from shortlist to submission more easily.",
   "related_intro": "If you're interested in scholarships beyond South Carolina, consider checking out related pages for additional opportunities tailored to different states or fields of study.",
   "how_to_use": [
     "Sort scholarships by award amount",
     "Read the requirement lines carefully",
-    "Open the official pages for details",
+    "Use the provider application path when you are ready to submit",
     "Shortlist scholarships that match your profile",
-    "Verify deadlines to avoid missing opportunities"
+    "Use structured deadline and award details to prioritize your next step"
   ],
   "who_for": [
     "High school seniors in South Carolina",
@@ -30,7 +30,7 @@
     },
     {
       "question": "Are there scholarships that require essays?",
-      "answer": "Yes, the scholarship listings include a mix of requirements, with some programs requiring essays while others do not. It's important to verify the specific requirements for each scholarship you're interested in, as this can affect your application process."
+      "answer": "Yes, the scholarship listings include a mix of requirements, with some programs requiring essays while others do not. It's important to review the specific requirements for each scholarship you're interested in, as this can affect your application process."
     },
     {
       "question": "What are the award amounts for South Carolina scholarships?",

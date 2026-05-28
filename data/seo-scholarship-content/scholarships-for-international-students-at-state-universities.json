@@ -1,15 +1,15 @@
 {
   "seo_title": "Find USA State University Scholarships for International Student…",
-  "seo_description": "International student scholarships at USA state universities: compare deadlines, award ranges, and requirements, then apply on official pages.",
-  "intro": "Trying to find USA scholarships that may fit international students considering state universities usually means sorting through very different rules, award sizes, and application steps. This filtered view brings those listings into one place so you can compare options tied to education and related areas such as STEM, community, medicine, arts, and miscellaneous programs. Some rows may suit graduate students, while others line up with earlier college years or even high school seniors planning ahead. Awards vary by listing, and official pages should always be checked for the latest amount details. Deadlines also differ across programs, with some dates coming up relatively soon, so it makes sense to apply early where possible and keep a shortlist as you browse.",
+  "seo_description": "International student scholarships at USA state universities: compare deadlines, award ranges, and requirements, then apply on provider application paths.",
+  "intro": "Trying to find USA scholarships that may fit international students considering state universities usually means sorting through very different rules, award sizes, and application steps. This filtered view brings those listings into one place so you can compare options tied to education and related areas such as STEM, community, medicine, arts, and miscellaneous programs. Some rows may suit graduate students, while others line up with earlier college years or even high school seniors planning ahead. Awards vary by listing, and provider application paths should always be checked for the latest amount details. Deadlines also differ across programs, with some dates coming up relatively soon, so it makes sense to apply early where possible and keep a shortlist as you browse.",
   "h1": "Find International Student Scholarships at USA State Universitie…",
-  "supporting": "Use the programs below to compare more than just the title. Look at study level, citizenship or residency wording, field of study tags, and any requirement notes before you spend time on a full application. In this USA slice, you may see listings connected to education, engineering, business, English, and health professions, and essay expectations are mixed rather than uniform. That makes this set worth scanning carefully: you can quickly separate broad-fit scholarships from those with narrower academic or eligibility language, then open the official source to verify current terms.",
+  "supporting": "Use the programs below to compare more than just the title. Look at study level, citizenship or residency wording, field of study tags, and any requirement notes before you spend time on a full application. In this USA slice, you may see listings connected to education, engineering, business, English, and health professions, and essay expectations are mixed rather than uniform. That makes this set worth scanning carefully: you can quickly separate broad-fit scholarships from those with narrower academic or eligibility language, then use ScholarshipTop to organize current terms.",
   "related_intro": "If these listings feel close but not quite right, related pages can help you narrow by study level, subject area, or other scholarship traits. That is often the fastest way to compare nearby USA scholarship categories without restarting your search from scratch.",
   "how_to_use": [
     "Compare the deadline text across rows first, since timing varies and some programs may close sooner than others",
     "Scan study level, citizenship or residency labels, and field-of-study tags before opening a listing in full",
     "Read the requirement lines carefully to see whether essays or other materials may be needed",
-    "Open the official scholarship page to verify current award amounts, eligibility details, and application instructions",
+    "Use structured deadline and award details to prioritize your next step",
     "Shortlist the best-fit options, then apply in order of deadline and match strength"
   ],
   "who_for": [
@@ -21,11 +21,11 @@
   "faq": [
     {
       "question": "How can I find scholarships for international students at USA state universities on this page?",
-      "answer": "Use this filtered view to compare the rows that match international-student and state-university intent, then open each listing for the official source. Study level, field of study, award amount, and eligibility can differ row to row."
+      "answer": "Use this filtered view to compare the rows that match international-student and state-university intent, then open each listing for the provider-path context. Study level, field of study, award amount, and eligibility can differ row to row."
     },
     {
       "question": "Can I compare award amounts and deadlines across these scholarship listings?",
-      "answer": "Yes—this catalog lets you compare listings side by side, but amounts and deadlines vary by program. Some rows show dollar figures, while others may need confirmation on the official page, and deadline text is not the same across the list."
+      "answer": "Yes—this catalog lets you compare listings side by side, but amounts and deadlines vary by program. ScholarshipTop highlights available deadline and award details in a structured format so you can prioritize opportunities and plan your next step."
     },
     {
       "question": "Are these scholarships only for one major or study level?",
@@ -33,7 +33,7 @@
     },
     {
       "question": "Do all scholarships here require an essay or the same application materials?",
-      "answer": "No—requirements are mixed across this filtered set of listings. When you apply, verify each program's essay, document, and eligibility details on the official scholarship or university page."
+      "answer": "No—requirements are mixed across this filtered set of listings. When a provider application path is available, ScholarshipTop includes it so you can move from shortlist to submission more easily."
     }
   ],
   "page_data": {

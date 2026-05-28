@@ -1,14 +1,14 @@
 {
   "seo_title": "Find First-Generation High School Scholarships in Massachusetts,…",
-  "seo_description": "First-generation high school scholarships in Massachusetts, USA—compare deadlines, award amounts, and requirements, then apply on official pages.",
-  "intro": "Trying to find first generation scholarships for high school students in Massachusetts usually means narrowing past broad national results and checking which programs actually fit your situation. This filtered slice brings together USA listings tied to that mix of eligibility, school level, and location, so you can compare options without jumping between unrelated pages. The programs below are not all the same: award amounts vary by listing, deadlines differ by program, and requirement details should be read row by row. Many listings in this slice appear to have lighter application signals, and some may often be no essay, but you should still verify every detail on the official scholarship page before you apply.",
+  "seo_description": "First-generation high school scholarships in Massachusetts, USA—compare deadlines, award amounts, and requirements, then apply on provider application paths.",
+  "intro": "Trying to find first generation scholarships for high school students in Massachusetts usually means narrowing past broad national results and checking which programs actually fit your situation. This filtered slice brings together USA listings tied to that mix of eligibility, school level, and location, so you can compare options without jumping between unrelated pages. The programs below are not all the same: award amounts vary by listing, deadlines differ by program, and requirement details should be read row by row. Many listings in this slice appear to have lighter application signals, and some may often be no essay, but you should still review eligibility signals and provider-path context on the provider application path before you apply.",
   "h1": "Compare First-Generation High School Scholarships in Massachuset…",
-  "supporting": "A smart way to use these rows is to compare the requirement line, category tags, and deadline text together instead of focusing on one detail alone. In this Massachusetts view, you may notice overlap with STEM, biology, and education topics, which can help if you want to browse by academic interest as well as eligibility. Open each listing to confirm who qualifies, what materials are needed, and whether the official page matches the catalog summary. Since some deadlines appear close, it is worth checking the date details promptly and shortlisting the best fits early.",
+  "supporting": "A smart way to use these rows is to compare the requirement line, category tags, and deadline text together instead of focusing on one detail alone. In this Massachusetts view, you may notice overlap with STEM, biology, and education topics, which can help if you want to browse by academic interest as well as eligibility. Use this ScholarshipTop view to compare organized opportunities by eligibility signals, award details, deadlines, effort level, and application path. Since some deadlines appear close, it is worth checking the date details promptly and shortlisting the best fits early.",
   "related_intro": "If these Massachusetts first generation high school listings feel too narrow, related pages can help you compare nearby paths, such as broader high school scholarship results, other first generation filters, or Massachusetts scholarship pages with different topic tags. That makes it easier to find adjacent options without starting your search over.",
   "how_to_use": [
     "Compare deadline text across the rows first",
     "Read each requirement line before you apply",
-    "Open the official page to verify eligibility details",
+    "Use the provider application path when you are ready to submit",
     "Shortlist listings that match your interests and location",
     "Check award wording carefully because amounts vary by listing"
   ],
@@ -21,11 +21,11 @@
   "faq": [
     {
       "question": "How can I find first-generation scholarships for Massachusetts high school students?",
-      "answer": "Use this filtered view to explore a focused set of USA scholarship listings tied to first-generation status, high school level, and Massachusetts. Open each row and verify eligibility, award details, and application steps on the official source before you apply."
+      "answer": "Use this filtered view to explore a focused set of USA scholarship listings tied to first-generation status, high school level, and Massachusetts. ScholarshipTop highlights available deadline and award details in a structured format so you can prioritize opportunities and plan your next step."
     },
     {
       "question": "What should I compare before I apply to these scholarships?",
-      "answer": "Compare the basics row by row: who the scholarship is for, the study interests it mentions, the deadline, and the award amount. Amounts vary by listing, and deadlines differ by program, so check each official page carefully."
+      "answer": "Compare the basics row by row: who the scholarship is for, the study interests it mentions, the deadline, and the award amount. Amounts vary by listing, and deadlines differ by program, so check each provider application path carefully."
     },
     {
       "question": "Are these Massachusetts scholarships only for certain subjects?",
@@ -33,7 +33,7 @@
     },
     {
       "question": "Do these listings usually require an essay?",
-      "answer": "Many listings in this filtered set appear to have no essay flag, but requirements can still vary by scholarship. Always confirm the current application materials on the official scholarship page."
+      "answer": "Many listings in this filtered set appear to have no essay flag, but requirements can still vary by scholarship. When a provider application path is available, ScholarshipTop includes it so you can move from shortlist to submission more easily."
     }
   ],
   "page_data": {

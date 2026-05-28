@@ -9,8 +9,8 @@
     "Compare deadlines for each scholarship",
     "Scan award amounts to identify the best fit",
     "Read through the eligibility requirements carefully",
-    "Open official pages for detailed application instructions",
-    "Shortlist your top choices and verify details on sponsor sites"
+    "Use the provider application path when you are ready to submit",
+    "Use the provider application path when you are ready to submit"
   ],
   "who_for": [
     "Women in their senior year of high school",
@@ -30,7 +30,7 @@
     },
     {
       "question": "Are there essay requirements for these scholarships?",
-      "answer": "Many of the scholarships listed do not require essays, making the application process potentially lighter for applicants. However, it's advisable to verify the requirements for each individual scholarship, as they can differ."
+      "answer": "Many of the scholarships listed do not require essays, making the application process potentially lighter for applicants. However, it's advisable to review the requirements for each individual scholarship, as they can differ."
     },
     {
       "question": "Who can apply for these scholarships?",

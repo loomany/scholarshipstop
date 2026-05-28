@@ -9,7 +9,7 @@
     "Compare deadlines for each scholarship",
     "Scan the award amounts listed",
     "Read the requirements for eligibility",
-    "Open the official scholarship pages for details",
+    "Use the provider application path when you are ready to submit",
     "Shortlist your preferred options for application"
   ],
   "who_for": [
@@ -24,11 +24,11 @@
     },
     {
       "question": "How can I find specific details about each scholarship?",
-      "answer": "Each scholarship listing includes important information such as award amounts and deadlines. It's advisable to check each entry for specific requirements and to verify deadlines, as they can vary significantly among the scholarships."
+      "answer": "Each scholarship listing includes important information such as award amounts and deadlines. It's advisable to check each entry for specific requirements and to review deadlines, as they can vary significantly among the scholarships."
     },
     {
       "question": "Are there any scholarships that require essays?",
-      "answer": "Most of the scholarships listed do not require essays, but it's important to review each listing for specific application requirements. While many entries are lighter on requirements, confirming details directly from the scholarship descriptions is recommended."
+      "answer": "Most of the scholarships listed do not require essays, but it's important to review each listing for specific application requirements. Use ScholarshipTop to compare fit, save relevant opportunities, prepare materials, track deadlines, and continue toward the provider application path when you are ready to submit."
     },
     {
       "question": "When should I apply for these scholarships?",

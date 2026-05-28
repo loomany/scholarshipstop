@@ -3,13 +3,13 @@
   "seo_description": "Explore 5 scholarships for international students with financial need. Award sizes vary, and deadlines differ—check details promptly.",
   "intro": "Finding financial support as an international student can be challenging, but there are options available. This selection features 5 scholarships specifically designed for those demonstrating financial need. Award sizes vary, with opportunities ranging from several hundred to several thousand dollars. Keep in mind that deadlines and requirements differ across listings, so it’s essential to review each one carefully.",
   "h1": "Scholarships for International Students with Financial Need",
-  "supporting": "As you explore these scholarships, pay attention to the specific award amounts and eligibility criteria. Many listings may not require essays, making them more accessible. Compare deadlines to ensure you apply on time, and verify details on the official sponsor websites for the most accurate information.",
+  "supporting": "As you explore these scholarships, pay attention to the specific award amounts and eligibility criteria. Many listings may not require essays, making them more accessible. Compare deadlines to ensure you apply on time, and use ScholarshipTop provider-path context to plan requirements, deadlines, and your next step.",
   "related_intro": "If you're interested in similar opportunities, consider checking out related pages that focus on scholarships for international students or those based on specific fields of study.",
   "how_to_use": [
     "Compare deadlines for each scholarship",
     "Review award amounts listed in each row",
     "Read the eligibility requirements carefully",
-    "Open official pages for detailed information",
+    "Use the provider application path when you are ready to submit",
     "Shortlist scholarships that match your profile"
   ],
   "who_for": [
@@ -34,7 +34,7 @@
     },
     {
       "question": "When are the deadlines for applying to these scholarships?",
-      "answer": "All five scholarships have upcoming deadlines, but they vary by listing. Some deadlines are within the next 45 days, so it's recommended to verify the exact dates for each scholarship promptly."
+      "answer": "All five scholarships have upcoming deadlines, but they vary by listing. Some deadlines are within the next 45 days, so it's recommended to review the exact dates for each scholarship promptly."
     }
   ],
   "_meta": {

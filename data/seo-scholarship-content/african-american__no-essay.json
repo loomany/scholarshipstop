@@ -9,7 +9,7 @@
     "Check each listing for specific deadlines",
     "Compare award amounts to prioritize applications",
     "Review eligibility requirements carefully",
-    "Open official scholarship pages for detailed information",
+    "Use the provider application path when you are ready to submit",
     "Shortlist your top choices for easier tracking"
   ],
   "who_for": [
@@ -32,7 +32,7 @@
     },
     {
       "question": "Do I need to submit an essay for these scholarships?",
-      "answer": "Most scholarships in this category do not require essays, making the application process simpler. However, it's important to verify the requirements for each scholarship, as some may have other criteria."
+      "answer": "Most scholarships in this category do not require essays, making the application process simpler. However, it's important to review the requirements for each scholarship, as some may have other criteria."
     }
   ],
   "_meta": {

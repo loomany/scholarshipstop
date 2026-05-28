@@ -9,8 +9,8 @@
     "Review each listing for specific award amounts",
     "Check the deadlines for each scholarship carefully",
     "Compare eligibility requirements to find suitable options",
-    "Open the official pages for detailed application instructions",
-    "Shortlist your favorites and verify details with sponsors"
+    "Use the provider application path when you are ready to submit",
+    "Use the provider application path when you are ready to submit"
   ],
   "who_for": [
     "High school seniors in New York",
@@ -29,7 +29,7 @@
     },
     {
       "question": "Are there any essay requirements for these scholarships?",
-      "answer": "Most scholarships in this listing do not require essays, but this can vary by program. It's advisable to verify the requirements for each scholarship to ensure you meet all necessary criteria."
+      "answer": "Most scholarships in this listing do not require essays, but this can vary by program. It's advisable to review the requirements for each scholarship to ensure you meet all necessary criteria."
     },
     {
       "question": "What are the award amounts for these scholarships?",

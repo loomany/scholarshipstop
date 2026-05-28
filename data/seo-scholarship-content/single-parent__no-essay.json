@@ -9,7 +9,7 @@
     "Review the list for scholarship titles that resonate with your goals",
     "Compare award amounts to prioritize your applications",
     "Check each listing for specific deadlines and requirements",
-    "Open the official pages to verify details and application processes",
+    "Use the provider application path when you are ready to submit",
     "Shortlist your top choices for a focused application strategy"
   ],
   "who_for": [
@@ -31,8 +31,8 @@
       "answer": "Yes, all 15 scholarships listed have deadlines, but they vary from one to another. Some deadlines are approaching, so it's advisable to check the specific dates for each scholarship promptly to ensure you don't miss any opportunities."
     },
     {
-      "question": "How can I verify the details of each scholarship?",
-      "answer": "You can click on each scholarship listing to view detailed information, including eligibility requirements, award amounts, and deadlines. Make sure to read through the specifics to confirm that you meet the criteria before applying."
+      "question": "How can I review the details of each scholarship?",
+      "answer": "You can click on each scholarship listing to view detailed information, including eligibility requirements, award amounts, and deadlines. Make sure to read through the specifics to compare that you meet the criteria before applying."
     }
   ],
   "_meta": {

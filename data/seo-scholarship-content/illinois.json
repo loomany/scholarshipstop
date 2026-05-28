@@ -9,7 +9,7 @@
     "Compare deadlines across listings to prioritize applications",
     "Scan award amounts to find suitable funding levels",
     "Read eligibility requirements carefully for each scholarship",
-    "Open official pages for the most current details",
+    "Use the provider application path when you are ready to submit",
     "Shortlist potential scholarships for easy tracking"
   ],
   "who_for": [
@@ -26,7 +26,7 @@
     },
     {
       "question": "How do I find specific scholarship deadlines?",
-      "answer": "Each scholarship in this list has its own deadline, so it's important to check the details for each one. Given that all 231 rows include deadline information, you should verify these dates promptly, especially since some may be approaching within the next 45 days."
+      "answer": "Each scholarship in this list has its own deadline, so it's important to check the details for each one. Given that all 231 rows include deadline information, you should review these dates promptly, especially since some may be approaching within the next 45 days."
     },
     {
       "question": "Are there scholarships that require essays?",

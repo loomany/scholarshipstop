@@ -9,8 +9,8 @@
     "Compare deadlines listed for each scholarship",
     "Scan the award amounts to find suitable options",
     "Read the requirement lines carefully to understand what is needed",
-    "Open the official pages for detailed application instructions",
-    "Shortlist scholarships that align with your goals and verify details on sponsor sites"
+    "Use the provider application path when you are ready to submit",
+    "Use the provider application path when you are ready to submit"
   ],
   "who_for": [
     "Students with a GPA of 2.5",
@@ -34,7 +34,7 @@
     },
     {
       "question": "What are the typical award amounts for these scholarships?",
-      "answer": "Award sizes for the scholarships listed generally range from around $400 to $6,000. However, it's important to verify the specific amounts for each scholarship as they can vary widely."
+      "answer": "Award sizes for the scholarships listed generally range from around $400 to $6,000. However, it's important to review the specific amounts for each scholarship as they can vary widely."
     }
   ],
   "_meta": {

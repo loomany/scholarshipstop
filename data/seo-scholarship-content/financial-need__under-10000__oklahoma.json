@@ -1,14 +1,14 @@
 {
   "seo_title": "Find Oklahoma Financial Need Scholarships | USA",
-  "seo_description": "Oklahoma financial need scholarships under ten thousand dollars: compare awards, deadlines, and requirements, then apply on official USA program pages.",
+  "seo_description": "Oklahoma financial need scholarships under ten thousand dollars: compare organized eligibility signals, award details, deadlines, requirements, effort level, and application paths, then apply on provider application paths.",
   "intro": "Trying to find Oklahoma scholarships tied to financial need without wading through very large award listings? This filtered USA view narrows the search to programs with listed awards under the stated cap, so you can compare options that may fit smaller funding gaps, books, fees, or other education costs. The rows below span several academic areas, including education, STEM, arts, medicine, law, and miscellaneous topics, with examples that also touch fields like engineering, business, journalism, and performing arts. Requirements are not identical across these listings: some may be relatively lighter touch, some may ask for more documentation, and essay expectations can differ by program. Deadlines also vary by row, so it is smart to check timing early if you plan to apply in the current cycle.",
   "h1": "Explore Oklahoma Financial Need Scholarships USA",
-  "supporting": "Use this slice to compare more than just the award line. Read each listing for location fit, financial need language, study level, field tags, and any residency or citizenship notes shown in the row before you open the official source. Because award amounts vary by listing and deadlines differ across programs, the most useful approach is to shortlist the rows that match your profile, then verify full eligibility, required materials, and current terms on the sponsor page. That makes it easier to find Oklahoma opportunities worth pursuing instead of treating every result as interchangeable.",
+  "supporting": "Use this slice to compare more than just the award line. Read each listing for location fit, financial need language, study level, field tags, and any residency or citizenship notes shown in the row before you review provider-path context in ScholarshipTop. Because award amounts vary by listing and deadlines differ across programs, the most useful approach is to shortlist the rows that match your profile, then review full eligibility, required materials, and current terms on the provider page. That makes it easier to find Oklahoma opportunities worth pursuing instead of treating every result as interchangeable.",
   "related_intro": "If these Oklahoma financial need listings feel too narrow, related pages can help you explore nearby options by changing one filter at a time, such as location, award range, or broader scholarship themes. That is often the fastest way to compare similar USA opportunities without starting your search over.",
   "how_to_use": [
     "Compare deadline text across rows first",
     "Read each requirement line carefully",
-    "Open the official page to verify details",
+    "Use the provider application path when you are ready to submit",
     "Shortlist listings that match your study level",
     "Check award wording and eligibility before you apply"
   ],
@@ -25,7 +25,7 @@
     },
     {
       "question": "Can I compare award amounts and deadlines on this page?",
-      "answer": "Yes—this catalog slice lets you compare the basic details side by side before you explore a program further. Award amounts vary by listing, and deadlines differ by program, so check each official page carefully and act promptly if a date is coming up soon."
+      "answer": "Yes—this ScholarshipTop workspace lets you compare the basic details side by side before you explore a program further. Award amounts vary by listing, and deadlines differ by program, so check each provider application path carefully and act promptly if a date is coming up soon."
     },
     {
       "question": "Are all of these Oklahoma scholarships open to the same major or study level?",
@@ -33,7 +33,7 @@
     },
     {
       "question": "Do these scholarships all have the same application requirements?",
-      "answer": "No—requirements can differ across the programs below. Some may be comparatively lighter-touch, while others may ask for more materials, so use the catalog to browse and compare, then confirm the full application steps on the official scholarship page."
+      "answer": "No—requirements can differ across the programs below. Use this ScholarshipTop view to compare organized opportunities by eligibility signals, award details, deadlines, effort level, and application path."
     }
   ],
   "page_data": {

@@ -9,8 +9,8 @@
     "Review the list for scholarship categories that match your profile",
     "Check each listing for specific deadlines and requirements",
     "Compare award amounts to identify the best opportunities",
-    "Open official pages for detailed application instructions",
-    "Shortlist scholarships that fit your needs and verify on sponsor sites"
+    "Use the provider application path when you are ready to submit",
+    "Use the provider application path when you are ready to submit"
   ],
   "who_for": [
     "International students seeking financial assistance",
@@ -28,7 +28,7 @@
     },
     {
       "question": "Are there any essay requirements for these scholarships?",
-      "answer": "Many of the scholarships listed do not require an essay, making them potentially easier to apply for. However, it's advisable to verify the requirements for each specific scholarship as they can vary."
+      "answer": "Many of the scholarships listed do not require an essay, making them potentially easier to apply for. However, it's advisable to review the requirements for each specific scholarship as they can vary."
     },
     {
       "question": "What should I know about deadlines for these scholarships?",
