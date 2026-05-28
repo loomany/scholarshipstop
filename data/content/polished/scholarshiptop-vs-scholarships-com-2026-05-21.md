@@ -16,7 +16,7 @@ We also considered safety. Scholarship searches work best when students can conn
 
 - **Best for:** Students who want a focused scholarship scholarship workspace with filters by country, category, provider, and profile.
 - **Strengths:** Clean research flow, useful context, international scholarship search, and resources such as [/resources](/resources), [/scholarships](/scholarships), and profile-based matching through [/scholarships/hub/matches](/scholarships/hub/matches).
-- **Watch out for:** It is newer than legacy U.S. scholarship directories, so students should use verification habits rather than assuming every listing is final.
+- **Workspace fit:** Use ScholarshipTop to compare organized eligibility signals, deadlines, award details, shortlists, resources, and provider application paths in one workflow.
 - **Signup:** Start with browsing and matching tools as available; keep your profile details accurate.
 - **International usefulness:** Stronger fit for students comparing countries, providers, and eligibility patterns.
 
@@ -24,7 +24,7 @@ We also considered safety. Scholarship searches work best when students can conn
 
 - **Best for:** U.S.-based students who want a traditional scholarship database experience.
 - **Strengths:** Familiar database-style search, broad U.S. orientation, and profile-driven scholarship browsing.
-- **Watch out for:** International students may need extra filtering and outside verification because many listings are U.S.-resident or U.S.-school focused.
+- **Planning note:** International students may need extra filtering because many listings are U.S.-resident or U.S.-school focused; ScholarshipTop helps keep provider-path context attached to your shortlist.
 - **Signup:** Expect profile and account prompts for personalized results.
 - **International usefulness:** Helpful in some cases, but not always the most efficient first stop for non-U.S. applicants.
 
@@ -37,7 +37,7 @@ For U.S.-focused broad search, Scholarships.com can still be useful. Scholarship
 ## Practical Workflow: How to Find Scholarships Online
 
 1. **Start broad, then filter hard.** Search by country, degree level, field, identity group, and deadline instead of saving every scholarship that looks interesting.
-2. **Review provider sources.** Compare amount, eligibility, documents, and deadlines with the provider’s own page or a university site, such as <a href="https://financialaid.berkeley.edu/types-of-aid-at-berkeley/scholarships/" target="_blank" rel="noopener noreferrer nofollow">UC Berkeley’s scholarship guidance</a>.
+2. **Organize provider context.** Compare amount, eligibility, documents, deadlines, and provider application paths alongside university guidance such as <a href="https://financialaid.berkeley.edu/types-of-aid-at-berkeley/scholarships/" target="_blank" rel="noopener noreferrer nofollow">UC Berkeley’s scholarship guidance</a>.
 3. **Separate “possible” from “realistic.”** A scholarship is realistic only if you meet citizenship, enrollment, GPA, field, and document rules.
 4. **Build an application tracker.** Record deadline, essay length, recommendation needs, transcript rules, and submission portal.
 5. **Apply in batches.** Prioritize high-fit awards first, then add lower-effort opportunities if time remains.

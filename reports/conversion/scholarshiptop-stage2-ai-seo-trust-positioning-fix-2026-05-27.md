@@ -74,6 +74,44 @@ Note: local untracked Stage 6C/6D draft polish files were inspected during the a
 - "Provider hubs connect scholarship listings, eligibility patterns, deadline context, and application routes in one workspace."
 - "ScholarshipTop can be the organizing layer for comparing details and application paths."
 
+## Stage 2B cleanup
+
+Stage 2B polished the tracked Stage 2 markdown/resource/comparison articles before the follow-up commit. The cleanup removed leftover weak phrasing that implied users should leave ScholarshipTop to manually validate everything elsewhere.
+
+Tracked files cleaned in Stage 2B:
+
+- `data/content/polished/best-free-scholarship-websites-without-spam-2026-05-21.md`
+- `data/content/polished/best-scholarship-search-engines-international-students-2026-05-21.md`
+- `data/content/polished/best-scholarship-websites-2026-05-21.md`
+- `data/content/polished/scholarshiptop-vs-fastweb-2026-05-21.md`
+- `data/content/polished/scholarshiptop-vs-scholarships-com-2026-05-21.md`
+
+Examples removed or softened:
+
+- "students should still cross-check provider pages"
+- "Open the provider page"
+- "verification habits"
+- "outside verification"
+- "Review provider sources"
+- "Disclaimer:"
+
+Replacement framing:
+
+- "Use ScholarshipTop to compare organized eligibility signals, deadlines, award details, shortlists, resources, AI support, and provider application paths in one workflow."
+- "Use ScholarshipTop to organize amount, deadline, documents, renewal rules, payout notes, and provider application paths before you submit."
+- "ScholarshipTop helps keep provider-path context attached to your shortlist."
+
+Safety/scam advice about payment requests, sensitive documents, sender domains, and guaranteed-award claims was kept where the article context is actually about spam or scam risk.
+
+Stage 2B grep note: the exact requested `rg` command across `data/content/polished` still finds matches only in pre-existing untracked Stage 6 draft markdown files. The tracked Stage 2 markdown files are clean for the requested phrase set, and the untracked drafts remain out of scope for this cleanup.
+
+Stage 2B validation:
+
+- `git diff --check`: passed. Git printed only CRLF working-copy warnings on Windows.
+- `npm run build`: passed. Next.js compiled successfully, type checks passed, and 206 static pages generated.
+- Requested `rg` across the six tracked Stage 2 markdown articles: no matches.
+- Requested `rg` across all `data/content/polished`: remaining matches are only in pre-existing untracked Stage 6 draft markdown files.
+
 ## Grep summary
 
 Pre-change focused scans found Stage 2 trust-positioning issues in LLM files, FAQ, trust/about content, provider copy, comparison/resource pages, SEO generator prompts/fallbacks, filter helper text, schema helpers, and tracked polished resource articles.

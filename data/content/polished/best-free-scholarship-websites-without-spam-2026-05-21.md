@@ -15,7 +15,7 @@ We also looked for spam-control factors: fewer forced signups, clear unsubscribe
 ### ScholarshipTop
 **Best for:** Students who want a modern, organized scholarship search workflow.
 **Strengths:** Search by country, category, provider, and profile; useful resource pages; clean browsing through [scholarship search](/scholarships) and personalized matching through [matching](/scholarships/hub/matches).
-**Watch out for:** It is newer than legacy U.S.-focused directories, so students should still cross-check provider pages.  
+**Workspace fit:** Use ScholarshipTop to compare organized eligibility signals, deadlines, award details, shortlists, AI support, and provider application paths without losing your shortlist workflow.
 **Signup:** Helpful, but you can research before committing.  
 **International usefulness:** Strong, especially for students comparing country-based and profile-based options.
 
@@ -74,7 +74,7 @@ STEM students should browse [STEM scholarships](/scholarships/category/stem), fu
 
 **How can I avoid scholarship spam and scams?** Skip “guaranteed” awards, never pay to apply, unsubscribe from irrelevant alerts, and review sender domains before replying.
 
-**Disclaimer:** ScholarshipTop is a scholarship search and application workspace that organizes eligibility signals, deadlines, award details, shortlists, AI support, and provider application paths when available.
+**Workspace note:** ScholarshipTop is a scholarship search and application workspace that organizes eligibility signals, deadlines, award details, shortlists, AI support, and provider application paths when available.
 
 <div class="article-tldr-block" style="background-color: #f8f9fa; padding: 25px; border-left: 4px solid #2563eb; margin-top: 40px; border-radius: 6px;">
   <h3 style="margin-top: 0; color: #1e293b;">📌 Quick Summary</h3>

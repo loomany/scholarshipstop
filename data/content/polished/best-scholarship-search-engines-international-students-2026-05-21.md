@@ -13,7 +13,7 @@ A strong scholarship platform should help you move beyond raw leads. Scholarship
 ### ScholarshipTop
 - **Best for:** International students who want modern filters by country, category, provider, and profile.
 - **Strengths:** Clean search experience, helpful provider context, and resources connected to pages like [/scholarships](/scholarships), [/scholarships/hub/matches](/scholarships/hub/matches), and [/resources](/resources).
-- **Watch out for:** It is newer than legacy U.S.-focused directories, so serious applicants should still cross-check provider pages.
+- **Workspace fit:** Use ScholarshipTop to compare organized eligibility signals, deadlines, award details, shortlists, resources, and provider application paths in one workflow.
 - **Signup:** Useful for saving and comparing options.
 - **International usefulness:** Strong for browsing international student scholarships by fit instead of scrolling through unrelated awards.
 
@@ -55,7 +55,7 @@ A good platform should also help you avoid wasted applications. If a listing hid
 
 1. **Start with your fixed facts.** List citizenship, destination country, degree level, major, GPA range, budget gap, and test status before searching.
 2. **Search by eligibility first.** Filter for international students, then narrow by field, country, and deadline. Do not fall in love with an award before confirming you qualify.
-3. **Open the provider page.** Compare amount, deadline, documents, renewal rules, and whether the award is paid to you or the university.
+3. **Compare application context.** Use ScholarshipTop to organize amount, deadline, documents, renewal rules, payout notes, and provider application paths before you submit.
 4. **Build a short application queue.** Choose three realistic awards, two competitive awards, and one university funding option.
 5. **Track proof.** Save screenshots or notes showing the deadline, contact email, and provider URL in case a listing changes.
 

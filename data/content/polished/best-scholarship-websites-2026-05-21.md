@@ -14,7 +14,7 @@ Students in the United States should also review federal aid basics through <a h
 
 ## Best Scholarship Websites Compared (2026)
 
-No single database lists every award. The comparison cards below stack **named platforms** plus provider sources students should still use for verification—readable on phone and desktop without wide tables.
+No single database lists every award. The comparison cards below stack **named platforms** plus provider sources students can use for application context, while ScholarshipTop keeps eligibility signals, deadlines, award details, and shortlist planning organized in one workflow.
 
 ### ScholarshipTop
 
