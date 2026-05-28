@@ -1,5 +1,10 @@
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import {
+  getLongTailSitemapSlugs,
+  LONG_TAIL_SLUG_SET,
+  normalizeScholarshipDynamicParam
+} from '@/app/scholarships/scholarshipLongTailPresets';
+import {
   fieldOfStudyDisplayList,
   getScholarshipDeadlineDisplayParts,
   studyLevelsDisplayList,
@@ -8,6 +13,9 @@ import {
 import { fieldOfStudyLabelForValue } from '@/lib/constants/scholarshipFieldOfStudyOptions';
 import { schoolLevelLabelForValue } from '@/lib/constants/scholarshipProfileOptions';
 import { parseScholarshipDeadlineAnchor } from '@/lib/scholarships/scholarshipDeadlineTrust';
+import type { LongTailSeoBundle } from '@/lib/scholarships/longTailSeoTypes';
+import type { SeoScholarshipRouteManifestEntry } from '@/lib/scholarships/seoScholarshipManifest';
+import { listUsStateSeoSlugs } from '@/lib/scholarships/seoScholarshipRouteTokens';
 
 export type ScholarshipSourceStatusCode =
   | 'verified_official_source'
@@ -637,4 +645,243 @@ export function getProgrammaticSeoIndexPolicy({
     indexable: reasonCodes.length === 0,
     reasonCodes
   };
+}
+
+export type ScholarshipSeoRouteFamily =
+  | 'manifest_single'
+  | 'manifest_combo'
+  | 'legacy_long_tail'
+  | 'dynamic_state'
+  | 'dynamic_state_topic'
+  | 'dynamic_state_degree_topic'
+  | 'dynamic_filter'
+  | 'country_seo'
+  | 'cross_country_seo'
+  | 'university_hub'
+  | 'scholarship_detail';
+
+export type ScholarshipSeoRouteQualityTier =
+  | 'strong'
+  | 'medium'
+  | 'weak'
+  | 'excluded';
+
+export type ScholarshipSeoRouteQualityFacts = {
+  canonicalPath: string;
+  entry?: SeoScholarshipRouteManifestEntry | null;
+  seoContent?: LongTailSeoBundle | null;
+  routeFamily?: ScholarshipSeoRouteFamily;
+  stablePublicRoute?: boolean;
+  routeResolves?: boolean;
+  hasQueryParams?: boolean;
+};
+
+export type ScholarshipSeoRouteQualityDecision = {
+  shouldIndex: boolean;
+  shouldIncludeInSitemap: boolean;
+  shouldBeRssEligible: boolean;
+  indexable: boolean;
+  includeInSitemap: boolean;
+  rssEligible: boolean;
+  qualityTier: ScholarshipSeoRouteQualityTier;
+  routeFamily: ScholarshipSeoRouteFamily;
+  reasonCodes: string[];
+};
+
+const US_STATE_SEO_SLUGS = new Set(listUsStateSeoSlugs());
+const LEGACY_LONG_TAIL_SITEMAP_SLUGS = new Set<string>(
+  getLongTailSitemapSlugs().map((slug) => normalizeScholarshipDynamicParam(slug))
+);
+
+function splitCanonicalScholarshipSeoPath(canonicalPath: string): string[] {
+  return canonicalPath
+    .trim()
+    .replace(/^\/+|\/+$/g, '')
+    .split('/')
+    .map((part) => normalizeScholarshipDynamicParam(part))
+    .filter(Boolean);
+}
+
+function countSeoBundleWords(seo: LongTailSeoBundle | null | undefined): number {
+  if (!seo) return 0;
+  const parts = [
+    seo.h1,
+    seo.seo_title,
+    seo.seo_description,
+    seo.intro,
+    seo.supporting,
+    seo.related_intro,
+    ...(Array.isArray(seo.how_to_use) ? seo.how_to_use : [seo.how_to_use]),
+    ...(Array.isArray(seo.who_for) ? seo.who_for : [seo.who_for]),
+    ...(seo.faq ?? []).flatMap((item) => [item.question, item.answer])
+  ].filter((value): value is string => Boolean(value?.trim()));
+
+  return parts
+    .join(' ')
+    .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .split(/\s+/)
+    .filter(Boolean).length;
+}
+
+function manifestRouteIsExplicitlyStrong(
+  entry: SeoScholarshipRouteManifestEntry | null | undefined
+): boolean {
+  if (!entry) return false;
+  return (
+    entry.indexable === true &&
+    entry.noindexNow !== true &&
+    entry.qualityBucket === 'GOOD' &&
+    !(entry.reasonCodes ?? []).includes('dynamic_route')
+  );
+}
+
+export function classifyScholarshipSeoRouteFamily({
+  canonicalPath,
+  entry,
+  routeFamily
+}: Pick<
+  ScholarshipSeoRouteQualityFacts,
+  'canonicalPath' | 'entry' | 'routeFamily'
+>): ScholarshipSeoRouteFamily {
+  if (routeFamily) return routeFamily;
+
+  const parts = splitCanonicalScholarshipSeoPath(canonicalPath);
+  const first = parts[0];
+
+  if (manifestRouteIsExplicitlyStrong(entry)) {
+    return parts.length <= 1 ? 'manifest_single' : 'manifest_combo';
+  }
+
+  if (parts.length === 1 && first && US_STATE_SEO_SLUGS.has(first)) {
+    return 'dynamic_state';
+  }
+
+  if (parts.length === 2 && first && US_STATE_SEO_SLUGS.has(first)) {
+    return 'dynamic_state_topic';
+  }
+
+  if (parts.length === 3 && first && US_STATE_SEO_SLUGS.has(first)) {
+    return 'dynamic_state_degree_topic';
+  }
+
+  if (parts.length === 1 && first && LONG_TAIL_SLUG_SET.has(first)) {
+    return 'legacy_long_tail';
+  }
+
+  return 'dynamic_filter';
+}
+
+function weakRouteDecision(
+  routeFamily: ScholarshipSeoRouteFamily,
+  reasonCodes: string[]
+): ScholarshipSeoRouteQualityDecision {
+  return {
+    shouldIndex: false,
+    shouldIncludeInSitemap: false,
+    shouldBeRssEligible: false,
+    indexable: false,
+    includeInSitemap: false,
+    rssEligible: false,
+    qualityTier: 'weak',
+    routeFamily,
+    reasonCodes
+  };
+}
+
+export function getScholarshipSeoRouteQualityPolicy(
+  facts: ScholarshipSeoRouteQualityFacts
+): ScholarshipSeoRouteQualityDecision {
+  const routeFamily = classifyScholarshipSeoRouteFamily(facts);
+  const reasonCodes: string[] = [];
+  const entry = facts.entry ?? null;
+  const parts = splitCanonicalScholarshipSeoPath(facts.canonicalPath);
+  const seoBundleWords = countSeoBundleWords(facts.seoContent);
+
+  if (facts.stablePublicRoute === false) reasonCodes.push('unstable_public_route');
+  if (facts.routeResolves === false) reasonCodes.push('route_does_not_resolve');
+  if (facts.hasQueryParams === true) reasonCodes.push('query_params_define_page');
+  if (parts.length === 0) reasonCodes.push('missing_canonical_path');
+
+  if (reasonCodes.length > 0) {
+    return weakRouteDecision(routeFamily, reasonCodes);
+  }
+
+  if (routeFamily === 'country_seo' || routeFamily === 'cross_country_seo') {
+    return {
+      shouldIndex: true,
+      shouldIncludeInSitemap: true,
+      shouldBeRssEligible: false,
+      indexable: true,
+      includeInSitemap: true,
+      rssEligible: false,
+      qualityTier: 'strong',
+      routeFamily,
+      reasonCodes: ['approved_specialized_scholarship_seo_route']
+    };
+  }
+
+  if (routeFamily === 'university_hub' || routeFamily === 'scholarship_detail') {
+    return {
+      shouldIndex: true,
+      shouldIncludeInSitemap: true,
+      shouldBeRssEligible: false,
+      indexable: true,
+      includeInSitemap: true,
+      rssEligible: false,
+      qualityTier: 'medium',
+      routeFamily,
+      reasonCodes: ['handled_by_dedicated_route_quality_policy']
+    };
+  }
+
+  if (manifestRouteIsExplicitlyStrong(entry)) {
+    const count =
+      entry?.scholarshipsCount ?? entry?.minCountSnapshot ?? seoBundleWords;
+    if (count <= 3) {
+      return weakRouteDecision(routeFamily, [
+        'manifest_route_below_sitemap_result_threshold'
+      ]);
+    }
+    return {
+      shouldIndex: true,
+      shouldIncludeInSitemap: true,
+      shouldBeRssEligible: true,
+      indexable: true,
+      includeInSitemap: true,
+      rssEligible: true,
+      qualityTier: 'strong',
+      routeFamily,
+      reasonCodes: ['manifest_good_route']
+    };
+  }
+
+  if (routeFamily === 'legacy_long_tail') {
+    const slug = parts[0] ?? '';
+    if (!LEGACY_LONG_TAIL_SITEMAP_SLUGS.has(slug)) {
+      return weakRouteDecision(routeFamily, [
+        'legacy_long_tail_not_promoted_for_sitemap'
+      ]);
+    }
+    if (seoBundleWords < 1200) {
+      return weakRouteDecision(routeFamily, [
+        'legacy_long_tail_below_visible_content_threshold'
+      ]);
+    }
+  }
+
+  if (
+    routeFamily === 'dynamic_state' ||
+    routeFamily === 'dynamic_state_topic' ||
+    routeFamily === 'dynamic_state_degree_topic' ||
+    routeFamily === 'dynamic_filter'
+  ) {
+    return weakRouteDecision(routeFamily, [
+      ...(entry?.reasonCodes ?? []).filter(Boolean),
+      'dynamic_scholarship_filter_route_requires_explicit_quality_approval'
+    ]);
+  }
+
+  return weakRouteDecision(routeFamily, ['scholarship_route_failed_quality_policy']);
 }

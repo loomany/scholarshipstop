@@ -13,6 +13,9 @@ import {
   getSeoListingEntry,
   resolveScholarshipSlugPath
 } from '@/lib/scholarships/seoScholarshipResolve';
+import { getScholarshipSeoRouteQualityPolicy } from '@/lib/seo/scholarshipSeoQualityPolicy';
+import type { LongTailSeoBundle } from '@/lib/scholarships/longTailSeoTypes';
+import type { SeoScholarshipRouteManifestEntry } from '@/lib/scholarships/seoScholarshipManifest';
 import { crossCountryListingRobotsFromManifest } from '@/lib/scholarships/seoCrossCountryManifest';
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import { scholarshipPublicPath } from '@/app/scholarships/scholarshipsData';
@@ -38,6 +41,48 @@ function applyScholarshipContentBundleIndexingPolicy(
     ...meta,
     robots: { index: true, follow: true },
     alternates: { canonical }
+  };
+  if (meta.openGraph && typeof meta.openGraph === 'object') {
+    next.openGraph = { ...meta.openGraph, url: canonical };
+  }
+  return next;
+}
+
+function applyScholarshipListingRouteQualityPolicy({
+  meta,
+  canonicalPath,
+  entry,
+  seoContent,
+  routeFamily
+}: {
+  meta: Metadata;
+  canonicalPath: string;
+  entry?: SeoScholarshipRouteManifestEntry | null;
+  seoContent?: LongTailSeoBundle | null;
+  routeFamily?: Parameters<typeof getScholarshipSeoRouteQualityPolicy>[0]['routeFamily'];
+}): Metadata {
+  const decision = getScholarshipSeoRouteQualityPolicy({
+    canonicalPath,
+    entry,
+    seoContent,
+    routeFamily,
+    stablePublicRoute: true,
+    routeResolves: true,
+    hasQueryParams: false
+  });
+
+  if (decision.shouldIndex) {
+    return applyScholarshipContentBundleIndexingPolicy(meta, canonicalPath);
+  }
+
+  const canonical = getCanonical(`/scholarships/${canonicalPath}`);
+  const next: Metadata = {
+    ...meta,
+    robots: { index: false, follow: true },
+    alternates: {
+      ...meta.alternates,
+      canonical
+    }
   };
   if (meta.openGraph && typeof meta.openGraph === 'object') {
     next.openGraph = { ...meta.openGraph, url: canonical };
@@ -130,7 +175,12 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
         }
       };
       return withExplicitIndexFollowWhenUnset(
-        applyScholarshipContentBundleIndexingPolicy(meta, resolved.canonicalPath)
+        applyScholarshipListingRouteQualityPolicy({
+          meta,
+          canonicalPath: resolved.canonicalPath,
+          entry,
+          seoContent: seo
+        })
       );
     }
     return {
@@ -233,7 +283,14 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
         canonical
       }
     };
-    return withExplicitIndexFollowWhenUnset(meta);
+    return withExplicitIndexFollowWhenUnset(
+      applyScholarshipListingRouteQualityPolicy({
+        meta,
+        canonicalPath: longTail.slug,
+        seoContent: seo,
+        routeFamily: 'legacy_long_tail'
+      })
+    );
   }
 
   if (resolved.kind === 'manifest_seo') {
@@ -284,7 +341,12 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
       }
     };
     return withExplicitIndexFollowWhenUnset(
-      applyScholarshipContentBundleIndexingPolicy(meta, resolved.canonicalPath)
+      applyScholarshipListingRouteQualityPolicy({
+        meta,
+        canonicalPath: resolved.canonicalPath,
+        entry: resolved.entry,
+        seoContent: seo
+      })
     );
   }
 

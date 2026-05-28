@@ -45,6 +45,7 @@ import {
   getEssaySeoQualityPolicy,
   MIN_LOCALIZED_ESSAY_VISIBLE_WORDS
 } from '@/lib/seo/essaySeoQualityPolicy';
+import { getScholarshipSeoRouteQualityPolicy } from '@/lib/seo/scholarshipSeoQualityPolicy';
 import {
   getSitemapDocumentSlugPlan,
   normalizeSitemapSlug,
@@ -623,6 +624,23 @@ function buildCategoriesSitemapEntries(base: string): MetadataRoute.Sitemap {
   );
 }
 
+function scholarshipSeoPathPassesRouteQuality(
+  canonicalPath: string,
+  routeFamily?: Parameters<
+    typeof getScholarshipSeoRouteQualityPolicy
+  >[0]['routeFamily']
+): boolean {
+  const entry = getSeoManifestRoute(canonicalPath);
+  return getScholarshipSeoRouteQualityPolicy({
+    canonicalPath,
+    entry,
+    routeFamily,
+    stablePublicRoute: true,
+    routeResolves: true,
+    hasQueryParams: false
+  }).shouldIncludeInSitemap;
+}
+
 /**
  * SEO listing URLs use {@link canonicalPathAllowedInSeoSitemap}, which matches the drip window when active
  * ({@link getVisibleSeoRoutes} / `SEO_DRIP_START_DATE` + `SEO_PAGES_PER_HOUR`; disabled via `SEO_DRIP_ENABLED=false`).
@@ -632,7 +650,7 @@ async function buildSeoSitemapEntries(base: string): Promise<MetadataRoute.Sitem
   void getVisibleSeoRoutes();
   const manifestSeoPaths = getAllIndexableSeoManifestPathsForSitemap(3).filter(
     (p) => canonicalPathAllowedInSeoSitemap(p)
-  );
+  ).filter((p) => scholarshipSeoPathPassesRouteQuality(p));
   const manifestPathSet = new Set(manifestSeoPaths);
   const manifestSeoPages: MetadataRoute.Sitemap = manifestSeoPaths.map((path) => ({
     url: `${base}/scholarships/${path}`,
@@ -647,9 +665,9 @@ async function buildSeoSitemapEntries(base: string): Promise<MetadataRoute.Sitem
         if (!manifestEntryMeetsSitemapGrantThreshold(manifestEntry, 3))
           return false;
         if (manifestPathSet.has(slug)) return false;
-        return manifestEntry.indexable === true;
+        return scholarshipSeoPathPassesRouteQuality(slug);
       }
-      return true;
+      return scholarshipSeoPathPassesRouteQuality(slug, 'legacy_long_tail');
     })
     .map((slug) => ({
       url: `${base}/scholarships/${slug}`,
@@ -661,6 +679,7 @@ async function buildSeoSitemapEntries(base: string): Promise<MetadataRoute.Sitem
   for (const row of stateGrantRows) {
     const slug = SEO_ROUTE_STATE_CODE_TO_SLUG[row.state_code.toUpperCase()];
     if (!slug) continue;
+    if (!scholarshipSeoPathPassesRouteQuality(slug, 'dynamic_state')) continue;
     stateListingPages.push({
       url: `${base}/scholarships/${slug}`,
       lastModified: new Date()
@@ -677,6 +696,7 @@ async function buildSeoSitemapEntries(base: string): Promise<MetadataRoute.Sitem
     .filter(
       (row) => !isCompareHubSeoGenerationCanonicalPath(row.canonical_path)
     )
+    .filter((row) => scholarshipSeoPathPassesRouteQuality(row.canonical_path))
     .map((row) => ({
       url: `${base}/scholarships/${row.canonical_path}`,
       lastModified: row.updated_at ? new Date(row.updated_at) : new Date()
