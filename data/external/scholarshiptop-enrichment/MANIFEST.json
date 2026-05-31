@@ -1,0 +1,27 @@
+{
+  "generated_from": "C:\\dev\\scholarshiptop-data-lab\\stage-a-static-data-pipeline",
+  "files": [
+    {
+      "name": "school_enrichment.json",
+      "rows": 6197,
+      "purpose": "university compare / school pages / provider enrichment"
+    },
+    {
+      "name": "state_affordability.json",
+      "rows": 52,
+      "purpose": "state compare / affordability widgets"
+    },
+    {
+      "name": "city_affordability.json",
+      "rows": 2759,
+      "purpose": "city affordability / scholarship state-university pages"
+    },
+    {
+      "name": "location_crosswalk.json",
+      "rows": 2704,
+      "purpose": "location joins"
+    }
+  ],
+  "supabase_writes": false,
+  "contains_secrets": false
+}

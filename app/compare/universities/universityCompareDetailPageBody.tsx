@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowRight, BrainCircuit } from 'lucide-react';
 
+import { CompareExternalSchoolEnrichmentSection } from '@/components/compare/CompareExternalSchoolEnrichmentSection';
 import CompareExploreRelatedScholarships from '@/components/compare/CompareExploreRelatedScholarships';
 import ScholarshipMatchCtaIcon from '@/components/compare/ScholarshipMatchCtaIcon';
 import CompareInstitutionScholarshipColumns from '@/components/compare/CompareInstitutionScholarshipColumns';
@@ -524,6 +525,12 @@ export async function UniversityCompareDetailPageBody({
             </table>
           </div>
         </section>
+
+        <CompareExternalSchoolEnrichmentSection
+          institutionA={{ name: instA.name, state: instA.state }}
+          institutionB={{ name: instB.name, state: instB.state }}
+          noDataLabel={uniUi.noData}
+        />
 
         <UniversityCompareIqCta
           institutionA={instA.name}

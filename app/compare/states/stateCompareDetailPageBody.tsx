@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowRight, BrainCircuit } from 'lucide-react';
 
+import { CompareExternalStateAffordabilitySection } from '@/components/compare/CompareExternalStateAffordabilitySection';
 import CompareExploreRelatedScholarships from '@/components/compare/CompareExploreRelatedScholarships';
 import ScholarshipMatchCtaIcon from '@/components/compare/ScholarshipMatchCtaIcon';
 import TopScholarshipProvidersColumn from '@/components/compare/TopScholarshipProvidersColumn';
@@ -612,6 +613,14 @@ export async function StateCompareDetailPageBody({
             </div>
           </section>
         ) : null}
+
+        <CompareExternalStateAffordabilitySection
+          stateAName={stateA.name}
+          stateACode={stateA.code}
+          stateBName={stateB.name}
+          stateBCode={stateB.code}
+          noDataLabel={stateUi.noData}
+        />
 
         {faqItems.length > 0 ? (
           <SiteFaqAccordion
