@@ -34,20 +34,64 @@ export type ResolvedContentEnrichmentContext = {
 /** Generic essay/resource slugs with no geographic signal — skip slug-based state inference. */
 const GENERIC_TOPIC_SLUGS = new Set([
   'best-scholarship-websites',
+  'best-scholarship-tracker-templates-students',
   'career-goals',
   'checklist',
+  'easy-scholarships-guide',
   'examples',
   'financial-need',
   'how-to-find-scholarships',
   'how-to-apply-for-scholarships',
+  'how-to-apply-for-scholarships-checklist',
   'leadership',
   'mistakes',
   'no-essay-scholarships',
+  'no-essay-scholarships-guide',
   'outline',
   'personal-statement',
+  'scholarship-documents-checklist',
+  'scholarship-eligibility-explained',
+  'scholarships-for-high-school-seniors',
+  'scholarships-in-usa-for-international-students',
   'stem',
+  'stem-scholarships-guide',
+  'types-of-scholarships-usa-explained',
   'why-do-you-deserve-this-scholarship'
 ]);
+
+/** Strict slug token → institution candidate for College Scorecard matching. */
+const INSTITUTION_SLUG_HINTS: ReadonlyArray<{
+  re: RegExp;
+  candidate: string;
+  state: string;
+}> = [
+  { re: /(?:^|[-_])harvard(?:[-_]|$)/i, candidate: 'Harvard University', state: 'MA' },
+  { re: /(?:^|[-_])stanford(?:[-_]|$)/i, candidate: 'Stanford University', state: 'CA' },
+  { re: /(?:^|[-_])yale(?:[-_]|$)/i, candidate: 'Yale University', state: 'CT' },
+  {
+    re: /(?:^|[-_])mit(?:[-_]|$)/i,
+    candidate: 'Massachusetts Institute of Technology',
+    state: 'MA'
+  },
+  { re: /(?:^|[-_])princeton(?:[-_]|$)/i, candidate: 'Princeton University', state: 'NJ' },
+  { re: /(?:^|[-_])duke(?:[-_]|$)/i, candidate: 'Duke University', state: 'NC' },
+  {
+    re: /(?:^|[-_])ucla(?:[-_]|$)/i,
+    candidate: 'University of California-Los Angeles',
+    state: 'CA'
+  },
+  { re: /(?:^|[-_])nyu(?:[-_]|$)/i, candidate: 'New York University', state: 'NY' },
+  {
+    re: /(?:^|[-_])columbia(?:[-_]|$)/i,
+    candidate: 'Columbia University in the City of New York',
+    state: 'NY'
+  },
+  {
+    re: /(?:^|[-_])georgetown(?:[-_]|$)/i,
+    candidate: 'Georgetown University',
+    state: 'DC'
+  }
+];
 
 const STATE_NAMES_BY_LENGTH = Object.entries(US_STATE_NAME_TO_CODE).sort(
   (a, b) => b[0].length - a[0].length
@@ -62,6 +106,9 @@ const STATE_SLUG_BOUNDARY_PATTERNS = Object.entries(SEO_ROUTE_STATE_SLUG_TO_CODE
 
 const INSTITUTION_IN_TITLE =
   /\b(?:at|for|from)\s+((?:the\s+)?[A-Za-z0-9][A-Za-z0-9\s.'&-]{2,90}?(?:University|College|Institute|Polytechnic|Academy)(?:\s+of\s+[A-Za-z0-9\s.'-]+)?)/i;
+
+const USA_NATIONAL_SLUG =
+  /(?:^|[-_/])(?:usa|united-states)(?:[-_/]|$)|(?:^|[-_/]).*-international-students(?:[-_/]|$)/i;
 
 function normalizeSlugToken(value: string): string {
   return value.trim().toLowerCase();
@@ -78,6 +125,17 @@ export function isGenericTopicSlug(slug: string | null | undefined): boolean {
   const s = slug?.trim().toLowerCase();
   if (!s) return false;
   return GENERIC_TOPIC_SLUGS.has(s);
+}
+
+function hasStateSlugSignal(slug: string): boolean {
+  return collectStateCodesFromSlug(slug, true).size > 0;
+}
+
+function isUsaNationalTopicSlug(slug: string): boolean {
+  const normalized = normalizeSlugToken(slug.replace(/_/g, '-'));
+  if (!normalized) return false;
+  if (hasStateSlugSignal(normalized)) return false;
+  return USA_NATIONAL_SLUG.test(normalized);
 }
 
 function collectStateCodesFromSlug(slug: string, allowSlugInference: boolean): Set<string> {
@@ -127,6 +185,10 @@ export function resolveStateCodeFromContentHints(
   }
   if (slugMatches.size > 1) return null;
 
+  if (slug && isUsaNationalTopicSlug(slug)) {
+    return null;
+  }
+
   const textBundle = joinHintText([
     input.title,
     input.subtitle,
@@ -139,6 +201,26 @@ export function resolveStateCodeFromContentHints(
   const textMatches = collectStateCodesFromText(textBundle);
   if (textMatches.size === 1) {
     return [...textMatches][0] ?? null;
+  }
+
+  return null;
+}
+
+function resolveInstitutionFromSlug(
+  slug: string | null | undefined
+): { name: string; state: string } | null {
+  const normalized = normalizeSlugToken(slug?.replace(/_/g, '-') ?? '');
+  if (!normalized || isGenericTopicSlug(normalized)) return null;
+
+  for (const hint of INSTITUTION_SLUG_HINTS) {
+    if (!hint.re.test(normalized)) continue;
+    const matched = matchSchoolForInstitution({
+      name: hint.candidate,
+      state: hint.state
+    });
+    if (matched) {
+      return { name: hint.candidate, state: hint.state };
+    }
   }
 
   return null;
@@ -165,6 +247,9 @@ function resolveSchoolNameFromHints(
   input: ContentEnrichmentHints,
   stateCode: string | null
 ): string | null {
+  const fromSlug = resolveInstitutionFromSlug(input.slug);
+  if (fromSlug) return fromSlug.name;
+
   const explicit = input.schoolName?.trim();
   if (explicit) return explicit;
 
@@ -184,8 +269,11 @@ function resolveSchoolNameFromHints(
 export function resolveContentEnrichmentContext(
   input: ContentEnrichmentHints
 ): ResolvedContentEnrichmentContext {
+  const slugInstitution = resolveInstitutionFromSlug(input.slug);
+
   const stateCode =
     resolveStateCodeFromExplicitInput(input.stateCode) ??
+    slugInstitution?.state ??
     resolveStateCodeFromContentHints(input);
 
   const stateRow = stateCode ? getStateAffordability(stateCode) : null;
@@ -199,7 +287,7 @@ export function resolveContentEnrichmentContext(
     schoolCandidate ?
       matchSchoolForInstitution({
         name: schoolCandidate,
-        state: stateCode
+        state: slugInstitution?.state ?? stateCode
       })
     : null;
 
@@ -207,11 +295,24 @@ export function resolveContentEnrichmentContext(
 }
 
 export function hasDisplayableContentContext(
-  context: ResolvedContentEnrichmentContext
+  context: ResolvedContentEnrichmentContext,
+  hints?: Pick<ContentEnrichmentHints, 'slug'>
 ): boolean {
+  const slug = hints?.slug?.trim().toLowerCase() ?? '';
+
+  if (slug && isGenericTopicSlug(slug)) {
+    return false;
+  }
+
+  if (slug && isUsaNationalTopicSlug(slug)) {
+    return Boolean(context.schoolRow);
+  }
+
   if (context.schoolRow) return true;
+
   if (context.stateRow && getTopStateAffordabilityHighlights(context.stateRow).length > 0) {
     return true;
   }
+
   return false;
 }

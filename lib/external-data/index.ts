@@ -66,6 +66,13 @@ export {
 } from './resolveContentEnrichmentContext';
 
 export {
+  buildRelatedScholarshipContextLinks,
+  resolveContentEnrichmentLinkCluster,
+  type ContextLinkItem,
+  type ScholarshipContextLinkCluster
+} from './contentEnrichmentLinks';
+
+export {
   schoolCompareBarMetrics,
   schoolProfilePairMetrics,
   schoolSingleBarMetrics,

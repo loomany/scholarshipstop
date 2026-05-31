@@ -1,6 +1,7 @@
 import type { ResolvedContentEnrichmentContext } from '@/lib/external-data';
 import {
   getTopStateAffordabilityHighlights,
+  resolveContentEnrichmentLinkCluster,
   stateDisplayName
 } from '@/lib/external-data';
 
@@ -10,22 +11,20 @@ import {
   fmtEnrichmentUsd
 } from '@/components/compare/compareExternalEnrichmentFormat';
 import { DataSourceFooter } from '@/components/data-viz/DataSourceFooter';
-import { RelatedContextLinks } from '@/components/data-viz/RelatedContextLinks';
-import { stateSlugFromCode } from '@/lib/seo/stateCompareSlug';
+import { RelatedScholarshipContextLinks } from '@/components/content-hub/RelatedScholarshipContextLinks';
 
 type ExternalReferenceContextCardProps = {
   heading: string;
   intro: string;
   context: ResolvedContentEnrichmentContext;
-  /** When set, adds state-specific scholarship and compare links. */
-  stateSlugHint?: string | null;
+  contentType: 'resource' | 'essay';
 };
 
 export function ExternalReferenceContextCard({
   heading,
   intro,
   context,
-  stateSlugHint = null
+  contentType
 }: ExternalReferenceContextCardProps) {
   const stateHighlights = getTopStateAffordabilityHighlights(context.stateRow);
   const school = context.schoolRow;
@@ -61,27 +60,7 @@ export function ExternalReferenceContextCard({
   const hasState = stateHighlights.length > 0;
   if (!hasState && !visibleSchool.length) return null;
 
-  const stateSlug =
-    stateSlugHint ??
-    (context.stateCode ? stateSlugFromCode(context.stateCode) : null);
-
-  const relatedLinks =
-    stateSlug ?
-      [
-        {
-          href: `/scholarships/${encodeURIComponent(stateSlug)}`,
-          label: `${stateDisplayName(context.stateCode!)} scholarships`
-        },
-        {
-          href: `/compare/states`,
-          label: 'Compare states'
-        },
-        {
-          href: '/resources/how-to-find-scholarships',
-          label: 'How to find scholarships'
-        }
-      ]
-    : [];
+  const cluster = resolveContentEnrichmentLinkCluster(context, contentType);
 
   return (
     <aside
@@ -99,6 +78,10 @@ export function ExternalReferenceContextCard({
           <h3 className="text-sm font-semibold text-gray-900">
             {stateDisplayName(context.stateCode)} affordability
           </h3>
+          <p className="mt-1 text-xs leading-relaxed text-gray-500">
+            Use these figures to compare scholarship amounts with typical living costs
+            in {stateDisplayName(context.stateCode)} — not as essay filler on its own.
+          </p>
           <div className="mt-3 grid grid-cols-2 gap-2.5 sm:gap-3">
             {stateHighlights.map((item) => (
               <CompareExternalEnrichmentStatCard
@@ -114,6 +97,10 @@ export function ExternalReferenceContextCard({
       {visibleSchool.length && school ? (
         <div className={hasState ? 'mt-5' : 'mt-4'}>
           <h3 className="text-sm font-semibold text-gray-900">{school.school_name}</h3>
+          <p className="mt-1 text-xs leading-relaxed text-gray-500">
+            College Scorecard reference only — verify current tuition and aid on the
+            institution site before citing numbers in your application.
+          </p>
           <div className="mt-3 grid grid-cols-2 gap-2.5 sm:gap-3">
             {visibleSchool.map((item) => (
               <CompareExternalEnrichmentStatCard
@@ -126,8 +113,8 @@ export function ExternalReferenceContextCard({
         </div>
       ) : null}
 
-      {relatedLinks.length ? (
-        <RelatedContextLinks title="Related scholarship planning" links={relatedLinks} />
+      {cluster ? (
+        <RelatedScholarshipContextLinks cluster={cluster} context={context} />
       ) : null}
 
       <DataSourceFooter variant="mixed" className="mt-4" />

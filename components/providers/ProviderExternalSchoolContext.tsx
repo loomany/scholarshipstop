@@ -6,11 +6,10 @@ import {
   fmtEnrichmentPctFromFraction,
   fmtEnrichmentUsd
 } from '@/components/compare/compareExternalEnrichmentFormat';
+import { RelatedScholarshipContextLinks } from '@/components/content-hub/RelatedScholarshipContextLinks';
 import { CompactMetricGrid } from '@/components/data-viz/CompactMetricGrid';
 import { DataSourceFooter } from '@/components/data-viz/DataSourceFooter';
 import { MetricComparisonBars } from '@/components/data-viz/MetricComparisonBars';
-import { RelatedContextLinks } from '@/components/data-viz/RelatedContextLinks';
-import { stateSlugFromCode } from '@/lib/seo/stateCompareSlug';
 
 type ProviderExternalSchoolContextProps = {
   displayName: string;
@@ -84,19 +83,12 @@ export function ProviderExternalSchoolContext({
   const barMetrics = schoolSingleBarMetrics(row).filter((m) =>
     ['tuition_in', 'net_price', 'earnings', 'size'].includes(m.key)
   );
-  const stateSlug = row.state ? stateSlugFromCode(row.state) : null;
-  const relatedLinks = [
-    ...(stateSlug ?
-      [
-        {
-          href: `/scholarships/${encodeURIComponent(stateSlug)}`,
-          label: `Scholarships in ${row.state}`
-        }
-      ]
-    : []),
-    { href: '/compare/universities', label: 'Compare universities' },
-    { href: '/resources/how-to-find-scholarships', label: 'How to find scholarships' }
-  ];
+  const providerContext = {
+    stateCode: row.state ?? null,
+    stateRow: null,
+    cityRow: null,
+    schoolRow: row
+  };
 
   return (
     <section
@@ -139,7 +131,10 @@ export function ProviderExternalSchoolContext({
         </div>
       ) : null}
 
-      <RelatedContextLinks links={relatedLinks} />
+      <RelatedScholarshipContextLinks
+        cluster="provider"
+        context={providerContext}
+      />
       <DataSourceFooter variant="college" className="mt-4" />
     </section>
   );
