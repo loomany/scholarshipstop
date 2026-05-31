@@ -67,6 +67,7 @@ export {
 
 export {
   hasScholarshipUniversitySidebarContent,
+  resolveAffordabilitySidebarStateSlug,
   resolveScholarshipStateContext,
   resolveScholarshipUniversityContext,
   type ScholarshipStateContext,

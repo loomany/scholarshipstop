@@ -21,6 +21,7 @@ import {
   ScholarshipHubCanonicalListingFooter
 } from '@/components/scholarships/ScholarshipHubCanonicalSeo';
 import { ScholarshipStateExternalContextSidebar } from '@/components/scholarships/ScholarshipStateExternalContextSidebar';
+import { resolveAffordabilitySidebarStateSlug } from '@/lib/external-data/scholarshipPageEnrichment';
 import {
   SeoScholarshipHero,
   SeoScholarshipPostListingSeo
@@ -843,8 +844,14 @@ export default async function ScholarshipsSlugPathPageBody({
       tripleHubCtx !== null ||
       shouldShowManifestSeoPromotedChrome(entry, seo);
     const listingMode = { type: 'manifest', canonicalPath, entry } as const;
-    const stateSlugForSidebar =
-      stateHubCtx?.stateSlug ?? tripleHubCtx?.stateSlug ?? null;
+    const stateSlugForSidebar = resolveAffordabilitySidebarStateSlug({
+      canonicalPath,
+      segments,
+      locationLabels: entry.filters?.includeLocationLabels
+    });
+    const stateAffordabilitySidebar = stateSlugForSidebar ? (
+      <ScholarshipStateExternalContextSidebar stateSlug={stateSlugForSidebar} />
+    ) : null;
 
     debugLogListingSeo({
       routeKind: 'manifest_seo',
@@ -917,13 +924,11 @@ export default async function ScholarshipsSlugPathPageBody({
                     canonicalTarget={entry.canonicalTarget ?? null}
                     publicSeoPage={stateHubCtx !== null || tripleHubCtx !== null}
                   />
-                  {stateSlugForSidebar ? (
-                    <ScholarshipStateExternalContextSidebar
-                      stateSlug={stateSlugForSidebar}
-                    />
-                  ) : null}
+                  {stateAffordabilitySidebar}
                 </>
-              ) : null
+              ) : (
+                stateAffordabilitySidebar
+              )
             }
             postListingContent={
               <>
