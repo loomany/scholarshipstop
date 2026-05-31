@@ -9,6 +9,7 @@ import ContentHubScholarshipCta from '@/components/content-hub/ContentHubScholar
 import StaticScholarshipGuidePage from '@/components/content-hub/StaticScholarshipGuidePage';
 import ResourceGuidesContinueSection from '@/components/content-hub/resourceGuides/ResourceGuidesContinueSection';
 import ResourceArticleTableOfContents from '@/components/content-hub/ResourceArticleTableOfContents';
+import { ResourceExternalContextCard } from '@/components/resources/ResourceExternalContextCard';
 import SafeContentPostBody from '@/components/content-hub/SafeContentPostBody';
 import { getRelatedScholarshipsForResourceArticle } from '@/lib/content-hub/relatedScholarshipsForResourceArticle';
 import { contentPostFaqFromJson } from '@/lib/content-hub/contentPostFaq';
@@ -316,6 +317,8 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
             </p>
           ) : null}
         </header>
+
+        <ResourceExternalContextCard slug={post.slug.trim()} title={post.title} />
 
         {post.cover_image_url?.trim() ? (
           <div className="mt-8 overflow-hidden rounded-2xl border border-gray-200 bg-gray-100 shadow-sm">

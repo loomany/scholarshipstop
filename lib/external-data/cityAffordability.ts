@@ -33,3 +33,11 @@ export function getCityAffordability(
   ensureIndex();
   return byCityStateCache!.get(key) ?? null;
 }
+
+/** Alias for city + state lookup. */
+export function findCityAffordabilityByCityState(
+  city: string,
+  stateCode: string
+): CityAffordability | null {
+  return getCityAffordability(city, stateCode);
+}

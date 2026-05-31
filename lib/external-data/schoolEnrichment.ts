@@ -71,7 +71,65 @@ export function getSchoolByNameAndState(
   ensureIndexes();
   const matches = byNameStateCache!.get(key);
   if (!matches?.length) return null;
+  if (matches.length > 1) return null;
   return matches[0] ?? null;
+}
+
+/** Exact normalized name + state lookup; hides ambiguous duplicates. */
+export function findSchoolByNameState(
+  name: string,
+  state?: string | null
+): SchoolEnrichment | null {
+  const stateCode = state?.trim().toUpperCase();
+  if (!stateCode) return null;
+  return getSchoolByNameAndState(name, stateCode);
+}
+
+const PROVIDER_SUFFIX_PATTERN =
+  /\b(foundation|fund|scholarship(s)?|program|trust|inc\.?|llc|association)\b/gi;
+
+function normalizeProviderOrSlugName(value: string): string {
+  return value
+    .replace(/-/g, ' ')
+    .replace(PROVIDER_SUFFIX_PATTERN, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+export function findSchoolBySlugOrName(
+  slugOrName: string,
+  state?: string | null
+): SchoolEnrichment | null {
+  const cleaned = normalizeProviderOrSlugName(slugOrName);
+  if (!cleaned) return null;
+
+  const stateCode = state?.trim().toUpperCase();
+  if (stateCode) {
+    const exact = getSchoolByNameAndState(cleaned, stateCode);
+    if (exact) return exact;
+  }
+
+  return matchSchoolForInstitution({ name: cleaned, state: stateCode ?? null });
+}
+
+export function matchProviderToSchool(input: {
+  displayName: string;
+  hqState?: string | null;
+}): SchoolEnrichment | null {
+  const stateCode = input.hqState?.trim().toUpperCase();
+  if (!stateCode) return null;
+
+  const cleaned = normalizeProviderOrSlugName(input.displayName);
+  if (!cleaned) return null;
+
+  const exact = getSchoolByNameAndState(cleaned, stateCode);
+  if (exact) return exact;
+
+  const institutionLike =
+    /\b(university|college|institute|polytechnic|school of)\b/i.test(cleaned);
+  if (!institutionLike) return null;
+
+  return matchSchoolForInstitution({ name: cleaned, state: stateCode });
 }
 
 /**

@@ -9,6 +9,7 @@ import { scholarshipPublicPath } from '@/app/scholarships/scholarshipsData';
 import ContentHubArticleMatchedScholarships from '@/components/content-hub/ContentHubArticleMatchedScholarships';
 import SafeContentPostBody from '@/components/content-hub/SafeContentPostBody';
 import { EssayGuideCardImage } from '@/components/essays/EssayGuideCardImage';
+import { EssayExternalContextCard } from '@/components/essays/EssayExternalContextCard';
 import { StaticEssayGuidePage } from '@/components/essays/StaticEssayGuidePage';
 import { SiteFaqAccordion } from '@/components/ui/SiteFaqAccordion';
 import HomePrimaryCtaClient from '@/components/home/HomePrimaryCtaClient';
@@ -482,6 +483,8 @@ export default async function EssayGuidePage({ params }: PageProps) {
             </p>
           </div>
         </header>
+
+        <EssayExternalContextCard slug={essay.slug.trim()} title={essay.title} />
 
         {essay.hero_image_url?.trim() ? (
           <div className="mt-8 overflow-hidden rounded-2xl border border-gray-200 bg-gray-100 shadow-sm">

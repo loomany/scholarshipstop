@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 
 import CompareCardGrid from '@/components/compare/CompareCardGrid';
+import { CompareHubExternalDataTeaser } from '@/components/compare/CompareHubExternalDataTeaser';
 import CompareIqAssessmentCard from '@/components/compare/CompareIqAssessmentCard';
 import CompareIndexToolbar from '@/components/compare/CompareIndexToolbar';
 import ResourcesPagination from '@/components/content-hub/ResourcesPagination';
@@ -182,6 +183,8 @@ export async function UniversityCompareHubPageBody({
                 {ui.intro}
               </p>
             </header>
+
+            <CompareHubExternalDataTeaser variant="universities" />
 
             {hasAnyPublished ? (
               <Suspense
