@@ -64,3 +64,11 @@ export {
   type ContentEnrichmentHints,
   type ResolvedContentEnrichmentContext
 } from './resolveContentEnrichmentContext';
+
+export {
+  hasScholarshipUniversitySidebarContent,
+  resolveScholarshipStateContext,
+  resolveScholarshipUniversityContext,
+  type ScholarshipStateContext,
+  type ScholarshipUniversityContext
+} from './scholarshipPageEnrichment';

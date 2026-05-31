@@ -10,6 +10,7 @@ import type { ProviderFaqItem } from '@/lib/providers/providerProfileTypes';
 import type { UniversityHubRow } from '@/lib/scholarships/universityHubServer';
 import { ProviderProfileFaqAccordion } from '@/components/providers/ProviderProfileFaqAccordion';
 import RelatedScholarships from '@/components/scholarships/RelatedScholarships';
+import { ScholarshipUniversityExternalContextSidebar } from '@/components/scholarships/ScholarshipUniversityExternalContextSidebar';
 
 export type UniversityHubPageContentProps = {
   hub: UniversityHubRow;
@@ -33,17 +34,23 @@ export default function UniversityHubPageContent({
       initialPayload={initialPayload}
       routeScope={routeScope}
       leadContent={
-        <header className="border-b border-slate-200 pb-8">
-          <p className="text-sm font-medium uppercase tracking-wide text-slate-500">
-            {hub.stateName} · 2026
-          </p>
-          <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">
-            Fully Funded Scholarships at {hub.displayName}, {hub.stateName} 2026
-          </h1>
-          <p className="mt-4 text-base leading-relaxed text-slate-700">
-            {intro}
-          </p>
-        </header>
+        <>
+          <header className="border-b border-slate-200 pb-8">
+            <p className="text-sm font-medium uppercase tracking-wide text-slate-500">
+              {hub.stateName} · 2026
+            </p>
+            <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">
+              Fully Funded Scholarships at {hub.displayName}, {hub.stateName} 2026
+            </h1>
+            <p className="mt-4 text-base leading-relaxed text-slate-700">
+              {intro}
+            </p>
+          </header>
+          <ScholarshipUniversityExternalContextSidebar
+            stateSlug={hub.stateSlug}
+            universityDisplayName={hub.displayName}
+          />
+        </>
       }
       postListingContent={
         <>

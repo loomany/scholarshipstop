@@ -20,6 +20,7 @@ import {
   ScholarshipHubCanonicalIntro,
   ScholarshipHubCanonicalListingFooter
 } from '@/components/scholarships/ScholarshipHubCanonicalSeo';
+import { ScholarshipStateExternalContextSidebar } from '@/components/scholarships/ScholarshipStateExternalContextSidebar';
 import {
   SeoScholarshipHero,
   SeoScholarshipPostListingSeo
@@ -842,6 +843,8 @@ export default async function ScholarshipsSlugPathPageBody({
       tripleHubCtx !== null ||
       shouldShowManifestSeoPromotedChrome(entry, seo);
     const listingMode = { type: 'manifest', canonicalPath, entry } as const;
+    const stateSlugForSidebar =
+      stateHubCtx?.stateSlug ?? tripleHubCtx?.stateSlug ?? null;
 
     debugLogListingSeo({
       routeKind: 'manifest_seo',
@@ -894,25 +897,32 @@ export default async function ScholarshipsSlugPathPageBody({
             currentPathname={`/scholarships/${canonicalPath}`}
             leadContent={
               promotedChrome ? (
-                <SeoScholarshipHero
-                  heading={pageTitle}
-                  scholarshipCount={initialListPayload.total}
-                  listLoading={false}
-                  introHtml={introParagraph}
-                  introFromSeoBundle={Boolean(seo?.intro?.trim())}
-                  fallbackUsed={Boolean(initialListPayload.seoFallback?.used)}
-                  thinListing={Boolean(
-                    initialListPayload.seoFallback?.thinListing
-                  )}
-                  exactFilterMatchTotal={
-                    initialListPayload.seoFallback?.exactTotal ?? null
-                  }
-                  qualityBucket={entry.qualityBucket ?? null}
-                  pageData={seo?.page_data ?? null}
-                  updatedAt={seo?._meta?.generatedAt ?? null}
-                  canonicalTarget={entry.canonicalTarget ?? null}
-                  publicSeoPage={stateHubCtx !== null || tripleHubCtx !== null}
-                />
+                <>
+                  <SeoScholarshipHero
+                    heading={pageTitle}
+                    scholarshipCount={initialListPayload.total}
+                    listLoading={false}
+                    introHtml={introParagraph}
+                    introFromSeoBundle={Boolean(seo?.intro?.trim())}
+                    fallbackUsed={Boolean(initialListPayload.seoFallback?.used)}
+                    thinListing={Boolean(
+                      initialListPayload.seoFallback?.thinListing
+                    )}
+                    exactFilterMatchTotal={
+                      initialListPayload.seoFallback?.exactTotal ?? null
+                    }
+                    qualityBucket={entry.qualityBucket ?? null}
+                    pageData={seo?.page_data ?? null}
+                    updatedAt={seo?._meta?.generatedAt ?? null}
+                    canonicalTarget={entry.canonicalTarget ?? null}
+                    publicSeoPage={stateHubCtx !== null || tripleHubCtx !== null}
+                  />
+                  {stateSlugForSidebar ? (
+                    <ScholarshipStateExternalContextSidebar
+                      stateSlug={stateSlugForSidebar}
+                    />
+                  ) : null}
+                </>
               ) : null
             }
             postListingContent={
