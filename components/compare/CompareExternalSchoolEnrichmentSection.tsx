@@ -3,6 +3,14 @@ import {
   type SchoolEnrichment
 } from '@/lib/external-data';
 
+import { CompareExternalEnrichmentStatCard } from '@/components/compare/CompareExternalEnrichmentStatCard';
+import {
+  enrichmentNotAvailableLabel,
+  fmtEnrichmentCount,
+  fmtEnrichmentPctFromFraction,
+  fmtEnrichmentUsd
+} from '@/components/compare/compareExternalEnrichmentFormat';
+
 type InstitutionLike = {
   name: string;
   state?: string | null;
@@ -14,111 +22,116 @@ type CompareExternalSchoolEnrichmentSectionProps = {
   noDataLabel?: string;
 };
 
-function fmtUsd(value: number | null | undefined, noData: string): string {
-  if (typeof value !== 'number' || Number.isNaN(value)) return noData;
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 0
-  }).format(value);
-}
+type SchoolMetric = {
+  key: string;
+  label: string;
+  value: string | null;
+  hint?: string;
+};
 
-function fmtPctFraction(value: number | null | undefined, noData: string): string {
-  if (typeof value !== 'number' || Number.isNaN(value)) return noData;
-  return `${(value * 100).toFixed(1)}%`;
-}
+function schoolMetrics(row: SchoolEnrichment | null): SchoolMetric[] {
+  if (!row) return [];
 
-function fmtNum(value: number | null | undefined, noData: string): string {
-  if (typeof value !== 'number' || Number.isNaN(value)) return noData;
-  return new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(value);
+  const metrics: SchoolMetric[] = [
+    {
+      key: 'tuition_in',
+      label: 'In-state tuition',
+      value: fmtEnrichmentUsd(row.tuition_in_state),
+      hint: 'Annual, before aid'
+    },
+    {
+      key: 'tuition_out',
+      label: 'Out-of-state tuition',
+      value: fmtEnrichmentUsd(row.tuition_out_of_state),
+      hint: 'Annual, before aid'
+    },
+    {
+      key: 'admission',
+      label: 'Admission rate',
+      value: fmtEnrichmentPctFromFraction(row.admission_rate)
+    },
+    {
+      key: 'completion',
+      label: 'Completion rate',
+      value: fmtEnrichmentPctFromFraction(row.completion_rate)
+    },
+    {
+      key: 'earnings',
+      label: 'Median earnings',
+      value: fmtEnrichmentUsd(row.median_earnings),
+      hint: '10 years after entry'
+    },
+    {
+      key: 'size',
+      label: 'Enrollment',
+      value: fmtEnrichmentCount(row.student_size),
+      hint: 'Undergraduate headcount'
+    }
+  ];
+
+  const withValues = metrics.filter((m) => m.value != null);
+
+  if (row.research_signal != null && String(row.research_signal).trim()) {
+    withValues.push({
+      key: 'research',
+      label: 'Research signal',
+      value: String(row.research_signal),
+      hint: 'OpenAlex / ROR where matched'
+    });
+  }
+
+  return withValues.slice(0, row.research_signal != null ? 7 : 6);
 }
 
 function hasAnySchoolFacts(row: SchoolEnrichment | null): boolean {
-  if (!row) return false;
-  return [
-    row.tuition_in_state,
-    row.tuition_out_of_state,
-    row.admission_rate,
-    row.completion_rate,
-    row.median_earnings,
-    row.student_size,
-    row.research_signal
-  ].some((v) => v != null);
+  return schoolMetrics(row).length > 0;
 }
 
-function SchoolFactsTable({
+function SchoolProfileColumn({
   name,
   row,
-  noData
+  notAvailable
 }: {
   name: string;
   row: SchoolEnrichment | null;
-  noData: string;
+  notAvailable: string;
 }) {
-  if (!hasAnySchoolFacts(row)) {
+  const metrics = schoolMetrics(row);
+
+  if (!metrics.length) {
     return (
-      <p className="text-sm text-gray-600">
-        No College Scorecard match for {name} in static enrichment data.
-      </p>
+      <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50/50 p-5">
+        <h3 className="text-sm font-semibold text-gray-900">{name}</h3>
+        <p className="mt-2 text-sm leading-relaxed text-gray-600">
+          No public College Scorecard match for this school name and state.
+        </p>
+      </div>
     );
   }
 
   return (
-    <table className="w-full text-left text-sm">
-      <caption className="mb-2 text-left text-sm font-semibold text-gray-900">{name}</caption>
-      <tbody className="divide-y divide-gray-100">
-        <tr>
-          <th className="py-2 pr-3 font-medium text-gray-600">In-state tuition</th>
-          <td className="py-2 tabular-nums text-gray-900">
-            {fmtUsd(row?.tuition_in_state, noData)}
-          </td>
-        </tr>
-        <tr>
-          <th className="py-2 pr-3 font-medium text-gray-600">Out-of-state tuition</th>
-          <td className="py-2 tabular-nums text-gray-900">
-            {fmtUsd(row?.tuition_out_of_state, noData)}
-          </td>
-        </tr>
-        <tr>
-          <th className="py-2 pr-3 font-medium text-gray-600">Admission rate</th>
-          <td className="py-2 tabular-nums text-gray-900">
-            {fmtPctFraction(row?.admission_rate, noData)}
-          </td>
-        </tr>
-        <tr>
-          <th className="py-2 pr-3 font-medium text-gray-600">Completion rate</th>
-          <td className="py-2 tabular-nums text-gray-900">
-            {fmtPctFraction(row?.completion_rate, noData)}
-          </td>
-        </tr>
-        <tr>
-          <th className="py-2 pr-3 font-medium text-gray-600">Median earnings</th>
-          <td className="py-2 tabular-nums text-gray-900">
-            {fmtUsd(row?.median_earnings, noData)}
-          </td>
-        </tr>
-        <tr>
-          <th className="py-2 pr-3 font-medium text-gray-600">Student size</th>
-          <td className="py-2 tabular-nums text-gray-900">
-            {fmtNum(row?.student_size, noData)}
-          </td>
-        </tr>
-        {row?.research_signal != null ? (
-          <tr>
-            <th className="py-2 pr-3 font-medium text-gray-600">Research signal</th>
-            <td className="py-2 text-gray-900">{String(row.research_signal)}</td>
-          </tr>
-        ) : null}
-      </tbody>
-    </table>
+    <div className="rounded-2xl border border-gray-200/90 bg-white p-4 shadow-sm sm:p-5">
+      <h3 className="text-base font-semibold leading-snug text-gray-900">{name}</h3>
+      <div className="mt-4 grid grid-cols-2 gap-2.5 sm:gap-3">
+        {metrics.map((metric) => (
+          <CompareExternalEnrichmentStatCard
+            key={metric.key}
+            label={metric.label}
+            value={metric.value ?? notAvailable}
+            hint={metric.hint}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
 
 export function CompareExternalSchoolEnrichmentSection({
   institutionA,
   institutionB,
-  noDataLabel = '—'
+  noDataLabel
 }: CompareExternalSchoolEnrichmentSectionProps) {
+  const notAvailable = enrichmentNotAvailableLabel(noDataLabel);
   const rowA = matchSchoolForInstitution(institutionA);
   const rowB = matchSchoolForInstitution(institutionB);
 
@@ -126,23 +139,34 @@ export function CompareExternalSchoolEnrichmentSection({
 
   return (
     <section
-      className="mt-10 rounded-2xl border border-gray-200/90 bg-white p-6 shadow-sm sm:p-8"
+      className="mt-10 rounded-2xl border border-slate-200/90 bg-gradient-to-b from-slate-50/80 to-white p-6 shadow-sm sm:p-8"
       aria-labelledby="compare-uni-enrichment-heading"
     >
-      <h2
-        id="compare-uni-enrichment-heading"
-        className="scroll-mt-28 text-center text-xl font-bold tracking-tight text-gray-900 sm:scroll-mt-24"
-      >
-        College profile (public data)
-      </h2>
-      <p className="mx-auto mt-2 max-w-2xl text-center text-sm leading-relaxed text-gray-600">
-        Matched from College Scorecard static enrichment by school name and state — separate
-        from ScholarshipTop scholarship catalog totals above.
-      </p>
-      <div className="mt-6 grid gap-8 md:grid-cols-2">
-        <SchoolFactsTable name={institutionA.name} row={rowA} noData={noDataLabel} />
-        <SchoolFactsTable name={institutionB.name} row={rowB} noData={noDataLabel} />
+      <div className="mx-auto max-w-2xl text-center">
+        <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500">
+          Public reference data
+        </p>
+        <h2
+          id="compare-uni-enrichment-heading"
+          className="scroll-mt-28 mt-2 text-xl font-bold tracking-tight text-gray-900 sm:scroll-mt-24 sm:text-2xl"
+        >
+          College cost &amp; outcomes
+        </h2>
+        <p className="mt-2 text-sm leading-relaxed text-gray-600">
+          Official-style college facts matched by school name and state. These figures are
+          separate from ScholarshipTop scholarship totals in the comparison table above.
+        </p>
       </div>
+
+      <div className="mt-6 grid gap-4 md:grid-cols-2 md:gap-5">
+        <SchoolProfileColumn name={institutionA.name} row={rowA} notAvailable={notAvailable} />
+        <SchoolProfileColumn name={institutionB.name} row={rowB} notAvailable={notAvailable} />
+      </div>
+
+      <p className="mx-auto mt-5 max-w-3xl text-center text-xs leading-relaxed text-gray-500">
+        Data: College Scorecard / OpenAlex / ROR where available. Values may lag the current
+        academic year; verify on the institution&apos;s site before decisions.
+      </p>
     </section>
   );
 }
