@@ -6,6 +6,8 @@ import ContentHubScholarshipCta from '@/components/content-hub/ContentHubScholar
 import ResourceArticleTableOfContents from '@/components/content-hub/ResourceArticleTableOfContents';
 import ResourceGuidesContinueSection from '@/components/content-hub/resourceGuides/ResourceGuidesContinueSection';
 import SafeContentPostBody from '@/components/content-hub/SafeContentPostBody';
+import { ResourceExternalContextCard } from '@/components/resources/ResourceExternalContextCard';
+import { classifyResourceArticle } from '@/lib/content-hub/resourceTaxonomy';
 import { SiteFaqAccordion } from '@/components/ui/SiteFaqAccordion';
 import type { ContentPostRow } from '@/lib/content-hub/contentPostListTypes';
 import { resourceArticleDateLine } from '@/lib/content-hub/resourceArticleDates';
@@ -143,6 +145,8 @@ export default function LocalizedResourceArticlePage({
     }
   };
 
+  const resourceClassification = classifyResourceArticle(post);
+
   const faqSchema =
     faq.length > 0
       ? {
@@ -237,6 +241,15 @@ export default function LocalizedResourceArticlePage({
             <p className="mt-4 text-lg leading-relaxed text-gray-600">{copy.summary}</p>
           ) : null}
         </header>
+
+        <ResourceExternalContextCard
+          slug={post.slug?.trim() ?? slug}
+          title={post.title}
+          subtitle={post.meta_description}
+          metaTitle={post.meta_title}
+          category={resourceClassification?.categoryId ?? null}
+          subcategory={resourceClassification?.subcategoryId ?? null}
+        />
 
         {post.cover_image_url?.trim() ? (
           <div className="mt-8 overflow-hidden rounded-2xl border border-gray-200 bg-gray-100 shadow-sm">

@@ -1,26 +1,21 @@
 import {
   hasDisplayableContentContext,
-  resolveContentEnrichmentContext
+  resolveContentEnrichmentContext,
+  type ContentEnrichmentHints
 } from '@/lib/external-data';
 
 import { ExternalReferenceContextCard } from '@/components/content-hub/ExternalReferenceContextCard';
 
-type ResourceExternalContextCardProps = {
-  slug: string;
-  title?: string | null;
-};
+type ResourceExternalContextCardProps = ContentEnrichmentHints;
 
-export function ResourceExternalContextCard({
-  slug,
-  title
-}: ResourceExternalContextCardProps) {
-  const context = resolveContentEnrichmentContext({ slug, title });
+export function ResourceExternalContextCard(props: ResourceExternalContextCardProps) {
+  const context = resolveContentEnrichmentContext(props);
   if (!hasDisplayableContentContext(context)) return null;
 
   return (
     <ExternalReferenceContextCard
       heading="Affordability & cost context"
-      intro="Public reference figures related to this guide topic. Shown only when state or school mapping is clear from the article title or slug."
+      intro="Public reference figures related to this guide topic. Shown only when state or school mapping is clear from the article title, slug, or summary."
       context={context}
     />
   );

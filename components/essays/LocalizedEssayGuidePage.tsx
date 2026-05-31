@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
 import { EssayGuideCardImage } from '@/components/essays/EssayGuideCardImage';
+import { EssayExternalContextCard } from '@/components/essays/EssayExternalContextCard';
 import { SiteFaqAccordion } from '@/components/ui/SiteFaqAccordion';
 import { ESSAYS_PAGE_TITLE, ESSAYS_SECTION_PATH } from '@/lib/essays/essayHubSection';
 import type { EssayDetailRow } from '@/lib/essays/essaysServer';
@@ -67,6 +68,14 @@ export default function LocalizedEssayGuidePage({
       {copy.intro ? (
         <p className="mt-4 text-lg leading-relaxed text-gray-700">{copy.intro}</p>
       ) : null}
+
+      <EssayExternalContextCard
+        slug={essay.slug.trim()}
+        title={essay.title}
+        subtitle={essay.meta_description}
+        category={essay.hub_category_slug}
+        subcategory={essay.manual_topic}
+      />
 
       <div
         className="prose prose-indigo mt-8 max-w-none text-gray-800"

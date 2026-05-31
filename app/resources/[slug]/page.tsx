@@ -318,7 +318,14 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
           ) : null}
         </header>
 
-        <ResourceExternalContextCard slug={post.slug.trim()} title={post.title} />
+        <ResourceExternalContextCard
+          slug={post.slug.trim()}
+          title={post.title}
+          subtitle={post.meta_description}
+          metaTitle={post.meta_title}
+          category={resourceClassification?.categoryId ?? null}
+          subcategory={resourceClassification?.subcategoryId ?? null}
+        />
 
         {post.cover_image_url?.trim() ? (
           <div className="mt-8 overflow-hidden rounded-2xl border border-gray-200 bg-gray-100 shadow-sm">

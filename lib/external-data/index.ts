@@ -58,7 +58,9 @@ export {
 
 export {
   hasDisplayableContentContext,
+  isGenericTopicSlug,
   resolveContentEnrichmentContext,
   resolveStateCodeFromContentHints,
+  type ContentEnrichmentHints,
   type ResolvedContentEnrichmentContext
 } from './resolveContentEnrichmentContext';

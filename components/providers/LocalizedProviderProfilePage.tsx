@@ -24,6 +24,7 @@ import {
   getProviderDetailUiCopy
 } from '@/lib/i18n/providerDetailUiCopy';
 import { isIqSitePromoVisible } from '@/lib/iq/iqSitePromoVisibility';
+import { ProviderExternalSchoolContext } from '@/components/providers/ProviderExternalSchoolContext';
 import ProviderScholarshipMatchCta from '@/components/providers/ProviderScholarshipMatchCta';
 import type { LocalizedProviderPageCopy } from '@/lib/i18n/providerPilot/providerProfileTranslationGate';
 import {
@@ -359,6 +360,11 @@ export default function LocalizedProviderProfilePage({
             <p className="mt-4 text-sm text-gray-500">{detailUi.about.emptyBody}</p>
           )}
         </section>
+
+        <ProviderExternalSchoolContext
+          displayName={data.displayName}
+          hqState={data.hqState}
+        />
 
         <LocalizedProviderSourceStatusBlock
           providerName={data.displayName}
