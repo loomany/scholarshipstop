@@ -4,7 +4,7 @@ import {
   type ScholarshipContextLinkCluster
 } from '@/lib/external-data/contentEnrichmentLinks';
 
-import { RelatedContextLinks } from '@/components/data-viz/RelatedContextLinks';
+import { SmartRelatedLinks } from '@/components/internal-links/SmartRelatedLinks';
 
 type RelatedScholarshipContextLinksProps = {
   cluster: ScholarshipContextLinkCluster;
@@ -12,14 +12,16 @@ type RelatedScholarshipContextLinksProps = {
   stateSlug?: string | null;
   title?: string;
   className?: string;
+  excludeHref?: string | null;
 };
 
 export function RelatedScholarshipContextLinks({
   cluster,
   context,
   stateSlug = null,
-  title = 'Related scholarship planning',
-  className = ''
+  title = 'Related scholarship planning pages',
+  className = '',
+  excludeHref = null
 }: RelatedScholarshipContextLinksProps) {
   const links = buildRelatedScholarshipContextLinks({
     cluster,
@@ -28,6 +30,11 @@ export function RelatedScholarshipContextLinks({
   });
 
   return (
-    <RelatedContextLinks title={title} links={links} className={className} />
+    <SmartRelatedLinks
+      title={title}
+      links={links}
+      excludeHref={excludeHref}
+      className={className}
+    />
   );
 }

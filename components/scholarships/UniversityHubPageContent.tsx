@@ -49,6 +49,7 @@ export default function UniversityHubPageContent({
           <ScholarshipUniversityExternalContextSidebar
             stateSlug={hub.stateSlug}
             universityDisplayName={hub.displayName}
+            providerSlug={hub.slug}
           />
         </>
       }

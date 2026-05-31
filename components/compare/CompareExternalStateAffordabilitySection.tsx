@@ -15,7 +15,7 @@ import {
 import { DataSourceFooter } from '@/components/data-viz/DataSourceFooter';
 import { InsightCallout } from '@/components/data-viz/InsightCallout';
 import { MetricComparisonBars } from '@/components/data-viz/MetricComparisonBars';
-import { RelatedContextLinks } from '@/components/data-viz/RelatedContextLinks';
+import { InternalLinkCluster } from '@/components/internal-links/InternalLinkCluster';
 import { stateSlugFromCode } from '@/lib/seo/stateCompareSlug';
 
 type CompareExternalStateAffordabilitySectionProps = {
@@ -129,28 +129,6 @@ function hasAffordabilityContent(row: StateAffordability | null): boolean {
   return stateMetrics(row).length > 0 || publicSafetyNote(row) != null;
 }
 
-function relatedLinksForStates(slugA: string | null, slugB: string | null) {
-  const links = [];
-  if (slugA) {
-    links.push({
-      href: `/scholarships/${encodeURIComponent(slugA)}`,
-      label: `Scholarships in ${slugA.replace(/-/g, ' ')}`
-    });
-  }
-  if (slugB) {
-    links.push({
-      href: `/scholarships/${encodeURIComponent(slugB)}`,
-      label: `Scholarships in ${slugB.replace(/-/g, ' ')}`
-    });
-  }
-  links.push(
-    { href: '/compare/universities', label: 'Compare universities' },
-    { href: '/resources/how-to-find-scholarships', label: 'How to find scholarships' },
-    { href: '/essays/financial-need', label: 'Financial need essays' }
-  );
-  return links;
-}
-
 export function CompareExternalStateAffordabilitySection({
   stateAName,
   stateACode,
@@ -220,7 +198,11 @@ export function CompareExternalStateAffordabilitySection({
           title="Why this matters for scholarship planning"
           body="Use these numbers to compare scholarship value, relocation costs, and likely out-of-pocket living expenses. A larger award in a higher-cost state may cover less than a smaller award elsewhere."
         />
-        <RelatedContextLinks links={relatedLinksForStates(slugA, slugB)} />
+        <InternalLinkCluster
+          pageType="compare-state-detail"
+          compareStateSlugA={slugA}
+          compareStateSlugB={slugB}
+        />
         <DataSourceFooter
           variant="state"
           showPublicSafetyNote={showSafetyNote}

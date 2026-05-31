@@ -73,6 +73,16 @@ export {
 } from './contentEnrichmentLinks';
 
 export {
+  buildInternalLinkCluster,
+  finalizeInternalLinks,
+  internalLinkTitle,
+  normalizeInternalLinkHref,
+  resolveStateSlugFromCode,
+  type InternalLinkGraphInput,
+  type InternalLinkPageType
+} from './internalLinkGraph';
+
+export {
   schoolCompareBarMetrics,
   schoolProfilePairMetrics,
   schoolSingleBarMetrics,

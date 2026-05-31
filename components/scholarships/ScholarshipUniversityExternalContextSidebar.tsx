@@ -13,16 +13,18 @@ import {
 } from '@/components/compare/compareExternalEnrichmentFormat';
 import { DataSourceFooter } from '@/components/data-viz/DataSourceFooter';
 import { MetricComparisonBars } from '@/components/data-viz/MetricComparisonBars';
-import { RelatedContextLinks } from '@/components/data-viz/RelatedContextLinks';
+import { InternalLinkCluster } from '@/components/internal-links/InternalLinkCluster';
 
 type ScholarshipUniversityExternalContextSidebarProps = {
   stateSlug: string;
   universityDisplayName: string;
+  providerSlug?: string | null;
 };
 
 export function ScholarshipUniversityExternalContextSidebar({
   stateSlug,
-  universityDisplayName
+  universityDisplayName,
+  providerSlug = null
 }: ScholarshipUniversityExternalContextSidebarProps) {
   const context = resolveScholarshipUniversityContext({
     stateSlugOrCode: stateSlug,
@@ -32,6 +34,10 @@ export function ScholarshipUniversityExternalContextSidebar({
 
   const school = context.schoolRow;
   const state = context.stateContext;
+  const excludeHref =
+    providerSlug ?
+      `/scholarships/${encodeURIComponent(stateSlug)}/${encodeURIComponent(providerSlug)}`
+    : null;
 
   const schoolCards =
     school ?
@@ -98,19 +104,6 @@ export function ScholarshipUniversityExternalContextSidebar({
     fmtEnrichmentRatePer100k(state.stateRow.public_safety_context?.value)
   : null;
   const schoolPairs = school ? schoolProfilePairMetrics(school) : [];
-
-  const relatedLinks = [
-    {
-      href: `/scholarships/${encodeURIComponent(stateSlug)}`,
-      label: `Scholarships in ${state?.stateName ?? stateSlug.replace(/-/g, ' ')}`
-    },
-    { href: '/compare/universities', label: 'Compare universities' },
-    {
-      href: '/resources/how-to-find-scholarships',
-      label: 'How to find scholarships'
-    },
-    { href: '/essays/financial-need', label: 'Financial need essays' }
-  ];
 
   return (
     <aside
@@ -190,7 +183,15 @@ export function ScholarshipUniversityExternalContextSidebar({
         </div>
       ) : null}
 
-      <RelatedContextLinks title="Plan your search" links={relatedLinks} />
+      <InternalLinkCluster
+        pageType="scholarship-university"
+        stateSlug={stateSlug}
+        stateCode={state?.stateCode ?? null}
+        stateName={state?.stateName ?? null}
+        providerSlug={providerSlug}
+        providerDisplayName={universityDisplayName}
+        excludeHref={excludeHref}
+      />
 
       <DataSourceFooter
         variant="mixed"

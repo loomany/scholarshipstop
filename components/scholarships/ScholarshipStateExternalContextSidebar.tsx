@@ -7,7 +7,7 @@ import { fmtEnrichmentRatePer100k } from '@/components/compare/compareExternalEn
 import { CompareExternalEnrichmentStatCard } from '@/components/compare/CompareExternalEnrichmentStatCard';
 import { DataSourceFooter } from '@/components/data-viz/DataSourceFooter';
 import { MetricComparisonBars } from '@/components/data-viz/MetricComparisonBars';
-import { RelatedContextLinks } from '@/components/data-viz/RelatedContextLinks';
+import { InternalLinkCluster } from '@/components/internal-links/InternalLinkCluster';
 
 type ScholarshipStateExternalContextSidebarProps = {
   stateSlug: string;
@@ -29,6 +29,7 @@ export function ScholarshipStateExternalContextSidebar({
 
   const safetyNote = publicSafetyFootnote(context);
   const pairMetrics = statePlanningPairMetrics(context.stateRow);
+  const currentPath = `/scholarships/${encodeURIComponent(stateSlug)}`;
 
   return (
     <aside
@@ -83,17 +84,12 @@ export function ScholarshipStateExternalContextSidebar({
         <p className="mt-4 text-xs leading-relaxed text-gray-500">{safetyNote}</p>
       ) : null}
 
-      <RelatedContextLinks
-        title="Plan your search"
-        links={[
-          { href: '/compare/states', label: 'Compare states' },
-          { href: '/compare/universities', label: 'Compare universities' },
-          {
-            href: '/resources/how-to-find-scholarships',
-            label: 'How to find scholarships'
-          },
-          { href: '/essays/financial-need', label: 'Financial need essays' }
-        ]}
+      <InternalLinkCluster
+        pageType="scholarship-state"
+        stateSlug={stateSlug}
+        stateCode={context.stateCode}
+        stateName={context.stateName}
+        excludeHref={currentPath}
       />
 
       <DataSourceFooter

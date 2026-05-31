@@ -1,0 +1,37 @@
+source_page_type,source_route_pattern,target_page_type,target_route_pattern,reason,priority,risk,implementation_status
+scholarship-state,/scholarships/{state},compare-hub,/compare/states,State planning should link to compare hub,high,low,done
+scholarship-state,/scholarships/{state},compare-hub,/compare/universities,Cross-link school cost comparisons,high,low,done
+scholarship-state,/scholarships/{state},resource,/resources/how-to-find-scholarships,Core scholarship search guide,high,low,done
+scholarship-state,/scholarships/{state},essay,/essays/financial-need,Common essay topic for aid planning,high,low,done
+scholarship-state,/scholarships/{state},compare-detail,/compare/states/california-vs-texas,Featured pair when state is CA or TX,medium,low,done
+scholarship-university,/scholarships/{state}/{university},scholarship-state,/scholarships/{state},Upward cluster to state hub,high,low,done
+scholarship-university,/scholarships/{state}/{university},compare-hub,/compare/universities,School-level cost comparison entry,high,low,done
+scholarship-university,/scholarships/{state}/{university},resource,/resources/how-to-find-scholarships,Actionable next step,high,low,done
+scholarship-university,/scholarships/{state}/{university},essay,/essays/financial-need,Essay support for applicants,high,low,done
+scholarship-university,/scholarships/{state}/{university},provider,/providers/{providerSlug},Only when hub slug is confident,medium,medium,done
+provider,/providers/{id},scholarship-state,/scholarships/{state},State scholarships when Scorecard match,high,low,done
+provider,/providers/{id},compare-hub,/compare/universities,Institution cost context,high,low,done
+provider,/providers/{id},resource,/resources/how-to-find-scholarships,Scholarship discovery guide,high,low,done
+compare-state-detail,/compare/states/{slug},scholarship-state,/scholarships/{stateA},Return to state scholarship listings,high,low,done
+compare-state-detail,/compare/states/{slug},scholarship-state,/scholarships/{stateB},Return to state scholarship listings,high,low,done
+compare-state-detail,/compare/states/{slug},compare-hub,/compare/universities,Sibling compare hub,high,low,done
+compare-state-detail,/compare/states/{slug},resource,/resources/how-to-find-scholarships,Planning resource,high,low,done
+compare-state-detail,/compare/states/{slug},essay,/essays/financial-need,Essay cluster,high,low,done
+compare-state-detail,/compare/states/{slug},compare-hub,/compare/states,Parent compare hub,medium,low,done
+compare-university-detail,/compare/universities/{slug},scholarship-state,/scholarships/{state},Per-institution state pages,high,low,done
+compare-university-detail,/compare/universities/{slug},compare-detail,/compare/states/{stateA}-vs-{stateB},When institution states differ,medium,low,done
+compare-university-detail,/compare/universities/{slug},compare-hub,/compare/universities,Compare hub,high,low,done
+compare-university-detail,/compare/universities/{slug},resource,/resources/how-to-find-scholarships,Planning resource,high,low,done
+compare-university-detail,/compare/universities/{slug},essay,/essays/financial-need,Essay cluster,high,low,done
+state-resource,/resources/{slug},scholarship-state,/scholarships/{state},Contextual state scholarships,high,low,done
+state-resource,/resources/{slug},compare-hub,/compare/states,State compare hub,high,low,done
+state-resource,/resources/{slug},compare-hub,/compare/universities,University compare hub,high,low,done
+state-resource,/resources/{slug},essay,/essays/financial-need,Essay support,high,low,done
+school-resource,/resources/{slug},scholarship-state,/scholarships/{state},State context for school article,high,low,done
+school-resource,/resources/{slug},compare-hub,/compare/universities,School cost comparisons,high,low,done
+state-essay,/essays/{slug},scholarship-state,/scholarships/{state},State essay cluster,high,low,done
+state-essay,/essays/{slug},scholarship-hub,/scholarships,Browse scholarships,high,low,done
+state-essay,/essays/{slug},resource,/resources/how-to-find-scholarships,Search guide,high,low,done
+state-essay,/essays/{slug},compare-hub,/compare/universities,University comparisons,high,low,done
+generic-resource,/resources/{slug},scholarship-hub,/scholarships,Optional generic links,low,medium,skipped
+generic-essay,/essays/{slug},scholarship-hub,/scholarships,Avoid spam on generic topics,low,medium,skipped

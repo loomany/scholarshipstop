@@ -1,4 +1,5 @@
 import { matchProviderToSchool, schoolSingleBarMetrics } from '@/lib/external-data';
+import { resolveStateSlugFromCode } from '@/lib/external-data/internalLinkGraph';
 
 import { CompareExternalEnrichmentStatCard } from '@/components/compare/CompareExternalEnrichmentStatCard';
 import {
@@ -6,7 +7,7 @@ import {
   fmtEnrichmentPctFromFraction,
   fmtEnrichmentUsd
 } from '@/components/compare/compareExternalEnrichmentFormat';
-import { RelatedScholarshipContextLinks } from '@/components/content-hub/RelatedScholarshipContextLinks';
+import { InternalLinkCluster } from '@/components/internal-links/InternalLinkCluster';
 import { CompactMetricGrid } from '@/components/data-viz/CompactMetricGrid';
 import { DataSourceFooter } from '@/components/data-viz/DataSourceFooter';
 import { MetricComparisonBars } from '@/components/data-viz/MetricComparisonBars';
@@ -83,12 +84,7 @@ export function ProviderExternalSchoolContext({
   const barMetrics = schoolSingleBarMetrics(row).filter((m) =>
     ['tuition_in', 'net_price', 'earnings', 'size'].includes(m.key)
   );
-  const providerContext = {
-    stateCode: row.state ?? null,
-    stateRow: null,
-    cityRow: null,
-    schoolRow: row
-  };
+  const providerStateSlug = resolveStateSlugFromCode(row.state);
 
   return (
     <section
@@ -131,9 +127,11 @@ export function ProviderExternalSchoolContext({
         </div>
       ) : null}
 
-      <RelatedScholarshipContextLinks
-        cluster="provider"
-        context={providerContext}
+      <InternalLinkCluster
+        pageType="provider"
+        stateSlug={providerStateSlug}
+        stateCode={row.state ?? null}
+        className="mt-4"
       />
       <DataSourceFooter variant="college" className="mt-4" />
     </section>

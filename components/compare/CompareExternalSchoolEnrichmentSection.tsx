@@ -14,8 +14,8 @@ import {
 import { DataSourceFooter } from '@/components/data-viz/DataSourceFooter';
 import { InsightCallout } from '@/components/data-viz/InsightCallout';
 import { MetricComparisonBars } from '@/components/data-viz/MetricComparisonBars';
-import { RelatedContextLinks } from '@/components/data-viz/RelatedContextLinks';
-import { STATE_VS_SEPARATOR, stateSlugFromCode } from '@/lib/seo/stateCompareSlug';
+import { InternalLinkCluster } from '@/components/internal-links/InternalLinkCluster';
+import { stateSlugFromCode } from '@/lib/seo/stateCompareSlug';
 
 type InstitutionLike = {
   name: string;
@@ -132,43 +132,6 @@ function SchoolProfileColumn({
   );
 }
 
-function relatedLinksForSchools(
-  instA: InstitutionLike,
-  instB: InstitutionLike
-) {
-  const slugA = instA.state ? stateSlugFromCode(instA.state) : null;
-  const slugB = instB.state ? stateSlugFromCode(instB.state) : null;
-  const links = [];
-
-  if (slugA) {
-    links.push({
-      href: `/scholarships/${encodeURIComponent(slugA)}`,
-      label: `${instA.name.split(',')[0]?.trim() ?? 'School A'} state scholarships`
-    });
-  }
-  if (slugB && slugB !== slugA) {
-    links.push({
-      href: `/scholarships/${encodeURIComponent(slugB)}`,
-      label: `${instB.name.split(',')[0]?.trim() ?? 'School B'} state scholarships`
-    });
-  }
-  if (slugA && slugB && slugA !== slugB) {
-    const sorted = [slugA, slugB].sort((a, b) => a.localeCompare(b, 'en'));
-    links.push({
-      href: `/compare/states/${sorted[0]}${STATE_VS_SEPARATOR}${sorted[1]}`,
-      label: 'Compare these states'
-    });
-  }
-
-  links.push(
-    { href: '/compare/universities', label: 'Compare more universities' },
-    { href: '/resources/how-to-find-scholarships', label: 'How to find scholarships' },
-    { href: '/essays/financial-need', label: 'Financial need essays' }
-  );
-
-  return links;
-}
-
 export function CompareExternalSchoolEnrichmentSection({
   institutionA,
   institutionB,
@@ -178,6 +141,8 @@ export function CompareExternalSchoolEnrichmentSection({
   const rowA = matchSchoolForInstitution(institutionA);
   const rowB = matchSchoolForInstitution(institutionB);
   const barMetrics = schoolCompareBarMetrics(rowA, rowB);
+  const stateSlugA = institutionA.state ? stateSlugFromCode(institutionA.state) : null;
+  const stateSlugB = institutionB.state ? stateSlugFromCode(institutionB.state) : null;
 
   if (!hasAnySchoolFacts(rowA) && !hasAnySchoolFacts(rowB)) return null;
 
@@ -232,7 +197,11 @@ export function CompareExternalSchoolEnrichmentSection({
           title="Cost, outcomes, and scholarship fit"
           body="Compare tuition, net price, and earnings alongside scholarship totals above. A higher sticker price may still fit if aid and outcomes align with your goals."
         />
-        <RelatedContextLinks links={relatedLinksForSchools(institutionA, institutionB)} />
+        <InternalLinkCluster
+          pageType="compare-university-detail"
+          institutionStateSlugA={stateSlugA}
+          institutionStateSlugB={stateSlugB}
+        />
         <DataSourceFooter variant="college" className="mt-5 text-center" />
       </div>
     </section>

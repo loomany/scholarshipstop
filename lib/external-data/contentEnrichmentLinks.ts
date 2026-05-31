@@ -2,6 +2,7 @@ import 'server-only';
 
 import { stateDisplayName } from './stateAffordability';
 import type { ResolvedContentEnrichmentContext } from './resolveContentEnrichmentContext';
+import { finalizeInternalLinks } from './internalLinkGraph';
 import { stateSlugFromCode } from '@/lib/seo/stateCompareSlug';
 
 export type ContextLinkItem = {
@@ -50,7 +51,8 @@ export function buildRelatedScholarshipContextLinks({
       links.push(
         { href: '/compare/states', label: 'Compare states' },
         { href: '/compare/universities', label: 'Compare universities' },
-        { href: '/essays/financial-need', label: 'Financial need essays' }
+        { href: '/resources/how-to-find-scholarships', label: 'How to find scholarships' },
+        { href: '/essays/financial-need', label: 'Financial need essay guide' }
       );
       break;
 
@@ -75,6 +77,7 @@ export function buildRelatedScholarshipContextLinks({
         links.push(scholarshipStateLink(stateCode, stateSlug));
       }
       links.push(
+        { href: '/scholarships', label: 'Browse scholarships' },
         { href: '/resources/how-to-find-scholarships', label: 'How to find scholarships' },
         { href: '/compare/universities', label: 'Compare universities' }
       );
@@ -97,15 +100,9 @@ export function buildRelatedScholarshipContextLinks({
       break;
   }
 
-  const seen = new Set<string>();
-  return links
-    .filter((link) => link.href.trim() && link.label.trim())
-    .filter((link) => {
-      if (seen.has(link.href)) return false;
-      seen.add(link.href);
-      return true;
-    })
-    .slice(0, 6);
+  return finalizeInternalLinks(
+    links.filter((link) => link.href.trim() && link.label.trim())
+  );
 }
 
 export function resolveContentEnrichmentLinkCluster(
