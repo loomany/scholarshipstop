@@ -66,6 +66,16 @@ export {
 } from './resolveContentEnrichmentContext';
 
 export {
+  schoolCompareBarMetrics,
+  schoolProfilePairMetrics,
+  schoolSingleBarMetrics,
+  stateCompareBarMetrics,
+  statePlanningPairMetrics,
+  type VizBarMetric,
+  type VizPairMetric
+} from './enrichmentVizMetrics';
+
+export {
   hasScholarshipUniversitySidebarContent,
   resolveAffordabilitySidebarStateSlug,
   resolveScholarshipStateContext,

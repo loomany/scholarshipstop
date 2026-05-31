@@ -2,8 +2,12 @@ import {
   resolveScholarshipStateContext,
   type ScholarshipStateContext
 } from '@/lib/external-data/scholarshipPageEnrichment';
+import { statePlanningPairMetrics } from '@/lib/external-data';
 import { fmtEnrichmentRatePer100k } from '@/components/compare/compareExternalEnrichmentFormat';
 import { CompareExternalEnrichmentStatCard } from '@/components/compare/CompareExternalEnrichmentStatCard';
+import { DataSourceFooter } from '@/components/data-viz/DataSourceFooter';
+import { MetricComparisonBars } from '@/components/data-viz/MetricComparisonBars';
+import { RelatedContextLinks } from '@/components/data-viz/RelatedContextLinks';
 
 type ScholarshipStateExternalContextSidebarProps = {
   stateSlug: string;
@@ -24,6 +28,7 @@ export function ScholarshipStateExternalContextSidebar({
   if (!context) return null;
 
   const safetyNote = publicSafetyFootnote(context);
+  const pairMetrics = statePlanningPairMetrics(context.stateRow);
 
   return (
     <aside
@@ -40,8 +45,8 @@ export function ScholarshipStateExternalContextSidebar({
         Cost of living in {context.stateName}
       </h2>
       <p className="mt-2 text-sm leading-relaxed text-gray-600">
-        Public reference data for planning context. Cost and wage estimates vary
-        by city and household.
+        These estimates can help students compare scholarship amounts with typical
+        living costs in this state. Figures vary by city and household.
       </p>
       <div className="mt-4 grid grid-cols-2 gap-2.5 sm:gap-3">
         {context.highlights.map((item) => (
@@ -52,13 +57,50 @@ export function ScholarshipStateExternalContextSidebar({
           />
         ))}
       </div>
+
+      {pairMetrics.length ? (
+        <div className="mt-5 rounded-xl border border-slate-200/80 bg-white p-3.5 sm:p-4">
+          <h3 className="text-sm font-semibold text-gray-900">Quick comparisons</h3>
+          <MetricComparisonBars
+            className="mt-3"
+            ariaLabel={`Planning comparisons for ${context.stateName}`}
+            leftSeriesLabel={context.stateName}
+            rightSeriesLabel={context.stateName}
+            metrics={pairMetrics.map((metric) => ({
+              key: metric.key,
+              label: metric.label,
+              leftValue: metric.leftValue,
+              rightValue: metric.rightValue,
+              leftCaption: metric.leftLabel,
+              rightCaption: metric.rightLabel,
+              hint: metric.hint
+            }))}
+          />
+        </div>
+      ) : null}
+
       {safetyNote ? (
         <p className="mt-4 text-xs leading-relaxed text-gray-500">{safetyNote}</p>
       ) : null}
-      <p className="mt-4 text-xs leading-relaxed text-gray-500">
-        Data: Census ACS, HUD FMR, MIT Living Wage, and BLS where available.
-        Reference only — not ScholarshipTop eligibility rules.
-      </p>
+
+      <RelatedContextLinks
+        title="Plan your search"
+        links={[
+          { href: '/compare/states', label: 'Compare states' },
+          { href: '/compare/universities', label: 'Compare universities' },
+          {
+            href: '/resources/how-to-find-scholarships',
+            label: 'How to find scholarships'
+          },
+          { href: '/essays/financial-need', label: 'Financial need essays' }
+        ]}
+      />
+
+      <DataSourceFooter
+        variant="state"
+        showPublicSafetyNote={Boolean(safetyNote)}
+        className="mt-4"
+      />
     </aside>
   );
 }

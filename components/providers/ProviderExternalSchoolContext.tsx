@@ -1,4 +1,4 @@
-import { matchProviderToSchool } from '@/lib/external-data';
+import { matchProviderToSchool, schoolSingleBarMetrics } from '@/lib/external-data';
 
 import { CompareExternalEnrichmentStatCard } from '@/components/compare/CompareExternalEnrichmentStatCard';
 import {
@@ -6,6 +6,11 @@ import {
   fmtEnrichmentPctFromFraction,
   fmtEnrichmentUsd
 } from '@/components/compare/compareExternalEnrichmentFormat';
+import { CompactMetricGrid } from '@/components/data-viz/CompactMetricGrid';
+import { DataSourceFooter } from '@/components/data-viz/DataSourceFooter';
+import { MetricComparisonBars } from '@/components/data-viz/MetricComparisonBars';
+import { RelatedContextLinks } from '@/components/data-viz/RelatedContextLinks';
+import { stateSlugFromCode } from '@/lib/seo/stateCompareSlug';
 
 type ProviderExternalSchoolContextProps = {
   displayName: string;
@@ -55,6 +60,13 @@ export function ProviderExternalSchoolContext({
         value: fmtEnrichmentPctFromFraction(row.completion_rate)
       }
     : null,
+    row.median_earnings != null ?
+      {
+        key: 'earnings',
+        label: 'Median earnings',
+        value: fmtEnrichmentUsd(row.median_earnings)
+      }
+    : null,
     row.student_size != null ?
       {
         key: 'size',
@@ -68,6 +80,23 @@ export function ProviderExternalSchoolContext({
 
   const visible = cards.filter((c) => c.value != null);
   if (!visible.length) return null;
+
+  const barMetrics = schoolSingleBarMetrics(row).filter((m) =>
+    ['tuition_in', 'net_price', 'earnings', 'size'].includes(m.key)
+  );
+  const stateSlug = row.state ? stateSlugFromCode(row.state) : null;
+  const relatedLinks = [
+    ...(stateSlug ?
+      [
+        {
+          href: `/scholarships/${encodeURIComponent(stateSlug)}`,
+          label: `Scholarships in ${row.state}`
+        }
+      ]
+    : []),
+    { href: '/compare/universities', label: 'Compare universities' },
+    { href: '/resources/how-to-find-scholarships', label: 'How to find scholarships' }
+  ];
 
   return (
     <section
@@ -87,19 +116,31 @@ export function ProviderExternalSchoolContext({
         Matched to {row.school_name} from College Scorecard by name and state. Shown only
         when the match is unambiguous.
       </p>
-      <div className="mt-4 grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3">
-        {visible.map((card) => (
-          <CompareExternalEnrichmentStatCard
-            key={card.key}
-            label={card.label}
-            value={card.value!}
+
+      <CompactMetricGrid
+        className="mt-4"
+        items={visible.map((card) => ({
+          key: card.key,
+          label: card.label,
+          value: card.value
+        }))}
+      />
+
+      {barMetrics.length ? (
+        <div className="mt-4 rounded-xl border border-slate-200/80 bg-white p-3.5">
+          <h3 className="text-sm font-semibold text-gray-900">Cost & outcomes</h3>
+          <MetricComparisonBars
+            className="mt-3"
+            ariaLabel={`Cost and outcomes for ${row.school_name}`}
+            leftSeriesLabel="Value"
+            rightSeriesLabel="Scale"
+            metrics={barMetrics}
           />
-        ))}
-      </div>
-      <p className="mt-4 text-xs leading-relaxed text-gray-500">
-        Data: College Scorecard / public reference data. Not a ScholarshipTop verification
-        of provider programs.
-      </p>
+        </div>
+      ) : null}
+
+      <RelatedContextLinks links={relatedLinks} />
+      <DataSourceFooter variant="college" className="mt-4" />
     </section>
   );
 }

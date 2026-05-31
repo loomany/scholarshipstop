@@ -1,5 +1,6 @@
 import {
   matchSchoolForInstitution,
+  schoolCompareBarMetrics,
   type SchoolEnrichment
 } from '@/lib/external-data';
 
@@ -10,6 +11,11 @@ import {
   fmtEnrichmentPctFromFraction,
   fmtEnrichmentUsd
 } from '@/components/compare/compareExternalEnrichmentFormat';
+import { DataSourceFooter } from '@/components/data-viz/DataSourceFooter';
+import { InsightCallout } from '@/components/data-viz/InsightCallout';
+import { MetricComparisonBars } from '@/components/data-viz/MetricComparisonBars';
+import { RelatedContextLinks } from '@/components/data-viz/RelatedContextLinks';
+import { STATE_VS_SEPARATOR, stateSlugFromCode } from '@/lib/seo/stateCompareSlug';
 
 type InstitutionLike = {
   name: string;
@@ -126,6 +132,43 @@ function SchoolProfileColumn({
   );
 }
 
+function relatedLinksForSchools(
+  instA: InstitutionLike,
+  instB: InstitutionLike
+) {
+  const slugA = instA.state ? stateSlugFromCode(instA.state) : null;
+  const slugB = instB.state ? stateSlugFromCode(instB.state) : null;
+  const links = [];
+
+  if (slugA) {
+    links.push({
+      href: `/scholarships/${encodeURIComponent(slugA)}`,
+      label: `${instA.name.split(',')[0]?.trim() ?? 'School A'} state scholarships`
+    });
+  }
+  if (slugB && slugB !== slugA) {
+    links.push({
+      href: `/scholarships/${encodeURIComponent(slugB)}`,
+      label: `${instB.name.split(',')[0]?.trim() ?? 'School B'} state scholarships`
+    });
+  }
+  if (slugA && slugB && slugA !== slugB) {
+    const sorted = [slugA, slugB].sort((a, b) => a.localeCompare(b, 'en'));
+    links.push({
+      href: `/compare/states/${sorted[0]}${STATE_VS_SEPARATOR}${sorted[1]}`,
+      label: 'Compare these states'
+    });
+  }
+
+  links.push(
+    { href: '/compare/universities', label: 'Compare more universities' },
+    { href: '/resources/how-to-find-scholarships', label: 'How to find scholarships' },
+    { href: '/essays/financial-need', label: 'Financial need essays' }
+  );
+
+  return links;
+}
+
 export function CompareExternalSchoolEnrichmentSection({
   institutionA,
   institutionB,
@@ -134,6 +177,7 @@ export function CompareExternalSchoolEnrichmentSection({
   const notAvailable = enrichmentNotAvailableLabel(noDataLabel);
   const rowA = matchSchoolForInstitution(institutionA);
   const rowB = matchSchoolForInstitution(institutionB);
+  const barMetrics = schoolCompareBarMetrics(rowA, rowB);
 
   if (!hasAnySchoolFacts(rowA) && !hasAnySchoolFacts(rowB)) return null;
 
@@ -158,15 +202,39 @@ export function CompareExternalSchoolEnrichmentSection({
         </p>
       </div>
 
+      {barMetrics.length ? (
+        <div className="mx-auto mt-6 max-w-3xl rounded-2xl border border-slate-200/80 bg-white p-4 sm:p-5">
+          <h3 className="text-sm font-semibold text-gray-900">Visual comparison</h3>
+          <MetricComparisonBars
+            className="mt-4"
+            ariaLabel={`College cost comparison between ${institutionA.name} and ${institutionB.name}`}
+            leftSeriesLabel={institutionA.name}
+            rightSeriesLabel={institutionB.name}
+            metrics={barMetrics.map((metric) => ({
+              key: metric.key,
+              label: metric.label,
+              leftValue: metric.leftValue,
+              rightValue: metric.rightValue,
+              hint: metric.hint
+            }))}
+            fractionMetrics={false}
+          />
+        </div>
+      ) : null}
+
       <div className="mt-6 grid gap-4 md:grid-cols-2 md:gap-5">
         <SchoolProfileColumn name={institutionA.name} row={rowA} notAvailable={notAvailable} />
         <SchoolProfileColumn name={institutionB.name} row={rowB} notAvailable={notAvailable} />
       </div>
 
-      <p className="mx-auto mt-5 max-w-3xl text-center text-xs leading-relaxed text-gray-500">
-        Data: College Scorecard / OpenAlex / ROR where available. Values may lag the current
-        academic year; verify on the institution&apos;s site before decisions.
-      </p>
+      <div className="mx-auto mt-6 max-w-3xl">
+        <InsightCallout
+          title="Cost, outcomes, and scholarship fit"
+          body="Compare tuition, net price, and earnings alongside scholarship totals above. A higher sticker price may still fit if aid and outcomes align with your goals."
+        />
+        <RelatedContextLinks links={relatedLinksForSchools(institutionA, institutionB)} />
+        <DataSourceFooter variant="college" className="mt-5 text-center" />
+      </div>
     </section>
   );
 }

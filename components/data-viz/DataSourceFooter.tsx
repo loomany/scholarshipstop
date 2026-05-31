@@ -1,0 +1,38 @@
+type DataSourceFooterProps = {
+  variant?: 'default' | 'college' | 'state' | 'mixed';
+  showPublicSafetyNote?: boolean;
+  className?: string;
+};
+
+const BASE_SOURCES =
+  'Data sources: College Scorecard, Census ACS, HUD FMR, MIT Living Wage, BLS OEWS, and public reference datasets where available.';
+
+const VARIANT_COPY: Record<NonNullable<DataSourceFooterProps['variant']>, string> = {
+  default: BASE_SOURCES,
+  college:
+    'Data sources: College Scorecard, OpenAlex, and ROR where matched. Figures may lag the current academic year; verify on the institution site.',
+  state:
+    'Data sources: Census ACS, HUD FMR, MIT Living Wage, BLS OEWS, and public reference datasets where available. Rent figures may reflect metro or state averages.',
+  mixed: BASE_SOURCES
+};
+
+export function DataSourceFooter({
+  variant = 'default',
+  showPublicSafetyNote = false,
+  className = ''
+}: DataSourceFooterProps) {
+  return (
+    <div className={`space-y-2 ${className}`.trim()}>
+      <p className="text-xs leading-relaxed text-gray-500">{VARIANT_COPY[variant]}</p>
+      {showPublicSafetyNote ? (
+        <p className="text-xs leading-relaxed text-gray-500">
+          Public safety context uses aggregate public data and is included only as
+          planning context.
+        </p>
+      ) : null}
+      <p className="text-xs leading-relaxed text-gray-500">
+        Reference only — not ScholarshipTop eligibility rules, rankings, or guarantees.
+      </p>
+    </div>
+  );
+}

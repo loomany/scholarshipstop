@@ -1,6 +1,7 @@
 import {
   getStateAffordability,
   isPlausibleHouseholdIncome,
+  stateCompareBarMetrics,
   type StateAffordability
 } from '@/lib/external-data';
 
@@ -11,6 +12,11 @@ import {
   fmtEnrichmentRatePer100k,
   fmtEnrichmentUsd
 } from '@/components/compare/compareExternalEnrichmentFormat';
+import { DataSourceFooter } from '@/components/data-viz/DataSourceFooter';
+import { InsightCallout } from '@/components/data-viz/InsightCallout';
+import { MetricComparisonBars } from '@/components/data-viz/MetricComparisonBars';
+import { RelatedContextLinks } from '@/components/data-viz/RelatedContextLinks';
+import { stateSlugFromCode } from '@/lib/seo/stateCompareSlug';
 
 type CompareExternalStateAffordabilitySectionProps = {
   stateAName: string;
@@ -123,6 +129,28 @@ function hasAffordabilityContent(row: StateAffordability | null): boolean {
   return stateMetrics(row).length > 0 || publicSafetyNote(row) != null;
 }
 
+function relatedLinksForStates(slugA: string | null, slugB: string | null) {
+  const links = [];
+  if (slugA) {
+    links.push({
+      href: `/scholarships/${encodeURIComponent(slugA)}`,
+      label: `Scholarships in ${slugA.replace(/-/g, ' ')}`
+    });
+  }
+  if (slugB) {
+    links.push({
+      href: `/scholarships/${encodeURIComponent(slugB)}`,
+      label: `Scholarships in ${slugB.replace(/-/g, ' ')}`
+    });
+  }
+  links.push(
+    { href: '/compare/universities', label: 'Compare universities' },
+    { href: '/resources/how-to-find-scholarships', label: 'How to find scholarships' },
+    { href: '/essays/financial-need', label: 'Financial need essays' }
+  );
+  return links;
+}
+
 export function CompareExternalStateAffordabilitySection({
   stateAName,
   stateACode,
@@ -133,6 +161,11 @@ export function CompareExternalStateAffordabilitySection({
   const notAvailable = enrichmentNotAvailableLabel(noDataLabel);
   const rowA = getStateAffordability(stateACode);
   const rowB = getStateAffordability(stateBCode);
+  const slugA = stateSlugFromCode(stateACode);
+  const slugB = stateSlugFromCode(stateBCode);
+  const barMetrics = stateCompareBarMetrics(rowA, rowB);
+  const showSafetyNote =
+    publicSafetyNote(rowA) != null || publicSafetyNote(rowB) != null;
 
   if (!hasAffordabilityContent(rowA) && !hasAffordabilityContent(rowB)) return null;
 
@@ -157,15 +190,43 @@ export function CompareExternalStateAffordabilitySection({
         </p>
       </div>
 
+      {barMetrics.length ? (
+        <div className="mx-auto mt-6 max-w-3xl rounded-2xl border border-slate-200/80 bg-white p-4 sm:p-5">
+          <h3 className="text-sm font-semibold text-gray-900">Visual comparison</h3>
+          <MetricComparisonBars
+            className="mt-4"
+            ariaLabel={`Affordability comparison between ${stateAName} and ${stateBName}`}
+            leftSeriesLabel={stateAName}
+            rightSeriesLabel={stateBName}
+            metrics={barMetrics.map((metric) => ({
+              key: metric.key,
+              label: metric.label,
+              leftValue: metric.leftValue,
+              rightValue: metric.rightValue,
+              hint: metric.hint
+            }))}
+            fractionMetrics={false}
+          />
+        </div>
+      ) : null}
+
       <div className="mt-6 grid gap-4 md:grid-cols-2 md:gap-5">
         <StateAffordabilityColumn name={stateAName} row={rowA} notAvailable={notAvailable} />
         <StateAffordabilityColumn name={stateBName} row={rowB} notAvailable={notAvailable} />
       </div>
 
-      <p className="mx-auto mt-5 max-w-3xl text-center text-xs leading-relaxed text-gray-500">
-        Data: Census ACS, HUD FMR, MIT Living Wage, BLS, and public aggregate sources. Rent
-        figures may reflect metro or state averages when city-level data is unavailable.
-      </p>
+      <div className="mx-auto mt-6 max-w-3xl">
+        <InsightCallout
+          title="Why this matters for scholarship planning"
+          body="Use these numbers to compare scholarship value, relocation costs, and likely out-of-pocket living expenses. A larger award in a higher-cost state may cover less than a smaller award elsewhere."
+        />
+        <RelatedContextLinks links={relatedLinksForStates(slugA, slugB)} />
+        <DataSourceFooter
+          variant="state"
+          showPublicSafetyNote={showSafetyNote}
+          className="mt-5 text-center"
+        />
+      </div>
     </section>
   );
 }

@@ -2,6 +2,7 @@ import {
   hasScholarshipUniversitySidebarContent,
   resolveScholarshipUniversityContext
 } from '@/lib/external-data/scholarshipPageEnrichment';
+import { schoolProfilePairMetrics } from '@/lib/external-data';
 
 import { CompareExternalEnrichmentStatCard } from '@/components/compare/CompareExternalEnrichmentStatCard';
 import {
@@ -10,6 +11,9 @@ import {
   fmtEnrichmentRatePer100k,
   fmtEnrichmentUsd
 } from '@/components/compare/compareExternalEnrichmentFormat';
+import { DataSourceFooter } from '@/components/data-viz/DataSourceFooter';
+import { MetricComparisonBars } from '@/components/data-viz/MetricComparisonBars';
+import { RelatedContextLinks } from '@/components/data-viz/RelatedContextLinks';
 
 type ScholarshipUniversityExternalContextSidebarProps = {
   stateSlug: string;
@@ -93,6 +97,20 @@ export function ScholarshipUniversityExternalContextSidebar({
   const safetyRate = state ?
     fmtEnrichmentRatePer100k(state.stateRow.public_safety_context?.value)
   : null;
+  const schoolPairs = school ? schoolProfilePairMetrics(school) : [];
+
+  const relatedLinks = [
+    {
+      href: `/scholarships/${encodeURIComponent(stateSlug)}`,
+      label: `Scholarships in ${state?.stateName ?? stateSlug.replace(/-/g, ' ')}`
+    },
+    { href: '/compare/universities', label: 'Compare universities' },
+    {
+      href: '/resources/how-to-find-scholarships',
+      label: 'How to find scholarships'
+    },
+    { href: '/essays/financial-need', label: 'Financial need essays' }
+  ];
 
   return (
     <aside
@@ -121,6 +139,27 @@ export function ScholarshipUniversityExternalContextSidebar({
               />
             ))}
           </div>
+
+          {schoolPairs.length ? (
+            <div className="mt-4 rounded-xl border border-slate-200/80 bg-white p-3.5">
+              <h3 className="text-sm font-semibold text-gray-900">Cost snapshot</h3>
+              <MetricComparisonBars
+                className="mt-3"
+                ariaLabel={`Cost comparison for ${school.school_name}`}
+                leftSeriesLabel={school.school_name}
+                rightSeriesLabel={school.school_name}
+                metrics={schoolPairs.map((metric) => ({
+                  key: metric.key,
+                  label: metric.label,
+                  leftValue: metric.leftValue,
+                  rightValue: metric.rightValue,
+                  leftCaption: metric.leftLabel,
+                  rightCaption: metric.rightLabel,
+                  hint: metric.hint
+                }))}
+              />
+            </div>
+          ) : null}
         </div>
       ) : null}
 
@@ -151,10 +190,13 @@ export function ScholarshipUniversityExternalContextSidebar({
         </div>
       ) : null}
 
-      <p className="mt-4 text-xs leading-relaxed text-gray-500">
-        Data: College Scorecard, Census ACS, HUD FMR, MIT Living Wage, and BLS where
-        available. Not a ScholarshipTop verification of linked scholarships.
-      </p>
+      <RelatedContextLinks title="Plan your search" links={relatedLinks} />
+
+      <DataSourceFooter
+        variant="mixed"
+        showPublicSafetyNote={Boolean(safetyRate)}
+        className="mt-4"
+      />
     </aside>
   );
 }

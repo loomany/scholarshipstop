@@ -9,17 +9,23 @@ import {
   fmtEnrichmentPctFromFraction,
   fmtEnrichmentUsd
 } from '@/components/compare/compareExternalEnrichmentFormat';
+import { DataSourceFooter } from '@/components/data-viz/DataSourceFooter';
+import { RelatedContextLinks } from '@/components/data-viz/RelatedContextLinks';
+import { stateSlugFromCode } from '@/lib/seo/stateCompareSlug';
 
 type ExternalReferenceContextCardProps = {
   heading: string;
   intro: string;
   context: ResolvedContentEnrichmentContext;
+  /** When set, adds state-specific scholarship and compare links. */
+  stateSlugHint?: string | null;
 };
 
 export function ExternalReferenceContextCard({
   heading,
   intro,
-  context
+  context,
+  stateSlugHint = null
 }: ExternalReferenceContextCardProps) {
   const stateHighlights = getTopStateAffordabilityHighlights(context.stateRow);
   const school = context.schoolRow;
@@ -54,6 +60,28 @@ export function ExternalReferenceContextCard({
   const visibleSchool = schoolCards.filter((c) => c.value != null);
   const hasState = stateHighlights.length > 0;
   if (!hasState && !visibleSchool.length) return null;
+
+  const stateSlug =
+    stateSlugHint ??
+    (context.stateCode ? stateSlugFromCode(context.stateCode) : null);
+
+  const relatedLinks =
+    stateSlug ?
+      [
+        {
+          href: `/scholarships/${encodeURIComponent(stateSlug)}`,
+          label: `${stateDisplayName(context.stateCode!)} scholarships`
+        },
+        {
+          href: `/compare/states`,
+          label: 'Compare states'
+        },
+        {
+          href: '/resources/how-to-find-scholarships',
+          label: 'How to find scholarships'
+        }
+      ]
+    : [];
 
   return (
     <aside
@@ -98,10 +126,11 @@ export function ExternalReferenceContextCard({
         </div>
       ) : null}
 
-      <p className="mt-4 text-xs leading-relaxed text-gray-500">
-        Data: Census ACS, HUD FMR, MIT Living Wage, BLS, and College Scorecard where
-        matched. Reference only — not ScholarshipTop program rules.
-      </p>
+      {relatedLinks.length ? (
+        <RelatedContextLinks title="Related scholarship planning" links={relatedLinks} />
+      ) : null}
+
+      <DataSourceFooter variant="mixed" className="mt-4" />
     </aside>
   );
 }
