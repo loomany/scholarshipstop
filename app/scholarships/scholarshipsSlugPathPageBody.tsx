@@ -74,7 +74,7 @@ import { fetchComparePeersForInstitution } from '@/lib/seo/comparePeersServer';
 import type { ProfilesRow } from '@/lib/scholarships/scholarshipMatch';
 import { createPublicClient } from '@/utils/supabase/public';
 import { createClient as createServerSupabase } from '@/utils/supabase/server';
-import { buildScholarshipListingJsonLd } from '@/app/scholarships/scholarshipListingJsonLd';
+import { buildScholarshipListingJsonLd, buildStateScholarshipBreadcrumbs } from '@/app/scholarships/scholarshipListingJsonLd';
 import type { Stage2PilotLocale } from '@/lib/i18n/pilotRoutes';
 import { fetchPublishedScholarshipDetail } from '@/lib/i18n/scholarshipPilot/resolveLocalizedScholarshipDetail';
 import {
@@ -878,7 +878,14 @@ export default async function ScholarshipsSlugPathPageBody({
       name: pageTitle,
       description: introParagraph,
       path: `/scholarships/${canonicalPath}`,
-      result: initialListPayload
+      result: initialListPayload,
+      breadcrumbs:
+        stateHubCtx ?
+          buildStateScholarshipBreadcrumbs({
+            stateLabel: stateHubCtx.stateLabel,
+            stateSlug: stateHubCtx.stateSlug
+          })
+        : null
     });
 
     return (

@@ -46,6 +46,7 @@
     "generate-seo-scholarship-detail-ai": "npx tsx scripts/generate-scholarship-detail-seo-ai.ts",
     "audit-seo-scholarship-content": "npx tsx scripts/audit-seo-scholarship-content.ts",
     "data:validate-enrichment": "npx tsx scripts/data/validate-static-enrichment.ts",
+    "seo:validate-jsonld": "npx tsx scripts/seo/validate-jsonld-shapes.ts",
     "generate-seo-pages-md": "npx tsx scripts/generate-seo-pages-md.ts",
     "smoke:seo-fallback": "npx tsx scripts/smoke-seo-listing-fallback.ts",
     "patch-manifest-broad-noindex": "npx tsx scripts/patch-manifest-broad-noindex.ts",

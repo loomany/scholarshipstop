@@ -1,5 +1,14 @@
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import type { ProviderFaqItem } from '@/lib/providers/providerProfileTypes';
+import {
+  buildBreadcrumbListJsonLd,
+  buildFaqPageJsonLd,
+  buildItemListJsonLd,
+  buildWebPageJsonLd,
+  type JsonLdBreadcrumbItem
+} from '@/lib/seo/jsonLd';
+import { scholarshipPublicPath } from '@/app/scholarships/scholarshipsData';
+import { getURL } from '@/utils/helpers';
 
 function mentionsInternational(s: Scholarship): boolean {
   if (s.seoTags?.some((t) => t.includes('international'))) return true;
@@ -70,23 +79,69 @@ export function resolveUniversityHubFaqItems(opts: {
   return buildFallbackFaqItems(opts);
 }
 
+/** @deprecated Use buildUniversityHubJsonLdBlocks — kept for callers expecting FAQ-only payload. */
 export function buildUniversityHubFaqJsonLd(
   faqItems: ProviderFaqItem[],
   canonicalUrl: string
 ): Record<string, unknown> {
-  const mainEntity = faqItems.map((item) => ({
-    '@type': 'Question',
-    name: item.question,
-    acceptedAnswer: {
-      '@type': 'Answer',
-      text: item.answer
+  return (
+    buildFaqPageJsonLd(faqItems, canonicalUrl) ?? {
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      url: canonicalUrl
     }
-  }));
+  );
+}
 
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    url: canonicalUrl,
-    mainEntity
-  };
+export type UniversityHubJsonLdInput = {
+  pageTitle: string;
+  pageDescription: string;
+  canonicalPath: string;
+  stateLabel: string;
+  stateSlug: string;
+  universityName: string;
+  universitySlug: string;
+  scholarships: Scholarship[];
+  faqItems: ProviderFaqItem[];
+  breadcrumbs?: JsonLdBreadcrumbItem[] | null;
+};
+
+export function buildUniversityHubJsonLdBlocks(
+  input: UniversityHubJsonLdInput
+): Record<string, unknown>[] {
+  const pageUrl = getURL(input.canonicalPath.replace(/^\//, ''));
+  const breadcrumbs =
+    input.breadcrumbs ??
+    ([
+      { name: 'Home', path: '/' },
+      { name: 'Scholarships', path: '/scholarships' },
+      { name: input.stateLabel, path: `/scholarships/${input.stateSlug}` },
+      {
+        name: input.universityName,
+        path: `/scholarships/${input.stateSlug}/${input.universitySlug}`
+      }
+    ] satisfies JsonLdBreadcrumbItem[]);
+
+  const blocks: Array<Record<string, unknown> | null> = [
+    buildBreadcrumbListJsonLd(breadcrumbs),
+    buildWebPageJsonLd({
+      name: input.pageTitle,
+      description: input.pageDescription,
+      url: pageUrl
+    }),
+    input.scholarships.length > 0
+      ? buildItemListJsonLd({
+          name: input.pageTitle,
+          description: input.pageDescription,
+          url: pageUrl,
+          items: input.scholarships.map((scholarship) => ({
+            name: scholarship.title,
+            url: getURL(scholarshipPublicPath(scholarship).replace(/^\//, ''))
+          }))
+        })
+      : null,
+    buildFaqPageJsonLd(input.faqItems, pageUrl)
+  ];
+
+  return blocks.filter((block): block is Record<string, unknown> => block != null);
 }

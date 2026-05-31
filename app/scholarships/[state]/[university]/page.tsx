@@ -7,15 +7,15 @@ import { normalizeScholarshipDynamicParam } from '@/app/scholarships/scholarship
 import { generateScholarshipSlugLayoutMetadata } from '@/app/scholarships/scholarshipSlugLayoutMetadata';
 import UniversityHubPageContent from '@/components/scholarships/UniversityHubPageContent';
 import {
-  buildUniversityHubFaqJsonLd,
+  buildUniversityHubJsonLdBlocks,
   resolveUniversityHubFaqItems
 } from '@/lib/scholarships/universityHubJsonLd';
+import { JsonLdScript } from '@/components/seo/JsonLdScript';
 import { createInitialScholarshipsPayload, fetchInitialUniversityHubScholarshipsPayload } from '@/app/scholarships/scholarshipListServerPayload';
 import {
   fetchProviderAiFaqBySlug,
   fetchUniversityHubRow
 } from '@/lib/scholarships/universityHubServer';
-import { getURL } from '@/utils/helpers';
 import { createPublicClient } from '@/utils/supabase/public';
 import { scholarshipHubQueryStringFromNextSearchParamsRecord } from '@/app/scholarships/scholarshipHubCanonicalQueryString';
 import { getCanonical } from '@/lib/seo/canonical';
@@ -117,24 +117,29 @@ export default async function UniversityScholarshipsPage({
   );
 
   const canonicalPath = `/scholarships/${hub.stateSlug}/${hub.slug}`;
+  const pageTitle = `Fully Funded Scholarships at ${hub.displayName}, ${hub.stateName} ${SEO_YEAR}`;
+  const pageDescription = `Find ${hub.scholarshipCount || 'active'} scholarships and grants linked to ${hub.displayName} in ${hub.stateName}. Compare ${SEO_YEAR} deadlines, requirements, and award amounts—then apply on the official provider site.`;
   const faqItems = resolveUniversityHubFaqItems({
     universityDisplayName: hub.displayName,
     stateName: hub.stateName,
     scholarships,
     providerFaq
   });
-  const jsonLd = buildUniversityHubFaqJsonLd(
-    faqItems,
-    getURL(canonicalPath.replace(/^\//, ''))
-  );
+  const jsonLdBlocks = buildUniversityHubJsonLdBlocks({
+    pageTitle,
+    pageDescription,
+    canonicalPath,
+    stateLabel: hub.stateName,
+    stateSlug: hub.stateSlug,
+    universityName: hub.displayName,
+    universitySlug: hub.slug,
+    scholarships,
+    faqItems
+  });
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        // eslint-disable-next-line react/no-danger
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <JsonLdScript data={jsonLdBlocks} />
       <UniversityHubPageContent
         hub={hub}
         initialPayload={initialPayload}

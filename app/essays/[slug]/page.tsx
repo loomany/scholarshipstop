@@ -38,13 +38,18 @@ import { getRelatedScholarshipsForEssayGuide } from '@/lib/essays/relatedScholar
 import { fetchScholarshipsBySlugsOrIdsOrdered } from '@/lib/scholarships/supabase';
 import { getURL } from '@/utils/helpers';
 import { getCanonical } from '@/lib/seo/canonical';
+import {
+  buildArticleJsonLd,
+  buildBreadcrumbListJsonLd,
+  buildFaqPageJsonLd
+} from '@/lib/seo/jsonLd';
+import { JsonLdScript } from '@/components/seo/JsonLdScript';
 import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
 import { getEssaySeoQualityPolicy } from '@/lib/seo/essaySeoQualityPolicy';
 import { countVisibleWords, hasRawPlaceholderText } from '@/lib/seo/visibleText';
 
 export const revalidate = 300;
 
-const ORG_NAME = 'ScholarshipTop';
 const SAME_DAY_MS = 24 * 60 * 60 * 1000;
 
 type PageProps = { params: { slug: string } };
@@ -348,84 +353,27 @@ export default async function EssayGuidePage({ params }: PageProps) {
   const articlePath = essayHubArticlePath(slug.trim());
   const articleUrl = getURL(articlePath);
 
-  const breadcrumbsSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: 'Home',
-        item: getURL('/')
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: ESSAYS_PAGE_TITLE,
-        item: getURL(ESSAYS_SECTION_PATH)
-      },
-      {
-        '@type': 'ListItem',
-        position: 3,
-        name: essay.title?.trim() || 'Guide',
-        item: articleUrl
-      }
-    ]
-  };
+  const breadcrumbsSchema = buildBreadcrumbListJsonLd([
+    { name: 'Home', path: '/' },
+    { name: ESSAYS_PAGE_TITLE, path: ESSAYS_SECTION_PATH },
+    { name: essay.title?.trim() || 'Guide', path: articlePath }
+  ]);
 
-  const orgId = `${getURL().replace(/\/$/, '')}#organization`;
-  const articleSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
-    mainEntityOfPage: articleUrl,
+  const articleSchema = buildArticleJsonLd({
+    url: articlePath,
     headline: essay.title?.trim() || 'Essay guide',
     description:
       essay.meta_description?.trim() ||
       essay.title?.trim() ||
       'Scholarship essay guide',
-    datePublished: essay.created_at || undefined,
-    dateModified: essay.updated_at || essay.created_at || undefined,
-    ...(essay.hero_image_url?.trim()
-      ? { image: [essay.hero_image_url.trim()] }
-      : {}),
-    author: {
-      '@type': 'Organization',
-      '@id': orgId,
-      name: ORG_NAME,
-      url: getURL()
-    },
-    publisher: {
-      '@type': 'Organization',
-      '@id': orgId,
-      name: ORG_NAME,
-      url: getURL()
-    },
-    ...(parentScholarshipAbout
-      ? {
-          about: {
-            '@type': 'Thing',
-            name: parentScholarshipAbout.name,
-            url: parentScholarshipAbout.url
-          }
-        }
-      : {})
-  };
+    datePublished: essay.created_at,
+    dateModified: essay.updated_at || essay.created_at,
+    imageUrls: essay.hero_image_url?.trim() ? [essay.hero_image_url.trim()] : undefined,
+    type: 'Article',
+    about: parentScholarshipAbout ?? undefined
+  });
 
-  const faqSchema =
-    faq.length > 0
-      ? {
-          '@context': 'https://schema.org',
-          '@type': 'FAQPage',
-          mainEntity: faq.map((item) => ({
-            '@type': 'Question',
-            name: item.question,
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: item.answer
-            }
-          }))
-        }
-      : null;
+  const faqSchema = buildFaqPageJsonLd(faq, articleUrl);
 
   const sourcesInset =
     sources.length > 0 ? (
@@ -442,20 +390,7 @@ export default async function EssayGuidePage({ params }: PageProps) {
 
   return (
     <div className="bg-white text-gray-900 antialiased">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
-      />
-      {faqSchema ? (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-        />
-      ) : null}
+      <JsonLdScript data={[breadcrumbsSchema, articleSchema, faqSchema]} />
 
       <article className="mx-auto w-full max-w-3xl px-4 py-10 sm:px-6 sm:py-12 lg:py-14">
         <p>

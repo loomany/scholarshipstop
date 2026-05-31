@@ -35,6 +35,15 @@ import {
 } from '@/lib/providers/providerProfilePagination';
 import { getCanonical } from '@/lib/seo/canonical';
 import {
+  buildBreadcrumbListJsonLd,
+  buildEducationalOrganizationJsonLd,
+  buildFaqPageJsonLd,
+  buildOrganizationJsonLd,
+  buildWebPageJsonLd
+} from '@/lib/seo/jsonLd';
+import { JsonLdScript } from '@/components/seo/JsonLdScript';
+import { matchProviderToSchool } from '@/lib/external-data';
+import {
   getProviderSeoQualityPolicy,
   type ProviderDataCompleteness,
   type ProviderSourceStatus
@@ -353,50 +362,41 @@ export default async function ProviderProfilePage({
   const pageTitleMeta = `${data.displayName} | Scholarship Provider`;
   const providerSchema =
     providerQuality.sourceStatus === 'official_source_available'
-      ? {
-          '@context': 'https://schema.org',
-          '@type': 'Organization',
+      ? buildOrganizationJsonLd({
           name: data.displayName,
           url: officialHrefNormalized || providerUrl,
-          mainEntityOfPage: providerUrl,
           description: resolvedDescription,
-          ...(officialHrefNormalized ? { sameAs: [officialHrefNormalized] } : {})
-        }
+          sameAs: officialHrefNormalized ? [officialHrefNormalized] : undefined
+        })
       : null;
 
-  const breadcrumbsLd = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: detailUi.nav.home,
-        item: getURL('/')
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: detailUi.nav.providersHub,
-        item: getURL('/providers')
-      },
-      {
-        '@type': 'ListItem',
-        position: 3,
+  const matchedSchool = matchProviderToSchool({
+    displayName: data.displayName,
+    hqState: data.hqState
+  });
+  const educationalOrganizationSchema =
+    matchedSchool ?
+      buildEducationalOrganizationJsonLd({
         name: data.displayName,
-        item: providerUrl
-      }
-    ]
-  };
+        url: providerUrl,
+        description: resolvedDescription,
+        addressLocality: matchedSchool.city,
+        addressRegion: matchedSchool.state
+      })
+    : null;
 
-  const webPageLd = {
-    '@context': 'https://schema.org',
-    '@type': 'WebPage',
+  const breadcrumbsLd = buildBreadcrumbListJsonLd([
+    { name: detailUi.nav.home, path: '/' },
+    { name: detailUi.nav.providersHub, path: '/providers' },
+    { name: data.displayName, path: providerPath }
+  ]);
+
+  const webPageLd = buildWebPageJsonLd({
     name: pageTitleMeta,
     url: providerUrl,
     description: resolvedDescription,
-    ...(data.lastUpdatedAt ? { dateModified: data.lastUpdatedAt } : {})
-  };
+    dateModified: data.lastUpdatedAt
+  });
 
   const tocItems: Array<{ id: string; label: string }> = [];
 
@@ -430,21 +430,7 @@ export default async function ProviderProfilePage({
     });
   }
 
-  const faqLd =
-    faqItems.length > 0
-      ? {
-          '@context': 'https://schema.org',
-          '@type': 'FAQPage',
-          mainEntity: faqItems.map((item) => ({
-            '@type': 'Question',
-            name: item.question,
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: item.answer
-            }
-          }))
-        }
-      : null;
+  const faqLd = buildFaqPageJsonLd(faqItems, providerUrl);
   const formattedAwardPool = formatProviderAwardPool(data.totalAwardAmount);
   const formattedLastUpdated = formatProviderProfileDate(data.lastUpdatedAt);
   const profileLocationLine = formatProviderHqLocationLine(data.hqState);
@@ -453,26 +439,15 @@ export default async function ProviderProfilePage({
 
   return (
     <div className="min-h-screen bg-[#f9fafb] pb-16 pt-8 sm:pt-12">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsLd) }}
+      <JsonLdScript
+        data={[
+          breadcrumbsLd,
+          webPageLd,
+          providerSchema,
+          educationalOrganizationSchema,
+          faqLd
+        ]}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageLd) }}
-      />
-      {providerSchema ? (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(providerSchema) }}
-        />
-      ) : null}
-      {faqLd ? (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
-        />
-      ) : null}
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <header className="rounded-2xl border border-gray-100 bg-white px-6 py-8 shadow-sm sm:px-10 sm:py-10">
           <div className="min-w-0 space-y-4">

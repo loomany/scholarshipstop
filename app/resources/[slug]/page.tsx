@@ -21,13 +21,19 @@ import {
   RESOURCES_SECTION_PATH,
   resourcesArticlePath
 } from '@/lib/content-hub/resourcesSection';
-import { getURL } from '@/utils/helpers';
+import {
+  buildArticleJsonLd,
+  buildBreadcrumbListJsonLd,
+  buildFaqPageJsonLd
+} from '@/lib/seo/jsonLd';
+import { JsonLdScript } from '@/components/seo/JsonLdScript';
 import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
 import { buildResourcePilotAlternates } from '@/lib/i18n/resourcePilot/resourceTranslationAlternates';
 import { resourceArticleDateLine } from '@/lib/content-hub/resourceArticleDates';
 import { getResourceDetailUiCopy } from '@/lib/i18n/resourceDetailUiCopy';
 import { isIqSitePromoVisible } from '@/lib/iq/iqSitePromoVisibility';
 import { getCanonical } from '@/lib/seo/canonical';
+import { getURL } from '@/utils/helpers';
 import { applyAutoInternalLinks } from '@/lib/content-hub/autoInternalLinks';
 import { deduplicateQuickSummaryBlocksInHtml } from '@/lib/content-hub/deduplicateQuickSummaryInHtml';
 import {
@@ -180,90 +186,31 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
     post.meta_description?.trim() ||
     post.title?.trim() ||
     'ScholarshipTop resource article';
-  const breadcrumbsSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: ui.homeLabel,
-        item: getURL('/')
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: ui.resourcesHubLabel,
-        item: getURL(RESOURCES_SECTION_PATH)
-      },
-      {
-        '@type': 'ListItem',
-        position: 3,
-        name: post.title?.trim() || 'Article',
-        item: articleUrl
-      }
-    ]
-  };
-  const articleSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
-    mainEntityOfPage: articleUrl,
+  const breadcrumbsSchema = buildBreadcrumbListJsonLd([
+    { name: ui.homeLabel, path: '/' },
+    { name: ui.resourcesHubLabel, path: RESOURCES_SECTION_PATH },
+    { name: post.title?.trim() || 'Article', path: articlePath }
+  ]);
+  const articleSchema = buildArticleJsonLd({
+    url: articlePath,
     headline: post.title?.trim() || 'Article',
     description: articleDescription,
-    url: articleUrl,
-    datePublished: post.published_at || undefined,
-    dateModified: post.updated_at || post.published_at || undefined,
-    ...(post.cover_image_url?.trim()
-      ? { image: [post.cover_image_url.trim()] }
-      : {}),
-    author: {
-      '@type': 'Organization',
-      name: 'ScholarshipTop'
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: 'ScholarshipTop',
-      url: getURL()
-    }
-  };
+    datePublished: post.published_at,
+    dateModified: post.updated_at || post.published_at,
+    imageUrls: post.cover_image_url?.trim() ? [post.cover_image_url.trim()] : undefined,
+    type: 'BlogPosting'
+  });
   const visibleDateLine = resourceArticleDateLine(
     { publishedAt: post.published_at, updatedAt: post.updated_at },
     ui,
     'en'
   );
 
-  const faqSchema =
-    faq.length > 0
-      ? {
-          '@context': 'https://schema.org',
-          '@type': 'FAQPage',
-          mainEntity: faq.map((item) => ({
-            '@type': 'Question',
-            name: item.question,
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: item.answer
-            }
-          }))
-        }
-      : null;
+  const faqSchema = buildFaqPageJsonLd(faq, articleUrl);
 
   return (
     <div className="bg-white text-gray-900 antialiased">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
-      />
-      {faqSchema ? (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-        />
-      ) : null}
+      <JsonLdScript data={[breadcrumbsSchema, articleSchema, faqSchema]} />
       <article className="mx-auto w-full max-w-3xl px-4 py-10 sm:px-6 sm:py-12 lg:py-14">
         <p>
           <Link
