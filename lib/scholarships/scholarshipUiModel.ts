@@ -1,9 +1,13 @@
-import type { Scholarship, ScholarshipSeoFaqItem } from '@/app/scholarships/scholarshipsData';
+import type {
+  Scholarship,
+  ScholarshipSeoFaqItem
+} from '@/app/scholarships/scholarshipsData';
 import {
   filterRawAiMissingInfoLines,
   getNormalizedBeforeYouApplySections,
   softenImportantCheckLine
 } from '@/lib/scholarships/scholarshipCheckSectionsNormalize';
+import { isGenericScholarshipFaqItem } from '@/lib/scholarships/scholarshipSeoSanitizers';
 import { sanitizeRequirementLines } from '@/lib/scholarships/scholarshipText';
 
 /** Below this, on-page FAQ / rich AI guidance / next steps are suppressed or reduced. */
@@ -189,18 +193,18 @@ function isAwardOrMoneySnippet(text: string): boolean {
 export function getDecisionLine(s: Scholarship): string | null {
   const parts: string[] = [];
   const bfRaw = (s.aiBestFor ?? []).map((x) => x.trim()).filter(Boolean)[0];
-  const hiRaw = (s.aiKeyHighlights ?? []).map((x) => x.trim()).filter(Boolean)[0];
-  const ckRaw = (s.aiImportantChecks ?? []).map((x) => x.trim()).filter(Boolean)[0];
+  const hiRaw = (s.aiKeyHighlights ?? [])
+    .map((x) => x.trim())
+    .filter(Boolean)[0];
+  const ckRaw = (s.aiImportantChecks ?? [])
+    .map((x) => x.trim())
+    .filter(Boolean)[0];
   const bf = bfRaw && !isAwardOrMoneySnippet(bfRaw) ? bfRaw : undefined;
   const hi = hiRaw && !isAwardOrMoneySnippet(hiRaw) ? hiRaw : undefined;
   const ck = ckRaw && !isAwardOrMoneySnippet(ckRaw) ? ckRaw : undefined;
   if (bf) parts.push(bf);
   if (hi && (!bf || !bulletsSimilar(bf, hi))) parts.push(hi);
-  if (
-    ck &&
-    !parts.some((p) => bulletsSimilar(p, ck)) &&
-    parts.length < 2
-  ) {
+  if (ck && !parts.some((p) => bulletsSimilar(p, ck)) && parts.length < 2) {
     parts.push(ck);
   }
   if (parts.length === 0) return null;
@@ -235,11 +239,7 @@ export function getUrgencyBadge(
     normLevel(s.aiUrgencyLevel, ['Low', 'Medium', 'High', 'Urgent']) ?? null;
   if (!u) return null;
   const variant =
-    u === 'Urgent' || u === 'High'
-      ? 'rose'
-      : u === 'Medium'
-        ? 'amber'
-        : 'sky';
+    u === 'Urgent' || u === 'High' ? 'rose' : u === 'Medium' ? 'amber' : 'sky';
   return { label: u, variant };
 }
 
@@ -279,8 +279,7 @@ export function shouldRenderBeforeYouApply(s: Scholarship): boolean {
 
 const GENERIC_TIP_RE =
   /\b(check|visit|review|see|read)\s+(the\s+)?(official\s+)?(website|site|page)\b/i;
-const GENERIC_PREP_RE =
-  /\b(prepare|gather)\s+(your\s+)?documents?\b/i;
+const GENERIC_PREP_RE = /\b(prepare|gather)\s+(your\s+)?documents?\b/i;
 const GENERIC_VERIFY_RE = /^verify\s+eligibility\.?$/i;
 
 export function filterApplicationTipsForUi(
@@ -294,11 +293,11 @@ export function filterApplicationTipsForUi(
       !GENERIC_PREP_RE.test(t) &&
       !GENERIC_VERIFY_RE.test(t)
   );
-  const use = filtered.length > 0 ? filtered : raw;
-  if (opts.trustworthyAi) return clampBullets(use, 4);
-  const safe = use.filter((t) => t.length >= 24);
+  if (filtered.length === 0) return [];
+  if (opts.trustworthyAi) return clampBullets(filtered, 4);
+  const safe = filtered.filter((t) => t.length >= 24);
   if (safe.length > 0) return clampBullets(safe, 2);
-  return clampBullets(raw, 2);
+  return [];
 }
 
 export function shouldRenderApplicationTipsUi(
@@ -350,7 +349,10 @@ export function shouldRenderAwardPaymentSection(ctx: {
 }
 
 function stripHtmlish(s: string): string {
-  return s.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  return s
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
 function isMostlyNumericJunk(text: string): boolean {
@@ -392,7 +394,9 @@ export function filterImportantNoteChunks(
   ctx: { awardLine: string; deadlineLine?: string }
 ): ImportantNoteChunk[] {
   const awardNorm = ctx.awardLine.replace(/\s/g, '').toLowerCase();
-  const deadlineNorm = (ctx.deadlineLine ?? '').replace(/\s/g, '').toLowerCase();
+  const deadlineNorm = (ctx.deadlineLine ?? '')
+    .replace(/\s/g, '')
+    .toLowerCase();
   return chunks.filter((c) => {
     const plain = c.plain?.trim() ?? '';
     if (c.html?.trim()) {
@@ -415,17 +419,18 @@ export function shouldMergeApplicationDetails(ctx: {
   hasSeoApplication: boolean;
   seoApplicationLength: number;
 }): boolean {
-  const n = [ctx.hasRequirementsSection, ctx.documentCount > 0, ctx.hasSeoApplication].filter(
-    Boolean
-  ).length;
+  const n = [
+    ctx.hasRequirementsSection,
+    ctx.documentCount > 0,
+    ctx.hasSeoApplication
+  ].filter(Boolean).length;
   if (n < 2) return false;
 
   const reqStrong =
     ctx.hasRequirementsSection &&
     (ctx.hasRequirementsHtml || ctx.requirementBulletCount >= 3);
   const docStrong = ctx.documentCount >= 3;
-  const seoStrong =
-    ctx.hasSeoApplication && ctx.seoApplicationLength >= 100;
+  const seoStrong = ctx.hasSeoApplication && ctx.seoApplicationLength >= 100;
 
   if (reqStrong || docStrong || seoStrong) return false;
 
@@ -433,8 +438,7 @@ export function shouldMergeApplicationDetails(ctx: {
     !ctx.hasRequirementsSection ||
     (!ctx.hasRequirementsHtml && ctx.requirementBulletCount <= 1);
   const docWeak = ctx.documentCount <= 1;
-  const seoWeak =
-    !ctx.hasSeoApplication || ctx.seoApplicationLength < 60;
+  const seoWeak = !ctx.hasSeoApplication || ctx.seoApplicationLength < 60;
 
   return [reqWeak, docWeak, seoWeak].filter(Boolean).length >= 2;
 }
@@ -478,7 +482,11 @@ function faqDuplicatesVisibleFact(
     return a.length < 100;
   }
   const q = question.toLowerCase();
-  if (/deadline|due date|when.*due/.test(q) && ctx.deadlineNorm && a.length < 60) {
+  if (
+    /deadline|due date|when.*due/.test(q) &&
+    ctx.deadlineNorm &&
+    a.length < 60
+  ) {
     return a === ctx.deadlineNorm || ctx.deadlineNorm.includes(a);
   }
   if (/how much|award amount|worth/.test(q) && ctx.awardNorm && a.length < 60) {
@@ -507,6 +515,7 @@ export function shouldRenderUsefulFaq(
     const a = it.answer?.trim() ?? '';
     if (!q || !a) return false;
     if (isJunkFaqQuestion(q)) return false;
+    if (isGenericScholarshipFaqItem(q, a)) return false;
     if (a.length < 28) return false;
     return true;
   });
@@ -539,7 +548,15 @@ export function filterFaqForOnPageDisplay(
   const good = items.filter((it) => {
     const q = it.question?.trim() ?? '';
     const a = it.answer?.trim() ?? '';
-    if (!q || !a || isJunkFaqQuestion(q) || a.length < 28) return false;
+    if (
+      !q ||
+      !a ||
+      isJunkFaqQuestion(q) ||
+      isGenericScholarshipFaqItem(q, a) ||
+      a.length < 28
+    ) {
+      return false;
+    }
     return true;
   });
   const heroNorm = normFaqText(ctx.heroSummary ?? '');
@@ -559,28 +576,30 @@ export function filterFaqForOnPageDisplay(
 export function getNextStepActions(s: Scholarship): string[] {
   if (!hasTrustworthyAiConfidence(s)) return [];
   const out: string[] = [];
-  out.push('Save this scholarship to your shortlist.');
   if (hasNonEmptyArray(s.documentsRequired)) {
     out.push(
       `Prepare the listed materials (${s.documentsRequired!.length} document type(s) detected in the catalog).`
     );
-  } else if (s.documentRequired || s.essayRequired) {
+  }
+  if (s.documentRequired || s.essayRequired) {
     out.push(
-      'Prepare any required essays, transcripts, uploads, or supporting documents.'
+      s.essayRequired
+        ? 'Prioritize the essay draft before opening the provider application.'
+        : 'Confirm each required upload before starting the provider application.'
     );
-  } else {
-    out.push('Review the organized requirements and note any materials you may need.');
   }
-  if (
-    s.deadline?.trim() &&
-    s.deadline.trim() !== '—'
-  ) {
-    out.push('Track the deadline and plan submission time in your ScholarshipTop workflow.');
-  } else {
-    out.push('Use the listing details to track timing and revisit the application path.');
+  if (s.deadline?.trim() && s.deadline.trim() !== '—') {
+    out.push(
+      `Plan submission around the listed deadline: ${s.deadline.trim()}.`
+    );
   }
-  out.push('Use the provider application link when you are ready to submit.');
-  return clampBullets(out, 5);
+  if (s.provider?.trim()) {
+    out.push(
+      `Verify the final application details on the ${s.provider.trim()} provider page.`
+    );
+  }
+  if (out.length < 2) return [];
+  return clampBullets(out, 4);
 }
 
 export function eligibilityLinesForUi(s: Scholarship): string[] {
@@ -640,7 +659,10 @@ export function overviewTextAvoidingHeroDuplicate(
   const on = normBulletKey(o.slice(0, Math.min(o.length, 320)));
   const hn = normBulletKey(h.slice(0, Math.min(h.length, 320)));
   if (on === hn || (hn.length > 50 && on.startsWith(hn))) {
-    const rest = o.slice(h.length).trim().replace(/^[.\s—-]+/, '');
+    const rest = o
+      .slice(h.length)
+      .trim()
+      .replace(/^[.\s—-]+/, '');
     return rest.length > 80 ? rest : o;
   }
   return o;

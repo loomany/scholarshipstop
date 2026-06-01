@@ -6,15 +6,21 @@ const SCHOLARSHIP_SEO_NOISE_QUERY_KEYS = [
   'app_cc',
   'aud',
   'category',
+  'country',
   'deadline',
+  'deadline_month',
   'email_ids',
+  'field',
   'fbclid',
   'gclid',
   'host_cc',
   'limit',
+  'mf',
   'msclkid',
   'next',
   'page',
+  'provider',
+  'provider_slug',
   'q',
   'return_to',
   'scope',
@@ -35,7 +41,9 @@ function hasNonEmptySearchParamValue(
   value: string | string[] | undefined
 ): boolean {
   if (Array.isArray(value)) {
-    return value.some((part) => typeof part === 'string' && part.trim().length > 0);
+    return value.some(
+      (part) => typeof part === 'string' && part.trim().length > 0
+    );
   }
   return typeof value === 'string' && value.trim().length > 0;
 }

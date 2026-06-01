@@ -8,17 +8,13 @@ import {
   normalizeCategoryId,
   scholarshipCategoryIds
 } from '@/app/scholarships/scholarshipCategories';
-import {
-  scholarshipDeadlineHasPassed as scholarshipDeadlineStateHasPassed
-} from '@/lib/scholarships/scholarshipDeadlineState';
+import { scholarshipDeadlineHasPassed as scholarshipDeadlineStateHasPassed } from '@/lib/scholarships/scholarshipDeadlineState';
 
 /** Detail page: max cards shown in the “Similar scholarships” block (API may fetch a small buffer). */
-export const SIMILAR_MAX = 4;
+export const SIMILAR_MAX = 8;
 
 /** Канонический slug категории для ссылок и «похожих» (DB `category_slug` или первая категория из данных). */
-export function resolveScholarshipCategorySlug(
-  s: Scholarship
-): string | null {
+export function resolveScholarshipCategorySlug(s: Scholarship): string | null {
   const fromDb = s.categorySlug?.trim().toLowerCase();
   if (fromDb) {
     return normalizeCategoryId(fromDb) ?? fromDb;

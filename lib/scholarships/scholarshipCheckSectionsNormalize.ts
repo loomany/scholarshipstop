@@ -1,4 +1,5 @@
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
+import { isScholarshipPlaceholderText } from '@/lib/scholarships/scholarshipSeoSanitizers';
 
 /** Low-signal structured repeats — hide from “missing” before normalization (not payout). */
 const SUPPRESSED_AI_MISSING_PHRASES = new Set(['provider url']);
@@ -8,7 +9,12 @@ export function filterRawAiMissingInfoLines(
 ): string[] {
   return (items ?? [])
     .map((s) => String(s).trim())
-    .filter((s) => s.length > 0 && !SUPPRESSED_AI_MISSING_PHRASES.has(s.toLowerCase()));
+    .filter(
+      (s) =>
+        s.length > 0 &&
+        !SUPPRESSED_AI_MISSING_PHRASES.has(s.toLowerCase()) &&
+        !isScholarshipPlaceholderText(s)
+    );
 }
 
 export type ScholarshipCheckSectionsInput = {
@@ -161,7 +167,9 @@ export function normalizeScholarshipCheckSections(
   input: ScholarshipCheckSectionsInput
 ): NormalizedScholarshipCheckSections {
   const importantChecks = dedupeCaseInsensitive(
-    (input.importantChecks ?? []).map((x) => softenImportantCheckLine(String(x)))
+    (input.importantChecks ?? []).map((x) =>
+      softenImportantCheckLine(String(x))
+    )
   );
 
   const keptRed: string[] = [];

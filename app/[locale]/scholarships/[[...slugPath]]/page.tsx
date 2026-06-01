@@ -25,6 +25,7 @@ import {
 import type { SupportedLocale } from '@/lib/i18n/types';
 import { getScholarshipsHubUiCopy } from '@/lib/i18n/scholarshipsHubUiCopy';
 import { getLocalizedCanonical } from '@/lib/seo/canonical';
+import { getScholarshipDetailIndexPolicy } from '@/lib/seo/scholarshipSeoQualityPolicy';
 
 export const revalidate = 300;
 
@@ -71,9 +72,14 @@ export async function generateMetadata({
       const slug = segments[0]!;
       const published = await fetchPublishedScholarshipDetail(slug, locale);
       if (!published) {
-        return { title: 'Page not found', robots: { index: false, follow: false } };
+        return {
+          title: 'Page not found',
+          robots: { index: false, follow: false }
+        };
       }
-      const englishIndexable = published.scholarship.isIndexable !== false;
+      const englishIndexable = getScholarshipDetailIndexPolicy(
+        published.scholarship
+      ).indexable;
       const seo = getContentTranslationSeoDecision({
         translation: published.translation,
         englishIndexable,
@@ -81,7 +87,7 @@ export async function generateMetadata({
         hasLocalizedH1: Boolean(published.scholarship.title.trim()),
         hasLocalizedBody: Boolean(
           published.scholarship.seoOverview?.trim() ||
-            published.scholarship.summaryShort?.trim()
+          published.scholarship.summaryShort?.trim()
         )
       });
       const alternates = await buildScholarshipDetailAlternates({

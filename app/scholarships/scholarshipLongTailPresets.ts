@@ -35,6 +35,7 @@ export type LongTailSlug = (typeof LONG_TAIL_SLUGS)[number];
  * Оставьте пустым — в индекс пойдут все LONG_TAIL_SLUGS.
  */
 export const LONG_TAIL_SITEMAP_SLUGS: readonly LongTailSlug[] = [
+  'no-essay',
   'closing-soon',
   'engineering',
   'computer-science',
@@ -120,9 +121,7 @@ function studyLevelsUndergraduate(s: Scholarship): boolean {
 
 function closingSoonBaseFilter(s: Scholarship): boolean {
   if (daysUntilDeadline(s) === null) return false;
-  return (
-    matchesDeadlinePreset(s, 'lt1d') || matchesDeadlinePreset(s, 'd1_7')
-  );
+  return matchesDeadlinePreset(s, 'lt1d') || matchesDeadlinePreset(s, 'd1_7');
 }
 
 function internationalStudentRelevant(s: Scholarship): boolean {
@@ -199,7 +198,9 @@ function nursingFieldRelevant(s: Scholarship): boolean {
     .map((x) => String(x).toLowerCase())
     .join(' ');
   if (
-    /\bnursing\b|\brn\b|\bbsn\b|\bmsn\b|nurse practitioner|pre-nursing/i.test(fields)
+    /\bnursing\b|\brn\b|\bbsn\b|\bmsn\b|nurse practitioner|pre-nursing/i.test(
+      fields
+    )
   ) {
     return true;
   }
@@ -316,8 +317,7 @@ const PRESET_COPY: Record<LongTailSlug, Omit<LongTailPreset, 'slug'>> = {
   },
   'international-students': {
     h1: 'Scholarships for International Students 2026',
-    metaTitle:
-      'International Student Scholarships 2026 | Study in the USA',
+    metaTitle: 'International Student Scholarships 2026 | Study in the USA',
     metaDescription:
       'Explore USA scholarship listings that mention international students or related eligibility in our catalog data.'
   },

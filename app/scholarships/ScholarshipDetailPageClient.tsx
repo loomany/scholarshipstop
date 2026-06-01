@@ -30,10 +30,7 @@ import {
   Shield
 } from 'lucide-react';
 
-import {
-  DarkTooltip,
-  DarkTooltipProvider
-} from '@/components/ui/DarkTooltip';
+import { DarkTooltip, DarkTooltipProvider } from '@/components/ui/DarkTooltip';
 import { toast } from '@/components/ui/Toasts/use-toast';
 import { ScholarshipsBrandLoading } from '@/components/scholarships/ScholarshipsBrandLoading';
 import ScholarshipCatalogEntryLink from '@/components/scholarships/ScholarshipCatalogEntryLink';
@@ -99,12 +96,8 @@ import {
   removeScholarship,
   saveScholarship
 } from '@/app/scholarships/savedScholarships';
-import {
-  getStartedScholarshipIds
-} from '@/app/scholarships/startedScholarships';
-import {
-  getSubmittedScholarshipIds
-} from '@/app/scholarships/submittedScholarships';
+import { getStartedScholarshipIds } from '@/app/scholarships/startedScholarships';
+import { getSubmittedScholarshipIds } from '@/app/scholarships/submittedScholarships';
 import {
   SCHOLARSHIP_ACTION_FILL,
   SCHOLARSHIP_ACTION_FOCUS_VISIBLE,
@@ -207,10 +200,14 @@ import {
   getScholarshipSourceStatus
 } from '@/lib/seo/scholarshipSeoQualityPolicy';
 
-const detailOfficialSavePillClass =
-  scholarshipSaveButtonClass.replace('rounded-xl', 'rounded-full');
-const detailOfficialSavedPillClass =
-  scholarshipSavedButtonClass.replace('rounded-xl', 'rounded-full');
+const detailOfficialSavePillClass = scholarshipSaveButtonClass.replace(
+  'rounded-xl',
+  'rounded-full'
+);
+const detailOfficialSavedPillClass = scholarshipSavedButtonClass.replace(
+  'rounded-xl',
+  'rounded-full'
+);
 /** Same emerald as Save — product parity for “Not relevant”. */
 const detailOfficialNotRelevantPillClass = detailOfficialSavePillClass;
 const detailOfficialRestorePillClass = `w-full rounded-full px-4 py-2 text-center text-sm font-medium text-white transition ${SCHOLARSHIP_ACTION_FILL} ${SCHOLARSHIP_ACTION_FOCUS_VISIBLE}`;
@@ -279,8 +276,15 @@ const BLOCKED_SOURCE_FALLBACK_LABELS = new Set([
   'scholarshipamerica'
 ]);
 
-function normalizeSourceFallbackLabel(value: string | null | undefined): string {
-  return value?.trim().toLowerCase().replace(/[^a-z0-9]+/g, '') ?? '';
+function normalizeSourceFallbackLabel(
+  value: string | null | undefined
+): string {
+  return (
+    value
+      ?.trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '') ?? ''
+  );
 }
 
 function shouldShowScholarshipSourceFallback(
@@ -316,7 +320,9 @@ function scholarshipIsoCodes(codes: string[] | undefined): string[] {
   ).sort();
 }
 
-function scholarshipApplicantCountryBadge(s: Scholarship): ScholarshipGeoBadge | null {
+function scholarshipApplicantCountryBadge(
+  s: Scholarship
+): ScholarshipGeoBadge | null {
   const codes = scholarshipIsoCodes(s.applicantCountryCodes);
   const hostCodes = scholarshipIsoCodes(s.hostCountryCodes);
   if (
@@ -353,8 +359,12 @@ function scholarshipApplicantCountryBadge(s: Scholarship): ScholarshipGeoBadge |
   return null;
 }
 
-function scholarshipHostCountryBadge(s: Scholarship): ScholarshipGeoBadge | null {
-  const hostCodes = dedupeHostCountryCodesForDisplay(scholarshipIsoCodes(s.hostCountryCodes));
+function scholarshipHostCountryBadge(
+  s: Scholarship
+): ScholarshipGeoBadge | null {
+  const hostCodes = dedupeHostCountryCodesForDisplay(
+    scholarshipIsoCodes(s.hostCountryCodes)
+  );
   const hasStateSignal = (s.stateCodes ?? []).some((code) =>
     /^[A-Z]{2}$/i.test(code.trim())
   );
@@ -418,6 +428,45 @@ function similarScholarshipCardClassName(
 
 const similarScholarshipsGridClass =
   'grid list-none grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-3';
+const DETAIL_AGGREGATION_MAX = 6;
+
+function detailDeadlineMonthParam(s: Scholarship): string | null {
+  const raw = s.deadlineAt?.trim();
+  if (!raw) return null;
+  const date = new Date(raw);
+  if (Number.isNaN(date.getTime())) return null;
+  return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}`;
+}
+
+function detailDeadlineMonthLabel(month: string | null): string | null {
+  if (!month) return null;
+  const [yearRaw, monthRaw] = month.split('-');
+  const year = Number.parseInt(yearRaw, 10);
+  const monthIndex = Number.parseInt(monthRaw, 10) - 1;
+  if (!Number.isFinite(year) || monthIndex < 0 || monthIndex > 11) {
+    return null;
+  }
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC'
+  }).format(new Date(Date.UTC(year, monthIndex, 1)));
+}
+
+function filterAggregationRows(
+  rows: Scholarship[],
+  currentId: string
+): Scholarship[] {
+  const seen = new Set<string>([currentId]);
+  const out: Scholarship[] = [];
+  for (const row of rows) {
+    if (!row?.id || seen.has(row.id)) continue;
+    seen.add(row.id);
+    out.push(row);
+    if (out.length >= DETAIL_AGGREGATION_MAX) break;
+  }
+  return out;
+}
 
 /** Blur-only overlay for stat cards — no lock affordance (locks stay on catalog flows). */
 function AuthNoSubDetailStatsBlur() {
@@ -464,13 +513,13 @@ function SimilarScholarshipDetailListItem({
   const deadlinePassed = scholarshipDeadlineHasPassed(s);
   const simDd = getScholarshipDeadlineDisplayParts(s);
   /** Pessimistic until session resolves — matches hub cards and prevents title FOUC. */
-  const catalogSubscriptionLockedGate =
-    !authResolved || !hasSubscription;
-  const targetedCategoryLockedSimilar = resolveScholarshipTargetedCategoryLocked({
-    subscriptionLockedCatalog: catalogSubscriptionLockedGate,
-    hasSubscription,
-    scholarship: s
-  });
+  const catalogSubscriptionLockedGate = !authResolved || !hasSubscription;
+  const targetedCategoryLockedSimilar =
+    resolveScholarshipTargetedCategoryLocked({
+      subscriptionLockedCatalog: catalogSubscriptionLockedGate,
+      hasSubscription,
+      scholarship: s
+    });
   const titleBlurPhrase = targetedCategoryLockedSimilar
     ? pickScholarshipLockedTitleBlurPhrase(s.title, s.provider)
     : null;
@@ -493,9 +542,7 @@ function SimilarScholarshipDetailListItem({
     shouldBlockScholarshipDetailNavigation(detailClickBudgetMode);
 
   const showBestRecommendation =
-    eligibleForMatchPill &&
-    isPrimarySimilarOpen &&
-    profileMatchPercent === 100;
+    eligibleForMatchPill && isPrimarySimilarOpen && profileMatchPercent === 100;
   const showMatchPercentPill =
     eligibleForMatchPill &&
     !showBestRecommendation &&
@@ -613,28 +660,25 @@ function SimilarScholarshipDetailListItem({
 
   const similarGeoHubLinkClass = `${similarGrantGeoPillClass} relative z-10 cursor-pointer no-underline transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50 focus-visible:ring-offset-1`;
 
-  const recommendationPill =
-    showBestRecommendation ? (
-      <span
-        className={`inline-flex max-w-full whitespace-normal rounded-full px-2.5 py-1 text-[10px] font-bold uppercase leading-tight tracking-wide shadow-sm ${
-          deadlinePassed
-            ? 'bg-zinc-300 text-zinc-700'
-            : 'bg-teal-600 text-white'
-        }`}
-      >
-        Best recommendation
-      </span>
-    ) : showMatchPercentPill ? (
-      <span
-        className={`inline-flex whitespace-nowrap rounded-full px-2.5 py-1 text-[10px] font-bold tabular-nums tracking-wide shadow-sm ${
-          deadlinePassed
-            ? 'bg-zinc-200 text-zinc-700'
-            : 'bg-emerald-50 text-emerald-900 ring-1 ring-emerald-200/90'
-        }`}
-      >
-        {profileMatchPercent}% Match
-      </span>
-    ) : null;
+  const recommendationPill = showBestRecommendation ? (
+    <span
+      className={`inline-flex max-w-full whitespace-normal rounded-full px-2.5 py-1 text-[10px] font-bold uppercase leading-tight tracking-wide shadow-sm ${
+        deadlinePassed ? 'bg-zinc-300 text-zinc-700' : 'bg-teal-600 text-white'
+      }`}
+    >
+      Best recommendation
+    </span>
+  ) : showMatchPercentPill ? (
+    <span
+      className={`inline-flex whitespace-nowrap rounded-full px-2.5 py-1 text-[10px] font-bold tabular-nums tracking-wide shadow-sm ${
+        deadlinePassed
+          ? 'bg-zinc-200 text-zinc-700'
+          : 'bg-emerald-50 text-emerald-900 ring-1 ring-emerald-200/90'
+      }`}
+    >
+      {profileMatchPercent}% Match
+    </span>
+  ) : null;
 
   const cardInner = (
     <div className="relative text-left">
@@ -654,10 +698,14 @@ function SimilarScholarshipDetailListItem({
                   lockedObscuredInteractive: false
                 })
               : providerBlurPhrasesSimilar.length > 0
-                ? renderTextWithObscuredPhrases(s.title, providerBlurPhrasesSimilar, {
-                    blurEntireWhenNoSubstringMatch: false,
-                    lockedObscuredInteractive: false
-                  })
+                ? renderTextWithObscuredPhrases(
+                    s.title,
+                    providerBlurPhrasesSimilar,
+                    {
+                      blurEntireWhenNoSubstringMatch: false,
+                      lockedObscuredInteractive: false
+                    }
+                  )
                 : s.title}
           </span>
           {s.provider ? (
@@ -722,7 +770,9 @@ function SimilarScholarshipDetailListItem({
               ) : null}
             </div>
             {recommendationPill ? (
-              <div className="mt-1.5 flex justify-end">{recommendationPill}</div>
+              <div className="mt-1.5 flex justify-end">
+                {recommendationPill}
+              </div>
             ) : null}
           </div>
         </div>
@@ -738,8 +788,12 @@ function SimilarScholarshipDetailListItem({
                 <Link
                   href={grantLocationHubHref}
                   className={similarGeoHubLinkClass}
-                  title={copy.similar.browseMatchingTitle(grantLocationBadge.title)}
-                  aria-label={copy.similar.browseFilteredAria(grantLocationBadge.text)}
+                  title={copy.similar.browseMatchingTitle(
+                    grantLocationBadge.title
+                  )}
+                  aria-label={copy.similar.browseFilteredAria(
+                    grantLocationBadge.text
+                  )}
                 >
                   <span className="truncate">{grantLocationBadge.text}</span>
                 </Link>
@@ -757,8 +811,12 @@ function SimilarScholarshipDetailListItem({
                 <Link
                   href={applicantCountryHubHref}
                   className={similarGeoHubLinkClass}
-                  title={copy.similar.browseMatchingTitle(applicantCountryBadge.title)}
-                  aria-label={copy.similar.browseFilteredAria(applicantCountryBadge.text)}
+                  title={copy.similar.browseMatchingTitle(
+                    applicantCountryBadge.title
+                  )}
+                  aria-label={copy.similar.browseFilteredAria(
+                    applicantCountryBadge.text
+                  )}
                 >
                   <span className="truncate">{applicantCountryBadge.text}</span>
                 </Link>
@@ -811,7 +869,10 @@ function SimilarScholarshipDetailListItem({
             return;
           }
         }}
-        className={similarScholarshipCardClassName(highlightPrimary, deadlinePassed)}
+        className={similarScholarshipCardClassName(
+          highlightPrimary,
+          deadlinePassed
+        )}
       >
         {cardInner}
       </Link>
@@ -819,7 +880,11 @@ function SimilarScholarshipDetailListItem({
   );
 }
 
-function SimilarScholarshipIqPromoCard({ copy }: { copy: ScholarshipDetailUiCopy }) {
+function SimilarScholarshipIqPromoCard({
+  copy
+}: {
+  copy: ScholarshipDetailUiCopy;
+}) {
   if (!isIqSitePromoVisible()) return null;
 
   return (
@@ -870,7 +935,11 @@ function SimilarScholarshipIqPromoCard({ copy }: { copy: ScholarshipDetailUiCopy
   );
 }
 
-function ScholarshipDetailIqDecisionCard({ copy }: { copy: ScholarshipDetailUiCopy }) {
+function ScholarshipDetailIqDecisionCard({
+  copy
+}: {
+  copy: ScholarshipDetailUiCopy;
+}) {
   if (!isIqSitePromoVisible()) return null;
 
   return (
@@ -891,7 +960,10 @@ function ScholarshipDetailIqDecisionCard({ copy }: { copy: ScholarshipDetailUiCo
         <div className="min-w-0">
           <div className="mb-3 flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center gap-2 rounded-full border border-[#FFB875] bg-white/80 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.17em] text-[#B45309] shadow-sm">
-              <BrainCircuit className="h-3.5 w-3.5 text-[#F97316]" aria-hidden />
+              <BrainCircuit
+                className="h-3.5 w-3.5 text-[#F97316]"
+                aria-hidden
+              />
               {copy.iq.applicantIntelligence}
             </span>
             <span className="rounded-full bg-slate-950 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white">
@@ -921,13 +993,17 @@ function ScholarshipDetailIqDecisionCard({ copy }: { copy: ScholarshipDetailUiCo
           </p>
           <div className="mt-3 grid grid-cols-2 gap-2">
             <div className="overflow-hidden rounded-xl border border-dashed border-slate-300 bg-slate-50/80 px-3 py-2">
-              <p className="text-[10px] font-medium text-slate-500">{copy.iq.iqLabel}</p>
+              <p className="text-[10px] font-medium text-slate-500">
+                {copy.iq.iqLabel}
+              </p>
               <p className="mt-1 text-base font-bold leading-none text-slate-950">
                 --
               </p>
             </div>
             <div className="overflow-hidden rounded-xl border border-dashed border-slate-300 bg-slate-50/80 px-3 py-2">
-              <p className="text-[10px] font-medium text-slate-500">{copy.iq.typeLabel}</p>
+              <p className="text-[10px] font-medium text-slate-500">
+                {copy.iq.typeLabel}
+              </p>
               <p className="mt-1 truncate text-sm font-bold leading-none text-slate-950">
                 ???
               </p>
@@ -993,7 +1069,10 @@ function RequirementsRichOrList({
   );
 }
 
-function compactScholarshipAwardStatDisplay(raw: string, fallback: string): string {
+function compactScholarshipAwardStatDisplay(
+  raw: string,
+  fallback: string
+): string {
   const formatted = formatScholarshipAwardDisplay(raw);
   if (!formatted) return fallback;
 
@@ -1004,7 +1083,9 @@ function compactScholarshipAwardStatDisplay(raw: string, fallback: string): stri
     const suffix = text.slice(colonIndex + 1).trim();
     if (
       /\b(scholarship|award|program|grant)\b/i.test(prefix) &&
-      /(?:[$€£¥]|\btuition\b|\bfee\b|\bannum\b|\byear\b|\bvaries\b)/i.test(suffix)
+      /(?:[$€£¥]|\btuition\b|\bfee\b|\bannum\b|\byear\b|\bvaries\b)/i.test(
+        suffix
+      )
     ) {
       text = suffix;
     }
@@ -1115,9 +1196,21 @@ export default function ScholarshipDetailPageClient({
   const [similarScholarships, setSimilarScholarships] = useState<Scholarship[]>(
     []
   );
-  const [scholarship, setScholarship] = useState<Scholarship | null>(serverScholarship);
-  const [detailLoadState, setDetailLoadState] =
-    useState<DetailLoadState>(() => (serverScholarship ? 'ok' : 'loading'));
+  const [providerScholarships, setProviderScholarships] = useState<
+    Scholarship[]
+  >([]);
+  const [providerScholarshipsTotal, setProviderScholarshipsTotal] = useState(0);
+  const [deadlineMonthScholarships, setDeadlineMonthScholarships] = useState<
+    Scholarship[]
+  >([]);
+  const [deadlineMonthScholarshipsTotal, setDeadlineMonthScholarshipsTotal] =
+    useState(0);
+  const [scholarship, setScholarship] = useState<Scholarship | null>(
+    serverScholarship
+  );
+  const [detailLoadState, setDetailLoadState] = useState<DetailLoadState>(() =>
+    serverScholarship ? 'ok' : 'loading'
+  );
   const [descExpanded, setDescExpanded] = useState(false);
   const [savedIds, setSavedIds] = useState<string[]>([]);
   const [ignoredIds, setIgnoredIds] = useState<string[]>([]);
@@ -1231,7 +1324,8 @@ export default function ScholarshipDetailPageClient({
 
     const initialMatchesRoute =
       serverScholarship != null &&
-      pathLastSeg(serverScholarship)?.toLowerCase() === routeParam.toLowerCase();
+      pathLastSeg(serverScholarship)?.toLowerCase() ===
+        routeParam.toLowerCase();
 
     if (initialMatchesRoute) {
       setScholarship(serverScholarship);
@@ -1269,6 +1363,10 @@ export default function ScholarshipDetailPageClient({
     setDetailLoadState('loading');
     setScholarship(null);
     setSimilarScholarships([]);
+    setProviderScholarships([]);
+    setProviderScholarshipsTotal(0);
+    setDeadlineMonthScholarships([]);
+    setDeadlineMonthScholarshipsTotal(0);
 
     const paramEncoded = encodeURIComponent(routeParam);
 
@@ -1314,7 +1412,9 @@ export default function ScholarshipDetailPageClient({
     sp.set('similar_to', scholarship.id);
     sp.set('limit', String(SIMILAR_MAX));
     if (slug) sp.set('similar_category_slug', slug);
-    const stateCode = scholarship.stateCodes?.find((c) => /^[A-Za-z]{2}$/.test(c.trim()));
+    const stateCode = scholarship.stateCodes?.find((c) =>
+      /^[A-Za-z]{2}$/.test(c.trim())
+    );
     if (stateCode) sp.set('similar_state_slug', stateCode.trim().toUpperCase());
 
     postScholarshipsList({ searchParams: sp.toString() })
@@ -1326,6 +1426,74 @@ export default function ScholarshipDetailPageClient({
       .catch(() => {
         if (!cancelled) setSimilarScholarships([]);
       });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [scholarship]);
+
+  useEffect(() => {
+    if (!scholarship?.id) {
+      setProviderScholarships([]);
+      setProviderScholarshipsTotal(0);
+      setDeadlineMonthScholarships([]);
+      setDeadlineMonthScholarshipsTotal(0);
+      return;
+    }
+
+    let cancelled = false;
+    const providerSlug = scholarship.providerSlug?.trim() || null;
+    const deadlineMonth = detailDeadlineMonthParam(scholarship);
+
+    if (providerSlug) {
+      const sp = new URLSearchParams();
+      sp.set('limit', String(DETAIL_AGGREGATION_MAX + 1));
+      sp.set('sort', 'closest_deadline');
+      postScholarshipsList({
+        searchParams: sp.toString(),
+        providerSlug
+      })
+        .then((r) => {
+          if (cancelled) return;
+          setProviderScholarships(
+            filterAggregationRows(r.scholarships, scholarship.id)
+          );
+          setProviderScholarshipsTotal(Math.max(0, r.total - 1));
+        })
+        .catch(() => {
+          if (!cancelled) {
+            setProviderScholarships([]);
+            setProviderScholarshipsTotal(0);
+          }
+        });
+    } else {
+      setProviderScholarships([]);
+      setProviderScholarshipsTotal(0);
+    }
+
+    if (deadlineMonth) {
+      const sp = new URLSearchParams();
+      sp.set('limit', String(DETAIL_AGGREGATION_MAX + 1));
+      sp.set('sort', 'closest_deadline');
+      sp.set('deadline_month', deadlineMonth);
+      postScholarshipsList({ searchParams: sp.toString() })
+        .then((r) => {
+          if (cancelled) return;
+          setDeadlineMonthScholarships(
+            filterAggregationRows(r.scholarships, scholarship.id)
+          );
+          setDeadlineMonthScholarshipsTotal(Math.max(0, r.total - 1));
+        })
+        .catch(() => {
+          if (!cancelled) {
+            setDeadlineMonthScholarships([]);
+            setDeadlineMonthScholarshipsTotal(0);
+          }
+        });
+    } else {
+      setDeadlineMonthScholarships([]);
+      setDeadlineMonthScholarshipsTotal(0);
+    }
 
     return () => {
       cancelled = true;
@@ -1439,6 +1607,22 @@ export default function ScholarshipDetailPageClient({
       ),
     [similarScholarships, currentMatchProfile]
   );
+  const providerScholarshipsWithMatch = useMemo(
+    () =>
+      applyProfileMatchPercentToScholarships(
+        providerScholarships,
+        currentMatchProfile
+      ),
+    [providerScholarships, currentMatchProfile]
+  );
+  const deadlineMonthScholarshipsWithMatch = useMemo(
+    () =>
+      applyProfileMatchPercentToScholarships(
+        deadlineMonthScholarships,
+        currentMatchProfile
+      ),
+    [deadlineMonthScholarships, currentMatchProfile]
+  );
   const normalizedBeforeYouApply = useMemo(() => {
     if (!scholarship) {
       return {
@@ -1544,7 +1728,10 @@ export default function ScholarshipDetailPageClient({
   const reqCleanLines = isSimplerGov
     ? simplerGrantsGovRequirementsLines(scholarship)
     : requirementsCleanLines(scholarship);
-  const reqChips = scholarshipDetailRequirementChips(detailUiLocale, scholarship);
+  const reqChips = scholarshipDetailRequirementChips(
+    detailUiLocale,
+    scholarship
+  );
 
   const reqCountFromDb =
     typeof scholarship.requirementsCount === 'number' &&
@@ -1599,7 +1786,8 @@ export default function ScholarshipDetailPageClient({
   const providerNameFromMission = providerNameFromRecord
     ? null
     : extractProviderNameFromMission(providerMissionRaw);
-  const providerName = providerNameFromRecord || providerNameFromMission || undefined;
+  const providerName =
+    providerNameFromRecord || providerNameFromMission || undefined;
   const providerSlugTrimmed = scholarship.providerSlug?.trim() ?? '';
   const providerProfileHref = providerSlugTrimmed
     ? `/providers/${encodeURIComponent(providerSlugTrimmed)}`
@@ -1609,21 +1797,25 @@ export default function ScholarshipDetailPageClient({
     scholarshipHostCountryBadge(scholarship)
   ].filter((badge): badge is ScholarshipGeoBadge => badge !== null);
   /** Pessimistic until session resolves — matches hub cards and prevents title FOUC. */
-  const catalogSubscriptionLockedGate =
-    !authResolved || !hasSubscription;
+  const catalogSubscriptionLockedGate = !authResolved || !hasSubscription;
   const targetedCategoryLocked = resolveScholarshipTargetedCategoryLocked({
     subscriptionLockedCatalog: catalogSubscriptionLockedGate,
     hasSubscription,
     scholarship
   });
   const authNoSubDetailPreviewBlur =
-    isAuthenticated && authResolved && !hasSubscription && !targetedCategoryLocked;
+    isAuthenticated &&
+    authResolved &&
+    !hasSubscription &&
+    !targetedCategoryLocked;
   const titleBlurPhrase = targetedCategoryLocked
     ? pickScholarshipLockedTitleBlurPhrase(scholarship.title, providerName)
     : null;
   const hasMission = Boolean(providerMissionRaw);
   const showMissionCompact =
-    hasMission && providerMissionRaw.length > 0 && providerMissionRaw.length <= 420;
+    hasMission &&
+    providerMissionRaw.length > 0 &&
+    providerMissionRaw.length <= 420;
   const showProviderMission =
     hasMission &&
     (Boolean(providerName) || Boolean(providerDescriptionFromRecord)) &&
@@ -1703,33 +1895,34 @@ export default function ScholarshipDetailPageClient({
     Boolean(scholarship.hasOfficialApplicationDestination);
   const detailApplyPrimaryClass =
     'inline-flex h-11 min-h-[2.75rem] w-full items-center justify-center gap-2 rounded-xl bg-orange-500 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-orange-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2 sm:px-6 sm:text-base';
-  const providerWebsiteCta = providerUrlRaw && !providerProfileHref ? (
-    hasSubscription ? (
-      <a
-        href={providerUrlRaw}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={detailApplyPrimaryClass}
-      >
-        <ExternalLink className="h-4 w-4 shrink-0" aria-hidden />
-        {detailUi.providerWebsite}
-      </a>
-    ) : (
-      <button
-        type="button"
-        className={detailApplyPrimaryClass}
-        onClick={openPremiumPaywall}
-        title={detailUi.applyPremiumTitle}
-      >
-        <Lock
-          className="h-4 w-4 shrink-0 text-white stroke-white"
-          strokeWidth={2}
-          aria-hidden
-        />
-        {detailUi.providerWebsite}
-      </button>
-    )
-  ) : null;
+  const providerWebsiteCta =
+    providerUrlRaw && !providerProfileHref ? (
+      hasSubscription ? (
+        <a
+          href={providerUrlRaw}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={detailApplyPrimaryClass}
+        >
+          <ExternalLink className="h-4 w-4 shrink-0" aria-hidden />
+          {detailUi.providerWebsite}
+        </a>
+      ) : (
+        <button
+          type="button"
+          className={detailApplyPrimaryClass}
+          onClick={openPremiumPaywall}
+          title={detailUi.applyPremiumTitle}
+        >
+          <Lock
+            className="h-4 w-4 shrink-0 text-white stroke-white"
+            strokeWidth={2}
+            aria-hidden
+          />
+          {detailUi.providerWebsite}
+        </button>
+      )
+    ) : null;
 
   const statusDisplay = scholarshipStatusDisplay(scholarship);
   const studyLevelsList = studyLevelsDisplayList(scholarship);
@@ -1896,9 +2089,12 @@ export default function ScholarshipDetailPageClient({
   const hasImportantNotes = importantChunks.length > 0;
 
   const trustworthyAi = hasTrustworthyAiConfidence(scholarship);
-  const filteredTips = filterApplicationTipsForUi(scholarship.aiApplicationTips, {
-    trustworthyAi
-  });
+  const filteredTips = filterApplicationTipsForUi(
+    scholarship.aiApplicationTips,
+    {
+      trustworthyAi
+    }
+  );
   const showApplicationTips = shouldRenderApplicationTipsUi(
     scholarship,
     filteredTips
@@ -1936,6 +2132,49 @@ export default function ScholarshipDetailPageClient({
   const faqItemsOnPage =
     strictFaqItems.length >= 2 ? strictFaqItems : fallbackFaqItems;
   const showFaqBlock = faqItemsOnPage.length >= 2;
+  const deadlineMonthParam = detailDeadlineMonthParam(scholarship);
+  const deadlineMonthLabel = detailDeadlineMonthLabel(deadlineMonthParam);
+  const currentAwardAmount =
+    scholarship.awardAmountNumericSort != null &&
+    !Number.isNaN(scholarship.awardAmountNumericSort)
+      ? scholarship.awardAmountNumericSort
+      : null;
+  const comparableAwardRows = similarScholarships.filter(
+    (row) =>
+      row.awardAmountNumericSort != null &&
+      !Number.isNaN(row.awardAmountNumericSort)
+  );
+  const categoryAwardRank =
+    currentAwardAmount != null && comparableAwardRows.length > 0
+      ? comparableAwardRows.filter(
+          (row) => (row.awardAmountNumericSort ?? 0) > currentAwardAmount
+        ).length + 1
+      : null;
+  const categoryAwardPeerCount =
+    categoryAwardRank != null ? comparableAwardRows.length + 1 : 0;
+  const providerAggregationName =
+    scholarship.provider?.trim() || 'this provider';
+  const aggregationStats = [
+    providerScholarshipsTotal > 0
+      ? `${providerScholarshipsTotal} other ${providerAggregationName} scholarship${
+          providerScholarshipsTotal === 1 ? '' : 's'
+        } are linked from this listing.`
+      : null,
+    deadlineMonthLabel && deadlineMonthScholarshipsTotal > 0
+      ? `${deadlineMonthScholarshipsTotal} scholarship${
+          deadlineMonthScholarshipsTotal === 1 ? '' : 's'
+        } share a ${deadlineMonthLabel} deadline window.`
+      : null,
+    categoryAwardRank != null && categorySlugForLinks
+      ? `Among ${categoryAwardPeerCount} ${breadcrumbCategoryLabel(
+          categorySlugForLinks
+        )} scholarships shown here, this award ranks #${categoryAwardRank} by listed amount.`
+      : null
+  ].filter((item): item is string => Boolean(item));
+  const showAggregationBlock =
+    aggregationStats.length > 0 ||
+    providerScholarshipsWithMatch.length > 0 ||
+    deadlineMonthScholarshipsWithMatch.length > 0;
 
   const similarOpenList = similarScholarshipsWithMatch.filter(
     (s) => !scholarshipDeadlineHasPassed(s)
@@ -1996,1213 +2235,1313 @@ export default function ScholarshipDetailPageClient({
         className={`${scholarshipDetailPageBgClass} px-4 py-8 sm:px-5 md:py-12 lg:px-8`}
       >
         <div className={scholarshipDetailShellClass}>
-        <Link
-          href={backToMatchesHref}
-          scroll
-          className={detailBackToMatchesLinkClass}
-        >
-          {detailUi.backToMatches}
-        </Link>
+          <Link
+            href={backToMatchesHref}
+            scroll
+            className={detailBackToMatchesLinkClass}
+          >
+            {detailUi.backToMatches}
+          </Link>
 
-        <div className={`mt-4 ${scholarshipDetailHeroSurfaceClass}`}>
-        <nav aria-label={detailUi.breadcrumbAria} className="border-b border-zinc-100 pb-4">
-          <ol className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-sm text-zinc-500">
-            <li>
-              <Link
-                href={backToMatchesHref}
-                scroll
-                className="font-medium text-zinc-600 underline-offset-2 transition hover:text-zinc-900 hover:underline"
-              >
-                {detailUi.scholarshipsHub}
-              </Link>
-            </li>
-            {categorySlugForLinks ? (
-              <>
+          <div className={`mt-4 ${scholarshipDetailHeroSurfaceClass}`}>
+            <nav
+              aria-label={detailUi.breadcrumbAria}
+              className="border-b border-zinc-100 pb-4"
+            >
+              <ol className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-sm text-zinc-500">
+                <li>
+                  <Link
+                    href={backToMatchesHref}
+                    scroll
+                    className="font-medium text-zinc-600 underline-offset-2 transition hover:text-zinc-900 hover:underline"
+                  >
+                    {detailUi.scholarshipsHub}
+                  </Link>
+                </li>
+                {categorySlugForLinks ? (
+                  <>
+                    <li className="text-zinc-300" aria-hidden>
+                      /
+                    </li>
+                    <li>
+                      <Link
+                        href={`/scholarships/category/${encodeURIComponent(categorySlugForLinks)}`}
+                        className="font-medium text-zinc-600 underline-offset-2 transition hover:text-zinc-900 hover:underline"
+                      >
+                        {breadcrumbCategoryLabel(categorySlugForLinks)}
+                      </Link>
+                    </li>
+                  </>
+                ) : null}
                 <li className="text-zinc-300" aria-hidden>
                   /
                 </li>
-                <li>
-                  <Link
-                    href={`/scholarships/category/${encodeURIComponent(categorySlugForLinks)}`}
-                    className="font-medium text-zinc-600 underline-offset-2 transition hover:text-zinc-900 hover:underline"
-                  >
-                    {breadcrumbCategoryLabel(categorySlugForLinks)}
-                  </Link>
-                </li>
-              </>
-            ) : null}
-            <li className="text-zinc-300" aria-hidden>
-              /
-            </li>
-            <li
-              className="min-w-0 max-w-full truncate font-medium text-zinc-900 sm:max-w-[min(100%,42rem)]"
-              title={scholarship.title}
-              aria-current="page"
-            >
-              {targetedCategoryLocked && titleBlurPhrase
-                ? renderTextWithObscuredPhrases(scholarship.title, [titleBlurPhrase], {
-                    blurEntireWhenNoSubstringMatch: false,
-                    onLockedSegmentClick: openPremiumPaywall
-                  })
-                : scholarship.title}
-            </li>
-          </ol>
-        </nav>
-
-        <div className="mt-5 min-w-0">
-          <h1 className="text-3xl font-bold leading-[1.15] tracking-tight text-zinc-900 sm:text-4xl md:text-[2.25rem] md:leading-tight">
-            {targetedCategoryLocked && titleBlurPhrase
-              ? renderTextWithObscuredPhrases(scholarship.title, [titleBlurPhrase], {
-                  blurEntireWhenNoSubstringMatch: false,
-                  onLockedSegmentClick: openPremiumPaywall
-                })
-              : scholarship.title}
-          </h1>
-          {detailDeadlineNeedsNotice ? (
-            <div className="mt-3 flex flex-wrap items-center gap-2">
-              <ScholarshipExpiredBadge />
-            </div>
-          ) : null}
-          <HeroDecisionBadges
-            copy={detailUi}
-            matchBadge={ui.matchBadge}
-            urgencyBadge={ui.urgencyBadge}
-            difficultyBadge={ui.difficultyBadge}
-          />
-          {heroIntro ? (
-            <p className="mt-4 max-w-3xl text-base leading-relaxed text-zinc-600 md:text-lg">
-              {obscureDetailLine(heroIntro)}
-            </p>
-          ) : null}
-          {detailGeoBadges.length > 0 ? (
-            <div
-              className="mt-4 flex flex-wrap items-center gap-2"
-              aria-label={detailUi.premium.eligibilityAria}
-            >
-              {detailGeoBadges.map((badge) => {
-                const className =
-                  'inline-flex max-w-full items-center rounded-full border border-orange-200/90 bg-orange-50/80 px-3 py-1.5 text-xs font-bold leading-tight text-orange-900 ring-1 ring-orange-100/80 transition sm:text-sm';
-
-                return badge.href ? (
-                  <Link
-                    key={badge.key}
-                    href={badge.href}
-                    className={`${className} no-underline hover:border-orange-300 hover:bg-orange-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/40 focus-visible:ring-offset-2`}
-                    title={detailUi.similar.browseMatchingTitle(badge.title)}
-                    aria-label={detailUi.similar.browseFilteredAria(badge.text)}
-                  >
-                    <span className="truncate">{badge.text}</span>
-                  </Link>
-                ) : (
-                  <span
-                    key={badge.key}
-                    className={className}
-                    title={badge.title}
-                  >
-                    <span className="truncate">{badge.text}</span>
-                  </span>
-                );
-              })}
-            </div>
-          ) : null}
-        </div>
-        </div>
-
-        <div className="relative mt-8">
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
-          {hasDeadlineStat ? (
-            <StatCard
-              primary={deadlinePrimary}
-              secondary={deadlineSecondaryLine ?? detailUi.deadlineSecondary}
-              deadlineFooter
-              extra={recurringExtra}
-              notice={
-                detailDeadlineNeedsNotice ? (
-                  <p className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm font-medium leading-snug text-amber-900">
-                    {detailUi.deadlinePassedNotice}
-                  </p>
-                ) : null
-              }
-            />
-          ) : null}
-          {hasAwardStat ? (
-            <StatCard
-              primary={awardDisplay}
-              primaryTitle={awardStatLine.lineTitle ?? awardFullDisplay}
-              secondary={detailUi.awardAmount}
-            />
-          ) : null}
-          {hasApplicantsStat ? (
-            <StatCard
-              primary={scholarship.applicantCount!.toLocaleString()}
-              secondary={detailUi.applicants}
-            />
-          ) : null}
-          <StatCard
-            primary={String(reqCount)}
-            secondary={detailUi.requirements}
-          />
-        </div>
-        {authNoSubDetailPreviewBlur ? <AuthNoSubDetailStatsBlur /> : null}
-        </div>
-
-        <ScholarshipDetailGuestLockSection
-          copy={detailUi}
-          locked={showLockedDetailOverlay}
-          onSignIn={openLockedAccessWall}
-        >
-        {panelPick.showQuickDecision ? (
-          <ScholarshipQuickDecisionGrid
-            copy={detailUi}
-            bestFor={ui.quickDecision.bestFor}
-            highlights={ui.quickDecision.highlights}
-            whyApply={ui.quickDecision.whyApply}
-            importantChecks={quickChecksForGrid}
-            renderLine={obscureDetailLine}
-          />
-        ) : null}
-        {ui.lowConfidenceAi ? (
-          <div className="mt-4 min-w-0">
-            <AiLowConfidenceNote copy={detailUi} />
-          </div>
-        ) : null}
-        <ScholarshipTrustSignalsBlock
-          copy={detailUi}
-          sourceStatus={detailSourceStatus}
-          difficulty={detailDifficulty}
-          urgency={detailUrgency}
-          missingDataFlags={detailMissingDataFlags}
-          lastReviewedLabel={lastVerifiedLabel}
-        />
-        <ScholarshipDetailIqDecisionCard copy={detailUi} />
-        {whoLines.length > 0 ? (
-          <div className="mt-10">
-            <SectionLabel>{detailUi.whoCanApply}</SectionLabel>
-            <div className={scholarshipDetailCardPrimaryClass}>
-              <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-zinc-700 md:text-base">
-                {whoLines.map((item, i) => (
-                  <li key={`who-${i}-${item.slice(0, 40)}`}>
-                    {obscureDetailLine(item)}
-                  </li>
-                ))}
-              </ul>
-              {eligibilityFromAi ? (
-                <p className="mt-4 text-xs leading-relaxed text-zinc-500">
-                  {detailUi.verifyEligibilityNote}
-                </p>
-              ) : null}
-            </div>
-          </div>
-        ) : null}
-
-        {showEligibilityHtmlFallback ? (
-            <ScholarshipRichSection
-            label={detailUi.sections.eligibility}
-            html={scholarship.eligibilityHtml}
-            fallbackText={scholarship.eligibilityText ?? undefined}
-          />
-        ) : null}
-
-        {hasQuickFacts ? (
-          <div className="mt-8 rounded-3xl border border-indigo-200 bg-indigo-50 px-5 py-4 text-center shadow-sm sm:px-6 sm:py-5">
-            <div className="mx-auto flex items-center justify-center gap-2.5">
-              <span className="text-xl leading-none" aria-hidden>
-                🎯
-              </span>
-              <p className="text-[1.65rem] font-bold leading-[1.08] tracking-tight text-indigo-950">
-                {detailUi.matchCta.title}
-              </p>
-            </div>
-            <HomePrimaryCtaClient
-              className="mt-3 inline-flex items-center justify-center rounded-full bg-black px-7 py-2 text-xl font-bold leading-none text-white shadow-[0_8px_20px_rgba(0,0,0,0.25)] transition hover:bg-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/45"
-            >
-              {detailUi.matchCta.button}
-            </HomePrimaryCtaClient>
-          </div>
-        ) : null}
-
-        {hasQuickFacts ? (
-          <div className={`mt-8 ${scholarshipDetailCardCompactClass}`}>
-            <h2 className="mb-4 text-base font-semibold tracking-tight text-zinc-900">
-              {detailUi.quickFacts.title}
-            </h2>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {statusDisplay ? (
-                <div>
-                  <p className="text-xs font-medium text-zinc-500">
-                    {detailUi.quickFacts.status}
-                  </p>
-                  <p className="mt-1 text-sm font-semibold text-zinc-900">
-                    {statusDisplay}
-                  </p>
-                </div>
-              ) : null}
-              {studyLevelsList.length ? (
-                <div className="min-w-0 sm:col-span-2 lg:col-span-2">
-                  <p className="text-xs font-medium text-zinc-500">
-                    {detailUi.quickFacts.studyLevels}
-                  </p>
-                  <p className="mt-1 text-sm text-zinc-700">
-                    {studyLevelsList.join(', ')}
-                  </p>
-                </div>
-              ) : null}
-              {fieldOfStudyList.length ? (
-                <div className="min-w-0 sm:col-span-2 lg:col-span-2">
-                  <p className="text-xs font-medium text-zinc-500">
-                    {detailUi.quickFacts.fieldOfStudy}
-                  </p>
-                  <p className="mt-1 text-sm text-zinc-700">
-                    {fieldOfStudyList.join(', ')}
-                  </p>
-                </div>
-              ) : null}
-              {institutionsLine ? (
-                <div className="min-w-0 sm:col-span-2 lg:col-span-2">
-                  <p className="text-xs font-medium text-zinc-500">
-                    {detailUi.quickFacts.eligibleInstitutions}
-                  </p>
-                  <p
-                    className="mt-1 text-sm leading-relaxed text-zinc-700"
-                    title={
-                      providerNameLocked
-                        ? detailUi.quickFacts.institutionsLockedHint
-                        : undefined
-                    }
-                  >
-                    {obscureDetailLine(institutionsLine)}
-                  </p>
-                </div>
-              ) : null}
-              {locationQuickFact ? (
-                <div className="min-w-0 sm:col-span-2">
-                  <p className="text-xs font-medium text-zinc-500">
-                    {detailUi.quickFacts.location}
-                  </p>
-                  <p className="mt-1 text-sm text-zinc-700">
-                    {locationQuickFact}
-                  </p>
-                </div>
-              ) : null}
-              {scholarship.numberOfAwards != null ? (
-                <div>
-                  <p className="text-xs font-medium text-zinc-500">
-                    {detailUi.quickFacts.numberOfAwards}
-                  </p>
-                  <p className="mt-1 text-sm font-semibold text-zinc-900">
-                    {scholarship.numberOfAwards.toLocaleString()}
-                  </p>
-                </div>
-              ) : null}
-              {payoutLabel ? (
-                <div className="min-w-0 sm:col-span-2">
-                  <p className="text-xs font-medium text-zinc-500">
-                    {detailUi.quickFacts.payoutMethod}
-                  </p>
-                  <p className="mt-1 text-sm text-zinc-700">{payoutLabel}</p>
-                </div>
-              ) : null}
-            </div>
-          </div>
-        ) : null}
-
-        {showSupport ? (
-          <div className="mt-10">
-            <SectionLabel>{detailUi.sections.scholarshipSupport}</SectionLabel>
-            <div className={scholarshipDetailCardPrimaryClass}>
-              <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-8">
-                {supportEmail ? (
-                  <a
-                    href={`mailto:${supportEmail}`}
-                    className="inline-flex items-center gap-2 text-sm font-medium text-sky-700 underline-offset-2 hover:underline"
-                  >
-                    <Mail className="h-4 w-4 shrink-0" strokeWidth={1.75} />
-                    {supportEmail}
-                  </a>
-                ) : supportEmailRedacted ? (
-                  <button
-                    type="button"
-                    onClick={openPremiumPaywall}
-                    className="inline-flex items-center gap-2 text-sm font-medium text-zinc-700"
-                    aria-label={detailUi.premium.supportEmailHiddenAria}
-                  >
-                    <Lock
-                      className={`h-4 w-4 shrink-0 ${scholarshipGuestLockIconClass}`}
-                      strokeWidth={2}
-                      aria-hidden
-                    />
-                    <Mail className="h-4 w-4 shrink-0" strokeWidth={1.75} />
-                    <span
-                      className={SCHOLARSHIP_PROVIDER_OBSCURE_CLASS}
-                      aria-hidden
-                    >
-                      support@example.org
-                    </span>
-                  </button>
-                ) : null}
-                {supportPhone ? (
-                  <a
-                    href={`tel:${supportPhone.replace(/\s/g, '')}`}
-                    className="inline-flex items-center gap-2 text-sm font-medium text-sky-700 underline-offset-2 hover:underline"
-                  >
-                    <Phone className="h-4 w-4 shrink-0" strokeWidth={1.75} />
-                    {supportPhone}
-                  </a>
-                ) : supportPhoneRedacted ? (
-                  <button
-                    type="button"
-                    onClick={openPremiumPaywall}
-                    className="inline-flex items-center gap-2 text-sm font-medium text-zinc-700"
-                    aria-label={detailUi.premium.supportPhoneHiddenAria}
-                  >
-                    <Lock
-                      className={`h-4 w-4 shrink-0 ${scholarshipGuestLockIconClass}`}
-                      strokeWidth={2}
-                      aria-hidden
-                    />
-                    <Phone className="h-4 w-4 shrink-0" strokeWidth={1.75} />
-                    <span
-                      className={SCHOLARSHIP_PROVIDER_OBSCURE_CLASS}
-                      aria-hidden
-                    >
-                      (555) 555-5555
-                    </span>
-                  </button>
-                ) : null}
-              </div>
-            </div>
-          </div>
-        ) : null}
-
-        {panelPick.showBeforeYouApply ? (
-          <ScholarshipBeforeYouApplyBlock
-            copy={detailUi}
-            checks={normalizedBeforeYouApply.importantChecks}
-            detailsToConfirm={normalizedBeforeYouApply.detailsToConfirm}
-            redFlags={normalizedBeforeYouApply.redFlags}
-            renderLine={obscureDetailLine}
-          />
-        ) : null}
-
-        {showNextStepsBlock ? (
-          <ScholarshipNextStepsBlock
-            copy={detailUi}
-            items={nextStepActions}
-            renderLine={obscureDetailLine}
-          />
-        ) : null}
-
-        {initialRelatedHubLinks.length > 0 ? (
-          <div
-            className="mt-10"
-            aria-labelledby="scholarship-related-hubs-heading"
-          >
-            <h2
-              id="scholarship-related-hubs-heading"
-              className="mb-3 text-base font-semibold tracking-tight text-zinc-900"
-            >
-              {detailUi.related.hubsTitle}
-            </h2>
-            <p className="mb-3 text-sm leading-relaxed text-zinc-600">
-              {detailUi.related.hubsIntro}
-            </p>
-            <ul className="flex flex-wrap gap-2" role="list">
-              {initialRelatedHubLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="inline-flex rounded-full border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-800 transition hover:border-slate-300 hover:bg-slate-50"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ) : null}
-
-        {initialComparePeers.length > 0 ? (
-          <div
-            className="mt-10"
-            aria-labelledby="scholarship-compare-peers-heading"
-          >
-            <h2
-              id="scholarship-compare-peers-heading"
-              className="mb-3 text-base font-semibold tracking-tight text-zinc-900"
-            >
-              {detailUi.related.compareTitle}
-            </h2>
-            <p className="mb-3 text-sm leading-relaxed text-zinc-600">
-              {detailUi.related.compareIntro}
-            </p>
-            <ul className="flex flex-wrap gap-2" role="list">
-              {initialComparePeers.map((peer) => (
-                <li key={peer.compareSlug}>
-                  <Link
-                    href={`/compare/universities/${encodeURIComponent(peer.compareSlug)}`}
-                    className="inline-flex rounded-full border border-sky-200 bg-sky-50/80 px-3 py-1.5 text-sm font-medium text-sky-950 transition hover:border-sky-300 hover:bg-sky-100"
-                  >
-                    {detailUi.related.compareVs(peer.peerName)}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ) : null}
-
-        {initialRelatedArticles.length > 0 ? (
-          <div
-            className="mt-10"
-            aria-labelledby="scholarship-related-resources-heading"
-          >
-            <div className="flex flex-wrap items-start gap-3">
-              <BookOpen
-                className="mt-0.5 h-5 w-5 shrink-0 text-teal-700/90"
-                strokeWidth={1.75}
-                aria-hidden
-              />
-              <div className="min-w-0 flex-1 space-y-3">
-                <h2
-                  id="scholarship-related-resources-heading"
-                  className="text-lg font-semibold tracking-tight text-zinc-900"
+                <li
+                  className="min-w-0 max-w-full truncate font-medium text-zinc-900 sm:max-w-[min(100%,42rem)]"
+                  title={scholarship.title}
+                  aria-current="page"
                 >
-                  {detailUi.related.resourcesTitle}
-                </h2>
-                <p className="text-sm leading-relaxed text-zinc-600">
-                  {detailUi.related.resourcesIntro}
+                  {targetedCategoryLocked && titleBlurPhrase
+                    ? renderTextWithObscuredPhrases(
+                        scholarship.title,
+                        [titleBlurPhrase],
+                        {
+                          blurEntireWhenNoSubstringMatch: false,
+                          onLockedSegmentClick: openPremiumPaywall
+                        }
+                      )
+                    : scholarship.title}
+                </li>
+              </ol>
+            </nav>
+
+            <div className="mt-5 min-w-0">
+              <h1 className="text-3xl font-bold leading-[1.15] tracking-tight text-zinc-900 sm:text-4xl md:text-[2.25rem] md:leading-tight">
+                {targetedCategoryLocked && titleBlurPhrase
+                  ? renderTextWithObscuredPhrases(
+                      scholarship.title,
+                      [titleBlurPhrase],
+                      {
+                        blurEntireWhenNoSubstringMatch: false,
+                        onLockedSegmentClick: openPremiumPaywall
+                      }
+                    )
+                  : scholarship.title}
+              </h1>
+              {detailDeadlineNeedsNotice ? (
+                <div className="mt-3 flex flex-wrap items-center gap-2">
+                  <ScholarshipExpiredBadge />
+                </div>
+              ) : null}
+              <HeroDecisionBadges
+                copy={detailUi}
+                matchBadge={ui.matchBadge}
+                urgencyBadge={ui.urgencyBadge}
+                difficultyBadge={ui.difficultyBadge}
+              />
+              {heroIntro ? (
+                <p className="mt-4 max-w-3xl text-base leading-relaxed text-zinc-600 md:text-lg">
+                  {obscureDetailLine(heroIntro)}
                 </p>
-                <ul className="space-y-2.5" role="list">
-                  {initialRelatedArticles.map((post) => {
-                    const slug = post.slug?.trim();
-                    if (!slug) return null;
-                    const label =
-                      post.title?.trim() || slug.replace(/-/g, ' ');
-                    return (
-                      <li key={post.id}>
-                        <Link
-                          href={resourcesArticlePath(slug)}
-                          className="text-sm font-semibold text-teal-800 underline decoration-teal-600/35 underline-offset-2 transition hover:text-teal-950 hover:decoration-teal-700/60"
-                        >
-                          {label}
-                        </Link>
-                        {post.meta_description?.trim() ? (
-                          <p className="mt-1 text-xs leading-relaxed text-zinc-500">
-                            {post.meta_description.trim()}
-                          </p>
-                        ) : null}
-                      </li>
+              ) : null}
+              {detailGeoBadges.length > 0 ? (
+                <div
+                  className="mt-4 flex flex-wrap items-center gap-2"
+                  aria-label={detailUi.premium.eligibilityAria}
+                >
+                  {detailGeoBadges.map((badge) => {
+                    const className =
+                      'inline-flex max-w-full items-center rounded-full border border-orange-200/90 bg-orange-50/80 px-3 py-1.5 text-xs font-bold leading-tight text-orange-900 ring-1 ring-orange-100/80 transition sm:text-sm';
+
+                    return badge.href ? (
+                      <Link
+                        key={badge.key}
+                        href={badge.href}
+                        className={`${className} no-underline hover:border-orange-300 hover:bg-orange-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/40 focus-visible:ring-offset-2`}
+                        title={detailUi.similar.browseMatchingTitle(
+                          badge.title
+                        )}
+                        aria-label={detailUi.similar.browseFilteredAria(
+                          badge.text
+                        )}
+                      >
+                        <span className="truncate">{badge.text}</span>
+                      </Link>
+                    ) : (
+                      <span
+                        key={badge.key}
+                        className={className}
+                        title={badge.title}
+                      >
+                        <span className="truncate">{badge.text}</span>
+                      </span>
                     );
                   })}
-                </ul>
-              </div>
-            </div>
-          </div>
-        ) : null}
-
-        {initialRelatedEssays.length > 0 ||
-        Boolean(scholarship?.essayRequired) ? (
-          <div
-            className="mt-10"
-            aria-labelledby="scholarship-related-essays-heading"
-          >
-            <div className="flex flex-wrap items-start gap-3">
-              <BookOpen
-                className="mt-0.5 h-5 w-5 shrink-0 text-indigo-700/90"
-                strokeWidth={1.75}
-                aria-hidden
-              />
-              <div className="min-w-0 flex-1 space-y-3">
-                <h2
-                  id="scholarship-related-essays-heading"
-                  className="text-lg font-semibold tracking-tight text-zinc-900"
-                >
-                  {detailUi.related.essaysTitle}
-                </h2>
-                {initialRelatedEssays.length > 0 ? (
-                  <ul className="space-y-2.5" role="list">
-                    {initialRelatedEssays.map((ex) => {
-                      const slug = ex.slug?.trim();
-                      if (!slug) return null;
-                      const label =
-                        ex.title?.trim() || slug.replace(/-/g, ' ');
-                      return (
-                        <li key={ex.id}>
-                          <Link
-                            href={essayHubArticlePath(slug)}
-                            className="text-sm font-semibold text-indigo-800 underline decoration-indigo-600/35 underline-offset-2 transition hover:text-indigo-950 hover:decoration-indigo-700/60"
-                          >
-                            {label}
-                          </Link>
-                          {ex.meta_description?.trim() ? (
-                            <p className="mt-1 text-xs leading-relaxed text-zinc-500">
-                              {ex.meta_description.trim()}
-                            </p>
-                          ) : null}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                ) : (
-                  <p className="text-sm text-zinc-600">
-                    {detailUi.related.essaysFallback}
-                  </p>
-                )}
-                {scholarship?.essayRequired ? (
-                  <div className="rounded-2xl border border-indigo-100 bg-indigo-50/60 p-4">
-                    <p className="text-sm font-semibold text-indigo-950">
-                      {detailUi.related.essayRequiredTitle}
-                    </p>
-                    <p className="mt-1 text-xs leading-relaxed text-indigo-900/75">
-                      {detailUi.related.essayRequiredBody}
-                    </p>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {[
-                        [detailUi.related.essayChecklist, '/essays/checklist'],
-                        [detailUi.related.essayExamples, '/essays/examples'],
-                        [
-                          detailUi.related.essayFinancialNeed,
-                          '/essays/financial-need'
-                        ],
-                        [detailUi.related.essayCareerGoals, '/essays/career-goals'],
-                        [detailUi.related.essayLeadership, '/essays/leadership']
-                      ].map(([label, href]) => (
-                        <Link
-                          key={href}
-                          href={href}
-                          className="rounded-full border border-indigo-200 bg-white px-3 py-1.5 text-xs font-semibold text-indigo-800 transition hover:border-indigo-300 hover:bg-indigo-50"
-                        >
-                          {label}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                ) : null}
-                <div className="rounded-2xl border border-indigo-200 bg-gradient-to-br from-indigo-50 to-white p-4">
-                  <p className="text-sm font-semibold text-indigo-950">
-                    {detailUi.related.aiWriterTitle}
-                  </p>
-                  <Link
-                    href={`/essay?scholarship=${encodeURIComponent(scholarship.title)}`}
-                    className="mt-2 inline-flex text-sm font-bold text-indigo-700 underline-offset-2 hover:text-indigo-900 hover:underline"
-                  >
-                    {detailUi.related.aiWriterLink}
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        ) : null}
-
-        {showApplicationTips ? (
-          <ScholarshipApplicationTipsBlock
-            copy={detailUi}
-            items={filteredTips}
-            renderLine={obscureDetailLine}
-          />
-        ) : null}
-
-        {mergeAppDetails &&
-        (hasRequirementsSection || docs.length > 0 || showSeoApplication) ? (
-          <div className="mt-10">
-            <SectionLabel>{detailUi.sections.applicationDetails}</SectionLabel>
-            <div className={`${scholarshipDetailCardPrimaryClass} space-y-8`}>
-              {hasRequirementsSection ? (
-                <div>
-                  <h3 className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
-                    {detailUi.sections.keyRequirements(keyRequirementsLabelCount)}
-                  </h3>
-                  <p className="mb-4 mt-2 text-xs text-zinc-500">
-                    {isSimplerGov
-                      ? detailUi.sections.keyRequirementsNoteGov
-                      : detailUi.sections.keyRequirementsNoteAlt}
-                  </p>
-                  {reqChips.length > 0 ? (
-                    <div className="mb-5 flex flex-wrap gap-2">
-                      {reqChips.map((c) => (
-                        <span
-                          key={c}
-                          className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-800"
-                        >
-                          {c}
-                        </span>
-                      ))}
-                    </div>
-                  ) : null}
-                  {reqDisplayLines.length > 0 ? (
-                    <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-zinc-700 md:text-base">
-                      {reqDisplayLines.map((item, i) => (
-                        <li key={`req-${i}-${item.slice(0, 40)}`}>
-                          {obscureDetailLine(item)}
-                        </li>
-                      ))}
-                    </ul>
-                  ) : null}
-                  {reqDisplayLines.length === 0 && requirementsHtmlRaw ? (
-                    <RequirementsRichOrList
-                      html={scholarship.requirementsHtml}
-                      lines={eligibilityItems}
-                      renderLine={obscureDetailLine}
-                    />
-                  ) : null}
-                  {reqCleanLines.length === 0 &&
-                  !requirementsHtmlRaw &&
-                  eligibilityItems.length > 0 ? (
-                    <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-zinc-700 md:text-base">
-                      {eligibilityItems.map((item, i) => (
-                        <li key={`elig-${i}-${item.slice(0, 40)}`}>
-                          {obscureDetailLine(item)}
-                        </li>
-                      ))}
-                    </ul>
-                  ) : null}
                 </div>
               ) : null}
-              {docs.length > 0 ? (
-                <div>
-                  <h3 className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
-                    {detailUi.sections.requiredDocuments}
-                  </h3>
-                  <p className="mb-4 mt-2 text-xs text-zinc-500">
-                    {isSimplerGov
-                      ? detailUi.sections.requiredDocumentsNoteGov
-                      : detailUi.sections.requiredDocumentsNote}
-                  </p>
+            </div>
+          </div>
+
+          <div className="relative mt-8">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+              {hasDeadlineStat ? (
+                <StatCard
+                  primary={deadlinePrimary}
+                  secondary={
+                    deadlineSecondaryLine ?? detailUi.deadlineSecondary
+                  }
+                  deadlineFooter
+                  extra={recurringExtra}
+                  notice={
+                    detailDeadlineNeedsNotice ? (
+                      <p className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm font-medium leading-snug text-amber-900">
+                        {detailUi.deadlinePassedNotice}
+                      </p>
+                    ) : null
+                  }
+                />
+              ) : null}
+              {hasAwardStat ? (
+                <StatCard
+                  primary={awardDisplay}
+                  primaryTitle={awardStatLine.lineTitle ?? awardFullDisplay}
+                  secondary={detailUi.awardAmount}
+                />
+              ) : null}
+              {hasApplicantsStat ? (
+                <StatCard
+                  primary={scholarship.applicantCount!.toLocaleString()}
+                  secondary={detailUi.applicants}
+                />
+              ) : null}
+              <StatCard
+                primary={String(reqCount)}
+                secondary={detailUi.requirements}
+              />
+            </div>
+            {authNoSubDetailPreviewBlur ? <AuthNoSubDetailStatsBlur /> : null}
+          </div>
+
+          <ScholarshipDetailGuestLockSection
+            copy={detailUi}
+            locked={showLockedDetailOverlay}
+            onSignIn={openLockedAccessWall}
+          >
+            {panelPick.showQuickDecision ? (
+              <ScholarshipQuickDecisionGrid
+                copy={detailUi}
+                bestFor={ui.quickDecision.bestFor}
+                highlights={ui.quickDecision.highlights}
+                whyApply={ui.quickDecision.whyApply}
+                importantChecks={quickChecksForGrid}
+                renderLine={obscureDetailLine}
+              />
+            ) : null}
+            {ui.lowConfidenceAi ? (
+              <div className="mt-4 min-w-0">
+                <AiLowConfidenceNote copy={detailUi} />
+              </div>
+            ) : null}
+            <ScholarshipTrustSignalsBlock
+              copy={detailUi}
+              sourceStatus={detailSourceStatus}
+              difficulty={detailDifficulty}
+              urgency={detailUrgency}
+              missingDataFlags={detailMissingDataFlags}
+              lastReviewedLabel={lastVerifiedLabel}
+            />
+            <ScholarshipDetailIqDecisionCard copy={detailUi} />
+            {whoLines.length > 0 ? (
+              <div className="mt-10">
+                <SectionLabel>{detailUi.whoCanApply}</SectionLabel>
+                <div className={scholarshipDetailCardPrimaryClass}>
                   <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-zinc-700 md:text-base">
-                    {docs.map((d) => (
-                      <li key={d}>{d}</li>
+                    {whoLines.map((item, i) => (
+                      <li key={`who-${i}-${item.slice(0, 40)}`}>
+                        {obscureDetailLine(item)}
+                      </li>
                     ))}
                   </ul>
-                </div>
-              ) : null}
-              {showSeoApplication ? (
-                <div>
-                  <h3 className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
-                    {detailUi.sections.applying}
-                  </h3>
-                  <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-zinc-700">
-                    {scholarship.seoApplication!.trim()}
-                  </p>
-                </div>
-              ) : null}
-            </div>
-          </div>
-        ) : (
-          <>
-            {hasRequirementsSection ? (
-              <div className="mt-10">
-                <SectionLabel>
-                  {detailUi.sections.keyRequirements(keyRequirementsLabelCount)}
-                </SectionLabel>
-                <div className={scholarshipDetailCardPrimaryClass}>
-                  <p className="mb-4 text-xs text-zinc-500">
-                    {isSimplerGov
-                      ? detailUi.sections.keyRequirementsNoteGov
-                      : detailUi.sections.keyRequirementsNote}
-                  </p>
-                  {reqChips.length > 0 ? (
-                    <div className="mb-5 flex flex-wrap gap-2">
-                      {reqChips.map((c) => (
-                        <span
-                          key={c}
-                          className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-800"
-                        >
-                          {c}
-                        </span>
-                      ))}
-                    </div>
-                  ) : null}
-                  {reqDisplayLines.length > 0 ? (
-                    <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-zinc-700 md:text-base">
-                      {reqDisplayLines.map((item, i) => (
-                        <li key={`req-${i}-${item.slice(0, 40)}`}>
-                          {obscureDetailLine(item)}
-                        </li>
-                      ))}
-                    </ul>
-                  ) : null}
-                  {reqDisplayLines.length === 0 && requirementsHtmlRaw ? (
-                    <RequirementsRichOrList
-                      html={scholarship.requirementsHtml}
-                      lines={eligibilityItems}
-                      renderLine={obscureDetailLine}
-                    />
-                  ) : null}
-                  {reqCleanLines.length === 0 &&
-                  !requirementsHtmlRaw &&
-                  eligibilityItems.length > 0 ? (
-                    <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-zinc-700 md:text-base">
-                      {eligibilityItems.map((item, i) => (
-                        <li key={`elig-${i}-${item.slice(0, 40)}`}>
-                          {obscureDetailLine(item)}
-                        </li>
-                      ))}
-                    </ul>
+                  {eligibilityFromAi ? (
+                    <p className="mt-4 text-xs leading-relaxed text-zinc-500">
+                      {detailUi.verifyEligibilityNote}
+                    </p>
                   ) : null}
                 </div>
               </div>
             ) : null}
 
-            {docs.length > 0 || officialDocumentLinks.length > 0 ? (
-              <div className="mt-10">
-                <SectionLabel>{detailUi.sections.requiredDocuments}</SectionLabel>
-                <div className={scholarshipDetailCardPrimaryClass}>
-                  <p className="mb-4 text-xs text-zinc-500">
-                    {isSimplerGov
-                      ? 'Document list from the listing; confirm the latest version on the official opportunity page.'
-                      : 'Materials you may need to upload or submit; check the official application for the final list.'}
-                  </p>
-                  {docs.length > 0 ? (
-                    <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-zinc-700 md:text-base">
-                      {docs.map((d) => (
-                        <li key={d}>{d}</li>
-                      ))}
-                    </ul>
-                  ) : null}
-                  {officialDocumentLinks.length > 0 ? (
-                    <ol
-                      className={`${docs.length > 0 ? 'mt-4 ' : ''}list-decimal space-y-2 pl-5 text-sm leading-relaxed text-zinc-700 md:text-base`}
-                    >
-                      {officialDocumentLinks.map((doc) => (
-                        <li key={doc.key}>
-                          <a
-                            href={doc.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-start gap-2 font-medium text-sky-700 underline-offset-2 transition hover:text-sky-800 hover:underline"
-                          >
-                            <Paperclip
-                              className="mt-0.5 h-4 w-4 shrink-0"
-                              aria-hidden
-                            />
-                            <span>{doc.label}</span>
-                          </a>
-                        </li>
-                      ))}
-                    </ol>
-                  ) : null}
-                </div>
-              </div>
-            ) : null}
-
-            {showSeoApplication ? (
-              <ScholarshipSeoApplicationBlock
-                copy={detailUi}
-                text={scholarship.seoApplication!.trim()}
+            {showEligibilityHtmlFallback ? (
+              <ScholarshipRichSection
+                label={detailUi.sections.eligibility}
+                html={scholarship.eligibilityHtml}
+                fallbackText={scholarship.eligibilityText ?? undefined}
               />
             ) : null}
-          </>
-        )}
 
-        {hasAwardPaymentBlock ? (
-          <div className="mt-10">
-            <SectionLabel>{detailUi.sections.awardPayment}</SectionLabel>
-            <div
-              className={`${scholarshipDetailCardPrimaryClass} space-y-4 text-sm text-zinc-700`}
-            >
-              {hasAwardStat ? (
-                <p>
-                  <span className="font-semibold text-zinc-900">Amount:</span>{' '}
-                  {awardFullDisplay}
-                </p>
-              ) : awardsPlain ? (
-                <p className="whitespace-pre-line">
-                  <span className="font-semibold text-zinc-900">
-                    Funding / awards:
-                  </span>{' '}
-                  {awardsPlain}
-                </p>
-              ) : null}
-              {scholarship.numberOfAwards != null ? (
-                <p>
-                  <span className="font-semibold text-zinc-900">
-                    Number of awards:
-                  </span>{' '}
-                  {scholarship.numberOfAwards.toLocaleString()}
-                </p>
-              ) : null}
-              {payoutLabel ? (
-                <p>
-                  <span className="font-semibold text-zinc-900">Payout:</span>{' '}
-                  {payoutLabel}
-                </p>
-              ) : null}
-              {paymentNarrative ? (
-                <p className="whitespace-pre-line text-zinc-700">
-                  {paymentNarrative}
-                </p>
-              ) : null}
-              {scholarship.recurring ? (
-                <p className="text-zinc-600">This award may be renewable.</p>
-              ) : null}
-              {paymentHtmlRaw && !paymentNarrative ? (
-                <SafeScholarshipHtml html={paymentHtmlRaw} />
-              ) : null}
-            </div>
-          </div>
-        ) : null}
-
-        {hasImportantNotes ? (
-          <div className="mt-10">
-            <SectionLabel variant="support">{detailUi.sections.importantNotes}</SectionLabel>
-            <div
-              className={`${scholarshipDetailCardPrimaryClass} space-y-6 text-sm leading-relaxed text-zinc-700`}
-            >
-              {importantChunks.map((chunk) => (
-                <div key={chunk.key}>
-                  <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">
-                    {chunk.heading}
+            {hasQuickFacts ? (
+              <div className="mt-8 rounded-3xl border border-indigo-200 bg-indigo-50 px-5 py-4 text-center shadow-sm sm:px-6 sm:py-5">
+                <div className="mx-auto flex items-center justify-center gap-2.5">
+                  <span className="text-xl leading-none" aria-hidden>
+                    🎯
+                  </span>
+                  <p className="text-[1.65rem] font-bold leading-[1.08] tracking-tight text-indigo-950">
+                    {detailUi.matchCta.title}
                   </p>
-                  {chunk.plain ? (
-                    <p className="whitespace-pre-line">{chunk.plain}</p>
-                  ) : chunk.html ? (
-                    <SafeScholarshipHtml html={chunk.html} />
+                </div>
+                <HomePrimaryCtaClient className="mt-3 inline-flex items-center justify-center rounded-full bg-black px-7 py-2 text-xl font-bold leading-none text-white shadow-[0_8px_20px_rgba(0,0,0,0.25)] transition hover:bg-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/45">
+                  {detailUi.matchCta.button}
+                </HomePrimaryCtaClient>
+              </div>
+            ) : null}
+
+            {hasQuickFacts ? (
+              <div className={`mt-8 ${scholarshipDetailCardCompactClass}`}>
+                <h2 className="mb-4 text-base font-semibold tracking-tight text-zinc-900">
+                  {detailUi.quickFacts.title}
+                </h2>
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {statusDisplay ? (
+                    <div>
+                      <p className="text-xs font-medium text-zinc-500">
+                        {detailUi.quickFacts.status}
+                      </p>
+                      <p className="mt-1 text-sm font-semibold text-zinc-900">
+                        {statusDisplay}
+                      </p>
+                    </div>
+                  ) : null}
+                  {studyLevelsList.length ? (
+                    <div className="min-w-0 sm:col-span-2 lg:col-span-2">
+                      <p className="text-xs font-medium text-zinc-500">
+                        {detailUi.quickFacts.studyLevels}
+                      </p>
+                      <p className="mt-1 text-sm text-zinc-700">
+                        {studyLevelsList.join(', ')}
+                      </p>
+                    </div>
+                  ) : null}
+                  {fieldOfStudyList.length ? (
+                    <div className="min-w-0 sm:col-span-2 lg:col-span-2">
+                      <p className="text-xs font-medium text-zinc-500">
+                        {detailUi.quickFacts.fieldOfStudy}
+                      </p>
+                      <p className="mt-1 text-sm text-zinc-700">
+                        {fieldOfStudyList.join(', ')}
+                      </p>
+                    </div>
+                  ) : null}
+                  {institutionsLine ? (
+                    <div className="min-w-0 sm:col-span-2 lg:col-span-2">
+                      <p className="text-xs font-medium text-zinc-500">
+                        {detailUi.quickFacts.eligibleInstitutions}
+                      </p>
+                      <p
+                        className="mt-1 text-sm leading-relaxed text-zinc-700"
+                        title={
+                          providerNameLocked
+                            ? detailUi.quickFacts.institutionsLockedHint
+                            : undefined
+                        }
+                      >
+                        {obscureDetailLine(institutionsLine)}
+                      </p>
+                    </div>
+                  ) : null}
+                  {locationQuickFact ? (
+                    <div className="min-w-0 sm:col-span-2">
+                      <p className="text-xs font-medium text-zinc-500">
+                        {detailUi.quickFacts.location}
+                      </p>
+                      <p className="mt-1 text-sm text-zinc-700">
+                        {locationQuickFact}
+                      </p>
+                    </div>
+                  ) : null}
+                  {scholarship.numberOfAwards != null ? (
+                    <div>
+                      <p className="text-xs font-medium text-zinc-500">
+                        {detailUi.quickFacts.numberOfAwards}
+                      </p>
+                      <p className="mt-1 text-sm font-semibold text-zinc-900">
+                        {scholarship.numberOfAwards.toLocaleString()}
+                      </p>
+                    </div>
+                  ) : null}
+                  {payoutLabel ? (
+                    <div className="min-w-0 sm:col-span-2">
+                      <p className="text-xs font-medium text-zinc-500">
+                        {detailUi.quickFacts.payoutMethod}
+                      </p>
+                      <p className="mt-1 text-sm text-zinc-700">
+                        {payoutLabel}
+                      </p>
+                    </div>
                   ) : null}
                 </div>
-              ))}
-            </div>
-          </div>
-        ) : null}
+              </div>
+            ) : null}
 
-        {hasVisibleProviderContent ? (
-          <div className="mt-10">
-            <SectionLabel variant="support">{detailUi.sections.aboutProvider}</SectionLabel>
-            <div className={scholarshipDetailCardSupportClass}>
-              <div className="flex min-w-0 flex-col gap-2 sm:gap-3">
-                {providerProfileHref ? (
-                  providerNameLocked && providerName ? (
-                    <button
-                      type="button"
-                      onClick={openLockedAccessWall}
-                      className="group flex min-w-0 gap-3 rounded-xl p-1 -m-1 text-left outline-none transition hover:bg-zinc-50/90 focus-visible:ring-2 focus-visible:ring-orange-500/40 focus-visible:ring-offset-2 sm:gap-4"
-                      aria-label={detailUi.premium.providerHiddenAria}
-                    >
-                      <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-zinc-200/80 bg-white shadow-sm">
-                        {logoUrl ? (
-                          <img
-                            src={logoUrl}
-                            alt="Scholarship provider logo"
-                            className="h-full w-full object-cover"
-                          />
-                        ) : (
-                          <Shield
-                            className="h-5 w-5 text-zinc-500"
-                            strokeWidth={1.5}
-                            aria-hidden
-                          />
-                        )}
-                      </div>
-                      <div className="flex min-w-0 flex-1 items-center gap-2">
+            {showSupport ? (
+              <div className="mt-10">
+                <SectionLabel>
+                  {detailUi.sections.scholarshipSupport}
+                </SectionLabel>
+                <div className={scholarshipDetailCardPrimaryClass}>
+                  <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-8">
+                    {supportEmail ? (
+                      <a
+                        href={`mailto:${supportEmail}`}
+                        className="inline-flex items-center gap-2 text-sm font-medium text-sky-700 underline-offset-2 hover:underline"
+                      >
+                        <Mail className="h-4 w-4 shrink-0" strokeWidth={1.75} />
+                        {supportEmail}
+                      </a>
+                    ) : supportEmailRedacted ? (
+                      <button
+                        type="button"
+                        onClick={openPremiumPaywall}
+                        className="inline-flex items-center gap-2 text-sm font-medium text-zinc-700"
+                        aria-label={detailUi.premium.supportEmailHiddenAria}
+                      >
                         <Lock
                           className={`h-4 w-4 shrink-0 ${scholarshipGuestLockIconClass}`}
                           strokeWidth={2}
                           aria-hidden
                         />
-                        <p
-                          className={`min-w-0 text-lg font-semibold text-zinc-900 ${SCHOLARSHIP_PROVIDER_OBSCURE_CLASS}`}
+                        <Mail className="h-4 w-4 shrink-0" strokeWidth={1.75} />
+                        <span
+                          className={SCHOLARSHIP_PROVIDER_OBSCURE_CLASS}
                           aria-hidden
                         >
-                          {providerName}
-                        </p>
-                      </div>
-                    </button>
-                  ) : (
-                    <Link
-                      href={providerProfileHref}
-                      className="group flex min-w-0 gap-3 rounded-xl p-1 -m-1 outline-none transition hover:bg-zinc-50/90 focus-visible:ring-2 focus-visible:ring-emerald-500/45 focus-visible:ring-offset-2 sm:gap-4"
-                      aria-label={
-                        providerName
-                          ? `View provider profile: ${providerName}`
-                          : 'View provider profile'
-                      }
-                    >
-                      <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-zinc-200/80 bg-white shadow-sm transition group-hover:border-emerald-200/80">
-                        {logoUrl ? (
-                          <img
-                            src={logoUrl}
-                            alt={
-                              providerName
-                                ? `${providerName} logo`
-                                : 'Scholarship provider logo'
-                            }
-                            className="h-full w-full object-cover"
-                          />
-                        ) : (
-                          <Shield
-                            className="h-5 w-5 text-zinc-500 transition group-hover:text-emerald-700"
-                            strokeWidth={1.5}
-                            aria-hidden
-                          />
-                        )}
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        {providerName ? (
-                          <p className="text-lg font-semibold text-emerald-800 underline decoration-emerald-600/40 underline-offset-4 transition group-hover:text-emerald-900">
-                            {providerName}
-                          </p>
-                        ) : (
-                          <p className="text-sm font-medium text-zinc-600 underline-offset-2 transition group-hover:text-emerald-800 group-hover:underline">
-                            View provider profile
-                          </p>
-                        )}
-                      </div>
-                    </Link>
-                  )
-                ) : providerNameLocked && providerName ? (
-                  <button
-                    type="button"
-                    onClick={openLockedAccessWall}
-                    className="flex min-w-0 gap-3 rounded-xl p-1 -m-1 text-left outline-none transition hover:bg-zinc-50/90 focus-visible:ring-2 focus-visible:ring-orange-500/40 focus-visible:ring-offset-2 sm:gap-4"
-                    aria-label={detailUi.premium.providerHiddenAria}
-                  >
-                    <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-zinc-200/80 bg-white shadow-sm">
-                      {logoUrl ? (
-                        <img
-                          src={logoUrl}
-                          alt="Scholarship provider logo"
-                          className="h-full w-full object-cover"
+                          support@example.org
+                        </span>
+                      </button>
+                    ) : null}
+                    {supportPhone ? (
+                      <a
+                        href={`tel:${supportPhone.replace(/\s/g, '')}`}
+                        className="inline-flex items-center gap-2 text-sm font-medium text-sky-700 underline-offset-2 hover:underline"
+                      >
+                        <Phone
+                          className="h-4 w-4 shrink-0"
+                          strokeWidth={1.75}
                         />
-                      ) : (
-                        <Shield
-                          className="h-5 w-5 text-zinc-500"
-                          strokeWidth={1.5}
+                        {supportPhone}
+                      </a>
+                    ) : supportPhoneRedacted ? (
+                      <button
+                        type="button"
+                        onClick={openPremiumPaywall}
+                        className="inline-flex items-center gap-2 text-sm font-medium text-zinc-700"
+                        aria-label={detailUi.premium.supportPhoneHiddenAria}
+                      >
+                        <Lock
+                          className={`h-4 w-4 shrink-0 ${scholarshipGuestLockIconClass}`}
+                          strokeWidth={2}
                           aria-hidden
                         />
-                      )}
-                    </div>
-                    <div className="flex min-w-0 flex-1 items-center gap-2">
-                      <Lock
-                        className={`h-4 w-4 shrink-0 ${scholarshipGuestLockIconClass}`}
-                        strokeWidth={2}
-                        aria-hidden
-                      />
-                      <p
-                        className={`min-w-0 text-lg font-semibold text-zinc-900 ${SCHOLARSHIP_PROVIDER_OBSCURE_CLASS}`}
-                        aria-hidden
+                        <Phone
+                          className="h-4 w-4 shrink-0"
+                          strokeWidth={1.75}
+                        />
+                        <span
+                          className={SCHOLARSHIP_PROVIDER_OBSCURE_CLASS}
+                          aria-hidden
+                        >
+                          (555) 555-5555
+                        </span>
+                      </button>
+                    ) : null}
+                  </div>
+                </div>
+              </div>
+            ) : null}
+
+            {panelPick.showBeforeYouApply ? (
+              <ScholarshipBeforeYouApplyBlock
+                copy={detailUi}
+                checks={normalizedBeforeYouApply.importantChecks}
+                detailsToConfirm={normalizedBeforeYouApply.detailsToConfirm}
+                redFlags={normalizedBeforeYouApply.redFlags}
+                renderLine={obscureDetailLine}
+              />
+            ) : null}
+
+            {showNextStepsBlock ? (
+              <ScholarshipNextStepsBlock
+                copy={detailUi}
+                items={nextStepActions}
+                renderLine={obscureDetailLine}
+              />
+            ) : null}
+
+            {initialRelatedHubLinks.length > 0 ? (
+              <div
+                className="mt-10"
+                aria-labelledby="scholarship-related-hubs-heading"
+              >
+                <h2
+                  id="scholarship-related-hubs-heading"
+                  className="mb-3 text-base font-semibold tracking-tight text-zinc-900"
+                >
+                  {detailUi.related.hubsTitle}
+                </h2>
+                <p className="mb-3 text-sm leading-relaxed text-zinc-600">
+                  {detailUi.related.hubsIntro}
+                </p>
+                <ul className="flex flex-wrap gap-2" role="list">
+                  {initialRelatedHubLinks.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        className="inline-flex rounded-full border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-800 transition hover:border-slate-300 hover:bg-slate-50"
                       >
-                        {providerName}
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+
+            {initialComparePeers.length > 0 ? (
+              <div
+                className="mt-10"
+                aria-labelledby="scholarship-compare-peers-heading"
+              >
+                <h2
+                  id="scholarship-compare-peers-heading"
+                  className="mb-3 text-base font-semibold tracking-tight text-zinc-900"
+                >
+                  {detailUi.related.compareTitle}
+                </h2>
+                <p className="mb-3 text-sm leading-relaxed text-zinc-600">
+                  {detailUi.related.compareIntro}
+                </p>
+                <ul className="flex flex-wrap gap-2" role="list">
+                  {initialComparePeers.map((peer) => (
+                    <li key={peer.compareSlug}>
+                      <Link
+                        href={`/compare/universities/${encodeURIComponent(peer.compareSlug)}`}
+                        className="inline-flex rounded-full border border-sky-200 bg-sky-50/80 px-3 py-1.5 text-sm font-medium text-sky-950 transition hover:border-sky-300 hover:bg-sky-100"
+                      >
+                        {detailUi.related.compareVs(peer.peerName)}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+
+            {initialRelatedArticles.length > 0 ? (
+              <div
+                className="mt-10"
+                aria-labelledby="scholarship-related-resources-heading"
+              >
+                <div className="flex flex-wrap items-start gap-3">
+                  <BookOpen
+                    className="mt-0.5 h-5 w-5 shrink-0 text-teal-700/90"
+                    strokeWidth={1.75}
+                    aria-hidden
+                  />
+                  <div className="min-w-0 flex-1 space-y-3">
+                    <h2
+                      id="scholarship-related-resources-heading"
+                      className="text-lg font-semibold tracking-tight text-zinc-900"
+                    >
+                      {detailUi.related.resourcesTitle}
+                    </h2>
+                    <p className="text-sm leading-relaxed text-zinc-600">
+                      {detailUi.related.resourcesIntro}
+                    </p>
+                    <ul className="space-y-2.5" role="list">
+                      {initialRelatedArticles.map((post) => {
+                        const slug = post.slug?.trim();
+                        if (!slug) return null;
+                        const label =
+                          post.title?.trim() || slug.replace(/-/g, ' ');
+                        return (
+                          <li key={post.id}>
+                            <Link
+                              href={resourcesArticlePath(slug)}
+                              className="text-sm font-semibold text-teal-800 underline decoration-teal-600/35 underline-offset-2 transition hover:text-teal-950 hover:decoration-teal-700/60"
+                            >
+                              {label}
+                            </Link>
+                            {post.meta_description?.trim() ? (
+                              <p className="mt-1 text-xs leading-relaxed text-zinc-500">
+                                {post.meta_description.trim()}
+                              </p>
+                            ) : null}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            ) : null}
+
+            {initialRelatedEssays.length > 0 ||
+            Boolean(scholarship?.essayRequired) ? (
+              <div
+                className="mt-10"
+                aria-labelledby="scholarship-related-essays-heading"
+              >
+                <div className="flex flex-wrap items-start gap-3">
+                  <BookOpen
+                    className="mt-0.5 h-5 w-5 shrink-0 text-indigo-700/90"
+                    strokeWidth={1.75}
+                    aria-hidden
+                  />
+                  <div className="min-w-0 flex-1 space-y-3">
+                    <h2
+                      id="scholarship-related-essays-heading"
+                      className="text-lg font-semibold tracking-tight text-zinc-900"
+                    >
+                      {detailUi.related.essaysTitle}
+                    </h2>
+                    {initialRelatedEssays.length > 0 ? (
+                      <ul className="space-y-2.5" role="list">
+                        {initialRelatedEssays.map((ex) => {
+                          const slug = ex.slug?.trim();
+                          if (!slug) return null;
+                          const label =
+                            ex.title?.trim() || slug.replace(/-/g, ' ');
+                          return (
+                            <li key={ex.id}>
+                              <Link
+                                href={essayHubArticlePath(slug)}
+                                className="text-sm font-semibold text-indigo-800 underline decoration-indigo-600/35 underline-offset-2 transition hover:text-indigo-950 hover:decoration-indigo-700/60"
+                              >
+                                {label}
+                              </Link>
+                              {ex.meta_description?.trim() ? (
+                                <p className="mt-1 text-xs leading-relaxed text-zinc-500">
+                                  {ex.meta_description.trim()}
+                                </p>
+                              ) : null}
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    ) : (
+                      <p className="text-sm text-zinc-600">
+                        {detailUi.related.essaysFallback}
+                      </p>
+                    )}
+                    {scholarship?.essayRequired ? (
+                      <div className="rounded-2xl border border-indigo-100 bg-indigo-50/60 p-4">
+                        <p className="text-sm font-semibold text-indigo-950">
+                          {detailUi.related.essayRequiredTitle}
+                        </p>
+                        <p className="mt-1 text-xs leading-relaxed text-indigo-900/75">
+                          {detailUi.related.essayRequiredBody}
+                        </p>
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          {[
+                            [
+                              detailUi.related.essayChecklist,
+                              '/essays/checklist'
+                            ],
+                            [
+                              detailUi.related.essayExamples,
+                              '/essays/examples'
+                            ],
+                            [
+                              detailUi.related.essayFinancialNeed,
+                              '/essays/financial-need'
+                            ],
+                            [
+                              detailUi.related.essayCareerGoals,
+                              '/essays/career-goals'
+                            ],
+                            [
+                              detailUi.related.essayLeadership,
+                              '/essays/leadership'
+                            ]
+                          ].map(([label, href]) => (
+                            <Link
+                              key={href}
+                              href={href}
+                              className="rounded-full border border-indigo-200 bg-white px-3 py-1.5 text-xs font-semibold text-indigo-800 transition hover:border-indigo-300 hover:bg-indigo-50"
+                            >
+                              {label}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    ) : null}
+                    <div className="rounded-2xl border border-indigo-200 bg-gradient-to-br from-indigo-50 to-white p-4">
+                      <p className="text-sm font-semibold text-indigo-950">
+                        {detailUi.related.aiWriterTitle}
+                      </p>
+                      <Link
+                        href={`/essay?scholarship=${encodeURIComponent(scholarship.title)}`}
+                        className="mt-2 inline-flex text-sm font-bold text-indigo-700 underline-offset-2 hover:text-indigo-900 hover:underline"
+                      >
+                        {detailUi.related.aiWriterLink}
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : null}
+
+            {showApplicationTips ? (
+              <ScholarshipApplicationTipsBlock
+                copy={detailUi}
+                items={filteredTips}
+                renderLine={obscureDetailLine}
+              />
+            ) : null}
+
+            {mergeAppDetails &&
+            (hasRequirementsSection ||
+              docs.length > 0 ||
+              showSeoApplication) ? (
+              <div className="mt-10">
+                <SectionLabel>
+                  {detailUi.sections.applicationDetails}
+                </SectionLabel>
+                <div
+                  className={`${scholarshipDetailCardPrimaryClass} space-y-8`}
+                >
+                  {hasRequirementsSection ? (
+                    <div>
+                      <h3 className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                        {detailUi.sections.keyRequirements(
+                          keyRequirementsLabelCount
+                        )}
+                      </h3>
+                      <p className="mb-4 mt-2 text-xs text-zinc-500">
+                        {isSimplerGov
+                          ? detailUi.sections.keyRequirementsNoteGov
+                          : detailUi.sections.keyRequirementsNoteAlt}
+                      </p>
+                      {reqChips.length > 0 ? (
+                        <div className="mb-5 flex flex-wrap gap-2">
+                          {reqChips.map((c) => (
+                            <span
+                              key={c}
+                              className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-800"
+                            >
+                              {c}
+                            </span>
+                          ))}
+                        </div>
+                      ) : null}
+                      {reqDisplayLines.length > 0 ? (
+                        <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-zinc-700 md:text-base">
+                          {reqDisplayLines.map((item, i) => (
+                            <li key={`req-${i}-${item.slice(0, 40)}`}>
+                              {obscureDetailLine(item)}
+                            </li>
+                          ))}
+                        </ul>
+                      ) : null}
+                      {reqDisplayLines.length === 0 && requirementsHtmlRaw ? (
+                        <RequirementsRichOrList
+                          html={scholarship.requirementsHtml}
+                          lines={eligibilityItems}
+                          renderLine={obscureDetailLine}
+                        />
+                      ) : null}
+                      {reqCleanLines.length === 0 &&
+                      !requirementsHtmlRaw &&
+                      eligibilityItems.length > 0 ? (
+                        <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-zinc-700 md:text-base">
+                          {eligibilityItems.map((item, i) => (
+                            <li key={`elig-${i}-${item.slice(0, 40)}`}>
+                              {obscureDetailLine(item)}
+                            </li>
+                          ))}
+                        </ul>
+                      ) : null}
+                    </div>
+                  ) : null}
+                  {docs.length > 0 ? (
+                    <div>
+                      <h3 className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                        {detailUi.sections.requiredDocuments}
+                      </h3>
+                      <p className="mb-4 mt-2 text-xs text-zinc-500">
+                        {isSimplerGov
+                          ? detailUi.sections.requiredDocumentsNoteGov
+                          : detailUi.sections.requiredDocumentsNote}
+                      </p>
+                      <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-zinc-700 md:text-base">
+                        {docs.map((d) => (
+                          <li key={d}>{d}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
+                  {showSeoApplication ? (
+                    <div>
+                      <h3 className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                        {detailUi.sections.applying}
+                      </h3>
+                      <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-zinc-700">
+                        {scholarship.seoApplication!.trim()}
                       </p>
                     </div>
-                  </button>
-                ) : providerName || logoUrl || showStandaloneProviderWebsiteRow ? (
-                  <div className="flex min-w-0 gap-3 sm:gap-4">
-                    <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-zinc-200/80 bg-white shadow-sm">
-                      {logoUrl ? (
-                        <img
-                          src={logoUrl}
-                          alt={
-                            providerName
-                              ? `${providerName} logo`
-                              : 'Scholarship provider logo'
-                          }
-                          className="h-full w-full object-cover"
-                        />
-                      ) : (
-                        <Shield
-                          className="h-5 w-5 text-zinc-500"
-                          strokeWidth={1.5}
-                          aria-hidden
-                        />
+                  ) : null}
+                </div>
+              </div>
+            ) : (
+              <>
+                {hasRequirementsSection ? (
+                  <div className="mt-10">
+                    <SectionLabel>
+                      {detailUi.sections.keyRequirements(
+                        keyRequirementsLabelCount
                       )}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      {providerName ? (
-                        <p className="text-lg font-semibold text-zinc-900">
-                          {providerName}
-                        </p>
-                      ) : showStandaloneProviderWebsiteRow && providerUrlRaw ? (
-                        hasSubscription ? (
-                          <a
-                            href={providerUrlRaw}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex w-fit items-center justify-center gap-1.5 rounded-xl border border-sky-100 bg-sky-50 px-3 py-2 text-sm font-semibold text-sky-700 shadow-sm transition hover:border-sky-200 hover:bg-sky-100"
-                          >
-                            <ExternalLink
-                              className="h-3.5 w-3.5 shrink-0"
-                              aria-hidden
-                            />
-                            {detailUi.providerWebsite}
-                          </a>
-                        ) : (
-                          <button
-                            type="button"
-                            onClick={openPremiumPaywall}
-                            className="inline-flex w-fit items-center justify-center gap-1.5 rounded-xl border border-sky-100 bg-sky-50 px-3 py-2 text-sm font-semibold text-sky-700 shadow-sm transition hover:border-sky-200 hover:bg-sky-100"
-                          >
-                            <Lock
-                              className="h-3.5 w-3.5 shrink-0"
-                              strokeWidth={2}
-                              aria-hidden
-                            />
-                            {detailUi.providerWebsite}
-                          </button>
-                        )
+                    </SectionLabel>
+                    <div className={scholarshipDetailCardPrimaryClass}>
+                      <p className="mb-4 text-xs text-zinc-500">
+                        {isSimplerGov
+                          ? detailUi.sections.keyRequirementsNoteGov
+                          : detailUi.sections.keyRequirementsNote}
+                      </p>
+                      {reqChips.length > 0 ? (
+                        <div className="mb-5 flex flex-wrap gap-2">
+                          {reqChips.map((c) => (
+                            <span
+                              key={c}
+                              className="rounded-full bg-zinc-100 px-3 py-1 text-xs font-medium text-zinc-800"
+                            >
+                              {c}
+                            </span>
+                          ))}
+                        </div>
+                      ) : null}
+                      {reqDisplayLines.length > 0 ? (
+                        <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-zinc-700 md:text-base">
+                          {reqDisplayLines.map((item, i) => (
+                            <li key={`req-${i}-${item.slice(0, 40)}`}>
+                              {obscureDetailLine(item)}
+                            </li>
+                          ))}
+                        </ul>
+                      ) : null}
+                      {reqDisplayLines.length === 0 && requirementsHtmlRaw ? (
+                        <RequirementsRichOrList
+                          html={scholarship.requirementsHtml}
+                          lines={eligibilityItems}
+                          renderLine={obscureDetailLine}
+                        />
+                      ) : null}
+                      {reqCleanLines.length === 0 &&
+                      !requirementsHtmlRaw &&
+                      eligibilityItems.length > 0 ? (
+                        <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-zinc-700 md:text-base">
+                          {eligibilityItems.map((item, i) => (
+                            <li key={`elig-${i}-${item.slice(0, 40)}`}>
+                              {obscureDetailLine(item)}
+                            </li>
+                          ))}
+                        </ul>
                       ) : null}
                     </div>
                   </div>
                 ) : null}
-                {providerWebsiteCta ? (
-                  <div className="mt-3 w-full sm:ml-14 sm:max-w-sm">
-                    {providerWebsiteCta}
+
+                {docs.length > 0 || officialDocumentLinks.length > 0 ? (
+                  <div className="mt-10">
+                    <SectionLabel>
+                      {detailUi.sections.requiredDocuments}
+                    </SectionLabel>
+                    <div className={scholarshipDetailCardPrimaryClass}>
+                      <p className="mb-4 text-xs text-zinc-500">
+                        {isSimplerGov
+                          ? 'Document list from the listing; confirm the latest version on the official opportunity page.'
+                          : 'Materials you may need to upload or submit; check the official application for the final list.'}
+                      </p>
+                      {docs.length > 0 ? (
+                        <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-zinc-700 md:text-base">
+                          {docs.map((d) => (
+                            <li key={d}>{d}</li>
+                          ))}
+                        </ul>
+                      ) : null}
+                      {officialDocumentLinks.length > 0 ? (
+                        <ol
+                          className={`${docs.length > 0 ? 'mt-4 ' : ''}list-decimal space-y-2 pl-5 text-sm leading-relaxed text-zinc-700 md:text-base`}
+                        >
+                          {officialDocumentLinks.map((doc) => (
+                            <li key={doc.key}>
+                              <a
+                                href={doc.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-start gap-2 font-medium text-sky-700 underline-offset-2 transition hover:text-sky-800 hover:underline"
+                              >
+                                <Paperclip
+                                  className="mt-0.5 h-4 w-4 shrink-0"
+                                  aria-hidden
+                                />
+                                <span>{doc.label}</span>
+                              </a>
+                            </li>
+                          ))}
+                        </ol>
+                      ) : null}
+                    </div>
                   </div>
                 ) : null}
-              </div>
-              {showProviderMission ? (
-                <p className="mt-4 text-sm leading-relaxed text-zinc-600">
-                  {providerMissionDisplay}
-                </p>
-              ) : null}
-              {social && hasSocial && hasSubscription ? (
-                <div className="mt-5 border-t border-zinc-100 pt-4">
-                  <p className="text-[11px] font-medium uppercase tracking-wide text-zinc-400">
-                    Social
-                  </p>
-                  <div className="mt-2 flex flex-wrap gap-1.5">
-                    {social.facebook ? (
-                      <a
-                        href={social.facebook}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex h-8 w-8 items-center justify-center rounded-full border border-zinc-100 bg-zinc-50/80 text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-700"
-                        aria-label="Facebook"
-                      >
-                        <Facebook className="h-3.5 w-3.5" strokeWidth={1.75} />
-                      </a>
-                    ) : null}
-                    {social.instagram ? (
-                      <a
-                        href={social.instagram}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex h-8 w-8 items-center justify-center rounded-full border border-zinc-100 bg-zinc-50/80 text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-700"
-                        aria-label="Instagram"
-                      >
-                        <Instagram className="h-3.5 w-3.5" strokeWidth={1.75} />
-                      </a>
-                    ) : null}
-                    {social.linkedin ? (
-                      <a
-                        href={social.linkedin}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex h-8 w-8 items-center justify-center rounded-full border border-zinc-100 bg-zinc-50/80 text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-700"
-                        aria-label="LinkedIn"
-                      >
-                        <Linkedin className="h-3.5 w-3.5" strokeWidth={1.75} />
-                      </a>
-                    ) : null}
-                  </div>
-                </div>
-              ) : null}
-            </div>
-          </div>
-        ) : null}
 
-        {showSourceFallbackBlock && sourceFallbackLabel ? (
-          <div className="mt-10">
-            <SectionLabel variant="support">{detailUi.sections.source}</SectionLabel>
-            <div className={scholarshipDetailCardSupportClass}>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-400">
-                {detailUi.sections.source}
-              </p>
-              <p className="mt-1 text-lg font-semibold text-zinc-900">
-                {sourceFallbackLabel}
-              </p>
-            </div>
-          </div>
-        ) : null}
+                {showSeoApplication ? (
+                  <ScholarshipSeoApplicationBlock
+                    copy={detailUi}
+                    text={scholarship.seoApplication!.trim()}
+                  />
+                ) : null}
+              </>
+            )}
 
-        {showOverviewSection ? (
-          <div className="mt-10">
-            <SectionLabel variant="support">{detailUi.sections.overview}</SectionLabel>
-            <div className={scholarshipDetailCardSupportClass}>
-              {showCredibilityInOverview ? (
+            {hasAwardPaymentBlock ? (
+              <div className="mt-10">
+                <SectionLabel>{detailUi.sections.awardPayment}</SectionLabel>
                 <div
-                  className={`${
-                    overviewBody || showDescriptionHtmlFallback
-                      ? 'border-b border-zinc-100 pb-6'
-                      : ''
-                  }`}
+                  className={`${scholarshipDetailCardPrimaryClass} space-y-4 text-sm text-zinc-700`}
                 >
-                  <p className="text-xs font-medium text-zinc-500">
-                    Credibility score:
-                  </p>
-                  <div className="mt-1 flex max-w-full items-center gap-2">
-                    {scholarship.verified ? (
-                      <>
-                        <CheckCircle2
-                          className="h-5 w-5 shrink-0 text-emerald-500"
-                          aria-hidden
-                        />
-                        <span className="text-base font-semibold text-zinc-900">
-                          Verified
-                        </span>
-                      </>
-                    ) : (
-                      <span className="text-base font-semibold text-zinc-600">
-                        {scholarship.credibilityLabel?.trim() ||
-                          'Not verified'}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              ) : null}
-              {overviewBody ? (
-                <div className={showCredibilityInOverview ? 'pt-6' : ''}>
-                  <p className="whitespace-pre-line text-sm leading-relaxed text-zinc-600 md:text-base">
-                    {obscureDetailLine(overviewShown)}
-                  </p>
-                  {overviewLong ? (
-                    <button
-                      type="button"
-                      onClick={() => setDescExpanded((e) => !e)}
-                      className="mt-2 text-sm font-semibold text-sky-600 underline decoration-sky-600/40 underline-offset-2 hover:text-sky-700"
-                    >
-                      {descExpanded ? detailUi.showLess : detailUi.showMore}
-                    </button>
+                  {hasAwardStat ? (
+                    <p>
+                      <span className="font-semibold text-zinc-900">
+                        Amount:
+                      </span>{' '}
+                      {awardFullDisplay}
+                    </p>
+                  ) : awardsPlain ? (
+                    <p className="whitespace-pre-line">
+                      <span className="font-semibold text-zinc-900">
+                        Funding / awards:
+                      </span>{' '}
+                      {awardsPlain}
+                    </p>
+                  ) : null}
+                  {scholarship.numberOfAwards != null ? (
+                    <p>
+                      <span className="font-semibold text-zinc-900">
+                        Number of awards:
+                      </span>{' '}
+                      {scholarship.numberOfAwards.toLocaleString()}
+                    </p>
+                  ) : null}
+                  {payoutLabel ? (
+                    <p>
+                      <span className="font-semibold text-zinc-900">
+                        Payout:
+                      </span>{' '}
+                      {payoutLabel}
+                    </p>
+                  ) : null}
+                  {paymentNarrative ? (
+                    <p className="whitespace-pre-line text-zinc-700">
+                      {paymentNarrative}
+                    </p>
+                  ) : null}
+                  {scholarship.recurring ? (
+                    <p className="text-zinc-600">
+                      This award may be renewable.
+                    </p>
+                  ) : null}
+                  {paymentHtmlRaw && !paymentNarrative ? (
+                    <SafeScholarshipHtml html={paymentHtmlRaw} />
                   ) : null}
                 </div>
-              ) : null}
-              {showDescriptionHtmlFallback ? (
-                <div
-                  className={
-                    showCredibilityInOverview || overviewBody ? 'pt-6' : ''
-                  }
-                >
-                  <SafeScholarshipHtml html={descriptionHtmlRaw} />
-                </div>
-              ) : null}
-            </div>
-          </div>
-        ) : null}
-        </ScholarshipDetailGuestLockSection>
+              </div>
+            ) : null}
 
-        {showApplyNowCta || officialName || lastVerifiedLabel ? (
-          <div className="mt-8 pb-0">
-            <h2 className="mb-2 text-lg font-semibold tracking-tight text-zinc-900">
-              {detailUi.sponsorAndApplication}
-            </h2>
-            <div
-              className={`${scholarshipDetailCardTrustClass} text-sm text-zinc-700`}
-            >
-              {officialName ? (
-                <p className="text-base font-semibold text-zinc-900">
-                  {officialName}
-                </p>
-              ) : null}
-              <ul className="mt-4 flex list-none flex-col gap-3 p-0 sm:flex-row sm:items-stretch sm:gap-3">
-                {showApplyNowCta ? (
-                  <li className="min-w-0 flex-1 basis-0">
-                    {officialApplicationHref ? (
-                      hasSubscription ? (
-                        <a
-                          href={officialApplicationHref}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className={detailApplyPrimaryClass}
+            {hasImportantNotes ? (
+              <div className="mt-10">
+                <SectionLabel variant="support">
+                  {detailUi.sections.importantNotes}
+                </SectionLabel>
+                <div
+                  className={`${scholarshipDetailCardPrimaryClass} space-y-6 text-sm leading-relaxed text-zinc-700`}
+                >
+                  {importantChunks.map((chunk) => (
+                    <div key={chunk.key}>
+                      <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                        {chunk.heading}
+                      </p>
+                      {chunk.plain ? (
+                        <p className="whitespace-pre-line">{chunk.plain}</p>
+                      ) : chunk.html ? (
+                        <SafeScholarshipHtml html={chunk.html} />
+                      ) : null}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+
+            {hasVisibleProviderContent ? (
+              <div className="mt-10">
+                <SectionLabel variant="support">
+                  {detailUi.sections.aboutProvider}
+                </SectionLabel>
+                <div className={scholarshipDetailCardSupportClass}>
+                  <div className="flex min-w-0 flex-col gap-2 sm:gap-3">
+                    {providerProfileHref ? (
+                      providerNameLocked && providerName ? (
+                        <button
+                          type="button"
+                          onClick={openLockedAccessWall}
+                          className="group flex min-w-0 gap-3 rounded-xl p-1 -m-1 text-left outline-none transition hover:bg-zinc-50/90 focus-visible:ring-2 focus-visible:ring-orange-500/40 focus-visible:ring-offset-2 sm:gap-4"
+                          aria-label={detailUi.premium.providerHiddenAria}
                         >
-                          {detailUi.applyNow}
-                        </a>
+                          <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-zinc-200/80 bg-white shadow-sm">
+                            {logoUrl ? (
+                              <img
+                                src={logoUrl}
+                                alt="Scholarship provider logo"
+                                className="h-full w-full object-cover"
+                              />
+                            ) : (
+                              <Shield
+                                className="h-5 w-5 text-zinc-500"
+                                strokeWidth={1.5}
+                                aria-hidden
+                              />
+                            )}
+                          </div>
+                          <div className="flex min-w-0 flex-1 items-center gap-2">
+                            <Lock
+                              className={`h-4 w-4 shrink-0 ${scholarshipGuestLockIconClass}`}
+                              strokeWidth={2}
+                              aria-hidden
+                            />
+                            <p
+                              className={`min-w-0 text-lg font-semibold text-zinc-900 ${SCHOLARSHIP_PROVIDER_OBSCURE_CLASS}`}
+                              aria-hidden
+                            >
+                              {providerName}
+                            </p>
+                          </div>
+                        </button>
+                      ) : (
+                        <Link
+                          href={providerProfileHref}
+                          className="group flex min-w-0 gap-3 rounded-xl p-1 -m-1 outline-none transition hover:bg-zinc-50/90 focus-visible:ring-2 focus-visible:ring-emerald-500/45 focus-visible:ring-offset-2 sm:gap-4"
+                          aria-label={
+                            providerName
+                              ? `View provider profile: ${providerName}`
+                              : 'View provider profile'
+                          }
+                        >
+                          <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-zinc-200/80 bg-white shadow-sm transition group-hover:border-emerald-200/80">
+                            {logoUrl ? (
+                              <img
+                                src={logoUrl}
+                                alt={
+                                  providerName
+                                    ? `${providerName} logo`
+                                    : 'Scholarship provider logo'
+                                }
+                                className="h-full w-full object-cover"
+                              />
+                            ) : (
+                              <Shield
+                                className="h-5 w-5 text-zinc-500 transition group-hover:text-emerald-700"
+                                strokeWidth={1.5}
+                                aria-hidden
+                              />
+                            )}
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            {providerName ? (
+                              <p className="text-lg font-semibold text-emerald-800 underline decoration-emerald-600/40 underline-offset-4 transition group-hover:text-emerald-900">
+                                {providerName}
+                              </p>
+                            ) : (
+                              <p className="text-sm font-medium text-zinc-600 underline-offset-2 transition group-hover:text-emerald-800 group-hover:underline">
+                                View provider profile
+                              </p>
+                            )}
+                          </div>
+                        </Link>
+                      )
+                    ) : providerNameLocked && providerName ? (
+                      <button
+                        type="button"
+                        onClick={openLockedAccessWall}
+                        className="flex min-w-0 gap-3 rounded-xl p-1 -m-1 text-left outline-none transition hover:bg-zinc-50/90 focus-visible:ring-2 focus-visible:ring-orange-500/40 focus-visible:ring-offset-2 sm:gap-4"
+                        aria-label={detailUi.premium.providerHiddenAria}
+                      >
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-zinc-200/80 bg-white shadow-sm">
+                          {logoUrl ? (
+                            <img
+                              src={logoUrl}
+                              alt="Scholarship provider logo"
+                              className="h-full w-full object-cover"
+                            />
+                          ) : (
+                            <Shield
+                              className="h-5 w-5 text-zinc-500"
+                              strokeWidth={1.5}
+                              aria-hidden
+                            />
+                          )}
+                        </div>
+                        <div className="flex min-w-0 flex-1 items-center gap-2">
+                          <Lock
+                            className={`h-4 w-4 shrink-0 ${scholarshipGuestLockIconClass}`}
+                            strokeWidth={2}
+                            aria-hidden
+                          />
+                          <p
+                            className={`min-w-0 text-lg font-semibold text-zinc-900 ${SCHOLARSHIP_PROVIDER_OBSCURE_CLASS}`}
+                            aria-hidden
+                          >
+                            {providerName}
+                          </p>
+                        </div>
+                      </button>
+                    ) : providerName ||
+                      logoUrl ||
+                      showStandaloneProviderWebsiteRow ? (
+                      <div className="flex min-w-0 gap-3 sm:gap-4">
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-zinc-200/80 bg-white shadow-sm">
+                          {logoUrl ? (
+                            <img
+                              src={logoUrl}
+                              alt={
+                                providerName
+                                  ? `${providerName} logo`
+                                  : 'Scholarship provider logo'
+                              }
+                              className="h-full w-full object-cover"
+                            />
+                          ) : (
+                            <Shield
+                              className="h-5 w-5 text-zinc-500"
+                              strokeWidth={1.5}
+                              aria-hidden
+                            />
+                          )}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          {providerName ? (
+                            <p className="text-lg font-semibold text-zinc-900">
+                              {providerName}
+                            </p>
+                          ) : showStandaloneProviderWebsiteRow &&
+                            providerUrlRaw ? (
+                            hasSubscription ? (
+                              <a
+                                href={providerUrlRaw}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex w-fit items-center justify-center gap-1.5 rounded-xl border border-sky-100 bg-sky-50 px-3 py-2 text-sm font-semibold text-sky-700 shadow-sm transition hover:border-sky-200 hover:bg-sky-100"
+                              >
+                                <ExternalLink
+                                  className="h-3.5 w-3.5 shrink-0"
+                                  aria-hidden
+                                />
+                                {detailUi.providerWebsite}
+                              </a>
+                            ) : (
+                              <button
+                                type="button"
+                                onClick={openPremiumPaywall}
+                                className="inline-flex w-fit items-center justify-center gap-1.5 rounded-xl border border-sky-100 bg-sky-50 px-3 py-2 text-sm font-semibold text-sky-700 shadow-sm transition hover:border-sky-200 hover:bg-sky-100"
+                              >
+                                <Lock
+                                  className="h-3.5 w-3.5 shrink-0"
+                                  strokeWidth={2}
+                                  aria-hidden
+                                />
+                                {detailUi.providerWebsite}
+                              </button>
+                            )
+                          ) : null}
+                        </div>
+                      </div>
+                    ) : null}
+                    {providerWebsiteCta ? (
+                      <div className="mt-3 w-full sm:ml-14 sm:max-w-sm">
+                        {providerWebsiteCta}
+                      </div>
+                    ) : null}
+                  </div>
+                  {showProviderMission ? (
+                    <p className="mt-4 text-sm leading-relaxed text-zinc-600">
+                      {providerMissionDisplay}
+                    </p>
+                  ) : null}
+                  {social && hasSocial && hasSubscription ? (
+                    <div className="mt-5 border-t border-zinc-100 pt-4">
+                      <p className="text-[11px] font-medium uppercase tracking-wide text-zinc-400">
+                        Social
+                      </p>
+                      <div className="mt-2 flex flex-wrap gap-1.5">
+                        {social.facebook ? (
+                          <a
+                            href={social.facebook}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex h-8 w-8 items-center justify-center rounded-full border border-zinc-100 bg-zinc-50/80 text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-700"
+                            aria-label="Facebook"
+                          >
+                            <Facebook
+                              className="h-3.5 w-3.5"
+                              strokeWidth={1.75}
+                            />
+                          </a>
+                        ) : null}
+                        {social.instagram ? (
+                          <a
+                            href={social.instagram}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex h-8 w-8 items-center justify-center rounded-full border border-zinc-100 bg-zinc-50/80 text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-700"
+                            aria-label="Instagram"
+                          >
+                            <Instagram
+                              className="h-3.5 w-3.5"
+                              strokeWidth={1.75}
+                            />
+                          </a>
+                        ) : null}
+                        {social.linkedin ? (
+                          <a
+                            href={social.linkedin}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex h-8 w-8 items-center justify-center rounded-full border border-zinc-100 bg-zinc-50/80 text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-700"
+                            aria-label="LinkedIn"
+                          >
+                            <Linkedin
+                              className="h-3.5 w-3.5"
+                              strokeWidth={1.75}
+                            />
+                          </a>
+                        ) : null}
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+              </div>
+            ) : null}
+
+            {showSourceFallbackBlock && sourceFallbackLabel ? (
+              <div className="mt-10">
+                <SectionLabel variant="support">
+                  {detailUi.sections.source}
+                </SectionLabel>
+                <div className={scholarshipDetailCardSupportClass}>
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-400">
+                    {detailUi.sections.source}
+                  </p>
+                  <p className="mt-1 text-lg font-semibold text-zinc-900">
+                    {sourceFallbackLabel}
+                  </p>
+                </div>
+              </div>
+            ) : null}
+
+            {showOverviewSection ? (
+              <div className="mt-10">
+                <SectionLabel variant="support">
+                  {detailUi.sections.overview}
+                </SectionLabel>
+                <div className={scholarshipDetailCardSupportClass}>
+                  {showCredibilityInOverview ? (
+                    <div
+                      className={`${
+                        overviewBody || showDescriptionHtmlFallback
+                          ? 'border-b border-zinc-100 pb-6'
+                          : ''
+                      }`}
+                    >
+                      <p className="text-xs font-medium text-zinc-500">
+                        Credibility score:
+                      </p>
+                      <div className="mt-1 flex max-w-full items-center gap-2">
+                        {scholarship.verified ? (
+                          <>
+                            <CheckCircle2
+                              className="h-5 w-5 shrink-0 text-emerald-500"
+                              aria-hidden
+                            />
+                            <span className="text-base font-semibold text-zinc-900">
+                              Verified
+                            </span>
+                          </>
+                        ) : (
+                          <span className="text-base font-semibold text-zinc-600">
+                            {scholarship.credibilityLabel?.trim() ||
+                              'Not verified'}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  ) : null}
+                  {overviewBody ? (
+                    <div className={showCredibilityInOverview ? 'pt-6' : ''}>
+                      <p className="whitespace-pre-line text-sm leading-relaxed text-zinc-600 md:text-base">
+                        {obscureDetailLine(overviewShown)}
+                      </p>
+                      {overviewLong ? (
+                        <button
+                          type="button"
+                          onClick={() => setDescExpanded((e) => !e)}
+                          className="mt-2 text-sm font-semibold text-sky-600 underline decoration-sky-600/40 underline-offset-2 hover:text-sky-700"
+                        >
+                          {descExpanded ? detailUi.showLess : detailUi.showMore}
+                        </button>
+                      ) : null}
+                    </div>
+                  ) : null}
+                  {showDescriptionHtmlFallback ? (
+                    <div
+                      className={
+                        showCredibilityInOverview || overviewBody ? 'pt-6' : ''
+                      }
+                    >
+                      <SafeScholarshipHtml html={descriptionHtmlRaw} />
+                    </div>
+                  ) : null}
+                </div>
+              </div>
+            ) : null}
+          </ScholarshipDetailGuestLockSection>
+
+          {showApplyNowCta || officialName || lastVerifiedLabel ? (
+            <div className="mt-8 pb-0">
+              <h2 className="mb-2 text-lg font-semibold tracking-tight text-zinc-900">
+                {detailUi.sponsorAndApplication}
+              </h2>
+              <div
+                className={`${scholarshipDetailCardTrustClass} text-sm text-zinc-700`}
+              >
+                {officialName ? (
+                  <p className="text-base font-semibold text-zinc-900">
+                    {officialName}
+                  </p>
+                ) : null}
+                <ul className="mt-4 flex list-none flex-col gap-3 p-0 sm:flex-row sm:items-stretch sm:gap-3">
+                  {showApplyNowCta ? (
+                    <li className="min-w-0 flex-1 basis-0">
+                      {officialApplicationHref ? (
+                        hasSubscription ? (
+                          <a
+                            href={officialApplicationHref}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={detailApplyPrimaryClass}
+                          >
+                            {detailUi.applyNow}
+                          </a>
+                        ) : (
+                          <button
+                            type="button"
+                            className={detailApplyPrimaryClass}
+                            onClick={openApplyAccessWall}
+                            title={detailUi.applyPremiumTitle}
+                          >
+                            <Lock
+                              className="h-4 w-4 shrink-0 text-white stroke-white"
+                              strokeWidth={2}
+                              aria-hidden
+                            />
+                            {detailUi.applyNow}
+                          </button>
+                        )
+                      ) : hasSubscription ? (
+                        scholarship.premiumFieldsRedacted ? (
+                          <span
+                            className={`${detailApplyPrimaryClass} cursor-wait opacity-75`}
+                            aria-busy="true"
+                            aria-label={detailUi.applyLoadingAria}
+                          >
+                            {detailUi.applyNow}
+                          </span>
+                        ) : null
                       ) : (
                         <button
                           type="button"
@@ -3217,310 +3556,445 @@ export default function ScholarshipDetailPageClient({
                           />
                           {detailUi.applyNow}
                         </button>
-                      )
-                    ) : hasSubscription ? (
-                      scholarship.premiumFieldsRedacted ? (
-                        <span
-                          className={`${detailApplyPrimaryClass} cursor-wait opacity-75`}
-                          aria-busy="true"
-                          aria-label={detailUi.applyLoadingAria}
-                        >
-                          {detailUi.applyNow}
-                        </span>
-                      ) : null
-                    ) : (
-                      <button
-                        type="button"
-                        className={detailApplyPrimaryClass}
-                        onClick={openApplyAccessWall}
-                        title={detailUi.applyPremiumTitle}
-                      >
-                        <Lock
-                          className="h-4 w-4 shrink-0 text-white stroke-white"
-                          strokeWidth={2}
-                          aria-hidden
-                        />
-                        {detailUi.applyNow}
-                      </button>
-                    )}
-                  </li>
-                ) : null}
-                <li className="min-w-0 flex-1 basis-0">
-                  <button
-                    type="button"
-                    aria-pressed={savedIds.includes(scholarship.id)}
-                    aria-label={
-                      savedIds.includes(scholarship.id)
-                        ? detailUi.removeSavedAria
-                        : detailUi.saveAria
-                    }
-                    className={
-                      savedIds.includes(scholarship.id)
-                        ? `${detailOfficialSavedPillClass} flex h-11 min-h-[2.75rem] items-center justify-center`
-                        : `${detailOfficialSavePillClass} flex h-11 min-h-[2.75rem] items-center justify-center`
-                    }
-                    onClick={async () => {
-                      const id = scholarship.id;
-                      const wasSaved = savedIds.includes(id);
-                      const syncServer =
-                        isAuthenticated && hasSubscription;
-                      if (!syncServer) {
+                      )}
+                    </li>
+                  ) : null}
+                  <li className="min-w-0 flex-1 basis-0">
+                    <button
+                      type="button"
+                      aria-pressed={savedIds.includes(scholarship.id)}
+                      aria-label={
+                        savedIds.includes(scholarship.id)
+                          ? detailUi.removeSavedAria
+                          : detailUi.saveAria
+                      }
+                      className={
+                        savedIds.includes(scholarship.id)
+                          ? `${detailOfficialSavedPillClass} flex h-11 min-h-[2.75rem] items-center justify-center`
+                          : `${detailOfficialSavePillClass} flex h-11 min-h-[2.75rem] items-center justify-center`
+                      }
+                      onClick={async () => {
+                        const id = scholarship.id;
+                        const wasSaved = savedIds.includes(id);
+                        const syncServer = isAuthenticated && hasSubscription;
+                        if (!syncServer) {
+                          setSavedIds(
+                            wasSaved
+                              ? removeScholarship(id)
+                              : saveScholarship(id)
+                          );
+                          return;
+                        }
+                        const ok = wasSaved
+                          ? await deleteUserSavedScholarship(id)
+                          : await postUserSavedScholarship(id);
+                        if (!ok) {
+                          toast({
+                            title: detailUi.toast.saveFailedTitle,
+                            description: detailUi.toast.saveFailedDescription,
+                            variant: 'destructive'
+                          });
+                          return;
+                        }
                         setSavedIds(
                           wasSaved ? removeScholarship(id) : saveScholarship(id)
                         );
-                        return;
-                      }
-                      const ok = wasSaved
-                        ? await deleteUserSavedScholarship(id)
-                        : await postUserSavedScholarship(id);
-                      if (!ok) {
-                        toast({
-                          title: detailUi.toast.saveFailedTitle,
-                          description: detailUi.toast.saveFailedDescription,
-                          variant: 'destructive'
-                        });
-                        return;
-                      }
-                      setSavedIds(
-                        wasSaved ? removeScholarship(id) : saveScholarship(id)
-                      );
-                    }}
+                      }}
+                    >
+                      {savedIds.includes(scholarship.id)
+                        ? detailUi.saved
+                        : detailUi.save}
+                    </button>
+                  </li>
+                  <li className="min-w-0 flex-1 basis-0">
+                    {ignoredIds.includes(scholarship.id) ? (
+                      <button
+                        type="button"
+                        className={`${detailOfficialRestorePillClass} flex h-11 min-h-[2.75rem] items-center justify-center`}
+                        aria-label={detailUi.restoreAria}
+                        onClick={() => {
+                          setIgnoredIds(
+                            removeIgnoredScholarship(scholarship.id)
+                          );
+                        }}
+                      >
+                        {detailUi.restoreToMatches}
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        className={`${detailOfficialNotRelevantPillClass} flex h-11 min-h-[2.75rem] items-center justify-center`}
+                        aria-label={detailUi.notRelevantAria}
+                        onClick={() => {
+                          setIgnoredIds(addIgnoredScholarship(scholarship.id));
+                        }}
+                      >
+                        {detailUi.notRelevant}
+                      </button>
+                    )}
+                  </li>
+                </ul>
+                {lastVerifiedLabel ? (
+                  <p className="mt-4 text-xs text-zinc-500">
+                    {detailUi.lastVerifiedPrefix} {lastVerifiedLabel}.
+                  </p>
+                ) : null}
+                <p className="mt-2 text-xs leading-relaxed text-zinc-500">
+                  {detailUi.confirmOfficialNote}{' '}
+                  <Link
+                    href="/scholarship-verification-methodology"
+                    className="font-semibold text-zinc-700 underline-offset-2 hover:text-zinc-900 hover:underline"
                   >
-                    {savedIds.includes(scholarship.id) ? detailUi.saved : detailUi.save}
-                  </button>
-                </li>
-                <li className="min-w-0 flex-1 basis-0">
-                  {ignoredIds.includes(scholarship.id) ? (
-                    <button
-                      type="button"
-                      className={`${detailOfficialRestorePillClass} flex h-11 min-h-[2.75rem] items-center justify-center`}
-                      aria-label={detailUi.restoreAria}
-                      onClick={() => {
-                        setIgnoredIds(
-                          removeIgnoredScholarship(scholarship.id)
-                        );
-                      }}
-                    >
-                      {detailUi.restoreToMatches}
-                    </button>
-                  ) : (
-                    <button
-                      type="button"
-                      className={`${detailOfficialNotRelevantPillClass} flex h-11 min-h-[2.75rem] items-center justify-center`}
-                      aria-label={detailUi.notRelevantAria}
-                      onClick={() => {
-                        setIgnoredIds(addIgnoredScholarship(scholarship.id));
-                      }}
-                    >
-                      {detailUi.notRelevant}
-                    </button>
-                  )}
-                </li>
-              </ul>
-              {lastVerifiedLabel ? (
-                <p className="mt-4 text-xs text-zinc-500">
-                  {detailUi.lastVerifiedPrefix} {lastVerifiedLabel}.
+                    Verification methodology
+                  </Link>
                 </p>
-              ) : null}
-              <p className="mt-2 text-xs leading-relaxed text-zinc-500">
-                {detailUi.confirmOfficialNote}
-              </p>
-            </div>
-          </div>
-        ) : null}
-
-        {showFaqBlock ? (
-          <div className="mt-8 border-t border-zinc-200 pt-6">
-            <ScholarshipFaqAccordion copy={detailUi} items={faqItemsOnPage} />
-          </div>
-        ) : null}
-
-        {similarScholarships.length > 0 ? (
-          <div
-            id="similar-scholarships"
-            className={`${
-              showFaqBlock
-                ? 'mt-4'
-                : 'mt-3'
-            } scroll-mt-24 border-t border-zinc-200 pt-4`}
-          >
-            <div className="flex flex-col gap-4">
-              <Link
-                href={backToMatchesHref}
-                scroll
-                className={detailBackToMatchesLinkClass}
-              >
-                {detailUi.backToMatches}
-              </Link>
-              <div className="min-w-0 space-y-2">
-                <h2 className="text-lg font-semibold tracking-tight text-zinc-900">
-                  {detailUi.similar.title}
-                </h2>
-                <p className="text-sm leading-relaxed text-zinc-600">
-                  <span className="font-semibold text-zinc-800">
-                    {detailUi.similar.introBold}
-                  </span>{' '}
-                  {detailUi.similar.introRest}
-                </p>
-                <p className="text-xs font-medium text-zinc-500">
-                  {detailUi.similar.categoryPrefix}{' '}
-                  <span className="text-zinc-700">
-                    {categorySlugForLinks
-                      ? breadcrumbCategoryLabel(categorySlugForLinks)
-                      : detailUi.similar.allScholarships}
-                  </span>
-                </p>
-                {categorySlugForLinks ? (
-                  <p className="text-sm">
-                    <Link
-                      href={`/scholarships/category/${encodeURIComponent(categorySlugForLinks)}`}
-                      className="font-semibold text-sky-700 underline-offset-2 hover:text-sky-800 hover:underline"
-                    >
-                      {detailUi.similar.moreInCategory(
-                        breadcrumbCategoryLabel(categorySlugForLinks)
-                      )}
-                    </Link>
-                  </p>
-                ) : (
-                  <p className="text-sm">
-                    <ScholarshipCatalogEntryLink
-                      className="font-semibold text-sky-700 underline-offset-2 hover:text-sky-800 hover:underline"
-                    >
-                      {detailUi.similar.browseAll}
-                    </ScholarshipCatalogEntryLink>
-                  </p>
-                )}
               </div>
             </div>
+          ) : null}
 
-            {similarSplitIntoSections ? (
-              <div className="mt-6 space-y-8">
-                <section aria-labelledby="similar-open-heading">
-                  <div className="flex flex-wrap items-end justify-between gap-2 border-b border-emerald-200/70 pb-2.5">
-                    <h3
-                      id="similar-open-heading"
-                      className="text-sm font-semibold tracking-tight text-emerald-900"
-                    >
-                      {detailUi.similar.openNow}
-                    </h3>
-                    <span className="text-xs font-medium tabular-nums text-emerald-800/80">
-                      {similarOpenList.length}{' '}
-                      {similarOpenList.length === 1
-                        ? detailUi.similar.scholarship
-                        : detailUi.similar.scholarships}
-                    </span>
-                  </div>
-                  <ul className={`${similarScholarshipsGridClass} mt-3`} role="list">
-                    <SimilarScholarshipIqPromoCard copy={detailUi} />
-                    {similarOpenList.map((s) => (
-                      <SimilarScholarshipDetailListItem
-                        key={s.id}
-                        copy={detailUi}
-                        scholarship={s}
-                        highlightPrimary={s.id === similarFirstOpenId}
-                        profileMatchPercent={s.profileMatchPercent ?? null}
-                        isPrimarySimilarOpen={s.id === similarFirstOpenId}
-                        eligibleForMatchPill
-                        isAuthenticated={isAuthenticated}
-                        hasSubscription={hasSubscription}
-                        authResolved={authResolved}
-                        needsEmailConfirmation={needsEmailConfirmation}
-                        onUnverifiedEmailDetailNavigate={openEmailConfirmModal}
-                        onGuestDetailNavigate={() => openRegistrationWall('grant-guest')}
-                        onSubscriptionDetailNavigate={() =>
-                          openRegistrationWall('card-unlock')
-                        }
-                        onLockedScholarshipNavigate={openLockedScholarshipWallForSimilar}
-                      />
+          {showFaqBlock ? (
+            <div className="mt-8 border-t border-zinc-200 pt-6">
+              <ScholarshipFaqAccordion copy={detailUi} items={faqItemsOnPage} />
+            </div>
+          ) : null}
+
+          {showAggregationBlock ? (
+            <div className="mt-8 border-t border-zinc-200 pt-6">
+              <div className="flex flex-col gap-2">
+                <h2 className="text-lg font-semibold tracking-tight text-zinc-900">
+                  Related scholarship data
+                </h2>
+                {aggregationStats.length > 0 ? (
+                  <ul className="grid list-none gap-2 text-sm leading-relaxed text-zinc-700 sm:grid-cols-3">
+                    {aggregationStats.map((item) => (
+                      <li
+                        key={item}
+                        className="rounded-lg border border-zinc-200 bg-white px-3 py-2 shadow-sm"
+                      >
+                        {item}
+                      </li>
                     ))}
                   </ul>
-                </section>
+                ) : null}
+              </div>
 
-                <section aria-labelledby="similar-closed-heading">
+              {providerScholarshipsWithMatch.length > 0 ? (
+                <section
+                  className="mt-5"
+                  aria-labelledby="provider-scholarships-heading"
+                >
                   <div className="flex flex-wrap items-end justify-between gap-2 border-b border-zinc-200 pb-2.5">
                     <h3
-                      id="similar-closed-heading"
-                      className="text-sm font-semibold tracking-tight text-zinc-600"
+                      id="provider-scholarships-heading"
+                      className="text-sm font-semibold tracking-tight text-zinc-800"
                     >
-                      {detailUi.similar.pastDeadline}
+                      Other {providerAggregationName} scholarships
                     </h3>
-                    <span className="text-xs text-zinc-500">
-                      {detailUi.similar.pastDeadlineNote}
+                    <span className="text-xs font-medium tabular-nums text-zinc-500">
+                      {providerScholarshipsTotal}
                     </span>
                   </div>
-                  <ul className={`${similarScholarshipsGridClass} mt-3`} role="list">
-                    {similarClosedList.map((s) => (
+                  <ul
+                    className={`${similarScholarshipsGridClass} mt-3`}
+                    role="list"
+                  >
+                    {providerScholarshipsWithMatch.map((s) => {
+                      const isOpen = !scholarshipDeadlineHasPassed(s);
+                      return (
+                        <SimilarScholarshipDetailListItem
+                          key={s.id}
+                          copy={detailUi}
+                          scholarship={s}
+                          highlightPrimary={false}
+                          profileMatchPercent={s.profileMatchPercent ?? null}
+                          isPrimarySimilarOpen={false}
+                          eligibleForMatchPill={isOpen}
+                          isAuthenticated={isAuthenticated}
+                          hasSubscription={hasSubscription}
+                          authResolved={authResolved}
+                          needsEmailConfirmation={needsEmailConfirmation}
+                          onUnverifiedEmailDetailNavigate={
+                            openEmailConfirmModal
+                          }
+                          onGuestDetailNavigate={() =>
+                            openRegistrationWall('grant-guest')
+                          }
+                          onSubscriptionDetailNavigate={() =>
+                            openRegistrationWall('card-unlock')
+                          }
+                          onLockedScholarshipNavigate={
+                            openLockedScholarshipWallForSimilar
+                          }
+                        />
+                      );
+                    })}
+                  </ul>
+                </section>
+              ) : null}
+
+              {deadlineMonthScholarshipsWithMatch.length > 0 &&
+              deadlineMonthLabel ? (
+                <section
+                  className="mt-6"
+                  aria-labelledby="deadline-month-scholarships-heading"
+                >
+                  <div className="flex flex-wrap items-end justify-between gap-2 border-b border-zinc-200 pb-2.5">
+                    <h3
+                      id="deadline-month-scholarships-heading"
+                      className="text-sm font-semibold tracking-tight text-zinc-800"
+                    >
+                      Scholarships with {deadlineMonthLabel} deadlines
+                    </h3>
+                    <span className="text-xs font-medium tabular-nums text-zinc-500">
+                      {deadlineMonthScholarshipsTotal}
+                    </span>
+                  </div>
+                  <ul
+                    className={`${similarScholarshipsGridClass} mt-3`}
+                    role="list"
+                  >
+                    {deadlineMonthScholarshipsWithMatch.map((s) => {
+                      const isOpen = !scholarshipDeadlineHasPassed(s);
+                      return (
+                        <SimilarScholarshipDetailListItem
+                          key={s.id}
+                          copy={detailUi}
+                          scholarship={s}
+                          highlightPrimary={false}
+                          profileMatchPercent={s.profileMatchPercent ?? null}
+                          isPrimarySimilarOpen={false}
+                          eligibleForMatchPill={isOpen}
+                          isAuthenticated={isAuthenticated}
+                          hasSubscription={hasSubscription}
+                          authResolved={authResolved}
+                          needsEmailConfirmation={needsEmailConfirmation}
+                          onUnverifiedEmailDetailNavigate={
+                            openEmailConfirmModal
+                          }
+                          onGuestDetailNavigate={() =>
+                            openRegistrationWall('grant-guest')
+                          }
+                          onSubscriptionDetailNavigate={() =>
+                            openRegistrationWall('card-unlock')
+                          }
+                          onLockedScholarshipNavigate={
+                            openLockedScholarshipWallForSimilar
+                          }
+                        />
+                      );
+                    })}
+                  </ul>
+                </section>
+              ) : null}
+            </div>
+          ) : null}
+
+          {similarScholarships.length > 0 ? (
+            <div
+              id="similar-scholarships"
+              className={`${
+                showFaqBlock ? 'mt-4' : 'mt-3'
+              } scroll-mt-24 border-t border-zinc-200 pt-4`}
+            >
+              <div className="flex flex-col gap-4">
+                <Link
+                  href={backToMatchesHref}
+                  scroll
+                  className={detailBackToMatchesLinkClass}
+                >
+                  {detailUi.backToMatches}
+                </Link>
+                <div className="min-w-0 space-y-2">
+                  <h2 className="text-lg font-semibold tracking-tight text-zinc-900">
+                    {detailUi.similar.title}
+                  </h2>
+                  <p className="text-sm leading-relaxed text-zinc-600">
+                    <span className="font-semibold text-zinc-800">
+                      {detailUi.similar.introBold}
+                    </span>{' '}
+                    {detailUi.similar.introRest}
+                  </p>
+                  <p className="text-xs font-medium text-zinc-500">
+                    {detailUi.similar.categoryPrefix}{' '}
+                    <span className="text-zinc-700">
+                      {categorySlugForLinks
+                        ? breadcrumbCategoryLabel(categorySlugForLinks)
+                        : detailUi.similar.allScholarships}
+                    </span>
+                  </p>
+                  {categorySlugForLinks ? (
+                    <p className="text-sm">
+                      <Link
+                        href={`/scholarships/category/${encodeURIComponent(categorySlugForLinks)}`}
+                        className="font-semibold text-sky-700 underline-offset-2 hover:text-sky-800 hover:underline"
+                      >
+                        {detailUi.similar.moreInCategory(
+                          breadcrumbCategoryLabel(categorySlugForLinks)
+                        )}
+                      </Link>
+                    </p>
+                  ) : (
+                    <p className="text-sm">
+                      <ScholarshipCatalogEntryLink className="font-semibold text-sky-700 underline-offset-2 hover:text-sky-800 hover:underline">
+                        {detailUi.similar.browseAll}
+                      </ScholarshipCatalogEntryLink>
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              {similarSplitIntoSections ? (
+                <div className="mt-6 space-y-8">
+                  <section aria-labelledby="similar-open-heading">
+                    <div className="flex flex-wrap items-end justify-between gap-2 border-b border-emerald-200/70 pb-2.5">
+                      <h3
+                        id="similar-open-heading"
+                        className="text-sm font-semibold tracking-tight text-emerald-900"
+                      >
+                        {detailUi.similar.openNow}
+                      </h3>
+                      <span className="text-xs font-medium tabular-nums text-emerald-800/80">
+                        {similarOpenList.length}{' '}
+                        {similarOpenList.length === 1
+                          ? detailUi.similar.scholarship
+                          : detailUi.similar.scholarships}
+                      </span>
+                    </div>
+                    <ul
+                      className={`${similarScholarshipsGridClass} mt-3`}
+                      role="list"
+                    >
+                      <SimilarScholarshipIqPromoCard copy={detailUi} />
+                      {similarOpenList.map((s) => (
+                        <SimilarScholarshipDetailListItem
+                          key={s.id}
+                          copy={detailUi}
+                          scholarship={s}
+                          highlightPrimary={s.id === similarFirstOpenId}
+                          profileMatchPercent={s.profileMatchPercent ?? null}
+                          isPrimarySimilarOpen={s.id === similarFirstOpenId}
+                          eligibleForMatchPill
+                          isAuthenticated={isAuthenticated}
+                          hasSubscription={hasSubscription}
+                          authResolved={authResolved}
+                          needsEmailConfirmation={needsEmailConfirmation}
+                          onUnverifiedEmailDetailNavigate={
+                            openEmailConfirmModal
+                          }
+                          onGuestDetailNavigate={() =>
+                            openRegistrationWall('grant-guest')
+                          }
+                          onSubscriptionDetailNavigate={() =>
+                            openRegistrationWall('card-unlock')
+                          }
+                          onLockedScholarshipNavigate={
+                            openLockedScholarshipWallForSimilar
+                          }
+                        />
+                      ))}
+                    </ul>
+                  </section>
+
+                  <section aria-labelledby="similar-closed-heading">
+                    <div className="flex flex-wrap items-end justify-between gap-2 border-b border-zinc-200 pb-2.5">
+                      <h3
+                        id="similar-closed-heading"
+                        className="text-sm font-semibold tracking-tight text-zinc-600"
+                      >
+                        {detailUi.similar.pastDeadline}
+                      </h3>
+                      <span className="text-xs text-zinc-500">
+                        {detailUi.similar.pastDeadlineNote}
+                      </span>
+                    </div>
+                    <ul
+                      className={`${similarScholarshipsGridClass} mt-3`}
+                      role="list"
+                    >
+                      {similarClosedList.map((s) => (
+                        <SimilarScholarshipDetailListItem
+                          key={s.id}
+                          copy={detailUi}
+                          scholarship={s}
+                          highlightPrimary={false}
+                          profileMatchPercent={s.profileMatchPercent ?? null}
+                          isPrimarySimilarOpen={false}
+                          eligibleForMatchPill={false}
+                          isAuthenticated={isAuthenticated}
+                          hasSubscription={hasSubscription}
+                          authResolved={authResolved}
+                          needsEmailConfirmation={needsEmailConfirmation}
+                          onUnverifiedEmailDetailNavigate={
+                            openEmailConfirmModal
+                          }
+                          onGuestDetailNavigate={() =>
+                            openRegistrationWall('grant-guest')
+                          }
+                          onSubscriptionDetailNavigate={() =>
+                            openRegistrationWall('card-unlock')
+                          }
+                          onLockedScholarshipNavigate={
+                            openLockedScholarshipWallForSimilar
+                          }
+                        />
+                      ))}
+                    </ul>
+                  </section>
+                </div>
+              ) : (
+                <ul
+                  className={`${similarScholarshipsGridClass} mt-5`}
+                  role="list"
+                >
+                  <SimilarScholarshipIqPromoCard copy={detailUi} />
+                  {similarScholarshipsWithMatch.map((s) => {
+                    const isOpen = !scholarshipDeadlineHasPassed(s);
+                    const isPrimaryOpen = isOpen && s.id === similarFirstOpenId;
+                    return (
                       <SimilarScholarshipDetailListItem
                         key={s.id}
                         copy={detailUi}
                         scholarship={s}
-                        highlightPrimary={false}
+                        highlightPrimary={Boolean(isPrimaryOpen)}
                         profileMatchPercent={s.profileMatchPercent ?? null}
-                        isPrimarySimilarOpen={false}
-                        eligibleForMatchPill={false}
+                        isPrimarySimilarOpen={Boolean(isPrimaryOpen)}
+                        eligibleForMatchPill={isOpen}
                         isAuthenticated={isAuthenticated}
                         hasSubscription={hasSubscription}
                         authResolved={authResolved}
                         needsEmailConfirmation={needsEmailConfirmation}
                         onUnverifiedEmailDetailNavigate={openEmailConfirmModal}
-                        onGuestDetailNavigate={() => openRegistrationWall('grant-guest')}
+                        onGuestDetailNavigate={() =>
+                          openRegistrationWall('grant-guest')
+                        }
                         onSubscriptionDetailNavigate={() =>
                           openRegistrationWall('card-unlock')
                         }
-                        onLockedScholarshipNavigate={openLockedScholarshipWallForSimilar}
+                        onLockedScholarshipNavigate={
+                          openLockedScholarshipWallForSimilar
+                        }
                       />
-                    ))}
-                  </ul>
-                </section>
+                    );
+                  })}
+                </ul>
+              )}
+
+              <div className="mt-6 border-t border-zinc-100 pt-4">
+                <Link
+                  href={backToMatchesHref}
+                  scroll
+                  className={detailBackToMatchesLinkClass}
+                >
+                  {detailUi.backToMatches}
+                </Link>
               </div>
-            ) : (
-              <ul className={`${similarScholarshipsGridClass} mt-5`} role="list">
-                <SimilarScholarshipIqPromoCard copy={detailUi} />
-                {similarScholarshipsWithMatch.map((s) => {
-                  const isOpen = !scholarshipDeadlineHasPassed(s);
-                  const isPrimaryOpen = isOpen && s.id === similarFirstOpenId;
-                  return (
-                    <SimilarScholarshipDetailListItem
-                      key={s.id}
-                      copy={detailUi}
-                      scholarship={s}
-                      highlightPrimary={Boolean(isPrimaryOpen)}
-                      profileMatchPercent={s.profileMatchPercent ?? null}
-                      isPrimarySimilarOpen={Boolean(isPrimaryOpen)}
-                      eligibleForMatchPill={isOpen}
-                      isAuthenticated={isAuthenticated}
-                      hasSubscription={hasSubscription}
-                      authResolved={authResolved}
-                      needsEmailConfirmation={needsEmailConfirmation}
-                      onUnverifiedEmailDetailNavigate={openEmailConfirmModal}
-                      onGuestDetailNavigate={() => openRegistrationWall('grant-guest')}
-                      onSubscriptionDetailNavigate={() =>
-                        openRegistrationWall('card-unlock')
-                      }
-                      onLockedScholarshipNavigate={openLockedScholarshipWallForSimilar}
-                    />
-                  );
-                })}
-              </ul>
-            )}
-
-            <div className="mt-6 border-t border-zinc-100 pt-4">
-              <Link
-                href={backToMatchesHref}
-                scroll
-                className={detailBackToMatchesLinkClass}
-              >
-                {detailUi.backToMatches}
-              </Link>
             </div>
-          </div>
-        ) : null}
-
+          ) : null}
         </div>
-    </section>
-    {premiumPaywallModal}
-    {registrationWallModal}
-    {emailConfirmRequiredModal}
+      </section>
+      {premiumPaywallModal}
+      {registrationWallModal}
+      {emailConfirmRequiredModal}
     </DarkTooltipProvider>
   );
 }

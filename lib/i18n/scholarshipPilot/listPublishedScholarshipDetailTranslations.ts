@@ -12,6 +12,18 @@ const TRANSLATIONS_PAGE_SIZE = 1000;
 const SCHOLARSHIP_LOOKUP_CHUNK_SIZE = 200;
 const SCHOLARSHIP_LOOKUP_CONCURRENCY = 8;
 
+function scholarshipRowIndexable(row: {
+  is_indexable: boolean | null;
+  deadline_date: string | null;
+  is_recurring: boolean | null;
+}): boolean {
+  if (row.is_indexable === false) return false;
+  if (row.is_recurring === true) return true;
+  const deadline = row.deadline_date?.trim();
+  if (!deadline) return true;
+  return deadline >= new Date().toISOString().slice(0, 10);
+}
+
 export type PublishedScholarshipDetailTranslationSummary = {
   sourceId: string;
   scholarshipSlug: string;
@@ -52,9 +64,7 @@ async function mapWithConcurrency<T, R>(
 
 export async function listPublishedScholarshipDetailTranslations(
   filters: PublishedScholarshipDetailTranslationFilters = {}
-): Promise<
-  PublishedScholarshipDetailTranslationSummary[]
-> {
+): Promise<PublishedScholarshipDetailTranslationSummary[]> {
   const admin = createServiceRoleSupabaseClient();
   if (!admin) return [];
 
@@ -97,7 +107,11 @@ export async function listPublishedScholarshipDetailTranslations(
 
   if (!data.length) return [];
 
-  const ids = [...new Set(data.map((r) => String(r.source_id ?? '').trim()).filter(Boolean))];
+  const ids = [
+    ...new Set(
+      data.map((r) => String(r.source_id ?? '').trim()).filter(Boolean)
+    )
+  ];
   if (ids.length === 0) return [];
 
   const slugById = new Map<string, string>();
@@ -116,7 +130,7 @@ export async function listPublishedScholarshipDetailTranslations(
     async (slice) => {
       const { data: scholarships, error: schErr } = await admin
         .from('scholarships')
-        .select('id, slug, is_indexable')
+        .select('id, slug, is_indexable, deadline_date, is_recurring')
         .in('id', slice);
 
       if (schErr) return null;
@@ -129,8 +143,13 @@ export async function listPublishedScholarshipDetailTranslations(
   for (const scholarships of scholarshipPages) {
     for (const s of scholarships ?? []) {
       const id = String(s.id);
-      slugById.set(id, String(s.slug ?? '').trim().toLowerCase());
-      indexableById.set(id, s.is_indexable !== false);
+      slugById.set(
+        id,
+        String(s.slug ?? '')
+          .trim()
+          .toLowerCase()
+      );
+      indexableById.set(id, scholarshipRowIndexable(s));
     }
   }
 
@@ -154,7 +173,9 @@ export async function listPublishedScholarshipDetailTranslations(
     if (!body && !summary) continue;
 
     const title =
-      typeof row.translated_title === 'string' ? row.translated_title.trim() : '';
+      typeof row.translated_title === 'string'
+        ? row.translated_title.trim()
+        : '';
     if (!title) continue;
 
     const scholarshipSlug = slugById.get(sourceId);

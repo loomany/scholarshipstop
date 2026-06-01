@@ -29,7 +29,7 @@ test('scholarship SEO route quality excludes dynamic state landing pages', () =>
 
 test('scholarship SEO route quality excludes unpromoted legacy long-tail pages', () => {
   const result = getScholarshipSeoRouteQualityPolicy({
-    canonicalPath: 'no-essay',
+    canonicalPath: 'undergraduate',
     stablePublicRoute: true,
     routeResolves: true,
     hasQueryParams: false
@@ -38,7 +38,10 @@ test('scholarship SEO route quality excludes unpromoted legacy long-tail pages',
   assert.equal(result.routeFamily, 'legacy_long_tail');
   assert.equal(result.shouldIndex, false);
   assert.equal(result.shouldIncludeInSitemap, false);
-  assert.equal(result.reasonCodes.includes('legacy_long_tail_not_promoted_for_sitemap'), true);
+  assert.equal(
+    result.reasonCodes.includes('legacy_long_tail_not_promoted_for_sitemap'),
+    true
+  );
 });
 
 test('scholarship SEO route quality excludes dynamic state-degree-topic pages', () => {
@@ -66,7 +69,10 @@ test('scholarship SEO route quality keeps curated GOOD manifest pages indexable'
     hasQueryParams: false
   });
 
-  assert.equal(classifyScholarshipSeoRouteFamily({ canonicalPath: 'engineering', entry }), 'manifest_single');
+  assert.equal(
+    classifyScholarshipSeoRouteFamily({ canonicalPath: 'engineering', entry }),
+    'manifest_single'
+  );
   assert.equal(result.shouldIndex, true);
   assert.equal(result.shouldIncludeInSitemap, true);
   assert.equal(result.shouldBeRssEligible, true);

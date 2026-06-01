@@ -14,6 +14,7 @@ import {
   redactPremiumScholarshipFields
 } from '@/lib/scholarships/scholarshipDetailServer';
 import { resolveScholarshipCategorySlug } from '@/lib/scholarships/similarScholarships';
+import { cleanScholarshipFaqItems } from '@/lib/scholarships/scholarshipSeoSanitizers';
 import { getURL } from '@/utils/helpers';
 import { parseScholarshipDeadlineAnchor } from '@/lib/scholarships/scholarshipDeadlineTrust';
 
@@ -69,7 +70,9 @@ function scholarshipDeadlineIso(s: Scholarship): string | null {
   return anchor ? anchor.toISOString() : null;
 }
 
-function legacyFaqItems(s: Scholarship): { question: string; answer: string }[] {
+function legacyFaqItems(
+  s: Scholarship
+): { question: string; answer: string }[] {
   const out: { question: string; answer: string }[] = [];
 
   const who =
@@ -130,26 +133,24 @@ function legacyFaqItems(s: Scholarship): { question: string; answer: string }[] 
 }
 
 function faqItems(s: Scholarship): { question: string; answer: string }[] {
-  const fromSeo =
-    s.seoFaq
-      ?.filter((x) => x.question?.trim() && x.answer?.trim())
-      .map((x) => {
-        const answer = x.answer.trim();
-        return {
-          question: x.question.trim(),
-          answer: answer.length > 800 ? `${answer.slice(0, 797)}…` : answer
-        };
-      }) ?? [];
-  if (fromSeo.length >= 2) return fromSeo;
-  if (fromSeo.length === 1) {
-    const legacy = legacyFaqItems(s).filter(
-      (l) =>
-        l.question.trim().toLowerCase() !==
-        fromSeo[0].question.trim().toLowerCase()
-    );
-    return [...fromSeo, ...legacy];
+  const seen = new Set<string>();
+  const out: { question: string; answer: string }[] = [];
+  const fromSeo = cleanScholarshipFaqItems(s.seoFaq).map((x) => {
+    const answer = x.answer.trim();
+    return {
+      question: x.question.trim(),
+      answer: answer.length > 800 ? `${answer.slice(0, 797)}…` : answer
+    };
+  });
+  for (const item of [...legacyFaqItems(s), ...fromSeo]) {
+    const key = item.question.trim().toLowerCase();
+    if (!key || seen.has(key)) {
+      continue;
+    }
+    seen.add(key);
+    out.push(item);
   }
-  return legacyFaqItems(s);
+  return out.slice(0, 6);
 }
 
 function jsonLdDocument(s: Scholarship) {
@@ -161,9 +162,7 @@ function jsonLdDocument(s: Scholarship) {
   const programId = `${absolutePath}#program`;
   const faqPageId = `${absolutePath}#faqpage`;
   const faqs = faqItems(s).filter(
-    (f) =>
-      f.question.trim().length > 0 &&
-      f.answer.trim().length > 0
+    (f) => f.question.trim().length > 0 && f.answer.trim().length > 0
   );
   const graph: Record<string, unknown>[] = [];
   const scholarshipDescription = scholarshipSchemaDescription(s);

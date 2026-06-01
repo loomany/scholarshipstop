@@ -23,7 +23,8 @@ import {
 export type { FeaturedBrandScholarship };
 
 /** @deprecated Use FEATURED_BRAND_SCHOLARSHIPS_HOME — kept for imports */
-export const FEATURED_BRAND_SCHOLARSHIPS_MOCK = FEATURED_BRAND_SCHOLARSHIPS_HOME.slice(0, 3);
+export const FEATURED_BRAND_SCHOLARSHIPS_MOCK =
+  FEATURED_BRAND_SCHOLARSHIPS_HOME.slice(0, 3);
 
 const h2Class =
   'text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl lg:text-[2.35rem] lg:leading-[1.15] xl:text-[2.5rem]';
@@ -81,9 +82,10 @@ export function FeaturedBrandScholarshipsSection({
     const key = `${item.href}-${index}${keySuffix}`;
     const logoUiScale = featuredHomeLogoUiScale(item.brandDomain);
 
-    const resolvedHref = item.href === '/scholarships'
-      ? hrefForLocalizedUiRequired(locale, '/scholarships')
-      : item.href;
+    const resolvedHref =
+      item.href === '/scholarships'
+        ? hrefForLocalizedUiRequired(locale, '/scholarships')
+        : item.href;
 
     return (
       <li
@@ -128,7 +130,8 @@ export function FeaturedBrandScholarshipsSection({
           <div
             className={clsx(
               'mt-auto flex items-baseline gap-3 px-6 pt-6 sm:px-7',
-              featuredScholarshipHasSpecificUsdAmount(item.amount) && 'justify-between'
+              featuredScholarshipHasSpecificUsdAmount(item.amount) &&
+                'justify-between'
             )}
           >
             <span className="inline-flex min-w-0 items-center gap-1.5 text-sm font-semibold text-gray-900 transition-colors duration-200 group-hover:gap-2 group-hover:text-[#FF7A1A]">
@@ -150,8 +153,6 @@ export function FeaturedBrandScholarshipsSection({
     );
   };
 
-  const marqueeItems = [...items, ...items];
-
   return (
     <section
       role="region"
@@ -159,7 +160,10 @@ export function FeaturedBrandScholarshipsSection({
       className={clsx(className)}
     >
       <div className="mx-auto max-w-7xl text-center">
-        <h2 id="featured-brand-scholarships-heading" className={`text-pretty ${h2Class}`}>
+        <h2
+          id="featured-brand-scholarships-heading"
+          className={`text-pretty ${h2Class}`}
+        >
           {copy.title}
         </h2>
         <p className="mx-auto mt-4 max-w-2xl text-pretty text-sm leading-relaxed text-gray-500 sm:mt-5 sm:text-base sm:leading-relaxed">
@@ -174,7 +178,7 @@ export function FeaturedBrandScholarshipsSection({
         <button
           type="button"
           onClick={() => scrollByDir(-1)}
-          className="absolute left-0 top-1/2 z-20 hidden -translate-y-1/2 rounded-full border border-gray-200 bg-white p-2.5 text-gray-700 shadow-md transition hover:border-gray-300 hover:text-blue-600 motion-reduce:md:flex"
+          className="absolute left-0 top-1/2 z-20 hidden -translate-y-1/2 rounded-full border border-gray-200 bg-white p-2.5 text-gray-700 shadow-md transition hover:border-gray-300 hover:text-blue-600 md:flex"
           aria-label={copy.scrollLeft}
         >
           <ChevronLeft className="h-5 w-5" strokeWidth={2} />
@@ -182,7 +186,7 @@ export function FeaturedBrandScholarshipsSection({
         <button
           type="button"
           onClick={() => scrollByDir(1)}
-          className="absolute right-0 top-1/2 z-20 hidden -translate-y-1/2 rounded-full border border-gray-200 bg-white p-2.5 text-gray-700 shadow-md transition hover:border-gray-300 hover:text-blue-600 motion-reduce:md:flex"
+          className="absolute right-0 top-1/2 z-20 hidden -translate-y-1/2 rounded-full border border-gray-200 bg-white p-2.5 text-gray-700 shadow-md transition hover:border-gray-300 hover:text-blue-600 md:flex"
           aria-label={copy.scrollRight}
         >
           <ChevronRight className="h-5 w-5" strokeWidth={2} />
@@ -191,21 +195,13 @@ export function FeaturedBrandScholarshipsSection({
         <ul
           ref={scrollerRef}
           className={clsx(
-            'hidden snap-x snap-mandatory items-stretch gap-5 overflow-x-auto scroll-smooth pb-3 pt-1 motion-reduce:flex',
+            'flex snap-x snap-mandatory items-stretch gap-5 overflow-x-auto scroll-smooth pb-3 pt-1',
             '[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
             'md:px-12'
           )}
         >
           {items.map((item, index) => renderScholarshipCard(item, index))}
         </ul>
-
-        <div className="overflow-x-auto pb-3 pt-1 [scrollbar-width:none] motion-reduce:hidden [&::-webkit-scrollbar]:hidden">
-          <ul className="flex w-max animate-home-country-marquee items-stretch gap-5 [animation-duration:220s] hover:[animation-play-state:paused] focus-within:[animation-play-state:paused]">
-            {marqueeItems.map((item, index) =>
-              renderScholarshipCard(item, index, `-marquee-${index >= items.length ? 'copy' : 'base'}`)
-            )}
-          </ul>
-        </div>
 
         <p className="mt-2 text-center text-xs text-gray-500 md:hidden">
           Swipe sideways to see more

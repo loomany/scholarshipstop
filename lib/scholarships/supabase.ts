@@ -19,10 +19,16 @@ import {
   isPhantomCalendarYear2001
 } from '@/lib/scholarships/scholarshipDeadlineTrust';
 import { compareScholarshipsByDeadlineState } from '@/lib/scholarships/scholarshipDeadlineState';
+import {
+  cleanScholarshipFaqItems,
+  cleanScholarshipGeneratedText,
+  cleanScholarshipStringArray
+} from '@/lib/scholarships/scholarshipSeoSanitizers';
 
 type ServerSupabaseClient = ReturnType<typeof createClient>;
 
-export type ScholarshipRow = Database['public']['Tables']['scholarships']['Row'];
+export type ScholarshipRow =
+  Database['public']['Tables']['scholarships']['Row'];
 
 export { sanitizeRequirementLines };
 
@@ -49,7 +55,9 @@ const UUID_PARAM_RE =
 
 export function jsonStringArray(value: Json | null | undefined): string[] {
   if (!value || !Array.isArray(value)) return [];
-  return value.filter((v): v is string => typeof v === 'string' && v.trim().length > 0);
+  return value.filter(
+    (v): v is string => typeof v === 'string' && v.trim().length > 0
+  );
 }
 
 function documentLinksFromJson(
@@ -71,7 +79,9 @@ function documentLinksFromJson(
   return out;
 }
 
-function seoFaqFromJson(value: Json | null | undefined): ScholarshipSeoFaqItem[] {
+function seoFaqFromJson(
+  value: Json | null | undefined
+): ScholarshipSeoFaqItem[] {
   if (!value || !Array.isArray(value)) return [];
   const out: ScholarshipSeoFaqItem[] = [];
   for (const item of value) {
@@ -89,7 +99,7 @@ function seoFaqFromJson(value: Json | null | undefined): ScholarshipSeoFaqItem[]
     const answer = aRaw.trim();
     if (question && answer) out.push({ question, answer });
   }
-  return out;
+  return cleanScholarshipFaqItems(out);
 }
 
 function catalogUiFromRawData(
@@ -246,7 +256,8 @@ const PUBLIC_LISTING_CARD_SELECT_COLUMNS = LISTING_CARD_SELECT_COLUMNS.filter(
  * Public anon listing payload. Must match `public.scholarships_safe_listing`.
  * Keep raw URLs, social URLs, raw blobs, and internal AI fields out of this select.
  */
-export const PUBLIC_LIST_CARD_SELECT = PUBLIC_LISTING_CARD_SELECT_COLUMNS.join(', ');
+export const PUBLIC_LIST_CARD_SELECT =
+  PUBLIC_LISTING_CARD_SELECT_COLUMNS.join(', ');
 
 /**
  * Same as {@link ACTIVE_CATALOG_SELECT} but omits `raw_data`. CLI scripts
@@ -516,7 +527,8 @@ export function mapScholarshipRow(row: ScholarshipRow): Scholarship {
     daysUntilDeadline:
       !textAllowsCalendar || phantomDeadline
         ? undefined
-        : row.days_until_deadline != null && !Number.isNaN(row.days_until_deadline)
+        : row.days_until_deadline != null &&
+            !Number.isNaN(row.days_until_deadline)
           ? row.days_until_deadline
           : undefined,
     deadlineBucket:
@@ -582,15 +594,26 @@ export function mapScholarshipRow(row: ScholarshipRow): Scholarship {
     transcriptRequired: Boolean(row.transcript_required),
     recommendationRequired: Boolean(row.recommendation_required),
     financialNeedConsidered: Boolean(row.financial_need_considered),
-    aiStudentSummary: row.ai_student_summary?.trim() || undefined,
-    aiBestFor: jsonStringArray(row.ai_best_for),
-    aiKeyHighlights: jsonStringArray(row.ai_key_highlights),
-    aiEligibilitySummary: jsonStringArray(row.ai_eligibility_summary),
-    aiImportantChecks: jsonStringArray(row.ai_important_checks),
-    aiApplicationTips: jsonStringArray(row.ai_application_tips),
-    aiWhyApply: jsonStringArray(row.ai_why_apply),
-    aiRedFlags: jsonStringArray(row.ai_red_flags),
-    aiMissingInfo: jsonStringArray(row.ai_missing_info),
+    aiStudentSummary:
+      cleanScholarshipGeneratedText(row.ai_student_summary) || undefined,
+    aiBestFor: cleanScholarshipStringArray(jsonStringArray(row.ai_best_for)),
+    aiKeyHighlights: cleanScholarshipStringArray(
+      jsonStringArray(row.ai_key_highlights)
+    ),
+    aiEligibilitySummary: cleanScholarshipStringArray(
+      jsonStringArray(row.ai_eligibility_summary)
+    ),
+    aiImportantChecks: cleanScholarshipStringArray(
+      jsonStringArray(row.ai_important_checks)
+    ),
+    aiApplicationTips: cleanScholarshipStringArray(
+      jsonStringArray(row.ai_application_tips)
+    ),
+    aiWhyApply: cleanScholarshipStringArray(jsonStringArray(row.ai_why_apply)),
+    aiRedFlags: cleanScholarshipStringArray(jsonStringArray(row.ai_red_flags)),
+    aiMissingInfo: cleanScholarshipStringArray(
+      jsonStringArray(row.ai_missing_info)
+    ),
     aiUrgencyLevel: row.ai_urgency_level?.trim() || undefined,
     aiDifficultyLevel: row.ai_difficulty_level?.trim() || undefined,
     aiMatchScore:
@@ -604,10 +627,12 @@ export function mapScholarshipRow(row: ScholarshipRow): Scholarship {
       !Number.isNaN(Number(row.ai_confidence_score))
         ? Number(row.ai_confidence_score)
         : undefined,
-    seoExcerpt: row.seo_excerpt?.trim() || undefined,
-    seoOverview: row.seo_overview?.trim() || undefined,
-    seoEligibility: row.seo_eligibility?.trim() || undefined,
-    seoApplication: row.seo_application?.trim() || undefined,
+    seoExcerpt: cleanScholarshipGeneratedText(row.seo_excerpt) || undefined,
+    seoOverview: cleanScholarshipGeneratedText(row.seo_overview) || undefined,
+    seoEligibility:
+      cleanScholarshipGeneratedText(row.seo_eligibility) || undefined,
+    seoApplication:
+      cleanScholarshipGeneratedText(row.seo_application) || undefined,
     seoFaq: seoFaqFromJson(row.seo_faq),
     applicantsCountIsEstimated: Boolean(row.applicants_count_is_estimated),
     catalogUi: catalogUiFromRawData(row.raw_data)
@@ -701,7 +726,9 @@ export async function fetchActiveScholarships(): Promise<Scholarship[]> {
  * `createClient()` from Next cookies is unavailable. Matches production list when env
  * points at the same Supabase project as the deployed app.
  */
-export async function fetchActiveScholarshipsForScript(): Promise<Scholarship[]> {
+export async function fetchActiveScholarshipsForScript(): Promise<
+  Scholarship[]
+> {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
   const key =
     process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() ||
@@ -791,9 +818,7 @@ export async function fetchScholarshipBySlugOrId(
 export async function fetchScholarshipsBySlugsOrIdsOrdered(
   keys: string[]
 ): Promise<Scholarship[]> {
-  const raw = keys
-    .map((k) => k?.trim())
-    .filter((k): k is string => Boolean(k));
+  const raw = keys.map((k) => k?.trim()).filter((k): k is string => Boolean(k));
   if (raw.length === 0) return [];
 
   const slugKeys: string[] = [];
@@ -836,9 +861,7 @@ export async function fetchScholarshipsBySlugsOrIdsOrdered(
   }
 
   return raw
-    .map((k) =>
-      UUID_PARAM_RE.test(k) ? byId.get(k) : bySlug.get(k)
-    )
+    .map((k) => (UUID_PARAM_RE.test(k) ? byId.get(k) : bySlug.get(k)))
     .filter((x): x is Scholarship => x != null);
 }
 
@@ -893,9 +916,8 @@ export async function fetchActiveScholarshipsByInstitutionIdForListing(
 
 /** One recent active scholarship for email/Telegram preview cards (service role). */
 export async function fetchFirstActiveScholarshipPreview(): Promise<Scholarship | null> {
-  const { createServiceRoleSupabaseClient } = await import(
-    '@/lib/supabase/serviceRoleClient'
-  );
+  const { createServiceRoleSupabaseClient } =
+    await import('@/lib/supabase/serviceRoleClient');
   const admin = createServiceRoleSupabaseClient();
   if (!admin) return null;
 
@@ -908,7 +930,10 @@ export async function fetchFirstActiveScholarshipPreview(): Promise<Scholarship 
     .maybeSingle();
 
   if (error) {
-    console.error('[scholarships] fetchFirstActiveScholarshipPreview', error.message);
+    console.error(
+      '[scholarships] fetchFirstActiveScholarshipPreview',
+      error.message
+    );
     return null;
   }
   if (!data) return null;
@@ -916,10 +941,11 @@ export async function fetchFirstActiveScholarshipPreview(): Promise<Scholarship 
 }
 
 /** Recent active scholarships for multi-card digest previews (service role). */
-export async function fetchActiveScholarshipPreviews(limit: number): Promise<Scholarship[]> {
-  const { createServiceRoleSupabaseClient } = await import(
-    '@/lib/supabase/serviceRoleClient'
-  );
+export async function fetchActiveScholarshipPreviews(
+  limit: number
+): Promise<Scholarship[]> {
+  const { createServiceRoleSupabaseClient } =
+    await import('@/lib/supabase/serviceRoleClient');
   const admin = createServiceRoleSupabaseClient();
   if (!admin) return [];
 
@@ -932,8 +958,13 @@ export async function fetchActiveScholarshipPreviews(limit: number): Promise<Sch
     .limit(cap);
 
   if (error) {
-    console.error('[scholarships] fetchActiveScholarshipPreviews', error.message);
+    console.error(
+      '[scholarships] fetchActiveScholarshipPreviews',
+      error.message
+    );
     return [];
   }
-  return (data ?? []).map((row) => mapScholarshipRow(row as unknown as ScholarshipRow));
+  return (data ?? []).map((row) =>
+    mapScholarshipRow(row as unknown as ScholarshipRow)
+  );
 }

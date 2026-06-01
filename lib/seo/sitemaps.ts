@@ -85,7 +85,12 @@ type SitemapBucket =
 
 type ScholarshipSitemapRow = Pick<
   Database['public']['Tables']['scholarships']['Row'],
-  'id' | 'slug' | 'updated_at' | 'is_indexable'
+  | 'id'
+  | 'slug'
+  | 'updated_at'
+  | 'is_indexable'
+  | 'deadline_date'
+  | 'is_recurring'
 >;
 
 type ProviderHubSitemapRow = {
@@ -192,6 +197,13 @@ function normalizeEntryDate(value: Date | string | null | undefined): Date {
   return new Date();
 }
 
+function isExpiredScholarshipSitemapRow(row: ScholarshipSitemapRow): boolean {
+  if (row.is_recurring === true) return false;
+  const deadline = row.deadline_date?.trim();
+  if (!deadline) return false;
+  return deadline < new Date().toISOString().slice(0, 10);
+}
+
 function latestLastModified(entries: MetadataRoute.Sitemap): string {
   if (entries.length === 0) return new Date().toISOString();
   const latest = entries.reduce((max, entry) => {
@@ -245,7 +257,9 @@ function makeSitemapIndexDocument(
   };
 }
 
-function stripSitemapEntriesForIndex(document: SitemapDocument): SitemapDocument {
+function stripSitemapEntriesForIndex(
+  document: SitemapDocument
+): SitemapDocument {
   return {
     ...document,
     entries: []
@@ -305,7 +319,9 @@ async function fetchCompareSitemapRows(): Promise<CompareSitemapRow[]> {
   for (let offset = 0; ; offset += SITEMAP_DB_PAGE_SIZE) {
     const { data, error } = await supabase
       .from('compare_pages')
-      .select('slug, updated_at, content_json, ai_verdict, meta_title, meta_description')
+      .select(
+        'slug, updated_at, content_json, ai_verdict, meta_title, meta_description'
+      )
       .eq('status', 'published')
       .order('updated_at', { ascending: false, nullsFirst: false })
       .range(offset, offset + SITEMAP_DB_PAGE_SIZE - 1);
@@ -328,12 +344,17 @@ async function fetchStateCompareSitemapRows(): Promise<CompareSitemapRow[]> {
   for (let offset = 0; ; offset += SITEMAP_DB_PAGE_SIZE) {
     const { data, error } = await supabase
       .from('state_compare_pages')
-      .select('slug, updated_at, content_json, ai_verdict, meta_title, meta_description')
+      .select(
+        'slug, updated_at, content_json, ai_verdict, meta_title, meta_description'
+      )
       .eq('status', 'published')
       .order('updated_at', { ascending: false, nullsFirst: false })
       .range(offset, offset + SITEMAP_DB_PAGE_SIZE - 1);
     if (error) {
-      console.error('[sitemap] state_compare_pages sitemap query failed:', error);
+      console.error(
+        '[sitemap] state_compare_pages sitemap query failed:',
+        error
+      );
       return out;
     }
     const batch = (data ?? []) as CompareSitemapRow[];
@@ -370,7 +391,9 @@ function compareSitemapRowPassesQuality(row: CompareSitemapRow): boolean {
 }
 
 /** `/scholarships/{state}/{university}` hubs backed by `provider_hub_listing` + `states` + `providers`. */
-async function fetchUniversityHubSitemapRows(): Promise<UniversityHubSitemapRow[]> {
+async function fetchUniversityHubSitemapRows(): Promise<
+  UniversityHubSitemapRow[]
+> {
   const supabase = createSitemapReadClient();
   if (!supabase) return [];
   const { data, error } = await supabase.rpc('university_hub_sitemap_rows', {});
@@ -425,7 +448,7 @@ async function fetchScholarshipSitemapEntries(
   for (;;) {
     const { data, error } = await supabase
       .from('scholarships')
-      .select('id, slug, updated_at, is_indexable')
+      .select('id, slug, updated_at, is_indexable, deadline_date, is_recurring')
       .eq('is_active', true)
       .order('updated_at', { ascending: false, nullsFirst: false })
       .range(offset, offset + SITEMAP_DB_PAGE_SIZE - 1);
@@ -434,6 +457,7 @@ async function fetchScholarshipSitemapEntries(
     const batch = (data ?? []) as ScholarshipSitemapRow[];
     for (const row of batch) {
       if (row.is_indexable === false) continue;
+      if (isExpiredScholarshipSitemapRow(row)) continue;
       out.push({
         url: `${base}${scholarshipPublicPath(row)}`,
         lastModified: row.updated_at ? new Date(row.updated_at) : new Date()
@@ -589,9 +613,10 @@ async function buildEssaysSitemapEntries(
   base: string,
   rowRange?: EssaySitemapRowRange
 ): Promise<MetadataRoute.Sitemap> {
-  const essayRows = await (rowRange
-    ? fetchPublishedEssaySitemapRowsRange(rowRange.from, rowRange.to)
-    : fetchAllPublishedEssaySitemapRows()
+  const essayRows = await (
+    rowRange
+      ? fetchPublishedEssaySitemapRowsRange(rowRange.from, rowRange.to)
+      : fetchAllPublishedEssaySitemapRows()
   ).catch(() => []);
   const includeStaticGuides = rowRange?.includeStaticGuides ?? true;
   return dedupeSitemapEntries(
@@ -646,16 +671,20 @@ function scholarshipSeoPathPassesRouteQuality(
  * ({@link getVisibleSeoRoutes} / `SEO_DRIP_START_DATE` + `SEO_PAGES_PER_HOUR`; disabled via `SEO_DRIP_ENABLED=false`).
  * Sitemap builders call `getVisibleSeoRoutes()` so the drip module runs on each sitemap build.
  */
-async function buildSeoSitemapEntries(base: string): Promise<MetadataRoute.Sitemap> {
+async function buildSeoSitemapEntries(
+  base: string
+): Promise<MetadataRoute.Sitemap> {
   void getVisibleSeoRoutes();
-  const manifestSeoPaths = getAllIndexableSeoManifestPathsForSitemap(3).filter(
-    (p) => canonicalPathAllowedInSeoSitemap(p)
-  ).filter((p) => scholarshipSeoPathPassesRouteQuality(p));
+  const manifestSeoPaths = getAllIndexableSeoManifestPathsForSitemap(3)
+    .filter((p) => canonicalPathAllowedInSeoSitemap(p))
+    .filter((p) => scholarshipSeoPathPassesRouteQuality(p));
   const manifestPathSet = new Set(manifestSeoPaths);
-  const manifestSeoPages: MetadataRoute.Sitemap = manifestSeoPaths.map((path) => ({
-    url: `${base}/scholarships/${path}`,
-    lastModified: new Date()
-  }));
+  const manifestSeoPages: MetadataRoute.Sitemap = manifestSeoPaths.map(
+    (path) => ({
+      url: `${base}/scholarships/${path}`,
+      lastModified: new Date()
+    })
+  );
 
   const longTailPages: MetadataRoute.Sitemap = getLongTailSitemapSlugs()
     .filter((slug) => {
@@ -721,12 +750,13 @@ async function buildSeoSitemapEntries(base: string): Promise<MetadataRoute.Sitem
       };
     });
 
-  const countrySeoPages: MetadataRoute.Sitemap = allScholarshipCountrySeoRoutes()
-    .filter((route) => canonicalPathAllowedInSeoSitemap(route.canonicalPath))
-    .map((route) => ({
-      url: `${base}${route.href}`,
-      lastModified: new Date()
-    }));
+  const countrySeoPages: MetadataRoute.Sitemap =
+    allScholarshipCountrySeoRoutes()
+      .filter((route) => canonicalPathAllowedInSeoSitemap(route.canonicalPath))
+      .map((route) => ({
+        url: `${base}${route.href}`,
+        lastModified: new Date()
+      }));
 
   const crossCountrySeoPages = buildCrossCountrySeoSitemapEntries(base);
 
@@ -809,21 +839,15 @@ async function buildCompareSitemapEntries(
 export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
   const base = sitemapBaseUrl();
 
-  const [
-    resources,
-    essays,
-    seo,
-    scholarships,
-    providers,
-    compare
-  ] = await Promise.all([
-    buildResourcesSitemapEntries(base),
-    buildEssaysSitemapEntries(base),
-    buildSeoSitemapEntries(base),
-    buildScholarshipsSitemapEntries(base),
-    buildProvidersSitemapEntries(base),
-    buildCompareSitemapEntries(base)
-  ]);
+  const [resources, essays, seo, scholarships, providers, compare] =
+    await Promise.all([
+      buildResourcesSitemapEntries(base),
+      buildEssaysSitemapEntries(base),
+      buildSeoSitemapEntries(base),
+      buildScholarshipsSitemapEntries(base),
+      buildProvidersSitemapEntries(base),
+      buildCompareSitemapEntries(base)
+    ]);
 
   return {
     core: buildCoreSitemapEntries(base),
@@ -837,54 +861,71 @@ export const buildSitemapBuckets = cache(async (): Promise<SitemapBuckets> => {
   };
 });
 
-export const buildSitemapDocuments = cache(async (): Promise<SitemapDocument[]> => {
-  void getVisibleSeoRoutes();
-  const buckets = await buildSitemapBuckets();
-  const localizedPilotDocs = buildLocalizedPilotSitemapDocuments();
+export const buildSitemapDocuments = cache(
+  async (): Promise<SitemapDocument[]> => {
+    void getVisibleSeoRoutes();
+    const buckets = await buildSitemapBuckets();
+    const localizedPilotDocs = buildLocalizedPilotSitemapDocuments();
 
-  return [
-    ...buildDocumentsForBucket('core', 'core', buckets.core, 'single-or-indexed'),
-    ...buildDocumentsForBucket(
-      'resources',
-      'resources',
-      buckets.resources,
-      'single-or-indexed'
-    ),
-    ...buildDocumentsForBucket('essays', 'essays', buckets.essays, 'always-indexed'),
-    ...buildDocumentsForBucket(
-      'providers',
-      'providers',
-      buckets.providers,
-      'single-or-indexed'
-    ),
-    ...buildDocumentsForBucket(
-      'categories',
-      'categories',
-      buckets.categories,
-      'single-or-indexed'
-    ),
-    ...buildDocumentsForBucket('seo', 'seo', buckets.seo, 'single-or-indexed'),
-    ...buildDocumentsForBucket(
-      'scholarships',
-      'scholarships',
-      buckets.scholarships,
-      'always-indexed'
-    ),
-    ...buildDocumentsForBucket(
-      'compare',
-      'compare',
-      buckets.compare,
-      'single-or-indexed'
-    ),
-    ...localizedPilotDocs,
-    ...(await buildLocalizedCategorySitemapDocuments()),
-    ...(await buildLocalizedResourceArticleSitemapDocuments()),
-    ...(await buildLocalizedProviderProfileSitemapDocuments()),
-    ...(await buildLocalizedScholarshipDetailSitemapDocuments()),
-    ...(await buildLocalizedEssayGuideSitemapDocuments()),
-    ...(await buildLocalizedCompareSitemapDocuments())
-  ];
-});
+    return [
+      ...buildDocumentsForBucket(
+        'core',
+        'core',
+        buckets.core,
+        'single-or-indexed'
+      ),
+      ...buildDocumentsForBucket(
+        'resources',
+        'resources',
+        buckets.resources,
+        'single-or-indexed'
+      ),
+      ...buildDocumentsForBucket(
+        'essays',
+        'essays',
+        buckets.essays,
+        'always-indexed'
+      ),
+      ...buildDocumentsForBucket(
+        'providers',
+        'providers',
+        buckets.providers,
+        'single-or-indexed'
+      ),
+      ...buildDocumentsForBucket(
+        'categories',
+        'categories',
+        buckets.categories,
+        'single-or-indexed'
+      ),
+      ...buildDocumentsForBucket(
+        'seo',
+        'seo',
+        buckets.seo,
+        'single-or-indexed'
+      ),
+      ...buildDocumentsForBucket(
+        'scholarships',
+        'scholarships',
+        buckets.scholarships,
+        'always-indexed'
+      ),
+      ...buildDocumentsForBucket(
+        'compare',
+        'compare',
+        buckets.compare,
+        'single-or-indexed'
+      ),
+      ...localizedPilotDocs,
+      ...(await buildLocalizedCategorySitemapDocuments()),
+      ...(await buildLocalizedResourceArticleSitemapDocuments()),
+      ...(await buildLocalizedProviderProfileSitemapDocuments()),
+      ...(await buildLocalizedScholarshipDetailSitemapDocuments()),
+      ...(await buildLocalizedEssayGuideSitemapDocuments()),
+      ...(await buildLocalizedCompareSitemapDocuments())
+    ];
+  }
+);
 
 async function fetchScholarshipSitemapDocumentCount(): Promise<number> {
   const supabase = createSitemapReadClient();
@@ -894,7 +935,10 @@ async function fetchScholarshipSitemapDocumentCount(): Promise<number> {
     .from('scholarships')
     .select('id', { count: 'exact', head: true })
     .eq('is_active', true)
-    .or('is_indexable.is.null,is_indexable.eq.true');
+    .or('is_indexable.is.null,is_indexable.eq.true')
+    .or(
+      `deadline_date.is.null,deadline_date.gte.${new Date().toISOString().slice(0, 10)},is_recurring.eq.true`
+    );
 
   if (error) {
     console.error('[sitemap] scholarship sitemap count failed:', error);
@@ -1006,7 +1050,9 @@ function buildLocalizedPilotSitemapDocuments(): SitemapDocument[] {
           Boolean(entry)
         );
       if (entries.length === 0) continue;
-      docs.push(makeSitemapDocument(bucket, `locale-${locale}-${bucket}`, entries));
+      docs.push(
+        makeSitemapDocument(bucket, `locale-${locale}-${bucket}`, entries)
+      );
     }
   }
 
@@ -1066,9 +1112,7 @@ async function buildLocalizedCategorySitemapDocuments(
 
 async function buildLocalizedResourceArticleSitemapDocuments(
   locale?: LocalizedSitemapLocale
-): Promise<
-  SitemapDocument[]
-> {
+): Promise<SitemapDocument[]> {
   const rows = await listPublishedResourceArticleTranslations({ locale });
   if (rows.length === 0) return [];
 
@@ -1085,7 +1129,12 @@ async function buildLocalizedResourceArticleSitemapDocuments(
   if (error || !posts?.length) return [];
 
   const slugById = new Map(
-    posts.map((p) => [String(p.id), String(p.slug ?? '').trim().toLowerCase()])
+    posts.map((p) => [
+      String(p.id),
+      String(p.slug ?? '')
+        .trim()
+        .toLowerCase()
+    ])
   );
 
   const byLocale = new Map<'es' | 'fr', MetadataRoute.Sitemap>();
@@ -1128,9 +1177,7 @@ async function buildLocalizedResourceArticleSitemapDocuments(
 
 async function buildLocalizedProviderProfileSitemapDocuments(
   locale?: LocalizedSitemapLocale
-): Promise<
-  SitemapDocument[]
-> {
+): Promise<SitemapDocument[]> {
   const rows = await listPublishedProviderProfileTranslations({ locale });
   if (rows.length === 0) return [];
 
@@ -1147,7 +1194,9 @@ async function buildLocalizedProviderProfileSitemapDocuments(
 
   const indexableSlugs = new Set<string>();
   for (const row of hubRows as unknown as ProviderHubSitemapRow[]) {
-    const slug = String(row.slug ?? '').trim().toLowerCase();
+    const slug = String(row.slug ?? '')
+      .trim()
+      .toLowerCase();
     if (!slug) continue;
     const count = Number(row.scholarship_count ?? 0);
     const quality = getProviderSeoQualityPolicy({
@@ -1201,9 +1250,7 @@ async function buildLocalizedProviderProfileSitemapDocuments(
 
 async function buildLocalizedScholarshipDetailSitemapDocuments(
   locale?: LocalizedSitemapLocale
-): Promise<
-  SitemapDocument[]
-> {
+): Promise<SitemapDocument[]> {
   const rows = await listPublishedScholarshipDetailTranslations({ locale });
   if (rows.length === 0) return [];
 
@@ -1546,9 +1593,8 @@ export const getSitemapDocumentBySlug = cache(
     const normalizedSlug = normalizeSitemapSlug(slug);
     if (!normalizedSlug) return null;
 
-    const englishDocument = await buildEnglishSitemapDocumentBySlug(
-      normalizedSlug
-    );
+    const englishDocument =
+      await buildEnglishSitemapDocumentBySlug(normalizedSlug);
     if (englishDocument) return englishDocument;
 
     const localizedPilotDocument =
@@ -1587,4 +1633,3 @@ export function renderSitemapUrlSetXml(entries: MetadataRoute.Sitemap): string {
     '</urlset>'
   ].join('');
 }
-

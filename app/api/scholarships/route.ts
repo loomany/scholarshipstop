@@ -66,7 +66,10 @@ function withRuntimePathDebugHeaders(
   if (searchParams.get('debug_read_path') !== '1') return response;
 
   response.headers.set('X-Scholarships-Read-Path', runtimeReadPath);
-  response.headers.set('X-Scholarships-V2-Flag', scholarshipsV2ReadPathEnabled() ? '1' : '0');
+  response.headers.set(
+    'X-Scholarships-V2-Flag',
+    scholarshipsV2ReadPathEnabled() ? '1' : '0'
+  );
   response.headers.set('X-Scholarships-V2-Eligible', v2Eligible ? '1' : '0');
 
   return response;
@@ -127,7 +130,8 @@ async function emptyListResult(
   if (includeMeta) {
     const bounds = await fetchGlobalFilterBounds(listDb);
     meta = await fetchScholarshipListMeta(listDb, req, bounds, {
-      skipBestRecommendationSidebarCount: !authUser && !keepBestRecommendationCount,
+      skipBestRecommendationSidebarCount:
+        !authUser && !keepBestRecommendationCount,
       skipGuestZeroedSidebarCounts: !authUser
     });
     applyListingMetaGuestPatches(meta, {
@@ -182,11 +186,13 @@ function buildGuestPublicCacheControl(args: {
   if (args.authUser) return null;
   if (!args.isHubPrimaryListing) return null;
   if (args.countOnly || args.includeMeta || args.metaOnly) return null;
-  if (args.req.page !== 1 || args.req.limit !== SCHOLARSHIPS_PAGE_SIZE) return null;
+  if (args.req.page !== 1 || args.req.limit !== SCHOLARSHIPS_PAGE_SIZE)
+    return null;
   if (args.req.tab !== 'matches' && args.req.tab !== 'easy-apply') return null;
   if (args.req.q.trim().length > 0) return null;
   if (args.req.categoryIds.size > 0) return null;
-  if (args.req.categoryPageSlug || args.req.catalogSubjectCategoryId) return null;
+  if (args.req.categoryPageSlug || args.req.catalogSubjectCategoryId)
+    return null;
   if (args.req.stateCodes.length > 0) return null;
   if (args.req.hostCountryCodesFilter.length > 0) return null;
   if (args.req.longTailLegacySlugs.length > 0) return null;
@@ -204,7 +210,8 @@ function buildGuestPublicCacheControl(args: {
     defaultFilters.includeEasyApply.add('easy_apply');
     const easyApplyJson = JSON.stringify(moreFiltersToJson(defaultFilters));
     const requestJson = JSON.stringify(moreFiltersToJson(args.req.moreFilters));
-    if (requestJson !== defaultJson && requestJson !== easyApplyJson) return null;
+    if (requestJson !== defaultJson && requestJson !== easyApplyJson)
+      return null;
   }
   return 'public, s-maxage=45, stale-while-revalidate=300';
 }
@@ -249,6 +256,7 @@ async function handleList(
     searchParams.get('category_page') ?? searchParams.get('category_slug');
   const deadline =
     parseDeadlineFromParam(searchParams.get('deadline')) ?? 'any';
+  const deadlineMonth = searchParams.get('deadline_month');
   const state = searchParams.get('state');
   const ignored = searchParams.get('ignored');
   const saved = searchParams.get('saved');
@@ -275,12 +283,8 @@ async function handleList(
     : [];
 
   const bounds = await fetchGlobalFilterBounds(listingSupabase);
-  const moreFilters = moreFiltersFromJson(
-    bodyMoreFilters,
-    bounds
-  );
-  const audienceParam =
-    searchParams.get('aud') ?? searchParams.get('audience');
+  const moreFilters = moreFiltersFromJson(bodyMoreFilters, bounds);
+  const audienceParam = searchParams.get('aud') ?? searchParams.get('audience');
   if (
     audienceParam === 'international_friendly' &&
     moreFilters.citizenshipAudience === 'any'
@@ -293,23 +297,27 @@ async function handleList(
 
   const lt =
     bodyLongTail ??
-    (searchParams.get('long_tail')?.split(',').map((s) => s.trim()) ?? []);
+    searchParams
+      .get('long_tail')
+      ?.split(',')
+      .map((s) => s.trim()) ??
+    [];
 
   const anonymousCatalogFastPath =
     !seoBody?.seoListingFallback &&
     !similarTo?.trim() &&
-    !(categoryPageParam?.trim()) &&
+    !categoryPageParam?.trim() &&
     lt.filter(Boolean).length === 0 &&
-    !(saved?.trim()) &&
-    !(ignored?.trim()) &&
-    !(started?.trim()) &&
-    !(submitted?.trim()) &&
+    !saved?.trim() &&
+    !ignored?.trim() &&
+    !started?.trim() &&
+    !submitted?.trim() &&
     !seoBody?.requiredSeoTags?.length;
 
   const isHubPrimaryListing =
-    !(categoryPageParam?.trim()) &&
+    !categoryPageParam?.trim() &&
     lt.filter(Boolean).length === 0 &&
-    !(similarTo?.trim());
+    !similarTo?.trim();
   const includeCategoryCounts =
     !sidebarOnlyMeta &&
     (Boolean(isHubPrimaryListing) ||
@@ -334,6 +342,7 @@ async function handleList(
       tab,
       q,
       providerSlug: providerSlugBody,
+      deadlineMonth,
       category,
       categoryPageSlug: legacyCategoryPageSlug,
       catalogSubjectCategoryId,
@@ -347,7 +356,8 @@ async function handleList(
       appCountryCodesFromUrl:
         appCountryCodesFromUrl.length > 0 ? appCountryCodesFromUrl : null,
       hostCountryCodesFromUrl:
-        hostCountryCodesFromUrl.length > 0 || hostCountryCodesFromBody.length > 0
+        hostCountryCodesFromUrl.length > 0 ||
+        hostCountryCodesFromBody.length > 0
           ? [...hostCountryCodesFromUrl, ...hostCountryCodesFromBody]
           : null,
       bestRecommendationRelaxableQuizHostCountries:
@@ -392,17 +402,13 @@ async function handleList(
       searchParams,
       moreFilters: bodyMoreFilters
     });
-
   }
 
   const hubDebugReqId = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
   const hubDbg = hubSidebarMetaDebugEnabled() && isHubPrimaryListing;
   const apiTimingDebug = scholarshipsApiTimingDebugEnabled();
   const requestStartedAt = performance.now();
-  const logApiTiming = (
-    phase: string,
-    extra: Record<string, unknown> = {}
-  ) => {
+  const logApiTiming = (phase: string, extra: Record<string, unknown> = {}) => {
     if (!apiTimingDebug) return;
     // eslint-disable-next-line no-console -- opt-in production performance diagnostics
     console.log('[scholarships-api-timing]', {
@@ -424,7 +430,9 @@ async function handleList(
   let authUser: { id?: string } | null = sessionUser;
   let profileRow: ProfilesRow | null = null;
   let isProSubscriber = false;
-  let profileFilterSeed = null as ReturnType<typeof buildScholarshipProfileFilterSeed>;
+  let profileFilterSeed = null as ReturnType<
+    typeof buildScholarshipProfileFilterSeed
+  >;
   let authBlockMs: number | undefined;
   /**
    * Load auth/profile only when the response actually needs personalized context.
@@ -516,7 +524,9 @@ async function handleList(
   ) {
     req = {
       ...req,
-      moreFilters: stripHubProfileHardMatchMoreFilters(profileSavedFiltersSnapshot)
+      moreFilters: stripHubProfileHardMatchMoreFilters(
+        profileSavedFiltersSnapshot
+      )
     };
   }
 
@@ -566,7 +576,9 @@ async function handleList(
         queryMs: Math.round(performance.now() - metaStartedAt)
       });
       const message = error instanceof Error ? error.message : String(error);
-      throw new Error(`Scholarship meta query failed for tab "${req.tab}": ${message}`);
+      throw new Error(
+        `Scholarship meta query failed for tab "${req.tab}": ${message}`
+      );
     }
     if (profileRow) {
       meta.profileMatchSummary = profileMatchSummaryFromRow(profileRow);
@@ -586,7 +598,12 @@ async function handleList(
       limit: req.limit
     });
     response.headers.set('Cache-Control', 'private, no-store');
-    return withRuntimePathDebugHeaders(response, searchParams, runtimeReadPath, v2ReadPathEligible);
+    return withRuntimePathDebugHeaders(
+      response,
+      searchParams,
+      runtimeReadPath,
+      v2ReadPathEligible
+    );
   }
 
   if (!similarTo && isEmptyIdTab(req)) {
@@ -690,7 +707,9 @@ async function handleList(
     !countOnly
   ) {
     // eslint-disable-next-line no-console -- SEO SQL debug
-    console.log('[SEO_SQL_DEBUG_BYPASS] active: is_active=true, limit 10, no moreFilters');
+    console.log(
+      '[SEO_SQL_DEBUG_BYPASS] active: is_active=true, limit 10, no moreFilters'
+    );
     const { data, error, count } = await listingSupabase
       .from('scholarships_safe_listing')
       .select(PUBLIC_LIST_CARD_SELECT, { count: 'exact' })
@@ -701,7 +720,10 @@ async function handleList(
     const scholarships = rows.map((r) => mapScholarshipRow(r));
     const total = count ?? scholarships.length;
     // eslint-disable-next-line no-console -- SEO SQL debug
-    console.log('SEO SQL RESULT (bypass)', { rows: scholarships.length, total });
+    console.log('SEO SQL RESULT (bypass)', {
+      rows: scholarships.length,
+      total
+    });
     return NextResponse.json({
       scholarships,
       results: scholarships,
@@ -775,7 +797,9 @@ async function handleList(
     });
     const message = error instanceof Error ? error.message : String(error);
     const phase = countOnly ? 'count' : includeMeta ? 'list+meta' : 'list';
-    throw new Error(`Scholarship ${phase} query failed for tab "${req.tab}": ${message}`);
+    throw new Error(
+      `Scholarship ${phase} query failed for tab "${req.tab}": ${message}`
+    );
   }
 
   if (scholarshipsSeoApiVerboseDebug && seoFallbackEnabled && !countOnly) {
@@ -795,11 +819,14 @@ async function handleList(
   }
   if (hubDbg && result.meta && !countOnly) {
     // eslint-disable-next-line no-console -- temporary hub sidebar diagnosis
-    console.log('[scholarships-hub-meta-debug] api before applyListingMetaGuestPatches', {
-      reqId: hubDebugReqId,
-      ts: new Date().toISOString(),
-      sidebarMatches: result.meta.sidebarCounts.matches
-    });
+    console.log(
+      '[scholarships-hub-meta-debug] api before applyListingMetaGuestPatches',
+      {
+        reqId: hubDebugReqId,
+        ts: new Date().toISOString(),
+        sidebarMatches: result.meta.sidebarCounts.matches
+      }
+    );
   }
   if (result.meta) {
     applyListingMetaGuestPatches(result.meta, {
@@ -810,12 +837,15 @@ async function handleList(
   }
   if (hubDbg && result.meta && !countOnly) {
     // eslint-disable-next-line no-console -- temporary hub sidebar diagnosis
-    console.log('[scholarships-hub-meta-debug] api after applyListingMetaGuestPatches', {
-      reqId: hubDebugReqId,
-      ts: new Date().toISOString(),
-      authUser: Boolean(authUser),
-      sidebarMatches: result.meta.sidebarCounts.matches
-    });
+    console.log(
+      '[scholarships-hub-meta-debug] api after applyListingMetaGuestPatches',
+      {
+        reqId: hubDebugReqId,
+        ts: new Date().toISOString(),
+        authUser: Boolean(authUser),
+        sidebarMatches: result.meta.sidebarCounts.matches
+      }
+    );
   }
 
   if (countOnly) {
@@ -870,7 +900,12 @@ async function handleList(
   } else {
     response.headers.set('Cache-Control', 'private, no-store');
   }
-  return withRuntimePathDebugHeaders(response, searchParams, runtimeReadPath, v2ReadPathEligible);
+  return withRuntimePathDebugHeaders(
+    response,
+    searchParams,
+    runtimeReadPath,
+    v2ReadPathEligible
+  );
 }
 
 /** GET /api/scholarships?page=&limit=&sort=&tab=&q=&category=&deadline=&state=&ignored=&saved=&…&meta=1&count_only=1&similar_to=&long_tail= */
@@ -886,7 +921,10 @@ export async function GET(request: Request) {
         return NextResponse.json({ error: 'Invalid mf JSON' }, { status: 400 });
       }
     }
-    const lt = searchParams.get('long_tail')?.split(',').map((s) => s.trim());
+    const lt = searchParams
+      .get('long_tail')
+      ?.split(',')
+      .map((s) => s.trim());
     return await handleList(
       searchParams,
       bodyMore,
@@ -941,14 +979,23 @@ export async function POST(request: Request) {
       sidebarOnlyMeta: json.sidebarOnlyMeta === true
     });
     const sp = new URLSearchParams(json.searchParams ?? '');
-    return await handleList(sp, json.moreFilters, json.longTailLegacySlugs, {
-      seoListingFallback: json.seoListingFallback,
-      slugOnlyMoreFilters: json.slugOnlyMoreFilters,
-      requiredSeoTags: json.requiredSeoTags,
-      hostCountryCodes: json.hostCountryCodes,
-      bestRecommendationRelaxableQuizHostCountries:
-        json.bestRecommendationRelaxableQuizHostCountries === true
-    }, json.savedFiltersSnapshot, json.providerSlug, json.guestBestRecommendationPreviewEnabled === true, json.sidebarOnlyMeta === true);
+    return await handleList(
+      sp,
+      json.moreFilters,
+      json.longTailLegacySlugs,
+      {
+        seoListingFallback: json.seoListingFallback,
+        slugOnlyMoreFilters: json.slugOnlyMoreFilters,
+        requiredSeoTags: json.requiredSeoTags,
+        hostCountryCodes: json.hostCountryCodes,
+        bestRecommendationRelaxableQuizHostCountries:
+          json.bestRecommendationRelaxableQuizHostCountries === true
+      },
+      json.savedFiltersSnapshot,
+      json.providerSlug,
+      json.guestBestRecommendationPreviewEnabled === true,
+      json.sidebarOnlyMeta === true
+    );
   } catch (e) {
     const err = e instanceof Error ? e : new Error(String(e));
     // eslint-disable-next-line no-console -- API diagnostics

@@ -16,7 +16,8 @@ const container = 'mx-auto w-full max-w-7xl';
 const emeraldCtaClass =
   'inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-2xl bg-emerald-500 px-8 py-4 text-center text-lg font-semibold text-white shadow-[0_10px_36px_-10px_rgba(16,185,129,0.45)] transition duration-200 ease-out hover:bg-emerald-600 hover:shadow-[0_14px_40px_-10px_rgba(16,185,129,0.45)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-white active:scale-[0.99] sm:w-auto sm:min-w-[240px] sm:py-[1.125rem] sm:text-xl';
 
-export type HomeInternationalGrantsCountryRow = ScholarshipListMeta['countryCounts'][number];
+export type HomeInternationalGrantsCountryRow =
+  ScholarshipListMeta['countryCounts'][number];
 
 const UNITED_STATES_FALLBACK: HomeInternationalGrantsCountryRow = {
   code: 'US',
@@ -46,12 +47,17 @@ function flagCdnUrl(code: string) {
 function buildDestinationCountries(
   countries: HomeInternationalGrantsCountryRow[]
 ): HomeInternationalGrantsCountryRow[] {
-  const byCode = new Map(countries.map((country) => [country.code.toUpperCase(), country]));
+  const byCode = new Map(
+    countries.map((country) => [country.code.toUpperCase(), country])
+  );
   const out: HomeInternationalGrantsCountryRow[] = [];
   const used = new Set<string>();
 
   for (const code of DESTINATION_PRIORITY) {
-    const country = code === 'US' ? byCode.get(code) ?? UNITED_STATES_FALLBACK : byCode.get(code);
+    const country =
+      code === 'US'
+        ? (byCode.get(code) ?? UNITED_STATES_FALLBACK)
+        : byCode.get(code);
     if (!country) continue;
     out.push(country);
     used.add(code);
@@ -66,23 +72,6 @@ function buildDestinationCountries(
   }
 
   return out.slice(0, MAX_DESTINATIONS);
-}
-
-function repeatUnitedStatesInMarquee(
-  countries: HomeInternationalGrantsCountryRow[]
-): HomeInternationalGrantsCountryRow[] {
-  const unitedStates =
-    countries.find((country) => country.code.toUpperCase() === 'US') ?? UNITED_STATES_FALLBACK;
-  if (countries.length <= 4) return [unitedStates, ...countries];
-
-  return [
-    unitedStates,
-    ...countries.slice(0, 4),
-    unitedStates,
-    ...countries.slice(4, 8),
-    unitedStates,
-    ...countries.slice(8)
-  ];
 }
 
 /** Matches homepage orange accent (see `homeMarketingCtaClasses` premium / essay CTAs). */
@@ -124,7 +113,9 @@ function CountryCard({
           {row.label}
         </p>
         <p className="mt-0.5 text-xs tabular-nums text-gray-500 transition group-hover:text-orange-800/90 sm:text-sm lg:text-[0.9375rem]">
-          {applyCopyTemplate(copy.countryListingsTemplate, { count: formattedCount })}
+          {applyCopyTemplate(copy.countryListingsTemplate, {
+            count: formattedCount
+          })}
         </p>
       </div>
     </Link>
@@ -155,19 +146,6 @@ export default function HomeInternationalGrantsUsp({
     [topApplicantCountries]
   );
   const hasCountries = destinationCountries.length > 0;
-  const secondaryDestinationCountries = hasCountries
-    ? [...destinationCountries.slice(3), ...destinationCountries.slice(0, 3)]
-    : [];
-  const primaryCountryLoop = hasCountries
-    ? repeatUnitedStatesInMarquee(destinationCountries)
-    : [];
-  const secondaryCountryLoop = hasCountries
-    ? repeatUnitedStatesInMarquee(secondaryDestinationCountries)
-    : [];
-  const primaryMarqueeItems = hasCountries ? [...primaryCountryLoop, ...primaryCountryLoop] : [];
-  const secondaryMarqueeItems = hasCountries
-    ? [...secondaryCountryLoop, ...secondaryCountryLoop]
-    : [];
 
   useEffect(() => {
     const el = sectionRef.current;
@@ -217,7 +195,10 @@ export default function HomeInternationalGrantsUsp({
               className={`${emeraldCtaClass} mx-auto mt-8 lg:mx-0 lg:inline-flex`}
             >
               {copy.cta}
-              <ArrowRight className="h-4 w-4 shrink-0 sm:h-5 sm:w-5" aria-hidden />
+              <ArrowRight
+                className="h-4 w-4 shrink-0 sm:h-5 sm:w-5"
+                aria-hidden
+              />
             </Link>
           </div>
 
@@ -272,31 +253,16 @@ export default function HomeInternationalGrantsUsp({
                   className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-gradient-to-l from-white via-white/85 to-transparent sm:w-16 lg:from-slate-50 lg:via-slate-50/90"
                   aria-hidden
                 />
-                <div className="hidden snap-x gap-3 overflow-x-auto py-2 px-12 [scrollbar-width:none] motion-reduce:flex sm:gap-4 sm:px-16 [&::-webkit-scrollbar]:hidden">
+                <div className="flex snap-x gap-3 overflow-x-auto py-2 px-12 [scrollbar-width:none] sm:gap-4 sm:px-16 lg:py-3 [&::-webkit-scrollbar]:hidden">
                   {destinationCountries.map((row) => (
                     <div key={row.code} className="snap-start">
-                      <CountryCard row={row} copy={copy} getScholarshipsBaseHref={getScholarshipsBaseHref} />
+                      <CountryCard
+                        row={row}
+                        copy={copy}
+                        getScholarshipsBaseHref={getScholarshipsBaseHref}
+                      />
                     </div>
                   ))}
-                </div>
-                <div className="overflow-x-auto [scrollbar-width:none] motion-reduce:hidden lg:hidden [&::-webkit-scrollbar]:hidden">
-                  <div className="flex w-max animate-home-country-marquee gap-3 py-2 pr-16 [animation-duration:80s] hover:[animation-play-state:paused] focus-within:[animation-play-state:paused] sm:gap-4 lg:py-3">
-                    {primaryMarqueeItems.map((row, index) => (
-                      <CountryCard key={`${row.code}-${index}`} row={row} copy={copy} getScholarshipsBaseHref={getScholarshipsBaseHref} />
-                    ))}
-                  </div>
-                </div>
-                <div className="hidden space-y-4 overflow-x-auto [scrollbar-width:none] motion-reduce:hidden lg:block [&::-webkit-scrollbar]:hidden">
-                  <div className="flex w-max animate-home-country-marquee gap-4 py-2 pr-16 [animation-duration:95s] hover:[animation-play-state:paused] focus-within:[animation-play-state:paused]">
-                    {primaryMarqueeItems.map((row, index) => (
-                      <CountryCard key={`${row.code}-primary-${index}`} row={row} copy={copy} getScholarshipsBaseHref={getScholarshipsBaseHref} />
-                    ))}
-                  </div>
-                  <div className="flex w-max animate-home-country-marquee gap-4 py-2 pr-16 [animation-direction:reverse] [animation-duration:115s] hover:[animation-play-state:paused] focus-within:[animation-play-state:paused]">
-                    {secondaryMarqueeItems.map((row, index) => (
-                      <CountryCard key={`${row.code}-secondary-${index}`} row={row} copy={copy} getScholarshipsBaseHref={getScholarshipsBaseHref} />
-                    ))}
-                  </div>
                 </div>
               </div>
             </div>

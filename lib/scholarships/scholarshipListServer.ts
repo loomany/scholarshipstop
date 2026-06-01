@@ -20,7 +20,10 @@ import {
 } from '@/lib/constants/usStates';
 import { DOMESTIC_OR_UNSPECIFIED_CITIZENSHIP } from '@/lib/constants/onboardingCitizenshipAndLocation';
 import type { SortOption } from '@/app/scholarships/scholarshipSort';
-import type { ScholarshipListTabId, ScholarshipSidebarCounts } from '@/app/scholarships/scholarshipTabs';
+import type {
+  ScholarshipListTabId,
+  ScholarshipSidebarCounts
+} from '@/app/scholarships/scholarshipTabs';
 import type { LongTailSlug } from '@/app/scholarships/scholarshipLongTailPresets';
 import {
   buildCategorySeoRelaxAttempts,
@@ -157,6 +160,7 @@ export type ScholarshipListRequest = {
   tab: ScholarshipListTabId;
   q: string;
   providerSlug: string | null;
+  deadlineMonth?: string | null;
   /** Multi-select category filter (OR semantics). */
   categoryIds: Set<ScholarshipCategoryId>;
   /** Narrow listing to one catalog slug (category page). */
@@ -243,36 +247,28 @@ export type HomeScholarshipCatalogStats = {
   totalKnownAwardAmount: number;
 };
 
-let globalFilterBoundsCache:
-  | {
-      value: ScholarshipListMeta['filterBounds'];
-      expiresAt: number;
-    }
-  | null = null;
-let applicantCountryCountsCache:
-  | {
-      value: {
-        countryCounts: ScholarshipListMeta['countryCounts'];
-        unspecifiedApplicantCountryCount: number;
-      };
-      expiresAt: number;
-    }
-  | null = null;
-let hostCountryCountsCache:
-  | {
-      value: {
-        hostCountryCounts: ScholarshipListMeta['hostCountryCounts'];
-        unspecifiedHostCountryCount: number;
-      };
-      expiresAt: number;
-    }
-  | null = null;
-let homeCatalogStatsCache:
-  | {
-      value: HomeScholarshipCatalogStats;
-      expiresAt: number;
-    }
-  | null = null;
+let globalFilterBoundsCache: {
+  value: ScholarshipListMeta['filterBounds'];
+  expiresAt: number;
+} | null = null;
+let applicantCountryCountsCache: {
+  value: {
+    countryCounts: ScholarshipListMeta['countryCounts'];
+    unspecifiedApplicantCountryCount: number;
+  };
+  expiresAt: number;
+} | null = null;
+let hostCountryCountsCache: {
+  value: {
+    hostCountryCounts: ScholarshipListMeta['hostCountryCounts'];
+    unspecifiedHostCountryCount: number;
+  };
+  expiresAt: number;
+} | null = null;
+let homeCatalogStatsCache: {
+  value: HomeScholarshipCatalogStats;
+  expiresAt: number;
+} | null = null;
 /** LRU-ish cap: bump on read moves entry to Map end; evict from start when over limit. */
 const LIST_META_CACHE_MAX_ENTRIES = 400;
 
@@ -348,7 +344,9 @@ function buildEasyApplyOrParts(sel: Iterable<string>): string[] {
   return parts;
 }
 
-function readTtlValue<T>(entry: { value: T; expiresAt: number } | null | undefined): T | null {
+function readTtlValue<T>(
+  entry: { value: T; expiresAt: number } | null | undefined
+): T | null {
   const now = Date.now();
   if (!entry || entry.expiresAt <= now) return null;
   return entry.value;
@@ -366,17 +364,22 @@ function writeTtlValue<T>(
   });
 }
 
-function cloneScholarshipListMeta(meta: ScholarshipListMeta): ScholarshipListMeta {
+function cloneScholarshipListMeta(
+  meta: ScholarshipListMeta
+): ScholarshipListMeta {
   return {
     filterBounds: { ...meta.filterBounds },
     sidebarCounts: { ...meta.sidebarCounts },
     categoryCounts: { ...meta.categoryCounts },
-    countryCounts: (meta.countryCounts ?? []).map((country) => ({ ...country })),
+    countryCounts: (meta.countryCounts ?? []).map((country) => ({
+      ...country
+    })),
     hostCountryCounts: (meta.hostCountryCounts ?? []).map((country) => ({
       ...country
     })),
     unspecifiedHostCountryCount: meta.unspecifiedHostCountryCount ?? 0,
-    unspecifiedApplicantCountryCount: meta.unspecifiedApplicantCountryCount ?? 0,
+    unspecifiedApplicantCountryCount:
+      meta.unspecifiedApplicantCountryCount ?? 0,
     profileMatchSummary: meta.profileMatchSummary
       ? { ...meta.profileMatchSummary }
       : meta.profileMatchSummary,
@@ -466,11 +469,7 @@ function interleaveSubscriptionLockedAndOpenScholarships<T extends Scholarship>(
     nextLocked = !nextLocked;
   }
 
-  return [
-    ...out,
-    ...locked.slice(lockedIndex),
-    ...open.slice(openIndex)
-  ];
+  return [...out, ...locked.slice(lockedIndex), ...open.slice(openIndex)];
 }
 
 function sliceFreeTierLockedOpenInterleavedPage<T extends Scholarship>(
@@ -523,7 +522,9 @@ export function parseCommaStateCodes(raw: string | null | undefined): string[] {
     .filter((s) => /^[A-Z]{2}$/.test(s));
 }
 
-function normalizeStateNameOrCodeToCode(raw: string | null | undefined): string | null {
+function normalizeStateNameOrCodeToCode(
+  raw: string | null | undefined
+): string | null {
   const t = raw?.trim();
   if (!t) return null;
   const upper = t.toUpperCase();
@@ -595,7 +596,10 @@ export async function resolveCatalogSubjectCategoryForPageSlug(
   if (error) throw new Error(postgrestErrorToMessage(error));
   const categoryRow = data as { id: string } | null;
   if (categoryRow?.id) {
-    return { legacyCategoryPageSlug: null, catalogSubjectCategoryId: categoryRow.id };
+    return {
+      legacyCategoryPageSlug: null,
+      catalogSubjectCategoryId: categoryRow.id
+    };
   }
   return { legacyCategoryPageSlug: raw, catalogSubjectCategoryId: null };
 }
@@ -617,6 +621,7 @@ export function scholarshipListRequestFromParts(parts: {
   tab: ScholarshipListTabId;
   q?: string | null;
   providerSlug?: string | null;
+  deadlineMonth?: string | null;
   category?: string | null;
   categoryPageSlug?: string | null;
   deadline: DeadlinePreset;
@@ -679,6 +684,7 @@ export function scholarshipListRequestFromParts(parts: {
     tab: parts.tab,
     q: parts.q?.trim() ?? '',
     providerSlug: parts.providerSlug?.trim() || null,
+    deadlineMonth: normalizeDeadlineMonthParam(parts.deadlineMonth),
     categoryIds: parseCommaCategories(parts.category ?? null),
     categoryPageSlug: parts.categoryPageSlug?.trim() || null,
     deadline: parts.deadline,
@@ -693,11 +699,14 @@ export function scholarshipListRequestFromParts(parts: {
     moreFilters,
     longTailLegacySlugs: lt,
     similarToId: parts.similarTo?.trim() || null,
-    similarCategorySlug: parts.similarCategorySlug?.trim().toLowerCase() || null,
+    similarCategorySlug:
+      parts.similarCategorySlug?.trim().toLowerCase() || null,
     similarStateSlug: normalizeSimilarStateSlugParam(parts.similarStateSlug),
     /** Hub/catalog listing is always catalog; `scope` URL param is ignored. */
     listScope: 'catalog',
-    requiredSeoTags: sanitizeRequiredSeoTagsInput(parts.requiredSeoTags ?? null),
+    requiredSeoTags: sanitizeRequiredSeoTagsInput(
+      parts.requiredSeoTags ?? null
+    ),
     catalogSubjectCategoryId: parts.catalogSubjectCategoryId?.trim() || null
   };
 }
@@ -722,14 +731,20 @@ export async function fetchGlobalFilterBounds(
           .select('award_amount_numeric_sort')
           .eq('is_active', true)
           .not('award_amount_numeric_sort', 'is', null)
-          .order('award_amount_numeric_sort', { ascending: true, nullsFirst: false })
+          .order('award_amount_numeric_sort', {
+            ascending: true,
+            nullsFirst: false
+          })
           .limit(1)
           .maybeSingle(),
         listingFrom(supabase)
           .select('award_amount_numeric_sort')
           .eq('is_active', true)
           .not('award_amount_numeric_sort', 'is', null)
-          .order('award_amount_numeric_sort', { ascending: false, nullsFirst: false })
+          .order('award_amount_numeric_sort', {
+            ascending: false,
+            nullsFirst: false
+          })
           .limit(1)
           .maybeSingle(),
         listingFrom(supabase)
@@ -751,20 +766,32 @@ export async function fetchGlobalFilterBounds(
       ?.award_amount_numeric_sort;
     const amax = (maxA as { award_amount_numeric_sort: number | null } | null)
       ?.award_amount_numeric_sort;
-    const pmin = (minP as { applicants_count: number | null } | null)?.applicants_count;
-    const pmax = (maxP as { applicants_count: number | null } | null)?.applicants_count;
+    const pmin = (minP as { applicants_count: number | null } | null)
+      ?.applicants_count;
+    const pmax = (maxP as { applicants_count: number | null } | null)
+      ?.applicants_count;
     /**
      * Bounds drive the amount slider only. Rows with NULL `award_amount_numeric_sort`
      * still pass the listing query when `payout_method = non_monetary` or `seo_tags`
      * overlaps `award_signal_*` (see `applyMoreFilters`).
      */
     const value = {
-      amountMin: amin != null && Number.isFinite(Number(amin)) ? Math.floor(Number(amin)) : fallback.amountMin,
-      amountMax: amax != null && Number.isFinite(Number(amax)) ? Math.ceil(Number(amax)) : fallback.amountMax,
+      amountMin:
+        amin != null && Number.isFinite(Number(amin))
+          ? Math.floor(Number(amin))
+          : fallback.amountMin,
+      amountMax:
+        amax != null && Number.isFinite(Number(amax))
+          ? Math.ceil(Number(amax))
+          : fallback.amountMax,
       applicantsMin:
-        pmin != null && Number.isFinite(Number(pmin)) ? Math.floor(Number(pmin)) : fallback.applicantsMin,
+        pmin != null && Number.isFinite(Number(pmin))
+          ? Math.floor(Number(pmin))
+          : fallback.applicantsMin,
       applicantsMax:
-        pmax != null && Number.isFinite(Number(pmax)) ? Math.ceil(Number(pmax)) : fallback.applicantsMax
+        pmax != null && Number.isFinite(Number(pmax))
+          ? Math.ceil(Number(pmax))
+          : fallback.applicantsMax
     };
     globalFilterBoundsCache = {
       value,
@@ -803,9 +830,7 @@ function applyCategoryPageScope(q: any, slug: string): any {
   const raw = slug.trim().toLowerCase();
   if (!raw) return q;
   const canonical = normalizeCategoryId(raw);
-  const keys = Array.from(
-    new Set([raw].concat(canonical ? [canonical] : []))
-  );
+  const keys = Array.from(new Set([raw].concat(canonical ? [canonical] : [])));
   return applyCategoryOrFilter(q, keys);
 }
 
@@ -932,7 +957,9 @@ function applyDeadlinePreset(q: any, preset: DeadlinePreset): any {
  * conflicting `eligibility_tags` / ILIKE / long-tail SQL on top of `requiredSeoTags`.
  * Keeps: deadline, amount & applicants bounds, `includeLocationLabels` (state / nationwide).
  */
-function moreFiltersReducedForSeoListing(base: MoreFiltersState): MoreFiltersState {
+function moreFiltersReducedForSeoListing(
+  base: MoreFiltersState
+): MoreFiltersState {
   const f = cloneMoreFilters(base);
   f.includeEligibility.clear();
   f.includeEducationLevels.clear();
@@ -969,13 +996,14 @@ function applyMoreFilters(q: any, f: MoreFiltersState): any {
   const payoutAmountOrAwardSignal = `payout_method.eq.non_monetary,${amountRange}${awardSignalPart}`;
   q = q.or(payoutAmountOrAwardSignal);
 
-  q = q
-    .or(`applicants_count.is.null,and(applicants_count.gte.${f.applicantsMin},applicants_count.lte.${f.applicantsMax})`);
+  q = q.or(
+    `applicants_count.is.null,and(applicants_count.gte.${f.applicantsMin},applicants_count.lte.${f.applicantsMax})`
+  );
 
   const includedRequirementTypes = Array.from(f.includeRequirementTypes);
-  const requirementOrParts = requirementTypesToDbColumns(includedRequirementTypes).map(
-    (field) => `${field}.eq.true`
-  );
+  const requirementOrParts = requirementTypesToDbColumns(
+    includedRequirementTypes
+  ).map((field) => `${field}.eq.true`);
   if (requirementOrParts.length > 0) {
     q = q.or(requirementOrParts.join(','));
   }
@@ -994,8 +1022,7 @@ function applyMoreFilters(q: any, f: MoreFiltersState): any {
   }
 
   const po = f.payout;
-  const poAny =
-    po.college || po.student || po.nonMonetary || po.notStated;
+  const poAny = po.college || po.student || po.nonMonetary || po.notStated;
   if (poAny) {
     const parts: string[] = [];
     if (po.college) parts.push('payout_method.eq.college');
@@ -1007,7 +1034,9 @@ function applyMoreFilters(q: any, f: MoreFiltersState): any {
 
   const addIncludeCs = (col: string, sel: Set<string>) => {
     if (sel.size === 0) return;
-    const parts = Array.from(sel).map((id) => `${col}.cs.${JSON.stringify([id])}`);
+    const parts = Array.from(sel).map(
+      (id) => `${col}.cs.${JSON.stringify([id])}`
+    );
     q = q.or(parts.join(','));
   };
   const addIncludeEasyApply = (sel: Set<string>) => {
@@ -1162,7 +1191,8 @@ function applyBestRecommendationProfileGpaFilter(
   if (req.tab !== 'best-recommendation') return q;
   if (req.moreFilters.includeApplicantCountryCodes.size > 0) return q;
   if (req.moreFilters.includeGpaBuckets.size > 0) return q;
-  if (gpaBucketIdsFromFilterChoice(req.moreFilters.gpaChoice).length > 0) return q;
+  if (gpaBucketIdsFromFilterChoice(req.moreFilters.gpaChoice).length > 0)
+    return q;
   const orParts = buildBestRecommendationProfileGpaOrParts(
     req.personalizedProfile ?? null
   );
@@ -1175,7 +1205,8 @@ function applyBestRecommendationNoCitizenshipListedFilter(
   q: any
 ): any {
   if (req.tab !== 'best-recommendation') return q;
-  const raw = req.personalizedProfile?.citizenship_status?.trim().toLowerCase() ?? '';
+  const raw =
+    req.personalizedProfile?.citizenship_status?.trim().toLowerCase() ?? '';
   if (raw !== DOMESTIC_OR_UNSPECIFIED_CITIZENSHIP) return q;
   return q.or('citizenship_statuses.eq.[]');
 }
@@ -1185,11 +1216,17 @@ function applySort(q: any, sort: SortOption): any {
   switch (sort) {
     case 'highest_amount':
       return q
-        .order('award_amount_numeric_sort', { ascending: false, nullsFirst: false })
+        .order('award_amount_numeric_sort', {
+          ascending: false,
+          nullsFirst: false
+        })
         .order('ranking_score', { ascending: false, nullsFirst: false });
     case 'least_requirements':
       return q
-        .order('requirements_sort_value', { ascending: true, nullsFirst: false })
+        .order('requirements_sort_value', {
+          ascending: true,
+          nullsFirst: false
+        })
         .order('ranking_score', { ascending: false, nullsFirst: false });
     case 'closest_deadline':
       return q
@@ -1242,13 +1279,16 @@ function applyTabScopeFixed(req: ScholarshipListRequest, q: any): any {
       }
       return q;
     case 'saved':
-      if (saved.length === 0) return q.eq('id', '00000000-0000-0000-0000-000000000000');
+      if (saved.length === 0)
+        return q.eq('id', '00000000-0000-0000-0000-000000000000');
       return q.in('id', saved);
     case 'from-email':
-      if (saved.length === 0) return q.eq('id', '00000000-0000-0000-0000-000000000000');
+      if (saved.length === 0)
+        return q.eq('id', '00000000-0000-0000-0000-000000000000');
       return q.in('id', saved);
     case 'ignored':
-      if (ignored.length === 0) return q.eq('id', '00000000-0000-0000-0000-000000000000');
+      if (ignored.length === 0)
+        return q.eq('id', '00000000-0000-0000-0000-000000000000');
       return q.in('id', ignored);
     case 'started':
       if (started.length === 0) {
@@ -1283,7 +1323,9 @@ function applyTabScopeFixed(req: ScholarshipListRequest, q: any): any {
  * When aggregating country histograms over the listing filter stack, fetch only the
  * jsonb array column(s) needed — not the full public card projection (large JSON per row).
  */
-type ListingCountryAggregateSelect = 'applicant_country_codes' | 'host_country_codes';
+type ListingCountryAggregateSelect =
+  | 'applicant_country_codes'
+  | 'host_country_codes';
 
 function baseSelect(
   supabase: ServerSupabaseClient,
@@ -1336,6 +1378,24 @@ function applyCatalogTextSearchFilter(q: any, rawQ: string): any {
   return q.or(cols.map((c) => `${c}.ilike.${pattern}`).join(','));
 }
 
+function normalizeDeadlineMonthParam(
+  value: string | null | undefined
+): string | null {
+  const normalized = value?.trim();
+  if (!normalized || !/^\d{4}-(0[1-9]|1[0-2])$/.test(normalized)) {
+    return null;
+  }
+  return normalized;
+}
+
+function nextDeadlineMonth(month: string): string {
+  const [yearRaw, monthRaw] = month.split('-');
+  const year = Number.parseInt(yearRaw, 10);
+  const monthIndex = Number.parseInt(monthRaw, 10) - 1;
+  const next = new Date(Date.UTC(year, monthIndex + 1, 1));
+  return `${next.getUTCFullYear()}-${String(next.getUTCMonth() + 1).padStart(2, '0')}`;
+}
+
 function applyCommonFilters(req: ScholarshipListRequest, q: any): any {
   const seoListing = req.requiredSeoTags.length > 0;
   q = q.eq('is_active', true);
@@ -1354,8 +1414,16 @@ function applyCommonFilters(req: ScholarshipListRequest, q: any): any {
   if (req.providerSlug) {
     q = q.eq('provider_slug', req.providerSlug);
   }
+  if (req.deadlineMonth) {
+    q = q
+      .gte('deadline_date', `${req.deadlineMonth}-01`)
+      .lt('deadline_date', `${nextDeadlineMonth(req.deadlineMonth)}-01`);
+  }
   if (req.catalogSubjectCategoryId) {
-    q = q.eq('scholarship_categories.category_id', req.catalogSubjectCategoryId);
+    q = q.eq(
+      'scholarship_categories.category_id',
+      req.catalogSubjectCategoryId
+    );
   } else if (req.categoryPageSlug) {
     q = applyCategoryPageScope(q, req.categoryPageSlug);
   } else if (req.categoryIds.size > 0) {
@@ -1470,7 +1538,10 @@ function categoryDropdownCountsRequest(
 }
 
 function tabUsesEmptyIdSet(
-  req: Pick<ScholarshipListRequest, 'ignored' | 'saved' | 'started' | 'submitted'>,
+  req: Pick<
+    ScholarshipListRequest,
+    'ignored' | 'saved' | 'started' | 'submitted'
+  >,
   tab: ScholarshipListTabId
 ): boolean {
   switch (tab) {
@@ -1499,7 +1570,9 @@ function buildListMetaCacheKey(
   const saved = Array.from(req.saved).sort().join(',');
   const started = Array.from(req.started).sort().join(',');
   const submitted = Array.from(req.submitted).sort().join(',');
-  const longTailLegacySlugs = Array.from(req.longTailLegacySlugs).sort().join(',');
+  const longTailLegacySlugs = Array.from(req.longTailLegacySlugs)
+    .sort()
+    .join(',');
   const requiredSeoTags = Array.from(req.requiredSeoTags).sort().join(',');
   const boundsKey = [
     bounds.amountMin,
@@ -1508,10 +1581,7 @@ function buildListMetaCacheKey(
     bounds.applicantsMax
   ].join(':');
   const qNorm = req.q.trim().toLowerCase();
-  const categoryIds = Array.from(req.categoryIds)
-    .slice()
-    .sort()
-    .join(',');
+  const categoryIds = Array.from(req.categoryIds).slice().sort().join(',');
   const moreFiltersKey = JSON.stringify(moreFiltersToJson(req.moreFilters));
   const savedSnapKey =
     req.savedFiltersSnapshot === undefined
@@ -1543,6 +1613,7 @@ function buildListMetaCacheKey(
     `bounds:${boundsKey}`,
     `q:${qNorm}`,
     `provider:${req.providerSlug ?? ''}`,
+    `deadlineMonth:${req.deadlineMonth ?? ''}`,
     `catIds:${categoryIds}`,
     `catPage:${req.categoryPageSlug ?? ''}`,
     `catSubj:${req.catalogSubjectCategoryId ?? ''}`,
@@ -1551,8 +1622,12 @@ function buildListMetaCacheKey(
 }
 
 /** `fetchScholarshipListMeta` listMeta cache: country dropdown aggregates depend on URL `app_cc` / `host_cc`. */
-function buildCountryCrossFilterMetaCacheKey(req: ScholarshipListRequest): string {
-  const host = [...sanitizeScholarshipListingIso2List(req.hostCountryCodesFilter)]
+function buildCountryCrossFilterMetaCacheKey(
+  req: ScholarshipListRequest
+): string {
+  const host = [
+    ...sanitizeScholarshipListingIso2List(req.hostCountryCodesFilter)
+  ]
     .sort()
     .join(',');
   const app = [...req.moreFilters.includeApplicantCountryCodes]
@@ -1560,8 +1635,12 @@ function buildCountryCrossFilterMetaCacheKey(req: ScholarshipListRequest): strin
     .filter((c) => /^[A-Z]{2}$/.test(c))
     .sort()
     .join(',');
-  const unspec = req.moreFilters.includeUnspecifiedApplicantCountries ? '1' : '0';
-  const hostUnspec = req.moreFilters.includeUnspecifiedHostCountries ? '1' : '0';
+  const unspec = req.moreFilters.includeUnspecifiedApplicantCountries
+    ? '1'
+    : '0';
+  const hostUnspec = req.moreFilters.includeUnspecifiedHostCountries
+    ? '1'
+    : '0';
   const mf = JSON.stringify(moreFiltersToJson(req.moreFilters));
   return `crossHost:${host}|crossApp:${app}|crossAppUnspec:${unspec}|crossHostUnspec:${hostUnspec}|mf:${mf}`;
 }
@@ -1597,7 +1676,8 @@ async function aggregateApplicantCountryCountsGlobalActive(
       }
       for (const raw of codes) {
         const code = String(raw).trim().toUpperCase();
-        if (/^[A-Z]{2}$/.test(code)) counts.set(code, (counts.get(code) ?? 0) + 1);
+        if (/^[A-Z]{2}$/.test(code))
+          counts.set(code, (counts.get(code) ?? 0) + 1);
       }
     }
 
@@ -1636,10 +1716,13 @@ async function aggregateHostCountryCountsGlobalActive(
         unspecifiedHostCountryCount += 1;
         continue;
       }
-      const codes = Array.isArray(row.host_country_codes) ? row.host_country_codes : [];
+      const codes = Array.isArray(row.host_country_codes)
+        ? row.host_country_codes
+        : [];
       for (const raw of codes) {
         const code = String(raw).trim().toUpperCase();
-        if (/^[A-Z]{2}$/.test(code)) counts.set(code, (counts.get(code) ?? 0) + 1);
+        if (/^[A-Z]{2}$/.test(code))
+          counts.set(code, (counts.get(code) ?? 0) + 1);
       }
     }
 
@@ -1738,7 +1821,9 @@ export async function fetchHostCountryCounts(
   const cached = readTtlValue(hostCountryCountsCache);
   if (cached) {
     return {
-      hostCountryCounts: cached.hostCountryCounts.map((country) => ({ ...country })),
+      hostCountryCounts: cached.hostCountryCounts.map((country) => ({
+        ...country
+      })),
       unspecifiedHostCountryCount: cached.unspecifiedHostCountryCount
     };
   }
@@ -1773,7 +1858,8 @@ export async function fetchHomeScholarshipCatalogStats(
   const countResult = await listingFrom(supabase)
     .select('id', { count: 'exact', head: true })
     .eq('is_active', true);
-  if (countResult.error) throw new Error(postgrestErrorToMessage(countResult.error));
+  if (countResult.error)
+    throw new Error(postgrestErrorToMessage(countResult.error));
 
   let totalKnownAwardAmount = 0;
   const pageSize = 1000;
@@ -1791,7 +1877,8 @@ export async function fetchHomeScholarshipCatalogStats(
 
     for (const row of rows) {
       const amount = Number(row.award_amount_numeric_sort);
-      if (Number.isFinite(amount) && amount > 0) totalKnownAwardAmount += amount;
+      if (Number.isFinite(amount) && amount > 0)
+        totalKnownAwardAmount += amount;
     }
 
     if (rows.length < pageSize) break;
@@ -1810,7 +1897,9 @@ export async function fetchHomeScholarshipCatalogStats(
 }
 
 /** Single catalog pipeline: no personalized SQL branch. */
-function effectiveListingRequest(req: ScholarshipListRequest): ScholarshipListRequest {
+function effectiveListingRequest(
+  req: ScholarshipListRequest
+): ScholarshipListRequest {
   const n = normalizeTabScopedMoreFilters(req);
   const base: ScholarshipListRequest = {
     ...n,
@@ -1823,7 +1912,9 @@ function effectiveListingRequest(req: ScholarshipListRequest): ScholarshipListRe
   return base;
 }
 
-function bestRecommendationHasRelaxableHardFilters(req: ScholarshipListRequest): boolean {
+function bestRecommendationHasRelaxableHardFilters(
+  req: ScholarshipListRequest
+): boolean {
   if (req.tab !== 'best-recommendation') return false;
   const f = req.moreFilters;
   return (
@@ -1955,7 +2046,8 @@ async function aggregateApplicantCountryCountsFromListingBasis(
       }
       for (const raw of codes) {
         const code = String(raw).trim().toUpperCase();
-        if (/^[A-Z]{2}$/.test(code)) counts.set(code, (counts.get(code) ?? 0) + 1);
+        if (/^[A-Z]{2}$/.test(code))
+          counts.set(code, (counts.get(code) ?? 0) + 1);
       }
     }
 
@@ -1995,10 +2087,13 @@ async function aggregateHostCountryCountsFromListingBasis(
         unspecifiedHostCountryCount += 1;
         continue;
       }
-      const codes = Array.isArray(row.host_country_codes) ? row.host_country_codes : [];
+      const codes = Array.isArray(row.host_country_codes)
+        ? row.host_country_codes
+        : [];
       for (const raw of codes) {
         const code = String(raw).trim().toUpperCase();
-        if (/^[A-Z]{2}$/.test(code)) counts.set(code, (counts.get(code) ?? 0) + 1);
+        if (/^[A-Z]{2}$/.test(code))
+          counts.set(code, (counts.get(code) ?? 0) + 1);
       }
     }
 
@@ -2040,7 +2135,11 @@ export async function countScholarshipsForTabRequest(
       ...effectiveListingRequest(relaxBestRecommendationHardFilters(r)),
       tab
     };
-    const retryQ: any = buildScholarshipListFilterQuery(supabase, true, relaxed);
+    const retryQ: any = buildScholarshipListFilterQuery(
+      supabase,
+      true,
+      relaxed
+    );
     const retry = await retryQ;
     if (retry.error) throw new Error(postgrestErrorToMessage(retry.error));
     return retry.count ?? 0;
@@ -2088,9 +2187,7 @@ async function loadSimilarScholarshipsLegacyRows(
   if (req.similarCategorySlug) {
     const raw = req.similarCategorySlug.trim().toLowerCase();
     const canon = normalizeCategoryId(raw);
-    const keys = Array.from(
-      new Set([raw].concat(canon ? [canon] : []))
-    );
+    const keys = Array.from(new Set([raw].concat(canon ? [canon] : [])));
     q = applyCategoryOrFilter(q, keys);
   }
   const similarPoolSize = Math.min(120, Math.max(req.limit * 6, 36));
@@ -2109,11 +2206,14 @@ async function fetchScoredSimilarScholarshipRows(
   req: ScholarshipListRequest
 ): Promise<ScholarshipRow[] | null> {
   if (!req.similarToId) return null;
-  const { data, error } = await supabase.rpc('get_scored_similar_scholarships', {
-    target_id: req.similarToId,
-    target_category_slug: req.similarCategorySlug ?? '',
-    target_state_slug: req.similarStateSlug
-  });
+  const { data, error } = await supabase.rpc(
+    'get_scored_similar_scholarships',
+    {
+      target_id: req.similarToId,
+      target_category_slug: req.similarCategorySlug ?? '',
+      target_state_slug: req.similarStateSlug
+    }
+  );
   if (error) {
     if (process.env.NODE_ENV === 'development') {
       // eslint-disable-next-line no-console
@@ -2217,271 +2317,397 @@ export async function executeScholarshipListQuery(
   const scholarshipsMetaTimingExecuteListQueryT0 =
     scholarshipsMetaTimingExecuteListQuery ? performance.now() : 0;
   try {
-  /**
-   * Catalog “similar scholarships” must bypass personalized match ordering.
-   * Otherwise `similar_to` is ignored whenever a match bundle exists.
-   */
-  if (req.similarToId) {
-    let qCount = listingFrom(supabase)
-      .select('id', {
-        count: 'exact',
-        head: true
-      })
-      .eq('is_active', true)
-      .neq('id', req.similarToId);
-    if (req.similarCategorySlug) {
-      const raw = req.similarCategorySlug.trim().toLowerCase();
-      const canon = normalizeCategoryId(raw);
-      const keys = Array.from(
-        new Set([raw].concat(canon ? [canon] : []))
+    /**
+     * Catalog “similar scholarships” must bypass personalized match ordering.
+     * Otherwise `similar_to` is ignored whenever a match bundle exists.
+     */
+    if (req.similarToId) {
+      let qCount = listingFrom(supabase)
+        .select('id', {
+          count: 'exact',
+          head: true
+        })
+        .eq('is_active', true)
+        .neq('id', req.similarToId);
+      if (req.similarCategorySlug) {
+        const raw = req.similarCategorySlug.trim().toLowerCase();
+        const canon = normalizeCategoryId(raw);
+        const keys = Array.from(new Set([raw].concat(canon ? [canon] : [])));
+        qCount = applyCategoryOrFilter(qCount, keys);
+      }
+      if (opts.countOnly) {
+        const { error, count } = await qCount;
+        if (error) throw new Error(postgrestErrorToMessage(error));
+        return {
+          scholarships: [],
+          total: count ?? 0,
+          page: 1,
+          limit: req.limit
+        };
+      }
+
+      let rows = (await fetchScoredSimilarScholarshipRows(supabase, req)) ?? [];
+      if (rows.length === 0) {
+        rows = await loadSimilarScholarshipsLegacyRows(supabase, req);
+      }
+
+      const fromScored = rows.map((r) => mapScholarshipRow(r));
+      const scholarships = await finalizeSimilarScholarshipsList(
+        supabase,
+        fromScored,
+        req.similarToId,
+        req.limit
       );
-      qCount = applyCategoryOrFilter(qCount, keys);
-    }
-    if (opts.countOnly) {
-      const { error, count } = await qCount;
-      if (error) throw new Error(postgrestErrorToMessage(error));
       return {
-        scholarships: [],
-        total: count ?? 0,
+        scholarships,
+        total: scholarships.length,
         page: 1,
         limit: req.limit
       };
     }
 
-    let rows =
-      (await fetchScoredSimilarScholarshipRows(supabase, req)) ?? [];
-    if (rows.length === 0) {
-      rows = await loadSimilarScholarshipsLegacyRows(supabase, req);
+    let rEff = effectiveListingRequest(req);
+
+    let bounds: ScholarshipListMeta['filterBounds'] | undefined;
+    if (opts.includeMeta) {
+      bounds = await fetchGlobalFilterBounds(supabase);
     }
 
-    const fromScored = rows.map((r) => mapScholarshipRow(r));
-    const scholarships = await finalizeSimilarScholarshipsList(
-      supabase,
-      fromScored,
-      req.similarToId,
-      req.limit
-    );
-    return {
-      scholarships,
-      total: scholarships.length,
-      page: 1,
-      limit: req.limit
-    };
-  }
-
-  let rEff = effectiveListingRequest(req);
-
-  let bounds: ScholarshipListMeta['filterBounds'] | undefined;
-  if (opts.includeMeta) {
-    bounds = await fetchGlobalFilterBounds(supabase);
-  }
-
-  if (opts.countOnly) {
-    let q: any = buildScholarshipListFilterQuery(supabase, true, rEff);
-    let { error, count } = await q;
-    if (error) throw new Error(postgrestErrorToMessage(error));
-    if ((count ?? 0) === 0 && bestRecommendationHasRelaxableHardFilters(rEff)) {
-      rEff = effectiveListingRequest(relaxBestRecommendationHardFilters(rEff));
-      q = buildScholarshipListFilterQuery(supabase, true, rEff);
-      const retry = await q;
-      if (retry.error) throw new Error(postgrestErrorToMessage(retry.error));
-      count = retry.count;
-    }
-    return {
-      scholarships: [],
-      total: count ?? 0,
-      page: req.page,
-      limit: req.limit
-    };
-  }
-
-  const personalizedHubTab =
-    (req.tab === 'best-recommendation' || req.tab === 'recommended') &&
-    Boolean(req.personalizedProfile) &&
-    !req.similarToId;
-
-  if (personalizedHubTab && req.personalizedProfile) {
-    let personalizedReq =
-      req.tab === 'best-recommendation'
-        ? bestRecommendationRequest(
-            req,
-            bounds ?? (await fetchGlobalFilterBounds(supabase))
-          )
-        : req;
-    let personalizedEff = effectiveListingRequest(personalizedReq);
-    let qc: any = buildScholarshipListFilterQuery(
-      supabase,
-      true,
-      personalizedEff
-    );
-    let { error: cErr, count } = await qc;
-    if (cErr) throw new Error(postgrestErrorToMessage(cErr));
-    let rawTotal = count ?? 0;
-    if (rawTotal === 0 && bestRecommendationHasRelaxableHardFilters(personalizedReq)) {
-      personalizedReq = relaxBestRecommendationHardFilters(personalizedReq);
-      personalizedEff = effectiveListingRequest(personalizedReq);
-      qc = buildScholarshipListFilterQuery(supabase, true, personalizedEff);
-      const retry = await qc;
-      if (retry.error) throw new Error(postgrestErrorToMessage(retry.error));
-      rawTotal = retry.count ?? 0;
+    if (opts.countOnly) {
+      let q: any = buildScholarshipListFilterQuery(supabase, true, rEff);
+      let { error, count } = await q;
+      if (error) throw new Error(postgrestErrorToMessage(error));
+      if (
+        (count ?? 0) === 0 &&
+        bestRecommendationHasRelaxableHardFilters(rEff)
+      ) {
+        rEff = effectiveListingRequest(
+          relaxBestRecommendationHardFilters(rEff)
+        );
+        q = buildScholarshipListFilterQuery(supabase, true, rEff);
+        const retry = await q;
+        if (retry.error) throw new Error(postgrestErrorToMessage(retry.error));
+        count = retry.count;
+      }
+      return {
+        scholarships: [],
+        total: count ?? 0,
+        page: req.page,
+        limit: req.limit
+      };
     }
 
-    let meta: ScholarshipListMeta | undefined;
-    if (opts.includeMeta && bounds) {
-      meta = await fetchScholarshipListMeta(supabase, personalizedReq, bounds, {
-        includeCategoryCounts: opts.includeCategoryCounts,
-        bestRecommendationCountOverride:
-          personalizedReq.tab === 'best-recommendation' ? rawTotal : undefined
-      });
-    }
+    const personalizedHubTab =
+      (req.tab === 'best-recommendation' || req.tab === 'recommended') &&
+      Boolean(req.personalizedProfile) &&
+      !req.similarToId;
 
-    const globalMaxPage = Math.max(1, Math.ceil(rawTotal / req.limit) || 1);
-    let effectivePage = Math.min(Math.max(1, req.page), globalMaxPage);
-
-    const cap = Math.min(PROFILE_SOFT_MATCH_SQL_WINDOW, rawTotal);
-    const pagesRanked = Math.max(1, Math.ceil(cap / req.limit));
-    let scholarships: Scholarship[];
-
-    if (rawTotal > cap && effectivePage > pagesRanked) {
-      const from = (effectivePage - 1) * req.limit;
-      const to = from + req.limit - 1;
-      let qn: any = buildScholarshipListFilterQuery(
+    if (personalizedHubTab && req.personalizedProfile) {
+      let personalizedReq =
+        req.tab === 'best-recommendation'
+          ? bestRecommendationRequest(
+              req,
+              bounds ?? (await fetchGlobalFilterBounds(supabase))
+            )
+          : req;
+      let personalizedEff = effectiveListingRequest(personalizedReq);
+      let qc: any = buildScholarshipListFilterQuery(
         supabase,
-        false,
+        true,
         personalizedEff
       );
-      qn = applySort(qn, personalizedEff.sort);
-      const { data, error: dErr } = await qn.range(from, to);
-      if (dErr) throw new Error(postgrestErrorToMessage(dErr));
-      const rows = (data ?? []) as unknown as ScholarshipRow[];
-      scholarships = applyDeadlineStateSafetyOrder(
-        rows.map((r) => ({ ...mapScholarshipRow(r), profileMatchPercent: null }))
-      );
-    } else {
-      const slicePage =
-        rawTotal > cap ? Math.min(effectivePage, pagesRanked) : effectivePage;
-      effectivePage = slicePage;
+      let { error: cErr, count } = await qc;
+      if (cErr) throw new Error(postgrestErrorToMessage(cErr));
+      let rawTotal = count ?? 0;
+      if (
+        rawTotal === 0 &&
+        bestRecommendationHasRelaxableHardFilters(personalizedReq)
+      ) {
+        personalizedReq = relaxBestRecommendationHardFilters(personalizedReq);
+        personalizedEff = effectiveListingRequest(personalizedReq);
+        qc = buildScholarshipListFilterQuery(supabase, true, personalizedEff);
+        const retry = await qc;
+        if (retry.error) throw new Error(postgrestErrorToMessage(retry.error));
+        rawTotal = retry.count ?? 0;
+      }
 
-      if (cap === 0) {
-        scholarships = [];
-      } else {
+      let meta: ScholarshipListMeta | undefined;
+      if (opts.includeMeta && bounds) {
+        meta = await fetchScholarshipListMeta(
+          supabase,
+          personalizedReq,
+          bounds,
+          {
+            includeCategoryCounts: opts.includeCategoryCounts,
+            bestRecommendationCountOverride:
+              personalizedReq.tab === 'best-recommendation'
+                ? rawTotal
+                : undefined
+          }
+        );
+      }
+
+      const globalMaxPage = Math.max(1, Math.ceil(rawTotal / req.limit) || 1);
+      let effectivePage = Math.min(Math.max(1, req.page), globalMaxPage);
+
+      const cap = Math.min(PROFILE_SOFT_MATCH_SQL_WINDOW, rawTotal);
+      const pagesRanked = Math.max(1, Math.ceil(cap / req.limit));
+      let scholarships: Scholarship[];
+
+      if (rawTotal > cap && effectivePage > pagesRanked) {
+        const from = (effectivePage - 1) * req.limit;
+        const to = from + req.limit - 1;
         let qn: any = buildScholarshipListFilterQuery(
           supabase,
           false,
           personalizedEff
         );
-        qn = applySort(qn, 'best_match');
-        const { data, error: dErr } = await qn.range(0, cap - 1);
+        qn = applySort(qn, personalizedEff.sort);
+        const { data, error: dErr } = await qn.range(from, to);
         if (dErr) throw new Error(postgrestErrorToMessage(dErr));
         const rows = (data ?? []) as unknown as ScholarshipRow[];
-        const profile = req.personalizedProfile;
-        const ranked = rows.map((r) => {
-          const scholarship = mapScholarshipRow(r);
-          return {
-            scholarship,
-            pct: computeHubProfileMatchPercent(scholarship, profile)
-          };
-        });
-        ranked.sort((a, b) => {
-          const deadlineStateOrder = compareDeadlineStateSafetyOrder(
-            a.scholarship,
-            b.scholarship
-          );
-          if (deadlineStateOrder !== 0) {
-            return deadlineStateOrder;
-          }
-          const amountA = a.scholarship.awardAmountNumericSort ?? 0;
-          const amountB = b.scholarship.awardAmountNumericSort ?? 0;
-          const reqA =
-            a.scholarship.requirementSignalsCount ??
-            a.scholarship.requirementsCount ??
-            Number.MAX_SAFE_INTEGER;
-          const reqB =
-            b.scholarship.requirementSignalsCount ??
-            b.scholarship.requirementsCount ??
-            Number.MAX_SAFE_INTEGER;
-          const applicantsA =
-            a.scholarship.applicantCount ?? Number.MAX_SAFE_INTEGER;
-          const applicantsB =
-            b.scholarship.applicantCount ?? Number.MAX_SAFE_INTEGER;
-          const updatedA = a.scholarship.updatedAt
-            ? Date.parse(a.scholarship.updatedAt)
-            : 0;
-          const updatedB = b.scholarship.updatedAt
-            ? Date.parse(b.scholarship.updatedAt)
-            : 0;
-          const daysA =
-            a.scholarship.daysUntilDeadline == null ||
-            Number.isNaN(a.scholarship.daysUntilDeadline)
-              ? Number.POSITIVE_INFINITY
-              : a.scholarship.daysUntilDeadline;
-          const daysB =
-            b.scholarship.daysUntilDeadline == null ||
-            Number.isNaN(b.scholarship.daysUntilDeadline)
-              ? Number.POSITIVE_INFINITY
-              : b.scholarship.daysUntilDeadline;
-          const deadlineA = scholarshipDeadlineSortMs(
-            a.scholarship.deadlineAt,
-            a.scholarship.deadline
-          );
-          const deadlineB = scholarshipDeadlineSortMs(
-            b.scholarship.deadlineAt,
-            b.scholarship.deadline
-          );
-          const verifiedA = a.scholarship.verified ? 1 : 0;
-          const verifiedB = b.scholarship.verified ? 1 : 0;
-
-          switch (personalizedEff.sort) {
-            case 'highest_amount':
-              if (amountB !== amountA) return amountB - amountA;
-              break;
-            case 'most_recent':
-              if (updatedB !== updatedA) return updatedB - updatedA;
-              break;
-            case 'closest_deadline':
-              if (deadlineA !== deadlineB) return deadlineA - deadlineB;
-              if (daysA !== daysB) return daysA - daysB;
-              break;
-            case 'verified_first':
-              if (verifiedB !== verifiedA) return verifiedB - verifiedA;
-              break;
-            case 'least_requirements':
-              if (reqA !== reqB) return reqA - reqB;
-              break;
-            case 'fewest_applicants':
-              if (applicantsA !== applicantsB) return applicantsA - applicantsB;
-              break;
-            case 'magic':
-            case 'best_match':
-            case 'best_recommendation':
-            case 'lowest_amount':
-            default:
-              if (b.pct !== a.pct) return b.pct - a.pct;
-              break;
-          }
-          // For non-recommended sorts, match percent is a tie-breaker only.
-          if (b.pct !== a.pct) return b.pct - a.pct;
-          const ra = a.scholarship.rankingScore ?? 0;
-          const rb = b.scholarship.rankingScore ?? 0;
-          if (rb !== ra) return rb - ra;
-          return amountB - amountA;
-        });
-        const start = (slicePage - 1) * req.limit;
         scholarships = applyDeadlineStateSafetyOrder(
-          ranked
-          .slice(start, start + req.limit)
-          .map(({ scholarship, pct }) => ({ ...scholarship, profileMatchPercent: pct }))
+          rows.map((r) => ({
+            ...mapScholarshipRow(r),
+            profileMatchPercent: null
+          }))
         );
+      } else {
+        const slicePage =
+          rawTotal > cap ? Math.min(effectivePage, pagesRanked) : effectivePage;
+        effectivePage = slicePage;
+
+        if (cap === 0) {
+          scholarships = [];
+        } else {
+          let qn: any = buildScholarshipListFilterQuery(
+            supabase,
+            false,
+            personalizedEff
+          );
+          qn = applySort(qn, 'best_match');
+          const { data, error: dErr } = await qn.range(0, cap - 1);
+          if (dErr) throw new Error(postgrestErrorToMessage(dErr));
+          const rows = (data ?? []) as unknown as ScholarshipRow[];
+          const profile = req.personalizedProfile;
+          const ranked = rows.map((r) => {
+            const scholarship = mapScholarshipRow(r);
+            return {
+              scholarship,
+              pct: computeHubProfileMatchPercent(scholarship, profile)
+            };
+          });
+          ranked.sort((a, b) => {
+            const deadlineStateOrder = compareDeadlineStateSafetyOrder(
+              a.scholarship,
+              b.scholarship
+            );
+            if (deadlineStateOrder !== 0) {
+              return deadlineStateOrder;
+            }
+            const amountA = a.scholarship.awardAmountNumericSort ?? 0;
+            const amountB = b.scholarship.awardAmountNumericSort ?? 0;
+            const reqA =
+              a.scholarship.requirementSignalsCount ??
+              a.scholarship.requirementsCount ??
+              Number.MAX_SAFE_INTEGER;
+            const reqB =
+              b.scholarship.requirementSignalsCount ??
+              b.scholarship.requirementsCount ??
+              Number.MAX_SAFE_INTEGER;
+            const applicantsA =
+              a.scholarship.applicantCount ?? Number.MAX_SAFE_INTEGER;
+            const applicantsB =
+              b.scholarship.applicantCount ?? Number.MAX_SAFE_INTEGER;
+            const updatedA = a.scholarship.updatedAt
+              ? Date.parse(a.scholarship.updatedAt)
+              : 0;
+            const updatedB = b.scholarship.updatedAt
+              ? Date.parse(b.scholarship.updatedAt)
+              : 0;
+            const daysA =
+              a.scholarship.daysUntilDeadline == null ||
+              Number.isNaN(a.scholarship.daysUntilDeadline)
+                ? Number.POSITIVE_INFINITY
+                : a.scholarship.daysUntilDeadline;
+            const daysB =
+              b.scholarship.daysUntilDeadline == null ||
+              Number.isNaN(b.scholarship.daysUntilDeadline)
+                ? Number.POSITIVE_INFINITY
+                : b.scholarship.daysUntilDeadline;
+            const deadlineA = scholarshipDeadlineSortMs(
+              a.scholarship.deadlineAt,
+              a.scholarship.deadline
+            );
+            const deadlineB = scholarshipDeadlineSortMs(
+              b.scholarship.deadlineAt,
+              b.scholarship.deadline
+            );
+            const verifiedA = a.scholarship.verified ? 1 : 0;
+            const verifiedB = b.scholarship.verified ? 1 : 0;
+
+            switch (personalizedEff.sort) {
+              case 'highest_amount':
+                if (amountB !== amountA) return amountB - amountA;
+                break;
+              case 'most_recent':
+                if (updatedB !== updatedA) return updatedB - updatedA;
+                break;
+              case 'closest_deadline':
+                if (deadlineA !== deadlineB) return deadlineA - deadlineB;
+                if (daysA !== daysB) return daysA - daysB;
+                break;
+              case 'verified_first':
+                if (verifiedB !== verifiedA) return verifiedB - verifiedA;
+                break;
+              case 'least_requirements':
+                if (reqA !== reqB) return reqA - reqB;
+                break;
+              case 'fewest_applicants':
+                if (applicantsA !== applicantsB)
+                  return applicantsA - applicantsB;
+                break;
+              case 'magic':
+              case 'best_match':
+              case 'best_recommendation':
+              case 'lowest_amount':
+              default:
+                if (b.pct !== a.pct) return b.pct - a.pct;
+                break;
+            }
+            // For non-recommended sorts, match percent is a tie-breaker only.
+            if (b.pct !== a.pct) return b.pct - a.pct;
+            const ra = a.scholarship.rankingScore ?? 0;
+            const rb = b.scholarship.rankingScore ?? 0;
+            if (rb !== ra) return rb - ra;
+            return amountB - amountA;
+          });
+          const start = (slicePage - 1) * req.limit;
+          scholarships = applyDeadlineStateSafetyOrder(
+            ranked
+              .slice(start, start + req.limit)
+              .map(({ scholarship, pct }) => ({
+                ...scholarship,
+                profileMatchPercent: pct
+              }))
+          );
+        }
       }
+
+      if (process.env.SCHOLARSHIPS_LIST_SYNC_DEBUG === '1') {
+        // eslint-disable-next-line no-console -- opt-in listing vs sidebar diagnostics
+        console.log('[scholarships-list-sync]', {
+          tab: personalizedEff.tab,
+          listScope: personalizedEff.listScope,
+          personalizedRank: true,
+          sqlTotal: rawTotal,
+          listRowsReturned: scholarships.length,
+          sidebarMatches: meta?.sidebarCounts.matches ?? null,
+          page: effectivePage,
+          limit: req.limit
+        });
+      }
+
+      return {
+        scholarships,
+        total: rawTotal,
+        page: effectivePage,
+        limit: req.limit,
+        meta
+      };
     }
+
+    const buildListPageQuery = (fromIdx: number, toIdx: number) => {
+      let qn: any = buildScholarshipListFilterQuery(supabase, false, rEff);
+      qn = applySort(qn, rEff.sort);
+      return qn.range(fromIdx, toIdx);
+    };
+
+    let effectivePage = req.page;
+    let from = (effectivePage - 1) * req.limit;
+    let to = from + req.limit - 1;
+    const freeTierLockedOpenInterleave =
+      shouldInterleaveFreeTierLockedOpenCards(rEff, opts) &&
+      from < FREE_TIER_LOCKED_OPEN_INTERLEAVE_WINDOW;
+    const queryFrom = freeTierLockedOpenInterleave ? 0 : from;
+    const queryTo = freeTierLockedOpenInterleave
+      ? FREE_TIER_LOCKED_OPEN_INTERLEAVE_WINDOW - 1
+      : to;
+    let { data, error, count } = await buildListPageQuery(queryFrom, queryTo);
+    if (error) throw new Error(postgrestErrorToMessage(error));
+    let rawTotal = count ?? 0;
+    if (rawTotal === 0 && bestRecommendationHasRelaxableHardFilters(rEff)) {
+      rEff = effectiveListingRequest(relaxBestRecommendationHardFilters(rEff));
+      effectivePage = 1;
+      from = 0;
+      to = req.limit - 1;
+      const retry = await buildListPageQuery(
+        freeTierLockedOpenInterleave ? 0 : from,
+        freeTierLockedOpenInterleave
+          ? FREE_TIER_LOCKED_OPEN_INTERLEAVE_WINDOW - 1
+          : to
+      );
+      if (retry.error) throw new Error(postgrestErrorToMessage(retry.error));
+      data = retry.data;
+      count = retry.count;
+      rawTotal = count ?? 0;
+    }
+    const sqlTotalBeforePostProcessing = rawTotal;
+
+    let total = rawTotal;
+    let rows = (data ?? []) as unknown as ScholarshipRow[];
+
+    /** `page` past last page: empty `data` but `count` &gt; 0 — listing UI showed no cards. */
+    const maxPage = Math.max(1, Math.ceil(total / req.limit) || 1);
+    if (rows.length === 0 && total > 0 && req.page > maxPage) {
+      effectivePage = maxPage;
+      from = (effectivePage - 1) * req.limit;
+      to = from + req.limit - 1;
+      const retryInterleaveWindow =
+        shouldInterleaveFreeTierLockedOpenCards(rEff, opts) &&
+        from < FREE_TIER_LOCKED_OPEN_INTERLEAVE_WINDOW;
+      const r2 = await buildListPageQuery(
+        retryInterleaveWindow ? 0 : from,
+        retryInterleaveWindow ? FREE_TIER_LOCKED_OPEN_INTERLEAVE_WINDOW - 1 : to
+      );
+      if (r2.error) throw new Error(postgrestErrorToMessage(r2.error));
+      rows = (r2.data ?? []) as unknown as ScholarshipRow[];
+    }
+
+    let meta: ScholarshipListMeta | undefined;
+    if (opts.includeMeta && bounds) {
+      meta = await fetchScholarshipListMeta(supabase, req, bounds, {
+        includeCategoryCounts: opts.includeCategoryCounts,
+        easyApplyCountOverride: canReuseEasyApplyTotalForSidebar(req)
+          ? rawTotal
+          : undefined,
+        matchesCountOverride: canReuseMatchesTotalForSidebar(req)
+          ? rawTotal
+          : undefined
+      });
+    }
+
+    const safeOrderedRows = applyDeadlineStateSafetyOrder(
+      rows.map((r) => mapScholarshipRow(r))
+    );
+    const scholarships =
+      shouldInterleaveFreeTierLockedOpenCards(rEff, opts) &&
+      (effectivePage - 1) * req.limit < FREE_TIER_LOCKED_OPEN_INTERLEAVE_WINDOW
+        ? sliceFreeTierLockedOpenInterleavedPage(
+            safeOrderedRows,
+            effectivePage,
+            req.limit
+          )
+        : safeOrderedRows;
 
     if (process.env.SCHOLARSHIPS_LIST_SYNC_DEBUG === '1') {
       // eslint-disable-next-line no-console -- opt-in listing vs sidebar diagnostics
       console.log('[scholarships-list-sync]', {
-        tab: personalizedEff.tab,
-        listScope: personalizedEff.listScope,
-        personalizedRank: true,
-        sqlTotal: rawTotal,
+        tab: rEff.tab,
+        listScope: rEff.listScope,
+        ignoredCount: rEff.ignored.length,
+        sqlTotal: sqlTotalBeforePostProcessing,
+        listTotal: total,
         listRowsReturned: scholarships.length,
         sidebarMatches: meta?.sidebarCounts.matches ?? null,
         page: effectivePage,
@@ -2491,121 +2717,18 @@ export async function executeScholarshipListQuery(
 
     return {
       scholarships,
-      total: rawTotal,
+      total,
       page: effectivePage,
       limit: req.limit,
       meta
     };
-  }
-
-  const buildListPageQuery = (fromIdx: number, toIdx: number) => {
-    let qn: any = buildScholarshipListFilterQuery(supabase, false, rEff);
-    qn = applySort(qn, rEff.sort);
-    return qn.range(fromIdx, toIdx);
-  };
-
-  let effectivePage = req.page;
-  let from = (effectivePage - 1) * req.limit;
-  let to = from + req.limit - 1;
-  const freeTierLockedOpenInterleave =
-    shouldInterleaveFreeTierLockedOpenCards(rEff, opts) &&
-    from < FREE_TIER_LOCKED_OPEN_INTERLEAVE_WINDOW;
-  const queryFrom = freeTierLockedOpenInterleave ? 0 : from;
-  const queryTo = freeTierLockedOpenInterleave
-    ? FREE_TIER_LOCKED_OPEN_INTERLEAVE_WINDOW - 1
-    : to;
-  let { data, error, count } = await buildListPageQuery(queryFrom, queryTo);
-  if (error) throw new Error(postgrestErrorToMessage(error));
-  let rawTotal = count ?? 0;
-  if (rawTotal === 0 && bestRecommendationHasRelaxableHardFilters(rEff)) {
-    rEff = effectiveListingRequest(relaxBestRecommendationHardFilters(rEff));
-    effectivePage = 1;
-    from = 0;
-    to = req.limit - 1;
-    const retry = await buildListPageQuery(
-      freeTierLockedOpenInterleave ? 0 : from,
-      freeTierLockedOpenInterleave
-        ? FREE_TIER_LOCKED_OPEN_INTERLEAVE_WINDOW - 1
-        : to
-    );
-    if (retry.error) throw new Error(postgrestErrorToMessage(retry.error));
-    data = retry.data;
-    count = retry.count;
-    rawTotal = count ?? 0;
-  }
-  const sqlTotalBeforePostProcessing = rawTotal;
-
-  let total = rawTotal;
-  let rows = (data ?? []) as unknown as ScholarshipRow[];
-
-  /** `page` past last page: empty `data` but `count` &gt; 0 — listing UI showed no cards. */
-  const maxPage = Math.max(1, Math.ceil(total / req.limit) || 1);
-  if (rows.length === 0 && total > 0 && req.page > maxPage) {
-    effectivePage = maxPage;
-    from = (effectivePage - 1) * req.limit;
-    to = from + req.limit - 1;
-    const retryInterleaveWindow =
-      shouldInterleaveFreeTierLockedOpenCards(rEff, opts) &&
-      from < FREE_TIER_LOCKED_OPEN_INTERLEAVE_WINDOW;
-    const r2 = await buildListPageQuery(
-      retryInterleaveWindow ? 0 : from,
-      retryInterleaveWindow
-        ? FREE_TIER_LOCKED_OPEN_INTERLEAVE_WINDOW - 1
-        : to
-    );
-    if (r2.error) throw new Error(postgrestErrorToMessage(r2.error));
-    rows = (r2.data ?? []) as unknown as ScholarshipRow[];
-  }
-
-  let meta: ScholarshipListMeta | undefined;
-  if (opts.includeMeta && bounds) {
-    meta = await fetchScholarshipListMeta(supabase, req, bounds, {
-      includeCategoryCounts: opts.includeCategoryCounts,
-      easyApplyCountOverride: canReuseEasyApplyTotalForSidebar(req) ? rawTotal : undefined,
-      matchesCountOverride: canReuseMatchesTotalForSidebar(req) ? rawTotal : undefined
-    });
-  }
-
-  const safeOrderedRows = applyDeadlineStateSafetyOrder(
-    rows.map((r) => mapScholarshipRow(r))
-  );
-  const scholarships =
-    shouldInterleaveFreeTierLockedOpenCards(rEff, opts) &&
-    (effectivePage - 1) * req.limit < FREE_TIER_LOCKED_OPEN_INTERLEAVE_WINDOW
-      ? sliceFreeTierLockedOpenInterleavedPage(
-          safeOrderedRows,
-          effectivePage,
-          req.limit
-        )
-      : safeOrderedRows;
-
-  if (process.env.SCHOLARSHIPS_LIST_SYNC_DEBUG === '1') {
-    // eslint-disable-next-line no-console -- opt-in listing vs sidebar diagnostics
-    console.log('[scholarships-list-sync]', {
-      tab: rEff.tab,
-      listScope: rEff.listScope,
-      ignoredCount: rEff.ignored.length,
-      sqlTotal: sqlTotalBeforePostProcessing,
-      listTotal: total,
-      listRowsReturned: scholarships.length,
-      sidebarMatches: meta?.sidebarCounts.matches ?? null,
-      page: effectivePage,
-      limit: req.limit
-    });
-  }
-
-  return {
-    scholarships,
-    total,
-    page: effectivePage,
-    limit: req.limit,
-    meta
-  };
   } finally {
     if (scholarshipsMetaTimingExecuteListQuery) {
       // eslint-disable-next-line no-console -- opt-in SCHOLARSHIPS_META_TIMING_DEBUG
       console.log('[scholarships-meta-timing]', 'executeScholarshipListQuery', {
-        ms: Math.round(performance.now() - scholarshipsMetaTimingExecuteListQueryT0)
+        ms: Math.round(
+          performance.now() - scholarshipsMetaTimingExecuteListQueryT0
+        )
       });
     }
   }
@@ -2633,10 +2756,7 @@ function bestRecommendationRequest(
   const pref = preferredHostCountryCodesFromProfileJson(
     nextReq.personalizedProfile?.preferred_host_country_codes
   );
-  if (
-    nextReq.hostCountryCodesFilter.length === 0 &&
-    pref.length > 0
-  ) {
+  if (nextReq.hostCountryCodesFilter.length === 0 && pref.length > 0) {
     nextReq = {
       ...nextReq,
       hostCountryCodesFilter: sanitizeScholarshipListingIso2List(pref),
@@ -2652,7 +2772,9 @@ function bestRecommendationRequest(
   );
   if (
     nextReq.moreFilters.includeGpaBuckets.size === 0 &&
-    buildBestRecommendationProfileGpaOrParts(nextReq.personalizedProfile ?? null).length > 0
+    buildBestRecommendationProfileGpaOrParts(
+      nextReq.personalizedProfile ?? null
+    ).length > 0
   ) {
     moreFilters.includeGpaBuckets = new Set();
   }
@@ -2729,11 +2851,18 @@ function canReuseMatchesTotalForSidebar(req: ScholarshipListRequest): boolean {
   if (req.tab !== 'matches') return false;
   if (!req.personalizedProfile) return true;
   const stripped = stripHubProfileHardMatchMoreFilters(req.moreFilters);
-  return JSON.stringify(moreFiltersToJson(req.moreFilters)) === JSON.stringify(moreFiltersToJson(stripped));
+  return (
+    JSON.stringify(moreFiltersToJson(req.moreFilters)) ===
+    JSON.stringify(moreFiltersToJson(stripped))
+  );
 }
 
-function canReuseEasyApplyTotalForSidebar(req: ScholarshipListRequest): boolean {
-  return req.tab === 'easy-apply' && req.moreFilters.citizenshipAudience === 'any';
+function canReuseEasyApplyTotalForSidebar(
+  req: ScholarshipListRequest
+): boolean {
+  return (
+    req.tab === 'easy-apply' && req.moreFilters.citizenshipAudience === 'any'
+  );
 }
 
 /** Align `moreFilters` / URL deadline with tab-only SQL (easy-apply, hot-deadlines). */
@@ -2806,7 +2935,10 @@ export async function fetchScholarshipSidebarCounts(
   const tabSettled = await Promise.allSettled(
     tabs.map(async (t) => {
       if (t === 'recommended') {
-        const mf = moreFiltersForRecommendedSidebarCount(countsBasisReq, bounds);
+        const mf = moreFiltersForRecommendedSidebarCount(
+          countsBasisReq,
+          bounds
+        );
         if (mf === null) {
           return { t, n: 0 };
         }
@@ -3238,7 +3370,12 @@ export async function fetchScholarshipListMeta(
   const categoryReq = categoryDropdownCountsRequest(req, b);
 
   const tSidebar = scholarshipsMetaTimingDebug ? performance.now() : 0;
-  const sidebarCounts = await fetchScholarshipSidebarCounts(supabase, req, b, opts);
+  const sidebarCounts = await fetchScholarshipSidebarCounts(
+    supabase,
+    req,
+    b,
+    opts
+  );
   if (scholarshipsMetaTimingDebug) {
     // eslint-disable-next-line no-console -- opt-in SCHOLARSHIPS_META_TIMING_DEBUG
     console.log('[scholarships-meta-timing]', 'fetchScholarshipSidebarCounts', {
@@ -3280,7 +3417,9 @@ export async function fetchScholarshipListMeta(
     });
   }
 
-  const tApplicantParallel = scholarshipsMetaTimingDebug ? performance.now() : 0;
+  const tApplicantParallel = scholarshipsMetaTimingDebug
+    ? performance.now()
+    : 0;
   const tHostParallel = scholarshipsMetaTimingDebug ? performance.now() : 0;
   const [
     { countryCounts, unspecifiedApplicantCountryCount },
@@ -3290,9 +3429,13 @@ export async function fetchScholarshipListMeta(
       const out = await fetchApplicantCountryCounts(supabase, req);
       if (scholarshipsMetaTimingDebug) {
         // eslint-disable-next-line no-console -- opt-in SCHOLARSHIPS_META_TIMING_DEBUG
-        console.log('[scholarships-meta-timing]', 'fetchApplicantCountryCounts', {
-          ms: Math.round(performance.now() - tApplicantParallel)
-        });
+        console.log(
+          '[scholarships-meta-timing]',
+          'fetchApplicantCountryCounts',
+          {
+            ms: Math.round(performance.now() - tApplicantParallel)
+          }
+        );
       }
       return out;
     })(),
@@ -3320,7 +3463,11 @@ export async function fetchScholarshipListMeta(
       buildScholarshipProfileFilterSeed(req.personalizedProfile ?? null)
     )
   };
-  listMetaCacheSet(cacheKey, cloneScholarshipListMeta(meta), LIST_META_CACHE_TTL_MS);
+  listMetaCacheSet(
+    cacheKey,
+    cloneScholarshipListMeta(meta),
+    LIST_META_CACHE_TTL_MS
+  );
   if (scholarshipsMetaTimingDebug) {
     // eslint-disable-next-line no-console -- opt-in SCHOLARSHIPS_META_TIMING_DEBUG
     console.log('[scholarships-meta-timing]', 'fetchScholarshipListMeta', {
@@ -3350,4 +3497,7 @@ export async function scholarshipMatchesTabListSql(
   return (count ?? 0) > 0;
 }
 
-export { DEFAULT_LIMIT as SCHOLARSHIPS_API_DEFAULT_LIMIT, MAX_LIMIT as SCHOLARSHIPS_API_MAX_LIMIT };
+export {
+  DEFAULT_LIMIT as SCHOLARSHIPS_API_DEFAULT_LIMIT,
+  MAX_LIMIT as SCHOLARSHIPS_API_MAX_LIMIT
+};

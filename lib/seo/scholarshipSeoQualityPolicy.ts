@@ -169,7 +169,8 @@ export function getScholarshipMissingDataFlags(
   const flags: ScholarshipMissingDataFlag[] = [];
   const deadlineText = s.deadline?.trim();
   const deadlineLooksEmpty =
-    !deadlineText || (deadlineText.length <= 3 && !/[A-Za-z0-9]/.test(deadlineText));
+    !deadlineText ||
+    (deadlineText.length <= 3 && !/[A-Za-z0-9]/.test(deadlineText));
   const hasDeadline =
     !deadlineLooksEmpty ||
     Boolean(s.deadlineAt?.trim()) ||
@@ -191,8 +192,7 @@ export function getScholarshipMissingDataFlags(
       s.recommendationRequired
     ].some((value) => value === true);
   const payoutKnown =
-    hasText(s.payoutMethod) ||
-    hasAnyText([s.paymentDetails, s.winnerPayment]);
+    hasText(s.payoutMethod) || hasAnyText([s.paymentDetails, s.winnerPayment]);
 
   if (!hasDeadline) {
     flags.push({
@@ -206,7 +206,8 @@ export function getScholarshipMissingDataFlags(
     flags.push({
       key: 'award_unclear',
       label: 'Award amount unclear',
-      description: 'Award value or renewal details are not fully structured yet.'
+      description:
+        'Award value or renewal details are not fully structured yet.'
     });
   }
   if (!hasEligibility) {
@@ -237,18 +238,6 @@ export function getScholarshipMissingDataFlags(
       key: 'renewal_unclear',
       label: 'Renewal status unclear',
       description: 'Cycle timing is not fully structured yet.'
-    });
-  }
-
-  for (const item of s.aiMissingInfo ?? []) {
-    const text = item.trim();
-    if (!text) continue;
-    const key = `ai_missing_${text.toLowerCase().replace(/[^a-z0-9]+/g, '_')}`;
-    if (flags.some((flag) => flag.key === key)) continue;
-    flags.push({
-      key,
-      label: text,
-      description: 'ScholarshipTop could not structure this detail from current listing data.'
     });
   }
 
@@ -302,9 +291,11 @@ export function getScholarshipApplicationDifficulty(
     s.transcriptRequired,
     s.recommendationRequired
   ].filter((value) => value === true).length;
-  const namedDocs = s.documentsRequired?.filter((item) => item.trim()).length ?? 0;
+  const namedDocs =
+    s.documentsRequired?.filter((item) => item.trim()).length ?? 0;
   const explicitReqCount =
-    typeof s.requirementsCount === 'number' && !Number.isNaN(s.requirementsCount)
+    typeof s.requirementsCount === 'number' &&
+    !Number.isNaN(s.requirementsCount)
       ? s.requirementsCount
       : typeof s.requirementSignalsCount === 'number' &&
           !Number.isNaN(s.requirementSignalsCount)
@@ -473,7 +464,9 @@ export function getScholarshipBestForLabel(
 }
 
 /** Same calendar/relative deadline copy as the card metric column (never raw ISO). */
-function deadlinePhraseForCardSnippet(s: ScholarshipDeadlineFields): string | null {
+function deadlinePhraseForCardSnippet(
+  s: ScholarshipDeadlineFields
+): string | null {
   const { primary } = getScholarshipDeadlineDisplayParts(s);
   return primary && primary !== '—' ? primary : null;
 }
@@ -529,11 +522,11 @@ export function buildScholarshipCardSnippet(
   }
 
   const fallback =
-    s.summaryShort?.trim() ||
-    s.seoExcerpt?.trim() ||
-    s.description?.trim();
+    s.summaryShort?.trim() || s.seoExcerpt?.trim() || s.description?.trim();
   if (fallback) {
-    return fallback.length > 220 ? `${fallback.slice(0, 217).trim()}...` : fallback;
+    return fallback.length > 220
+      ? `${fallback.slice(0, 217).trim()}...`
+      : fallback;
   }
 
   return `${bestFor} can use ScholarshipTop to compare eligibility signals, deadline timing, award details, and application steps in one place.`;
@@ -585,6 +578,7 @@ export function getScholarshipDetailIndexPolicy(
   const sourceStatus = getScholarshipSourceStatus(s);
   const missingDataFlags = getScholarshipMissingDataFlags(s);
   const meaningfulFactCount = meaningfulScholarshipFactCount(s);
+  const deadlineUrgency = getScholarshipDeadlineUrgency(s);
   const hasOriginalSummary = hasAnyText([
     s.aiStudentSummary,
     s.summaryShort,
@@ -592,9 +586,39 @@ export function getScholarshipDetailIndexPolicy(
     s.seoExcerpt,
     s.seoOverview
   ]);
+  const hasIndexableAward =
+    hasAnyText([s.amount, s.awardAmount]) ||
+    (typeof s.awardAmountNumericSort === 'number' &&
+      !Number.isNaN(s.awardAmountNumericSort)) ||
+    s.payoutMethod === 'non_monetary';
+  const hasIndexableDeadline =
+    s.recurring === true ||
+    /\b(rolling|ongoing|open year[-\s]?round|varies)\b/i.test(
+      s.deadline ?? ''
+    ) ||
+    ['Urgent', 'Soon', 'Open', 'Recurring'].includes(deadlineUrgency.level);
+  const hasIndexableEligibility =
+    (s.eligibility?.length ?? 0) > 0 ||
+    hasAnyText([s.whoCanApplyText, s.eligibilityText, s.seoEligibility]);
+  const hasIndexableProvider =
+    hasAnyText([
+      s.provider,
+      s.providerSlug,
+      s.providerUrl,
+      s.listingUrl,
+      s.applyLink
+    ]) || s.hasOfficialApplicationDestination === true;
+  const expiredWithoutFutureCycle =
+    s.recurring !== true && deadlineUrgency.level === 'Expired';
   const reasonCodes: string[] = [];
 
   if (s.isIndexable === false) reasonCodes.push('explicit_noindex');
+  if (expiredWithoutFutureCycle)
+    reasonCodes.push('expired_without_future_cycle');
+  if (!hasIndexableAward) reasonCodes.push('missing_award');
+  if (!hasIndexableDeadline) reasonCodes.push('missing_or_expired_deadline');
+  if (!hasIndexableEligibility) reasonCodes.push('missing_eligibility');
+  if (!hasIndexableProvider) reasonCodes.push('missing_provider');
   if (
     sourceStatus.code === 'source_unclear' ||
     sourceStatus.code === 'needs_confirmation'
@@ -608,6 +632,11 @@ export function getScholarshipDetailIndexPolicy(
   return {
     indexable:
       s.isIndexable !== false &&
+      !expiredWithoutFutureCycle &&
+      hasIndexableAward &&
+      hasIndexableDeadline &&
+      hasIndexableEligibility &&
+      hasIndexableProvider &&
       hasOriginalSummary &&
       meaningfulFactCount >= 3 &&
       sourceStatus.code !== 'source_unclear',
@@ -690,8 +719,14 @@ export type ScholarshipSeoRouteQualityDecision = {
 
 const US_STATE_SEO_SLUGS = new Set(listUsStateSeoSlugs());
 const LEGACY_LONG_TAIL_SITEMAP_SLUGS = new Set<string>(
-  getLongTailSitemapSlugs().map((slug) => normalizeScholarshipDynamicParam(slug))
+  getLongTailSitemapSlugs().map((slug) =>
+    normalizeScholarshipDynamicParam(slug)
+  )
 );
+const PRIORITY_LOW_COMPETITION_LONG_TAIL_SLUGS = new Set<string>([
+  'no-essay',
+  'closing-soon'
+]);
 
 function splitCanonicalScholarshipSeoPath(canonicalPath: string): string[] {
   return canonicalPath
@@ -702,7 +737,9 @@ function splitCanonicalScholarshipSeoPath(canonicalPath: string): string[] {
     .filter(Boolean);
 }
 
-function countSeoBundleWords(seo: LongTailSeoBundle | null | undefined): number {
+function countSeoBundleWords(
+  seo: LongTailSeoBundle | null | undefined
+): number {
   if (!seo) return 0;
   const parts = [
     seo.h1,
@@ -799,9 +836,11 @@ export function getScholarshipSeoRouteQualityPolicy(
   const parts = splitCanonicalScholarshipSeoPath(facts.canonicalPath);
   const seoBundleWords = countSeoBundleWords(facts.seoContent);
 
-  if (facts.stablePublicRoute === false) reasonCodes.push('unstable_public_route');
+  if (facts.stablePublicRoute === false)
+    reasonCodes.push('unstable_public_route');
   if (facts.routeResolves === false) reasonCodes.push('route_does_not_resolve');
-  if (facts.hasQueryParams === true) reasonCodes.push('query_params_define_page');
+  if (facts.hasQueryParams === true)
+    reasonCodes.push('query_params_define_page');
   if (parts.length === 0) reasonCodes.push('missing_canonical_path');
 
   if (reasonCodes.length > 0) {
@@ -822,7 +861,10 @@ export function getScholarshipSeoRouteQualityPolicy(
     };
   }
 
-  if (routeFamily === 'university_hub' || routeFamily === 'scholarship_detail') {
+  if (
+    routeFamily === 'university_hub' ||
+    routeFamily === 'scholarship_detail'
+  ) {
     return {
       shouldIndex: true,
       shouldIncludeInSitemap: true,
@@ -864,7 +906,10 @@ export function getScholarshipSeoRouteQualityPolicy(
         'legacy_long_tail_not_promoted_for_sitemap'
       ]);
     }
-    if (seoBundleWords < 1200) {
+    const minimumWords = PRIORITY_LOW_COMPETITION_LONG_TAIL_SLUGS.has(slug)
+      ? 120
+      : 1200;
+    if (seoBundleWords < minimumWords) {
       return weakRouteDecision(routeFamily, [
         'legacy_long_tail_below_visible_content_threshold'
       ]);
@@ -883,5 +928,7 @@ export function getScholarshipSeoRouteQualityPolicy(
     ]);
   }
 
-  return weakRouteDecision(routeFamily, ['scholarship_route_failed_quality_policy']);
+  return weakRouteDecision(routeFamily, [
+    'scholarship_route_failed_quality_policy'
+  ]);
 }

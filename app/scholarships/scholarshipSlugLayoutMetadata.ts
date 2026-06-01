@@ -13,7 +13,10 @@ import {
   getSeoListingEntry,
   resolveScholarshipSlugPath
 } from '@/lib/scholarships/seoScholarshipResolve';
-import { getScholarshipSeoRouteQualityPolicy } from '@/lib/seo/scholarshipSeoQualityPolicy';
+import {
+  getScholarshipDetailIndexPolicy,
+  getScholarshipSeoRouteQualityPolicy
+} from '@/lib/seo/scholarshipSeoQualityPolicy';
 import type { LongTailSeoBundle } from '@/lib/scholarships/longTailSeoTypes';
 import type { SeoScholarshipRouteManifestEntry } from '@/lib/scholarships/seoScholarshipManifest';
 import { crossCountryListingRobotsFromManifest } from '@/lib/scholarships/seoCrossCountryManifest';
@@ -59,7 +62,9 @@ function applyScholarshipListingRouteQualityPolicy({
   canonicalPath: string;
   entry?: SeoScholarshipRouteManifestEntry | null;
   seoContent?: LongTailSeoBundle | null;
-  routeFamily?: Parameters<typeof getScholarshipSeoRouteQualityPolicy>[0]['routeFamily'];
+  routeFamily?: Parameters<
+    typeof getScholarshipSeoRouteQualityPolicy
+  >[0]['routeFamily'];
 }): Metadata {
   const decision = getScholarshipSeoRouteQualityPolicy({
     canonicalPath,
@@ -153,7 +158,10 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
           routeKind: 'scholarship_listing',
           title,
           fallbackDescription,
-          context: { canonicalPath: resolved.canonicalPath, source: 'redirect_canonical' },
+          context: {
+            canonicalPath: resolved.canonicalPath,
+            source: 'redirect_canonical'
+          },
           priority: 4
         })) ?? fallbackDescription;
       const meta: Metadata = {
@@ -255,7 +263,8 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
     const canonical = getCanonical(path);
     const seo = readLongTailSeoBundle(longTail.slug);
     const title = seo?.seo_title ?? longTail.metaTitle;
-    const fallbackDescription = seo?.seo_description ?? longTail.metaDescription;
+    const fallbackDescription =
+      seo?.seo_description ?? longTail.metaDescription;
     const description =
       (await resolveAiMetaDescription({
         canonicalPath: path,
@@ -319,7 +328,10 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
         routeKind: 'scholarship_listing',
         title,
         fallbackDescription,
-        context: { canonicalPath: resolved.canonicalPath, source: 'manifest_seo' },
+        context: {
+          canonicalPath: resolved.canonicalPath,
+          source: 'manifest_seo'
+        },
         priority: 5
       })) ?? fallbackDescription;
     const meta: Metadata = {
@@ -404,7 +416,8 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
     alternates
   };
 
-  if (record.isIndexable === false) {
+  const detailIndexPolicy = getScholarshipDetailIndexPolicy(record);
+  if (!detailIndexPolicy.indexable) {
     meta.robots = { index: false, follow: true };
   }
 
