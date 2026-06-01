@@ -9,7 +9,11 @@ import {
   ESSAYS_SECTION_PATH,
   essayHubArticlePath
 } from '@/lib/essays/essayHubSection';
-import { resolveHealthcareEssayTopicContext } from '@/lib/external-data';
+import {
+  buildMedicalClusterLinks,
+  resolveHealthcareEssayTopicContext
+} from '@/lib/external-data';
+import { normalizeInternalLinkHref } from '@/lib/external-data/internalLinkGraph';
 import { getURL } from '@/utils/helpers';
 
 type StaticEssayGuidePageCopy = {
@@ -59,6 +63,22 @@ function shouldShowHealthcareEssayContext(guide: StaticEssayGuide): boolean {
   return guide.slug === 'career-goals';
 }
 
+function filterCareerGoalsRelatedLinks(
+  guide: StaticEssayGuide
+): StaticEssayGuide['links'] {
+  if (guide.slug !== 'career-goals') return guide.links;
+
+  const clusterHrefs = new Set(
+    buildMedicalClusterLinks({ surface: 'career-goals' }).map((link) =>
+      normalizeInternalLinkHref(link.href)
+    )
+  );
+
+  return guide.links.filter(
+    (link) => !clusterHrefs.has(normalizeInternalLinkHref(link.href))
+  );
+}
+
 export function StaticEssayGuidePage({
   guide,
   locale = 'en',
@@ -75,6 +95,7 @@ export function StaticEssayGuidePage({
         category: guide.description
       })
     : null;
+  const relatedLinks = filterCareerGoalsRelatedLinks(guide);
   const localizedEssaysPath = hrefForPath(ESSAYS_SECTION_PATH);
   const breadcrumbsSchema = {
     '@context': 'https://schema.org',
@@ -203,6 +224,7 @@ export function StaticEssayGuidePage({
           context={topicContext}
           className="mt-8"
           compact
+          showRelatedLinks={guide.slug !== 'career-goals'}
         />
 
         {guide.slug === 'career-goals' ? (
@@ -295,7 +317,7 @@ export function StaticEssayGuidePage({
             {copy.relatedPages}
           </h2>
           <div className="mt-4 flex flex-wrap gap-2">
-            {guide.links.map((link) => (
+            {relatedLinks.map((link) => (
               <Link
                 key={link.href}
                 href={hrefForPath(link.href)}

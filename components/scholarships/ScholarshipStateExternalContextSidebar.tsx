@@ -7,6 +7,7 @@ import { statePlanningPairMetrics } from '@/lib/external-data';
 import { fmtEnrichmentRatePer100k } from '@/components/compare/compareExternalEnrichmentFormat';
 import { CompareExternalEnrichmentStatCard } from '@/components/compare/CompareExternalEnrichmentStatCard';
 import { DataSourceFooter } from '@/components/data-viz/DataSourceFooter';
+import { InsightCallout } from '@/components/data-viz/InsightCallout';
 import { MetricComparisonBars } from '@/components/data-viz/MetricComparisonBars';
 import { StateSocialContextBlock } from '@/components/data-viz/StateSocialContextBlock';
 import { InternalLinkCluster } from '@/components/internal-links/InternalLinkCluster';
@@ -49,9 +50,21 @@ export function ScholarshipStateExternalContextSidebar({
         Cost of living in {context.stateName}
       </h2>
       <p className="mt-2 text-sm leading-relaxed text-gray-600">
-        These estimates can help students compare scholarship amounts with typical
-        living costs in this state. Figures vary by city and household.
+        Scholarship value can feel different depending on rent, wages, and cost
+        of attendance in the state. Use this planning context alongside award
+        amount, eligibility rules, school costs, and application deadlines.
       </p>
+      <p className="mt-2 text-sm leading-relaxed text-gray-600">
+        The figures below are state-level estimates. Actual costs vary by city,
+        campus, and household.
+      </p>
+
+      <InsightCallout
+        title="Why this matters for scholarship planning"
+        body={`When comparing awards in ${context.stateName}, look at income, rent, and wage context together — not the award amount alone. A smaller scholarship in a lower-cost area may cover more of your expenses than a larger award elsewhere.`}
+        className="mt-4"
+      />
+
       <div className="mt-4 grid grid-cols-2 gap-2.5 sm:gap-3">
         {context.highlights.map((item) => (
           <CompareExternalEnrichmentStatCard

@@ -19,19 +19,26 @@ export function HealthcareCareerGoalsPlanningSection() {
         Connect goals to evidence, not guarantees
       </h2>
       <p className="mt-3 text-sm leading-relaxed text-gray-600">
-        Students writing career-goals essays can connect their goals to service, training,
-        workforce needs, and long-term community impact, but should avoid making claims they
-        cannot support. Use public planning context to compare pathways and costs, not to
-        imply admission, residency placement, or scholarship eligibility.
+        When writing a career-goals essay, connect your goal to specific
+        experiences, service motivation, training plans, and long-term impact.
+        Reviewers want to see why the path fits you now — not a generic promise
+        about helping people someday.
       </p>
       <p className="mt-3 text-sm leading-relaxed text-gray-600">
-        Medical and healthcare scholarship requirements vary by program. Workforce and school
-        data can help students compare goals, costs, and pathways, yet every application still
-        depends on the provider&apos;s official rules.
+        Healthcare examples should be personal and evidence-based; avoid broad
+        claims you cannot support. Use public planning context to compare
+        pathways and costs, not to imply admission, residency placement, or
+        scholarship eligibility.
+      </p>
+      <p className="mt-3 text-sm leading-relaxed text-gray-600">
+        Medical and healthcare scholarship requirements vary by program, school,
+        state, and funding source. Compare scholarship amounts alongside
+        tuition, living costs, career goals, and school context — then confirm
+        every rule on the official provider page.
       </p>
 
       <SmartRelatedLinks
-        title="Related planning pages"
+        title="Planning pages for your essay research"
         links={clusterLinks}
         excludeHref="/essays/career-goals"
         className="mt-5"

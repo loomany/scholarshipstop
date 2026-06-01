@@ -83,8 +83,9 @@ export function StateSocialContextBlock({
         Public planning context
       </h3>
       <p className="mt-2 text-xs leading-relaxed text-gray-600">
-        Community indicators vary by county. Use this alongside scholarship amount,
-        school cost, and living expenses.
+        Community indicators vary by county and are included only as public
+        planning context. Use this alongside scholarship amount, school cost,
+        and living expenses — not as an eligibility rule.
       </p>
 
       {cards.length ? (

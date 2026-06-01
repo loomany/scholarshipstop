@@ -9,12 +9,14 @@ type PremedTopicContextCardProps = {
   context: PremedTopicContext | null;
   className?: string;
   compact?: boolean;
+  showRelatedLinks?: boolean;
 };
 
 export function PremedTopicContextCard({
   context,
   className = '',
-  compact = false
+  compact = false,
+  showRelatedLinks = true
 }: PremedTopicContextCardProps) {
   if (!context) return null;
 
@@ -55,7 +57,7 @@ export function PremedTopicContextCard({
         </div>
       ) : null}
 
-      {links.length ? (
+      {showRelatedLinks && links.length ? (
         <div className="mt-4 flex flex-wrap gap-2">
           {links.slice(0, compact ? 3 : 5).map((link) => (
             <Link
@@ -70,8 +72,9 @@ export function PremedTopicContextCard({
       ) : null}
 
       <p className="mt-4 text-xs leading-relaxed text-gray-500">
-        Planning context only. Scholarship rules, deadlines, and eligibility come
-        from each provider or school.
+        Use these data points as planning context, not as a scholarship eligibility
+        rule. Scholarship rules, deadlines, and eligibility come from each provider
+        or school.
       </p>
       <DataSourceFooter variant="mixed" className="mt-3" />
     </aside>
