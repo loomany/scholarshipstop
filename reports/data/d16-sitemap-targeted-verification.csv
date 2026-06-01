@@ -1,0 +1,11 @@
+url,http_status,robots_meta,canonical,expected_in_sitemap,found_in_sitemap,sitemap_bucket,result,notes
+"https://scholarshiptop.com/resources/medical-scholarships-guide","200","(none)","https://scholarshiptop.com/resources/medical-scholarships-guide","yes","no","","pending_deploy","code fix verified; not yet in live sitemap until deploy"
+"https://scholarshiptop.com/essays/career-goals","200","(none)","https://scholarshiptop.com/essays/career-goals","yes","yes","essays-0","ok",""
+"https://scholarshiptop.com/resources/best-scholarships-texas-international-students","200","(none)","https://scholarshiptop.com/resources/best-scholarships-texas-international-students","yes","yes","resources","ok",""
+"https://scholarshiptop.com/resources/how-to-find-scholarships","200","(none)","https://scholarshiptop.com/resources/how-to-find-scholarships","yes","yes","resources","ok",""
+"https://scholarshiptop.com/resources/best-scholarship-websites","200","(none)","https://scholarshiptop.com/resources/best-scholarship-websites","yes","yes","resources","ok",""
+"https://scholarshiptop.com/providers/loyola-university-chicago","200","(none)","https://scholarshiptop.com/providers/loyola-university-chicago","yes","yes","providers","ok",""
+"https://scholarshiptop.com/scholarships/texas/tarleton-state-university","200","index, follow","https://scholarshiptop.com/scholarships/texas/tarleton-state-university","yes","no","","fail",""
+"https://scholarshiptop.com/scholarships/california/california-state-university-northridge","200","index, follow","https://scholarshiptop.com/scholarships/california/california-state-university-northridge","yes","yes","seo","ok",""
+"https://scholarshiptop.com/compare/states/california-vs-texas","200","noindex, follow","https://scholarshiptop.com/compare/states/california-vs-texas","no","no","","ok","noindex policy"
+"https://scholarshiptop.com/compare/universities/university-of-massachusetts-amherst-vs-university-of-south-florida","200","noindex, follow","https://scholarshiptop.com/compare/universities/university-of-massachusetts-amherst-vs-university-of-south-florida","no","no","","ok","noindex policy; may appear in seo.xml per drip"

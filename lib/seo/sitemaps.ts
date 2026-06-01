@@ -3,6 +3,7 @@ import type { MetadataRoute } from 'next';
 
 import { fetchAllPublishedContentPostsForSitemap } from '@/lib/content-hub/contentPostsServer';
 import { STATIC_SCHOLARSHIP_GUIDES } from '@/lib/resources/staticScholarshipGuides';
+import { buildDedicatedResourceGuideSitemapEntries } from '@/lib/seo/dedicatedResourceGuideSitemap';
 import { STATIC_ESSAY_GUIDES } from '@/lib/essays/staticEssayGuides';
 import { STATIC_COMPARE_GUIDES } from '@/lib/compare/staticCompareGuides';
 import {
@@ -535,20 +536,19 @@ async function buildResourcesSitemapEntries(
   base: string
 ): Promise<MetadataRoute.Sitemap> {
   const resourcePosts = await fetchAllPublishedContentPostsForSitemap();
-  return dedupeSitemapEntries(
-    resourcePosts
-    .filter((post) => Boolean(post.slug?.trim()))
-    .map((post) => ({
-      url: `${base}${resourcesArticlePath(post.slug!.trim())}`,
-      lastModified: post.published_at || new Date()
-    }))
-    .concat(
-      STATIC_SCHOLARSHIP_GUIDES.map((guide) => ({
-        url: `${base}${resourcesArticlePath(guide.slug)}`,
-        lastModified: new Date('2026-05-16T00:00:00.000Z')
-      }))
-    )
-  );
+  return dedupeSitemapEntries([
+    ...resourcePosts
+      .filter((post) => Boolean(post.slug?.trim()))
+      .map((post) => ({
+        url: `${base}${resourcesArticlePath(post.slug!.trim())}`,
+        lastModified: post.published_at || new Date()
+      })),
+    ...STATIC_SCHOLARSHIP_GUIDES.map((guide) => ({
+      url: `${base}${resourcesArticlePath(guide.slug)}`,
+      lastModified: new Date('2026-05-16T00:00:00.000Z')
+    })),
+    ...buildDedicatedResourceGuideSitemapEntries(base)
+  ]);
 }
 
 type EssaySitemapRowRange = {
