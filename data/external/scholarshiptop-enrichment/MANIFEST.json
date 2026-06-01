@@ -1,5 +1,11 @@
 {
-  "generated_from": "C:\\dev\\scholarshiptop-data-lab\\stage-a-static-data-pipeline",
+  "generated_from": "Stage A static enrichment pipeline plus scripts/data/build-static-enrichment-v2.ts",
+  "permission_status": "permission_received_per_user_statement",
+  "source_package_read_only": true,
+  "static_outputs_only": true,
+  "raw_customer_package_copied": false,
+  "supabase_writes": false,
+  "contains_secrets": false,
   "files": [
     {
       "name": "school_enrichment.json",
@@ -20,8 +26,21 @@
       "name": "location_crosswalk.json",
       "rows": 2704,
       "purpose": "location joins"
+    },
+    {
+      "name": "provider_nonprofit_enrichment.json",
+      "rows": 1293,
+      "purpose": "strict provider nonprofit context for non-school providers"
+    },
+    {
+      "name": "institution_research_enrichment.json",
+      "rows": 2323,
+      "purpose": "OpenAlex/ROR/NIH aggregate institution research context"
+    },
+    {
+      "name": "state_social_context.json",
+      "rows": 52,
+      "purpose": "neutral state social and community planning context"
     }
-  ],
-  "supabase_writes": false,
-  "contains_secrets": false
+  ]
 }

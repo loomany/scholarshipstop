@@ -2,7 +2,11 @@ import {
   hasScholarshipUniversitySidebarContent,
   resolveScholarshipUniversityContext
 } from '@/lib/external-data/scholarshipPageEnrichment';
-import { schoolProfilePairMetrics } from '@/lib/external-data';
+import {
+  getInstitutionResearchBySchool,
+  getStateSocialContext,
+  schoolProfilePairMetrics
+} from '@/lib/external-data';
 
 import { CompareExternalEnrichmentStatCard } from '@/components/compare/CompareExternalEnrichmentStatCard';
 import {
@@ -12,7 +16,9 @@ import {
   fmtEnrichmentUsd
 } from '@/components/compare/compareExternalEnrichmentFormat';
 import { DataSourceFooter } from '@/components/data-viz/DataSourceFooter';
+import { InstitutionResearchContext } from '@/components/data-viz/InstitutionResearchContext';
 import { MetricComparisonBars } from '@/components/data-viz/MetricComparisonBars';
+import { StateSocialContextBlock } from '@/components/data-viz/StateSocialContextBlock';
 import { InternalLinkCluster } from '@/components/internal-links/InternalLinkCluster';
 
 type ScholarshipUniversityExternalContextSidebarProps = {
@@ -104,6 +110,16 @@ export function ScholarshipUniversityExternalContextSidebar({
     fmtEnrichmentRatePer100k(state.stateRow.public_safety_context?.value)
   : null;
   const schoolPairs = school ? schoolProfilePairMetrics(school) : [];
+  const research = school
+    ? getInstitutionResearchBySchool({
+        name: school.school_name,
+        state: school.state,
+        unitId: school.unit_id,
+        rorId: school.ror_id,
+        openAlexId: school.openalex_id
+      })
+    : null;
+  const social = state ? getStateSocialContext(state.stateCode) : null;
 
   return (
     <aside
@@ -153,6 +169,8 @@ export function ScholarshipUniversityExternalContextSidebar({
               />
             </div>
           ) : null}
+
+          <InstitutionResearchContext research={research} compact className="mt-4" />
         </div>
       ) : null}
 
@@ -180,6 +198,8 @@ export function ScholarshipUniversityExternalContextSidebar({
               reference context only — not a safety rating.
             </p>
           ) : null}
+
+          <StateSocialContextBlock context={social} compact className="mt-4" />
         </div>
       ) : null}
 

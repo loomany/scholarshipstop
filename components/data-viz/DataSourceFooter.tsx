@@ -1,5 +1,12 @@
 type DataSourceFooterProps = {
-  variant?: 'default' | 'college' | 'state' | 'mixed';
+  variant?:
+    | 'default'
+    | 'college'
+    | 'state'
+    | 'mixed'
+    | 'nonprofit'
+    | 'research'
+    | 'social';
   showPublicSafetyNote?: boolean;
   className?: string;
 };
@@ -13,6 +20,12 @@ const VARIANT_COPY: Record<NonNullable<DataSourceFooterProps['variant']>, string
     'Data sources: College Scorecard, OpenAlex, and ROR where matched. Figures may lag the current academic year; verify on the institution site.',
   state:
     'Data sources: Census ACS, HUD FMR, MIT Living Wage, BLS OEWS, and public reference datasets where available. Rent figures may reflect metro or state averages.',
+  nonprofit:
+    'Data sources: ProPublica Nonprofit Explorer and USAspending where strict public-organization matches are available.',
+  research:
+    'Data sources: College Scorecard, OpenAlex, ROR, and NIH RePORTER aggregate public data where matched.',
+  social:
+    'Data sources: CDC SVI, ADI, and County Health public data aggregated to state-level planning context.',
   mixed: BASE_SOURCES
 };
 
@@ -31,7 +44,7 @@ export function DataSourceFooter({
         </p>
       ) : null}
       <p className="text-xs leading-relaxed text-gray-500">
-        Reference only — not ScholarshipTop eligibility rules, rankings, or guarantees.
+        Reference only - not ScholarshipTop rules or guarantees.
       </p>
     </div>
   );

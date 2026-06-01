@@ -25,6 +25,7 @@ import {
 } from '@/lib/i18n/providerDetailUiCopy';
 import { isIqSitePromoVisible } from '@/lib/iq/iqSitePromoVisibility';
 import { ProviderExternalSchoolContext } from '@/components/providers/ProviderExternalSchoolContext';
+import { ProviderNonprofitContext } from '@/components/providers/ProviderNonprofitContext';
 import ProviderScholarshipMatchCta from '@/components/providers/ProviderScholarshipMatchCta';
 import type { LocalizedProviderPageCopy } from '@/lib/i18n/providerPilot/providerProfileTranslationGate';
 import {
@@ -362,6 +363,10 @@ export default function LocalizedProviderProfilePage({
         </section>
 
         <ProviderExternalSchoolContext
+          displayName={data.displayName}
+          hqState={data.hqState}
+        />
+        <ProviderNonprofitContext
           displayName={data.displayName}
           hqState={data.hqState}
         />

@@ -1,8 +1,10 @@
 import {
+  getStateSocialContext,
   getStateAffordability,
   isPlausibleHouseholdIncome,
   stateCompareBarMetrics,
-  type StateAffordability
+  type StateAffordability,
+  type StateSocialContext
 } from '@/lib/external-data';
 
 import { CompareExternalEnrichmentStatCard } from '@/components/compare/CompareExternalEnrichmentStatCard';
@@ -15,6 +17,7 @@ import {
 import { DataSourceFooter } from '@/components/data-viz/DataSourceFooter';
 import { InsightCallout } from '@/components/data-viz/InsightCallout';
 import { MetricComparisonBars } from '@/components/data-viz/MetricComparisonBars';
+import { StateSocialContextBlock } from '@/components/data-viz/StateSocialContextBlock';
 import { InternalLinkCluster } from '@/components/internal-links/InternalLinkCluster';
 import { stateSlugFromCode } from '@/lib/seo/stateCompareSlug';
 
@@ -81,16 +84,18 @@ function publicSafetyNote(row: StateAffordability | null): string | null {
 function StateAffordabilityColumn({
   name,
   row,
+  social,
   notAvailable
 }: {
   name: string;
   row: StateAffordability | null;
+  social: StateSocialContext | null;
   notAvailable: string;
 }) {
   const metrics = stateMetrics(row);
   const safetyNote = publicSafetyNote(row);
 
-  if (!metrics.length && !safetyNote) {
+  if (!metrics.length && !safetyNote && !social) {
     return (
       <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50/50 p-5">
         <h3 className="text-sm font-semibold text-gray-900">{name}</h3>
@@ -121,12 +126,17 @@ function StateAffordabilityColumn({
           {safetyNote}
         </p>
       ) : null}
+
+      <StateSocialContextBlock context={social} compact className="mt-4" />
     </div>
   );
 }
 
-function hasAffordabilityContent(row: StateAffordability | null): boolean {
-  return stateMetrics(row).length > 0 || publicSafetyNote(row) != null;
+function hasAffordabilityContent(
+  row: StateAffordability | null,
+  social: StateSocialContext | null
+): boolean {
+  return stateMetrics(row).length > 0 || publicSafetyNote(row) != null || social != null;
 }
 
 export function CompareExternalStateAffordabilitySection({
@@ -139,13 +149,17 @@ export function CompareExternalStateAffordabilitySection({
   const notAvailable = enrichmentNotAvailableLabel(noDataLabel);
   const rowA = getStateAffordability(stateACode);
   const rowB = getStateAffordability(stateBCode);
+  const socialA = getStateSocialContext(stateACode);
+  const socialB = getStateSocialContext(stateBCode);
   const slugA = stateSlugFromCode(stateACode);
   const slugB = stateSlugFromCode(stateBCode);
   const barMetrics = stateCompareBarMetrics(rowA, rowB);
   const showSafetyNote =
     publicSafetyNote(rowA) != null || publicSafetyNote(rowB) != null;
 
-  if (!hasAffordabilityContent(rowA) && !hasAffordabilityContent(rowB)) return null;
+  if (!hasAffordabilityContent(rowA, socialA) && !hasAffordabilityContent(rowB, socialB)) {
+    return null;
+  }
 
   return (
     <section
@@ -189,8 +203,18 @@ export function CompareExternalStateAffordabilitySection({
       ) : null}
 
       <div className="mt-6 grid gap-4 md:grid-cols-2 md:gap-5">
-        <StateAffordabilityColumn name={stateAName} row={rowA} notAvailable={notAvailable} />
-        <StateAffordabilityColumn name={stateBName} row={rowB} notAvailable={notAvailable} />
+        <StateAffordabilityColumn
+          name={stateAName}
+          row={rowA}
+          social={socialA}
+          notAvailable={notAvailable}
+        />
+        <StateAffordabilityColumn
+          name={stateBName}
+          row={rowB}
+          social={socialB}
+          notAvailable={notAvailable}
+        />
       </div>
 
       <div className="mx-auto mt-6 max-w-3xl">

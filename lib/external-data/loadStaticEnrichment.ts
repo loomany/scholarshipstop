@@ -1,16 +1,22 @@
 import 'server-only';
 
 import cityAffordabilityRaw from '@/data/external/scholarshiptop-enrichment/city_affordability.json';
+import institutionResearchEnrichmentRaw from '@/data/external/scholarshiptop-enrichment/institution_research_enrichment.json';
 import locationCrosswalkRaw from '@/data/external/scholarshiptop-enrichment/location_crosswalk.json';
+import providerNonprofitEnrichmentRaw from '@/data/external/scholarshiptop-enrichment/provider_nonprofit_enrichment.json';
 import schoolEnrichmentRaw from '@/data/external/scholarshiptop-enrichment/school_enrichment.json';
 import stateAffordabilityRaw from '@/data/external/scholarshiptop-enrichment/state_affordability.json';
+import stateSocialContextRaw from '@/data/external/scholarshiptop-enrichment/state_social_context.json';
 
 import type {
   CityAffordability,
   EnrichmentFile,
+  InstitutionResearchEnrichment,
   LocationCrosswalk,
+  ProviderNonprofitEnrichment,
   SchoolEnrichment,
-  StateAffordability
+  StateAffordability,
+  StateSocialContext
 } from './types';
 
 const isDevOrTest =
@@ -37,10 +43,31 @@ export function loadSchoolEnrichmentRecords(): SchoolEnrichment[] {
   return safeRecords<SchoolEnrichment>(schoolEnrichmentRaw, 'school_enrichment');
 }
 
+export function loadProviderNonprofitEnrichmentRecords(): ProviderNonprofitEnrichment[] {
+  return safeRecords<ProviderNonprofitEnrichment>(
+    providerNonprofitEnrichmentRaw,
+    'provider_nonprofit_enrichment'
+  );
+}
+
+export function loadInstitutionResearchEnrichmentRecords(): InstitutionResearchEnrichment[] {
+  return safeRecords<InstitutionResearchEnrichment>(
+    institutionResearchEnrichmentRaw,
+    'institution_research_enrichment'
+  );
+}
+
 export function loadStateAffordabilityRecords(): StateAffordability[] {
   return safeRecords<StateAffordability>(
     stateAffordabilityRaw,
     'state_affordability'
+  );
+}
+
+export function loadStateSocialContextRecords(): StateSocialContext[] {
+  return safeRecords<StateSocialContext>(
+    stateSocialContextRaw,
+    'state_social_context'
   );
 }
 

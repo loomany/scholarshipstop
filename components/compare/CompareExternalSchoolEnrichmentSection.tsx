@@ -1,4 +1,6 @@
 import {
+  getInstitutionResearchBySchool,
+  type InstitutionResearchEnrichment,
   matchSchoolForInstitution,
   schoolCompareBarMetrics,
   type SchoolEnrichment
@@ -13,6 +15,7 @@ import {
 } from '@/components/compare/compareExternalEnrichmentFormat';
 import { DataSourceFooter } from '@/components/data-viz/DataSourceFooter';
 import { InsightCallout } from '@/components/data-viz/InsightCallout';
+import { InstitutionResearchContext } from '@/components/data-viz/InstitutionResearchContext';
 import { MetricComparisonBars } from '@/components/data-viz/MetricComparisonBars';
 import { InternalLinkCluster } from '@/components/internal-links/InternalLinkCluster';
 import { stateSlugFromCode } from '@/lib/seo/stateCompareSlug';
@@ -77,16 +80,7 @@ function schoolMetrics(row: SchoolEnrichment | null): SchoolMetric[] {
 
   const withValues = metrics.filter((m) => m.value != null);
 
-  if (row.research_signal != null && String(row.research_signal).trim()) {
-    withValues.push({
-      key: 'research',
-      label: 'Research signal',
-      value: String(row.research_signal),
-      hint: 'OpenAlex / ROR where matched'
-    });
-  }
-
-  return withValues.slice(0, row.research_signal != null ? 7 : 6);
+  return withValues.slice(0, 6);
 }
 
 function hasAnySchoolFacts(row: SchoolEnrichment | null): boolean {
@@ -96,10 +90,12 @@ function hasAnySchoolFacts(row: SchoolEnrichment | null): boolean {
 function SchoolProfileColumn({
   name,
   row,
+  research,
   notAvailable
 }: {
   name: string;
   row: SchoolEnrichment | null;
+  research: InstitutionResearchEnrichment | null;
   notAvailable: string;
 }) {
   const metrics = schoolMetrics(row);
@@ -128,8 +124,38 @@ function SchoolProfileColumn({
           />
         ))}
       </div>
+      <InstitutionResearchContext research={research} compact className="mt-4" />
     </div>
   );
+}
+
+function researchCompareBarMetrics(
+  rowA: InstitutionResearchEnrichment | null,
+  rowB: InstitutionResearchEnrichment | null
+) {
+  return [
+    {
+      key: 'works',
+      label: 'Works count',
+      leftValue: rowA?.works_count ?? null,
+      rightValue: rowB?.works_count ?? null,
+      hint: 'OpenAlex'
+    },
+    {
+      key: 'citations',
+      label: 'Citation count',
+      leftValue: rowA?.cited_by_count ?? null,
+      rightValue: rowB?.cited_by_count ?? null,
+      hint: 'OpenAlex'
+    },
+    {
+      key: 'nih_projects',
+      label: 'NIH projects',
+      leftValue: rowA?.nih_project_count ?? null,
+      rightValue: rowB?.nih_project_count ?? null,
+      hint: 'NIH RePORTER aggregate'
+    }
+  ].filter((metric) => metric.leftValue != null || metric.rightValue != null);
 }
 
 export function CompareExternalSchoolEnrichmentSection({
@@ -140,11 +166,33 @@ export function CompareExternalSchoolEnrichmentSection({
   const notAvailable = enrichmentNotAvailableLabel(noDataLabel);
   const rowA = matchSchoolForInstitution(institutionA);
   const rowB = matchSchoolForInstitution(institutionB);
+  const researchA = getInstitutionResearchBySchool({
+    name: rowA?.school_name ?? institutionA.name,
+    state: rowA?.state ?? institutionA.state,
+    unitId: rowA?.unit_id,
+    rorId: rowA?.ror_id,
+    openAlexId: rowA?.openalex_id
+  });
+  const researchB = getInstitutionResearchBySchool({
+    name: rowB?.school_name ?? institutionB.name,
+    state: rowB?.state ?? institutionB.state,
+    unitId: rowB?.unit_id,
+    rorId: rowB?.ror_id,
+    openAlexId: rowB?.openalex_id
+  });
   const barMetrics = schoolCompareBarMetrics(rowA, rowB);
+  const researchBarMetrics = researchCompareBarMetrics(researchA, researchB);
   const stateSlugA = institutionA.state ? stateSlugFromCode(institutionA.state) : null;
   const stateSlugB = institutionB.state ? stateSlugFromCode(institutionB.state) : null;
 
-  if (!hasAnySchoolFacts(rowA) && !hasAnySchoolFacts(rowB)) return null;
+  if (
+    !hasAnySchoolFacts(rowA) &&
+    !hasAnySchoolFacts(rowB) &&
+    !researchA &&
+    !researchB
+  ) {
+    return null;
+  }
 
   return (
     <section
@@ -187,9 +235,39 @@ export function CompareExternalSchoolEnrichmentSection({
         </div>
       ) : null}
 
+      {researchBarMetrics.length ? (
+        <div className="mx-auto mt-5 max-w-3xl rounded-2xl border border-slate-200/80 bg-white p-4 sm:p-5">
+          <h3 className="text-sm font-semibold text-gray-900">
+            Research activity comparison
+          </h3>
+          <p className="mt-2 text-xs leading-relaxed text-gray-600">
+            Public research indicators can help compare academic activity; they do not
+            imply scholarship eligibility.
+          </p>
+          <MetricComparisonBars
+            className="mt-4"
+            ariaLabel={`Research activity comparison between ${institutionA.name} and ${institutionB.name}`}
+            leftSeriesLabel={institutionA.name}
+            rightSeriesLabel={institutionB.name}
+            metrics={researchBarMetrics}
+            fractionMetrics={false}
+          />
+        </div>
+      ) : null}
+
       <div className="mt-6 grid gap-4 md:grid-cols-2 md:gap-5">
-        <SchoolProfileColumn name={institutionA.name} row={rowA} notAvailable={notAvailable} />
-        <SchoolProfileColumn name={institutionB.name} row={rowB} notAvailable={notAvailable} />
+        <SchoolProfileColumn
+          name={institutionA.name}
+          row={rowA}
+          research={researchA}
+          notAvailable={notAvailable}
+        />
+        <SchoolProfileColumn
+          name={institutionB.name}
+          row={rowB}
+          research={researchB}
+          notAvailable={notAvailable}
+        />
       </div>
 
       <div className="mx-auto mt-6 max-w-3xl">

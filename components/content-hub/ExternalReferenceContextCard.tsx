@@ -1,5 +1,7 @@
 import type { ResolvedContentEnrichmentContext } from '@/lib/external-data';
 import {
+  getInstitutionResearchBySchool,
+  getStateSocialContext,
   getTopStateAffordabilityHighlights,
   resolveContentEnrichmentLinkCluster,
   stateDisplayName
@@ -11,6 +13,8 @@ import {
   fmtEnrichmentUsd
 } from '@/components/compare/compareExternalEnrichmentFormat';
 import { DataSourceFooter } from '@/components/data-viz/DataSourceFooter';
+import { InstitutionResearchContext } from '@/components/data-viz/InstitutionResearchContext';
+import { StateSocialContextBlock } from '@/components/data-viz/StateSocialContextBlock';
 import { RelatedScholarshipContextLinks } from '@/components/content-hub/RelatedScholarshipContextLinks';
 
 type ExternalReferenceContextCardProps = {
@@ -28,6 +32,18 @@ export function ExternalReferenceContextCard({
 }: ExternalReferenceContextCardProps) {
   const stateHighlights = getTopStateAffordabilityHighlights(context.stateRow);
   const school = context.schoolRow;
+  const stateSocial = context.stateCode
+    ? getStateSocialContext(context.stateCode)
+    : null;
+  const research = school
+    ? getInstitutionResearchBySchool({
+        name: school.school_name,
+        state: school.state,
+        unitId: school.unit_id,
+        rorId: school.ror_id,
+        openAlexId: school.openalex_id
+      })
+    : null;
 
   const schoolCards =
     school ?
@@ -110,7 +126,16 @@ export function ExternalReferenceContextCard({
               />
             ))}
           </div>
+          <InstitutionResearchContext research={research} compact className="mt-4" />
         </div>
+      ) : null}
+
+      {stateSocial ? (
+        <StateSocialContextBlock
+          context={stateSocial}
+          compact
+          className={hasState || visibleSchool.length ? 'mt-5' : 'mt-4'}
+        />
       ) : null}
 
       {cluster ? (

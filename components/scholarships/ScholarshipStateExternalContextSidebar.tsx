@@ -1,12 +1,14 @@
 import {
+  getStateSocialContext,
   resolveScholarshipStateContext,
   type ScholarshipStateContext
-} from '@/lib/external-data/scholarshipPageEnrichment';
+} from '@/lib/external-data';
 import { statePlanningPairMetrics } from '@/lib/external-data';
 import { fmtEnrichmentRatePer100k } from '@/components/compare/compareExternalEnrichmentFormat';
 import { CompareExternalEnrichmentStatCard } from '@/components/compare/CompareExternalEnrichmentStatCard';
 import { DataSourceFooter } from '@/components/data-viz/DataSourceFooter';
 import { MetricComparisonBars } from '@/components/data-viz/MetricComparisonBars';
+import { StateSocialContextBlock } from '@/components/data-viz/StateSocialContextBlock';
 import { InternalLinkCluster } from '@/components/internal-links/InternalLinkCluster';
 
 type ScholarshipStateExternalContextSidebarProps = {
@@ -30,6 +32,7 @@ export function ScholarshipStateExternalContextSidebar({
   const safetyNote = publicSafetyFootnote(context);
   const pairMetrics = statePlanningPairMetrics(context.stateRow);
   const currentPath = `/scholarships/${encodeURIComponent(stateSlug)}`;
+  const social = getStateSocialContext(context.stateCode);
 
   return (
     <aside
@@ -83,6 +86,8 @@ export function ScholarshipStateExternalContextSidebar({
       {safetyNote ? (
         <p className="mt-4 text-xs leading-relaxed text-gray-500">{safetyNote}</p>
       ) : null}
+
+      <StateSocialContextBlock context={social} compact className="mt-5" />
 
       <InternalLinkCluster
         pageType="scholarship-state"

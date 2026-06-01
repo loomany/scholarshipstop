@@ -6,6 +6,7 @@ import type { Metadata } from 'next';
 import ResourcesPagination from '@/components/content-hub/ResourcesPagination';
 import ProviderProfilePageAuthBridge from '@/app/providers/ProviderProfilePageAuthBridge';
 import { ProviderExternalSchoolContext } from '@/components/providers/ProviderExternalSchoolContext';
+import { ProviderNonprofitContext } from '@/components/providers/ProviderNonprofitContext';
 import { ProviderProfileContextLinks } from '@/components/providers/ProviderProfileContextLinks';
 import { ProviderProfileTableOfContents } from '@/components/providers/ProviderProfileTableOfContents';
 import { ProviderProfileFaqAccordion } from '@/components/providers/ProviderProfileFaqAccordion';
@@ -544,6 +545,10 @@ export default async function ProviderProfilePage({
         </section>
 
         <ProviderExternalSchoolContext
+          displayName={data.displayName}
+          hqState={data.hqState}
+        />
+        <ProviderNonprofitContext
           displayName={data.displayName}
           hqState={data.hqState}
         />

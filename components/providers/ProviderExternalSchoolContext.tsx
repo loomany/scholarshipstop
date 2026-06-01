@@ -1,4 +1,8 @@
-import { matchProviderToSchool, schoolSingleBarMetrics } from '@/lib/external-data';
+import {
+  getInstitutionResearchBySchool,
+  matchProviderToSchool,
+  schoolSingleBarMetrics
+} from '@/lib/external-data';
 import { resolveStateSlugFromCode } from '@/lib/external-data/internalLinkGraph';
 
 import { CompareExternalEnrichmentStatCard } from '@/components/compare/CompareExternalEnrichmentStatCard';
@@ -10,6 +14,7 @@ import {
 import { InternalLinkCluster } from '@/components/internal-links/InternalLinkCluster';
 import { CompactMetricGrid } from '@/components/data-viz/CompactMetricGrid';
 import { DataSourceFooter } from '@/components/data-viz/DataSourceFooter';
+import { InstitutionResearchContext } from '@/components/data-viz/InstitutionResearchContext';
 import { MetricComparisonBars } from '@/components/data-viz/MetricComparisonBars';
 
 type ProviderExternalSchoolContextProps = {
@@ -85,6 +90,13 @@ export function ProviderExternalSchoolContext({
     ['tuition_in', 'net_price', 'earnings', 'size'].includes(m.key)
   );
   const providerStateSlug = resolveStateSlugFromCode(row.state);
+  const research = getInstitutionResearchBySchool({
+    name: row.school_name,
+    state: row.state,
+    unitId: row.unit_id,
+    rorId: row.ror_id,
+    openAlexId: row.openalex_id
+  });
 
   return (
     <section
@@ -126,6 +138,8 @@ export function ProviderExternalSchoolContext({
           />
         </div>
       ) : null}
+
+      <InstitutionResearchContext research={research} compact className="mt-4" />
 
       <InternalLinkCluster
         pageType="provider"

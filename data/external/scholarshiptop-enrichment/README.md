@@ -1,43 +1,40 @@
-# ScholarshipTop static enrichment data (Stage A)
+# ScholarshipTop static enrichment data
 
-These four JSON files are **read-only static data** produced by the Stage A pipeline in `scholarshiptop-data-lab`:
+These JSON files are read-only static data for ScholarshipTop compare pages,
+scholarship hubs, provider profiles, resource pages, and essay context cards.
 
-`C:\dev\scholarshiptop-data-lab\stage-a-static-data-pipeline`
+## Guardrails
 
-## What this is
-
-- A small, typed enrichment layer for compare pages, scholarship hubs, and future stat blocks
-- **Not** stored in Supabase — loaded at build/runtime on the server only
-- **Not** a copy of the MedResidency customer package or raw source dumps
+- Permission status: `permission_received_per_user_statement`
+- Customer package is read as a source package only; it is not copied into the site
+- Outputs are small, typed, static JSON files
+- No Supabase writes, migrations, Auth changes, Payments changes, or SEO policy changes
+- No raw customer package files, raw filings, NIH project abstracts, grant text, ADI
+  block-group rows, or large JSONL/GZ/CSV dumps are shipped here
 
 ## Files
 
 | File | Rows | Purpose |
-|------|------|---------|
-| `school_enrichment.json` | 6,197 | College Scorecard + optional OpenAlex/ROR joins |
+|------|------:|---------|
+| `school_enrichment.json` | 6,197 | College Scorecard plus optional OpenAlex/ROR joins |
 | `state_affordability.json` | 52 | Census ACS, HUD FMR, MIT living wage, BLS, FBI aggregate context |
-| `city_affordability.json` | 2,759 | City-level affordability (HUD uses state metro averages when city FMR unavailable) |
+| `city_affordability.json` | 2,759 | City-level affordability and location context |
 | `location_crosswalk.json` | 2,704 | City/state/county join keys |
+| `provider_nonprofit_enrichment.json` | 1,293 | ProPublica Nonprofit context for strict non-school provider matches |
+| `institution_research_enrichment.json` | 2,323 | OpenAlex/ROR identity plus NIH aggregate research context |
+| `state_social_context.json` | 52 | CDC SVI, ADI, and County Health neutral state-level context |
 
-Total on-disk size is about **4.88 MB**.
+Total on-disk size is about 7.60 MB.
 
 ## Regenerating
 
-Rebuild from data-lab (requires permission to read the customer package on the build machine):
+The Stage A files come from the original static enrichment pipeline. D8 static
+enrichment V2 outputs are generated with:
 
 ```bash
-cd C:\dev\scholarshiptop-data-lab\stage-a-static-data-pipeline
-python 02_working/build_stage_a.py
+npx tsx scripts/data/build-static-enrichment-v2.ts
+npm run data:validate-enrichment
 ```
 
-Then copy only the four outputs from `03_outputs/` into this folder and re-run:
-
-```bash
-npx tsx scripts/data/validate-static-enrichment.ts
-```
-
-## Usage in the site
-
-Import helpers from `@/lib/external-data` in **server components or scripts only** — do not import in client components (bundle size).
-
-See `reports/data/stage-b-static-enrichment-integration-report.md` for integration status.
+Use helpers from `@/lib/external-data` in server components or scripts only.
+The loaders build lazy indexes and hide ambiguous provider/school matches.

@@ -2,10 +2,13 @@ export type {
   CityAffordability,
   EnrichmentFile,
   EnrichmentFileMeta,
+  InstitutionResearchEnrichment,
   LocationCrosswalk,
+  ProviderNonprofitEnrichment,
   PublicSafetyContext,
   SchoolEnrichment,
-  StateAffordability
+  StateAffordability,
+  StateSocialContext
 } from './types';
 
 export {
@@ -30,9 +33,12 @@ export {
 
 export {
   loadCityAffordabilityRecords,
+  loadInstitutionResearchEnrichmentRecords,
   loadLocationCrosswalkRecords,
+  loadProviderNonprofitEnrichmentRecords,
   loadSchoolEnrichmentRecords,
-  loadStateAffordabilityRecords
+  loadStateAffordabilityRecords,
+  loadStateSocialContextRecords
 } from './loadStaticEnrichment';
 
 export {
@@ -45,6 +51,16 @@ export {
   matchProviderToSchool,
   matchSchoolForInstitution
 } from './schoolEnrichment';
+
+export {
+  getProviderNonprofitByEin,
+  getProviderNonprofitByNameState,
+  matchProviderToNonprofit
+} from './providerNonprofitEnrichment';
+
+export { getInstitutionResearchBySchool } from './institutionResearchEnrichment';
+
+export { getStateSocialContext } from './stateSocialContext';
 
 export {
   findCityAffordabilityByCityState,

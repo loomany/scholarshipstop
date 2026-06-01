@@ -1,0 +1,1402 @@
+{
+  "meta": {
+    "generated_at": "2026-05-31T20:58:46.819Z",
+    "generated_by": "scripts/data/build-static-enrichment-v2.ts",
+    "permission_status": "permission_received_per_user_statement",
+    "output_policy": "Small aggregate/static output only; no raw customer package files, filings, abstracts, or grant text."
+  },
+  "records": [
+    {
+      "state_code": "AL",
+      "state_name": "Alabama",
+      "svi_context": null,
+      "svi_percentile_band": null,
+      "adi_context": "ADI block-group data is available across 67 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "higher indicator band",
+      "county_health_context": "County health public data is available for 67 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": null,
+      "counties_with_adi_data": 67,
+      "counties_with_health_data": 67,
+      "source_years": {
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "AK",
+      "state_name": "Alaska",
+      "svi_context": null,
+      "svi_percentile_band": null,
+      "adi_context": "ADI block-group data is available across 30 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "middle indicator band",
+      "county_health_context": "County health public data is available for 30 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": null,
+      "counties_with_adi_data": 30,
+      "counties_with_health_data": 30,
+      "source_years": {
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "AZ",
+      "state_name": "Arizona",
+      "svi_context": null,
+      "svi_percentile_band": null,
+      "adi_context": "ADI block-group data is available across 15 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "middle indicator band",
+      "county_health_context": "County health public data is available for 15 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": null,
+      "counties_with_adi_data": 15,
+      "counties_with_health_data": 15,
+      "source_years": {
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "AR",
+      "state_name": "Arkansas",
+      "svi_context": null,
+      "svi_percentile_band": null,
+      "adi_context": "ADI block-group data is available across 75 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "higher indicator band",
+      "county_health_context": "County health public data is available for 75 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": null,
+      "counties_with_adi_data": 75,
+      "counties_with_health_data": 75,
+      "source_years": {
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "CA",
+      "state_name": "California",
+      "svi_context": "CDC SVI county data is available for 45 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "higher indicator band",
+      "adi_context": "ADI block-group data is available across 56 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "lower indicator band",
+      "county_health_context": "County health public data is available for 58 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 45,
+      "counties_with_adi_data": 56,
+      "counties_with_health_data": 58,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "CO",
+      "state_name": "Colorado",
+      "svi_context": "CDC SVI county data is available for 64 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "middle indicator band",
+      "adi_context": "ADI block-group data is available across 63 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "lower indicator band",
+      "county_health_context": "County health public data is available for 64 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 64,
+      "counties_with_adi_data": 63,
+      "counties_with_health_data": 64,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "CT",
+      "state_name": "Connecticut",
+      "svi_context": "CDC SVI county data is available for 9 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "middle indicator band",
+      "adi_context": "ADI block-group data is available across 9 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "middle indicator band",
+      "county_health_context": "County health public data is available for 8 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 9,
+      "counties_with_adi_data": 9,
+      "counties_with_health_data": 8,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "DE",
+      "state_name": "Delaware",
+      "svi_context": "CDC SVI county data is available for 3 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "middle indicator band",
+      "adi_context": "ADI block-group data is available across 3 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "middle indicator band",
+      "county_health_context": "County health public data is available for 3 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 3,
+      "counties_with_adi_data": 3,
+      "counties_with_health_data": 3,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "DC",
+      "state_name": "District of Columbia",
+      "svi_context": "CDC SVI county data is available for 1 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "middle indicator band",
+      "adi_context": "ADI block-group data is available across 1 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "lower indicator band",
+      "county_health_context": "County health public data is available for 1 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 1,
+      "counties_with_adi_data": 1,
+      "counties_with_health_data": 1,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "FL",
+      "state_name": "Florida",
+      "svi_context": "CDC SVI county data is available for 67 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "higher indicator band",
+      "adi_context": "ADI block-group data is available across 67 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "middle indicator band",
+      "county_health_context": "County health public data is available for 67 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 67,
+      "counties_with_adi_data": 67,
+      "counties_with_health_data": 67,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "GA",
+      "state_name": "Georgia",
+      "svi_context": "CDC SVI county data is available for 159 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "higher indicator band",
+      "adi_context": "ADI block-group data is available across 159 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "middle indicator band",
+      "county_health_context": "County health public data is available for 159 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 159,
+      "counties_with_adi_data": 159,
+      "counties_with_health_data": 159,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "HI",
+      "state_name": "Hawaii",
+      "svi_context": "CDC SVI county data is available for 5 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "middle indicator band",
+      "adi_context": "ADI block-group data is available across 4 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "lower indicator band",
+      "county_health_context": "County health public data is available for 5 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 5,
+      "counties_with_adi_data": 4,
+      "counties_with_health_data": 5,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "ID",
+      "state_name": "Idaho",
+      "svi_context": "CDC SVI county data is available for 44 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "middle indicator band",
+      "adi_context": "ADI block-group data is available across 44 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "middle indicator band",
+      "county_health_context": "County health public data is available for 44 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 44,
+      "counties_with_adi_data": 44,
+      "counties_with_health_data": 44,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "IL",
+      "state_name": "Illinois",
+      "svi_context": "CDC SVI county data is available for 102 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "middle indicator band",
+      "adi_context": "ADI block-group data is available across 102 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "middle indicator band",
+      "county_health_context": "County health public data is available for 102 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 102,
+      "counties_with_adi_data": 102,
+      "counties_with_health_data": 102,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "IN",
+      "state_name": "Indiana",
+      "svi_context": "CDC SVI county data is available for 92 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "middle indicator band",
+      "adi_context": "ADI block-group data is available across 92 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "higher indicator band",
+      "county_health_context": "County health public data is available for 92 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 92,
+      "counties_with_adi_data": 92,
+      "counties_with_health_data": 92,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "IA",
+      "state_name": "Iowa",
+      "svi_context": "CDC SVI county data is available for 99 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "lower indicator band",
+      "adi_context": "ADI block-group data is available across 99 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "higher indicator band",
+      "county_health_context": "County health public data is available for 99 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 99,
+      "counties_with_adi_data": 99,
+      "counties_with_health_data": 99,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "KS",
+      "state_name": "Kansas",
+      "svi_context": "CDC SVI county data is available for 105 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "lower indicator band",
+      "adi_context": "ADI block-group data is available across 105 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "higher indicator band",
+      "county_health_context": "County health public data is available for 105 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 105,
+      "counties_with_adi_data": 105,
+      "counties_with_health_data": 105,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "KY",
+      "state_name": "Kentucky",
+      "svi_context": "CDC SVI county data is available for 120 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "middle indicator band",
+      "adi_context": "ADI block-group data is available across 120 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "higher indicator band",
+      "county_health_context": "County health public data is available for 120 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 120,
+      "counties_with_adi_data": 120,
+      "counties_with_health_data": 120,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "LA",
+      "state_name": "Louisiana",
+      "svi_context": "CDC SVI county data is available for 64 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "higher indicator band",
+      "adi_context": "ADI block-group data is available across 63 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "higher indicator band",
+      "county_health_context": "County health public data is available for 64 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 64,
+      "counties_with_adi_data": 63,
+      "counties_with_health_data": 64,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "ME",
+      "state_name": "Maine",
+      "svi_context": "CDC SVI county data is available for 16 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "middle indicator band",
+      "adi_context": "ADI block-group data is available across 16 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "middle indicator band",
+      "county_health_context": "County health public data is available for 16 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 16,
+      "counties_with_adi_data": 16,
+      "counties_with_health_data": 16,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "MD",
+      "state_name": "Maryland",
+      "svi_context": "CDC SVI county data is available for 24 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "middle indicator band",
+      "adi_context": "ADI block-group data is available across 24 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "middle indicator band",
+      "county_health_context": "County health public data is available for 24 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 24,
+      "counties_with_adi_data": 24,
+      "counties_with_health_data": 24,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "MA",
+      "state_name": "Massachusetts",
+      "svi_context": "CDC SVI county data is available for 14 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "middle indicator band",
+      "adi_context": "ADI block-group data is available across 14 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "lower indicator band",
+      "county_health_context": "County health public data is available for 14 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 14,
+      "counties_with_adi_data": 14,
+      "counties_with_health_data": 14,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "MI",
+      "state_name": "Michigan",
+      "svi_context": "CDC SVI county data is available for 83 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "middle indicator band",
+      "adi_context": "ADI block-group data is available across 83 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "middle indicator band",
+      "county_health_context": "County health public data is available for 83 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 83,
+      "counties_with_adi_data": 83,
+      "counties_with_health_data": 83,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "MN",
+      "state_name": "Minnesota",
+      "svi_context": "CDC SVI county data is available for 87 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "lower indicator band",
+      "adi_context": "ADI block-group data is available across 87 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "middle indicator band",
+      "county_health_context": "County health public data is available for 87 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 87,
+      "counties_with_adi_data": 87,
+      "counties_with_health_data": 87,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "MS",
+      "state_name": "Mississippi",
+      "svi_context": "CDC SVI county data is available for 82 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "higher indicator band",
+      "adi_context": "ADI block-group data is available across 82 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "higher indicator band",
+      "county_health_context": "County health public data is available for 82 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 82,
+      "counties_with_adi_data": 82,
+      "counties_with_health_data": 82,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "MO",
+      "state_name": "Missouri",
+      "svi_context": "CDC SVI county data is available for 115 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "middle indicator band",
+      "adi_context": "ADI block-group data is available across 115 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "higher indicator band",
+      "county_health_context": "County health public data is available for 115 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 115,
+      "counties_with_adi_data": 115,
+      "counties_with_health_data": 115,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "MT",
+      "state_name": "Montana",
+      "svi_context": "CDC SVI county data is available for 56 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "lower indicator band",
+      "adi_context": "ADI block-group data is available across 56 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "middle indicator band",
+      "county_health_context": "County health public data is available for 56 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 56,
+      "counties_with_adi_data": 56,
+      "counties_with_health_data": 56,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "NE",
+      "state_name": "Nebraska",
+      "svi_context": "CDC SVI county data is available for 93 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "lower indicator band",
+      "adi_context": "ADI block-group data is available across 93 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "middle indicator band",
+      "county_health_context": "County health public data is available for 93 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 93,
+      "counties_with_adi_data": 93,
+      "counties_with_health_data": 93,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "NV",
+      "state_name": "Nevada",
+      "svi_context": "CDC SVI county data is available for 17 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "middle indicator band",
+      "adi_context": "ADI block-group data is available across 15 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "middle indicator band",
+      "county_health_context": "County health public data is available for 17 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 17,
+      "counties_with_adi_data": 15,
+      "counties_with_health_data": 17,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "NH",
+      "state_name": "New Hampshire",
+      "svi_context": "CDC SVI county data is available for 10 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "lower indicator band",
+      "adi_context": "ADI block-group data is available across 10 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "middle indicator band",
+      "county_health_context": "County health public data is available for 10 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 10,
+      "counties_with_adi_data": 10,
+      "counties_with_health_data": 10,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "NJ",
+      "state_name": "New Jersey",
+      "svi_context": "CDC SVI county data is available for 21 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "middle indicator band",
+      "adi_context": "ADI block-group data is available across 21 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "lower indicator band",
+      "county_health_context": "County health public data is available for 21 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 21,
+      "counties_with_adi_data": 21,
+      "counties_with_health_data": 21,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "NM",
+      "state_name": "New Mexico",
+      "svi_context": "CDC SVI county data is available for 33 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "higher indicator band",
+      "adi_context": "ADI block-group data is available across 33 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "middle indicator band",
+      "county_health_context": "County health public data is available for 33 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 33,
+      "counties_with_adi_data": 33,
+      "counties_with_health_data": 33,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "NY",
+      "state_name": "New York",
+      "svi_context": "CDC SVI county data is available for 62 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "middle indicator band",
+      "adi_context": "ADI block-group data is available across 62 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "middle indicator band",
+      "county_health_context": "County health public data is available for 62 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 62,
+      "counties_with_adi_data": 62,
+      "counties_with_health_data": 62,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "NC",
+      "state_name": "North Carolina",
+      "svi_context": "CDC SVI county data is available for 100 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "higher indicator band",
+      "adi_context": "ADI block-group data is available across 100 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "middle indicator band",
+      "county_health_context": "County health public data is available for 100 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 100,
+      "counties_with_adi_data": 100,
+      "counties_with_health_data": 100,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "ND",
+      "state_name": "North Dakota",
+      "svi_context": "CDC SVI county data is available for 53 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "lower indicator band",
+      "adi_context": "ADI block-group data is available across 53 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "middle indicator band",
+      "county_health_context": "County health public data is available for 53 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 53,
+      "counties_with_adi_data": 53,
+      "counties_with_health_data": 53,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "OH",
+      "state_name": "Ohio",
+      "svi_context": "CDC SVI county data is available for 88 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "middle indicator band",
+      "adi_context": "ADI block-group data is available across 88 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "higher indicator band",
+      "county_health_context": "County health public data is available for 88 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 88,
+      "counties_with_adi_data": 88,
+      "counties_with_health_data": 88,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "OK",
+      "state_name": "Oklahoma",
+      "svi_context": "CDC SVI county data is available for 77 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "higher indicator band",
+      "adi_context": "ADI block-group data is available across 77 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "higher indicator band",
+      "county_health_context": "County health public data is available for 77 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 77,
+      "counties_with_adi_data": 77,
+      "counties_with_health_data": 77,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "OR",
+      "state_name": "Oregon",
+      "svi_context": "CDC SVI county data is available for 36 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "middle indicator band",
+      "adi_context": "ADI block-group data is available across 36 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "middle indicator band",
+      "county_health_context": "County health public data is available for 36 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 36,
+      "counties_with_adi_data": 36,
+      "counties_with_health_data": 36,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "PA",
+      "state_name": "Pennsylvania",
+      "svi_context": "CDC SVI county data is available for 67 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "middle indicator band",
+      "adi_context": "ADI block-group data is available across 67 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "middle indicator band",
+      "county_health_context": "County health public data is available for 67 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 67,
+      "counties_with_adi_data": 67,
+      "counties_with_health_data": 67,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "PR",
+      "state_name": "Puerto Rico",
+      "svi_context": null,
+      "svi_percentile_band": null,
+      "adi_context": "ADI block-group data is available across 78 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "higher indicator band",
+      "county_health_context": null,
+      "counties_with_svi_data": null,
+      "counties_with_adi_data": 78,
+      "counties_with_health_data": null,
+      "source_years": {
+        "adi": 2023
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi"
+      ]
+    },
+    {
+      "state_code": "RI",
+      "state_name": "Rhode Island",
+      "svi_context": "CDC SVI county data is available for 5 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "lower indicator band",
+      "adi_context": "ADI block-group data is available across 5 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "middle indicator band",
+      "county_health_context": "County health public data is available for 5 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 5,
+      "counties_with_adi_data": 5,
+      "counties_with_health_data": 5,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "SC",
+      "state_name": "South Carolina",
+      "svi_context": "CDC SVI county data is available for 46 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "higher indicator band",
+      "adi_context": "ADI block-group data is available across 46 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "middle indicator band",
+      "county_health_context": "County health public data is available for 46 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 46,
+      "counties_with_adi_data": 46,
+      "counties_with_health_data": 46,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "SD",
+      "state_name": "South Dakota",
+      "svi_context": "CDC SVI county data is available for 66 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "middle indicator band",
+      "adi_context": "ADI block-group data is available across 66 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "middle indicator band",
+      "county_health_context": "County health public data is available for 66 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 66,
+      "counties_with_adi_data": 66,
+      "counties_with_health_data": 66,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "TN",
+      "state_name": "Tennessee",
+      "svi_context": "CDC SVI county data is available for 95 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "middle indicator band",
+      "adi_context": "ADI block-group data is available across 95 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "middle indicator band",
+      "county_health_context": "County health public data is available for 95 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 95,
+      "counties_with_adi_data": 95,
+      "counties_with_health_data": 95,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "TX",
+      "state_name": "Texas",
+      "svi_context": "CDC SVI county data is available for 254 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "higher indicator band",
+      "adi_context": "ADI block-group data is available across 246 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "middle indicator band",
+      "county_health_context": "County health public data is available for 254 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 254,
+      "counties_with_adi_data": 246,
+      "counties_with_health_data": 254,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "UT",
+      "state_name": "Utah",
+      "svi_context": "CDC SVI county data is available for 29 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "lower indicator band",
+      "adi_context": "ADI block-group data is available across 29 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "lower indicator band",
+      "county_health_context": "County health public data is available for 29 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 29,
+      "counties_with_adi_data": 29,
+      "counties_with_health_data": 29,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "VT",
+      "state_name": "Vermont",
+      "svi_context": "CDC SVI county data is available for 14 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "lower indicator band",
+      "adi_context": "ADI block-group data is available across 14 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "middle indicator band",
+      "county_health_context": "County health public data is available for 14 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 14,
+      "counties_with_adi_data": 14,
+      "counties_with_health_data": 14,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "VA",
+      "state_name": "Virginia",
+      "svi_context": "CDC SVI county data is available for 133 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "middle indicator band",
+      "adi_context": "ADI block-group data is available across 133 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "middle indicator band",
+      "county_health_context": "County health public data is available for 133 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 133,
+      "counties_with_adi_data": 133,
+      "counties_with_health_data": 133,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "WA",
+      "state_name": "Washington",
+      "svi_context": "CDC SVI county data is available for 39 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "middle indicator band",
+      "adi_context": "ADI block-group data is available across 39 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "lower indicator band",
+      "county_health_context": "County health public data is available for 39 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 39,
+      "counties_with_adi_data": 39,
+      "counties_with_health_data": 39,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "WV",
+      "state_name": "West Virginia",
+      "svi_context": "CDC SVI county data is available for 55 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "middle indicator band",
+      "adi_context": "ADI block-group data is available across 55 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "higher indicator band",
+      "county_health_context": "County health public data is available for 55 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 55,
+      "counties_with_adi_data": 55,
+      "counties_with_health_data": 55,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "WI",
+      "state_name": "Wisconsin",
+      "svi_context": "CDC SVI county data is available for 72 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "lower indicator band",
+      "adi_context": "ADI block-group data is available across 72 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "middle indicator band",
+      "county_health_context": "County health public data is available for 72 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 72,
+      "counties_with_adi_data": 72,
+      "counties_with_health_data": 72,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    },
+    {
+      "state_code": "WY",
+      "state_name": "Wyoming",
+      "svi_context": "CDC SVI county data is available for 23 counties; county indicators vary and are best used as public planning context.",
+      "svi_percentile_band": "lower indicator band",
+      "adi_context": "ADI block-group data is available across 23 counties; local conditions can vary within the same state.",
+      "adi_percentile_band": "middle indicator band",
+      "county_health_context": "County health public data is available for 23 counties; use it alongside cost, school, and scholarship details.",
+      "counties_with_svi_data": 23,
+      "counties_with_adi_data": 23,
+      "counties_with_health_data": 23,
+      "source_years": {
+        "cdc_svi": 2022,
+        "adi": 2023,
+        "county_health_rankings": 2024
+      },
+      "display_policy": {
+        "neutral_context_only": true,
+        "no_rankings": true,
+        "no_eligibility_claims": true
+      },
+      "sources": [
+        "adi",
+        "cdc_svi",
+        "county_health_rankings"
+      ]
+    }
+  ]
+}

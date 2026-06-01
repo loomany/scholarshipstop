@@ -29,6 +29,27 @@ const SECRET_PATTERNS = [
 ];
 
 const ADEK_PATH_PATTERN = /C:\\dev\\adek/i;
+const RAW_SOURCE_FIELD_PATTERNS = [
+  /"raw_artifact/i,
+  /"raw"\s*:/i,
+  /"filing_links"\s*:/i,
+  /"principal_investigators"\s*:/i,
+  /"project_title"\s*:/i,
+  /"project_detail_url"\s*:/i,
+  /"terms"\s*:/i,
+  /"pref_terms"\s*:/i,
+  /"abstract/i
+];
+
+const EXPECTED_FILES = [
+  'school_enrichment.json',
+  'state_affordability.json',
+  'city_affordability.json',
+  'location_crosswalk.json',
+  'provider_nonprofit_enrichment.json',
+  'institution_research_enrichment.json',
+  'state_social_context.json'
+];
 
 function fail(message: string): never {
   console.error(`FAIL: ${message}`);
@@ -84,6 +105,12 @@ function scanForForbiddenContent(raw: string, filename: string): void {
       fail(`${filename} matches secret-like pattern ${pattern}`);
     }
   }
+
+  for (const pattern of RAW_SOURCE_FIELD_PATTERNS) {
+    if (pattern.test(raw)) {
+      fail(`${filename} appears to contain raw source-only field ${pattern}`);
+    }
+  }
 }
 
 function main(): void {
@@ -92,8 +119,15 @@ function main(): void {
   }
 
   const manifest = JSON.parse(fs.readFileSync(MANIFEST_PATH, 'utf8')) as Manifest;
-  if (!Array.isArray(manifest.files) || manifest.files.length !== 4) {
-    fail('MANIFEST.files must list exactly 4 files');
+  if (!Array.isArray(manifest.files) || manifest.files.length !== EXPECTED_FILES.length) {
+    fail(`MANIFEST.files must list exactly ${EXPECTED_FILES.length} files`);
+  }
+
+  const manifestNames = new Set(manifest.files.map((entry) => entry.name));
+  for (const expected of EXPECTED_FILES) {
+    if (!manifestNames.has(expected)) {
+      fail(`MANIFEST.files missing ${expected}`);
+    }
   }
 
   let totalBytes = 0;
@@ -187,12 +221,77 @@ function main(): void {
     );
   }
 
-  const maxBytes = 15 * 1024 * 1024;
-  if (totalBytes >= maxBytes) {
-    fail(`total size ${totalBytes} bytes >= 15 MB cap`);
+  const providerNonprofits = readJsonFile<{ records: Record<string, unknown>[] }>(
+    'provider_nonprofit_enrichment.json'
+  ).records;
+  const providerKeyDupes = countDuplicates(providerNonprofits, (r) =>
+    typeof r.provider_key === 'string' ? r.provider_key : null
+  );
+  results['provider_nonprofit_enrichment.json'].duplicateKeys =
+    providerKeyDupes.duplicateKeys;
+  if (providerKeyDupes.duplicateKeys > 0) {
+    fail(
+      `provider_nonprofit provider_key duplicates: ${providerKeyDupes.duplicateKeys} (${providerKeyDupes.examples.join(', ')})`
+    );
+  }
+  const providerNameStateDupes = countDuplicates(providerNonprofits, (r) => {
+    const name = typeof r.normalized_name === 'string' ? r.normalized_name : '';
+    const state = typeof r.state === 'string' ? r.state : '';
+    return name && state ? `${name}|${state}` : null;
+  });
+  if (providerNameStateDupes.duplicateKeys > 0) {
+    warn(
+      `provider nonprofit name+state ambiguous keys hidden by loader: ${providerNameStateDupes.duplicateKeys} (${providerNameStateDupes.examples.join(', ')})`
+    );
   }
 
-  ok(`total data size ${(totalBytes / 1024 / 1024).toFixed(2)} MB (< 15 MB)`);
+  const research = readJsonFile<{ records: Record<string, unknown>[] }>(
+    'institution_research_enrichment.json'
+  ).records;
+  const researchKeyDupes = countDuplicates(research, (r) =>
+    typeof r.institution_key === 'string' ? r.institution_key : null
+  );
+  results['institution_research_enrichment.json'].duplicateKeys =
+    researchKeyDupes.duplicateKeys;
+  if (researchKeyDupes.duplicateKeys > 0) {
+    fail(`institution_research institution_key duplicates: ${researchKeyDupes.duplicateKeys}`);
+  }
+
+  const social = readJsonFile<{ records: Record<string, unknown>[] }>(
+    'state_social_context.json'
+  ).records;
+  if (social.length > 52) {
+    fail(`state_social_context has ${social.length} rows; expected 52 or fewer`);
+  }
+  const socialDupes = countDuplicates(social, (r) =>
+    typeof r.state_code === 'string' ? r.state_code : null
+  );
+  results['state_social_context.json'].duplicateKeys = socialDupes.duplicateKeys;
+  if (socialDupes.duplicateKeys > 0) {
+    fail(`state_social_context state_code duplicates: ${socialDupes.duplicateKeys}`);
+  }
+  for (const row of social) {
+    const policy = row.display_policy as Record<string, unknown> | undefined;
+    if (
+      !policy ||
+      policy.neutral_context_only !== true ||
+      policy.no_rankings !== true ||
+      policy.no_eligibility_claims !== true
+    ) {
+      fail('state_social_context display_policy must enforce neutral/no-ranking/no-eligibility flags');
+    }
+  }
+
+  const targetBytes = 15 * 1024 * 1024;
+  const hardMaxBytes = 25 * 1024 * 1024;
+  if (totalBytes > hardMaxBytes) {
+    fail(`total size ${totalBytes} bytes > 25 MB hard cap`);
+  }
+  if (totalBytes > targetBytes) {
+    warn(`total size ${(totalBytes / 1024 / 1024).toFixed(2)} MB exceeds 15 MB target`);
+  }
+
+  ok(`total data size ${(totalBytes / 1024 / 1024).toFixed(2)} MB (< 25 MB hard cap)`);
   ok('no secrets-like strings detected');
   ok('no C:\\dev\\adek paths in final JSON');
   ok('manifest row counts match');
