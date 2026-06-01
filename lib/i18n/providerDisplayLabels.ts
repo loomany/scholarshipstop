@@ -65,9 +65,9 @@ const SOURCE_SHORT: Record<
     fr: 'Source à confirmer'
   },
   missing_official_url: {
-    en: 'Missing official URL',
-    es: 'URL oficial ausente',
-    fr: 'URL officielle manquante'
+    en: 'Source under review',
+    es: 'Fuente en revision',
+    fr: 'Source en verification'
   }
 };
 
