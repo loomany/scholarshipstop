@@ -1,7 +1,7 @@
 import {
-  getPremedTopicContext,
   hasDisplayableContentContext,
   resolveContentEnrichmentContext,
+  resolveHealthcareEssayTopicContext,
   type ContentEnrichmentHints
 } from '@/lib/external-data';
 
@@ -10,32 +10,9 @@ import { PremedTopicContextCard } from '@/components/content-hub/PremedTopicCont
 
 type EssayExternalContextCardProps = ContentEnrichmentHints;
 
-function shouldShowHealthcareEssayContext(props: EssayExternalContextCardProps): boolean {
-  const slug = props.slug?.toLowerCase().trim();
-  if (slug === 'career-goals') return true;
-
-  const haystack = [
-    props.slug,
-    props.title,
-    props.category,
-    props.subcategory,
-    ...(props.tags ?? [])
-  ]
-    .filter(Boolean)
-    .join(' ')
-    .toLowerCase();
-  return /\b(pre[-\s]?med|medical|medicine|nursing|healthcare|health care)\b/.test(
-    haystack
-  );
-}
-
 export function EssayExternalContextCard(props: EssayExternalContextCardProps) {
   const context = resolveContentEnrichmentContext(props);
-  const topicContext = shouldShowHealthcareEssayContext(props)
-    ? getPremedTopicContext(props.slug) ??
-      getPremedTopicContext(props.title) ??
-      getPremedTopicContext(props.category)
-    : null;
+  const topicContext = resolveHealthcareEssayTopicContext(props);
   const hasExternalContext = hasDisplayableContentContext(context, props);
   if (!hasExternalContext && !topicContext) return null;
 

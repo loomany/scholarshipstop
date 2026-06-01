@@ -81,6 +81,20 @@ export { getHealthWorkforceContext } from './healthWorkforceContext';
 export { getPremedTopicContext } from './premedTopicContext';
 
 export {
+  buildMedicalClusterLinks,
+  CAREER_GOALS_LINK,
+  FINANCIAL_NEED_LINK,
+  HEALTHCARE_TOPIC_SUPPRESS_SLUGS,
+  HOW_TO_FIND_LINK,
+  MEDICAL_CATEGORY_LINK,
+  MEDICAL_GUIDE_LINK,
+  resolveHealthcareEssayTopicContext,
+  resolveHealthcareResourceTopicContext,
+  shouldShowHealthcareTopicContext,
+  shouldSuppressHealthcareTopicContext
+} from './medicalContentCluster';
+
+export {
   findCityAffordabilityByCityState,
   getCityAffordability
 } from './cityAffordability';

@@ -425,6 +425,10 @@ export const STATIC_ESSAY_GUIDES: StaticEssayGuide[] = [
     ],
     links: [
       ...commonLinks,
+      { href: '/resources/medical-scholarships-guide', label: 'Medical scholarships guide' },
+      { href: '/essays/financial-need', label: 'Financial need essay' },
+      { href: '/resources/how-to-find-scholarships', label: 'How to find scholarships' },
+      { href: '/compare/universities', label: 'Compare universities' },
       { href: '/essays/outline', label: 'Essay outline' },
       { href: '/scholarships/stem', label: 'STEM scholarships' }
     ],

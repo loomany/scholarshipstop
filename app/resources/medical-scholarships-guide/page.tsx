@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
+import { MedicalScholarshipPlanningSections } from '@/components/content-hub/MedicalScholarshipPlanningSections';
 import { PremedTopicContextCard } from '@/components/content-hub/PremedTopicContextCard';
 import ResourceGuideShell from '@/components/content-hub/resourceGuides/ResourceGuideShell';
 import { resourceGuideLinkClassName } from '@/lib/content-hub/resourceGuidePages';
@@ -8,6 +9,10 @@ import { getPremedTopicContext } from '@/lib/external-data';
 import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
 import { getCanonical } from '@/lib/seo/canonical';
 
+const hrefCareerGoals = '/essays/career-goals';
+const hrefFinancialNeed = '/essays/financial-need';
+const hrefHowToFind = '/resources/how-to-find-scholarships';
+const hrefCompareUniversities = '/compare/universities';
 const hrefMedicalCategory = '/scholarships/category/medical';
 const hrefMatches = '/scholarships/hub/matches';
 const hrefEasyApply = '/scholarships/hub/easy-apply';
@@ -99,6 +104,8 @@ export default function MedicalScholarshipsGuidePage() {
           className="not-prose my-8"
           compact
         />
+
+        <MedicalScholarshipPlanningSections />
 
         <h2>Start with the healthcare path you are actually on</h2>
         <p>
@@ -304,6 +311,34 @@ export default function MedicalScholarshipsGuidePage() {
             .
           </li>
           <li>
+            Plan a{' '}
+            <Link href={hrefCareerGoals} className={resourceGuideLinkClassName}>
+              career goals essay
+            </Link>{' '}
+            with evidence-backed healthcare examples.
+          </li>
+          <li>
+            Read the{' '}
+            <Link href={hrefFinancialNeed} className={resourceGuideLinkClassName}>
+              financial need essay guide
+            </Link>{' '}
+            when cost framing matters.
+          </li>
+          <li>
+            Use{' '}
+            <Link href={hrefHowToFind} className={resourceGuideLinkClassName}>
+              how to find scholarships
+            </Link>{' '}
+            for a broader search workflow.
+          </li>
+          <li>
+            Compare{' '}
+            <Link href={hrefCompareUniversities} className={resourceGuideLinkClassName}>
+              universities
+            </Link>{' '}
+            when training location and cost matter.
+          </li>
+          <li>
             Use{' '}
             <Link href={hrefEssays} className={resourceGuideLinkClassName}>
               scholarship essay guides
@@ -316,13 +351,6 @@ export default function MedicalScholarshipsGuidePage() {
               how to apply for scholarships
             </Link>{' '}
             for a broader application workflow.
-          </li>
-          <li>
-            Compare broader{' '}
-            <Link href={hrefMatches} className={resourceGuideLinkClassName}>
-              scholarship matches
-            </Link>{' '}
-            if your healthcare path is one part of a larger profile.
           </li>
         </ul>
       </>

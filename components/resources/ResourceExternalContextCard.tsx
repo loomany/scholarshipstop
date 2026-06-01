@@ -1,7 +1,7 @@
 import {
-  getPremedTopicContext,
   hasDisplayableContentContext,
   resolveContentEnrichmentContext,
+  resolveHealthcareResourceTopicContext,
   type ContentEnrichmentHints
 } from '@/lib/external-data';
 
@@ -10,29 +10,9 @@ import { PremedTopicContextCard } from '@/components/content-hub/PremedTopicCont
 
 type ResourceExternalContextCardProps = ContentEnrichmentHints;
 
-function shouldShowHealthcareTopic(props: ResourceExternalContextCardProps): boolean {
-  const haystack = [
-    props.slug,
-    props.title,
-    props.category,
-    props.subcategory,
-    ...(props.tags ?? [])
-  ]
-    .filter(Boolean)
-    .join(' ')
-    .toLowerCase();
-  return /\b(pre[-\s]?med|medical|medicine|nursing|healthcare|health care)\b/.test(
-    haystack
-  );
-}
-
 export function ResourceExternalContextCard(props: ResourceExternalContextCardProps) {
   const context = resolveContentEnrichmentContext(props);
-  const topicContext = shouldShowHealthcareTopic(props)
-    ? getPremedTopicContext(props.slug) ??
-      getPremedTopicContext(props.title) ??
-      getPremedTopicContext(props.category)
-    : null;
+  const topicContext = resolveHealthcareResourceTopicContext(props);
   const hasExternalContext = hasDisplayableContentContext(context, props);
   if (!hasExternalContext && !topicContext) return null;
 

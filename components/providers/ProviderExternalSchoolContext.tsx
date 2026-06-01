@@ -1,10 +1,13 @@
+import { SmartRelatedLinks } from '@/components/internal-links/SmartRelatedLinks';
 import {
+  buildMedicalClusterLinks,
   getInstitutionResearchBySchool,
   getMedicalSchoolByNameState,
   getMedicalSchoolByUnitId,
   getRentMetroContextForSchool,
   matchProviderToSchool,
-  schoolSingleBarMetrics
+  schoolSingleBarMetrics,
+  stateDisplayName
 } from '@/lib/external-data';
 import { resolveStateSlugFromCode } from '@/lib/external-data/internalLinkGraph';
 
@@ -154,6 +157,18 @@ export function ProviderExternalSchoolContext({
       <InstitutionResearchContext research={research} compact className="mt-4" />
       <MedicalSchoolContext context={medicalSchool} compact className="mt-4" />
       <CityRentMetroContext context={cityRent} compact className="mt-4" />
+
+      {medicalSchool ? (
+        <SmartRelatedLinks
+          title="Medical scholarship planning pages"
+          links={buildMedicalClusterLinks({
+            surface: 'provider-medical',
+            stateSlug: providerStateSlug,
+            stateName: row.state ? stateDisplayName(row.state) : null
+          })}
+          className="mt-4"
+        />
+      ) : null}
 
       <InternalLinkCluster
         pageType="provider"

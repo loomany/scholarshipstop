@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
 
+import { HealthcareCareerGoalsPlanningSection } from '@/components/content-hub/HealthcareCareerGoalsPlanningSection';
 import { PremedTopicContextCard } from '@/components/content-hub/PremedTopicContextCard';
 import type { StaticEssayGuide } from '@/lib/essays/staticEssayGuides';
 import {
@@ -8,7 +9,7 @@ import {
   ESSAYS_SECTION_PATH,
   essayHubArticlePath
 } from '@/lib/essays/essayHubSection';
-import { getPremedTopicContext } from '@/lib/external-data';
+import { resolveHealthcareEssayTopicContext } from '@/lib/external-data';
 import { getURL } from '@/utils/helpers';
 
 type StaticEssayGuidePageCopy = {
@@ -55,11 +56,7 @@ type StaticEssayGuidePageProps = {
 };
 
 function shouldShowHealthcareEssayContext(guide: StaticEssayGuide): boolean {
-  if (guide.slug === 'career-goals') return true;
-  const haystack = `${guide.slug} ${guide.title} ${guide.description}`.toLowerCase();
-  return /\b(pre[-\s]?med|medical|medicine|nursing|healthcare|health care)\b/.test(
-    haystack
-  );
+  return guide.slug === 'career-goals';
 }
 
 export function StaticEssayGuidePage({
@@ -72,7 +69,11 @@ export function StaticEssayGuidePage({
   const path = essayHubArticlePath(guide.slug);
   const articleUrl = urlForPath(path);
   const topicContext = shouldShowHealthcareEssayContext(guide)
-    ? getPremedTopicContext(guide.slug) ?? getPremedTopicContext(guide.title)
+    ? resolveHealthcareEssayTopicContext({
+        slug: guide.slug,
+        title: guide.title,
+        category: guide.description
+      })
     : null;
   const localizedEssaysPath = hrefForPath(ESSAYS_SECTION_PATH);
   const breadcrumbsSchema = {
@@ -203,6 +204,10 @@ export function StaticEssayGuidePage({
           className="mt-8"
           compact
         />
+
+        {guide.slug === 'career-goals' ? (
+          <HealthcareCareerGoalsPlanningSection />
+        ) : null}
 
         <section className="mt-10 grid gap-5">
           {guide.sections.map((section) => (
