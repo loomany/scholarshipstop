@@ -154,9 +154,9 @@ export function ProviderExternalSchoolContext({
         </div>
       ) : null}
 
-      <InstitutionResearchContext research={research} compact className="mt-4" />
-      <MedicalSchoolContext context={medicalSchool} compact className="mt-4" />
-      <CityRentMetroContext context={cityRent} compact className="mt-4" />
+      <InstitutionResearchContext research={research} compact className="mt-4" showSourceFooter={false} />
+      <MedicalSchoolContext context={medicalSchool} compact className="mt-4" showSourceFooter={false} />
+      <CityRentMetroContext context={cityRent} compact className="mt-4" showSourceFooter={false} />
 
       {medicalSchool ? (
         <SmartRelatedLinks

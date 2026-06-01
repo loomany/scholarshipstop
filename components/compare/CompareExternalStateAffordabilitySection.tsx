@@ -127,7 +127,7 @@ function StateAffordabilityColumn({
         </p>
       ) : null}
 
-      <StateSocialContextBlock context={social} compact className="mt-4" />
+      <StateSocialContextBlock context={social} compact className="mt-4" showSourceFooter={false} />
     </div>
   );
 }

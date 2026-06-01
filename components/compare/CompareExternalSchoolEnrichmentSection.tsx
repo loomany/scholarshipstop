@@ -129,8 +129,8 @@ function SchoolProfileColumn({
           />
         ))}
       </div>
-      <InstitutionResearchContext research={research} compact className="mt-4" />
-      <CityRentMetroContext context={cityRent} compact className="mt-4" />
+      <InstitutionResearchContext research={research} compact className="mt-4" showSourceFooter={false} />
+      <CityRentMetroContext context={cityRent} compact className="mt-4" showSourceFooter={false} />
     </div>
   );
 }

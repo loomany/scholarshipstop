@@ -8,6 +8,7 @@ type MedicalSchoolContextProps = {
   context: MedicalSchoolEnrichment | null;
   className?: string;
   compact?: boolean;
+  showSourceFooter?: boolean;
 };
 
 function hostFromUrl(value: string): string {
@@ -78,7 +79,8 @@ function medicalSchoolCards(row: MedicalSchoolEnrichment) {
 export function MedicalSchoolContext({
   context,
   className = '',
-  compact = false
+  compact = false,
+  showSourceFooter = true
 }: MedicalSchoolContextProps) {
   if (!context) return null;
 
@@ -146,7 +148,9 @@ export function MedicalSchoolContext({
         ROR, NIH RePORTER aggregate, and public admissions-summary data where
         strict matches are available.
       </p>
-      <DataSourceFooter variant="mixed" className="mt-2" />
+      {showSourceFooter ? (
+        <DataSourceFooter variant="mixed" className="mt-2" />
+      ) : null}
     </div>
   );
 }

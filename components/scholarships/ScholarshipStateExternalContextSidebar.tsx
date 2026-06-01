@@ -100,7 +100,7 @@ export function ScholarshipStateExternalContextSidebar({
         <p className="mt-4 text-xs leading-relaxed text-gray-500">{safetyNote}</p>
       ) : null}
 
-      <StateSocialContextBlock context={social} compact className="mt-5" />
+      <StateSocialContextBlock context={social} compact className="mt-5" showSourceFooter={false} />
 
       <InternalLinkCluster
         pageType="scholarship-state"

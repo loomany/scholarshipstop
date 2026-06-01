@@ -7,6 +7,7 @@ type StateSocialContextBlockProps = {
   context: StateSocialContext | null;
   className?: string;
   compact?: boolean;
+  showSourceFooter?: boolean;
 };
 
 function hasSocialContext(context: StateSocialContext | null): context is StateSocialContext {
@@ -24,7 +25,8 @@ function hasSocialContext(context: StateSocialContext | null): context is StateS
 export function StateSocialContextBlock({
   context,
   className = '',
-  compact = false
+  compact = false,
+  showSourceFooter = true
 }: StateSocialContextBlockProps) {
   if (!hasSocialContext(context)) return null;
 
@@ -115,7 +117,9 @@ export function StateSocialContextBlock({
         </ul>
       ) : null}
 
-      <DataSourceFooter variant="social" className="mt-3" />
+      {showSourceFooter ? (
+        <DataSourceFooter variant="social" className="mt-3" />
+      ) : null}
     </div>
   );
 }

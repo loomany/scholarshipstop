@@ -11,6 +11,7 @@ type CityRentMetroContextProps = {
   context: CityRentMetroEnrichment | null;
   className?: string;
   compact?: boolean;
+  showSourceFooter?: boolean;
 };
 
 type CityMetricCard = {
@@ -91,7 +92,8 @@ function cityCards(row: CityRentMetroEnrichment): CityMetricCard[] {
 export function CityRentMetroContext({
   context,
   className = '',
-  compact = false
+  compact = false,
+  showSourceFooter = true
 }: CityRentMetroContextProps) {
   if (!context) return null;
 
@@ -145,7 +147,9 @@ export function CityRentMetroContext({
           ))}
         </ul>
       ) : null}
-      <DataSourceFooter variant="city" className="mt-3" />
+      {showSourceFooter ? (
+        <DataSourceFooter variant="city" className="mt-3" />
+      ) : null}
     </div>
   );
 }

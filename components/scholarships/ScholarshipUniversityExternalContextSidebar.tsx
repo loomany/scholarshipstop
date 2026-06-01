@@ -175,8 +175,8 @@ export function ScholarshipUniversityExternalContextSidebar({
             </div>
           ) : null}
 
-          <InstitutionResearchContext research={research} compact className="mt-4" />
-          <CityRentMetroContext context={cityRent} compact className="mt-4" />
+          <InstitutionResearchContext research={research} compact className="mt-4" showSourceFooter={false} />
+          <CityRentMetroContext context={cityRent} compact className="mt-4" showSourceFooter={false} />
         </div>
       ) : null}
 
@@ -205,7 +205,7 @@ export function ScholarshipUniversityExternalContextSidebar({
             </p>
           ) : null}
 
-          <StateSocialContextBlock context={social} compact className="mt-4" />
+          <StateSocialContextBlock context={social} compact className="mt-4" showSourceFooter={false} />
         </div>
       ) : null}
 

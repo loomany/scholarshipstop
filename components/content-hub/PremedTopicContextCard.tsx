@@ -10,13 +10,15 @@ type PremedTopicContextCardProps = {
   className?: string;
   compact?: boolean;
   showRelatedLinks?: boolean;
+  showSourceFooter?: boolean;
 };
 
 export function PremedTopicContextCard({
   context,
   className = '',
   compact = false,
-  showRelatedLinks = true
+  showRelatedLinks = true,
+  showSourceFooter = true
 }: PremedTopicContextCardProps) {
   if (!context) return null;
 
@@ -76,7 +78,9 @@ export function PremedTopicContextCard({
         rule. Scholarship rules, deadlines, and eligibility come from each provider
         or school.
       </p>
-      <DataSourceFooter variant="mixed" className="mt-3" />
+      {showSourceFooter ? (
+        <DataSourceFooter variant="mixed" className="mt-3" />
+      ) : null}
     </aside>
   );
 }

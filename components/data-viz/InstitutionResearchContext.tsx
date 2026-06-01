@@ -8,6 +8,7 @@ type InstitutionResearchContextProps = {
   research: InstitutionResearchEnrichment | null;
   className?: string;
   compact?: boolean;
+  showSourceFooter?: boolean;
 };
 
 function researchCards(row: InstitutionResearchEnrichment) {
@@ -70,7 +71,8 @@ function researchCards(row: InstitutionResearchEnrichment) {
 export function InstitutionResearchContext({
   research,
   className = '',
-  compact = false
+  compact = false,
+  showSourceFooter = true
 }: InstitutionResearchContextProps) {
   if (!research) return null;
 
@@ -106,7 +108,9 @@ export function InstitutionResearchContext({
           {research.research_summary}
         </p>
       ) : null}
-      <DataSourceFooter variant="research" className="mt-3" />
+      {showSourceFooter ? (
+        <DataSourceFooter variant="research" className="mt-3" />
+      ) : null}
     </div>
   );
 }

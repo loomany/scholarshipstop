@@ -136,8 +136,8 @@ export function ExternalReferenceContextCard({
               />
             ))}
           </div>
-          <InstitutionResearchContext research={research} compact className="mt-4" />
-          <CityRentMetroContext context={cityRent} compact className="mt-4" />
+          <InstitutionResearchContext research={research} compact className="mt-4" showSourceFooter={false} />
+          <CityRentMetroContext context={cityRent} compact className="mt-4" showSourceFooter={false} />
         </div>
       ) : null}
 
@@ -146,6 +146,7 @@ export function ExternalReferenceContextCard({
           context={cityRent}
           compact
           className={hasState ? 'mt-5' : 'mt-4'}
+          showSourceFooter={false}
         />
       ) : null}
 
@@ -154,6 +155,7 @@ export function ExternalReferenceContextCard({
           context={stateSocial}
           compact
           className={hasState || visibleSchool.length ? 'mt-5' : 'mt-4'}
+          showSourceFooter={false}
         />
       ) : null}
 

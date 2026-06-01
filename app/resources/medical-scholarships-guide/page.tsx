@@ -99,6 +99,7 @@ export default function MedicalScholarshipsGuidePage() {
           className="not-prose my-8"
           compact
           showRelatedLinks={false}
+          showSourceFooter={false}
         />
 
         <MedicalScholarshipPlanningSections />

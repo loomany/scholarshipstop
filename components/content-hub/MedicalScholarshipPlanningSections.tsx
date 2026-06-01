@@ -1,7 +1,6 @@
 import Link from 'next/link';
 
 import { SmartRelatedLinks } from '@/components/internal-links/SmartRelatedLinks';
-import { DataSourceFooter } from '@/components/data-viz/DataSourceFooter';
 import { buildMedicalClusterLinks } from '@/lib/external-data/medicalContentCluster';
 import { resourceGuideLinkClassName } from '@/lib/content-hub/resourceGuidePages';
 
@@ -133,7 +132,6 @@ export function MedicalScholarshipPlanningSections() {
           or guarantees. Data availability varies by school, city, state, and
           source year.
         </p>
-        <DataSourceFooter variant="mixed" className="mt-3" />
       </section>
     </div>
   );
