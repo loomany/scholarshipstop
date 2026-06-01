@@ -1,6 +1,7 @@
 import 'server-only';
 
 import cityAffordabilityRaw from '@/data/external/scholarshiptop-enrichment/city_affordability.json';
+import cityRentMetroEnrichmentRaw from '@/data/external/scholarshiptop-enrichment/city_rent_metro_enrichment.json';
 import institutionResearchEnrichmentRaw from '@/data/external/scholarshiptop-enrichment/institution_research_enrichment.json';
 import locationCrosswalkRaw from '@/data/external/scholarshiptop-enrichment/location_crosswalk.json';
 import providerNonprofitEnrichmentRaw from '@/data/external/scholarshiptop-enrichment/provider_nonprofit_enrichment.json';
@@ -10,6 +11,7 @@ import stateSocialContextRaw from '@/data/external/scholarshiptop-enrichment/sta
 
 import type {
   CityAffordability,
+  CityRentMetroEnrichment,
   EnrichmentFile,
   InstitutionResearchEnrichment,
   LocationCrosswalk,
@@ -75,6 +77,13 @@ export function loadCityAffordabilityRecords(): CityAffordability[] {
   return safeRecords<CityAffordability>(
     cityAffordabilityRaw,
     'city_affordability'
+  );
+}
+
+export function loadCityRentMetroEnrichmentRecords(): CityRentMetroEnrichment[] {
+  return safeRecords<CityRentMetroEnrichment>(
+    cityRentMetroEnrichmentRaw,
+    'city_rent_metro_enrichment'
   );
 }
 

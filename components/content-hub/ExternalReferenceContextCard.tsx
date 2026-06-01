@@ -1,6 +1,7 @@
 import type { ResolvedContentEnrichmentContext } from '@/lib/external-data';
 import {
   getInstitutionResearchBySchool,
+  getRentMetroContextForSchool,
   getStateSocialContext,
   getTopStateAffordabilityHighlights,
   resolveContentEnrichmentLinkCluster,
@@ -13,6 +14,7 @@ import {
   fmtEnrichmentUsd
 } from '@/components/compare/compareExternalEnrichmentFormat';
 import { DataSourceFooter } from '@/components/data-viz/DataSourceFooter';
+import { CityRentMetroContext } from '@/components/data-viz/CityRentMetroContext';
 import { InstitutionResearchContext } from '@/components/data-viz/InstitutionResearchContext';
 import { StateSocialContextBlock } from '@/components/data-viz/StateSocialContextBlock';
 import { RelatedScholarshipContextLinks } from '@/components/content-hub/RelatedScholarshipContextLinks';
@@ -44,6 +46,14 @@ export function ExternalReferenceContextCard({
         openAlexId: school.openalex_id
       })
     : null;
+  const cityRent = school
+    ? getRentMetroContextForSchool({ city: school.city, state: school.state })
+    : context.cityRow
+      ? getRentMetroContextForSchool({
+          city: context.cityRow.city,
+          state: context.cityRow.state
+        })
+      : null;
 
   const schoolCards =
     school ?
@@ -127,7 +137,16 @@ export function ExternalReferenceContextCard({
             ))}
           </div>
           <InstitutionResearchContext research={research} compact className="mt-4" />
+          <CityRentMetroContext context={cityRent} compact className="mt-4" />
         </div>
+      ) : null}
+
+      {!visibleSchool.length && cityRent ? (
+        <CityRentMetroContext
+          context={cityRent}
+          compact
+          className={hasState ? 'mt-5' : 'mt-4'}
+        />
       ) : null}
 
       {stateSocial ? (

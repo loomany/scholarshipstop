@@ -48,7 +48,8 @@ const EXPECTED_FILES = [
   'location_crosswalk.json',
   'provider_nonprofit_enrichment.json',
   'institution_research_enrichment.json',
-  'state_social_context.json'
+  'state_social_context.json',
+  'city_rent_metro_enrichment.json'
 ];
 
 function fail(message: string): never {
@@ -141,9 +142,18 @@ function main(): void {
 
     const stat = fs.statSync(filePath);
     totalBytes += stat.size;
+    if (entry.name === 'city_rent_metro_enrichment.json' && stat.size > 10 * 1024 * 1024) {
+      fail('city_rent_metro_enrichment.json exceeds 10 MB hard stop');
+    }
 
     const raw = fs.readFileSync(filePath, 'utf8');
     scanForForbiddenContent(raw, entry.name);
+    if (
+      entry.name === 'city_rent_metro_enrichment.json' &&
+      /"20\d{2}-\d{2}-\d{2}"\s*:/.test(raw)
+    ) {
+      fail('city_rent_metro_enrichment appears to contain raw monthly Zillow series');
+    }
 
     const parsed = readJsonFile<{ records?: unknown[] }>(entry.name);
     const rowCount = Array.isArray(parsed.records) ? parsed.records.length : 0;
@@ -279,6 +289,30 @@ function main(): void {
       policy.no_eligibility_claims !== true
     ) {
       fail('state_social_context display_policy must enforce neutral/no-ranking/no-eligibility flags');
+    }
+  }
+
+  const cityRentMetro = readJsonFile<{ records: Record<string, unknown>[] }>(
+    'city_rent_metro_enrichment.json'
+  ).records;
+  const cityRentMetroDupes = countDuplicates(cityRentMetro, (r) =>
+    typeof r.city_key === 'string' ? r.city_key : null
+  );
+  results['city_rent_metro_enrichment.json'].duplicateKeys =
+    cityRentMetroDupes.duplicateKeys;
+  if (cityRentMetroDupes.duplicateKeys > 0) {
+    fail(
+      `city_rent_metro city_key duplicates: ${cityRentMetroDupes.duplicateKeys} (${cityRentMetroDupes.examples.join(', ')})`
+    );
+  }
+  for (const row of cityRentMetro) {
+    for (const [key, value] of Object.entries(row)) {
+      if (/^\d{4}-\d{2}-\d{2}$/.test(key)) {
+        fail(`city_rent_metro row contains raw monthly Zillow key ${key}`);
+      }
+      if (Array.isArray(value) && value.length > 12) {
+        fail(`city_rent_metro row contains large array field ${key}`);
+      }
     }
   }
 

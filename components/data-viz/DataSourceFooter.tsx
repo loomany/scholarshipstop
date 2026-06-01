@@ -6,7 +6,8 @@ type DataSourceFooterProps = {
     | 'mixed'
     | 'nonprofit'
     | 'research'
-    | 'social';
+    | 'social'
+    | 'city';
   showPublicSafetyNote?: boolean;
   className?: string;
 };
@@ -26,6 +27,8 @@ const VARIANT_COPY: Record<NonNullable<DataSourceFooterProps['variant']>, string
     'Data sources: College Scorecard, OpenAlex, ROR, and NIH RePORTER aggregate public data where matched.',
   social:
     'Data sources: CDC SVI, ADI, and County Health public data aggregated to state-level planning context.',
+  city:
+    'Data sources: location crosswalk, HUD FMR, Zillow ZORI, and BLS OEWS metro data where strict city or metro matches are available.',
   mixed: BASE_SOURCES
 };
 

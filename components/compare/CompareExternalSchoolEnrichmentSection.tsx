@@ -1,5 +1,7 @@
 import {
   getInstitutionResearchBySchool,
+  getRentMetroContextForSchool,
+  type CityRentMetroEnrichment,
   type InstitutionResearchEnrichment,
   matchSchoolForInstitution,
   schoolCompareBarMetrics,
@@ -14,6 +16,7 @@ import {
   fmtEnrichmentUsd
 } from '@/components/compare/compareExternalEnrichmentFormat';
 import { DataSourceFooter } from '@/components/data-viz/DataSourceFooter';
+import { CityRentMetroContext } from '@/components/data-viz/CityRentMetroContext';
 import { InsightCallout } from '@/components/data-viz/InsightCallout';
 import { InstitutionResearchContext } from '@/components/data-viz/InstitutionResearchContext';
 import { MetricComparisonBars } from '@/components/data-viz/MetricComparisonBars';
@@ -90,11 +93,13 @@ function hasAnySchoolFacts(row: SchoolEnrichment | null): boolean {
 function SchoolProfileColumn({
   name,
   row,
+  cityRent,
   research,
   notAvailable
 }: {
   name: string;
   row: SchoolEnrichment | null;
+  cityRent: CityRentMetroEnrichment | null;
   research: InstitutionResearchEnrichment | null;
   notAvailable: string;
 }) {
@@ -125,6 +130,7 @@ function SchoolProfileColumn({
         ))}
       </div>
       <InstitutionResearchContext research={research} compact className="mt-4" />
+      <CityRentMetroContext context={cityRent} compact className="mt-4" />
     </div>
   );
 }
@@ -158,6 +164,42 @@ function researchCompareBarMetrics(
   ].filter((metric) => metric.leftValue != null || metric.rightValue != null);
 }
 
+function cityRentCompareBarMetrics(
+  rowA: CityRentMetroEnrichment | null,
+  rowB: CityRentMetroEnrichment | null
+) {
+  return [
+    {
+      key: 'zillow_rent',
+      label: 'Latest rent estimate',
+      leftValue: rowA?.zillow_latest_rent ?? null,
+      rightValue: rowB?.zillow_latest_rent ?? null,
+      hint: 'Zillow ZORI'
+    },
+    {
+      key: 'hud_1br',
+      label: 'HUD 1BR FMR',
+      leftValue: rowA?.hud_fmr_1br ?? null,
+      rightValue: rowB?.hud_fmr_1br ?? null,
+      hint: 'HUD FMR'
+    },
+    {
+      key: 'hud_2br',
+      label: 'HUD 2BR FMR',
+      leftValue: rowA?.hud_fmr_2br ?? null,
+      rightValue: rowB?.hud_fmr_2br ?? null,
+      hint: 'HUD FMR'
+    },
+    {
+      key: 'bls_median',
+      label: 'Median wage',
+      leftValue: rowA?.bls_median_wage ?? null,
+      rightValue: rowB?.bls_median_wage ?? null,
+      hint: 'BLS OEWS'
+    }
+  ].filter((metric) => metric.leftValue != null || metric.rightValue != null);
+}
+
 export function CompareExternalSchoolEnrichmentSection({
   institutionA,
   institutionB,
@@ -180,8 +222,17 @@ export function CompareExternalSchoolEnrichmentSection({
     rorId: rowB?.ror_id,
     openAlexId: rowB?.openalex_id
   });
+  const cityRentA = getRentMetroContextForSchool({
+    city: rowA?.city,
+    state: rowA?.state ?? institutionA.state
+  });
+  const cityRentB = getRentMetroContextForSchool({
+    city: rowB?.city,
+    state: rowB?.state ?? institutionB.state
+  });
   const barMetrics = schoolCompareBarMetrics(rowA, rowB);
   const researchBarMetrics = researchCompareBarMetrics(researchA, researchB);
+  const cityRentBarMetrics = cityRentCompareBarMetrics(cityRentA, cityRentB);
   const stateSlugA = institutionA.state ? stateSlugFromCode(institutionA.state) : null;
   const stateSlugB = institutionB.state ? stateSlugFromCode(institutionB.state) : null;
 
@@ -189,7 +240,9 @@ export function CompareExternalSchoolEnrichmentSection({
     !hasAnySchoolFacts(rowA) &&
     !hasAnySchoolFacts(rowB) &&
     !researchA &&
-    !researchB
+    !researchB &&
+    !cityRentA &&
+    !cityRentB
   ) {
     return null;
   }
@@ -255,16 +308,38 @@ export function CompareExternalSchoolEnrichmentSection({
         </div>
       ) : null}
 
+      {cityRentBarMetrics.length ? (
+        <div className="mx-auto mt-5 max-w-3xl rounded-2xl border border-slate-200/80 bg-white p-4 sm:p-5">
+          <h3 className="text-sm font-semibold text-gray-900">
+            City rent and wage comparison
+          </h3>
+          <p className="mt-2 text-xs leading-relaxed text-gray-600">
+            Public rent and wage estimates can help compare cost of attendance
+            and relocation planning.
+          </p>
+          <MetricComparisonBars
+            className="mt-4"
+            ariaLabel={`City rent and wage comparison between ${institutionA.name} and ${institutionB.name}`}
+            leftSeriesLabel={cityRentA ? `${cityRentA.city}, ${cityRentA.state_code}` : institutionA.name}
+            rightSeriesLabel={cityRentB ? `${cityRentB.city}, ${cityRentB.state_code}` : institutionB.name}
+            metrics={cityRentBarMetrics}
+            fractionMetrics={false}
+          />
+        </div>
+      ) : null}
+
       <div className="mt-6 grid gap-4 md:grid-cols-2 md:gap-5">
         <SchoolProfileColumn
           name={institutionA.name}
           row={rowA}
+          cityRent={cityRentA}
           research={researchA}
           notAvailable={notAvailable}
         />
         <SchoolProfileColumn
           name={institutionB.name}
           row={rowB}
+          cityRent={cityRentB}
           research={researchB}
           notAvailable={notAvailable}
         />

@@ -1,5 +1,6 @@
 import {
   getInstitutionResearchBySchool,
+  getRentMetroContextForSchool,
   matchProviderToSchool,
   schoolSingleBarMetrics
 } from '@/lib/external-data';
@@ -13,6 +14,7 @@ import {
 } from '@/components/compare/compareExternalEnrichmentFormat';
 import { InternalLinkCluster } from '@/components/internal-links/InternalLinkCluster';
 import { CompactMetricGrid } from '@/components/data-viz/CompactMetricGrid';
+import { CityRentMetroContext } from '@/components/data-viz/CityRentMetroContext';
 import { DataSourceFooter } from '@/components/data-viz/DataSourceFooter';
 import { InstitutionResearchContext } from '@/components/data-viz/InstitutionResearchContext';
 import { MetricComparisonBars } from '@/components/data-viz/MetricComparisonBars';
@@ -97,6 +99,10 @@ export function ProviderExternalSchoolContext({
     rorId: row.ror_id,
     openAlexId: row.openalex_id
   });
+  const cityRent = getRentMetroContextForSchool({
+    city: row.city,
+    state: row.state
+  });
 
   return (
     <section
@@ -140,6 +146,7 @@ export function ProviderExternalSchoolContext({
       ) : null}
 
       <InstitutionResearchContext research={research} compact className="mt-4" />
+      <CityRentMetroContext context={cityRent} compact className="mt-4" />
 
       <InternalLinkCluster
         pageType="provider"

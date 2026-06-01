@@ -123,6 +123,33 @@ export type StateSocialContext = {
   sources?: string[];
 };
 
+export type CityRentMetroEnrichment = {
+  city_key: string;
+  city: string;
+  state: string;
+  state_code: string;
+  county?: string | null;
+  county_fips?: string | null;
+  metro_name?: string | null;
+  metro_code?: string | null;
+  lat?: number | null;
+  lng?: number | null;
+  population?: number | null;
+  hud_fmr_1br?: number | null;
+  hud_fmr_2br?: number | null;
+  zillow_latest_rent?: number | null;
+  zillow_rent_12mo_change_pct?: number | null;
+  zillow_latest_month?: string | null;
+  bls_median_wage?: number | null;
+  bls_mean_wage?: number | null;
+  bls_employment?: number | null;
+  bls_year?: number | null;
+  rent_context?: string | null;
+  wage_context?: string | null;
+  source_years?: Record<string, string | number>;
+  sources?: string[];
+};
+
 export type CityAffordability = {
   city: string;
   state: string;

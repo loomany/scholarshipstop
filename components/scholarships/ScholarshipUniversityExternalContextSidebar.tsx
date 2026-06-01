@@ -4,6 +4,7 @@ import {
 } from '@/lib/external-data/scholarshipPageEnrichment';
 import {
   getInstitutionResearchBySchool,
+  getRentMetroContextForSchool,
   getStateSocialContext,
   schoolProfilePairMetrics
 } from '@/lib/external-data';
@@ -16,6 +17,7 @@ import {
   fmtEnrichmentUsd
 } from '@/components/compare/compareExternalEnrichmentFormat';
 import { DataSourceFooter } from '@/components/data-viz/DataSourceFooter';
+import { CityRentMetroContext } from '@/components/data-viz/CityRentMetroContext';
 import { InstitutionResearchContext } from '@/components/data-viz/InstitutionResearchContext';
 import { MetricComparisonBars } from '@/components/data-viz/MetricComparisonBars';
 import { StateSocialContextBlock } from '@/components/data-viz/StateSocialContextBlock';
@@ -119,6 +121,9 @@ export function ScholarshipUniversityExternalContextSidebar({
         openAlexId: school.openalex_id
       })
     : null;
+  const cityRent = school
+    ? getRentMetroContextForSchool({ city: school.city, state: school.state })
+    : null;
   const social = state ? getStateSocialContext(state.stateCode) : null;
 
   return (
@@ -171,6 +176,7 @@ export function ScholarshipUniversityExternalContextSidebar({
           ) : null}
 
           <InstitutionResearchContext research={research} compact className="mt-4" />
+          <CityRentMetroContext context={cityRent} compact className="mt-4" />
         </div>
       ) : null}
 

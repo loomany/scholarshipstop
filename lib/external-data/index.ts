@@ -1,5 +1,6 @@
 export type {
   CityAffordability,
+  CityRentMetroEnrichment,
   EnrichmentFile,
   EnrichmentFileMeta,
   InstitutionResearchEnrichment,
@@ -33,6 +34,7 @@ export {
 
 export {
   loadCityAffordabilityRecords,
+  loadCityRentMetroEnrichmentRecords,
   loadInstitutionResearchEnrichmentRecords,
   loadLocationCrosswalkRecords,
   loadProviderNonprofitEnrichmentRecords,
@@ -66,6 +68,13 @@ export {
   findCityAffordabilityByCityState,
   getCityAffordability
 } from './cityAffordability';
+
+export {
+  getCityRentMetroByCityState,
+  getCityRentMetroByKey,
+  getRentMetroContextForProvider,
+  getRentMetroContextForSchool
+} from './cityRentMetroEnrichment';
 
 export {
   getLocationByCityState,

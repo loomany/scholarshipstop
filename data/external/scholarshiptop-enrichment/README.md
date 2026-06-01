@@ -10,7 +10,8 @@ scholarship hubs, provider profiles, resource pages, and essay context cards.
 - Outputs are small, typed, static JSON files
 - No Supabase writes, migrations, Auth changes, Payments changes, or SEO policy changes
 - No raw customer package files, raw filings, NIH project abstracts, grant text, ADI
-  block-group rows, or large JSONL/GZ/CSV dumps are shipped here
+  block-group rows, full Zillow monthly rent series, BLS occupation tables, or
+  large JSONL/GZ/CSV dumps are shipped here
 
 ## Files
 
@@ -23,8 +24,9 @@ scholarship hubs, provider profiles, resource pages, and essay context cards.
 | `provider_nonprofit_enrichment.json` | 1,293 | ProPublica Nonprofit context for strict non-school provider matches |
 | `institution_research_enrichment.json` | 2,323 | OpenAlex/ROR identity plus NIH aggregate research context |
 | `state_social_context.json` | 52 | CDC SVI, ADI, and County Health neutral state-level context |
+| `city_rent_metro_enrichment.json` | 2,692 | City rent and metro wage planning context with strict city/state matching |
 
-Total on-disk size is about 7.60 MB.
+Total on-disk size is about 10.27 MB.
 
 ## Regenerating
 
@@ -33,8 +35,10 @@ enrichment V2 outputs are generated with:
 
 ```bash
 npx tsx scripts/data/build-static-enrichment-v2.ts
+npx tsx scripts/data/build-city-rent-metro-enrichment.ts
 npm run data:validate-enrichment
 ```
 
 Use helpers from `@/lib/external-data` in server components or scripts only.
-The loaders build lazy indexes and hide ambiguous provider/school matches.
+The loaders build lazy indexes and hide ambiguous provider, school, and city/metro
+matches.
