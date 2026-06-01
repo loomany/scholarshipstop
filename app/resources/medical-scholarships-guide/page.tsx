@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
+import { PremedTopicContextCard } from '@/components/content-hub/PremedTopicContextCard';
 import ResourceGuideShell from '@/components/content-hub/resourceGuides/ResourceGuideShell';
 import { resourceGuideLinkClassName } from '@/lib/content-hub/resourceGuidePages';
+import { getPremedTopicContext } from '@/lib/external-data';
 import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
 import { getCanonical } from '@/lib/seo/canonical';
 
@@ -28,6 +30,8 @@ export const metadata: Metadata = {
 };
 
 export default function MedicalScholarshipsGuidePage() {
+  const topicContext = getPremedTopicContext('medical school scholarships');
+
   return (
     <ResourceGuideShell
       title="Medical Scholarships Guide"
@@ -89,6 +93,12 @@ export default function MedicalScholarshipsGuidePage() {
           you sort deadlines and requirements; this page helps you decide which
           applications deserve your best time.
         </p>
+
+        <PremedTopicContextCard
+          context={topicContext}
+          className="not-prose my-8"
+          compact
+        />
 
         <h2>Start with the healthcare path you are actually on</h2>
         <p>

@@ -40,6 +40,16 @@ const RAW_SOURCE_FIELD_PATTERNS = [
   /"pref_terms"\s*:/i,
   /"abstract/i
 ];
+const RESIDENCY_OR_HOSPITAL_ONLY_FIELD_PATTERNS = [
+  /"residency_program/i,
+  /"program_id"\s*:/i,
+  /"program_director/i,
+  /"board_pass/i,
+  /"hospital_quality/i,
+  /"cms_provider/i,
+  /"nppes/i,
+  /"open_payments/i
+];
 
 const EXPECTED_FILES = [
   'school_enrichment.json',
@@ -49,7 +59,10 @@ const EXPECTED_FILES = [
   'provider_nonprofit_enrichment.json',
   'institution_research_enrichment.json',
   'state_social_context.json',
-  'city_rent_metro_enrichment.json'
+  'city_rent_metro_enrichment.json',
+  'medical_school_enrichment.json',
+  'health_workforce_context.json',
+  'premed_topic_context.json'
 ];
 
 function fail(message: string): never {
@@ -112,6 +125,12 @@ function scanForForbiddenContent(raw: string, filename: string): void {
       fail(`${filename} appears to contain raw source-only field ${pattern}`);
     }
   }
+
+  for (const pattern of RESIDENCY_OR_HOSPITAL_ONLY_FIELD_PATTERNS) {
+    if (pattern.test(raw)) {
+      fail(`${filename} appears to contain residency/hospital-only field ${pattern}`);
+    }
+  }
 }
 
 function main(): void {
@@ -144,6 +163,12 @@ function main(): void {
     totalBytes += stat.size;
     if (entry.name === 'city_rent_metro_enrichment.json' && stat.size > 10 * 1024 * 1024) {
       fail('city_rent_metro_enrichment.json exceeds 10 MB hard stop');
+    }
+    if (entry.name === 'medical_school_enrichment.json' && stat.size > 3 * 1024 * 1024) {
+      fail('medical_school_enrichment.json exceeds 3 MB target');
+    }
+    if (entry.name === 'health_workforce_context.json' && stat.size > 1 * 1024 * 1024) {
+      fail('health_workforce_context.json exceeds 1 MB target');
     }
 
     const raw = fs.readFileSync(filePath, 'utf8');
@@ -313,6 +338,73 @@ function main(): void {
       if (Array.isArray(value) && value.length > 12) {
         fail(`city_rent_metro row contains large array field ${key}`);
       }
+    }
+  }
+
+  const medicalSchools = readJsonFile<{ records: Record<string, unknown>[] }>(
+    'medical_school_enrichment.json'
+  ).records;
+  const medicalSchoolKeyDupes = countDuplicates(medicalSchools, (r) =>
+    typeof r.school_key === 'string' ? r.school_key : null
+  );
+  results['medical_school_enrichment.json'].duplicateKeys =
+    medicalSchoolKeyDupes.duplicateKeys;
+  if (medicalSchoolKeyDupes.duplicateKeys > 0) {
+    fail(
+      `medical_school school_key duplicates: ${medicalSchoolKeyDupes.duplicateKeys} (${medicalSchoolKeyDupes.examples.join(', ')})`
+    );
+  }
+  const medicalNameStateDupes = countDuplicates(medicalSchools, (r) => {
+    const name = typeof r.normalized_name === 'string' ? r.normalized_name : '';
+    const state = typeof r.state === 'string' ? r.state : '';
+    return name && state ? `${name}|${state}` : null;
+  });
+  if (medicalNameStateDupes.duplicateKeys > 0) {
+    fail(
+      `medical_school name+state duplicates would make strict matching ambiguous: ${medicalNameStateDupes.duplicateKeys} (${medicalNameStateDupes.examples.join(', ')})`
+    );
+  }
+  for (const row of medicalSchools) {
+    if ('residency_programs' in row || 'board_pass_rate' in row) {
+      fail('medical_school_enrichment contains residency or board-pass fields');
+    }
+  }
+
+  const healthWorkforce = readJsonFile<{ records: Record<string, unknown>[] }>(
+    'health_workforce_context.json'
+  ).records;
+  if (healthWorkforce.length > 52) {
+    fail(`health_workforce_context has ${healthWorkforce.length} rows; expected 52 or fewer`);
+  }
+  const healthWorkforceDupes = countDuplicates(healthWorkforce, (r) =>
+    typeof r.state_code === 'string' ? r.state_code : null
+  );
+  results['health_workforce_context.json'].duplicateKeys =
+    healthWorkforceDupes.duplicateKeys;
+  if (healthWorkforceDupes.duplicateKeys > 0) {
+    fail(`health_workforce_context state_code duplicates: ${healthWorkforceDupes.duplicateKeys}`);
+  }
+
+  const premedTopics = readJsonFile<{ records: Record<string, unknown>[] }>(
+    'premed_topic_context.json'
+  ).records;
+  const premedTopicDupes = countDuplicates(premedTopics, (r) =>
+    typeof r.topic_key === 'string' ? r.topic_key : null
+  );
+  results['premed_topic_context.json'].duplicateKeys =
+    premedTopicDupes.duplicateKeys;
+  if (premedTopicDupes.duplicateKeys > 0) {
+    fail(`premed_topic_context topic_key duplicates: ${premedTopicDupes.duplicateKeys}`);
+  }
+  for (const row of premedTopics) {
+    const policy = row.display_policy as Record<string, unknown> | undefined;
+    if (
+      !policy ||
+      policy.no_eligibility_claims !== true ||
+      policy.no_rankings !== true ||
+      policy.no_admissions_advice_as_guarantee !== true
+    ) {
+      fail('premed_topic_context display_policy must enforce no eligibility, no rankings, and no admissions-guarantee flags');
     }
   }
 

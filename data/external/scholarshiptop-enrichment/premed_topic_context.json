@@ -1,0 +1,367 @@
+{
+  "meta": {
+    "generated_at": "2026-06-01T07:32:35.562Z",
+    "generated_by": "scripts/data/build-medical-cluster-enrichment.ts",
+    "permission_status": "permission_received_per_user_statement",
+    "output_policy": "Small curated topic index for pre-med, medical, nursing, and healthcare scholarship content; no raw data dump."
+  },
+  "records": [
+    {
+      "topic_key": "pre-med-scholarships",
+      "topic": "Pre-med scholarships",
+      "page_targets": [
+        "/resources/medical-scholarships-guide",
+        "/scholarships/category/medical"
+      ],
+      "relevant_sources": [
+        "WDOMS",
+        "LCME",
+        "College Scorecard",
+        "OpenAlex aggregate"
+      ],
+      "suggested_context_copy": "Pre-med scholarship planning can combine science preparation, healthcare service, research exposure, and school-cost context without implying medical school admission or award eligibility.",
+      "related_links": [
+        {
+          "label": "Medicine scholarships",
+          "href": "/scholarships/category/medical"
+        },
+        {
+          "label": "Medical scholarships guide",
+          "href": "/resources/medical-scholarships-guide"
+        },
+        {
+          "label": "Career goals essay guide",
+          "href": "/essays/career-goals"
+        }
+      ],
+      "data_points": [
+        {
+          "label": "Medical school directory records available",
+          "value": 321,
+          "source": "WDOMS/LCME/COCA/AACOM aggregate"
+        }
+      ],
+      "display_policy": {
+        "no_eligibility_claims": true,
+        "no_rankings": true,
+        "no_admissions_advice_as_guarantee": true
+      }
+    },
+    {
+      "topic_key": "medical-school-scholarships",
+      "topic": "Medical school scholarships",
+      "page_targets": [
+        "/resources/medical-scholarships-guide",
+        "/scholarships/category/medical"
+      ],
+      "relevant_sources": [
+        "LCME",
+        "COCA",
+        "AACOM",
+        "WDOMS",
+        "Admit med school stats"
+      ],
+      "suggested_context_copy": "Medical school scholarship context should distinguish MD, DO, and broader healthcare awards, and should point students back to official provider requirements.",
+      "related_links": [
+        {
+          "label": "Medicine scholarships",
+          "href": "/scholarships/category/medical"
+        },
+        {
+          "label": "Medical scholarships guide",
+          "href": "/resources/medical-scholarships-guide"
+        },
+        {
+          "label": "Career goals essay guide",
+          "href": "/essays/career-goals"
+        }
+      ],
+      "data_points": [
+        {
+          "label": "MD/DO school context records available",
+          "value": 321,
+          "source": "medical_school_enrichment"
+        }
+      ],
+      "display_policy": {
+        "no_eligibility_claims": true,
+        "no_rankings": true,
+        "no_admissions_advice_as_guarantee": true
+      }
+    },
+    {
+      "topic_key": "nursing-scholarships",
+      "topic": "Nursing scholarships",
+      "page_targets": [
+        "/resources/medical-scholarships-guide",
+        "/scholarships/nursing"
+      ],
+      "relevant_sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ],
+      "suggested_context_copy": "Nursing scholarship planning can use state wage and workforce context as background, while official scholarship rules remain the source of truth.",
+      "related_links": [
+        {
+          "label": "Nursing scholarships",
+          "href": "/scholarships/nursing"
+        },
+        {
+          "label": "Medicine scholarships",
+          "href": "/scholarships/category/medical"
+        },
+        {
+          "label": "Medical scholarships guide",
+          "href": "/resources/medical-scholarships-guide"
+        },
+        {
+          "label": "Career goals essay guide",
+          "href": "/essays/career-goals"
+        }
+      ],
+      "data_points": [
+        {
+          "label": "States with nursing wage context",
+          "value": 52,
+          "source": "BLS OEWS state"
+        }
+      ],
+      "display_policy": {
+        "no_eligibility_claims": true,
+        "no_rankings": true,
+        "no_admissions_advice_as_guarantee": true
+      }
+    },
+    {
+      "topic_key": "healthcare-scholarships",
+      "topic": "Healthcare scholarships",
+      "page_targets": [
+        "/resources/medical-scholarships-guide",
+        "/scholarships/category/medical"
+      ],
+      "relevant_sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate",
+        "state_affordability"
+      ],
+      "suggested_context_copy": "Healthcare scholarships can span nursing, public health, pre-med, allied health, and service-oriented paths; data should be used for planning context only.",
+      "related_links": [
+        {
+          "label": "Medicine scholarships",
+          "href": "/scholarships/category/medical"
+        },
+        {
+          "label": "Medical scholarships guide",
+          "href": "/resources/medical-scholarships-guide"
+        },
+        {
+          "label": "Career goals essay guide",
+          "href": "/essays/career-goals"
+        }
+      ],
+      "data_points": [
+        {
+          "label": "States with HPSA aggregate context",
+          "value": 52,
+          "source": "HRSA HPSA aggregate"
+        }
+      ],
+      "display_policy": {
+        "no_eligibility_claims": true,
+        "no_rankings": true,
+        "no_admissions_advice_as_guarantee": true
+      }
+    },
+    {
+      "topic_key": "first-generation-pre-med",
+      "topic": "First-generation pre-med",
+      "page_targets": [
+        "/resources/medical-scholarships-guide",
+        "/essays/career-goals"
+      ],
+      "relevant_sources": [
+        "College Scorecard",
+        "state_affordability",
+        "premed_topic_context"
+      ],
+      "suggested_context_copy": "First-generation pre-med applicants can frame preparation, mentoring, cost planning, and service experience without treating data context as a promise of admission or funding.",
+      "related_links": [
+        {
+          "label": "First-generation scholarships",
+          "href": "/scholarships/hub/first-generation"
+        },
+        {
+          "label": "Medicine scholarships",
+          "href": "/scholarships/category/medical"
+        },
+        {
+          "label": "Medical scholarships guide",
+          "href": "/resources/medical-scholarships-guide"
+        },
+        {
+          "label": "Career goals essay guide",
+          "href": "/essays/career-goals"
+        }
+      ],
+      "display_policy": {
+        "no_eligibility_claims": true,
+        "no_rankings": true,
+        "no_admissions_advice_as_guarantee": true
+      }
+    },
+    {
+      "topic_key": "financial-need-for-medical-school",
+      "topic": "Financial need for medical school",
+      "page_targets": [
+        "/resources/medical-scholarships-guide",
+        "/essays/financial-need"
+      ],
+      "relevant_sources": [
+        "state_affordability",
+        "College Scorecard",
+        "city_rent_metro_enrichment"
+      ],
+      "suggested_context_copy": "Financial-need examples should connect verified personal costs with public planning context, not copy public estimates as a substitute for the student story.",
+      "related_links": [
+        {
+          "label": "Financial need essay guide",
+          "href": "/essays/financial-need"
+        },
+        {
+          "label": "Medicine scholarships",
+          "href": "/scholarships/category/medical"
+        },
+        {
+          "label": "Medical scholarships guide",
+          "href": "/resources/medical-scholarships-guide"
+        },
+        {
+          "label": "Career goals essay guide",
+          "href": "/essays/career-goals"
+        }
+      ],
+      "display_policy": {
+        "no_eligibility_claims": true,
+        "no_rankings": true,
+        "no_admissions_advice_as_guarantee": true
+      }
+    },
+    {
+      "topic_key": "stem-to-medical-career-path",
+      "topic": "STEM to medical career path",
+      "page_targets": [
+        "/resources/stem-scholarships-guide",
+        "/essays/career-goals"
+      ],
+      "relevant_sources": [
+        "OpenAlex aggregate",
+        "College Scorecard",
+        "premed_topic_context"
+      ],
+      "suggested_context_copy": "STEM-to-medicine context can help students connect coursework, research, patient-care goals, and scholarship fit without turning the essay into admissions advice.",
+      "related_links": [
+        {
+          "label": "STEM scholarships guide",
+          "href": "/resources/stem-scholarships-guide"
+        },
+        {
+          "label": "Medicine scholarships",
+          "href": "/scholarships/category/medical"
+        },
+        {
+          "label": "Medical scholarships guide",
+          "href": "/resources/medical-scholarships-guide"
+        },
+        {
+          "label": "Career goals essay guide",
+          "href": "/essays/career-goals"
+        }
+      ],
+      "display_policy": {
+        "no_eligibility_claims": true,
+        "no_rankings": true,
+        "no_admissions_advice_as_guarantee": true
+      }
+    },
+    {
+      "topic_key": "rural-healthcare-scholarships",
+      "topic": "Rural healthcare scholarships",
+      "page_targets": [
+        "/resources/medical-scholarships-guide",
+        "/scholarships/category/medical"
+      ],
+      "relevant_sources": [
+        "HRSA HPSA aggregate",
+        "BLS OEWS state",
+        "state_social_context"
+      ],
+      "suggested_context_copy": "Rural healthcare scholarship context can mention workforce planning themes neutrally, while avoiding claims that a student qualifies because of shortage designations.",
+      "related_links": [
+        {
+          "label": "Medicine scholarships",
+          "href": "/scholarships/category/medical"
+        },
+        {
+          "label": "Medical scholarships guide",
+          "href": "/resources/medical-scholarships-guide"
+        },
+        {
+          "label": "Career goals essay guide",
+          "href": "/essays/career-goals"
+        }
+      ],
+      "data_points": [
+        {
+          "label": "States with HPSA aggregate context",
+          "value": 52,
+          "source": "HRSA HPSA aggregate"
+        }
+      ],
+      "display_policy": {
+        "no_eligibility_claims": true,
+        "no_rankings": true,
+        "no_admissions_advice_as_guarantee": true
+      }
+    },
+    {
+      "topic_key": "underserved-communities-healthcare-workforce",
+      "topic": "Underserved communities / healthcare workforce",
+      "page_targets": [
+        "/resources/medical-scholarships-guide",
+        "/essays/career-goals"
+      ],
+      "relevant_sources": [
+        "HRSA HPSA aggregate",
+        "state_social_context",
+        "BLS OEWS state"
+      ],
+      "suggested_context_copy": "Use public community and workforce indicators as background for planning and reflection; do not describe communities as rankings or scholarship eligibility triggers.",
+      "related_links": [
+        {
+          "label": "Medicine scholarships",
+          "href": "/scholarships/category/medical"
+        },
+        {
+          "label": "Medical scholarships guide",
+          "href": "/resources/medical-scholarships-guide"
+        },
+        {
+          "label": "Career goals essay guide",
+          "href": "/essays/career-goals"
+        }
+      ],
+      "data_points": [
+        {
+          "label": "States with workforce shortage context",
+          "value": 52,
+          "source": "HRSA HPSA aggregate"
+        }
+      ],
+      "display_policy": {
+        "no_eligibility_claims": true,
+        "no_rankings": true,
+        "no_admissions_advice_as_guarantee": true
+      }
+    }
+  ]
+}

@@ -3,8 +3,11 @@ export type {
   CityRentMetroEnrichment,
   EnrichmentFile,
   EnrichmentFileMeta,
+  HealthWorkforceContext,
   InstitutionResearchEnrichment,
   LocationCrosswalk,
+  MedicalSchoolEnrichment,
+  PremedTopicContext,
   ProviderNonprofitEnrichment,
   PublicSafetyContext,
   SchoolEnrichment,
@@ -35,8 +38,11 @@ export {
 export {
   loadCityAffordabilityRecords,
   loadCityRentMetroEnrichmentRecords,
+  loadHealthWorkforceContextRecords,
   loadInstitutionResearchEnrichmentRecords,
   loadLocationCrosswalkRecords,
+  loadMedicalSchoolEnrichmentRecords,
+  loadPremedTopicContextRecords,
   loadProviderNonprofitEnrichmentRecords,
   loadSchoolEnrichmentRecords,
   loadStateAffordabilityRecords,
@@ -63,6 +69,16 @@ export {
 export { getInstitutionResearchBySchool } from './institutionResearchEnrichment';
 
 export { getStateSocialContext } from './stateSocialContext';
+
+export {
+  getMedicalSchoolByKey,
+  getMedicalSchoolByNameState,
+  getMedicalSchoolByUnitId
+} from './medicalSchoolEnrichment';
+
+export { getHealthWorkforceContext } from './healthWorkforceContext';
+
+export { getPremedTopicContext } from './premedTopicContext';
 
 export {
   findCityAffordabilityByCityState,

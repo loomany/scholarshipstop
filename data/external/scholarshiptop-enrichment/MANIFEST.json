@@ -1,5 +1,5 @@
 {
-  "generated_from": "Stage A static enrichment pipeline plus scripts/data/build-static-enrichment-v2.ts and scripts/data/build-city-rent-metro-enrichment.ts",
+  "generated_from": "Stage A static enrichment pipeline plus scripts/data/build-static-enrichment-v2.ts, scripts/data/build-city-rent-metro-enrichment.ts, and scripts/data/build-medical-cluster-enrichment.ts",
   "permission_status": "permission_received_per_user_statement",
   "source_package_read_only": true,
   "static_outputs_only": true,
@@ -46,6 +46,21 @@
       "name": "city_rent_metro_enrichment.json",
       "rows": 2692,
       "purpose": "strict city rent and metro wage planning context"
+    },
+    {
+      "name": "medical_school_enrichment.json",
+      "rows": 321,
+      "purpose": "medical school identity, accreditation, admissions availability, and aggregate research context"
+    },
+    {
+      "name": "health_workforce_context.json",
+      "rows": 52,
+      "purpose": "state-level health workforce wage and HPSA planning context"
+    },
+    {
+      "name": "premed_topic_context.json",
+      "rows": 9,
+      "purpose": "curated pre-med, nursing, and healthcare scholarship topic context"
     }
   ]
 }

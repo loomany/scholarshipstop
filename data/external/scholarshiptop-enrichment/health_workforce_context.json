@@ -1,0 +1,998 @@
+{
+  "meta": {
+    "generated_at": "2026-06-01T07:32:35.561Z",
+    "generated_by": "scripts/data/build-medical-cluster-enrichment.ts",
+    "permission_status": "permission_received_per_user_statement",
+    "output_policy": "State-level aggregate health workforce planning context only; no raw HRSA rows or eligibility claims."
+  },
+  "records": [
+    {
+      "state_code": "AL",
+      "state_name": "Alabama",
+      "healthcare_median_wage": 67360,
+      "nursing_median_wage": 77080,
+      "physician_assistant_median_wage": 104960,
+      "medical_assistant_median_wage": 36100,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 248,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "AK",
+      "state_name": "Alaska",
+      "healthcare_median_wage": 105600,
+      "nursing_median_wage": 109480,
+      "physician_assistant_median_wage": 150700,
+      "medical_assistant_median_wage": 52560,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 988,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "AZ",
+      "state_name": "Arizona",
+      "healthcare_median_wage": 92500,
+      "nursing_median_wage": 99500,
+      "physician_assistant_median_wage": 134650,
+      "medical_assistant_median_wage": 45940,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 640,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "AR",
+      "state_name": "Arkansas",
+      "healthcare_median_wage": 75070,
+      "nursing_median_wage": 78940,
+      "physician_assistant_median_wage": 118430,
+      "medical_assistant_median_wage": 37760,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 385,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "CA",
+      "state_name": "California",
+      "healthcare_median_wage": 123330,
+      "nursing_median_wage": 140270,
+      "physician_assistant_median_wage": 165650,
+      "medical_assistant_median_wage": 49660,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 1623,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "CO",
+      "state_name": "Colorado",
+      "healthcare_median_wage": 98030,
+      "nursing_median_wage": 100260,
+      "physician_assistant_median_wage": 134540,
+      "medical_assistant_median_wage": 48400,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 308,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "CT",
+      "state_name": "Connecticut",
+      "healthcare_median_wage": 99850,
+      "nursing_median_wage": 102740,
+      "physician_assistant_median_wage": 139860,
+      "medical_assistant_median_wage": 47430,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 112,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "DE",
+      "state_name": "Delaware",
+      "healthcare_median_wage": 97270,
+      "nursing_median_wage": 99520,
+      "physician_assistant_median_wage": 139350,
+      "medical_assistant_median_wage": 44490,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 37,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "DC",
+      "state_name": "District of Columbia",
+      "healthcare_median_wage": 100400,
+      "nursing_median_wage": 102540,
+      "physician_assistant_median_wage": 135140,
+      "medical_assistant_median_wage": 51050,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 31,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "FL",
+      "state_name": "Florida",
+      "healthcare_median_wage": 81390,
+      "nursing_median_wage": 84190,
+      "physician_assistant_median_wage": 129620,
+      "medical_assistant_median_wage": 43680,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 636,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "GA",
+      "state_name": "Georgia",
+      "healthcare_median_wage": 83590,
+      "nursing_median_wage": 93550,
+      "physician_assistant_median_wage": 115390,
+      "medical_assistant_median_wage": 41600,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 376,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "HI",
+      "state_name": "Hawaii",
+      "healthcare_median_wage": 106080,
+      "nursing_median_wage": 136320,
+      "physician_assistant_median_wage": 164050,
+      "medical_assistant_median_wage": 48410,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 99,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "ID",
+      "state_name": "Idaho",
+      "healthcare_median_wage": 84360,
+      "nursing_median_wage": 92460,
+      "physician_assistant_median_wage": 133790,
+      "medical_assistant_median_wage": 44700,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 252,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "IL",
+      "state_name": "Illinois",
+      "healthcare_median_wage": 84940,
+      "nursing_median_wage": 95990,
+      "physician_assistant_median_wage": 131950,
+      "medical_assistant_median_wage": 46090,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 729,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "IN",
+      "state_name": "Indiana",
+      "healthcare_median_wage": 80740,
+      "nursing_median_wage": 83500,
+      "physician_assistant_median_wage": 132050,
+      "medical_assistant_median_wage": 45110,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 366,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "IA",
+      "state_name": "Iowa",
+      "healthcare_median_wage": 77590,
+      "nursing_median_wage": 78630,
+      "physician_assistant_median_wage": 134770,
+      "medical_assistant_median_wage": 45480,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 451,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "KS",
+      "state_name": "Kansas",
+      "healthcare_median_wage": 78140,
+      "nursing_median_wage": 79320,
+      "physician_assistant_median_wage": 125640,
+      "medical_assistant_median_wage": 39510,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 395,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "KY",
+      "state_name": "Kentucky",
+      "healthcare_median_wage": 78530,
+      "nursing_median_wage": 81040,
+      "physician_assistant_median_wage": 120760,
+      "medical_assistant_median_wage": 39270,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 701,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "LA",
+      "state_name": "Louisiana",
+      "healthcare_median_wage": 74150,
+      "nursing_median_wage": 80230,
+      "physician_assistant_median_wage": 128870,
+      "medical_assistant_median_wage": 36320,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 523,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "ME",
+      "state_name": "Maine",
+      "healthcare_median_wage": 86990,
+      "nursing_median_wage": 86990,
+      "physician_assistant_median_wage": 131170,
+      "medical_assistant_median_wage": 47580,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 220,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "MD",
+      "state_name": "Maryland",
+      "healthcare_median_wage": 98600,
+      "nursing_median_wage": 99790,
+      "physician_assistant_median_wage": 137560,
+      "medical_assistant_median_wage": 46410,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 121,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "MA",
+      "state_name": "Massachusetts",
+      "healthcare_median_wage": 100240,
+      "nursing_median_wage": 104550,
+      "physician_assistant_median_wage": 142410,
+      "medical_assistant_median_wage": 49460,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 171,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "MI",
+      "state_name": "Michigan",
+      "healthcare_median_wage": 83520,
+      "nursing_median_wage": 94300,
+      "physician_assistant_median_wage": 131510,
+      "medical_assistant_median_wage": 39870,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 791,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "MN",
+      "state_name": "Minnesota",
+      "healthcare_median_wage": 98840,
+      "nursing_median_wage": 101510,
+      "physician_assistant_median_wage": 141190,
+      "medical_assistant_median_wage": 50480,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 533,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "MS",
+      "state_name": "Mississippi",
+      "healthcare_median_wage": 66630,
+      "nursing_median_wage": 77090,
+      "physician_assistant_median_wage": 105920,
+      "medical_assistant_median_wage": 35360,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 388,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "MO",
+      "state_name": "Missouri",
+      "healthcare_median_wage": 79250,
+      "nursing_median_wage": 81780,
+      "physician_assistant_median_wage": 135130,
+      "medical_assistant_median_wage": 40440,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 925,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "MT",
+      "state_name": "Montana",
+      "healthcare_median_wage": 82160,
+      "nursing_median_wage": 85280,
+      "physician_assistant_median_wage": 141470,
+      "medical_assistant_median_wage": 46820,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 328,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "NE",
+      "state_name": "Nebraska",
+      "healthcare_median_wage": 82080,
+      "nursing_median_wage": 84730,
+      "physician_assistant_median_wage": 133040,
+      "medical_assistant_median_wage": 47370,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 316,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "NV",
+      "state_name": "Nevada",
+      "healthcare_median_wage": 95740,
+      "nursing_median_wage": 103670,
+      "physician_assistant_median_wage": 134660,
+      "medical_assistant_median_wage": 45200,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 167,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "NH",
+      "state_name": "New Hampshire",
+      "healthcare_median_wage": 96400,
+      "nursing_median_wage": 99700,
+      "physician_assistant_median_wage": 150960,
+      "medical_assistant_median_wage": 48020,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 64,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "NJ",
+      "state_name": "New Jersey",
+      "healthcare_median_wage": 102650,
+      "nursing_median_wage": 106500,
+      "physician_assistant_median_wage": 165690,
+      "medical_assistant_median_wage": 47210,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 126,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "NM",
+      "state_name": "New Mexico",
+      "healthcare_median_wage": 86360,
+      "nursing_median_wage": 94340,
+      "physician_assistant_median_wage": 139920,
+      "medical_assistant_median_wage": 39230,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 301,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "NY",
+      "state_name": "New York",
+      "healthcare_median_wage": 103970,
+      "nursing_median_wage": 109440,
+      "physician_assistant_median_wage": 160880,
+      "medical_assistant_median_wage": 48000,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 556,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "NC",
+      "state_name": "North Carolina",
+      "healthcare_median_wage": 81270,
+      "nursing_median_wage": 84350,
+      "physician_assistant_median_wage": 129360,
+      "medical_assistant_median_wage": 45140,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 613,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "ND",
+      "state_name": "North Dakota",
+      "healthcare_median_wage": 79920,
+      "nursing_median_wage": 80730,
+      "physician_assistant_median_wage": 133450,
+      "medical_assistant_median_wage": 45980,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 207,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "OH",
+      "state_name": "Ohio",
+      "healthcare_median_wage": 80820,
+      "nursing_median_wage": 82510,
+      "physician_assistant_median_wage": 132090,
+      "medical_assistant_median_wage": 42810,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 495,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "OK",
+      "state_name": "Oklahoma",
+      "healthcare_median_wage": 78560,
+      "nursing_median_wage": 82920,
+      "physician_assistant_median_wage": 136550,
+      "medical_assistant_median_wage": 38750,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 501,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "OR",
+      "state_name": "Oregon",
+      "healthcare_median_wage": 118020,
+      "nursing_median_wage": 129010,
+      "physician_assistant_median_wage": 155780,
+      "medical_assistant_median_wage": 50410,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 411,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "PA",
+      "state_name": "Pennsylvania",
+      "healthcare_median_wage": 81590,
+      "nursing_median_wage": 96430,
+      "physician_assistant_median_wage": 127070,
+      "medical_assistant_median_wage": 43920,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 402,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "PR",
+      "state_name": "Puerto Rico",
+      "healthcare_median_wage": 39580,
+      "nursing_median_wage": 39880,
+      "physician_assistant_median_wage": null,
+      "medical_assistant_median_wage": 46120,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 215,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "RI",
+      "state_name": "Rhode Island",
+      "healthcare_median_wage": 96900,
+      "nursing_median_wage": 100640,
+      "physician_assistant_median_wage": 139930,
+      "medical_assistant_median_wage": 47190,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 40,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "SC",
+      "state_name": "South Carolina",
+      "healthcare_median_wage": 79750,
+      "nursing_median_wage": 82360,
+      "physician_assistant_median_wage": 122490,
+      "medical_assistant_median_wage": 41160,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 267,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "SD",
+      "state_name": "South Dakota",
+      "healthcare_median_wage": 77740,
+      "nursing_median_wage": 78060,
+      "physician_assistant_median_wage": 133200,
+      "medical_assistant_median_wage": 41870,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 249,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "TN",
+      "state_name": "Tennessee",
+      "healthcare_median_wage": 78590,
+      "nursing_median_wage": 81500,
+      "physician_assistant_median_wage": 118240,
+      "medical_assistant_median_wage": 39570,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 384,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "TX",
+      "state_name": "Texas",
+      "healthcare_median_wage": 82970,
+      "nursing_median_wage": 95970,
+      "physician_assistant_median_wage": 134550,
+      "medical_assistant_median_wage": 39520,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 1044,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "UT",
+      "state_name": "Utah",
+      "healthcare_median_wage": 82260,
+      "nursing_median_wage": 84600,
+      "physician_assistant_median_wage": 134740,
+      "medical_assistant_median_wage": 45360,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 180,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "VT",
+      "state_name": "Vermont",
+      "healthcare_median_wage": 87370,
+      "nursing_median_wage": 97460,
+      "physician_assistant_median_wage": 150490,
+      "medical_assistant_median_wage": 47250,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 42,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "VA",
+      "state_name": "Virginia",
+      "healthcare_median_wage": 87270,
+      "nursing_median_wage": 93600,
+      "physician_assistant_median_wage": 135940,
+      "medical_assistant_median_wage": 44740,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 439,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "WA",
+      "state_name": "Washington",
+      "healthcare_median_wage": 108780,
+      "nursing_median_wage": 124200,
+      "physician_assistant_median_wage": 164360,
+      "medical_assistant_median_wage": 59290,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 636,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "WV",
+      "state_name": "West Virginia",
+      "healthcare_median_wage": 76530,
+      "nursing_median_wage": 80130,
+      "physician_assistant_median_wage": 128610,
+      "medical_assistant_median_wage": 37180,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 361,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "WI",
+      "state_name": "Wisconsin",
+      "healthcare_median_wage": 85940,
+      "nursing_median_wage": 95530,
+      "physician_assistant_median_wage": 133950,
+      "medical_assistant_median_wage": 48680,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 458,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    },
+    {
+      "state_code": "WY",
+      "state_name": "Wyoming",
+      "healthcare_median_wage": 83140,
+      "nursing_median_wage": 83760,
+      "physician_assistant_median_wage": 136080,
+      "medical_assistant_median_wage": 40920,
+      "hpsa_context": "HRSA HPSA designation counts are public workforce planning context; they do not determine scholarship eligibility.",
+      "hpsa_count": 97,
+      "workforce_context": "Use public wage and shortage-designation context alongside scholarship amount, program cost, and official provider requirements.",
+      "source_years": {
+        "bls_state_oes": 2025,
+        "hrsa_hpsa": 2026
+      },
+      "sources": [
+        "BLS OEWS state",
+        "HRSA HPSA aggregate"
+      ]
+    }
+  ]
+}

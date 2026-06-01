@@ -10,8 +10,9 @@ scholarship hubs, provider profiles, resource pages, and essay context cards.
 - Outputs are small, typed, static JSON files
 - No Supabase writes, migrations, Auth changes, Payments changes, or SEO policy changes
 - No raw customer package files, raw filings, NIH project abstracts, grant text, ADI
-  block-group rows, full Zillow monthly rent series, BLS occupation tables, or
-  large JSONL/GZ/CSV dumps are shipped here
+  block-group rows, full Zillow monthly rent series, BLS occupation tables,
+  raw HRSA rows, residency program data, hospital-quality data, board-pass data,
+  or large JSONL/GZ/CSV dumps are shipped here
 
 ## Files
 
@@ -25,8 +26,11 @@ scholarship hubs, provider profiles, resource pages, and essay context cards.
 | `institution_research_enrichment.json` | 2,323 | OpenAlex/ROR identity plus NIH aggregate research context |
 | `state_social_context.json` | 52 | CDC SVI, ADI, and County Health neutral state-level context |
 | `city_rent_metro_enrichment.json` | 2,692 | City rent and metro wage planning context with strict city/state matching |
+| `medical_school_enrichment.json` | 321 | Medical school identity, accreditation, admissions availability, and aggregate research context |
+| `health_workforce_context.json` | 52 | State-level health workforce wage and HPSA planning context |
+| `premed_topic_context.json` | 9 | Curated pre-med, nursing, and healthcare scholarship topic context |
 
-Total on-disk size is about 10.27 MB.
+Total on-disk size is about 10.58 MB.
 
 ## Regenerating
 
@@ -36,9 +40,10 @@ enrichment V2 outputs are generated with:
 ```bash
 npx tsx scripts/data/build-static-enrichment-v2.ts
 npx tsx scripts/data/build-city-rent-metro-enrichment.ts
+npx tsx scripts/data/build-medical-cluster-enrichment.ts
 npm run data:validate-enrichment
 ```
 
 Use helpers from `@/lib/external-data` in server components or scripts only.
-The loaders build lazy indexes and hide ambiguous provider, school, and city/metro
-matches.
+The loaders build lazy indexes and hide ambiguous provider, school, medical-school,
+and city/metro matches.

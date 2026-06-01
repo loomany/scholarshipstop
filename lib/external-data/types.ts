@@ -150,6 +150,63 @@ export type CityRentMetroEnrichment = {
   sources?: string[];
 };
 
+export type MedicalSchoolEnrichment = {
+  school_key: string;
+  name: string;
+  normalized_name: string;
+  city?: string | null;
+  state?: string | null;
+  country?: string | null;
+  school_type?: 'MD' | 'DO' | 'international' | 'unknown';
+  accreditor?: 'LCME' | 'COCA' | 'AACOM' | 'WDOMS' | 'unknown';
+  accreditation_status?: string | null;
+  website?: string | null;
+  ror_id?: string | null;
+  openalex_id?: string | null;
+  scorecard_unit_id?: string | null;
+  admit_stats_available?: boolean | null;
+  admit_applicant_count?: number | null;
+  admit_acceptance_context?: string | null;
+  nih_project_count?: number | null;
+  openalex_works_count?: number | null;
+  research_context?: string | null;
+  source_years?: Record<string, string | number>;
+  sources?: string[];
+};
+
+export type HealthWorkforceContext = {
+  state_code: string;
+  state_name: string;
+  healthcare_median_wage?: number | null;
+  nursing_median_wage?: number | null;
+  physician_assistant_median_wage?: number | null;
+  medical_assistant_median_wage?: number | null;
+  hpsa_context?: string | null;
+  hpsa_count?: number | null;
+  workforce_context?: string | null;
+  source_years?: Record<string, string | number>;
+  sources?: string[];
+};
+
+export type PremedTopicContext = {
+  topic_key: string;
+  topic: string;
+  page_targets: string[];
+  relevant_sources: string[];
+  suggested_context_copy: string;
+  related_links: Array<{ label: string; href: string }>;
+  data_points?: Array<{
+    label: string;
+    value?: string | number | null;
+    source: string;
+  }>;
+  display_policy: {
+    no_eligibility_claims: true;
+    no_rankings: true;
+    no_admissions_advice_as_guarantee: true;
+  };
+};
+
 export type CityAffordability = {
   city: string;
   state: string;

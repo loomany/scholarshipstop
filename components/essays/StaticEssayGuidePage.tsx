@@ -1,12 +1,14 @@
 import Link from 'next/link';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
 
+import { PremedTopicContextCard } from '@/components/content-hub/PremedTopicContextCard';
 import type { StaticEssayGuide } from '@/lib/essays/staticEssayGuides';
 import {
   ESSAYS_PAGE_TITLE,
   ESSAYS_SECTION_PATH,
   essayHubArticlePath
 } from '@/lib/essays/essayHubSection';
+import { getPremedTopicContext } from '@/lib/external-data';
 import { getURL } from '@/utils/helpers';
 
 type StaticEssayGuidePageCopy = {
@@ -52,6 +54,14 @@ type StaticEssayGuidePageProps = {
   urlForPath?: (path: string) => string;
 };
 
+function shouldShowHealthcareEssayContext(guide: StaticEssayGuide): boolean {
+  if (guide.slug === 'career-goals') return true;
+  const haystack = `${guide.slug} ${guide.title} ${guide.description}`.toLowerCase();
+  return /\b(pre[-\s]?med|medical|medicine|nursing|healthcare|health care)\b/.test(
+    haystack
+  );
+}
+
 export function StaticEssayGuidePage({
   guide,
   locale = 'en',
@@ -61,6 +71,9 @@ export function StaticEssayGuidePage({
 }: StaticEssayGuidePageProps) {
   const path = essayHubArticlePath(guide.slug);
   const articleUrl = urlForPath(path);
+  const topicContext = shouldShowHealthcareEssayContext(guide)
+    ? getPremedTopicContext(guide.slug) ?? getPremedTopicContext(guide.title)
+    : null;
   const localizedEssaysPath = hrefForPath(ESSAYS_SECTION_PATH);
   const breadcrumbsSchema = {
     '@context': 'https://schema.org',
@@ -184,6 +197,12 @@ export function StaticEssayGuidePage({
             </Link>
           </div>
         </header>
+
+        <PremedTopicContextCard
+          context={topicContext}
+          className="mt-8"
+          compact
+        />
 
         <section className="mt-10 grid gap-5">
           {guide.sections.map((section) => (

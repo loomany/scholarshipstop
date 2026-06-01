@@ -1,5 +1,7 @@
 import {
   getInstitutionResearchBySchool,
+  getMedicalSchoolByNameState,
+  getMedicalSchoolByUnitId,
   getRentMetroContextForSchool,
   matchProviderToSchool,
   schoolSingleBarMetrics
@@ -17,6 +19,7 @@ import { CompactMetricGrid } from '@/components/data-viz/CompactMetricGrid';
 import { CityRentMetroContext } from '@/components/data-viz/CityRentMetroContext';
 import { DataSourceFooter } from '@/components/data-viz/DataSourceFooter';
 import { InstitutionResearchContext } from '@/components/data-viz/InstitutionResearchContext';
+import { MedicalSchoolContext } from '@/components/data-viz/MedicalSchoolContext';
 import { MetricComparisonBars } from '@/components/data-viz/MetricComparisonBars';
 
 type ProviderExternalSchoolContextProps = {
@@ -103,6 +106,9 @@ export function ProviderExternalSchoolContext({
     city: row.city,
     state: row.state
   });
+  const medicalSchool =
+    getMedicalSchoolByUnitId(row.unit_id) ??
+    getMedicalSchoolByNameState(row.school_name, row.state);
 
   return (
     <section
@@ -146,6 +152,7 @@ export function ProviderExternalSchoolContext({
       ) : null}
 
       <InstitutionResearchContext research={research} compact className="mt-4" />
+      <MedicalSchoolContext context={medicalSchool} compact className="mt-4" />
       <CityRentMetroContext context={cityRent} compact className="mt-4" />
 
       <InternalLinkCluster

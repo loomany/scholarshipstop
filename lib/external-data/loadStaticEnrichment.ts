@@ -2,8 +2,11 @@ import 'server-only';
 
 import cityAffordabilityRaw from '@/data/external/scholarshiptop-enrichment/city_affordability.json';
 import cityRentMetroEnrichmentRaw from '@/data/external/scholarshiptop-enrichment/city_rent_metro_enrichment.json';
+import healthWorkforceContextRaw from '@/data/external/scholarshiptop-enrichment/health_workforce_context.json';
 import institutionResearchEnrichmentRaw from '@/data/external/scholarshiptop-enrichment/institution_research_enrichment.json';
 import locationCrosswalkRaw from '@/data/external/scholarshiptop-enrichment/location_crosswalk.json';
+import medicalSchoolEnrichmentRaw from '@/data/external/scholarshiptop-enrichment/medical_school_enrichment.json';
+import premedTopicContextRaw from '@/data/external/scholarshiptop-enrichment/premed_topic_context.json';
 import providerNonprofitEnrichmentRaw from '@/data/external/scholarshiptop-enrichment/provider_nonprofit_enrichment.json';
 import schoolEnrichmentRaw from '@/data/external/scholarshiptop-enrichment/school_enrichment.json';
 import stateAffordabilityRaw from '@/data/external/scholarshiptop-enrichment/state_affordability.json';
@@ -13,8 +16,11 @@ import type {
   CityAffordability,
   CityRentMetroEnrichment,
   EnrichmentFile,
+  HealthWorkforceContext,
   InstitutionResearchEnrichment,
   LocationCrosswalk,
+  MedicalSchoolEnrichment,
+  PremedTopicContext,
   ProviderNonprofitEnrichment,
   SchoolEnrichment,
   StateAffordability,
@@ -84,6 +90,27 @@ export function loadCityRentMetroEnrichmentRecords(): CityRentMetroEnrichment[] 
   return safeRecords<CityRentMetroEnrichment>(
     cityRentMetroEnrichmentRaw,
     'city_rent_metro_enrichment'
+  );
+}
+
+export function loadMedicalSchoolEnrichmentRecords(): MedicalSchoolEnrichment[] {
+  return safeRecords<MedicalSchoolEnrichment>(
+    medicalSchoolEnrichmentRaw,
+    'medical_school_enrichment'
+  );
+}
+
+export function loadHealthWorkforceContextRecords(): HealthWorkforceContext[] {
+  return safeRecords<HealthWorkforceContext>(
+    healthWorkforceContextRaw,
+    'health_workforce_context'
+  );
+}
+
+export function loadPremedTopicContextRecords(): PremedTopicContext[] {
+  return safeRecords<PremedTopicContext>(
+    premedTopicContextRaw,
+    'premed_topic_context'
   );
 }
 
