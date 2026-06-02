@@ -13,7 +13,7 @@ import type {
   ScholarshipSourceStatus
 } from '@/lib/seo/scholarshipSeoQualityPolicy';
 import {
-  scholarshipDetailCardPrimaryClass,
+  scholarshipDetailCardCompactClass,
   scholarshipDetailCardSupportClass
 } from '@/lib/scholarships/scholarshipDetailLayoutClasses';
 import type { ScholarshipDetailUiCopy } from '@/lib/i18n/scholarshipDetailUiCopy';
@@ -308,8 +308,8 @@ export function AiInsightSection({
   children: React.ReactNode;
 }) {
   return (
-    <div className="mt-10">
-      <div className="mb-2 flex flex-wrap items-center gap-2">
+    <div className={`mt-10 ${scholarshipDetailCardCompactClass}`}>
+      <div className="mb-2 flex flex-wrap items-center justify-center gap-2 text-center sm:justify-start sm:text-left">
         <h2 className="text-base font-semibold tracking-tight text-zinc-900">
           {title}
         </h2>
@@ -319,13 +319,11 @@ export function AiInsightSection({
         </span>
       </div>
       {subtitle ? (
-        <p className="mb-3 max-w-2xl text-sm leading-relaxed text-zinc-600">
+        <p className="mb-4 max-w-2xl text-center text-sm leading-relaxed text-zinc-600 sm:text-left">
           {subtitle}
         </p>
       ) : null}
-      <div className="rounded-2xl border border-zinc-200/80 bg-zinc-50/50 p-5 shadow-sm ring-1 ring-zinc-100/50 sm:p-6">
-        {children}
-      </div>
+      {children}
     </div>
   );
 }

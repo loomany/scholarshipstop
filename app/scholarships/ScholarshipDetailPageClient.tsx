@@ -191,7 +191,8 @@ import {
   scholarshipDetailCardTrustClass,
   scholarshipDetailHeroSurfaceClass,
   scholarshipDetailPageBgClass,
-  scholarshipDetailShellClass
+  scholarshipDetailShellClass,
+  scholarshipDetailWhiteOutlineClass
 } from '@/lib/scholarships/scholarshipDetailLayoutClasses';
 import {
   getScholarshipApplicationDifficulty,
@@ -407,23 +408,17 @@ function scholarshipHostCountryBadge(
 }
 
 /**
- * Similar cards: optional teal ring on the primary open pick (first actionable recommendation).
+ * Similar cards: white outline surface (matches AI insight / quick-facts panels).
  */
-function similarScholarshipCardClassName(
-  highlightPrimary: boolean,
-  deadlinePassed: boolean
-): string {
+function similarScholarshipCardClassName(deadlinePassed: boolean): string {
   const interactive =
-    'block h-full min-w-0 overflow-hidden rounded-xl border p-3 shadow-[0_12px_30px_-26px_rgba(15,23,42,0.72)] ring-1 ring-slate-100/70 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 md:p-3.5';
+    'block h-full min-w-0 overflow-hidden rounded-xl p-3 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 md:p-3.5';
 
   if (deadlinePassed) {
-    return `${interactive} border-zinc-200 bg-zinc-100/90 hover:border-zinc-300 hover:shadow-sm`;
+    return `${interactive} border border-slate-200/85 bg-zinc-50/90 shadow-[0_12px_32px_-28px_rgba(15,23,42,0.65)] ring-1 ring-slate-100/70 hover:border-slate-300/90 hover:shadow-sm`;
   }
 
-  const base = `${interactive} border-slate-200/90 bg-[linear-gradient(180deg,#ffffff_0%,#fbfcff_100%)] hover:border-emerald-300/80 hover:shadow-[0_18px_42px_-32px_rgba(15,23,42,0.76)]`;
-  return highlightPrimary
-    ? `${base} border-teal-200/90 ring-1 ring-teal-100/80`
-    : base;
+  return `${interactive} ${scholarshipDetailWhiteOutlineClass} hover:shadow-[0_18px_42px_-32px_rgba(15,23,42,0.76)] hover:ring-slate-300/90`;
 }
 
 const similarScholarshipsGridClass =
@@ -869,10 +864,7 @@ function SimilarScholarshipDetailListItem({
             return;
           }
         }}
-        className={similarScholarshipCardClassName(
-          highlightPrimary,
-          deadlinePassed
-        )}
+        className={similarScholarshipCardClassName(deadlinePassed)}
       >
         {cardInner}
       </Link>
@@ -892,7 +884,7 @@ function SimilarScholarshipIqPromoCard({
       <Link
         href="/iq/assessment?intent=scholarship_match"
         aria-label={copy.iq.startAria}
-        className="group relative block h-full min-w-0 overflow-hidden rounded-lg border border-slate-200 bg-white p-3 text-left shadow-sm ring-1 ring-slate-100/80 transition hover:border-orange-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/70 focus-visible:ring-offset-2 md:p-3.5"
+        className={`group relative block h-full min-w-0 overflow-hidden rounded-xl p-3 text-left transition hover:shadow-[0_18px_42px_-32px_rgba(15,23,42,0.76)] hover:ring-slate-300/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/70 focus-visible:ring-offset-2 md:p-3.5 ${scholarshipDetailWhiteOutlineClass}`}
       >
         <div
           className="absolute inset-y-0 left-0 w-1 bg-orange-500"
@@ -2425,8 +2417,8 @@ export default function ScholarshipDetailPageClient({
             <ScholarshipDetailIqDecisionCard copy={detailUi} />
             {whoLines.length > 0 ? (
               <div className="mt-10">
-                <SectionLabel>{detailUi.whoCanApply}</SectionLabel>
                 <div className={scholarshipDetailCardPrimaryClass}>
+                  <SectionLabel>{detailUi.whoCanApply}</SectionLabel>
                   <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-zinc-700 md:text-base">
                     {whoLines.map((item, i) => (
                       <li key={`who-${i}-${item.slice(0, 40)}`}>
@@ -2974,12 +2966,12 @@ export default function ScholarshipDetailPageClient({
               <>
                 {hasRequirementsSection ? (
                   <div className="mt-10">
-                    <SectionLabel>
-                      {detailUi.sections.keyRequirements(
-                        keyRequirementsLabelCount
-                      )}
-                    </SectionLabel>
                     <div className={scholarshipDetailCardPrimaryClass}>
+                      <SectionLabel>
+                        {detailUi.sections.keyRequirements(
+                          keyRequirementsLabelCount
+                        )}
+                      </SectionLabel>
                       <p className="mb-4 text-xs text-zinc-500">
                         {isSimplerGov
                           ? detailUi.sections.keyRequirementsNoteGov
@@ -3161,10 +3153,8 @@ export default function ScholarshipDetailPageClient({
 
             {hasVisibleProviderContent ? (
               <div className="mt-10">
-                <SectionLabel variant="support">
-                  {detailUi.sections.aboutProvider}
-                </SectionLabel>
                 <div className={scholarshipDetailCardSupportClass}>
+                  <SectionLabel>{detailUi.sections.aboutProvider}</SectionLabel>
                   <div className="flex min-w-0 flex-col gap-2 sm:gap-3">
                     {providerProfileHref ? (
                       providerNameLocked && providerName ? (
@@ -3426,10 +3416,8 @@ export default function ScholarshipDetailPageClient({
 
             {showOverviewSection ? (
               <div className="mt-10">
-                <SectionLabel variant="support">
-                  {detailUi.sections.overview}
-                </SectionLabel>
                 <div className={scholarshipDetailCardSupportClass}>
+                  <SectionLabel>{detailUi.sections.overview}</SectionLabel>
                   {showCredibilityInOverview ? (
                     <div
                       className={`${
@@ -3493,12 +3481,10 @@ export default function ScholarshipDetailPageClient({
 
           {showApplyNowCta || officialName || lastVerifiedLabel ? (
             <div className="mt-8 pb-0">
-              <h2 className="mb-2 text-lg font-semibold tracking-tight text-zinc-900">
-                {detailUi.sponsorAndApplication}
-              </h2>
               <div
                 className={`${scholarshipDetailCardTrustClass} text-sm text-zinc-700`}
               >
+                <SectionLabel>{detailUi.sponsorAndApplication}</SectionLabel>
                 {officialName ? (
                   <p className="text-base font-semibold text-zinc-900">
                     {officialName}
@@ -3796,57 +3782,58 @@ export default function ScholarshipDetailPageClient({
             <div
               id="similar-scholarships"
               className={`${
-                showFaqBlock ? 'mt-4' : 'mt-3'
-              } scroll-mt-24 border-t border-zinc-200 pt-4`}
+                showFaqBlock ? 'mt-4' : 'mt-8'
+              } scroll-mt-24`}
             >
-              <div className="flex flex-col gap-4">
-                <Link
-                  href={backToMatchesHref}
-                  scroll
-                  className={detailBackToMatchesLinkClass}
-                >
-                  {detailUi.backToMatches}
-                </Link>
-                <div className="min-w-0 space-y-2">
-                  <h2 className="text-lg font-semibold tracking-tight text-zinc-900">
-                    {detailUi.similar.title}
-                  </h2>
-                  <p className="text-sm leading-relaxed text-zinc-600">
-                    <span className="font-semibold text-zinc-800">
-                      {detailUi.similar.introBold}
-                    </span>{' '}
-                    {detailUi.similar.introRest}
-                  </p>
-                  <p className="text-xs font-medium text-zinc-500">
-                    {detailUi.similar.categoryPrefix}{' '}
-                    <span className="text-zinc-700">
-                      {categorySlugForLinks
-                        ? breadcrumbCategoryLabel(categorySlugForLinks)
-                        : detailUi.similar.allScholarships}
-                    </span>
-                  </p>
-                  {categorySlugForLinks ? (
-                    <p className="text-sm">
-                      <Link
-                        href={`/scholarships/category/${encodeURIComponent(categorySlugForLinks)}`}
-                        className="font-semibold text-sky-700 underline-offset-2 hover:text-sky-800 hover:underline"
-                      >
-                        {detailUi.similar.moreInCategory(
-                          breadcrumbCategoryLabel(categorySlugForLinks)
-                        )}
-                      </Link>
+              <div className={scholarshipDetailCardCompactClass}>
+                <div className="flex flex-col gap-4">
+                  <Link
+                    href={backToMatchesHref}
+                    scroll
+                    className={detailBackToMatchesLinkClass}
+                  >
+                    {detailUi.backToMatches}
+                  </Link>
+                  <div className="min-w-0 space-y-2">
+                    <h2 className="text-base font-semibold tracking-tight text-zinc-900">
+                      {detailUi.similar.title}
+                    </h2>
+                    <p className="text-sm leading-relaxed text-zinc-600">
+                      <span className="font-semibold text-zinc-800">
+                        {detailUi.similar.introBold}
+                      </span>{' '}
+                      {detailUi.similar.introRest}
                     </p>
-                  ) : (
-                    <p className="text-sm">
-                      <ScholarshipCatalogEntryLink className="font-semibold text-sky-700 underline-offset-2 hover:text-sky-800 hover:underline">
-                        {detailUi.similar.browseAll}
-                      </ScholarshipCatalogEntryLink>
+                    <p className="text-xs font-medium text-zinc-500">
+                      {detailUi.similar.categoryPrefix}{' '}
+                      <span className="text-zinc-700">
+                        {categorySlugForLinks
+                          ? breadcrumbCategoryLabel(categorySlugForLinks)
+                          : detailUi.similar.allScholarships}
+                      </span>
                     </p>
-                  )}
+                    {categorySlugForLinks ? (
+                      <p className="text-sm">
+                        <Link
+                          href={`/scholarships/category/${encodeURIComponent(categorySlugForLinks)}`}
+                          className="font-semibold text-sky-700 underline-offset-2 hover:text-sky-800 hover:underline"
+                        >
+                          {detailUi.similar.moreInCategory(
+                            breadcrumbCategoryLabel(categorySlugForLinks)
+                          )}
+                        </Link>
+                      </p>
+                    ) : (
+                      <p className="text-sm">
+                        <ScholarshipCatalogEntryLink className="font-semibold text-sky-700 underline-offset-2 hover:text-sky-800 hover:underline">
+                          {detailUi.similar.browseAll}
+                        </ScholarshipCatalogEntryLink>
+                      </p>
+                    )}
+                  </div>
                 </div>
-              </div>
 
-              {similarSplitIntoSections ? (
+                {similarSplitIntoSections ? (
                 <div className="mt-6 space-y-8">
                   <section aria-labelledby="similar-open-heading">
                     <div className="flex flex-wrap items-end justify-between gap-2 border-b border-emerald-200/70 pb-2.5">
@@ -3990,6 +3977,7 @@ export default function ScholarshipDetailPageClient({
                 >
                   {detailUi.backToMatches}
                 </Link>
+              </div>
               </div>
             </div>
           ) : null}

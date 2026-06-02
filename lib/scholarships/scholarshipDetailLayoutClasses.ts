@@ -23,9 +23,13 @@ export const scholarshipDetailHeroSurfaceClass =
 export const scholarshipDetailCardPrimaryClass =
   'rounded-2xl border border-slate-200/85 bg-[linear-gradient(180deg,#ffffff_0%,#fbfcff_100%)] p-5 shadow-[0_16px_44px_-34px_rgba(15,23,42,0.65)] ring-1 ring-slate-100/70 sm:p-6 md:p-8';
 
-/** Denser primary card (quick facts grid). */
+/** White outline on `#f7f8fb` page bg — detail panels and similar-scholarship tiles. */
+export const scholarshipDetailWhiteOutlineClass =
+  'border border-white bg-white shadow-[0_12px_32px_-28px_rgba(15,23,42,0.65)] ring-1 ring-slate-200/80';
+
+/** Denser primary card (quick facts grid, AI insight panels). */
 export const scholarshipDetailCardCompactClass =
-  'rounded-2xl border border-slate-200/85 bg-white p-4 shadow-[0_12px_32px_-28px_rgba(15,23,42,0.65)] ring-1 ring-slate-100/70 sm:p-5';
+  `rounded-2xl ${scholarshipDetailWhiteOutlineClass} p-4 sm:p-5`;
 
 /** Supporting / narrative sections (overview, provider shell). */
 export const scholarshipDetailCardSupportClass =
