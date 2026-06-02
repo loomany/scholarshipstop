@@ -23,6 +23,13 @@ services/content-hub/node_modules/
 # long-running SEO batch log (scripts/compare-battle-sequential.ts)
 /logs/compare-battle-sequential.log
 
+# generated one-off script outputs
+scripts/output/
+
+# ephemeral local QA captures (regenerate from smoke scripts)
+reports/data/_*.html
+reports/screenshots/visual-polish-*/
+
 # local batch outputs / large downloaded datasets
 classified_hosts_result.json
 classified_hosts_result.json*.bak
@@ -47,6 +54,11 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
+.env.local.bak-*
+.env.local.prod-backup
+
+# cursor IDE (local only)
+.cursor/
 
 # vercel
 .vercel
