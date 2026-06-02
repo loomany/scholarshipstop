@@ -423,6 +423,10 @@ function similarScholarshipCardClassName(deadlinePassed: boolean): string {
 const similarScholarshipsGridClass =
   'grid list-none grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2 lg:grid-cols-3';
 const DETAIL_AGGREGATION_MAX = 6;
+const DETAIL_RESEARCH_PANEL_CLASS =
+  'mt-10 rounded-2xl border border-slate-200/85 bg-white p-4 shadow-[0_18px_48px_-36px_rgba(15,23,42,0.68)] ring-1 ring-slate-100/80 sm:p-5';
+const DETAIL_RESEARCH_INNER_CARD_CLASS =
+  'rounded-lg border border-slate-200/90 bg-slate-50/80 p-4 shadow-sm';
 
 function detailDeadlineMonthParam(s: Scholarship): string | null {
   const raw = s.deadlineAt?.trim();
@@ -1108,7 +1112,7 @@ function StatCard({
   notice?: React.ReactNode;
 }) {
   return (
-    <div className="relative flex h-full min-h-[7rem] min-w-0 flex-col justify-start rounded-xl border border-zinc-200/90 bg-white px-5 py-4 shadow-sm ring-1 ring-zinc-100/50">
+    <div className="relative flex h-full min-h-[7rem] min-w-0 flex-col justify-center rounded-xl border border-zinc-200/90 bg-white px-5 py-4 shadow-sm ring-1 ring-zinc-100/50">
       <p
         className="min-w-0 overflow-hidden text-lg font-bold leading-tight tracking-tight text-zinc-900 sm:text-xl [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]"
         title={primaryTitle ?? primary}
@@ -2693,7 +2697,7 @@ export default function ScholarshipDetailPageClient({
 
             {initialRelatedArticles.length > 0 ? (
               <div
-                className="mt-10"
+                className={DETAIL_RESEARCH_PANEL_CLASS}
                 aria-labelledby="scholarship-related-resources-heading"
               >
                 <div className="flex flex-wrap items-start gap-3">
@@ -2743,7 +2747,7 @@ export default function ScholarshipDetailPageClient({
             {initialRelatedEssays.length > 0 ||
             Boolean(scholarship?.essayRequired) ? (
               <div
-                className="mt-10"
+                className={DETAIL_RESEARCH_PANEL_CLASS}
                 aria-labelledby="scholarship-related-essays-heading"
               >
                 <div className="flex flex-wrap items-start gap-3">
@@ -2789,7 +2793,7 @@ export default function ScholarshipDetailPageClient({
                       </p>
                     )}
                     {scholarship?.essayRequired ? (
-                      <div className="rounded-2xl border border-slate-200/85 bg-slate-50/80 p-4 shadow-sm ring-1 ring-slate-100/70">
+                      <div className={DETAIL_RESEARCH_INNER_CARD_CLASS}>
                         <p className="text-sm font-semibold text-indigo-950">
                           {detailUi.related.essayRequiredTitle}
                         </p>
@@ -2830,8 +2834,8 @@ export default function ScholarshipDetailPageClient({
                         </div>
                       </div>
                     ) : null}
-                    <div className="rounded-2xl border border-slate-200/85 bg-white p-4 shadow-sm ring-1 ring-slate-100/70">
-                      <p className="text-sm font-semibold text-indigo-950">
+                    <div className={DETAIL_RESEARCH_INNER_CARD_CLASS}>
+                      <p className="text-sm leading-relaxed text-indigo-900/85">
                         {detailUi.related.aiWriterTitle}
                       </p>
                       <Link
@@ -3630,7 +3634,7 @@ export default function ScholarshipDetailPageClient({
           ) : null}
 
           {showAggregationBlock ? (
-            <div className="mt-10 rounded-2xl border border-slate-200/85 bg-white p-4 shadow-[0_18px_48px_-36px_rgba(15,23,42,0.68)] ring-1 ring-slate-100/80 sm:p-5">
+            <div className={DETAIL_RESEARCH_PANEL_CLASS}>
               <div className="flex flex-col gap-2">
                 <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500">
                   Research links
