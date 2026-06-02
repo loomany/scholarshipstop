@@ -1,7 +1,7 @@
 # AI Resources Stage 6E — publish ten AI drafts
 
 **Report date:** 2026-05-22  
-**Verified at:** 2026-05-21T23:15:09.723Z  
+**Verified at:** 2026-06-02T11:00:11.525Z  
 **Script:** `scripts/ai-resources-stage6e-publish-ten-ai-drafts.ts`  
 **Publish action:** already completed (no re-publish)  
 **Original publish timestamp:** 2026-05-21T23:11:04.722+00:00  
@@ -23,41 +23,21 @@
 | 9 | how-to-use-ai-without-missing-scholarship-deadlines | ab19be1f-8cb9-436f-8a8e-80929b069807 | published | 2026-05-21T23:11:04.722+00:00 | https://scholarshiptop.com/resources/how-to-use-ai-without-missing-scholarship-deadlines |
 | 10 | scholarship-search-checklist-using-ai | 3aa78afa-d98e-47f4-a055-26b0f211d725 | published | 2026-05-21T23:11:04.722+00:00 | https://scholarshiptop.com/resources/scholarship-search-checklist-using-ai |
 
-## Original publish (2026-05-21)
-
-- **Action:** slug-filtered update `review_needed` → `published` for exactly 10 rows (`published_at` / `updated_at` = `2026-05-21T23:11:04.722Z`)
-- **`review_needed` count:** 47 → 37 (−10 only)
-- **Preflight polish QA (all passed before publish):**
-
-| Slug | KP1 | KP2 | KP3 | no bare paths | FAQ | disclaimer | links | category |
-|------|-----|-----|-----|---------------|-----|------------|-------|----------|
-| can-chatgpt-help-find-scholarships | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | 20 | ai |
-| how-to-use-chatgpt-to-search-for-scholarships | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | 17 | ai |
-| best-ai-tools-for-finding-scholarships | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | 16 | ai |
-| ai-scholarship-search-vs-traditional-databases | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | 15 | ai |
-| best-sites-to-find-fully-funded-scholarships | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | 19 | ai |
-| how-to-verify-ai-generated-scholarship-lists | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | 15 | ai |
-| chatgpt-prompts-for-scholarship-search | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | 18 | ai |
-| ai-tools-for-international-students-looking-for-scholarships | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | 17 | ai |
-| how-to-use-ai-without-missing-scholarship-deadlines | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | 15 | ai |
-| scholarship-search-checklist-using-ai | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | 16 | ai |
-
 ## Post-publish DB verification
 
 - All 10 target slugs `published`: **yes**
 - Other drafts accidentally published: **no** (only these 10 were updated in original publish; `review_needed` count now 37)
-- Target bodies unchanged vs pre-publish backup (status/timestamps only): **yes**
-- Six Stage 6B articles: still `published`, body fingerprints unchanged vs pre-publish snapshot
+- Target bodies unchanged vs pre-publish backup (status/timestamps only): see per-slug below
 
-  - `can-chatgpt-help-find-scholarships`: body unchanged=true
-  - `how-to-use-chatgpt-to-search-for-scholarships`: body unchanged=true
+  - `can-chatgpt-help-find-scholarships`: body unchanged=false
+  - `how-to-use-chatgpt-to-search-for-scholarships`: body unchanged=false
   - `best-ai-tools-for-finding-scholarships`: body unchanged=true
   - `ai-scholarship-search-vs-traditional-databases`: body unchanged=true
-  - `best-sites-to-find-fully-funded-scholarships`: body unchanged=true
-  - `how-to-verify-ai-generated-scholarship-lists`: body unchanged=true
-  - `chatgpt-prompts-for-scholarship-search`: body unchanged=true
-  - `ai-tools-for-international-students-looking-for-scholarships`: body unchanged=true
-  - `how-to-use-ai-without-missing-scholarship-deadlines`: body unchanged=true
+  - `best-sites-to-find-fully-funded-scholarships`: body unchanged=false
+  - `how-to-verify-ai-generated-scholarship-lists`: body unchanged=false
+  - `chatgpt-prompts-for-scholarship-search`: body unchanged=false
+  - `ai-tools-for-international-students-looking-for-scholarships`: body unchanged=false
+  - `how-to-use-ai-without-missing-scholarship-deadlines`: body unchanged=false
   - `scholarship-search-checklist-using-ai`: body unchanged=true
 
 ## Six Stage 6B live articles (unchanged)
@@ -79,10 +59,10 @@
 | /resources/best-ai-tools-for-finding-scholarships | 200 | true | true | true | true | true | true | true | true | true |
 | /resources/ai-scholarship-search-vs-traditional-databases | 200 | true | true | true | true | true | true | true | true | true |
 | /resources/best-sites-to-find-fully-funded-scholarships | 200 | true | true | true | true | true | true | true | true | true |
-| /resources/how-to-verify-ai-generated-scholarship-lists | 200 | true | true | true | true | true | false | false | true | true |
-| /resources/chatgpt-prompts-for-scholarship-search | 200 | true | true | true | true | true | false | false | true | true |
-| /resources/ai-tools-for-international-students-looking-for-scholarships | 200 | true | true | true | true | true | false | false | true | true |
-| /resources/how-to-use-ai-without-missing-scholarship-deadlines | 200 | true | true | true | true | true | false | false | true | true |
+| /resources/how-to-verify-ai-generated-scholarship-lists | 200 | true | true | true | true | true | true | true | true | true |
+| /resources/chatgpt-prompts-for-scholarship-search | 200 | true | true | true | true | true | true | true | true | true |
+| /resources/ai-tools-for-international-students-looking-for-scholarships | 200 | true | true | true | true | true | true | true | true | true |
+| /resources/how-to-use-ai-without-missing-scholarship-deadlines | 200 | true | true | true | true | true | true | true | true | true |
 | /resources/scholarship-search-checklist-using-ai | 200 | true | true | true | true | true | true | true | true | true |
 | /resources/best-scholarship-websites | 200 | true | true | true | true | true | true | true | true | true |
 | /resources/best-scholarship-search-engines-international-students | 200 | true | true | true | true | true | true | true | false | true |
@@ -99,11 +79,11 @@
 - `how-to-use-chatgpt-to-search-for-scholarships`: visible
 - `best-ai-tools-for-finding-scholarships`: visible
 - `ai-scholarship-search-vs-traditional-databases`: visible
-- `best-sites-to-find-fully-funded-scholarships`: visible
-- `how-to-verify-ai-generated-scholarship-lists`: not on first page (check pagination/search; URL still 200 + sitemap)
-- `chatgpt-prompts-for-scholarship-search`: not on first page (check pagination/search; URL still 200 + sitemap)
-- `ai-tools-for-international-students-looking-for-scholarships`: not on first page (check pagination/search; URL still 200 + sitemap)
-- `how-to-use-ai-without-missing-scholarship-deadlines`: not on first page (check pagination/search; URL still 200 + sitemap)
+- `best-sites-to-find-fully-funded-scholarships`: not on first page (check pagination/search; URL still 200 + sitemap)
+- `how-to-verify-ai-generated-scholarship-lists`: visible
+- `chatgpt-prompts-for-scholarship-search`: visible
+- `ai-tools-for-international-students-looking-for-scholarships`: visible
+- `how-to-use-ai-without-missing-scholarship-deadlines`: visible
 - `scholarship-search-checklist-using-ai`: visible
 
 ## Sitemap
@@ -119,13 +99,6 @@
 - `ai-tools-for-international-students-looking-for-scholarships`: **in** `/sitemaps/resources.xml`
 - `how-to-use-ai-without-missing-scholarship-deadlines`: **in** `/sitemaps/resources.xml`
 - `scholarship-search-checklist-using-ai`: **in** `/sitemaps/resources.xml`
-
-## Smoke notes (not blockers for publish)
-
-- **All 10 article URLs:** HTTP 200, indexable (no `noindex` on article pages), self-canonical, title/meta present, no Key Point placeholders, no markdown tables.
-- **Four Stage 6D URLs** (`how-to-verify-…`, `chatgpt-prompts-…`, `ai-tools-for-international-…`, `how-to-use-ai-without-missing-…`): HTML still contains IQ CTA markup (`resource-article-iq-cta`, preview `Type ???`) because production `shouldShowResourceArticleIqCta` only hides when `categoryId === 'ai'`, and these slugs are not yet classified as `ai` on the deployed app (overrides exist locally in `data/resource-article-classification.json`, uncommitted). Stage 6C.1 slugs pass because `resourceTaxonomy` slug hints already map them to `ai`. **Fix:** deploy classification overrides or add slug hints — no republish required.
-- **`/resources?cat=ai`:** `meta robots` is `noindex, follow` on the filtered hub (listing behavior; article pages themselves are indexable). Hub IQ grid card is hidden on deployed AI hub per Stage 6B.4.
-- **Hub first-page visibility:** 5 of 10 new slugs appear on page 1 of 16 AI articles; the other 5 are on later pages / search / sitemap (expected pagination).
 
 ## Guardrails
 

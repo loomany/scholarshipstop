@@ -49,10 +49,10 @@
 | /resources/best-ai-tools-for-finding-scholarships | 200 | true | true | true | true | true | true | true | true | true | true |
 | /resources/ai-scholarship-search-vs-traditional-databases | 200 | true | true | true | true | true | true | true | true | true | true |
 | /resources/best-sites-to-find-fully-funded-scholarships | 200 | true | true | true | true | true | true | true | true | true | true |
-| /resources/how-to-verify-ai-generated-scholarship-lists | 200 | true | true | true | false | true | true | false | true | true | true |
-| /resources/chatgpt-prompts-for-scholarship-search | 200 | true | true | true | false | true | true | false | true | true | true |
-| /resources/ai-tools-for-international-students-looking-for-scholarships | 200 | true | true | true | false | true | true | false | true | true | true |
-| /resources/how-to-use-ai-without-missing-scholarship-deadlines | 200 | true | true | true | false | true | true | false | true | true | true |
+| /resources/how-to-verify-ai-generated-scholarship-lists | 200 | true | true | true | true | true | true | true | true | true | true |
+| /resources/chatgpt-prompts-for-scholarship-search | 200 | true | true | true | true | true | true | true | true | true | true |
+| /resources/ai-tools-for-international-students-looking-for-scholarships | 200 | true | true | true | true | true | true | true | true | true | true |
+| /resources/how-to-use-ai-without-missing-scholarship-deadlines | 200 | true | true | true | true | true | true | true | true | true | true |
 | /resources/scholarship-search-checklist-using-ai | 200 | true | true | true | true | true | true | true | true | true | true |
 
 ### Hub discoverability (`/resources?cat=ai`)
@@ -60,20 +60,20 @@
 Classification for all 16 is `ai` in codebase after pack override. Hub lists paginated AI articles (16 total).
 
 - `best-scholarship-websites`: not on first page (pagination/search/sitemap OK)
-- `best-scholarship-search-engines-international-students`: visible on first page
+- `best-scholarship-search-engines-international-students`: not on first page (pagination/search/sitemap OK)
 - `scholarshiptop-vs-fastweb`: not on first page (pagination/search/sitemap OK)
-- `scholarshiptop-vs-scholarships-com`: visible on first page
+- `scholarshiptop-vs-scholarships-com`: not on first page (pagination/search/sitemap OK)
 - `best-free-scholarship-websites-without-spam`: not on first page (pagination/search/sitemap OK)
 - `best-scholarship-websites-for-graduate-students`: not on first page (pagination/search/sitemap OK)
 - `can-chatgpt-help-find-scholarships`: visible on first page
 - `how-to-use-chatgpt-to-search-for-scholarships`: visible on first page
 - `best-ai-tools-for-finding-scholarships`: visible on first page
 - `ai-scholarship-search-vs-traditional-databases`: visible on first page
-- `best-sites-to-find-fully-funded-scholarships`: visible on first page
-- `how-to-verify-ai-generated-scholarship-lists`: not on first page (pagination/search/sitemap OK)
-- `chatgpt-prompts-for-scholarship-search`: not on first page (pagination/search/sitemap OK)
-- `ai-tools-for-international-students-looking-for-scholarships`: not on first page (pagination/search/sitemap OK)
-- `how-to-use-ai-without-missing-scholarship-deadlines`: not on first page (pagination/search/sitemap OK)
+- `best-sites-to-find-fully-funded-scholarships`: not on first page (pagination/search/sitemap OK)
+- `how-to-verify-ai-generated-scholarship-lists`: visible on first page
+- `chatgpt-prompts-for-scholarship-search`: visible on first page
+- `ai-tools-for-international-students-looking-for-scholarships`: visible on first page
+- `how-to-use-ai-without-missing-scholarship-deadlines`: visible on first page
 - `scholarship-search-checklist-using-ai`: visible on first page
 
 ## ISR revalidate
@@ -96,28 +96,6 @@ Classification for all 16 is `ai` in codebase after pack override. Hub lists pag
 - `/resources/how-to-use-ai-without-missing-scholarship-deadlines`: OK
 - `/resources/scholarship-search-checklist-using-ai`: OK
 - `/resources?cat=ai`: OK
-
-## Post-hotfix live notes
-
-- **DB body fixes** are live after ISR revalidate (raw `](/` in article HTML cleared; `best-sites` garbled `resources at/resources` fixed; `how-to-verify` doubled sentence removed in markdown).
-- **IQ CTA + `Type ???`** on 4 Stage 6D URLs and some 6B comparison pages still appear in HTML until a **minimal deploy** ships:
-  - `lib/content-hub/aiResourcePackSlugs.ts`
-  - `lib/content-hub/resourceTaxonomy.ts` (pack override + AI hint order)
-  - `lib/content-hub/filterResourceArticleRelatedScholarships.ts`
-  - `app/resources/[slug]/page.tsx` (pass `slug` into `shouldShowResourceArticleIqCta`)
-- **`/resources?cat=ai` hub filter** uses the same classification — Stage 6D slugs may stay off page 1 until deploy; all 16 URLs are 200, sitemap-listed, and cross-linked via Related reading sections.
-- Hub listing uses `noindex, follow` (existing filtered-hub behavior); **article pages** are indexable.
-
-## Deploy request (owner approval)
-
-Suggested commit message: `fix(resources): AI pack slugs hide IQ CTA and classify for hub`
-
-Files only (no IQ product, no schema):
-
-- `lib/content-hub/aiResourcePackSlugs.ts` (new)
-- `lib/content-hub/resourceTaxonomy.ts`
-- `lib/content-hub/filterResourceArticleRelatedScholarships.ts`
-- `app/resources/[slug]/page.tsx`
 
 ## Guardrails
 
