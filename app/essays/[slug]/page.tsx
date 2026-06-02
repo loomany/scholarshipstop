@@ -7,6 +7,7 @@ import { isIqSitePromoVisible } from '@/lib/iq/iqSitePromoVisibility';
 
 import { scholarshipPublicPath } from '@/app/scholarships/scholarshipsData';
 import ContentHubArticleMatchedScholarships from '@/components/content-hub/ContentHubArticleMatchedScholarships';
+import ArticleTrustByline from '@/components/content-hub/ArticleTrustByline';
 import SafeContentPostBody from '@/components/content-hub/SafeContentPostBody';
 import { EssayGuideCardImage } from '@/components/essays/EssayGuideCardImage';
 import { EssayExternalContextCard } from '@/components/essays/EssayExternalContextCard';
@@ -45,8 +46,12 @@ import {
 } from '@/lib/seo/jsonLd';
 import { JsonLdScript } from '@/components/seo/JsonLdScript';
 import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
+import { scholarshipIntentCanonicalForContentRoute } from '@/lib/seo/contentIntentCanonical';
 import { getEssaySeoQualityPolicy } from '@/lib/seo/essaySeoQualityPolicy';
-import { countVisibleWords, hasRawPlaceholderText } from '@/lib/seo/visibleText';
+import {
+  countVisibleWords,
+  hasRawPlaceholderText
+} from '@/lib/seo/visibleText';
 
 export const revalidate = 300;
 
@@ -132,9 +137,7 @@ function parseFaq(json: unknown): { question: string; answer: string }[] {
   return out;
 }
 
-function parseSources(
-  json: unknown
-): { title: string; url: string }[] {
+function parseSources(json: unknown): { title: string; url: string }[] {
   if (!Array.isArray(json)) return [];
   const out: { title: string; url: string }[] = [];
   for (const item of json) {
@@ -159,9 +162,7 @@ function EssaySourcesInset({
   return (
     <div
       className={
-        standalone
-          ? ''
-          : 'mt-8 border-t border-gray-100 pt-6 sm:mt-10 sm:pt-8'
+        standalone ? '' : 'mt-8 border-t border-gray-100 pt-6 sm:mt-10 sm:pt-8'
       }
       aria-labelledby="essay-sources-heading"
     >
@@ -193,17 +194,29 @@ export async function generateMetadata({
   params
 }: PageProps): Promise<Metadata> {
   const slug = decodeURIComponent(params.slug).trim();
+  const intentCanonical = scholarshipIntentCanonicalForContentRoute(
+    'essay',
+    slug
+  );
   const staticGuide = getStaticEssayGuide(slug);
   if (staticGuide) {
     const path = essayHubArticlePath(staticGuide.slug);
     const canonical = getCanonical(path);
+    const canonicalUrl = intentCanonical
+      ? getCanonical(intentCanonical.canonicalPath)
+      : canonical;
     return {
       title: staticGuide.title,
       description: staticGuide.description,
-      alternates: buildStage2EnglishPilotAlternates(path),
+      alternates: intentCanonical
+        ? { canonical: canonicalUrl }
+        : buildStage2EnglishPilotAlternates(path),
+      robots: intentCanonical
+        ? { index: false, follow: true }
+        : { index: true, follow: true },
       openGraph: {
         type: 'article',
-        url: canonical,
+        url: canonicalUrl,
         title: staticGuide.title,
         description: staticGuide.description,
         publishedTime: staticGuide.updatedAt,
@@ -221,8 +234,7 @@ export async function generateMetadata({
   if (!essay) {
     return { title: 'Essay guide' };
   }
-  const title =
-    essay.title?.trim() || 'Scholarship essay guide';
+  const title = essay.title?.trim() || 'Scholarship essay guide';
   const description =
     essay.meta_description?.trim() ||
     `How to write a strong essay for your scholarship application: ${title}`;
@@ -237,23 +249,23 @@ export async function generateMetadata({
     hasTitle: Boolean(title.trim()),
     hasH1: Boolean(title.trim()),
     hasBody: Boolean(essay.content_html?.trim()),
-    visibleWordCount: countVisibleWords(
-      title,
-      description,
-      essay.content_html
-    ),
+    visibleWordCount: countVisibleWords(title, description, essay.content_html),
     hasRawPlaceholder: hasRawPlaceholderText(title, essay.content_html)
   });
+  const canonicalUrl = intentCanonical
+    ? getCanonical(intentCanonical.canonicalPath)
+    : url;
   return {
     title,
     description,
-    alternates: { canonical: url },
-    robots: quality.indexable
-      ? { index: true, follow: true }
-      : { index: false, follow: true },
+    alternates: { canonical: canonicalUrl },
+    robots:
+      quality.indexable && !intentCanonical
+        ? { index: true, follow: true }
+        : { index: false, follow: true },
     openGraph: {
       type: 'article',
-      url,
+      url: canonicalUrl,
       title,
       description,
       ...(published ? { publishedTime: published } : {}),
@@ -310,20 +322,19 @@ export default async function EssayGuidePage({ params }: PageProps) {
 
   const { html: bodyHtml, toc: tocItems } =
     injectH2IdsAndExtractToc(bodyHtmlAfterLinks);
-  const primarySplit = bodyHtml
-    ? splitForPrimaryCtaInsertion(bodyHtml)
-    : null;
+  const primarySplit = bodyHtml ? splitForPrimaryCtaInsertion(bodyHtml) : null;
   const midSplit =
-    primarySplit != null
-      ? splitForMidCtaInRemainder(primarySplit.after)
-      : null;
+    primarySplit != null ? splitForMidCtaInRemainder(primarySplit.after) : null;
 
   const faq = parseFaq(essay.faq);
   const sources = parseSources(essay.sources).filter((s) =>
     /^https:\/\//i.test(s.url)
   );
 
-  const relatedScholarshipRows = await fetchScholarshipRowsForEssay(essay.id, 1);
+  const relatedScholarshipRows = await fetchScholarshipRowsForEssay(
+    essay.id,
+    1
+  );
   const primaryScholarshipRow = relatedScholarshipRows[0];
   const parentScholarshipAbout =
     primaryScholarshipRow &&
@@ -334,15 +345,12 @@ export default async function EssayGuidePage({ params }: PageProps) {
       });
       return {
         url: getURL(path),
-        name:
-          primaryScholarshipRow.title?.trim() ||
-          'Scholarship program'
+        name: primaryScholarshipRow.title?.trim() || 'Scholarship program'
       };
     })();
 
-  const relatedScholarshipItems = await getRelatedScholarshipsForEssayGuide(
-    essay
-  );
+  const relatedScholarshipItems =
+    await getRelatedScholarshipsForEssayGuide(essay);
   const essayHubKeys = relatedScholarshipItems.map((i) => i.slug.trim());
   const essayHubScholarships =
     essayHubKeys.length > 0
@@ -368,7 +376,9 @@ export default async function EssayGuidePage({ params }: PageProps) {
       'Scholarship essay guide',
     datePublished: essay.created_at,
     dateModified: essay.updated_at || essay.created_at,
-    imageUrls: essay.hero_image_url?.trim() ? [essay.hero_image_url.trim()] : undefined,
+    imageUrls: essay.hero_image_url?.trim()
+      ? [essay.hero_image_url.trim()]
+      : undefined,
     type: 'Article',
     about: parentScholarshipAbout ?? undefined
   });
@@ -376,9 +386,7 @@ export default async function EssayGuidePage({ params }: PageProps) {
   const faqSchema = buildFaqPageJsonLd(faq, articleUrl);
 
   const sourcesInset =
-    sources.length > 0 ? (
-      <EssaySourcesInset sources={sources} />
-    ) : undefined;
+    sources.length > 0 ? <EssaySourcesInset sources={sources} /> : undefined;
   const sourcesStandalone =
     sources.length > 0 ? (
       <EssaySourcesInset sources={sources} standalone />
@@ -407,11 +415,7 @@ export default async function EssayGuidePage({ params }: PageProps) {
             {essay.title?.trim() || 'Essay guide'}
           </h1>
           <div className="mt-4 space-y-2">
-            {visibleDateLine ? (
-              <p className="text-xs font-medium text-gray-500 sm:text-sm">
-                {visibleDateLine}
-              </p>
-            ) : null}
+            <ArticleTrustByline dateLine={visibleDateLine} />
             <p className="max-w-2xl border-l-2 border-indigo-200 pl-3 text-xs leading-relaxed text-gray-600">
               ScholarshipTop editorial guide. Writing guidance does not
               guarantee eligibility, selection, or award payment.
@@ -557,7 +561,10 @@ function EssayIqCta() {
         <div className="min-w-0">
           <div className="mb-3 flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center gap-2 rounded-full border border-[#FFB875] bg-white/85 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.17em] text-[#B45309] shadow-sm">
-              <BrainCircuit className="h-3.5 w-3.5 text-[#F97316]" aria-hidden />
+              <BrainCircuit
+                className="h-3.5 w-3.5 text-[#F97316]"
+                aria-hidden
+              />
               Featured Tool
             </span>
             <span className="rounded-full border border-slate-200 bg-slate-950 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white">
@@ -572,8 +579,8 @@ function EssayIqCta() {
           </h2>
           <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">
             Turn self-reflection into a clearer story. Take a comprehensive
-            cognitive assessment and get your IQ score, percentile, and strengths
-            across logic, speed, spatial reasoning, and patterns.
+            cognitive assessment and get your IQ score, percentile, and
+            strengths across logic, speed, spatial reasoning, and patterns.
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
             {['Logic', 'Speed', 'Spatial', 'Patterns'].map((item) => (
@@ -615,7 +622,11 @@ function EssayIqCta() {
   );
 }
 
-function EssayBuilderCta({ variant = 'default' }: { variant?: 'default' | 'compact' }) {
+function EssayBuilderCta({
+  variant = 'default'
+}: {
+  variant?: 'default' | 'compact';
+}) {
   if (variant === 'compact') {
     return (
       <div className="mt-4 rounded-3xl border border-indigo-200 bg-indigo-50 px-5 py-4 text-center shadow-sm sm:mt-5 sm:px-6 sm:py-5">
@@ -627,9 +638,7 @@ function EssayBuilderCta({ variant = 'default' }: { variant?: 'default' | 'compa
             Get matched with scholarships in 2 minutes
           </p>
         </div>
-        <HomePrimaryCtaClient
-          className="mt-3 inline-flex items-center justify-center rounded-full bg-black px-7 py-2 text-xl font-bold leading-none text-white shadow-[0_8px_20px_rgba(0,0,0,0.25)] transition hover:bg-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/45"
-        >
+        <HomePrimaryCtaClient className="mt-3 inline-flex items-center justify-center rounded-full bg-black px-7 py-2 text-xl font-bold leading-none text-white shadow-[0_8px_20px_rgba(0,0,0,0.25)] transition hover:bg-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/45">
           Find My Scholarships
         </HomePrimaryCtaClient>
       </div>
@@ -637,12 +646,10 @@ function EssayBuilderCta({ variant = 'default' }: { variant?: 'default' | 'compa
   }
 
   return (
-    <div
-      className="mt-6 rounded-2xl border border-indigo-200 bg-gradient-to-br from-indigo-50 to-white p-6 shadow-sm sm:mt-8 sm:p-8"
-    >
+    <div className="mt-6 rounded-2xl border border-indigo-200 bg-gradient-to-br from-indigo-50 to-white p-6 shadow-sm sm:mt-8 sm:p-8">
       <p className="text-sm font-semibold text-indigo-950">
-        💡 This template was analyzed by our AI. Write your own unique version in
-        2 minutes.
+        💡 This template was analyzed by our AI. Write your own unique version
+        in 2 minutes.
       </p>
       <Link
         href="/essay"

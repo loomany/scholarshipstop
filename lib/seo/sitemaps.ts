@@ -20,6 +20,8 @@ import type { Database } from '@/types_db';
 import { SCHOLARSHIP_CATEGORY_ORDER } from '@/app/scholarships/scholarshipCategories';
 import { getLongTailSitemapSlugs } from '@/app/scholarships/scholarshipLongTailPresets';
 import { scholarshipPublicPath } from '@/app/scholarships/scholarshipsData';
+import { DETAIL_SELECT, mapScholarshipRow } from '@/lib/scholarships/supabase';
+import { readLongTailSeoBundle } from '@/lib/scholarships/longTailSeoStore';
 import { SEO_ROUTE_STATE_CODE_TO_SLUG } from '@/lib/scholarships/seoTags/routeSegmentMaps';
 import { getPromotedSeoCategorySlugs } from '@/lib/scholarships/categorySeoAllowlist';
 import {
@@ -46,7 +48,10 @@ import {
   getEssaySeoQualityPolicy,
   MIN_LOCALIZED_ESSAY_VISIBLE_WORDS
 } from '@/lib/seo/essaySeoQualityPolicy';
-import { getScholarshipSeoRouteQualityPolicy } from '@/lib/seo/scholarshipSeoQualityPolicy';
+import {
+  getScholarshipDetailIndexPolicy,
+  getScholarshipSeoRouteQualityPolicy
+} from '@/lib/seo/scholarshipSeoQualityPolicy';
 import {
   getSitemapDocumentSlugPlan,
   normalizeSitemapSlug,
@@ -58,6 +63,7 @@ import {
   countVisibleWordsUpTo,
   hasRawPlaceholderText
 } from '@/lib/seo/visibleText';
+import { scholarshipIntentCanonicalForContentRoute } from '@/lib/seo/contentIntentCanonical';
 import { listPublishedCategoryTranslations } from '@/lib/i18n/categoryPilot/listPublishedCategoryTranslations';
 import { listPublishedResourceArticleTranslations } from '@/lib/i18n/resourcePilot/listPublishedResourceArticleTranslations';
 import { listPublishedProviderProfileTranslations } from '@/lib/i18n/providerPilot/listPublishedProviderProfileTranslations';
@@ -448,19 +454,25 @@ async function fetchScholarshipSitemapEntries(
   for (;;) {
     const { data, error } = await supabase
       .from('scholarships')
-      .select('id, slug, updated_at, is_indexable, deadline_date, is_recurring')
+      .select(DETAIL_SELECT)
       .eq('is_active', true)
       .order('updated_at', { ascending: false, nullsFirst: false })
       .range(offset, offset + SITEMAP_DB_PAGE_SIZE - 1);
 
     if (error) throw new Error(error.message);
-    const batch = (data ?? []) as ScholarshipSitemapRow[];
+    const batch = (data ?? []) as unknown as ScholarshipSitemapRow[];
     for (const row of batch) {
       if (row.is_indexable === false) continue;
       if (isExpiredScholarshipSitemapRow(row)) continue;
+      const scholarship = mapScholarshipRow(
+        row as unknown as Parameters<typeof mapScholarshipRow>[0]
+      );
+      if (!getScholarshipDetailIndexPolicy(scholarship).indexable) continue;
       out.push({
-        url: `${base}${scholarshipPublicPath(row)}`,
-        lastModified: row.updated_at ? new Date(row.updated_at) : new Date()
+        url: `${base}${scholarshipPublicPath(scholarship)}`,
+        lastModified: scholarship.updatedAt
+          ? new Date(scholarship.updatedAt)
+          : new Date()
       });
     }
     if (batch.length < SITEMAP_DB_PAGE_SIZE) break;
@@ -563,11 +575,18 @@ async function buildResourcesSitemapEntries(
   return dedupeSitemapEntries([
     ...resourcePosts
       .filter((post) => Boolean(post.slug?.trim()))
+      .filter(
+        (post) =>
+          !scholarshipIntentCanonicalForContentRoute('resource', post.slug!)
+      )
       .map((post) => ({
         url: `${base}${resourcesArticlePath(post.slug!.trim())}`,
         lastModified: post.published_at || new Date()
       })),
-    ...STATIC_SCHOLARSHIP_GUIDES.map((guide) => ({
+    ...STATIC_SCHOLARSHIP_GUIDES.filter(
+      (guide) =>
+        !scholarshipIntentCanonicalForContentRoute('resource', guide.slug)
+    ).map((guide) => ({
       url: `${base}${resourcesArticlePath(guide.slug)}`,
       lastModified: new Date('2026-05-16T00:00:00.000Z')
     })),
@@ -587,6 +606,9 @@ const STATIC_ESSAY_GUIDE_SLUGS = new Set(
 
 function essaySitemapRowPassesQuality(row: EssaySitemapRow): boolean {
   if (!row.slug?.trim()) return false;
+  if (scholarshipIntentCanonicalForContentRoute('essay', row.slug)) {
+    return false;
+  }
   if (STATIC_ESSAY_GUIDE_SLUGS.has(row.slug.trim().toLowerCase())) {
     return false;
   }
@@ -628,7 +650,10 @@ async function buildEssaysSitemapEntries(
       }))
       .concat(
         includeStaticGuides
-          ? STATIC_ESSAY_GUIDES.map((guide) => ({
+          ? STATIC_ESSAY_GUIDES.filter(
+              (guide) =>
+                !scholarshipIntentCanonicalForContentRoute('essay', guide.slug)
+            ).map((guide) => ({
               url: `${base}${essayHubArticlePath(guide.slug)}`,
               lastModified: new Date(guide.updatedAt)
             }))
@@ -653,13 +678,17 @@ function scholarshipSeoPathPassesRouteQuality(
   canonicalPath: string,
   routeFamily?: Parameters<
     typeof getScholarshipSeoRouteQualityPolicy
-  >[0]['routeFamily']
+  >[0]['routeFamily'],
+  seoContent?: Parameters<
+    typeof getScholarshipSeoRouteQualityPolicy
+  >[0]['seoContent']
 ): boolean {
   const entry = getSeoManifestRoute(canonicalPath);
   return getScholarshipSeoRouteQualityPolicy({
     canonicalPath,
     entry,
     routeFamily,
+    seoContent,
     stablePublicRoute: true,
     routeResolves: true,
     hasQueryParams: false
@@ -696,7 +725,11 @@ async function buildSeoSitemapEntries(
         if (manifestPathSet.has(slug)) return false;
         return scholarshipSeoPathPassesRouteQuality(slug);
       }
-      return scholarshipSeoPathPassesRouteQuality(slug, 'legacy_long_tail');
+      return scholarshipSeoPathPassesRouteQuality(
+        slug,
+        'legacy_long_tail',
+        readLongTailSeoBundle(slug)
+      );
     })
     .map((slug) => ({
       url: `${base}/scholarships/${slug}`,

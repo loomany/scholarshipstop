@@ -148,9 +148,9 @@ import { useCurrentUserScholarshipMatchProfile } from '@/app/scholarships/useCur
 import { createClient } from '@/utils/supabase/client';
 import {
   filterApplicationTipsForUi,
-  filterFaqForOnPageDisplay,
   filterImportantNoteChunks,
   getNextStepActions,
+  getUsefulFaqForOnPageDisplay,
   hasNonEmptyArray,
   hasTrustworthyAiConfidence,
   normalizeScholarshipForUi,
@@ -158,8 +158,7 @@ import {
   shouldMergeApplicationDetails,
   shouldRenderApplicationTipsUi,
   shouldRenderAwardPaymentSection,
-  shouldRenderSeoApplication,
-  shouldRenderUsefulFaq
+  shouldRenderSeoApplication
 } from '@/lib/scholarships/scholarshipUiModel';
 import type { ImportantNoteChunk } from '@/lib/scholarships/scholarshipUiModel';
 import { getNormalizedBeforeYouApplySections } from '@/lib/scholarships/scholarshipCheckSectionsNormalize';
@@ -2096,27 +2095,11 @@ export default function ScholarshipDetailPageClient({
     (panelPick.showQuickDecision || panelPick.showBeforeYouApply);
 
   const showSeoApplication = shouldRenderSeoApplication(scholarship);
-  const showUsefulFaqPage = shouldRenderUsefulFaq(scholarship, {
+  const faqItemsOnPage = getUsefulFaqForOnPageDisplay(scholarship, {
     heroSummary: ui.heroSummary,
     awardLine: awardCatalogText,
     deadlinePrimary
   });
-  const strictFaqItems = showUsefulFaqPage
-    ? filterFaqForOnPageDisplay(scholarship, {
-        heroSummary: ui.heroSummary,
-        awardLine: awardCatalogText,
-        deadlinePrimary
-      })
-    : [];
-  const fallbackFaqItems = (scholarship.seoFaq ?? [])
-    .filter((it) => {
-      const q = it.question?.trim() ?? '';
-      const a = it.answer?.trim() ?? '';
-      return q.length >= 8 && a.length >= 28;
-    })
-    .slice(0, 5);
-  const faqItemsOnPage =
-    strictFaqItems.length >= 2 ? strictFaqItems : fallbackFaqItems;
   const showFaqBlock = faqItemsOnPage.length >= 2;
   const deadlineMonthParam = detailDeadlineMonthParam(scholarship);
   const deadlineMonthLabel = detailDeadlineMonthLabel(deadlineMonthParam);
@@ -3783,9 +3766,7 @@ export default function ScholarshipDetailPageClient({
           {similarScholarships.length > 0 ? (
             <div
               id="similar-scholarships"
-              className={`${
-                showFaqBlock ? 'mt-4' : 'mt-8'
-              } scroll-mt-24`}
+              className={`${showFaqBlock ? 'mt-4' : 'mt-8'} scroll-mt-24`}
             >
               <div className={scholarshipDetailCardCompactClass}>
                 <div className="flex flex-col gap-4">
@@ -3836,82 +3817,122 @@ export default function ScholarshipDetailPageClient({
                 </div>
 
                 {similarSplitIntoSections ? (
-                <div className="mt-6 space-y-8">
-                  <section aria-labelledby="similar-open-heading">
-                    <div className="flex flex-wrap items-end justify-between gap-2 border-b border-emerald-200/70 pb-2.5">
-                      <h3
-                        id="similar-open-heading"
-                        className="text-sm font-semibold tracking-tight text-emerald-900"
+                  <div className="mt-6 space-y-8">
+                    <section aria-labelledby="similar-open-heading">
+                      <div className="flex flex-wrap items-end justify-between gap-2 border-b border-emerald-200/70 pb-2.5">
+                        <h3
+                          id="similar-open-heading"
+                          className="text-sm font-semibold tracking-tight text-emerald-900"
+                        >
+                          {detailUi.similar.openNow}
+                        </h3>
+                        <span className="text-xs font-medium tabular-nums text-emerald-800/80">
+                          {similarOpenList.length}{' '}
+                          {similarOpenList.length === 1
+                            ? detailUi.similar.scholarship
+                            : detailUi.similar.scholarships}
+                        </span>
+                      </div>
+                      <ul
+                        className={`${similarScholarshipsGridClass} mt-3`}
+                        role="list"
                       >
-                        {detailUi.similar.openNow}
-                      </h3>
-                      <span className="text-xs font-medium tabular-nums text-emerald-800/80">
-                        {similarOpenList.length}{' '}
-                        {similarOpenList.length === 1
-                          ? detailUi.similar.scholarship
-                          : detailUi.similar.scholarships}
-                      </span>
-                    </div>
-                    <ul
-                      className={`${similarScholarshipsGridClass} mt-3`}
-                      role="list"
-                    >
-                      <SimilarScholarshipIqPromoCard copy={detailUi} />
-                      {similarOpenList.map((s) => (
-                        <SimilarScholarshipDetailListItem
-                          key={s.id}
-                          copy={detailUi}
-                          scholarship={s}
-                          highlightPrimary={s.id === similarFirstOpenId}
-                          profileMatchPercent={s.profileMatchPercent ?? null}
-                          isPrimarySimilarOpen={s.id === similarFirstOpenId}
-                          eligibleForMatchPill
-                          isAuthenticated={isAuthenticated}
-                          hasSubscription={hasSubscription}
-                          authResolved={authResolved}
-                          needsEmailConfirmation={needsEmailConfirmation}
-                          onUnverifiedEmailDetailNavigate={
-                            openEmailConfirmModal
-                          }
-                          onGuestDetailNavigate={() =>
-                            openRegistrationWall('grant-guest')
-                          }
-                          onSubscriptionDetailNavigate={() =>
-                            openRegistrationWall('card-unlock')
-                          }
-                          onLockedScholarshipNavigate={
-                            openLockedScholarshipWallForSimilar
-                          }
-                        />
-                      ))}
-                    </ul>
-                  </section>
+                        <SimilarScholarshipIqPromoCard copy={detailUi} />
+                        {similarOpenList.map((s) => (
+                          <SimilarScholarshipDetailListItem
+                            key={s.id}
+                            copy={detailUi}
+                            scholarship={s}
+                            highlightPrimary={s.id === similarFirstOpenId}
+                            profileMatchPercent={s.profileMatchPercent ?? null}
+                            isPrimarySimilarOpen={s.id === similarFirstOpenId}
+                            eligibleForMatchPill
+                            isAuthenticated={isAuthenticated}
+                            hasSubscription={hasSubscription}
+                            authResolved={authResolved}
+                            needsEmailConfirmation={needsEmailConfirmation}
+                            onUnverifiedEmailDetailNavigate={
+                              openEmailConfirmModal
+                            }
+                            onGuestDetailNavigate={() =>
+                              openRegistrationWall('grant-guest')
+                            }
+                            onSubscriptionDetailNavigate={() =>
+                              openRegistrationWall('card-unlock')
+                            }
+                            onLockedScholarshipNavigate={
+                              openLockedScholarshipWallForSimilar
+                            }
+                          />
+                        ))}
+                      </ul>
+                    </section>
 
-                  <section aria-labelledby="similar-closed-heading">
-                    <div className="flex flex-wrap items-end justify-between gap-2 border-b border-zinc-200 pb-2.5">
-                      <h3
-                        id="similar-closed-heading"
-                        className="text-sm font-semibold tracking-tight text-zinc-600"
+                    <section aria-labelledby="similar-closed-heading">
+                      <div className="flex flex-wrap items-end justify-between gap-2 border-b border-zinc-200 pb-2.5">
+                        <h3
+                          id="similar-closed-heading"
+                          className="text-sm font-semibold tracking-tight text-zinc-600"
+                        >
+                          {detailUi.similar.pastDeadline}
+                        </h3>
+                        <span className="text-xs text-zinc-500">
+                          {detailUi.similar.pastDeadlineNote}
+                        </span>
+                      </div>
+                      <ul
+                        className={`${similarScholarshipsGridClass} mt-3`}
+                        role="list"
                       >
-                        {detailUi.similar.pastDeadline}
-                      </h3>
-                      <span className="text-xs text-zinc-500">
-                        {detailUi.similar.pastDeadlineNote}
-                      </span>
-                    </div>
-                    <ul
-                      className={`${similarScholarshipsGridClass} mt-3`}
-                      role="list"
-                    >
-                      {similarClosedList.map((s) => (
+                        {similarClosedList.map((s) => (
+                          <SimilarScholarshipDetailListItem
+                            key={s.id}
+                            copy={detailUi}
+                            scholarship={s}
+                            highlightPrimary={false}
+                            profileMatchPercent={s.profileMatchPercent ?? null}
+                            isPrimarySimilarOpen={false}
+                            eligibleForMatchPill={false}
+                            isAuthenticated={isAuthenticated}
+                            hasSubscription={hasSubscription}
+                            authResolved={authResolved}
+                            needsEmailConfirmation={needsEmailConfirmation}
+                            onUnverifiedEmailDetailNavigate={
+                              openEmailConfirmModal
+                            }
+                            onGuestDetailNavigate={() =>
+                              openRegistrationWall('grant-guest')
+                            }
+                            onSubscriptionDetailNavigate={() =>
+                              openRegistrationWall('card-unlock')
+                            }
+                            onLockedScholarshipNavigate={
+                              openLockedScholarshipWallForSimilar
+                            }
+                          />
+                        ))}
+                      </ul>
+                    </section>
+                  </div>
+                ) : (
+                  <ul
+                    className={`${similarScholarshipsGridClass} mt-5`}
+                    role="list"
+                  >
+                    <SimilarScholarshipIqPromoCard copy={detailUi} />
+                    {similarScholarshipsWithMatch.map((s) => {
+                      const isOpen = !scholarshipDeadlineHasPassed(s);
+                      const isPrimaryOpen =
+                        isOpen && s.id === similarFirstOpenId;
+                      return (
                         <SimilarScholarshipDetailListItem
                           key={s.id}
                           copy={detailUi}
                           scholarship={s}
-                          highlightPrimary={false}
+                          highlightPrimary={Boolean(isPrimaryOpen)}
                           profileMatchPercent={s.profileMatchPercent ?? null}
-                          isPrimarySimilarOpen={false}
-                          eligibleForMatchPill={false}
+                          isPrimarySimilarOpen={Boolean(isPrimaryOpen)}
+                          eligibleForMatchPill={isOpen}
                           isAuthenticated={isAuthenticated}
                           hasSubscription={hasSubscription}
                           authResolved={authResolved}
@@ -3929,57 +3950,20 @@ export default function ScholarshipDetailPageClient({
                             openLockedScholarshipWallForSimilar
                           }
                         />
-                      ))}
-                    </ul>
-                  </section>
+                      );
+                    })}
+                  </ul>
+                )}
+
+                <div className="mt-6 border-t border-zinc-100 pt-4">
+                  <Link
+                    href={backToMatchesHref}
+                    scroll
+                    className={detailBackToMatchesLinkClass}
+                  >
+                    {detailUi.backToMatches}
+                  </Link>
                 </div>
-              ) : (
-                <ul
-                  className={`${similarScholarshipsGridClass} mt-5`}
-                  role="list"
-                >
-                  <SimilarScholarshipIqPromoCard copy={detailUi} />
-                  {similarScholarshipsWithMatch.map((s) => {
-                    const isOpen = !scholarshipDeadlineHasPassed(s);
-                    const isPrimaryOpen = isOpen && s.id === similarFirstOpenId;
-                    return (
-                      <SimilarScholarshipDetailListItem
-                        key={s.id}
-                        copy={detailUi}
-                        scholarship={s}
-                        highlightPrimary={Boolean(isPrimaryOpen)}
-                        profileMatchPercent={s.profileMatchPercent ?? null}
-                        isPrimarySimilarOpen={Boolean(isPrimaryOpen)}
-                        eligibleForMatchPill={isOpen}
-                        isAuthenticated={isAuthenticated}
-                        hasSubscription={hasSubscription}
-                        authResolved={authResolved}
-                        needsEmailConfirmation={needsEmailConfirmation}
-                        onUnverifiedEmailDetailNavigate={openEmailConfirmModal}
-                        onGuestDetailNavigate={() =>
-                          openRegistrationWall('grant-guest')
-                        }
-                        onSubscriptionDetailNavigate={() =>
-                          openRegistrationWall('card-unlock')
-                        }
-                        onLockedScholarshipNavigate={
-                          openLockedScholarshipWallForSimilar
-                        }
-                      />
-                    );
-                  })}
-                </ul>
-              )}
-
-              <div className="mt-6 border-t border-zinc-100 pt-4">
-                <Link
-                  href={backToMatchesHref}
-                  scroll
-                  className={detailBackToMatchesLinkClass}
-                >
-                  {detailUi.backToMatches}
-                </Link>
-              </div>
               </div>
             </div>
           ) : null}

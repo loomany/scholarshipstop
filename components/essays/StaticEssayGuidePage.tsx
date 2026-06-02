@@ -1,8 +1,13 @@
 import Link from 'next/link';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
 
+import ArticleTrustByline from '@/components/content-hub/ArticleTrustByline';
 import { HealthcareCareerGoalsPlanningSection } from '@/components/content-hub/HealthcareCareerGoalsPlanningSection';
 import { PremedTopicContextCard } from '@/components/content-hub/PremedTopicContextCard';
+import {
+  articleAuthorJsonLd,
+  articleReviewerJsonLd
+} from '@/lib/seo/articleTrust';
 import type { StaticEssayGuide } from '@/lib/essays/staticEssayGuides';
 import {
   ESSAYS_PAGE_TITLE,
@@ -101,7 +106,12 @@ export function StaticEssayGuidePage({
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: copy.home, item: urlForPath('/') },
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: copy.home,
+        item: urlForPath('/')
+      },
       {
         '@type': 'ListItem',
         position: 2,
@@ -121,7 +131,8 @@ export function StaticEssayGuidePage({
     url: articleUrl,
     datePublished: guide.updatedAt,
     dateModified: guide.updatedAt,
-    author: { '@type': 'Organization', name: 'ScholarshipTop', url: getURL() },
+    author: articleAuthorJsonLd(),
+    reviewedBy: articleReviewerJsonLd(),
     publisher: {
       '@type': 'Organization',
       name: 'ScholarshipTop',
@@ -161,7 +172,10 @@ export function StaticEssayGuidePage({
         <nav className="text-sm text-gray-500" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
             <li>
-              <Link href={hrefForPath('/')} className="font-medium text-gray-600 hover:text-gray-900">
+              <Link
+                href={hrefForPath('/')}
+                className="font-medium text-gray-600 hover:text-gray-900"
+              >
                 {copy.home}
               </Link>
             </li>
@@ -192,6 +206,14 @@ export function StaticEssayGuidePage({
           <h1 className="mt-3 text-4xl font-bold leading-tight tracking-tight text-gray-950 sm:text-5xl">
             {guide.h1}
           </h1>
+          <ArticleTrustByline
+            dateLine={`Updated ${new Intl.DateTimeFormat('en-US', {
+              month: 'short',
+              day: 'numeric',
+              year: 'numeric'
+            }).format(new Date(guide.updatedAt))}`}
+            className="mt-4"
+          />
           <p className="mt-5 max-w-3xl text-lg leading-8 text-gray-600">
             {guide.intro}
           </p>
@@ -301,7 +323,9 @@ export function StaticEssayGuidePage({
               <tbody className="divide-y divide-gray-100">
                 {guide.doDont.map((row) => (
                   <tr key={`${row.do}-${row.dont}`}>
-                    <td className="px-5 py-4 align-top text-gray-700">{row.do}</td>
+                    <td className="px-5 py-4 align-top text-gray-700">
+                      {row.do}
+                    </td>
                     <td className="px-5 py-4 align-top text-gray-700">
                       {row.dont}
                     </td>

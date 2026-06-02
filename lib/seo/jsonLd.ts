@@ -1,4 +1,8 @@
 import { SITE_BRAND } from '@/lib/seo/siteTitle';
+import {
+  articleAuthorJsonLd,
+  articleReviewerJsonLd
+} from '@/lib/seo/articleTrust';
 import { getURL } from '@/utils/helpers';
 
 export const SCHEMA_ORG_CONTEXT = 'https://schema.org';
@@ -60,7 +64,8 @@ export type JsonLdWebPageInput = {
 function absoluteUrl(pathOrUrl: string): string {
   const trimmed = pathOrUrl.trim();
   if (!trimmed) return getURL();
-  if (/^https?:\/\//i.test(trimmed)) return trimmed.replace(/\/+$/, '') || trimmed;
+  if (/^https?:\/\//i.test(trimmed))
+    return trimmed.replace(/\/+$/, '') || trimmed;
   return getURL(trimmed.replace(/^\/+/, ''));
 }
 
@@ -72,7 +77,12 @@ export function pruneJsonLd<T extends Record<string, unknown>>(value: T): T {
     if (raw == null) continue;
     if (typeof raw === 'string') {
       const trimmed = raw.trim();
-      if (!trimmed || trimmed === 'undefined' || trimmed === 'null' || trimmed === 'NaN') {
+      if (
+        !trimmed ||
+        trimmed === 'undefined' ||
+        trimmed === 'null' ||
+        trimmed === 'NaN'
+      ) {
         continue;
       }
       result[key] = trimmed;
@@ -120,7 +130,9 @@ export function buildBreadcrumbListJsonLd(
   });
 }
 
-export function buildWebPageJsonLd(input: JsonLdWebPageInput): Record<string, unknown> {
+export function buildWebPageJsonLd(
+  input: JsonLdWebPageInput
+): Record<string, unknown> {
   return pruneJsonLd({
     '@context': SCHEMA_ORG_CONTEXT,
     '@type': 'WebPage',
@@ -131,7 +143,9 @@ export function buildWebPageJsonLd(input: JsonLdWebPageInput): Record<string, un
   });
 }
 
-export function buildArticleJsonLd(input: JsonLdArticleInput): Record<string, unknown> | null {
+export function buildArticleJsonLd(
+  input: JsonLdArticleInput
+): Record<string, unknown> | null {
   const headline = input.headline.trim();
   const description = input.description.trim();
   const url = absoluteUrl(input.url);
@@ -149,14 +163,13 @@ export function buildArticleJsonLd(input: JsonLdArticleInput): Record<string, un
     description,
     url,
     datePublished: input.datePublished?.trim() || undefined,
-    dateModified: input.dateModified?.trim() || input.datePublished?.trim() || undefined,
-    ...(input.imageUrls?.length ? { image: input.imageUrls.map((u) => u.trim()).filter(Boolean) } : {}),
-    author: {
-      '@type': 'Organization',
-      '@id': orgId,
-      name: SITE_BRAND,
-      url: siteUrl
-    },
+    dateModified:
+      input.dateModified?.trim() || input.datePublished?.trim() || undefined,
+    ...(input.imageUrls?.length
+      ? { image: input.imageUrls.map((u) => u.trim()).filter(Boolean) }
+      : {}),
+    author: articleAuthorJsonLd(),
+    reviewedBy: articleReviewerJsonLd(),
     publisher: {
       '@type': 'Organization',
       '@id': orgId,
@@ -207,7 +220,9 @@ export function buildOrganizationJsonLd(
   const url = absoluteUrl(input.url);
   if (!name || !url) return null;
 
-  const sameAs = (input.sameAs ?? []).map((href) => href.trim()).filter(Boolean);
+  const sameAs = (input.sameAs ?? [])
+    .map((href) => href.trim())
+    .filter(Boolean);
 
   return pruneJsonLd({
     '@context': SCHEMA_ORG_CONTEXT,
@@ -249,7 +264,9 @@ export function buildItemListJsonLd(
 ): Record<string, unknown> | null {
   const name = input.name.trim();
   const url = absoluteUrl(input.url);
-  const items = input.items.filter((item) => item.name.trim() && item.url.trim());
+  const items = input.items.filter(
+    (item) => item.name.trim() && item.url.trim()
+  );
   if (!name || !url || items.length === 0) return null;
 
   return pruneJsonLd({
@@ -281,11 +298,16 @@ function walkJsonLd(value: unknown, issues: string[], path = '$'): void {
     if (value.length === 0 && path.endsWith('itemListElement')) {
       issues.push(`${path}: empty itemListElement`);
     }
-    value.forEach((item, index) => walkJsonLd(item, issues, `${path}[${index}]`));
+    value.forEach((item, index) =>
+      walkJsonLd(item, issues, `${path}[${index}]`)
+    );
     return;
   }
   if (typeof value !== 'object') {
-    if (typeof value === 'string' && (!value.trim() || value === 'undefined' || value === 'null')) {
+    if (
+      typeof value === 'string' &&
+      (!value.trim() || value === 'undefined' || value === 'null')
+    ) {
       issues.push(`${path}: invalid string ${JSON.stringify(value)}`);
     }
     return;

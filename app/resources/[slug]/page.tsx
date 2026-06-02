@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { ArrowRight, BrainCircuit } from 'lucide-react';
 
 import ContentHubArticleMatchedScholarships from '@/components/content-hub/ContentHubArticleMatchedScholarships';
+import ArticleTrustByline from '@/components/content-hub/ArticleTrustByline';
 import { SiteFaqAccordion } from '@/components/ui/SiteFaqAccordion';
 import ContentHubScholarshipCta from '@/components/content-hub/ContentHubScholarshipCta';
 import StaticScholarshipGuidePage from '@/components/content-hub/StaticScholarshipGuidePage';
@@ -33,6 +34,7 @@ import { resourceArticleDateLine } from '@/lib/content-hub/resourceArticleDates'
 import { getResourceDetailUiCopy } from '@/lib/i18n/resourceDetailUiCopy';
 import { isIqSitePromoVisible } from '@/lib/iq/iqSitePromoVisibility';
 import { getCanonical } from '@/lib/seo/canonical';
+import { scholarshipIntentCanonicalForContentRoute } from '@/lib/seo/contentIntentCanonical';
 import { getURL } from '@/utils/helpers';
 import { applyAutoInternalLinks } from '@/lib/content-hub/autoInternalLinks';
 import { deduplicateQuickSummaryBlocksInHtml } from '@/lib/content-hub/deduplicateQuickSummaryInHtml';
@@ -62,6 +64,10 @@ export async function generateMetadata({
   params
 }: PageProps): Promise<Metadata> {
   const slug = decodeURIComponent(params.slug).trim();
+  const intentCanonical = scholarshipIntentCanonicalForContentRoute(
+    'resource',
+    slug
+  );
   const staticGuide = getStaticScholarshipGuide(slug);
   if (staticGuide) {
     const path = resourcesArticlePath(staticGuide.slug);
@@ -69,11 +75,18 @@ export async function generateMetadata({
     return {
       title: staticGuide.title,
       description: staticGuide.description,
-      alternates: buildStage2EnglishPilotAlternates(path),
+      alternates: intentCanonical
+        ? { canonical: getCanonical(intentCanonical.canonicalPath) }
+        : buildStage2EnglishPilotAlternates(path),
+      robots: intentCanonical
+        ? { index: false, follow: true }
+        : { index: true, follow: true },
       openGraph: {
         title: staticGuide.title,
         description: staticGuide.description,
-        url: canonical
+        url: intentCanonical
+          ? getCanonical(intentCanonical.canonicalPath)
+          : canonical
       }
     };
   }
@@ -89,14 +102,20 @@ export async function generateMetadata({
     slug,
     currentLocale: 'en'
   });
+  const canonicalUrl = intentCanonical
+    ? getCanonical(intentCanonical.canonicalPath)
+    : (alternates.canonical ?? getCanonical(path));
   return {
     title,
     description,
-    alternates,
+    alternates: intentCanonical ? { canonical: canonicalUrl } : alternates,
+    robots: intentCanonical
+      ? { index: false, follow: true }
+      : { index: true, follow: true },
     openGraph: {
       title,
       description,
-      url: alternates.canonical ?? getCanonical(path),
+      url: canonicalUrl,
       ...(ogImage ? { images: [{ url: ogImage }] } : {})
     }
   };
@@ -260,11 +279,7 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
           <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl lg:text-[2.25rem] lg:leading-tight">
             {post.title?.trim() || 'Untitled'}
           </h1>
-          {visibleDateLine ? (
-            <p className="mt-3 text-xs font-medium text-gray-500 sm:text-sm">
-              {visibleDateLine}
-            </p>
-          ) : null}
+          <ArticleTrustByline dateLine={visibleDateLine} className="mt-4" />
         </header>
 
         <ResourceExternalContextCard

@@ -914,6 +914,19 @@ export function getScholarshipSeoRouteQualityPolicy(
         'legacy_long_tail_below_visible_content_threshold'
       ]);
     }
+    if (PRIORITY_LOW_COMPETITION_LONG_TAIL_SLUGS.has(slug)) {
+      return {
+        shouldIndex: true,
+        shouldIncludeInSitemap: true,
+        shouldBeRssEligible: true,
+        indexable: true,
+        includeInSitemap: true,
+        rssEligible: true,
+        qualityTier: 'strong',
+        routeFamily,
+        reasonCodes: ['priority_legacy_long_tail_route']
+      };
+    }
   }
 
   if (

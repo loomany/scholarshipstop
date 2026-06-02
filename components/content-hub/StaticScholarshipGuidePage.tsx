@@ -1,7 +1,12 @@
 import Link from 'next/link';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
 
+import ArticleTrustByline from '@/components/content-hub/ArticleTrustByline';
 import type { StaticScholarshipGuide } from '@/lib/resources/staticScholarshipGuides';
+import {
+  articleAuthorJsonLd,
+  articleReviewerJsonLd
+} from '@/lib/seo/articleTrust';
 import {
   RESOURCES_PAGE_TITLE,
   RESOURCES_SECTION_PATH,
@@ -58,7 +63,12 @@ export default function StaticScholarshipGuidePage({
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: copy.home, item: urlForPath('/') },
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: copy.home,
+        item: urlForPath('/')
+      },
       {
         '@type': 'ListItem',
         position: 2,
@@ -78,7 +88,8 @@ export default function StaticScholarshipGuidePage({
     url: articleUrl,
     datePublished: '2026-05-16',
     dateModified: '2026-05-16',
-    author: { '@type': 'Organization', name: 'ScholarshipTop' },
+    author: articleAuthorJsonLd(),
+    reviewedBy: articleReviewerJsonLd(),
     publisher: {
       '@type': 'Organization',
       name: 'ScholarshipTop',
@@ -116,7 +127,10 @@ export default function StaticScholarshipGuidePage({
         <nav className="text-sm text-gray-500" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
             <li>
-              <Link href={hrefForPath('/')} className="font-medium text-gray-600 hover:text-gray-900">
+              <Link
+                href={hrefForPath('/')}
+                className="font-medium text-gray-600 hover:text-gray-900"
+              >
                 {copy.home}
               </Link>
             </li>
@@ -147,6 +161,10 @@ export default function StaticScholarshipGuidePage({
           <h1 className="mt-3 text-4xl font-bold leading-tight tracking-tight text-gray-950 sm:text-5xl">
             {guide.title}
           </h1>
+          <ArticleTrustByline
+            dateLine="Updated May 16, 2026"
+            className="mt-4"
+          />
           <p className="mt-5 text-lg leading-8 text-gray-600">{guide.intro}</p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
@@ -167,15 +185,23 @@ export default function StaticScholarshipGuidePage({
 
         <section className="mt-10 grid gap-5">
           {guide.sections.map((section) => (
-            <div key={section.title} className="rounded-2xl border border-gray-200 bg-gray-50/70 p-6">
+            <div
+              key={section.title}
+              className="rounded-2xl border border-gray-200 bg-gray-50/70 p-6"
+            >
               <h2 className="text-2xl font-bold tracking-tight text-gray-950">
                 {section.title}
               </h2>
-              <p className="mt-3 text-base leading-7 text-gray-600">{section.body}</p>
+              <p className="mt-3 text-base leading-7 text-gray-600">
+                {section.body}
+              </p>
               <ul className="mt-4 space-y-2 text-base leading-7 text-gray-700">
                 {section.bullets.map((bullet) => (
                   <li key={bullet} className="flex gap-3">
-                    <CheckCircle2 className="mt-1 h-5 w-5 shrink-0 text-orange-500" aria-hidden />
+                    <CheckCircle2
+                      className="mt-1 h-5 w-5 shrink-0 text-orange-500"
+                      aria-hidden
+                    />
                     <span>{bullet}</span>
                   </li>
                 ))}

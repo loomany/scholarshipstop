@@ -500,14 +500,16 @@ function isJunkFaqQuestion(q: string): boolean {
   return t.length < 8 || /^faq\.?$/i.test(t) || /^question\s*\d+$/i.test(t);
 }
 
-/** On-page FAQ only: strict quality + confidence: SEO/schema may still use full seo_faq in layout. */
+type ScholarshipFaqDisplayContext = {
+  heroSummary: string | null;
+  awardLine: string;
+  deadlinePrimary: string;
+};
+
+/** Detail FAQ quality gate shared by visible UI and JSON-LD schema. */
 export function shouldRenderUsefulFaq(
   s: Scholarship,
-  ctx: {
-    heroSummary: string | null;
-    awardLine: string;
-    deadlinePrimary: string;
-  }
+  ctx: ScholarshipFaqDisplayContext
 ): boolean {
   const items = s.seoFaq ?? [];
   const good = items.filter((it) => {
@@ -538,11 +540,7 @@ export function shouldRenderUsefulFaq(
 
 export function filterFaqForOnPageDisplay(
   s: Scholarship,
-  ctx: {
-    heroSummary: string | null;
-    awardLine: string;
-    deadlinePrimary: string;
-  }
+  ctx: ScholarshipFaqDisplayContext
 ): ScholarshipSeoFaqItem[] {
   const items = s.seoFaq ?? [];
   const good = items.filter((it) => {
@@ -570,6 +568,14 @@ export function filterFaqForOnPageDisplay(
         deadlineNorm
       })
   );
+}
+
+export function getUsefulFaqForOnPageDisplay(
+  s: Scholarship,
+  ctx: ScholarshipFaqDisplayContext
+): ScholarshipSeoFaqItem[] {
+  const items = filterFaqForOnPageDisplay(s, ctx);
+  return items.length >= 2 ? items : [];
 }
 
 /** Next steps: only with trustworthy AI; grounded in listing signals. */

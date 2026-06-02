@@ -13,14 +13,21 @@ import { JWT } from 'google-auth-library';
 import { getLongTailSitemapSlugs } from '../app/scholarships/scholarshipLongTailPresets';
 import type { Scholarship } from '../app/scholarships/scholarshipsData';
 import { scholarshipPublicPath } from '../app/scholarships/scholarshipsData';
-import { RESOURCES_PAGE_TITLE, RESOURCES_SECTION_PATH } from '../lib/content-hub/resourcesSection';
-import { ESSAYS_PAGE_TITLE, ESSAYS_SECTION_PATH } from '../lib/essays/essayHubSection';
+import {
+  RESOURCES_PAGE_TITLE,
+  RESOURCES_SECTION_PATH
+} from '../lib/content-hub/resourcesSection';
+import {
+  ESSAYS_PAGE_TITLE,
+  ESSAYS_SECTION_PATH
+} from '../lib/essays/essayHubSection';
 import { fetchActiveScholarshipsForScript } from '../lib/scholarships/supabase';
 import { notifyEnvTelegramAdminsPlainText } from '../lib/telegram/bot';
 import {
   getAllIndexableSeoManifestPathsForSitemap,
   resolveScholarshipSlugPath
 } from '../lib/scholarships/seoScholarshipResolve';
+import { getScholarshipDetailIndexPolicy } from '../lib/seo/scholarshipSeoQualityPolicy';
 import { createPublicClient } from '../utils/supabase/public';
 
 type PageType =
@@ -178,7 +185,10 @@ type FallbackExtract = {
 
 const REPORT_JSON_PATH = path.resolve('docs', 'seo-audit-report.json');
 const REPORT_CSV_PATH = path.resolve('docs', 'seo-audit-report.csv');
-const ACTION_PLAN_JSON_PATH = path.resolve('docs', 'seo-audit-action-plan.json');
+const ACTION_PLAN_JSON_PATH = path.resolve(
+  'docs',
+  'seo-audit-action-plan.json'
+);
 const SUPABASE_SCAN_BATCH = 1000;
 const TITLE_POINTS = 15;
 const META_POINTS = 20;
@@ -252,7 +262,8 @@ function toOutputType(pageType: PageType): OutputPageType {
 }
 
 function defaultPriorityStageForPageType(pageType: PageType): PriorityStage {
-  if (pageType === 'scholarship_seo' || pageType === 'content_page') return 'seo_pages';
+  if (pageType === 'scholarship_seo' || pageType === 'content_page')
+    return 'seo_pages';
   if (pageType === 'scholarship_detail') return 'grants';
   if (pageType === 'provider_page') return 'providers';
   if (pageType === 'essay_page') return 'essays';
@@ -334,8 +345,14 @@ async function fetchSearchAnalyticsImpressionPaths(params: {
   baseUrl: string;
   reportWarnings: string[];
 }): Promise<Set<string>> {
-  const gscDays = Math.max(1, Math.min(400, envIntWithDefault('SEO_AUDIT_GSC_DAYS', 90)));
-  const maxPaths = Math.max(1, envIntWithDefault('SEO_AUDIT_GSC_MAX_PATHS', 10000));
+  const gscDays = Math.max(
+    1,
+    Math.min(400, envIntWithDefault('SEO_AUDIT_GSC_DAYS', 90))
+  );
+  const maxPaths = Math.max(
+    1,
+    envIntWithDefault('SEO_AUDIT_GSC_MAX_PATHS', 10000)
+  );
   const client = buildGscJwtClientOrNull();
   if (!client) {
     params.reportWarnings.push('gsc_priority_skipped_missing_credentials');
@@ -355,7 +372,9 @@ async function fetchSearchAnalyticsImpressionPaths(params: {
     );
     const accessToken = await client.getAccessToken();
     const token =
-      typeof accessToken === 'string' ? accessToken : accessToken?.token ?? null;
+      typeof accessToken === 'string'
+        ? accessToken
+        : (accessToken?.token ?? null);
     if (!token) {
       params.reportWarnings.push('gsc_priority_skipped_no_access_token');
       return new Set();
@@ -384,7 +403,9 @@ async function fetchSearchAnalyticsImpressionPaths(params: {
         })
       });
       if (!response.ok) {
-        params.reportWarnings.push(`gsc_priority_query_failed_${response.status}`);
+        params.reportWarnings.push(
+          `gsc_priority_query_failed_${response.status}`
+        );
         return out;
       }
 
@@ -457,7 +478,9 @@ function applyPriorityOrder(
   return { ordered, priorityCounts };
 }
 
-function buildExecutionSummaryRows(pages: AuditInputPage[]): PriorityExecutionSummaryRow[] {
+function buildExecutionSummaryRows(
+  pages: AuditInputPage[]
+): PriorityExecutionSummaryRow[] {
   const order: PriorityStage[] = [
     'gsc_impressions',
     'seo_pages',
@@ -475,7 +498,8 @@ function buildExecutionSummaryRows(pages: AuditInputPage[]): PriorityExecutionSu
     {} as Record<PriorityStage, number>
   );
   for (const page of pages) {
-    const stage = page.priorityStage ?? defaultPriorityStageForPageType(page.pageType);
+    const stage =
+      page.priorityStage ?? defaultPriorityStageForPageType(page.pageType);
     plannedCounts[stage] += 1;
   }
   return order
@@ -523,12 +547,18 @@ function pickFixSuggestion(issueCodes: string[], status: Status): string {
   if (issueCodes.includes('result_count_unavailable_internal_context')) {
     return 'Provide Supabase env for full internal audit context or treat this check as partial.';
   }
-  if (status === 'bad') return 'Fix critical metadata gaps first: title, meta, canonical, H1.';
-  if (status === 'medium') return 'Improve metadata quality and missing support blocks.';
+  if (status === 'bad')
+    return 'Fix critical metadata gaps first: title, meta, canonical, H1.';
+  if (status === 'medium')
+    return 'Improve metadata quality and missing support blocks.';
   return 'No immediate action required.';
 }
 
-function deriveFixPriority(issueCodes: string[], score: number, status: Status): FixPriority {
+function deriveFixPriority(
+  issueCodes: string[],
+  score: number,
+  status: Status
+): FixPriority {
   const criticalCodes = new Set([
     'title_missing',
     'meta_description_missing',
@@ -541,8 +571,10 @@ function deriveFixPriority(issueCodes: string[], score: number, status: Status):
     'duplicate_title',
     'duplicate_meta_description'
   ]);
-  if (issueCodes.some((c) => criticalCodes.has(c)) || score < 40) return 'critical';
-  if (status === 'bad' || issueCodes.some((c) => highCodes.has(c))) return 'high';
+  if (issueCodes.some((c) => criticalCodes.has(c)) || score < 40)
+    return 'critical';
+  if (status === 'bad' || issueCodes.some((c) => highCodes.has(c)))
+    return 'high';
   if (status === 'medium' || issueCodes.length > 0) return 'medium';
   return 'low';
 }
@@ -551,7 +583,7 @@ function hasSupabaseScriptEnv(): boolean {
   const hasUrl = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL?.trim());
   const hasKey = Boolean(
     process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() ||
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim()
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim()
   );
   return hasUrl && hasKey;
 }
@@ -578,7 +610,8 @@ function detailMetaFallbackDescription(s: Scholarship): string {
   const seo = normalizeWhitespace(s.seoExcerpt);
   if (seo.length >= 40) return seo.length > 160 ? `${seo.slice(0, 157)}…` : seo;
   const short = normalizeWhitespace(s.summaryShort);
-  if (short.length >= 40) return short.length > 160 ? `${short.slice(0, 157)}…` : short;
+  if (short.length >= 40)
+    return short.length > 160 ? `${short.slice(0, 157)}…` : short;
   const title = normalizeWhitespace(s.title) || 'This scholarship';
   return `Learn the key details of ${title}, including eligibility, deadline, award amount, required documents, and how to apply.`.slice(
     0,
@@ -593,7 +626,10 @@ function stripTitle(raw: unknown): string | null {
     const fromAbsolute = typeof o.absolute === 'string' ? o.absolute : null;
     const fromDefault = typeof o.default === 'string' ? o.default : null;
     const fromTemplate = typeof o.template === 'string' ? o.template : null;
-    return normalizeWhitespace(fromAbsolute || fromDefault || fromTemplate || '') || null;
+    return (
+      normalizeWhitespace(fromAbsolute || fromDefault || fromTemplate || '') ||
+      null
+    );
   }
   return null;
 }
@@ -609,7 +645,9 @@ function extractCanonical(raw: unknown): string | null {
   if (typeof raw === 'string') return normalizeWhitespace(raw) || null;
   if (typeof raw === 'object') {
     const value = (raw as Record<string, unknown>).canonical;
-    return typeof value === 'string' ? normalizeWhitespace(value) || null : null;
+    return typeof value === 'string'
+      ? normalizeWhitespace(value) || null
+      : null;
   }
   return null;
 }
@@ -648,7 +686,11 @@ function checkRange(
   };
 }
 
-function checkExists(value: unknown, maxPoints: number, missingReason: string): CheckResult {
+function checkExists(
+  value: unknown,
+  maxPoints: number,
+  missingReason: string
+): CheckResult {
   const ok = Boolean(value);
   return {
     ok,
@@ -693,21 +735,28 @@ function parseTagContent(html: string, tag: string): string | null {
 
 function parseMetaContent(html: string, name: string): string | null {
   const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const re =
-    new RegExp(`<meta[^>]+(?:name|property)=["']${escaped}["'][^>]*content=["']([^"']*)["'][^>]*>`, 'i');
+  const re = new RegExp(
+    `<meta[^>]+(?:name|property)=["']${escaped}["'][^>]*content=["']([^"']*)["'][^>]*>`,
+    'i'
+  );
   const m = html.match(re);
   return normalizeWhitespace(m?.[1] ?? '') || null;
 }
 
 function parseLinkHref(html: string, rel: string): string | null {
   const escaped = rel.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const re =
-    new RegExp(`<link[^>]+rel=["']${escaped}["'][^>]*href=["']([^"']+)["'][^>]*>`, 'i');
+  const re = new RegExp(
+    `<link[^>]+rel=["']${escaped}["'][^>]*href=["']([^"']+)["'][^>]*>`,
+    'i'
+  );
   const m = html.match(re);
   return normalizeWhitespace(m?.[1] ?? '') || null;
 }
 
-async function fetchHtmlFallback(baseUrl: string, urlPath: string): Promise<FallbackExtract | null> {
+async function fetchHtmlFallback(
+  baseUrl: string,
+  urlPath: string
+): Promise<FallbackExtract | null> {
   const url = `${baseUrl.replace(/\/$/, '')}${urlPath.startsWith('/') ? urlPath : `/${urlPath}`}`;
   const res = await fetch(url, { method: 'GET' });
   if (!res.ok) {
@@ -717,7 +766,8 @@ async function fetchHtmlFallback(baseUrl: string, urlPath: string): Promise<Fall
   return {
     title: parseTagContent(html, 'title'),
     metaDescription:
-      parseMetaContent(html, 'description') || parseMetaContent(html, 'og:description'),
+      parseMetaContent(html, 'description') ||
+      parseMetaContent(html, 'og:description'),
     h1: parseTagContent(html, 'h1'),
     canonical: parseLinkHref(html, 'canonical'),
     robots: parseMetaContent(html, 'robots'),
@@ -732,11 +782,17 @@ function statusFromScore(score: number): Status {
   return 'bad';
 }
 
-function getTitleRangeForType(_type: OutputPageType): { min: number; max: number } {
+function getTitleRangeForType(_type: OutputPageType): {
+  min: number;
+  max: number;
+} {
   return { min: 25, max: 70 };
 }
 
-function getMetaRangeForType(_type: OutputPageType): { min: number; max: number } {
+function getMetaRangeForType(_type: OutputPageType): {
+  min: number;
+  max: number;
+} {
   return { min: 120, max: 160 };
 }
 
@@ -788,7 +844,8 @@ function classifyIssueSeverity(code: string): Severity {
     'eligibility_missing',
     'application_missing'
   ]);
-  if (code === 'result_count_unavailable_internal_context') return 'false_positive';
+  if (code === 'result_count_unavailable_internal_context')
+    return 'false_positive';
   if (critical.has(code)) return 'critical';
   if (important.has(code)) return 'important';
   return 'minor';
@@ -847,37 +904,50 @@ function hasScholarshipEligibilitySignals(s: Scholarship): boolean {
   return boolSignals.some((v) => v === true);
 }
 
-async function extractScholarshipListingInternal(page: AuditInputPage): Promise<InternalExtract> {
+async function extractScholarshipListingInternal(
+  page: AuditInputPage
+): Promise<InternalExtract> {
   const issues: string[] = [];
   const canonicalPath = page.canonicalPath ?? page.sourceKey;
   const segments = canonicalPath.split('/').filter(Boolean);
-  const seo = await readJsonIfExists<LongTailLikeBundle>(contentFilePath(canonicalPath));
-  const longTail = await readJsonIfExists<LongTailLikeBundle>(longTailFilePath(canonicalPath));
+  const seo = await readJsonIfExists<LongTailLikeBundle>(
+    contentFilePath(canonicalPath)
+  );
+  const longTail = await readJsonIfExists<LongTailLikeBundle>(
+    longTailFilePath(canonicalPath)
+  );
   const resolved = resolveScholarshipSlugPath(segments);
-  const title = normalizeWhitespace(
-    seo?.seo_title ??
-      longTail?.seo_title ??
-      (resolved.kind === 'manifest_seo' ? resolved.entry.h1Fallback : '')
-  ) || null;
-  const metaDescription = normalizeWhitespace(
-    seo?.seo_description ??
-      longTail?.seo_description ??
-      (resolved.kind === 'manifest_seo' ? resolved.entry.metaDescriptionFallback : '')
-  ) || null;
+  const title =
+    normalizeWhitespace(
+      seo?.seo_title ??
+        longTail?.seo_title ??
+        (resolved.kind === 'manifest_seo' ? resolved.entry.h1Fallback : '')
+    ) || null;
+  const metaDescription =
+    normalizeWhitespace(
+      seo?.seo_description ??
+        longTail?.seo_description ??
+        (resolved.kind === 'manifest_seo'
+          ? resolved.entry.metaDescriptionFallback
+          : '')
+    ) || null;
   const h1 =
-    normalizeWhitespace(seo?.h1 ?? seo?.seo_title ?? longTail?.h1 ?? longTail?.seo_title ?? '') ||
-    title;
+    normalizeWhitespace(
+      seo?.h1 ?? seo?.seo_title ?? longTail?.h1 ?? longTail?.seo_title ?? ''
+    ) || title;
   const hasContentBlocks = Boolean(
     normalizeWhitespace(seo?.intro) ||
-      normalizeWhitespace(seo?.supporting) ||
-      normalizeWhitespace(longTail?.intro) ||
-      normalizeWhitespace(longTail?.body_html)
+    normalizeWhitespace(seo?.supporting) ||
+    normalizeWhitespace(longTail?.intro) ||
+    normalizeWhitespace(longTail?.body_html)
   );
   const hasFaq =
-    (seo?.faq?.filter((f) => normalizeWhitespace(f.question) && normalizeWhitespace(f.answer))
-      .length ?? 0) > 0 ||
-    (longTail?.faq?.filter((f) => normalizeWhitespace(f.question) && normalizeWhitespace(f.answer))
-      .length ?? 0) > 0;
+    (seo?.faq?.filter(
+      (f) => normalizeWhitespace(f.question) && normalizeWhitespace(f.answer)
+    ).length ?? 0) > 0 ||
+    (longTail?.faq?.filter(
+      (f) => normalizeWhitespace(f.question) && normalizeWhitespace(f.answer)
+    ).length ?? 0) > 0;
   const listingBody = normalizeWhitespace(
     `${seo?.intro ?? ''} ${seo?.supporting ?? ''} ${longTail?.intro ?? ''} ${longTail?.body_html ?? ''}`
   );
@@ -885,7 +955,9 @@ async function extractScholarshipListingInternal(page: AuditInputPage): Promise<
   let scholarshipResultsCount: number | null = null;
   scholarshipResultsCount =
     resolved.kind === 'manifest_seo'
-      ? (resolved.entry.scholarshipsCount ?? resolved.entry.minCountSnapshot ?? null)
+      ? (resolved.entry.scholarshipsCount ??
+        resolved.entry.minCountSnapshot ??
+        null)
       : (seo?.page_data?.exactCount ?? longTail?.page_data?.exactCount ?? null);
   if (scholarshipResultsCount == null) {
     issues.push('result_count_unavailable_internal_context');
@@ -910,7 +982,9 @@ async function extractScholarshipListingInternal(page: AuditInputPage): Promise<
   };
 }
 
-async function extractScholarshipDetailInternal(page: AuditInputPage): Promise<InternalExtract> {
+async function extractScholarshipDetailInternal(
+  page: AuditInputPage
+): Promise<InternalExtract> {
   const issues: string[] = [];
   const s = page.scholarship;
   if (!s) {
@@ -928,10 +1002,10 @@ async function extractScholarshipDetailInternal(page: AuditInputPage): Promise<I
   }
   const hasContentBlocks = Boolean(
     normalizeWhitespace(s.description) ||
-      normalizeWhitespace(s.seoOverview) ||
-      normalizeWhitespace(s.seoEligibility) ||
-      normalizeWhitespace(s.seoApplication) ||
-      normalizeWhitespace(s.fullContentHtml)
+    normalizeWhitespace(s.seoOverview) ||
+    normalizeWhitespace(s.seoEligibility) ||
+    normalizeWhitespace(s.seoApplication) ||
+    normalizeWhitespace(s.fullContentHtml)
   );
   const hasFaq = (s.seoFaq?.length ?? 0) > 0;
   const overview = normalizeWhitespace(s.seoOverview);
@@ -940,8 +1014,14 @@ async function extractScholarshipDetailInternal(page: AuditInputPage): Promise<I
   const fullHtml = normalizeWhitespace(s.fullContentHtml);
   const eligibilityEvidence = hasScholarshipEligibilitySignals(s);
   const hasEligibility = Boolean(eligibility || eligibilityEvidence);
+  const indexPolicy = getScholarshipDetailIndexPolicy(s);
+  if (!indexPolicy.indexable) {
+    issues.push(`detail_noindex:${indexPolicy.reasonCodes.join(',')}`);
+  }
   return {
-    title: buildScholarshipDetailSeoTitle(normalizeWhitespace(s.title) || 'Scholarship'),
+    title: buildScholarshipDetailSeoTitle(
+      normalizeWhitespace(s.title) || 'Scholarship'
+    ),
     metaDescription: detailMetaFallbackDescription(s),
     h1: normalizeWhitespace(s.title) || 'Scholarship',
     hasContentBlocks,
@@ -949,8 +1029,10 @@ async function extractScholarshipDetailInternal(page: AuditInputPage): Promise<I
     faqFromData: hasFaq,
     scholarshipResultsCount: 1,
     canonical: scholarshipPublicPath(s),
-    indexable: s.isIndexable !== false,
-    contentLength: normalizeWhitespace(`${overview} ${eligibility} ${application} ${fullHtml}`).length,
+    indexable: indexPolicy.indexable,
+    contentLength: normalizeWhitespace(
+      `${overview} ${eligibility} ${application} ${fullHtml}`
+    ).length,
     internalLinksCount: (s.fullContentHtml?.match(/<a\b/gi) ?? []).length,
     hasOverview: Boolean(overview || normalizeWhitespace(s.description)),
     hasEligibility,
@@ -960,7 +1042,9 @@ async function extractScholarshipDetailInternal(page: AuditInputPage): Promise<I
   };
 }
 
-async function extractContentInternal(page: AuditInputPage): Promise<InternalExtract> {
+async function extractContentInternal(
+  page: AuditInputPage
+): Promise<InternalExtract> {
   const issues: string[] = [];
   if (page.urlPath === '/resources') {
     return {
@@ -988,7 +1072,10 @@ async function extractContentInternal(page: AuditInputPage): Promise<InternalExt
       scholarshipResultsCount: null,
       canonical: null,
       indexable: null,
-      issues: ['content_slug_missing', 'result_count_unavailable_internal_context']
+      issues: [
+        'content_slug_missing',
+        'result_count_unavailable_internal_context'
+      ]
     };
   }
   const post = page.contentPost;
@@ -1002,18 +1089,22 @@ async function extractContentInternal(page: AuditInputPage): Promise<InternalExt
       scholarshipResultsCount: null,
       canonical: `/resources/${encodeURIComponent(slug)}`,
       indexable: true,
-      issues: ['content_posts_unavailable', 'result_count_unavailable_internal_context']
+      issues: [
+        'content_posts_unavailable',
+        'result_count_unavailable_internal_context'
+      ]
     };
   }
-  const faqCount =
-    Array.isArray((post as Record<string, unknown> | null)?.faq)
-      ? ((post as Record<string, unknown>).faq as unknown[]).filter((item) => {
-          if (!item || typeof item !== 'object') return false;
-          const o = item as Record<string, unknown>;
-          return Boolean(normalizeWhitespace(String(o.question ?? o.q ?? ''))) &&
-            Boolean(normalizeWhitespace(String(o.answer ?? o.a ?? '')));
-        }).length
-      : 0;
+  const faqCount = Array.isArray((post as Record<string, unknown> | null)?.faq)
+    ? ((post as Record<string, unknown>).faq as unknown[]).filter((item) => {
+        if (!item || typeof item !== 'object') return false;
+        const o = item as Record<string, unknown>;
+        return (
+          Boolean(normalizeWhitespace(String(o.question ?? o.q ?? ''))) &&
+          Boolean(normalizeWhitespace(String(o.answer ?? o.a ?? '')))
+        );
+      }).length
+    : 0;
   const h1 = normalizeWhitespace(post?.title ?? '');
   const hasContentBlocks = Boolean(normalizeWhitespace(post?.body_html ?? ''));
   const bodyHtml = normalizeWhitespace(post?.body_html ?? '');
@@ -1033,7 +1124,9 @@ async function extractContentInternal(page: AuditInputPage): Promise<InternalExt
   };
 }
 
-function parseFaqLikeArray(value: unknown): Array<{ question: string; answer: string }> {
+function parseFaqLikeArray(
+  value: unknown
+): Array<{ question: string; answer: string }> {
   if (!Array.isArray(value)) return [];
   return value
     .map((item) => {
@@ -1052,7 +1145,9 @@ function parseJsonRecord(value: unknown): Record<string, unknown> {
   return value as Record<string, unknown>;
 }
 
-async function extractEssayInternal(page: AuditInputPage): Promise<InternalExtract> {
+async function extractEssayInternal(
+  page: AuditInputPage
+): Promise<InternalExtract> {
   const issues: string[] = [];
   if (page.urlPath === '/essays') {
     return {
@@ -1080,7 +1175,10 @@ async function extractEssayInternal(page: AuditInputPage): Promise<InternalExtra
       scholarshipResultsCount: null,
       canonical: null,
       indexable: null,
-      issues: ['essay_slug_missing', 'result_count_unavailable_internal_context']
+      issues: [
+        'essay_slug_missing',
+        'result_count_unavailable_internal_context'
+      ]
     };
   }
 
@@ -1095,7 +1193,10 @@ async function extractEssayInternal(page: AuditInputPage): Promise<InternalExtra
       scholarshipResultsCount: null,
       canonical: `/essays/${encodeURIComponent(slug)}`,
       indexable: true,
-      issues: ['essays_unavailable', 'result_count_unavailable_internal_context']
+      issues: [
+        'essays_unavailable',
+        'result_count_unavailable_internal_context'
+      ]
     };
   }
 
@@ -1112,12 +1213,15 @@ async function extractEssayInternal(page: AuditInputPage): Promise<InternalExtra
     canonical: `/essays/${encodeURIComponent(slug)}`,
     indexable: true,
     contentLength: essayHtml.length,
-    internalLinksCount: ((essay.content_html ?? '').match(/<a\b/gi) ?? []).length,
+    internalLinksCount: ((essay.content_html ?? '').match(/<a\b/gi) ?? [])
+      .length,
     issues: ['result_count_unavailable_internal_context']
   };
 }
 
-async function extractCompareInternal(page: AuditInputPage): Promise<InternalExtract> {
+async function extractCompareInternal(
+  page: AuditInputPage
+): Promise<InternalExtract> {
   const issues: string[] = [];
   if (page.urlPath === '/compare') {
     return {
@@ -1173,7 +1277,10 @@ async function extractCompareInternal(page: AuditInputPage): Promise<InternalExt
       scholarshipResultsCount: null,
       canonical: null,
       indexable: null,
-      issues: ['compare_slug_missing', 'result_count_unavailable_internal_context']
+      issues: [
+        'compare_slug_missing',
+        'result_count_unavailable_internal_context'
+      ]
     };
   }
   const row = page.comparePage;
@@ -1190,7 +1297,10 @@ async function extractCompareInternal(page: AuditInputPage): Promise<InternalExt
           ? `/compare/states/${encodeURIComponent(slug)}`
           : `/compare/universities/${encodeURIComponent(slug)}`,
       indexable: true,
-      issues: ['compare_pages_unavailable', 'result_count_unavailable_internal_context']
+      issues: [
+        'compare_pages_unavailable',
+        'result_count_unavailable_internal_context'
+      ]
     };
   }
   const content = parseJsonRecord(row.content_json);
@@ -1215,13 +1325,18 @@ async function extractCompareInternal(page: AuditInputPage): Promise<InternalExt
         : `/compare/universities/${encodeURIComponent(slug)}`,
     indexable: true,
     contentLength: bodyHtml.length,
-    internalLinksCount: (String(content.body_html ?? '').match(/<a\b/gi) ?? []).length,
-    hasComparisonContent: Boolean(bodyHtml || normalizeWhitespace(row.ai_verdict)),
+    internalLinksCount: (String(content.body_html ?? '').match(/<a\b/gi) ?? [])
+      .length,
+    hasComparisonContent: Boolean(
+      bodyHtml || normalizeWhitespace(row.ai_verdict)
+    ),
     issues: ['result_count_unavailable_internal_context']
   };
 }
 
-async function extractProviderInternal(page: AuditInputPage): Promise<InternalExtract> {
+async function extractProviderInternal(
+  page: AuditInputPage
+): Promise<InternalExtract> {
   if (page.urlPath === '/providers') {
     return {
       title: 'Scholarship Providers',
@@ -1248,7 +1363,10 @@ async function extractProviderInternal(page: AuditInputPage): Promise<InternalEx
       scholarshipResultsCount: null,
       canonical: null,
       indexable: null,
-      issues: ['provider_slug_missing', 'result_count_unavailable_internal_context']
+      issues: [
+        'provider_slug_missing',
+        'result_count_unavailable_internal_context'
+      ]
     };
   }
   const row = page.providerRow;
@@ -1262,10 +1380,14 @@ async function extractProviderInternal(page: AuditInputPage): Promise<InternalEx
       scholarshipResultsCount: null,
       canonical: `/providers/${encodeURIComponent(slug)}`,
       indexable: true,
-      issues: ['providers_unavailable', 'result_count_unavailable_internal_context']
+      issues: [
+        'providers_unavailable',
+        'result_count_unavailable_internal_context'
+      ]
     };
   }
-  const displayName = normalizeWhitespace(row.display_name) || slug.replace(/-/g, ' ');
+  const displayName =
+    normalizeWhitespace(row.display_name) || slug.replace(/-/g, ' ');
   const metaDescription =
     normalizeWhitespace(row.ai_description) ||
     `Scholarships and profile for ${displayName} on ScholarshipTop.`;
@@ -1283,7 +1405,9 @@ async function extractProviderInternal(page: AuditInputPage): Promise<InternalEx
     indexable: true,
     contentLength: normalizeWhitespace(row.ai_description).length,
     hasScholarshipList:
-      typeof row.scholarship_count === 'number' ? row.scholarship_count > 0 : false,
+      typeof row.scholarship_count === 'number'
+        ? row.scholarship_count > 0
+        : false,
     issues:
       typeof row.scholarship_count === 'number'
         ? []
@@ -1292,8 +1416,10 @@ async function extractProviderInternal(page: AuditInputPage): Promise<InternalEx
 }
 
 async function extractInternal(page: AuditInputPage): Promise<InternalExtract> {
-  if (page.pageType === 'scholarship_seo') return extractScholarshipListingInternal(page);
-  if (page.pageType === 'scholarship_detail') return extractScholarshipDetailInternal(page);
+  if (page.pageType === 'scholarship_seo')
+    return extractScholarshipListingInternal(page);
+  if (page.pageType === 'scholarship_detail')
+    return extractScholarshipDetailInternal(page);
   if (page.pageType === 'content_page') return extractContentInternal(page);
   if (page.pageType === 'essay_page') return extractEssayInternal(page);
   if (page.pageType === 'compare_page') return extractCompareInternal(page);
@@ -1319,7 +1445,10 @@ async function listAuditPages(): Promise<{
   const reportWarnings: string[] = [];
   const listingManifestPaths = getAllIndexableSeoManifestPathsForSitemap(3);
   const listingLongTail = getLongTailSitemapSlugs().map((s) => String(s));
-  const listingPages: AuditInputPage[] = [...listingManifestPaths, ...listingLongTail].map((p) => ({
+  const listingPages: AuditInputPage[] = [
+    ...listingManifestPaths,
+    ...listingLongTail
+  ].map((p) => ({
     pageType: 'scholarship_seo',
     urlPath: `/scholarships/${p}`,
     sourceKey: p,
@@ -1401,7 +1530,9 @@ async function listAuditPages(): Promise<{
           const to = from + SUPABASE_SCAN_BATCH - 1;
           const { data } = await supabase
             .from('content_posts')
-            .select('slug, published_at, title, meta_title, meta_description, body_html, faq')
+            .select(
+              'slug, published_at, title, meta_title, meta_description, body_html, faq'
+            )
             .eq('status', 'published')
             .not('slug', 'is', null)
             .neq('slug', '')
@@ -1465,7 +1596,9 @@ async function listAuditPages(): Promise<{
           const to = from + SUPABASE_SCAN_BATCH - 1;
           const { data: compareData } = await supabase
             .from('compare_pages')
-            .select('slug, meta_title, meta_description, content_json, ai_verdict')
+            .select(
+              'slug, meta_title, meta_description, content_json, ai_verdict'
+            )
             .eq('status', 'published')
             .not('slug', 'is', null)
             .neq('slug', '')
@@ -1496,7 +1629,9 @@ async function listAuditPages(): Promise<{
           const to = from + SUPABASE_SCAN_BATCH - 1;
           const { data: compareStatesData } = await supabase
             .from('state_compare_pages')
-            .select('slug, meta_title, meta_description, content_json, ai_verdict')
+            .select(
+              'slug, meta_title, meta_description, content_json, ai_verdict'
+            )
             .eq('status', 'published')
             .not('slug', 'is', null)
             .neq('slug', '')
@@ -1552,7 +1687,12 @@ async function listAuditPages(): Promise<{
             .from('providers')
             .select('slug, ai_faq')
             .in('slug', chunk);
-          providersFaqRows.push(...((providersFaqData ?? []) as Array<{ slug: string; ai_faq: unknown }>));
+          providersFaqRows.push(
+            ...((providersFaqData ?? []) as Array<{
+              slug: string;
+              ai_faq: unknown;
+            }>)
+          );
         }
         providerFaqBySlug = new Map(
           providersFaqRows.map((row) => [row.slug, row.ai_faq])
@@ -1574,7 +1714,11 @@ async function listAuditPages(): Promise<{
     reportWarnings.push('content_pages_skipped_missing_supabase_env');
   }
   const contentPages: AuditInputPage[] = [
-    { pageType: 'content_page', urlPath: '/resources', sourceKey: '/resources' },
+    {
+      pageType: 'content_page',
+      urlPath: '/resources',
+      sourceKey: '/resources'
+    },
     ...contentRows.map((r) => ({
       pageType: 'content_page' as const,
       urlPath: `/resources/${encodeURIComponent(r.slug.trim())}`,
@@ -1615,7 +1759,11 @@ async function listAuditPages(): Promise<{
       urlPath: '/compare/universities',
       sourceKey: '/compare/universities'
     },
-    { pageType: 'compare_page', urlPath: '/compare/states', sourceKey: '/compare/states' },
+    {
+      pageType: 'compare_page',
+      urlPath: '/compare/states',
+      sourceKey: '/compare/states'
+    },
     ...compareUniversityRows.map((row) => ({
       pageType: 'compare_page' as const,
       compareType: 'university' as const,
@@ -1646,7 +1794,11 @@ async function listAuditPages(): Promise<{
     }))
   ];
   const providerPages: AuditInputPage[] = [
-    { pageType: 'provider_page', urlPath: '/providers', sourceKey: '/providers' },
+    {
+      pageType: 'provider_page',
+      urlPath: '/providers',
+      sourceKey: '/providers'
+    },
     ...providerRows.map((row) => ({
       pageType: 'provider_page' as const,
       providerSlug: row.slug.trim(),
@@ -1675,7 +1827,9 @@ async function listAuditPages(): Promise<{
   return { pages, reportWarnings: Array.from(new Set(reportWarnings)) };
 }
 
-function toCsvValue(input: string | number | boolean | null | undefined): string {
+function toCsvValue(
+  input: string | number | boolean | null | undefined
+): string {
   const s = input == null ? '' : String(input);
   if (!/[",\n]/.test(s)) return s;
   return `"${s.replace(/"/g, '""')}"`;
@@ -1761,8 +1915,18 @@ async function main() {
 
   const limit = envInt('SEO_AUDIT_LIMIT');
   const typeFilterRaw = argString('type');
-  const typeFilter = typeFilterRaw ? new Set(typeFilterRaw.split(',').map((x) => x.trim()).filter(Boolean)) : null;
-  const progressEvery = Math.max(1, envIntWithDefault('SEO_AUDIT_PROGRESS_EVERY', 25));
+  const typeFilter = typeFilterRaw
+    ? new Set(
+        typeFilterRaw
+          .split(',')
+          .map((x) => x.trim())
+          .filter(Boolean)
+      )
+    : null;
+  const progressEvery = Math.max(
+    1,
+    envIntWithDefault('SEO_AUDIT_PROGRESS_EVERY', 25)
+  );
   const telegramProgress = envFlag('SEO_AUDIT_NOTIFY_TELEGRAM');
   const baseUrl =
     process.env.SEO_AUDIT_BASE_URL?.trim() ||
@@ -1774,13 +1938,13 @@ async function main() {
     baseUrl,
     reportWarnings
   });
-  const { ordered: prioritizedPages, priorityCounts: stagePriorityCounts } = applyPriorityOrder(
-    pages,
-    impressionPaths
-  );
+  const { ordered: prioritizedPages, priorityCounts: stagePriorityCounts } =
+    applyPriorityOrder(pages, impressionPaths);
   const urlFilterSet = await loadUrlFilterSet();
   const filteredByUrl = urlFilterSet
-    ? prioritizedPages.filter((p) => urlFilterSet.has(normalizeUrlPathForMatching(p.urlPath)))
+    ? prioritizedPages.filter((p) =>
+        urlFilterSet.has(normalizeUrlPathForMatching(p.urlPath))
+      )
     : prioritizedPages;
   const filteredByType = typeFilter
     ? filteredByUrl.filter((p) => typeFilter.has(toOutputType(p.pageType)))
@@ -1813,16 +1977,20 @@ async function main() {
   const startedAt = Date.now();
   let currentStage: PriorityStage | null = null;
   let currentStageProcessed = 0;
-  const executionSummaryByStage = new Map<PriorityStage, PriorityExecutionSummaryRow>(
-    executionSummaryRows.map((row) => [row.stage, row])
-  );
+  const executionSummaryByStage = new Map<
+    PriorityStage,
+    PriorityExecutionSummaryRow
+  >(executionSummaryRows.map((row) => [row.stage, row]));
 
   for (const page of targetPages) {
-    const pageStage = page.priorityStage ?? defaultPriorityStageForPageType(page.pageType);
+    const pageStage =
+      page.priorityStage ?? defaultPriorityStageForPageType(page.pageType);
     if (currentStage !== pageStage) {
       if (currentStage) {
         const finishedLabel = priorityStageLabel(currentStage);
-        console.log(`[seo:audit] Stage finished: ${finishedLabel} (${currentStageProcessed})`);
+        console.log(
+          `[seo:audit] Stage finished: ${finishedLabel} (${currentStageProcessed})`
+        );
         if (telegramProgress) {
           await notifyAuditProgressTelegram(
             `✅ SEO audit stage finished: ${finishedLabel} (${currentStageProcessed} pages)`
@@ -1832,8 +2000,11 @@ async function main() {
       currentStage = pageStage;
       currentStageProcessed = 0;
       const startedLabel = priorityStageLabel(pageStage);
-      const plannedForStage = executionSummaryByStage.get(pageStage)?.planned ?? 0;
-      console.log(`[seo:audit] Stage started: ${startedLabel} (planned ${plannedForStage})`);
+      const plannedForStage =
+        executionSummaryByStage.get(pageStage)?.planned ?? 0;
+      console.log(
+        `[seo:audit] Stage started: ${startedLabel} (planned ${plannedForStage})`
+      );
       if (telegramProgress) {
         await notifyAuditProgressTelegram(
           `▶️ SEO audit stage started: ${startedLabel} (planned ${plannedForStage})`
@@ -1849,15 +2020,24 @@ async function main() {
       extracted = await extractInternal(page);
       issues.push(...extracted.issues);
     } catch (e) {
-      issues.push(`internal_extract_failed:${e instanceof Error ? e.message : String(e)}`);
+      issues.push(
+        `internal_extract_failed:${e instanceof Error ? e.message : String(e)}`
+      );
     }
 
-    if (!extracted || !extracted.title || !extracted.metaDescription || !extracted.h1) {
+    if (
+      !extracted ||
+      !extracted.title ||
+      !extracted.metaDescription ||
+      !extracted.h1
+    ) {
       try {
         fallback = await fetchHtmlFallback(baseUrl, page.urlPath);
         sourceType = 'http_fallback';
       } catch (e) {
-        issues.push(`fetch_unavailable:${e instanceof Error ? e.message : String(e)}`);
+        issues.push(
+          `fetch_unavailable:${e instanceof Error ? e.message : String(e)}`
+        );
       }
     }
 
@@ -1867,7 +2047,9 @@ async function main() {
     const h1 = extracted?.h1 ?? fallback?.h1 ?? null;
     const hasContentBlocks =
       extracted?.hasContentBlocks ?? fallback?.hasContentBlocks ?? false;
-    const hasFaq = Boolean(extracted?.hasFaq || extracted?.faqFromData || fallback?.hasFaq);
+    const hasFaq = Boolean(
+      extracted?.hasFaq || extracted?.faqFromData || fallback?.hasFaq
+    );
     const scholarshipResultsCount = extracted?.scholarshipResultsCount ?? null;
     const canonical = extracted?.canonical ?? fallback?.canonical ?? null;
     const indexable =
@@ -1881,16 +2063,22 @@ async function main() {
     const hasOverview = extracted?.hasOverview ?? hasContentBlocks;
     const hasEligibility = extracted?.hasEligibility ?? hasContentBlocks;
     const hasApplication = extracted?.hasApplication ?? hasContentBlocks;
-    const hasComparisonContent = extracted?.hasComparisonContent ?? hasContentBlocks;
+    const hasComparisonContent =
+      extracted?.hasComparisonContent ?? hasContentBlocks;
     const hasScholarshipList =
       extracted?.hasScholarshipList ??
-      (typeof scholarshipResultsCount === 'number' ? scholarshipResultsCount > 0 : false);
+      (typeof scholarshipResultsCount === 'number'
+        ? scholarshipResultsCount > 0
+        : false);
 
     const titleLength = normalizeWhitespace(title).length;
     const metaLength = normalizeWhitespace(metaDescription).length;
     const titleRange = getTitleRangeForType(outputType);
     const metaRange = getMetaRangeForType(outputType);
-    const passCheck = (points: number, value?: string | number | boolean | null): CheckResult => ({
+    const passCheck = (
+      points: number,
+      value?: string | number | boolean | null
+    ): CheckResult => ({
       ok: true,
       pointsAwarded: points,
       maxPoints: points,
@@ -1898,7 +2086,13 @@ async function main() {
     });
 
     const titleCheck = title
-      ? checkRangeSoft(titleLength, titleRange.min, titleRange.max, TITLE_POINTS, 'title_length')
+      ? checkRangeSoft(
+          titleLength,
+          titleRange.min,
+          titleRange.max,
+          TITLE_POINTS,
+          'title_length'
+        )
       : checkExists(title, TITLE_POINTS, 'title_missing');
     const metaCheck = metaDescription
       ? checkRangeSoft(
@@ -1942,7 +2136,9 @@ async function main() {
               ? checkBoolean(
                   hasContentBlocks && contentLength >= 500,
                   CONTENT_POINTS,
-                  !hasContentBlocks ? 'content_blocks_missing' : 'content_length_low',
+                  !hasContentBlocks
+                    ? 'content_blocks_missing'
+                    : 'content_length_low',
                   hasContentBlocks && contentLength >= 500
                 )
               : checkBoolean(
@@ -1977,7 +2173,12 @@ async function main() {
     }
 
     const canonicalRobotsCheck =
-      outputType === 'essay' || outputType === 'article' || outputType === 'listing' || outputType === 'scholarship' || outputType === 'compare' || outputType === 'provider'
+      outputType === 'essay' ||
+      outputType === 'article' ||
+      outputType === 'listing' ||
+      outputType === 'scholarship' ||
+      outputType === 'compare' ||
+      outputType === 'provider'
         ? checkBoolean(
             Boolean(canonical) && indexable !== false,
             CANONICAL_ROBOTS_POINTS,
@@ -1985,7 +2186,8 @@ async function main() {
             indexable === true
           )
         : passCheck(CANONICAL_ROBOTS_POINTS, indexable === true);
-    const linksCheckNeeded = outputType === 'compare' || outputType === 'article';
+    const linksCheckNeeded =
+      outputType === 'compare' || outputType === 'article';
     const internalLinksMissing = linksCheckNeeded && internalLinksCount <= 0;
 
     const duplicateCheck = {
@@ -1997,9 +2199,11 @@ async function main() {
     if (!titleCheck.ok && titleCheck.reason) issues.push(titleCheck.reason);
     if (!metaCheck.ok && metaCheck.reason) issues.push(metaCheck.reason);
     if (!h1Check.ok && h1Check.reason) issues.push(h1Check.reason);
-    if (!contentCheck.ok && contentCheck.reason) issues.push(contentCheck.reason);
+    if (!contentCheck.ok && contentCheck.reason)
+      issues.push(contentCheck.reason);
     if (!faqCheck.ok && faqCheck.reason) issues.push(faqCheck.reason);
-    if (!resultsCheck.ok && resultsCheck.reason) issues.push(resultsCheck.reason);
+    if (!resultsCheck.ok && resultsCheck.reason)
+      issues.push(resultsCheck.reason);
     if (!canonicalRobotsCheck.ok && canonicalRobotsCheck.reason) {
       issues.push(canonicalRobotsCheck.reason);
     }
@@ -2014,7 +2218,9 @@ async function main() {
       canonicalRobotsCheck.pointsAwarded +
       duplicateCheck.pointsAwarded;
 
-    const normalizedIssues = Array.from(new Set(issues.map((issue) => normalizeIssueCode(issue))));
+    const normalizedIssues = Array.from(
+      new Set(issues.map((issue) => normalizeIssueCode(issue)))
+    );
     const falsePositives: string[] = normalizedIssues.filter((code) => {
       if (code === 'result_count_unavailable_internal_context') return true;
       if (code === 'faq_missing' && extracted?.faqFromData) return true;
@@ -2029,9 +2235,12 @@ async function main() {
     if (internalLinksMissing) {
       const likelyClientOrDataRendered =
         sourceType === 'internal' &&
-        (outputType === 'compare' || outputType === 'article' || outputType === 'essay');
+        (outputType === 'compare' ||
+          outputType === 'article' ||
+          outputType === 'essay');
       if (likelyClientOrDataRendered) {
-        if (!warnings.includes('internal_links_missing')) warnings.push('internal_links_missing');
+        if (!warnings.includes('internal_links_missing'))
+          warnings.push('internal_links_missing');
         if (!falsePositives.includes('internal_links_missing'))
           falsePositives.push('internal_links_missing');
       } else if (!realIssueCodes.includes('internal_links_missing')) {
@@ -2044,11 +2253,12 @@ async function main() {
         sourceType === 'internal' &&
         Boolean(
           extracted?.hasEligibilityEvidence ||
-            extracted?.hasEligibility ||
-            extracted?.contentLength && extracted.contentLength > 200
+          extracted?.hasEligibility ||
+          (extracted?.contentLength && extracted.contentLength > 200)
         );
       if (likelyEligibilityInDataOrDerived) {
-        if (!warnings.includes('eligibility_missing')) warnings.push('eligibility_missing');
+        if (!warnings.includes('eligibility_missing'))
+          warnings.push('eligibility_missing');
         if (!falsePositives.includes('eligibility_missing')) {
           falsePositives.push('eligibility_missing');
         }
@@ -2061,10 +2271,17 @@ async function main() {
       code,
       severity: classifyIssueSeverity(code)
     }));
-    const criticalCount = severityByIssue.filter((x) => x.severity === 'critical').length;
-    const importantCount = severityByIssue.filter((x) => x.severity === 'important').length;
-    const minorCount = severityByIssue.filter((x) => x.severity === 'minor').length;
-    const realPenalty = criticalCount * 12 + importantCount * 6 + minorCount * 2;
+    const criticalCount = severityByIssue.filter(
+      (x) => x.severity === 'critical'
+    ).length;
+    const importantCount = severityByIssue.filter(
+      (x) => x.severity === 'important'
+    ).length;
+    const minorCount = severityByIssue.filter(
+      (x) => x.severity === 'minor'
+    ).length;
+    const realPenalty =
+      criticalCount * 12 + importantCount * 6 + minorCount * 2;
     const realScore = Math.max(0, rawScore - realPenalty);
 
     const pageAudit: PageAudit = {
@@ -2072,7 +2289,8 @@ async function main() {
       outputType,
       type: outputType,
       sourceType,
-      priorityStage: page.priorityStage ?? defaultPriorityStageForPageType(page.pageType),
+      priorityStage:
+        page.priorityStage ?? defaultPriorityStageForPageType(page.pageType),
       url: page.urlPath,
       rawScore,
       realScore,
@@ -2109,7 +2327,10 @@ async function main() {
       pageAudit.realScore,
       pageAudit.status
     );
-    pageAudit.fixSuggestion = pickFixSuggestion(pageAudit.issueCodes, pageAudit.status);
+    pageAudit.fixSuggestion = pickFixSuggestion(
+      pageAudit.issueCodes,
+      pageAudit.status
+    );
     const tKey = normalizeDuplicateKey(title);
     if (tKey) {
       const list = titleKeyToIdx.get(tKey) ?? [];
@@ -2138,7 +2359,9 @@ async function main() {
 
   if (currentStage) {
     const finishedLabel = priorityStageLabel(currentStage);
-    console.log(`[seo:audit] Stage finished: ${finishedLabel} (${currentStageProcessed})`);
+    console.log(
+      `[seo:audit] Stage finished: ${finishedLabel} (${currentStageProcessed})`
+    );
     if (telegramProgress) {
       await notifyAuditProgressTelegram(
         `✅ SEO audit stage finished: ${finishedLabel} (${currentStageProcessed} pages)`
@@ -2189,17 +2412,25 @@ async function main() {
   const pagesChecked = provisional.length;
   const sumRaw = provisional.reduce((acc, p) => acc + p.rawScore, 0);
   const sumReal = provisional.reduce((acc, p) => acc + p.realScore, 0);
-  const averageRawScore = pagesChecked > 0 ? Number((sumRaw / pagesChecked).toFixed(2)) : 0;
-  const averageRealScore = pagesChecked > 0 ? Number((sumReal / pagesChecked).toFixed(2)) : 0;
+  const averageRawScore =
+    pagesChecked > 0 ? Number((sumRaw / pagesChecked).toFixed(2)) : 0;
+  const averageRealScore =
+    pagesChecked > 0 ? Number((sumReal / pagesChecked).toFixed(2)) : 0;
   const averageScore = averageRealScore;
   const good = provisional.filter((p) => p.status === 'good').length;
   const medium = provisional.filter((p) => p.status === 'medium').length;
   const bad = provisional.filter((p) => p.status === 'bad').length;
   const falseBadPages = provisional.filter(
-    (p) => statusFromScore(p.rawScore) === 'bad' && statusFromScore(p.realScore) !== 'bad'
+    (p) =>
+      statusFromScore(p.rawScore) === 'bad' &&
+      statusFromScore(p.realScore) !== 'bad'
   ).length;
-  const realBadPages = provisional.filter((p) => statusFromScore(p.realScore) === 'bad').length;
-  const zeroResultPages = provisional.filter((p) => p.scholarshipResultsCount === 0).length;
+  const realBadPages = provisional.filter(
+    (p) => statusFromScore(p.realScore) === 'bad'
+  ).length;
+  const zeroResultPages = provisional.filter(
+    (p) => p.scholarshipResultsCount === 0
+  ).length;
   const missingMetaDescriptions = provisional.filter(
     (p) => !normalizeWhitespace(p.metaDescription).length
   ).length;
@@ -2210,13 +2441,25 @@ async function main() {
       (p.metaDescriptionLength < 120 || p.metaDescriptionLength > 160)
   ).length;
   const missingFaqBlocks = provisional.filter((p) => !p.checks.faq.ok).length;
-  const listingCount = provisional.filter((p) => p.outputType === 'listing').length;
-  const scholarshipCount = provisional.filter((p) => p.outputType === 'scholarship').length;
-  const articleCount = provisional.filter((p) => p.outputType === 'article').length;
+  const listingCount = provisional.filter(
+    (p) => p.outputType === 'listing'
+  ).length;
+  const scholarshipCount = provisional.filter(
+    (p) => p.outputType === 'scholarship'
+  ).length;
+  const articleCount = provisional.filter(
+    (p) => p.outputType === 'article'
+  ).length;
   const essayCount = provisional.filter((p) => p.outputType === 'essay').length;
-  const compareCount = provisional.filter((p) => p.outputType === 'compare').length;
-  const providerCount = provisional.filter((p) => p.outputType === 'provider').length;
-  const topWorst = [...provisional].sort((a, b) => a.score - b.score).slice(0, 20);
+  const compareCount = provisional.filter(
+    (p) => p.outputType === 'compare'
+  ).length;
+  const providerCount = provisional.filter(
+    (p) => p.outputType === 'provider'
+  ).length;
+  const topWorst = [...provisional]
+    .sort((a, b) => a.score - b.score)
+    .slice(0, 20);
 
   const issueTypeCounts = new Map<string, number>();
   for (const p of provisional) {
@@ -2313,7 +2556,11 @@ async function main() {
   };
 
   await fs.mkdir(path.dirname(REPORT_JSON_PATH), { recursive: true });
-  await fs.writeFile(REPORT_JSON_PATH, JSON.stringify(payload, null, 2), 'utf-8');
+  await fs.writeFile(
+    REPORT_JSON_PATH,
+    JSON.stringify(payload, null, 2),
+    'utf-8'
+  );
 
   const csvHeader = [
     'url',
@@ -2347,14 +2594,20 @@ async function main() {
       toCsvValue(Array.from(new Set(p.issues)).join('|'))
     ].join(',')
   );
-  await fs.writeFile(REPORT_CSV_PATH, `${csvHeader.join(',')}\n${csvRows.join('\n')}\n`, 'utf-8');
+  await fs.writeFile(
+    REPORT_CSV_PATH,
+    `${csvHeader.join(',')}\n${csvRows.join('\n')}\n`,
+    'utf-8'
+  );
 
   const weakMetaPages = provisional.filter(
     (p) =>
       normalizeWhitespace(p.metaDescription).length > 0 &&
       (p.metaDescriptionLength < 120 || p.metaDescriptionLength > 160)
   );
-  const missingFaqPages = provisional.filter((p) => p.issueCodes.includes('faq_missing'));
+  const missingFaqPages = provisional.filter((p) =>
+    p.issueCodes.includes('faq_missing')
+  );
   const badScholarshipPages = provisional.filter(
     (p) => p.outputType === 'scholarship' && p.status === 'bad'
   );
@@ -2439,12 +2692,16 @@ async function main() {
   console.log(
     `Priority (GSC impressions first): gsc=${stagePriorityCounts.gsc_impressions}, seo=${stagePriorityCounts.seo_pages}, grants=${stagePriorityCounts.grants}, providers=${stagePriorityCounts.providers}, essays=${stagePriorityCounts.essays}, compare=${stagePriorityCounts.compare}, other=${stagePriorityCounts.other}`
   );
-  console.log(`Warnings: ${reportWarnings.length > 0 ? reportWarnings.join(', ') : 'none'}`);
+  console.log(
+    `Warnings: ${reportWarnings.length > 0 ? reportWarnings.join(', ') : 'none'}`
+  );
   console.log('');
   console.log('Execution summary by stage:');
   for (const row of executionSummaryRows) {
     const processed = executionSummaryByStage.get(row.stage)?.processed ?? 0;
-    console.log(`- ${priorityStageLabel(row.stage)}: ${processed}/${row.planned}`);
+    console.log(
+      `- ${priorityStageLabel(row.stage)}: ${processed}/${row.planned}`
+    );
   }
   console.log('');
   console.log('Main problems:');
@@ -2462,10 +2719,16 @@ async function main() {
   for (const row of topIssueTypes.slice(0, 10)) {
     console.log(`- ${row.issueCode}: ${row.count}`);
   }
-  console.log(`- internal_links_missing (real): ${internalLinksMissingRealCount}`);
-  console.log(`- internal_links_missing (warning/false-positive): ${internalLinksMissingWarningCount}`);
+  console.log(
+    `- internal_links_missing (real): ${internalLinksMissingRealCount}`
+  );
+  console.log(
+    `- internal_links_missing (warning/false-positive): ${internalLinksMissingWarningCount}`
+  );
   console.log(`- eligibility_missing (real): ${eligibilityMissingRealCount}`);
-  console.log(`- eligibility_missing (warning/false-positive): ${eligibilityMissingWarningCount}`);
+  console.log(
+    `- eligibility_missing (warning/false-positive): ${eligibilityMissingWarningCount}`
+  );
   console.log('');
   if (previousReportSummary) {
     const prevReal =
@@ -2478,9 +2741,7 @@ async function main() {
       null;
     const prevFalseBad = previousReportSummary.falseBadPages ?? 0;
     const prevBad =
-      previousReportSummary.realBadPages ??
-      previousReportSummary.bad ??
-      null;
+      previousReportSummary.realBadPages ?? previousReportSummary.bad ?? null;
     console.log('Previous vs new:');
     if (prevReal != null) {
       console.log(`- real average score: ${prevReal} -> ${averageRealScore}`);
@@ -2513,7 +2774,10 @@ async function main() {
 }
 
 main().catch((e) => {
-  console.error('[seo:audit] fatal', e instanceof Error ? e.message : String(e));
+  console.error(
+    '[seo:audit] fatal',
+    e instanceof Error ? e.message : String(e)
+  );
   if (envFlag('SEO_AUDIT_NOTIFY_TELEGRAM')) {
     void notifyAuditProgressTelegram(
       `❌ SEO audit failed: ${e instanceof Error ? e.message : String(e)}`

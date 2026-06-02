@@ -5,7 +5,7 @@ import { hubPathToTab } from '@/app/scholarships/scholarshipHubPath';
 import { resolveScholarshipSlugPath } from '@/lib/scholarships/seoScholarshipResolve';
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import {
-  formatScholarshipAwardDisplay,
+  getScholarshipDeadlineDisplayParts,
   scholarshipPublicPath
 } from '@/app/scholarships/scholarshipsData';
 import { ScholarshipDetailInitialDataProvider } from '@/app/scholarships/ScholarshipDetailInitialDataContext';
@@ -14,7 +14,14 @@ import {
   redactPremiumScholarshipFields
 } from '@/lib/scholarships/scholarshipDetailServer';
 import { resolveScholarshipCategorySlug } from '@/lib/scholarships/similarScholarships';
-import { cleanScholarshipFaqItems } from '@/lib/scholarships/scholarshipSeoSanitizers';
+import {
+  getUsefulFaqForOnPageDisplay,
+  normalizeScholarshipForUi
+} from '@/lib/scholarships/scholarshipUiModel';
+import {
+  isSimplerGrantsGovScholarship,
+  simplerGrantsGovOverviewText
+} from '@/lib/scholarships/simplerGrantsGovDetail';
 import { getURL } from '@/utils/helpers';
 import { parseScholarshipDeadlineAnchor } from '@/lib/scholarships/scholarshipDeadlineTrust';
 
@@ -22,19 +29,6 @@ type LayoutProps = {
   children: React.ReactNode;
   params: { slugPath?: string[] };
 };
-
-function payoutMethodLabel(method: string | null | undefined): string | null {
-  const m = method?.toLowerCase();
-  if (!m) return null;
-  const map: Record<string, string> = {
-    college: 'Paid to the college or financial aid office',
-    student: 'Paid directly to the student',
-    non_monetary:
-      'Non-monetary award (for example courses, equipment, or prizes)',
-    not_stated: 'Not stated on the listing'
-  };
-  return map[m] ?? null;
-}
 
 function scholarshipSchemaDescription(s: Scholarship): string | undefined {
   const raw =
@@ -70,87 +64,28 @@ function scholarshipDeadlineIso(s: Scholarship): string | null {
   return anchor ? anchor.toISOString() : null;
 }
 
-function legacyFaqItems(
-  s: Scholarship
-): { question: string; answer: string }[] {
-  const out: { question: string; answer: string }[] = [];
-
-  const who =
-    s.whoCanApplyText?.trim() ||
-    (s.eligibility?.length ? s.eligibility.join(' ') : '') ||
-    s.eligibilityText?.trim();
-  if (who) {
-    out.push({
-      question: 'Who is eligible for this scholarship?',
-      answer: who.length > 800 ? `${who.slice(0, 797)}…` : who
-    });
-  }
-
-  const deadlineLine = s.deadline?.trim();
-  if (deadlineLine && deadlineLine !== '—') {
-    out.push({
-      question: 'What is the deadline?',
-      answer: deadlineLine
-    });
-  }
-
-  const amount = (s.amount ?? s.awardAmount)?.trim();
-  if (amount) {
-    out.push({
-      question: 'How much is the award amount?',
-      answer: formatScholarshipAwardDisplay(amount)
-    });
-  }
-
-  const docs = s.documentsRequired?.filter(Boolean).length
-    ? s.documentsRequired!.join('; ')
-    : null;
-  if (docs) {
-    out.push({
-      question: 'What documents are required?',
-      answer: docs
-    });
-  }
-
-  const payout = payoutMethodLabel(s.payoutMethod);
-  if (payout) {
-    out.push({
-      question: 'What type of payout is used?',
-      answer: payout
-    });
-  }
-
-  if (s.essayRequired === true || s.essayRequired === false) {
-    out.push({
-      question: 'Is an essay required?',
-      answer: s.essayRequired
-        ? 'Yes, an essay is listed among requirements.'
-        : 'No essay requirement was detected in the structured data for this listing.'
-    });
-  }
-
-  return out;
-}
-
 function faqItems(s: Scholarship): { question: string; answer: string }[] {
-  const seen = new Set<string>();
-  const out: { question: string; answer: string }[] = [];
-  const fromSeo = cleanScholarshipFaqItems(s.seoFaq).map((x) => {
-    const answer = x.answer.trim();
-    return {
-      question: x.question.trim(),
-      answer: answer.length > 800 ? `${answer.slice(0, 797)}…` : answer
-    };
+  const isSimplerGov = isSimplerGrantsGovScholarship(s);
+  const ui = normalizeScholarshipForUi(s, {
+    isSimplerGov,
+    simplerOverviewText: isSimplerGov ? simplerGrantsGovOverviewText(s) : ''
   });
-  for (const item of [...legacyFaqItems(s), ...fromSeo]) {
-    const key = item.question.trim().toLowerCase();
-    if (!key || seen.has(key)) {
-      continue;
-    }
-    seen.add(key);
-    out.push(item);
-  }
-  return out.slice(0, 6);
+  const deadlineDisplay = getScholarshipDeadlineDisplayParts(s);
+  const awardLine = s.amount?.trim() || s.awardAmount?.trim() || '';
+
+  return getUsefulFaqForOnPageDisplay(s, {
+    heroSummary: ui.heroSummary,
+    awardLine,
+    deadlinePrimary: deadlineDisplay.primary
+  })
+    .map((x) => {
+      const answer = x.answer.trim();
+      return {
+        question: x.question.trim(),
+        answer: answer.length > 800 ? `${answer.slice(0, 797)}…` : answer
+      };
+    })
+    .slice(0, 6);
 }
 
 function jsonLdDocument(s: Scholarship) {
