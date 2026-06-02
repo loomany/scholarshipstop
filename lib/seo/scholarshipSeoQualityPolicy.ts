@@ -606,7 +606,9 @@ export function getScholarshipDetailIndexPolicy(
       s.providerSlug,
       s.providerUrl,
       s.listingUrl,
-      s.applyLink
+      s.applyLink,
+      s.officialSourceName,
+      s.source
     ]) || s.hasOfficialApplicationDestination === true;
   const expiredWithoutFutureCycle =
     s.recurring !== true && deadlineUrgency.level === 'Expired';

@@ -1,4 +1,5 @@
 import { cache } from 'react';
+import { unstable_cache } from 'next/cache';
 import type { MetadataRoute } from 'next';
 
 import { fetchAllPublishedContentPostsForSitemap } from '@/lib/content-hub/contentPostsServer';
@@ -19,8 +20,12 @@ import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClien
 import type { Database } from '@/types_db';
 import { SCHOLARSHIP_CATEGORY_ORDER } from '@/app/scholarships/scholarshipCategories';
 import { getLongTailSitemapSlugs } from '@/app/scholarships/scholarshipLongTailPresets';
-import { scholarshipPublicPath } from '@/app/scholarships/scholarshipsData';
-import { DETAIL_SELECT, mapScholarshipRow } from '@/lib/scholarships/supabase';
+import {
+  applyScholarshipDetailSitemapCandidateFilters,
+  getScholarshipDetailSitemapDecision,
+  SCHOLARSHIP_DETAIL_SITEMAP_SELECT,
+  type ScholarshipDetailSitemapRow
+} from '@/lib/seo/scholarshipDetailSitemapPolicy';
 import { readLongTailSeoBundle } from '@/lib/scholarships/longTailSeoStore';
 import { SEO_ROUTE_STATE_CODE_TO_SLUG } from '@/lib/scholarships/seoTags/routeSegmentMaps';
 import { getPromotedSeoCategorySlugs } from '@/lib/scholarships/categorySeoAllowlist';
@@ -48,10 +53,7 @@ import {
   getEssaySeoQualityPolicy,
   MIN_LOCALIZED_ESSAY_VISIBLE_WORDS
 } from '@/lib/seo/essaySeoQualityPolicy';
-import {
-  getScholarshipDetailIndexPolicy,
-  getScholarshipSeoRouteQualityPolicy
-} from '@/lib/seo/scholarshipSeoQualityPolicy';
+import { getScholarshipSeoRouteQualityPolicy } from '@/lib/seo/scholarshipSeoQualityPolicy';
 import {
   getSitemapDocumentSlugPlan,
   normalizeSitemapSlug,
@@ -88,16 +90,6 @@ type SitemapBucket =
   | 'seo'
   | 'scholarships'
   | 'compare';
-
-type ScholarshipSitemapRow = Pick<
-  Database['public']['Tables']['scholarships']['Row'],
-  | 'id'
-  | 'slug'
-  | 'updated_at'
-  | 'is_indexable'
-  | 'deadline_date'
-  | 'is_recurring'
->;
 
 type ProviderHubSitemapRow = {
   slug: string;
@@ -201,13 +193,6 @@ function normalizeEntryDate(value: Date | string | null | undefined): Date {
     if (!Number.isNaN(parsed.getTime())) return parsed;
   }
   return new Date();
-}
-
-function isExpiredScholarshipSitemapRow(row: ScholarshipSitemapRow): boolean {
-  if (row.is_recurring === true) return false;
-  const deadline = row.deadline_date?.trim();
-  if (!deadline) return false;
-  return deadline < new Date().toISOString().slice(0, 10);
 }
 
 function latestLastModified(entries: MetadataRoute.Sitemap): string {
@@ -443,7 +428,7 @@ async function fetchStateGrantSitemapRows(): Promise<StateGrantCountRow[]> {
   return (data ?? []) as StateGrantCountRow[];
 }
 
-async function fetchScholarshipSitemapEntries(
+async function fetchScholarshipSitemapEntriesUncached(
   base: string
 ): Promise<MetadataRoute.Sitemap> {
   const supabase = createSitemapReadClient();
@@ -452,26 +437,23 @@ async function fetchScholarshipSitemapEntries(
   let offset = 0;
 
   for (;;) {
-    const { data, error } = await supabase
-      .from('scholarships')
-      .select(DETAIL_SELECT)
-      .eq('is_active', true)
+    const { data, error } = await applyScholarshipDetailSitemapCandidateFilters(
+      supabase
+        .from('scholarships_safe_listing' as unknown as 'scholarships')
+        .select(SCHOLARSHIP_DETAIL_SITEMAP_SELECT)
+    )
       .order('updated_at', { ascending: false, nullsFirst: false })
       .range(offset, offset + SITEMAP_DB_PAGE_SIZE - 1);
 
     if (error) throw new Error(error.message);
-    const batch = (data ?? []) as unknown as ScholarshipSitemapRow[];
+    const batch = (data ?? []) as unknown as ScholarshipDetailSitemapRow[];
     for (const row of batch) {
-      if (row.is_indexable === false) continue;
-      if (isExpiredScholarshipSitemapRow(row)) continue;
-      const scholarship = mapScholarshipRow(
-        row as unknown as Parameters<typeof mapScholarshipRow>[0]
-      );
-      if (!getScholarshipDetailIndexPolicy(scholarship).indexable) continue;
+      const decision = getScholarshipDetailSitemapDecision(row);
+      if (!decision.include || !decision.publicPath) continue;
       out.push({
-        url: `${base}${scholarshipPublicPath(scholarship)}`,
-        lastModified: scholarship.updatedAt
-          ? new Date(scholarship.updatedAt)
+        url: `${base}${decision.publicPath}`,
+        lastModified: decision.updatedAt
+          ? new Date(decision.updatedAt)
           : new Date()
       });
     }
@@ -481,6 +463,12 @@ async function fetchScholarshipSitemapEntries(
 
   return out;
 }
+
+const fetchScholarshipSitemapEntries = unstable_cache(
+  fetchScholarshipSitemapEntriesUncached,
+  ['scholarship-detail-sitemap-entries-v2'],
+  { revalidate: SITEMAP_REVALIDATE_SECONDS }
+);
 
 async function fetchProviderSitemapEntries(
   base: string
@@ -807,10 +795,7 @@ async function buildSeoSitemapEntries(
 async function buildScholarshipsSitemapEntries(
   base: string
 ): Promise<MetadataRoute.Sitemap> {
-  return fetchScholarshipSitemapEntries(base).catch((err) => {
-    console.error('[sitemap] fetchScholarshipSitemapEntries failed:', err);
-    return [];
-  });
+  return fetchScholarshipSitemapEntries(base);
 }
 
 async function buildProvidersSitemapEntries(
@@ -964,14 +949,11 @@ async function fetchScholarshipSitemapDocumentCount(): Promise<number> {
   const supabase = createSitemapReadClient();
   if (!supabase) return 1;
 
-  const { count, error } = await supabase
-    .from('scholarships')
-    .select('id', { count: 'exact', head: true })
-    .eq('is_active', true)
-    .or('is_indexable.is.null,is_indexable.eq.true')
-    .or(
-      `deadline_date.is.null,deadline_date.gte.${new Date().toISOString().slice(0, 10)},is_recurring.eq.true`
-    );
+  const { count, error } = await applyScholarshipDetailSitemapCandidateFilters(
+    supabase
+      .from('scholarships_safe_listing' as unknown as 'scholarships')
+      .select('id', { count: 'exact', head: true })
+  );
 
   if (error) {
     console.error('[sitemap] scholarship sitemap count failed:', error);
