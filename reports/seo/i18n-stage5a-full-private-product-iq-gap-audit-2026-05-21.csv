@@ -1,0 +1,38 @@
+route,area,visible_text,current_language,expected_es,expected_fr,bucket,source,risk,priority,fix_type,notes
+/providers/loyola-university-chicago,provider_detail,About Provider,en,Acerca del proveedor,À propos du fournisseur,UI_STATIC,app/providers/[id]/page.tsx,low,P1,code copy,EN-only route; no /es|fr provider detail path exists
+/providers/loyola-university-chicago,provider_detail,Scholarships from this provider,en,Becas de este proveedor,Bourses de ce fournisseur,UI_STATIC,app/providers/[id]/page.tsx,low,P1,code copy,TOC + section headings hardcoded
+/providers/loyola-university-chicago,provider_detail,Official source available / Data: strong,en,Fuente oficial disponible / Datos: sólidos,Source officielle / Données solides,UI_STATIC,lib/seo/providerSeoQualityPolicy.ts,low,P1,code copy,Uses EN policy labels not providerDisplayLabels helpers
+/providers/loyola-university-chicago,provider_detail,Provider AI description body,en,(DB Spanish later),(DB French later),DB_CONTENT,public.providers.ai_description,medium,P2,content_translations,Legal/display name unchanged; body needs provider_profile rows
+/providers/loyola-university-chicago,provider_detail,Start IQ Test CTA,en,Iniciar prueba IQ,Commencer le test QI,UI_STATIC,app/providers/[id]/page.tsx,low,P1,code copy,Links to iq.scholarshiptop.com (EN product)
+/providers/loyola-university-chicago,provider_detail,On this page (TOC),en,En esta página,Sur cette page,UI_STATIC,app/essays/[slug]/page.tsx pattern,low,P2,code copy,Shared article TOC pattern on provider if present
+/es/providers/loyola-university-chicago,provider_detail,(route),n/a,404 expected,404 expected,AUTH_PRIVATE,pilotRoutes / no [locale]/providers/[id],low,P0,noindex/404 policy,Correct: no English fallback under /es URL
+/essays/how-to-write-about-the-gap-between-expectation-and-reality-of-studying-in-america,essay_detail,Full article HTML body,en,DB translation,DB translation,DB_CONTENT,content_posts / essaysServer,medium,P2,content_translations,Live CMS essay; not a static pilot guide
+/essays/how-to-write-about-the-gap-between-expectation-and-reality-of-studying-in-america,essay_detail,On this page,en,En esta página,Sur cette page,UI_STATIC,app/essays/[slug]/page.tsx,low,P1,code copy,
+/essays/how-to-write-about-the-gap-between-expectation-and-reality-of-studying-in-america,essay_detail,Published/Updated date line,en,Publicado/Actualizado,Publié/Mis à jour,UI_STATIC,app/essays/[slug]/page.tsx,low,P2,code copy,Intl en-US formatter
+/es/essays/how-to-write-about-the-gap-between-expectation-and-reality-of-studying-in-america,essay_detail,(route),n/a,404,404,DB_CONTENT,no localized essay detail route,medium,P2,noindex/404 policy,Correct until essay_guide/content_translations
+/essays/examples,essay_hub,Static essay guide cards,localized,localized,UI_STATIC,staticEssayGuides + staticTranslations,low,—,code copy,ES/FR static pilots OK on hub
+/scholarships/climate-stripes-scholarship-14487,scholarship_detail,Full detail page EN,en,404 until translation,404 until translation,DB_CONTENT,ScholarshipDetailPageClient,medium,P2,content_translations,EN indexable detail
+/es/scholarships/climate-stripes-scholarship-14487,scholarship_detail,(route),n/a,404,404,DB_CONTENT,localizedScholarshipDetailGate.ts,low,P0,noindex/404 policy,Gate calls notFound even if row exists (render TODO)
+/es/resources/how-to-apply-for-scholarships,resource_detail,Pilot article body,localized,localized,DB_CONTENT,content_translations resource_article,low,—,content_translations,25-slug pilot; switcher present
+/es/resources/not-a-pilot-slug,resource_detail,(route),n/a,404,404,DB_CONTENT,resource pilot allowlist,low,—,noindex/404 policy,
+/compare/universities,scholarship_hub,Subhub chrome,localized,localized,UI_STATIC,compareSubhubUiCopy,P0 done,—,code copy,EnglishZoneNotice + EN DB card titles remain
+/compare/universities/harvard-university-vs-massachusetts-institute-of-technology,compare_detail,University names + compare narrative,en,DB translation,DB translation,DB_CONTENT,universityCompareServer,medium,P2,content_translations,EN-only slug route; no /es/compare/universities/[slug]
+/es/compare/universities/harvard-university-vs-massachusetts-institute-of-technology,compare_detail,(route),n/a,404 or EN reuse,404,DB_CONTENT,no localized compare detail,medium,P2,noindex/404 policy,Policy decision: 404 vs EnglishZone wrapper
+/account,account,Sign in redirect copy,en,Iniciar sesión,Se connecter,AUTH_PRIVATE,account page redirect,low,P1,auth UI copy,Logged-out → /signin
+/es/account,account,Page shell + profile form,partial es,localized,localized,AUTH_PRIVATE,accountProfileUiCopy.ts,medium,P1,auth UI copy,Requires authenticated session to verify all fields/toasts
+/es/signin,auth,Sign-in card UI,es,es,es,AUTH_PRIVATE,authUiCopy.ts,low,P1,auth UI copy,Production: no literal Sign in string in HTML
+/es/onboarding,auth,Onboarding wizard,es,es,es,AUTH_PRIVATE,onboardingUiCopy.ts,low,P1,auth UI copy,Steps localized; test full funnel manually
+/es/subscription,product,Pricing UI,es,es,es,PRODUCT_COPY,subscriptionPageCopy.ts,low,—,code copy,Desktop Precios nav deployed P0
+/es/subscription/success,product,Success page,es,es,es,PRODUCT_COPY,funnelUiCopy / subscription,low,P1,auth UI copy,noindex
+/subscription/success,product,Success page EN,en,es/fr routes exist,fr route exists,PRODUCT_COPY,app/subscription/success,low,P2,code copy,EN path still used post-checkout
+/auth/reset_password,auth,Reset password,en partial,es via sessionStorage,fr via sessionStorage,AUTH_PRIVATE,authUiCopy + Supabase email URL,medium,P1,auth UI copy,Supabase email links EN URL by default
+iq.scholarshiptop.com/,iq_product,Landing + funnel,en,es/fr TBD,fr/fr TBD,IQ_DYNAMIC,app/iq/* + GeneralIqFunnelClient,high,P0,IQ locale system,No language switcher; canonical en_US only
+iq.scholarshiptop.com/assessment,iq_product,All question prompts + options,en,Translate question bank,Traduire banque,UI_STATIC,lib/cognitiveAssessmentQuestions.ts,high,P0,IQ locale system,~30+ timed items; template result in UnlockedIqReport
+iq.scholarshiptop.com/assessment,iq_product,Final IQ report / Brain Archetype,en,Localized templates,Modèles localisés,IQ_DYNAMIC,components/iq/UnlockedIqReport.tsx,high,P0,IQ locale system,Scoring labels in assessmentScoring.ts EN
+iq.scholarshiptop.com/,iq_product,Language switcher,absent,Español/Français,Español/Français,UI_STATIC,none,high,P0,IQ locale system,User-reported blocker
+/scholarships/hub/*,cross_link,DB scholarship cards in listings,en entity + mixed chrome,localized chrome,localized chrome,DB_CONTENT,API listings,medium,P2,content_translations,Card chrome P0 done; titles/descriptions EN
+/providers hub,provider_hub,ScholarshipTop provider descriptions on cards,en,DB,DB,DB_CONTENT,providers.ai_description,medium,P2,content_translations,Card chrome localized P0
+/resources hub,resource_hub,Static guide titles (non-pilot),en,Hide or translate,Hide or translate,DB_CONTENT,staticResourceGuideCards fallback,medium,P2,code copy or content_translations,EN titles on ES hub static section
+/nav,product,IQ Test nav link,en,IQ / Prueba IQ,Test QI,UI_STATIC,Navlinks.tsx → iq.scholarshiptop.com,low,P1,code copy,External EN product
+/lemon checkout,product,Hosted checkout,en,en,en,OUT_OF_SCOPE,Lemon SaaS,low,—,external Lemon/out-of-scope,Explicitly out of scope
+/essay,product,Essay mentor app,en,en,en,OUT_OF_SCOPE,app/essay,low,—,out-of-scope,Separate product route

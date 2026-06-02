@@ -1,0 +1,15 @@
+opportunity,target_pages,uses_customer_data,expected_seo_geo_value_1_10,implementation_effort_1_10,risk_1_10,recommended_stage,reason
+GSC URL Inspection + monitor medical guide,/resources/medical-scholarships-guide,no,9,2,1,D18-ops,D16 sitemap live; indexing feedback closes the loop
+Provider nonprofit manual QA,/providers/* foundations,ProPublica (expand collect),7,4,4,D18-data-ops,Alamo-type gaps are source coverage not code bugs
+Nursing scholarships guide,/resources/nursing-scholarships-guide,premed_topic + health_workforce,8,5,3,D19-content,premed_topic_context ready; high intent cluster extension
+Pre-med scholarships guide,/resources/pre-med-scholarships-guide,medical_school + premed_topic,7,5,3,D19-content,Split or expand medical cluster based on GSC queries
+Methodology/source transparency,/scholarship-verification-methodology or new resource,MANIFEST copy only,5,3,2,D19-content,Trust/E-E-A-T; no new JSON
+GSC query-based title/meta polish,career-goals + texas intl resource + medical guide,no,8,3,2,D18-seo-copy,Needs GSC export; low engineering risk
+City/cost local pages,/scholarships/{state}/{city} or city hub,city_rent_metro + crosswalk,7,8,8,D20+ product,Data ready; route policy blocker
+USAspending funding block,/providers/[id] research hospitals,USAspending partial slice,4,6,6,defer,Partial THCGME scope; limited ROI
+County Health deeper metrics,/scholarships/[state],County Health Rankings,5,5,5,defer,Already light availability; marginal vs copy polish
+More state scholarship GEO copy,/scholarships/[state],state_affordability + social,6,3,2,D18-seo-copy,Pages noindex but help UX/AI citations; D13 pattern
+Alamo/foundation provider enrichment,/providers/alamo-colleges-foundation,ProPublica (missing),4,5,5,D18-data-ops,Requires collect expansion or manual override approval
+Medical vertical full rollout,/medical-schools/* + hubs,WDOMS/LCME/COCA/admit.med,9,9,7,D21+ vertical,Do not rush on general site
+OpenAlex schema identifiers,provider/university JSON-LD,OpenAlex/ROR,4,4,4,defer,Only if visible on page per D6 policy
+Residency datasets (FREIDA/NRMP),none on general site,residency sources,2,9,9,never general,Vertical-only per D7/D12 guardrails

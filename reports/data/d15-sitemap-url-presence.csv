@@ -1,0 +1,20 @@
+url,expected_in_sitemap,found_in_sitemap,robots_meta,canonical,status,notes
+https://scholarshiptop.com/resources/medical-scholarships-guide,yes,no,(none),https://scholarshiptop.com/resources/medical-scholarships-guide,warn,indexable static page missing from all sitemap buckets
+https://scholarshiptop.com/essays/career-goals,yes,yes,(none),https://scholarshiptop.com/essays/career-goals,ok,essays-0.xml
+https://scholarshiptop.com/essays/financial-need,yes,yes,(none),https://scholarshiptop.com/essays/financial-need,ok,essays-0.xml
+https://scholarshiptop.com/resources/how-to-find-scholarships,yes,yes,(none),https://scholarshiptop.com/resources/how-to-find-scholarships,ok,resources.xml
+https://scholarshiptop.com/resources/best-scholarship-websites,yes,yes,(none),https://scholarshiptop.com/resources/best-scholarship-websites,ok,resources.xml
+https://scholarshiptop.com/resources/best-scholarships-texas-international-students,yes,yes,(none),https://scholarshiptop.com/resources/best-scholarships-texas-international-students,ok,resources.xml
+https://scholarshiptop.com/scholarships/texas,no,yes,"noindex, follow",https://scholarshiptop.com/scholarships/texas,note,in seo.xml despite noindex policy
+https://scholarshiptop.com/scholarships/california,no,yes,"noindex, follow",https://scholarshiptop.com/scholarships/california,note,in seo.xml despite noindex policy
+https://scholarshiptop.com/scholarships/new-york,no,yes,"noindex, follow",https://scholarshiptop.com/scholarships/new-york,note,in seo.xml despite noindex policy
+https://scholarshiptop.com/scholarships/florida,no,yes,"noindex, follow",https://scholarshiptop.com/scholarships/florida,note,in seo.xml despite noindex policy
+https://scholarshiptop.com/scholarships/illinois,no,yes,"noindex, follow",https://scholarshiptop.com/scholarships/illinois,note,in seo.xml despite noindex policy
+https://scholarshiptop.com/scholarships/texas/tarleton-state-university,yes,yes,"index, follow",https://scholarshiptop.com/scholarships/texas/tarleton-state-university,ok,scholarships-0.xml
+https://scholarshiptop.com/scholarships/california/california-state-university-northridge,yes,yes,"index, follow",https://scholarshiptop.com/scholarships/california/california-state-university-northridge,ok,seo.xml
+https://scholarshiptop.com/compare/states,yes,yes,(none),https://scholarshiptop.com/compare/states,ok,core.xml
+https://scholarshiptop.com/compare/universities,yes,yes,(none),https://scholarshiptop.com/compare/universities,ok,core.xml
+https://scholarshiptop.com/compare/states/california-vs-texas,no,no,"noindex, follow",https://scholarshiptop.com/compare/states/california-vs-texas,ok,absent from sitemap matches noindex
+https://scholarshiptop.com/compare/universities/university-of-massachusetts-amherst-vs-university-of-south-florida,no,yes,"noindex, follow",https://scholarshiptop.com/compare/universities/university-of-massachusetts-amherst-vs-university-of-south-florida,note,in seo.xml but page is noindex
+https://scholarshiptop.com/providers/loyola-university-chicago,yes,yes,(none),https://scholarshiptop.com/providers/loyola-university-chicago,ok,providers.xml
+https://scholarshiptop.com/providers/alamo-colleges-foundation,yes,yes,(none),https://scholarshiptop.com/providers/alamo-colleges-foundation,ok,providers.xml

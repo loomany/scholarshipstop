@@ -1,0 +1,14 @@
+path,status,time_s,html_bytes,enrich_expected,enrich_observed,canonical,robots,visible_garbage,json_embedded,list_visible,type,result
+/compare/universities,200,1.42,98956,none,N/A,https://scholarshiptop.com/compare/universities,,no,none,false,hub,PASS
+/compare/states,200,1.09,102668,none,N/A,https://scholarshiptop.com/compare/states,,no,none,false,hub,PASS
+/compare/universities/university-of-massachusetts-amherst-vs-university-of-south-florida,200,3.36,219512,school,present,https://scholarshiptop.com/compare/universities/university-of-massachusetts-amherst-vs-university-of-south-florida,"noindex, follow",no,none,true,compare-uni,PASS
+/compare/states/california-vs-texas,200,2.71,126262,state,present,https://scholarshiptop.com/compare/states/california-vs-texas,"noindex, follow",no,none,true,compare-state,PASS
+/providers/loyola-university-chicago,200,2.79,295319,school,present,https://scholarshiptop.com/providers/loyola-university-chicago,,no,none,false,provider-school,PASS
+/providers/alamo-colleges-foundation,200,2.37,288560,hidden,hidden,https://scholarshiptop.com/providers/alamo-colleges-foundation,,no,none,false,provider-foundation,PASS
+/resources/best-scholarship-websites,200,1.22,108099,hidden,hidden,https://scholarshiptop.com/resources/best-scholarship-websites,,no,none,false,resource-generic,PASS
+/resources/best-scholarships-texas-international-students,200,30.18,168249,state,present,https://scholarshiptop.com/resources/best-scholarships-texas-international-students,,no,none,false,resource-state,PASS
+/essays/financial-need,200,0.26,67896,hidden,hidden,https://scholarshiptop.com/essays/financial-need,,no,none,false,essay-generic,PASS
+/scholarships/california,200,3.45,169533,state-sidebar,present,https://scholarshiptop.com/scholarships/california,"noindex, follow",no,none,true,sch-state,PASS
+/scholarships/texas,200,3.15,169735,state-sidebar,present,https://scholarshiptop.com/scholarships/texas,"noindex, follow",no,none,true,sch-state,PASS
+/scholarships/new-york,200,3.21,170152,state-sidebar,present,https://scholarshiptop.com/scholarships/new-york,"noindex, follow",no,none,true,sch-state,PASS
+/scholarships/texas/tarleton-state-university,200,9.39,150692,school,present,https://scholarshiptop.com/scholarships/texas/tarleton-state-university,"index, follow",no,none,true,sch-uni,PASS

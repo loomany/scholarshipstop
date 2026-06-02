@@ -1,0 +1,137 @@
+{
+  "dbTotalRows": 834,
+  "dbEs": 417,
+  "dbFr": 417,
+  "distinctScholarships": 417,
+  "eligibleEsRows": 417,
+  "eligibleFrRows": 417,
+  "listedEs": 1201,
+  "listedFr": 1201,
+  "liveEsCount": 1201,
+  "liveFrCount": 1201,
+  "reasonCounts": {},
+  "missingByWave": {
+    "21": 0,
+    "22": 0,
+    "23": 0,
+    "24": 0,
+    "25": 0,
+    "26": 0,
+    "27": 0,
+    "28": 0,
+    "29": 0,
+    "30": 0
+  },
+  "waveSummary": {
+    "21": {
+      "total": 40,
+      "es": 20,
+      "fr": 20,
+      "distinctScholarships": 20,
+      "emptyTitle": 0,
+      "emptyBody": 0,
+      "status": {
+        "published": 40
+      }
+    },
+    "22": {
+      "total": 50,
+      "es": 25,
+      "fr": 25,
+      "distinctScholarships": 25,
+      "emptyTitle": 0,
+      "emptyBody": 0,
+      "status": {
+        "published": 50
+      }
+    },
+    "23": {
+      "total": 44,
+      "es": 22,
+      "fr": 22,
+      "distinctScholarships": 22,
+      "emptyTitle": 0,
+      "emptyBody": 0,
+      "status": {
+        "published": 44
+      }
+    },
+    "24": {
+      "total": 100,
+      "es": 50,
+      "fr": 50,
+      "distinctScholarships": 50,
+      "emptyTitle": 0,
+      "emptyBody": 0,
+      "status": {
+        "published": 100
+      }
+    },
+    "25": {
+      "total": 100,
+      "es": 50,
+      "fr": 50,
+      "distinctScholarships": 50,
+      "emptyTitle": 0,
+      "emptyBody": 0,
+      "status": {
+        "published": 100
+      }
+    },
+    "26": {
+      "total": 100,
+      "es": 50,
+      "fr": 50,
+      "distinctScholarships": 50,
+      "emptyTitle": 0,
+      "emptyBody": 0,
+      "status": {
+        "published": 100
+      }
+    },
+    "27": {
+      "total": 100,
+      "es": 50,
+      "fr": 50,
+      "distinctScholarships": 50,
+      "emptyTitle": 0,
+      "emptyBody": 0,
+      "status": {
+        "published": 100
+      }
+    },
+    "28": {
+      "total": 100,
+      "es": 50,
+      "fr": 50,
+      "distinctScholarships": 50,
+      "emptyTitle": 0,
+      "emptyBody": 0,
+      "status": {
+        "published": 100
+      }
+    },
+    "29": {
+      "total": 100,
+      "es": 50,
+      "fr": 50,
+      "distinctScholarships": 50,
+      "emptyTitle": 0,
+      "emptyBody": 0,
+      "status": {
+        "published": 100
+      }
+    },
+    "30": {
+      "total": 100,
+      "es": 50,
+      "fr": 50,
+      "distinctScholarships": 50,
+      "emptyTitle": 0,
+      "emptyBody": 0,
+      "status": {
+        "published": 100
+      }
+    }
+  }
+}

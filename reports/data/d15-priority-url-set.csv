@@ -1,0 +1,20 @@
+url,page_type,expected_robots,expected_canonical,expected_indexability,priority,reason
+https://scholarshiptop.com/resources/medical-scholarships-guide,resource,index follow (default),self,indexable,P1,D11/D13 medical cluster hub; URL Inspection P1
+https://scholarshiptop.com/essays/career-goals,essay,index follow (default),self,indexable,P1,D11 cluster + enriched essay guide; URL Inspection P1
+https://scholarshiptop.com/essays/financial-need,essay,index follow (default),self,indexable,P2,Core essay guide; monitor indexing
+https://scholarshiptop.com/resources/how-to-find-scholarships,resource,index follow (default),self,indexable,P2,Top-of-funnel resource; sitemap present
+https://scholarshiptop.com/resources/best-scholarship-websites,resource,index follow (default),self,indexable,P2,High-intent listicle; sitemap present
+https://scholarshiptop.com/resources/best-scholarships-texas-international-students,resource,index follow (default),self,indexable,P1,GEO Texas + intl intent; URL Inspection P1; slow TTFB watch
+https://scholarshiptop.com/scholarships/texas,scholarship_state,noindex follow,self,noindex,P2,D13 GEO sidebar; inspect only (no request indexing)
+https://scholarshiptop.com/scholarships/california,scholarship_state,noindex follow,self,noindex,P3,State listing policy; monitor crawl
+https://scholarshiptop.com/scholarships/new-york,scholarship_state,noindex follow,self,noindex,P3,State listing policy
+https://scholarshiptop.com/scholarships/florida,scholarship_state,noindex follow,self,noindex,P3,State listing policy
+https://scholarshiptop.com/scholarships/illinois,scholarship_state,noindex follow,self,noindex,P3,State listing policy
+https://scholarshiptop.com/scholarships/texas/tarleton-state-university,scholarship_university,index follow,self,indexable,P2,Indexable uni hub; in scholarships-0 sitemap
+https://scholarshiptop.com/scholarships/california/california-state-university-northridge,scholarship_university,index follow,self,indexable,P2,Indexable uni hub; in seo sitemap
+https://scholarshiptop.com/compare/states,compare_hub,index follow (default),self,indexable,P2,Compare hub; core sitemap
+https://scholarshiptop.com/compare/universities,compare_hub,index follow (default),self,indexable,P2,Compare hub; core sitemap
+https://scholarshiptop.com/compare/states/california-vs-texas,compare_detail,noindex follow,self,noindex,P2,D9/D14 enrichment; inspect only
+https://scholarshiptop.com/compare/universities/university-of-massachusetts-amherst-vs-university-of-south-florida,compare_detail,noindex follow,self,noindex,P2,D14 footer dedupe validated; inspect only
+https://scholarshiptop.com/providers/loyola-university-chicago,provider,index follow (default),self,indexable,P1,D8 enrichment + providers sitemap; URL Inspection P1
+https://scholarshiptop.com/providers/alamo-colleges-foundation,provider,index follow (default),self,indexable,P2,Provider enrichment sample; sitemap present

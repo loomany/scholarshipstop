@@ -1,0 +1,11 @@
+url,period,clicks,impressions,ctr,avg_position,indexing_status,coverage_issue,last_crawl,notes
+https://scholarshiptop.com/resources/medical-scholarships-guide,last_7d,,,,,manual_required,,,GSC API 403 — fill from Search Console export
+https://scholarshiptop.com/resources/medical-scholarships-guide,last_28d,,,,,manual_required,,,GSC API 403 — fill from Search Console export
+https://scholarshiptop.com/essays/career-goals,last_7d,,,,,manual_required,,,GSC API 403 — fill from Search Console export
+https://scholarshiptop.com/essays/career-goals,last_28d,,,,,manual_required,,,GSC API 403 — fill from Search Console export
+https://scholarshiptop.com/resources/best-scholarships-texas-international-students,last_7d,,,,,manual_required,,,GSC API 403 — fill from Search Console export
+https://scholarshiptop.com/resources/best-scholarships-texas-international-students,last_28d,,,,,manual_required,,,GSC API 403 — fill from Search Console export
+https://scholarshiptop.com/providers/loyola-university-chicago,last_7d,,,,,manual_required,,,GSC API 403 — fill from Search Console export
+https://scholarshiptop.com/providers/loyola-university-chicago,last_28d,,,,,manual_required,,,GSC API 403 — fill from Search Console export
+https://scholarshiptop.com/scholarships/texas,last_28d,,,,,manual_required,noindex_expected,,,Inspect only — do not request indexing
+https://scholarshiptop.com/compare/states/california-vs-texas,last_28d,,,,,manual_required,noindex_expected,,,Inspect only — do not request indexing

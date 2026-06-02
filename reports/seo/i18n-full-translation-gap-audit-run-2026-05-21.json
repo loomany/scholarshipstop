@@ -1,0 +1,754 @@
+{
+  "base": "https://scholarshiptop.com",
+  "generatedAt": "2026-05-21T17:30:32.787Z",
+  "statusByUrl": {
+    "https://scholarshiptop.com/es/scholarships": 200,
+    "https://scholarshiptop.com/fr/scholarships": 200,
+    "https://scholarshiptop.com/es/providers": 200,
+    "https://scholarshiptop.com/fr/providers": 200,
+    "https://scholarshiptop.com/es/compare": 200,
+    "https://scholarshiptop.com/fr/compare": 200,
+    "https://scholarshiptop.com/es/compare/universities": 200,
+    "https://scholarshiptop.com/fr/compare/universities": 200,
+    "https://scholarshiptop.com/es/compare/states": 200,
+    "https://scholarshiptop.com/fr/compare/states": 200,
+    "https://scholarshiptop.com/es/compare/scholarship-vs-grant": 200,
+    "https://scholarshiptop.com/fr/compare/scholarship-vs-grant": 200,
+    "https://scholarshiptop.com/es/compare/no-essay-vs-essay-scholarships": 200,
+    "https://scholarshiptop.com/fr/compare/no-essay-vs-essay-scholarships": 200,
+    "https://scholarshiptop.com/es/resources": 200,
+    "https://scholarshiptop.com/fr/resources": 200,
+    "https://scholarshiptop.com/es/essays": 200,
+    "https://scholarshiptop.com/fr/essays": 200,
+    "https://scholarshiptop.com/es/subscription": 200,
+    "https://scholarshiptop.com/fr/subscription": 200,
+    "https://scholarshiptop.com/es/scholarships/category/stem": 200,
+    "https://scholarshiptop.com/fr/scholarships/category/stem": 200,
+    "https://scholarshiptop.com/es/scholarships/category/hobbies": 404,
+    "https://scholarshiptop.com/fr/scholarships/category/hobbies": 404,
+    "https://scholarshiptop.com/es/resources/how-to-find-scholarships": 200,
+    "https://scholarshiptop.com/es/essays/examples": 200
+  },
+  "rows": [
+    {
+      "url": "https://scholarshiptop.com/es/scholarships",
+      "locale": "es",
+      "section": "scholarships",
+      "status": 200,
+      "marker": "NEW",
+      "bucket": "A",
+      "snippet": "ripes Scholarship University of Reading NEW Climate Stripes Scholarship Graduate student can compare this scholarship w"
+    },
+    {
+      "url": "https://scholarshiptop.com/es/scholarships",
+      "locale": "es",
+      "section": "scholarships",
+      "status": 200,
+      "marker": "Award Amount",
+      "bucket": "A",
+      "snippet": "s left None Requirements 10.000 GBP Award Amount Guardar No relevante Education Few Requirements Graduate Study in:"
+    },
+    {
+      "url": "https://scholarshiptop.com/es/scholarships",
+      "locale": "es",
+      "section": "scholarships",
+      "status": 200,
+      "marker": "Requirements",
+      "bucket": "A",
+      "snippet": "check May 29, 2026 9 days left None Requirements 10.000 GBP Award Amount Guardar No relevante Education Few Requi"
+    },
+    {
+      "url": "https://scholarshiptop.com/es/scholarships",
+      "locale": "es",
+      "section": "scholarships",
+      "status": 200,
+      "marker": "Best for:",
+      "bucket": "A",
+      "snippet": "nd required materials before applying. Best for: Graduate student Effort: Unknown Source: Needs check May 29, 2026 9 "
+    },
+    {
+      "url": "https://scholarshiptop.com/es/scholarships",
+      "locale": "es",
+      "section": "scholarships",
+      "status": 200,
+      "marker": "Effort:",
+      "bucket": "A",
+      "snippet": "e applying. Best for: Graduate student Effort: Unknown Source: Needs check May 29, 2026 9 days left None Requiremen"
+    },
+    {
+      "url": "https://scholarshiptop.com/es/scholarships",
+      "locale": "es",
+      "section": "scholarships",
+      "status": 200,
+      "marker": "Source:",
+      "bucket": "A",
+      "snippet": "t for: Graduate student Effort: Unknown Source: Needs check May 29, 2026 9 days left None Requirements 10.000 GBP "
+    },
+    {
+      "url": "https://scholarshiptop.com/es/scholarships",
+      "locale": "es",
+      "section": "scholarships",
+      "status": 200,
+      "marker": "Host",
+      "bucket": "A",
+      "snippet": "nte Education Few Requirements Graduate Host: Not specified Vice-Chancellor’s Scholarship Bangor University NEW Vice-Cha"
+    },
+    {
+      "url": "https://scholarshiptop.com/es/scholarships",
+      "locale": "es",
+      "section": "scholarships",
+      "status": 200,
+      "marker": "Continue your scholarship search",
+      "bucket": "A",
+      "snippet": "stion? Can I update my recommendations? Continue your scholarship search Explore next steps to find scholarships faster"
+    },
+    {
+      "url": "https://scholarshiptop.com/es/scholarships",
+      "locale": "es",
+      "section": "scholarships",
+      "status": 200,
+      "marker": "Explore →",
+      "bucket": "A",
+      "snippet": "d apply for scholarships step by step. Explore → Essay guides Learn how to write strong scholarship essays and stand o"
+    },
+    {
+      "url": "https://scholarshiptop.com/es/scholarships",
+      "locale": "es",
+      "section": "scholarships",
+      "status": 200,
+      "marker": "Education (taxonomy)",
+      "bucket": "B",
+      "snippet": "GBP Award Amount Guardar No relevante Education Few Requirements Graduate Study in: United Kingdom HERRAMIENTA DESTACA"
+    },
+    {
+      "url": "https://scholarshiptop.com/es/scholarships",
+      "locale": "es",
+      "section": "scholarships",
+      "status": 200,
+      "marker": "Few Requirements",
+      "bucket": "B",
+      "snippet": " Amount Guardar No relevante Education Few Requirements Graduate Study in: United Kingdom HERRAMIENTA DESTACADA EVALUAC"
+    },
+    {
+      "url": "https://scholarshiptop.com/es/scholarships",
+      "locale": "es",
+      "section": "scholarships",
+      "status": 200,
+      "marker": "Graduate",
+      "bucket": "B",
+      "snippet": "eading NEW Climate Stripes Scholarship Graduate student can compare this scholarship with a listed award of 10.000 GBP "
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/scholarships",
+      "locale": "fr",
+      "section": "scholarships",
+      "status": 200,
+      "marker": "NEW",
+      "bucket": "A",
+      "snippet": "ripes Scholarship University of Reading NEW Climate Stripes Scholarship Graduate student can compare this scholarship w"
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/scholarships",
+      "locale": "fr",
+      "section": "scholarships",
+      "status": 200,
+      "marker": "Award Amount",
+      "bucket": "A",
+      "snippet": "s left None Requirements 10.000 GBP Award Amount Enregistrer Non pertinent Education Few Requirements Graduate Stud"
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/scholarships",
+      "locale": "fr",
+      "section": "scholarships",
+      "status": 200,
+      "marker": "Requirements",
+      "bucket": "A",
+      "snippet": "check May 29, 2026 9 days left None Requirements 10.000 GBP Award Amount Enregistrer Non pertinent Education Few "
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/scholarships",
+      "locale": "fr",
+      "section": "scholarships",
+      "status": 200,
+      "marker": "Best for:",
+      "bucket": "A",
+      "snippet": "nd required materials before applying. Best for: Graduate student Effort: Unknown Source: Needs check May 29, 2026 9 "
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/scholarships",
+      "locale": "fr",
+      "section": "scholarships",
+      "status": 200,
+      "marker": "Effort:",
+      "bucket": "A",
+      "snippet": "e applying. Best for: Graduate student Effort: Unknown Source: Needs check May 29, 2026 9 days left None Requiremen"
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/scholarships",
+      "locale": "fr",
+      "section": "scholarships",
+      "status": 200,
+      "marker": "Source:",
+      "bucket": "A",
+      "snippet": "t for: Graduate student Effort: Unknown Source: Needs check May 29, 2026 9 days left None Requirements 10.000 GBP "
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/scholarships",
+      "locale": "fr",
+      "section": "scholarships",
+      "status": 200,
+      "marker": "Host",
+      "bucket": "A",
+      "snippet": "ent Education Few Requirements Graduate Host: Not specified Vice-Chancellor’s Scholarship Bangor University NEW Vice-Cha"
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/scholarships",
+      "locale": "fr",
+      "section": "scholarships",
+      "status": 200,
+      "marker": "Continue your scholarship search",
+      "bucket": "A",
+      "snippet": "stion? Can I update my recommendations? Continue your scholarship search Explore next steps to find scholarships faster"
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/scholarships",
+      "locale": "fr",
+      "section": "scholarships",
+      "status": 200,
+      "marker": "Explore →",
+      "bucket": "A",
+      "snippet": "d apply for scholarships step by step. Explore → Essay guides Learn how to write strong scholarship essays and stand o"
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/scholarships",
+      "locale": "fr",
+      "section": "scholarships",
+      "status": 200,
+      "marker": "Education (taxonomy)",
+      "bucket": "B",
+      "snippet": "Award Amount Enregistrer Non pertinent Education Few Requirements Graduate Study in: United Kingdom OUTIL EN VEDETTE ÉV"
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/scholarships",
+      "locale": "fr",
+      "section": "scholarships",
+      "status": 200,
+      "marker": "Few Requirements",
+      "bucket": "B",
+      "snippet": "nt Enregistrer Non pertinent Education Few Requirements Graduate Study in: United Kingdom OUTIL EN VEDETTE ÉVALUATION I"
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/scholarships",
+      "locale": "fr",
+      "section": "scholarships",
+      "status": 200,
+      "marker": "Graduate",
+      "bucket": "B",
+      "snippet": "eading NEW Climate Stripes Scholarship Graduate student can compare this scholarship with a listed award of 10.000 GBP "
+    },
+    {
+      "url": "https://scholarshiptop.com/es/providers",
+      "locale": "es",
+      "section": "providers",
+      "status": 200,
+      "marker": "View Profile",
+      "bucket": "A",
+      "snippet": "AVAILABLE DATA: STRONG PROFILE ENRICHED View Profile UNITED STATES, TEXAS 542 Active Scholarships Tarleton State Unive"
+    },
+    {
+      "url": "https://scholarshiptop.com/es/providers",
+      "locale": "es",
+      "section": "providers",
+      "status": 200,
+      "marker": "Countries",
+      "bucket": "A",
+      "snippet": " de 6,069 proveedores Search providers Countries HERRAMIENTA DESTACADA IQ Elige proveedores que encajen con tu estrate"
+    },
+    {
+      "url": "https://scholarshiptop.com/es/providers",
+      "locale": "es",
+      "section": "providers",
+      "status": 200,
+      "marker": "Profile enriched",
+      "bucket": "A",
+      "snippet": " OFFICIAL SOURCE AVAILABLE DATA: STRONG PROFILE ENRICHED View Profile UNITED STATES, TEXAS 542 Active Scholarships Tar"
+    },
+    {
+      "url": "https://scholarshiptop.com/es/providers",
+      "locale": "es",
+      "section": "providers",
+      "status": 200,
+      "marker": "Active Scholarship(s)",
+      "bucket": "A",
+      "snippet": "id disclaimer How recommendations work Active scholarships How many live listings are connected to the provider. Sour"
+    },
+    {
+      "url": "https://scholarshiptop.com/es/providers",
+      "locale": "es",
+      "section": "providers",
+      "status": 200,
+      "marker": "Education (taxonomy)",
+      "bucket": "B",
+      "snippet": "ation advances student access to higher education across the Alamo Colleges through donor-supported scholarships and stu"
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/providers",
+      "locale": "fr",
+      "section": "providers",
+      "status": 200,
+      "marker": "View Profile",
+      "bucket": "A",
+      "snippet": "AVAILABLE DATA: STRONG PROFILE ENRICHED View Profile UNITED STATES, TEXAS 542 Active Scholarships Tarleton State Unive"
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/providers",
+      "locale": "fr",
+      "section": "providers",
+      "status": 200,
+      "marker": "Countries",
+      "bucket": "A",
+      "snippet": "ur 6,069 fournisseurs Search providers Countries OUTIL EN VEDETTE IQ Choisissez des fournisseurs adaptés à votre strat"
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/providers",
+      "locale": "fr",
+      "section": "providers",
+      "status": 200,
+      "marker": "Profile enriched",
+      "bucket": "A",
+      "snippet": " OFFICIAL SOURCE AVAILABLE DATA: STRONG PROFILE ENRICHED View Profile UNITED STATES, TEXAS 542 Active Scholarships Tar"
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/providers",
+      "locale": "fr",
+      "section": "providers",
+      "status": 200,
+      "marker": "Active Scholarship(s)",
+      "bucket": "A",
+      "snippet": "id disclaimer How recommendations work Active scholarships How many live listings are connected to the provider. Sour"
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/providers",
+      "locale": "fr",
+      "section": "providers",
+      "status": 200,
+      "marker": "Education (taxonomy)",
+      "bucket": "B",
+      "snippet": "ation advances student access to higher education across the Alamo Colleges through donor-supported scholarships and stu"
+    },
+    {
+      "url": "https://scholarshiptop.com/es/compare/universities",
+      "locale": "es",
+      "section": "compare-universities",
+      "status": 200,
+      "marker": "Read more",
+      "bucket": "A",
+      "snippet": "asis, award amounts, and essay effort. Read more → University vs University Austin Community College vs Florida Gateway"
+    },
+    {
+      "url": "https://scholarshiptop.com/es/compare/universities",
+      "locale": "es",
+      "section": "compare-universities",
+      "status": 200,
+      "marker": "Showing N",
+      "bucket": "A",
+      "snippet": " cards faster with search and sorting. Showing 1–11 of 171 University vs University FEATURED TOOL COLLEGE FIT Compare"
+    },
+    {
+      "url": "https://scholarshiptop.com/es/compare/universities",
+      "locale": "es",
+      "section": "compare-universities",
+      "status": 200,
+      "marker": "University vs University",
+      "bucket": "B",
+      "snippet": "ersiones localizadas. Home / Compare / University vs University University vs University Explore published university-"
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/compare/universities",
+      "locale": "fr",
+      "section": "compare-universities",
+      "status": 200,
+      "marker": "Read more",
+      "bucket": "A",
+      "snippet": "asis, award amounts, and essay effort. Read more → University vs University Austin Community College vs Florida Gateway"
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/compare/universities",
+      "locale": "fr",
+      "section": "compare-universities",
+      "status": 200,
+      "marker": "Showing N",
+      "bucket": "A",
+      "snippet": " cards faster with search and sorting. Showing 1–11 of 171 University vs University FEATURED TOOL COLLEGE FIT Compare"
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/compare/universities",
+      "locale": "fr",
+      "section": "compare-universities",
+      "status": 200,
+      "marker": "University vs University",
+      "bucket": "B",
+      "snippet": " versions localisées. Home / Compare / University vs University University vs University Explore published university-"
+    },
+    {
+      "url": "https://scholarshiptop.com/es/compare/states",
+      "locale": "es",
+      "section": "compare-states",
+      "status": 200,
+      "marker": "Read more",
+      "bucket": "A",
+      "snippet": ", and strongest scholarship providers. Read more → State vs State Louisiana vs North Dakota Scholarships 2026 Compare "
+    },
+    {
+      "url": "https://scholarshiptop.com/es/compare/states",
+      "locale": "es",
+      "section": "compare-states",
+      "status": 200,
+      "marker": "Showing N",
+      "bucket": "A",
+      "snippet": " cards faster with search and sorting. Showing 1–11 of 1275 State vs State FEATURED TOOL MARKET FIT Find the market t"
+    },
+    {
+      "url": "https://scholarshiptop.com/es/compare/states",
+      "locale": "es",
+      "section": "compare-states",
+      "status": 200,
+      "marker": "State vs State",
+      "bucket": "B",
+      "snippet": "ersiones localizadas. Home / Compare / State vs State State vs State Explore published state-vs-state scholarship comp"
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/compare/states",
+      "locale": "fr",
+      "section": "compare-states",
+      "status": 200,
+      "marker": "Read more",
+      "bucket": "A",
+      "snippet": ", and strongest scholarship providers. Read more → State vs State Louisiana vs North Dakota Scholarships 2026 Compare "
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/compare/states",
+      "locale": "fr",
+      "section": "compare-states",
+      "status": 200,
+      "marker": "Showing N",
+      "bucket": "A",
+      "snippet": " cards faster with search and sorting. Showing 1–11 of 1275 State vs State FEATURED TOOL MARKET FIT Find the market t"
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/compare/states",
+      "locale": "fr",
+      "section": "compare-states",
+      "status": 200,
+      "marker": "State vs State",
+      "bucket": "B",
+      "snippet": " versions localisées. Home / Compare / State vs State State vs State Explore published state-vs-state scholarship comp"
+    },
+    {
+      "url": "https://scholarshiptop.com/es/resources",
+      "locale": "es",
+      "section": "resources",
+      "status": 200,
+      "marker": "Requirements",
+      "bucket": "A",
+      "snippet": "a simple tracker for deadlines, essays, requirements, and submission status. Read more → Scholarship Application Checkl"
+    },
+    {
+      "url": "https://scholarshiptop.com/es/resources",
+      "locale": "es",
+      "section": "resources",
+      "status": 200,
+      "marker": "Read more",
+      "bucket": "A",
+      "snippet": "based aid, and where GPA matters less. Read more → How to Verify Scholarship Emails in the USA Before Replying Learn h"
+    },
+    {
+      "url": "https://scholarshiptop.com/es/resources",
+      "locale": "es",
+      "section": "resources",
+      "status": 200,
+      "marker": "Graduate",
+      "bucket": "B",
+      "snippet": "→ Scholarship Application Checklist for Graduate Students: What to Prepare and When Use this scholarship application ch"
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/resources",
+      "locale": "fr",
+      "section": "resources",
+      "status": 200,
+      "marker": "Requirements",
+      "bucket": "A",
+      "snippet": "a simple tracker for deadlines, essays, requirements, and submission status. Read more → Scholarship Application Checkl"
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/resources",
+      "locale": "fr",
+      "section": "resources",
+      "status": 200,
+      "marker": "Read more",
+      "bucket": "A",
+      "snippet": "based aid, and where GPA matters less. Read more → How to Verify Scholarship Emails in the USA Before Replying Learn h"
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/resources",
+      "locale": "fr",
+      "section": "resources",
+      "status": 200,
+      "marker": "Graduate",
+      "bucket": "B",
+      "snippet": "→ Scholarship Application Checklist for Graduate Students: What to Prepare and When Use this scholarship application ch"
+    },
+    {
+      "url": "https://scholarshiptop.com/es/essays",
+      "locale": "es",
+      "section": "essays",
+      "status": 200,
+      "marker": "Showing N",
+      "bucket": "A",
+      "snippet": ", usa el catálogo. Filters Categories Showing 1–11 of 11 guides Probar Essay Mentor → CENTRO DE ENSAYOS PARA BECAS "
+    },
+    {
+      "url": "https://scholarshiptop.com/es/essays",
+      "locale": "es",
+      "section": "essays",
+      "status": 200,
+      "marker": "Categories",
+      "bucket": "A",
+      "snippet": "plorar becas, usa el catálogo. Filters Categories Showing 1–11 of 11 guides Probar Essay Mentor → CENTRO DE ENSAYOS "
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/essays",
+      "locale": "fr",
+      "section": "essays",
+      "status": 200,
+      "marker": "Showing N",
+      "bucket": "A",
+      "snippet": "isez le catalogue. Filters Categories Showing 1–11 of 11 guides Essayer Essay Mentor → CENTRE DE RÉDACTION POUR BOUR"
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/essays",
+      "locale": "fr",
+      "section": "essays",
+      "status": 200,
+      "marker": "Categories",
+      "bucket": "A",
+      "snippet": "ourses, utilisez le catalogue. Filters Categories Showing 1–11 of 11 guides Essayer Essay Mentor → CENTRE DE RÉDACTI"
+    },
+    {
+      "url": "https://scholarshiptop.com/es/scholarships/category/stem",
+      "locale": "es",
+      "section": "category-pilot",
+      "status": 200,
+      "marker": "NEW",
+      "bucket": "A",
+      "snippet": "laysia 2025 Monash University, Malaysia NEW Monash High Achiever Award (for new students) at Monash University Malaysia "
+    },
+    {
+      "url": "https://scholarshiptop.com/es/scholarships/category/stem",
+      "locale": "es",
+      "section": "category-pilot",
+      "status": 200,
+      "marker": "Award Amount",
+      "bucket": "A",
+      "snippet": "quirements Partial Funding, RM10,000… Award Amount Save Not relevant STEM Medicine Few Requirements Women Disability "
+    },
+    {
+      "url": "https://scholarshiptop.com/es/scholarships/category/stem",
+      "locale": "es",
+      "section": "category-pilot",
+      "status": 200,
+      "marker": "Requirements",
+      "bucket": "A",
+      "snippet": "heck May 31, 2026 11 days left None Requirements Partial Funding, RM10,000… Award Amount Save Not relevant STEM M"
+    },
+    {
+      "url": "https://scholarshiptop.com/es/scholarships/category/stem",
+      "locale": "es",
+      "section": "category-pilot",
+      "status": 200,
+      "marker": "Best for:",
+      "bucket": "A",
+      "snippet": "nd required materials before applying. Best for: Business, Management and Marketing students Effort: Unknown Source: Ne"
+    },
+    {
+      "url": "https://scholarshiptop.com/es/scholarships/category/stem",
+      "locale": "es",
+      "section": "category-pilot",
+      "status": 200,
+      "marker": "Effort:",
+      "bucket": "A",
+      "snippet": "ness, Management and Marketing students Effort: Unknown Source: Needs check May 31, 2026 11 days left None Requireme"
+    },
+    {
+      "url": "https://scholarshiptop.com/es/scholarships/category/stem",
+      "locale": "es",
+      "section": "category-pilot",
+      "status": 200,
+      "marker": "Source:",
+      "bucket": "A",
+      "snippet": " and Marketing students Effort: Unknown Source: Needs check May 31, 2026 11 days left None Requirements Partial Fun"
+    },
+    {
+      "url": "https://scholarshiptop.com/es/scholarships/category/stem",
+      "locale": "es",
+      "section": "category-pilot",
+      "status": 200,
+      "marker": "Not relevant",
+      "bucket": "A",
+      "snippet": " Funding, RM10,000… Award Amount Save Not relevant STEM Medicine Few Requirements Women Disability Undergraduate Gradu"
+    },
+    {
+      "url": "https://scholarshiptop.com/es/scholarships/category/stem",
+      "locale": "es",
+      "section": "category-pilot",
+      "status": 200,
+      "marker": "Save",
+      "bucket": "A",
+      "snippet": "rtial Funding, RM10,000… Award Amount Save Not relevant STEM Medicine Few Requirements Women Disability Undergraduate "
+    },
+    {
+      "url": "https://scholarshiptop.com/es/scholarships/category/stem",
+      "locale": "es",
+      "section": "category-pilot",
+      "status": 200,
+      "marker": "Host",
+      "bucket": "A",
+      "snippet": "vant STEM Few Requirements Graduate PhD Host: Not specified James Dyson Foundation Launches Design and Engineering Schol"
+    },
+    {
+      "url": "https://scholarshiptop.com/es/scholarships/category/stem",
+      "locale": "es",
+      "section": "category-pilot",
+      "status": 200,
+      "marker": "Education (taxonomy)",
+      "bucket": "B",
+      "snippet": "NEW Milestone Trial LawHER Scholarship Education students can compare this scholarship with a listed award of $10.000 -"
+    },
+    {
+      "url": "https://scholarshiptop.com/es/scholarships/category/stem",
+      "locale": "es",
+      "section": "category-pilot",
+      "status": 200,
+      "marker": "Few Requirements",
+      "bucket": "B",
+      "snippet": "Amount Save Not relevant STEM Medicine Few Requirements Women Disability Undergraduate Graduate PhD +3 more Study in: M"
+    },
+    {
+      "url": "https://scholarshiptop.com/es/scholarships/category/stem",
+      "locale": "es",
+      "section": "category-pilot",
+      "status": 200,
+      "marker": "Graduate",
+      "bucket": "B",
+      "snippet": "irements Women Disability Undergraduate Graduate PhD +3 more Study in: Malaysia School of Health and Social Science PhD "
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/scholarships/category/stem",
+      "locale": "fr",
+      "section": "category-pilot",
+      "status": 200,
+      "marker": "NEW",
+      "bucket": "A",
+      "snippet": "laysia 2025 Monash University, Malaysia NEW Monash High Achiever Award (for new students) at Monash University Malaysia "
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/scholarships/category/stem",
+      "locale": "fr",
+      "section": "category-pilot",
+      "status": 200,
+      "marker": "Award Amount",
+      "bucket": "A",
+      "snippet": "quirements Partial Funding, RM10,000… Award Amount Save Not relevant STEM Medicine Few Requirements Women Disability "
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/scholarships/category/stem",
+      "locale": "fr",
+      "section": "category-pilot",
+      "status": 200,
+      "marker": "Requirements",
+      "bucket": "A",
+      "snippet": "heck May 31, 2026 11 days left None Requirements Partial Funding, RM10,000… Award Amount Save Not relevant STEM M"
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/scholarships/category/stem",
+      "locale": "fr",
+      "section": "category-pilot",
+      "status": 200,
+      "marker": "Best for:",
+      "bucket": "A",
+      "snippet": "nd required materials before applying. Best for: Business, Management and Marketing students Effort: Unknown Source: Ne"
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/scholarships/category/stem",
+      "locale": "fr",
+      "section": "category-pilot",
+      "status": 200,
+      "marker": "Effort:",
+      "bucket": "A",
+      "snippet": "ness, Management and Marketing students Effort: Unknown Source: Needs check May 31, 2026 11 days left None Requireme"
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/scholarships/category/stem",
+      "locale": "fr",
+      "section": "category-pilot",
+      "status": 200,
+      "marker": "Source:",
+      "bucket": "A",
+      "snippet": " and Marketing students Effort: Unknown Source: Needs check May 31, 2026 11 days left None Requirements Partial Fun"
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/scholarships/category/stem",
+      "locale": "fr",
+      "section": "category-pilot",
+      "status": 200,
+      "marker": "Not relevant",
+      "bucket": "A",
+      "snippet": " Funding, RM10,000… Award Amount Save Not relevant STEM Medicine Few Requirements Women Disability Undergraduate Gradu"
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/scholarships/category/stem",
+      "locale": "fr",
+      "section": "category-pilot",
+      "status": 200,
+      "marker": "Save",
+      "bucket": "A",
+      "snippet": "rtial Funding, RM10,000… Award Amount Save Not relevant STEM Medicine Few Requirements Women Disability Undergraduate "
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/scholarships/category/stem",
+      "locale": "fr",
+      "section": "category-pilot",
+      "status": 200,
+      "marker": "Host",
+      "bucket": "A",
+      "snippet": "vant STEM Few Requirements Graduate PhD Host: Not specified James Dyson Foundation Launches Design and Engineering Schol"
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/scholarships/category/stem",
+      "locale": "fr",
+      "section": "category-pilot",
+      "status": 200,
+      "marker": "Education (taxonomy)",
+      "bucket": "B",
+      "snippet": "NEW Milestone Trial LawHER Scholarship Education students can compare this scholarship with a listed award of $10.000 -"
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/scholarships/category/stem",
+      "locale": "fr",
+      "section": "category-pilot",
+      "status": 200,
+      "marker": "Few Requirements",
+      "bucket": "B",
+      "snippet": "Amount Save Not relevant STEM Medicine Few Requirements Women Disability Undergraduate Graduate PhD +3 more Study in: M"
+    },
+    {
+      "url": "https://scholarshiptop.com/fr/scholarships/category/stem",
+      "locale": "fr",
+      "section": "category-pilot",
+      "status": 200,
+      "marker": "Graduate",
+      "bucket": "B",
+      "snippet": "irements Women Disability Undergraduate Graduate PhD +3 more Study in: Malaysia School of Health and Social Science PhD "
+    }
+  ]
+}

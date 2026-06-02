@@ -1,0 +1,22 @@
+source_or_opportunity,d7_recommendation,implemented_stage,implemented_status,remaining_gap,next_action,priority,risk
+CDC SVI state context,Add social_vulnerability_context to state output,D8,implemented,County-level SVI not exposed; copy depth varies by page,Optional county aggregate review if city pages launch,medium,medium
+ADI aggregation,Aggregate ADI before display,D8,implemented,Block/county ADI not on city pages (no routes),Wait for city-page product decision,medium,medium
+ProPublica nonprofit provider cards,provider_nonprofit_enrichment.json,D8,partial,Many foundations unmatched; Alamo not in package or static JSON,Manual QA workflow + optional ProPublica collect expansion,high,medium
+NIH RePORTER institution aggregates,Aggregate-only institution research,D8,implemented,Not shown on all compare/provider matches; medical schools partial,Expand match coverage via school keys not raw NIH,medium,medium
+OpenAlex/ROR normalization,Friendly works/citations identity,D8/D6,partial,research_signal legacy paths mostly normalized; schema identifiers limited,Wave 1 schema audit only if visible IDs approved,medium,medium
+BLS metro wages,city_affordability_v2 / metro context,D9,implemented,No public city scholarship pages yet,Approve city route strategy before more surfacing,high,medium
+Zillow ZORI rent trends,Latest rent + trend in city output,D9,implemented,Trend narrative not written; latest rent only in blocks,Careful copy if trend text added,medium,medium
+County Health Rankings,Richer county health indicators,D1/D8 baseline,partial,Still mostly counties_with_data count in state_affordability,Pick 2-3 neutral county/state metrics if editorial approves,medium,medium
+USAspending funding context,Scoped federal funding block,D7,not_implemented,Partial THCGME scope only in package; no static output,Defer or small pilot on matched research hospitals only,low,medium
+Medical school data cluster,WDOMS/LCME/COCA/admit.med pages,D10/D11,partial,Data in medical_school_enrichment + guide; no /medical-schools/ routes,Pre-med/nursing guides before full vertical,high,medium
+State scholarship GEO copy,Affordability sidebar summaries,D13,implemented,D15 shows state pages noindex; copy helps UX/AI not index volume,Monitor GSC; polish titles/meta from queries,medium,low
+Internal link graph,D5 graph across sections,D5,implemented,Provider pages without enrichment get fewer cluster links,Fix provider match gaps first,medium,low
+JSON-LD structured data,D6 blocks,D6,implemented,No Dataset/DataCatalog; nonprofit EIN not in schema until visible,Keep policy; add org identifiers only when UI shows them,low,medium
+City scholarship pages,BLS/Zillow/US Cities public routes,D7/D9,data_ready_routes_missing,2.7MB city_rent_metro unused on city URLs,Product/SEO approval for city hub strategy,high,high
+Nursing/pre-med guides,Vertical content clusters,D10,data_ready_content_missing,premed_topic_context has nursing/pre-med keys; only medical guide exists,Create /resources/nursing-scholarships-guide and/or pre-med guide,high,low
+Methodology hub,Central data-sources page,D12 proposed,partial,/scholarship-verification-methodology exists; no consolidated data-sources page,Optional /resources/scholarshiptop-data-methodology content-only,medium,low
+GSC feedback loop,Search Console monitoring,D15,blocked,API 403; manual checklist only,Grant service account GSC access (ops not code),high,low
+Residency vertical (FREIDA/NRMP/etc),Future medical vertical,D7,not_implemented,Correctly excluded from general site,Do not use until vertical launch,low,high
+VA facilities / hospital quality,Provider/medical clusters,D7,not_implemented,Clinical/hospital claims risk,Do not use on general site,low,high
+Payload dedupe,Footer consolidation,D14,implemented,Large provider/compare HTML remains,Monitor TTFB; no new datasets,medium,low
+Medical guide sitemap,D16 sitemap inclusion,D16,implemented,Live post-deploy,URL Inspection + monitor impressions,high,low

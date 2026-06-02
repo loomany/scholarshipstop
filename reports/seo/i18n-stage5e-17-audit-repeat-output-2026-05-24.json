@@ -1,0 +1,28 @@
+﻿
+> i18n:scholarship-autopilot:audit-repeat
+> tsx scripts/i18n/scholarship-detail-autopilot/audit-railway-repeat-startwave.ts
+
+{
+  "auditedAt": "2026-05-25T17:07:07.482Z",
+  "lock": {
+    "rpcHeld": false,
+    "row": null
+  },
+  "sitemap": {
+    "liveEs": 13051,
+    "liveFr": 13051,
+    "eligibleEs": 13051,
+    "eligibleFr": 13051,
+    "badSitemapContent": true,
+    "hasEnInXml": false
+  },
+  "relaxedWaves181Plus": [],
+  "latestAcceptedWave": 0,
+  "nextSafeWave": 181,
+  "wave183": null,
+  "routeSamples": [],
+  "unseeded404": {
+    "es": 404,
+    "fr": 404
+  }
+}

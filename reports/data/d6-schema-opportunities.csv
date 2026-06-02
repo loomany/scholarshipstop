@@ -1,0 +1,15 @@
+route_type,route_example,current_schema,recommended_schema,visible_content_supports_it,risk,action
+resource,/resources/best-scholarship-websites,"BreadcrumbList, BlogPosting, FAQPage (conditional)","BreadcrumbList, BlogPosting/BlogPosting, FAQPage (conditional)",yes,low,done-refactor-shared-helper
+resource-state,/resources/best-scholarships-texas-international-students,"BreadcrumbList, BlogPosting, FAQPage (conditional)",same,yes,low,done-refactor-shared-helper
+essay,/essays/financial-need,"BreadcrumbList, Article, FAQPage (conditional)",same,yes,low,done-refactor-shared-helper
+provider,/providers/loyola-university-chicago,"BreadcrumbList, WebPage, Organization (conditional), FAQPage","BreadcrumbList, WebPage, Organization, EducationalOrganization (school match), FAQPage",yes,medium,done-add-educational-org
+university-hub,/scholarships/texas/tarleton-state-university,FAQPage only,"BreadcrumbList, WebPage, ItemList, FAQPage",yes,low,done-expand-bundle
+state-hub,/scholarships/texas,"WebPage, ItemList @graph",add BreadcrumbList,yes,low,done-add-breadcrumbs
+compare-state-hub,/compare/states,"BreadcrumbList, ItemList",keep,yes,low,audit-only-no-change
+compare-university-hub,/compare/universities,"BreadcrumbList, ItemList",keep,yes,low,audit-only-no-change
+compare-state-detail,/compare/states/california-vs-texas,"BreadcrumbList, WebPage, FAQPage (conditional)",keep,yes,low,audit-only-no-change
+compare-university-detail,/compare/universities/university-of-massachusetts-amherst-vs-university-of-south-florida,"BreadcrumbList, WebPage, FAQPage (conditional)",keep,yes,low,audit-only-no-change
+scholarship-detail,/scholarships/[slug],Scholarship graph in layout,keep existing detail graph,yes,medium,skipped-no-change
+dataset-enrichment,external-data sidebars,none,Dataset/DataCatalog,no,high,skipped-audit-only
+generic-resource,/resources/best-scholarship-websites,Article schema when DB article exists,yes,yes,low,done
+review-rating,site-wide,none,Review/AggregateRating,no,high,skipped
