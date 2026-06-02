@@ -21,7 +21,7 @@ export default function Logo({
     variant === 'auth'
       ? 'text-[0.9375rem] leading-none sm:text-lg'
       : variant === 'header'
-        ? 'hidden text-[0.9rem] leading-none min-[430px]:inline-flex sm:text-[0.95rem] md:text-base'
+        ? 'inline-flex text-[0.8125rem] leading-none sm:text-[0.95rem] md:text-base'
         : 'text-[0.9rem] leading-none sm:text-[0.95rem] md:text-base';
 
   const inner = (
