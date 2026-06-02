@@ -75,6 +75,11 @@ import {
   getScholarshipSourceStatus
 } from '@/lib/seo/scholarshipSeoQualityPolicy';
 import { SHOW_SCHOLARSHIP_APPLICANT_COUNT_UI } from '@/lib/constants/scholarshipApplicantCountUi';
+import {
+  SHOW_SCHOLARSHIP_CARD_EFFORT_BADGE,
+  SHOW_SCHOLARSHIP_CARD_SOURCE_SIGNAL_BADGE
+} from '@/lib/constants/scholarshipCardIntelligenceBadgeUi';
+import { SHOW_SCHOLARSHIP_CARD_REQUIREMENTS_METRIC } from '@/lib/constants/scholarshipCardRequirementsMetricUi';
 import { dismissRouteProgress } from '@/lib/navigation/dismissRouteProgress';
 import type { ScholarshipListTabId } from '@/app/scholarships/scholarshipTabs';
 import type { ScholarshipsHubUiCopy } from '@/lib/i18n/scholarshipsHubUiCopy';
@@ -113,6 +118,11 @@ type ScholarshipCardProps = {
   authResolved?: boolean;
   /** Hub listing tab — used for Hot Deadlines lock affordance. */
   listingTab?: ScholarshipListTabId;
+  /**
+   * Main `/scholarships` catalog grid: intelligence badges span the full card width on xl
+   * instead of staying inside the narrow title column.
+   */
+  hubCatalogListing?: boolean;
   /** Open subscription modal when premium category chip is clicked. */
   onSubscriptionLockedCategoryClick?: (categoryId: string) => void;
   /** Open the dedicated subscription modal for always-locked grant categories. */
@@ -218,6 +228,7 @@ export default function ScholarshipCard({
   hasSubscription = false,
   authResolved = true,
   listingTab,
+  hubCatalogListing = false,
   onSubscriptionLockedCategoryClick,
   onLockedScholarshipNavigate,
   onSubscriptionDetailNavigate,
@@ -432,12 +443,27 @@ export default function ScholarshipCard({
 
   const gridShell = stackedListing
     ? 'grid min-w-0 flex-1 grid-cols-1 content-start gap-x-5 gap-y-3.5 px-4 py-4 sm:px-5 sm:py-5'
-    : 'grid min-w-0 flex-1 grid-cols-1 content-start gap-x-5 gap-y-3.5 px-4 py-4 sm:px-5 sm:py-5 xl:grid-cols-[minmax(0,2.2fr)_minmax(112px,0.48fr)_minmax(164px,0.72fr)] xl:grid-rows-[auto_auto_auto] xl:gap-x-2.5 xl:gap-y-2.5 xl:items-start';
+    : hubCatalogListing
+      ? 'grid min-w-0 flex-1 grid-cols-1 content-start gap-x-5 gap-y-3.5 px-4 py-4 sm:px-5 sm:py-5 xl:grid-cols-[minmax(0,2.2fr)_minmax(112px,0.48fr)_minmax(164px,0.72fr)] xl:grid-rows-[auto_auto_auto] xl:gap-x-2.5 xl:gap-y-2 xl:items-start'
+      : 'grid min-w-0 flex-1 grid-cols-1 content-start gap-x-5 gap-y-3.5 px-4 py-4 sm:px-5 sm:py-5 xl:grid-cols-[minmax(0,2.2fr)_minmax(112px,0.48fr)_minmax(164px,0.72fr)] xl:grid-rows-[auto_auto_auto] xl:gap-x-2.5 xl:gap-y-2.5 xl:items-start';
 
   /** Title spans rows 1–2 on xl so it aligns with deadline+reqs / award+actions. */
   const titleCell = stackedListing
     ? 'min-w-0 text-left'
-    : 'min-w-0 text-left xl:col-start-1 xl:row-start-1 xl:row-span-2';
+    : hubCatalogListing
+      ? 'min-w-0 text-left xl:col-start-1 xl:row-start-1 xl:row-span-1'
+      : 'min-w-0 text-left xl:col-start-1 xl:row-start-1 xl:row-span-2';
+
+  const hubIntelligenceBadgesCell =
+    'col-span-full min-w-0 pointer-events-auto hidden xl:col-start-1 xl:col-span-2 xl:row-start-2 xl:block xl:self-start';
+
+  const xlDeadlineMetricRowSpan = hubCatalogListing
+    ? 'xl:row-span-1'
+    : 'xl:row-span-2';
+
+  const xlAwardMetricRowSpan = hubCatalogListing
+    ? 'xl:row-span-2'
+    : 'xl:row-span-2';
 
   /** Stacked/narrow listing only — catalog hub uses a mobile combined row + xl grid columns on inner wrappers. */
   const deadlineBlockWrap = 'min-w-0 border-t border-slate-200/80 pt-3';
@@ -446,18 +472,29 @@ export default function ScholarshipCard({
   /** Save / Not relevant — under award when stacked; inside award row on catalog mobile. */
   const cardActionsWrap = stackedListing
     ? 'relative z-10 mt-2.5 mx-auto flex w-full max-w-[148px] flex-col items-stretch gap-1.5 pointer-events-auto'
-    : 'relative z-10 flex w-full max-w-[148px] shrink-0 flex-col gap-1.5 self-start pointer-events-auto xl:mt-0 xl:w-full xl:max-w-[148px] xl:self-start';
+    : 'relative z-10 mt-2.5 mx-auto flex w-full max-w-[148px] shrink-0 flex-col gap-1.5 pointer-events-auto xl:w-full xl:max-w-[148px]';
 
-  /** Award metrics: left-aligned (reads toward deadline). */
+  /** Catalog hub mobile: award + deadline + actions in one equal-width row (`xl:hidden` only). */
+  const catalogMobileMetricsRowClass = showCardActions
+    ? 'grid w-full min-w-0 grid-cols-3 items-stretch gap-2 sm:gap-2.5'
+    : 'grid w-full min-w-0 grid-cols-2 items-stretch gap-2 sm:gap-2.5';
+  const catalogMobileMetricCellClass = 'min-w-0 w-full';
+  const cardActionsWrapCatalogMobileRow =
+    'relative z-10 flex min-w-0 w-full flex-col justify-center gap-1 pointer-events-auto [&_button]:px-1.5 [&_button]:py-1 [&_button]:text-[10px] sm:[&_button]:px-2 sm:[&_button]:text-[11px]';
+
+  /** Award / deadline metric panels (centered inside the bordered box). */
   const metricPanelSurface =
     'rounded-lg border p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.78)]';
-  const awardMetricAlign = `${metricPanelSurface} border-orange-100/90 bg-orange-50/50 text-left`;
-  const awardMetricAlignTight = 'text-left';
+  const metricPanelCenterClass =
+    'flex flex-col items-center justify-center text-center';
+  const awardMetricAlign = `${metricPanelSurface} border-orange-100/90 bg-orange-50/50 min-h-full ${metricPanelCenterClass}`;
+  const awardMetricAlignTight = 'text-center';
 
-  const deadlineInner = `${metricPanelSurface} min-w-0 border-slate-200/90 bg-slate-50/90`;
+  const deadlineInner = `${metricPanelSurface} min-w-0 border-slate-200/90 bg-slate-50/90 min-h-full ${metricPanelCenterClass}`;
 
-  /** Left-aligned on all breakpoints (matches requirements / award on mobile). */
-  const deadlineMetricAlign = 'text-left';
+  const deadlineMetricAlign = 'w-full text-center';
+  const catalogMobileAwardCellClass = `${catalogMobileMetricCellClass} ${awardMetricAlign}`;
+  const catalogMobileDeadlineCellClass = `${catalogMobileMetricCellClass} ${deadlineInner}`;
 
   /** Compact vertical stack under award (right column on xl). */
   const cardActionBtnBase = `w-full rounded-lg px-2.5 py-1.5 text-center text-xs font-semibold text-white transition ${SCHOLARSHIP_ACTION_FOCUS_VISIBLE}`;
@@ -568,7 +605,7 @@ export default function ScholarshipCard({
   const deadlineRaw = scholarship.deadline?.trim() ?? '';
   const hasDeadline =
     Boolean(deadlineRaw) || Boolean(scholarship.deadlineAt?.trim());
-  const deadlineParts = getScholarshipDeadlineDisplayParts(scholarship);
+  const deadlineParts = getScholarshipDeadlineDisplayParts(scholarship, uiLocale);
 
   const reqCount = scholarship.eligibility?.length ?? 0;
   const reqDisplayCount =
@@ -600,9 +637,9 @@ export default function ScholarshipCard({
     </div>
   );
 
-  const requirementsStackedUnderDeadline = (
+  const requirementsStackedUnderDeadline = SHOW_SCHOLARSHIP_CARD_REQUIREMENTS_METRIC ? (
     <div className="mt-2 min-w-0 text-left">{requirementsMetricInner}</div>
-  );
+  ) : null;
 
   const cardSourceStatus = getScholarshipSourceStatus(scholarship);
   const cardDifficulty = getScholarshipApplicationDifficulty(scholarship);
@@ -626,28 +663,36 @@ export default function ScholarshipCard({
       label: `${cardChrome.bestForPrefix} ${cardBestFor}`,
       title: cardChrome.bestForBadgeTitle
     },
-    {
-      key: 'effort',
-      label: `${cardChrome.effortPrefix} ${localizedEffortLevel}`,
-      title: cardDifficulty.reason
-    },
-    {
-      key: 'source',
-      label: `${sourceSignalPrefix} ${localizedSourceShort}`,
-      title: cardSourceStatus.description
-    }
-  ] as const;
+    ...(SHOW_SCHOLARSHIP_CARD_EFFORT_BADGE
+      ? [
+          {
+            key: 'effort' as const,
+            label: `${cardChrome.effortPrefix} ${localizedEffortLevel}`,
+            title: cardDifficulty.reason
+          }
+        ]
+      : []),
+    ...(SHOW_SCHOLARSHIP_CARD_SOURCE_SIGNAL_BADGE
+      ? [
+          {
+            key: 'source' as const,
+            label: `${sourceSignalPrefix} ${localizedSourceShort}`,
+            title: cardSourceStatus.description
+          }
+        ]
+      : [])
+  ];
 
   const intelligenceBadgesRow = (
     <div
-      className="mt-2 flex w-full min-w-0 flex-col items-stretch gap-1.5 sm:flex-row sm:flex-wrap sm:items-center"
+      className="mt-2 flex min-w-0 flex-wrap items-center gap-1.5"
       aria-label={cardChrome.intelligenceAria}
     >
       {intelligenceBadges.map((badge) => (
         <span
           key={badge.key}
           title={badge.title}
-          className="inline-flex max-w-full items-center rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[10px] font-semibold leading-5 text-slate-700 sm:shrink-0 sm:whitespace-nowrap"
+          className="inline-flex shrink-0 items-center whitespace-nowrap rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[10px] font-semibold leading-5 text-slate-700"
         >
           {badge.label}
         </span>
@@ -1093,7 +1138,11 @@ export default function ScholarshipCard({
                   )
                 : summaryLine}
             </p>
-            {intelligenceBadgesRow}
+            {!hubCatalogListing || stackedListing ? (
+              intelligenceBadgesRow
+            ) : (
+              <div className="xl:hidden">{intelligenceBadgesRow}</div>
+            )}
             {authNoSubPreviewBlur && openAuthNoSubPaywall ? (
               <AuthNoSubBlurUnlock
                 onUnlock={openAuthNoSubPaywall}
@@ -1140,6 +1189,25 @@ export default function ScholarshipCard({
             </div>
           ) : null}
         </div>
+
+        {hubCatalogListing && !stackedListing ? (
+          <div className={hubIntelligenceBadgesCell}>
+            <div
+              className="flex min-w-0 flex-wrap items-center gap-x-1.5 gap-y-1.5"
+              aria-label={cardChrome.intelligenceAria}
+            >
+              {intelligenceBadges.map((badge) => (
+                <span
+                  key={badge.key}
+                  title={badge.title}
+                  className="inline-flex shrink-0 items-center whitespace-nowrap rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 text-[10px] font-semibold leading-5 text-slate-700"
+                >
+                  {badge.label}
+                </span>
+              ))}
+            </div>
+          </div>
+        ) : null}
 
         {stackedListing ? (
           <div className="relative">
@@ -1221,11 +1289,11 @@ export default function ScholarshipCard({
         ) : (
           <>
             <div className="relative col-span-full space-y-3 border-t border-gray-200 pt-3 xl:hidden">
-              <div className="flex w-full min-w-0 items-center justify-between gap-2 sm:gap-3">
-                <div className={`min-w-0 flex-1 ${awardMetricAlign}`}>
+              <div className={catalogMobileMetricsRowClass}>
+                <div className={catalogMobileAwardCellClass}>
                   <p
                     title={awardLine.lineTitle}
-                    className={`min-w-0 max-w-full truncate text-sm font-semibold leading-snug sm:text-[0.9375rem] ${
+                    className={`min-w-0 w-full truncate text-sm font-semibold leading-snug sm:text-[0.9375rem] ${
                       awardLine.isNumeric ? 'tabular-nums' : ''
                     } ${
                       !hasAwardContent
@@ -1237,23 +1305,23 @@ export default function ScholarshipCard({
                   >
                     {awardCell}
                   </p>
-                  <p className={METRIC_LABEL}>{cardChrome.awardAmountLabel}</p>
+                  <p className={`${METRIC_LABEL} w-full truncate`}>
+                    {cardChrome.awardAmountLabel}
+                  </p>
                   {payoutLine ? (
-                    <p
-                      className={`mt-1 text-[11px] font-medium text-gray-500 ${awardMetricAlignTight}`}
-                    >
+                    <p className="mt-1 w-full truncate text-center text-[11px] font-medium text-gray-500">
                       {payoutLine}
                     </p>
                   ) : null}
                 </div>
                 <div
-                  className={`${deadlineInner} min-w-0 max-w-[min(11rem,52%)] shrink-0 text-right`}
+                  className={catalogMobileDeadlineCellClass}
                   title={hasDeadline ? deadlineTooltipText : undefined}
                 >
                   {hasDeadline ? (
-                    <div className="text-right">
+                    <div className="w-full text-center">
                       <p
-                        className={`min-w-0 break-words text-sm font-semibold tabular-nums leading-snug sm:text-[0.9375rem] ${
+                        className={`min-w-0 truncate text-sm font-semibold tabular-nums leading-snug sm:text-[0.9375rem] ${
                           deadlinePassed ? 'text-gray-500' : 'text-gray-900'
                         }`}
                       >
@@ -1261,7 +1329,7 @@ export default function ScholarshipCard({
                       </p>
                       {deadlineParts.secondary ? (
                         <p
-                          className={`mt-0.5 text-[11px] font-medium leading-snug sm:text-xs ${
+                          className={`mt-0.5 truncate text-[10px] font-medium leading-snug sm:text-[11px] ${
                             deadlinePassed ? 'text-gray-400' : 'text-gray-500'
                           }`}
                         >
@@ -1270,22 +1338,22 @@ export default function ScholarshipCard({
                       ) : null}
                     </div>
                   ) : (
-                    <div className="text-right">
+                    <div className="w-full text-center">
                       <p className="text-sm font-semibold text-gray-400">—</p>
                     </div>
                   )}
                 </div>
-              </div>
-              <div className="flex w-full min-w-0 items-start justify-between gap-2 sm:gap-3">
-                <div className="min-w-0 flex-1 text-left">
-                  {requirementsMetricInner}
-                </div>
                 {showCardActions ? (
-                  <div className="relative z-10 flex w-full min-w-0 max-w-[148px] shrink-0 flex-col items-stretch gap-2 self-start pointer-events-auto">
-                    <div className={cardActionsWrap}>{cardActionControls}</div>
+                  <div className={cardActionsWrapCatalogMobileRow}>
+                    {cardActionControls}
                   </div>
                 ) : null}
               </div>
+              {SHOW_SCHOLARSHIP_CARD_REQUIREMENTS_METRIC ? (
+                <div className="min-w-0 text-left">
+                  {requirementsMetricInner}
+                </div>
+              ) : null}
               {showGeoBadges ? (
                 <div className={`${geoBadgesColumnClass} pointer-events-auto`}>
                   {renderGeoBadgeLinks()}
@@ -1298,10 +1366,12 @@ export default function ScholarshipCard({
                 />
               ) : null}
             </div>
-            <div className="hidden min-w-0 xl:col-start-2 xl:row-start-1 xl:row-span-2 xl:block xl:self-start xl:border-0 xl:pt-0">
-              <div className="flex w-full min-w-0 items-start justify-between gap-2 sm:gap-3 xl:flex-col xl:items-stretch xl:gap-2">
+            <div
+              className={`hidden min-w-0 xl:col-start-2 xl:row-start-1 ${xlDeadlineMetricRowSpan} xl:block xl:self-start xl:border-0 xl:pt-0`}
+            >
+              <div className="flex w-full min-w-0 items-start justify-between gap-2 sm:gap-3 xl:flex-col xl:items-center xl:gap-2">
                 <div
-                  className={`${deadlineInner} min-w-0 flex-1`}
+                  className={`${deadlineInner} min-w-0 w-full flex-1`}
                   title={hasDeadline ? deadlineTooltipText : undefined}
                 >
                   {hasDeadline ? (
@@ -1329,14 +1399,18 @@ export default function ScholarshipCard({
                     </div>
                   )}
                 </div>
-                <div className="min-w-0 max-w-[min(11rem,46%)] shrink-0 text-right xl:max-w-none xl:w-full xl:shrink xl:text-left">
-                  {requirementsMetricInner}
-                </div>
+                {SHOW_SCHOLARSHIP_CARD_REQUIREMENTS_METRIC ? (
+                  <div className="min-w-0 max-w-[min(11rem,46%)] shrink-0 text-right xl:max-w-none xl:w-full xl:shrink xl:text-left">
+                    {requirementsMetricInner}
+                  </div>
+                ) : null}
               </div>
             </div>
-            <div className="hidden min-w-0 xl:col-start-3 xl:row-start-1 xl:row-span-2 xl:block xl:w-full xl:max-w-[200px] xl:justify-self-start xl:self-start xl:border-0 xl:pt-0">
-              <div className="flex w-full min-w-0 items-start justify-between gap-2 sm:gap-3 xl:flex-col xl:items-stretch xl:gap-2">
-                <div className={`min-w-0 flex-1 ${awardMetricAlign}`}>
+            <div
+              className={`hidden min-w-0 xl:col-start-3 xl:row-start-1 ${xlAwardMetricRowSpan} xl:block xl:w-full xl:max-w-[200px] xl:justify-self-start xl:self-start xl:border-0 xl:pt-0`}
+            >
+              <div className="flex w-full min-w-0 items-start justify-between gap-2 sm:gap-3 xl:flex-col xl:items-center xl:gap-2">
+                <div className={`min-w-0 w-full flex-1 ${awardMetricAlign}`}>
                   <p
                     title={awardLine.lineTitle}
                     className={`min-w-0 max-w-full truncate text-sm font-semibold leading-snug sm:text-[0.9375rem] ${
@@ -1351,10 +1425,12 @@ export default function ScholarshipCard({
                   >
                     {awardCell}
                   </p>
-                  <p className={METRIC_LABEL}>{cardChrome.awardAmountLabel}</p>
+                  <p className={`${METRIC_LABEL} w-full truncate`}>
+                    {cardChrome.awardAmountLabel}
+                  </p>
                   {payoutLine ? (
                     <p
-                      className={`mt-1 text-[11px] font-medium text-gray-500 ${awardMetricAlignTight}`}
+                      className={`mt-1 w-full truncate text-[11px] font-medium text-gray-500 ${awardMetricAlignTight}`}
                     >
                       {payoutLine}
                     </p>

@@ -3851,6 +3851,7 @@ function ScholarshipsPageInner({
                                 hasSubscription={hasSubscription}
                                 authResolved={authResolved}
                                 listingTab="best-recommendation"
+                                hubCatalogListing
                                 selectedApplicantCountryCodes={selectedApplicantCountryCodes}
                                 onSubscriptionLockedCategoryClick={
                                   openLockedScholarshipWallForCard
@@ -3954,6 +3955,7 @@ function ScholarshipsPageInner({
                                 hasSubscription={hasSubscription}
                                 authResolved={authResolved}
                                 listingTab="best-recommendation"
+                                hubCatalogListing
                                 selectedApplicantCountryCodes={selectedApplicantCountryCodes}
                                 onSubscriptionLockedCategoryClick={
                                   openLockedScholarshipWallForCard
@@ -4131,6 +4133,7 @@ function ScholarshipsPageInner({
                       hasSubscription={hasSubscription}
                       authResolved={authResolved}
                       listingTab={activeTab}
+                      hubCatalogListing
                       selectedApplicantCountryCodes={selectedApplicantCountryCodes}
                       onSubscriptionLockedCategoryClick={
                         openLockedScholarshipWallForCard

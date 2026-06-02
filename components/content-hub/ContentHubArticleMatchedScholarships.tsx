@@ -7,6 +7,7 @@ import {
   formatScholarshipAwardDisplay,
   type Scholarship
 } from '@/app/scholarships/scholarshipsData';
+import { formatScholarshipDeadlineCompactDate } from '@/lib/scholarships/scholarshipDeadlineCompactDate';
 
 const cardClass =
   'group flex h-full flex-col rounded-2xl border border-gray-200 bg-white p-5 text-left shadow-sm transition hover:border-gray-300 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2';
@@ -15,26 +16,16 @@ const cardClass =
 function formatDeadlineDisplay(raw: string | null | undefined): string {
   const s = raw?.trim();
   if (!s) return '';
-  // ISO 8601 with time (any position in string)
   if (/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(s)) {
     const d = new Date(s);
     if (!Number.isNaN(d.getTime())) {
-      return d.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric'
-      });
+      return formatScholarshipDeadlineCompactDate(d, 'en');
     }
   }
-  // Plain YYYY-MM-DD
   if (/^\d{4}-\d{2}-\d{2}$/.test(s)) {
-    const d = new Date(`${s}T12:00:00`);
+    const d = new Date(`${s}T12:00:00.000Z`);
     if (!Number.isNaN(d.getTime())) {
-      return d.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric'
-      });
+      return formatScholarshipDeadlineCompactDate(d, 'en');
     }
   }
   return s;

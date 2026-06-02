@@ -35,7 +35,7 @@ test('buildScholarshipCardSnippet formats ISO deadline_text like the card column
     '$3,165',
     true
   );
-  assert.match(snippet, /Nov 30, 2026 deadline/);
+  assert.match(snippet, /11\.30\.26 deadline/);
   assert.doesNotMatch(snippet, /T23:59:59/);
 });
 
@@ -51,6 +51,6 @@ test('buildScholarshipCardSnippet keeps human deadline_text', () => {
     '10.000 USD',
     true
   );
-  assert.match(snippet, /30 Jun 2026|Jun 30, 2026/);
+  assert.match(snippet, /06\.30\.26|30\.06\.26/);
   assert.doesNotMatch(snippet, /T23:59:59/);
 });

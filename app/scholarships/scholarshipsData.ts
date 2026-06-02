@@ -4,6 +4,7 @@ import {
   isPhantomCalendarYear2001,
   parseScholarshipDeadlineAnchor
 } from '@/lib/scholarships/scholarshipDeadlineTrust';
+import { formatScholarshipDeadlineCompactDate } from '@/lib/scholarships/scholarshipDeadlineCompactDate';
 
 /** Parsed from `scholarships.raw_data.catalog_ui` for human-readable catalog UI. */
 export type ScholarshipCatalogUi = {
@@ -357,13 +358,8 @@ export function resolveScholarshipCardAwardDisplay(
   };
 }
 
-function formatDeadlineDateOnly(d: Date): string {
-  return d.toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-    timeZone: 'UTC'
-  });
+function formatDeadlineDateOnly(d: Date, locale?: string): string {
+  return formatScholarshipDeadlineCompactDate(d, locale);
 }
 
 function stripDeadlineTimeText(text: string): string {
@@ -472,15 +468,16 @@ export function parseTimeFragmentFromDeadlineText(
 }
 
 /**
- * Calendar date line: "May 14, 2026". Deadline times are intentionally hidden
- * across the product because most catalog rows only provide date-level precision.
+ * Calendar date line: compact `DD.MM.YY` (US: `MM.DD.YY`). Times are hidden
+ * because most catalog rows only provide date-level precision.
  */
 export function formatScholarshipDeadlineAbsoluteLine(
-  s: ScholarshipDeadlineFields
+  s: ScholarshipDeadlineFields,
+  locale?: string
 ): string | null {
   const d = scholarshipDeadlineAnchorDate(s);
   if (!d) return null;
-  return formatDeadlineDateOnly(d);
+  return formatDeadlineDateOnly(d, locale);
 }
 
 function formatDaysLeftSubtitle(d: Date): string {
@@ -494,32 +491,41 @@ function formatDaysLeftSubtitle(d: Date): string {
 }
 
 /** Legacy relative primary: "in 44 days" — used only when no parseable calendar date. */
-export function formatScholarshipDeadlineRelativePrimary(d: Date): string {
+export function formatScholarshipDeadlineRelativePrimary(
+  d: Date,
+  locale?: string
+): string {
   const diffMs = d.getTime() - Date.now();
   const diffDays = Math.ceil(diffMs / 86400000);
   if (diffDays > 1) return `in ${diffDays} days`;
   if (diffDays === 1) return 'in 1 day';
   if (diffDays === 0) return 'today';
   if (diffDays < 0) return 'deadline passed';
-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  return formatDeadlineDateOnly(d, locale);
 }
 
 /**
  * Hero / card: main line = absolute date when known; subtitle = "X days left".
  * If no calendar date, main line stays relative (in X days) and subtitle is null.
  */
-export function getScholarshipDeadlineDisplayParts(s: ScholarshipDeadlineFields): {
+export function getScholarshipDeadlineDisplayParts(
+  s: ScholarshipDeadlineFields,
+  locale?: string
+): {
   primary: string;
   secondary: string | null;
 } {
-  const abs = formatScholarshipDeadlineAbsoluteLine(s);
+  const abs = formatScholarshipDeadlineAbsoluteLine(s, locale);
   const anchor = scholarshipDeadlineAnchorDate(s);
   const relSub = anchor != null ? formatDaysLeftSubtitle(anchor) : null;
   if (abs) {
     return { primary: abs, secondary: relSub || null };
   }
   if (anchor) {
-    return { primary: formatScholarshipDeadlineRelativePrimary(anchor), secondary: null };
+    return {
+      primary: formatScholarshipDeadlineRelativePrimary(anchor, locale),
+      secondary: null
+    };
   }
   const raw = s.deadline?.trim();
   if (raw && raw !== '—') {

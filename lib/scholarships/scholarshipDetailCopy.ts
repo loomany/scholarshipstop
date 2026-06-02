@@ -3,6 +3,7 @@ import {
   type Scholarship
 } from '@/app/scholarships/scholarshipsData';
 import { parseScholarshipDeadlineAnchor } from '@/lib/scholarships/scholarshipDeadlineTrust';
+import { formatScholarshipDeadlineCompactDate } from '@/lib/scholarships/scholarshipDeadlineCompactDate';
 
 function joinListNatural(items: string[]): string {
   const x = items.filter(Boolean);
@@ -15,11 +16,7 @@ function joinListNatural(items: string[]): string {
 function formatDeadlinePhrase(s: Scholarship): string | null {
   const anchor = parseScholarshipDeadlineAnchor(s.deadlineAt, s.deadline);
   if (anchor) {
-    return `Plan to apply by ${anchor.toLocaleDateString('en-US', {
-      month: 'long',
-      day: 'numeric',
-      year: 'numeric'
-    })}.`;
+    return `Plan to apply by ${formatScholarshipDeadlineCompactDate(anchor, 'en')}.`;
   }
   const raw = s.deadline?.trim();
   if (raw && raw !== '—') {
