@@ -1,0 +1,83 @@
+{
+  "packId": "ai-resources-2026-05-22",
+  "category": "AI",
+  "source": "ai-resources-2026-05-22",
+  "locale": "en",
+  "topics": [
+    {
+      "title": "How to Verify AI-Generated Scholarship Lists Before You Apply",
+      "slug": "how-to-verify-ai-generated-scholarship-lists",
+      "category": "AI",
+      "subcategoryId": "scholarship-search-safety",
+      "primaryKeyword": "verify AI generated scholarship lists",
+      "secondaryKeywords": ["AI scholarship verification", "check scholarship legitimacy", "confirm scholarship deadlines"],
+      "searchIntent": "informational",
+      "targetAudience": "Students using ChatGPT or AI tools for scholarship research",
+      "internalLinksSuggestions": ["/scholarships", "/scholarships/hub/matches", "/resources"],
+      "articleAngle": "Safety-first verification workflow for AI-suggested scholarships; ScholarshipTop for structured discovery, official pages for final rules. No guarantee that AI lists are complete or current.",
+      "requiredSections": ["Quick Answer", "Numbered steps", "Strengths and limitations", "FAQ", "Disclaimer"],
+      "disclaimerNotes": "ScholarshipTop is a scholarship discovery/research platform, not an official scholarship provider, university, government agency, or financial aid office. Students should verify deadlines, amounts, and eligibility on official provider pages.",
+      "articleType": "guide"
+    },
+    {
+      "title": "ChatGPT Prompts for Scholarship Search (Safe Templates)",
+      "slug": "chatgpt-prompts-for-scholarship-search",
+      "category": "AI",
+      "subcategoryId": "ai-scholarship-discovery",
+      "primaryKeyword": "ChatGPT prompts for scholarship search",
+      "secondaryKeywords": ["scholarship ChatGPT prompts", "AI prompts for scholarships", "scholarship research prompts"],
+      "searchIntent": "informational",
+      "targetAudience": "Students learning to use ChatGPT for scholarship brainstorming",
+      "internalLinksSuggestions": ["/scholarships", "/scholarships/hub/matches", "/resources"],
+      "articleAngle": "Copy-ready prompt templates with verification reminders; pair with ScholarshipTop filters. Do not promise ChatGPT can find all scholarships.",
+      "requiredSections": ["Quick Answer", "Prompt examples", "Strengths and limitations", "FAQ", "Disclaimer"],
+      "disclaimerNotes": "ScholarshipTop is a scholarship discovery/research platform, not an official scholarship provider, university, government agency, or financial aid office. Students should verify deadlines, amounts, and eligibility on official provider pages.",
+      "articleType": "guide"
+    },
+    {
+      "title": "Best AI Tools for International Students Looking for Scholarships",
+      "slug": "ai-tools-for-international-students-looking-for-scholarships",
+      "category": "AI",
+      "subcategoryId": "ai-scholarship-discovery",
+      "primaryKeyword": "AI tools for international students scholarships",
+      "secondaryKeywords": ["international student scholarship AI", "global scholarship search tools", "study abroad scholarship AI"],
+      "searchIntent": "informational",
+      "targetAudience": "International students comparing AI-assisted discovery options",
+      "internalLinksSuggestions": ["/scholarships", "/scholarships/category/education", "/scholarships/hub/matches", "/resources"],
+      "articleAngle": "Stacked tool comparison for international discovery; ScholarshipTop strength = country/category/provider filters. Neutral competitor descriptions.",
+      "requiredSections": ["Quick Answer", "Platform cards", "Strengths and limitations", "Best for", "FAQ", "Disclaimer"],
+      "disclaimerNotes": "ScholarshipTop is a scholarship discovery/research platform, not an official scholarship provider, university, government agency, or financial aid office. Students should verify deadlines, amounts, and eligibility on official provider pages.",
+      "articleType": "list"
+    },
+    {
+      "title": "How to Use AI Without Missing Scholarship Deadlines",
+      "slug": "how-to-use-ai-without-missing-scholarship-deadlines",
+      "category": "AI",
+      "subcategoryId": "scholarship-search-safety",
+      "primaryKeyword": "AI scholarship deadline tracking",
+      "secondaryKeywords": ["scholarship deadline checklist AI", "organize scholarships with AI", "miss scholarship deadlines"],
+      "searchIntent": "informational",
+      "targetAudience": "Students juggling many applications with AI-assisted planning",
+      "internalLinksSuggestions": ["/scholarships/hub/matches", "/scholarships", "/resources"],
+      "articleAngle": "AI for planning and tracking only; deadlines must be confirmed on official provider pages. ScholarshipTop for discovery, not awarding.",
+      "requiredSections": ["Quick Answer", "Numbered steps", "Strengths and limitations", "FAQ", "Disclaimer"],
+      "disclaimerNotes": "ScholarshipTop is a scholarship discovery/research platform, not an official scholarship provider, university, government agency, or financial aid office. Students should verify deadlines, amounts, and eligibility on official provider pages.",
+      "articleType": "guide"
+    },
+    {
+      "title": "Scholarship Search Checklist Using AI (Step-by-Step)",
+      "slug": "scholarship-search-checklist-using-ai",
+      "category": "AI",
+      "subcategoryId": "ai-scholarship-discovery",
+      "primaryKeyword": "scholarship search checklist using AI",
+      "secondaryKeywords": ["AI scholarship checklist", "scholarship search steps AI", "organize scholarship search AI"],
+      "searchIntent": "informational",
+      "targetAudience": "Students starting a structured AI-assisted scholarship search",
+      "internalLinksSuggestions": ["/scholarships/hub/matches", "/scholarships", "/resources"],
+      "articleAngle": "Actionable checklist combining AI brainstorming with ScholarshipTop discovery and official verification. No Key Point placeholder bullets.",
+      "requiredSections": ["Quick Answer", "Checklist", "Numbered steps", "Strengths and limitations", "FAQ", "Disclaimer"],
+      "disclaimerNotes": "ScholarshipTop is a scholarship discovery/research platform, not an official scholarship provider, university, government agency, or financial aid office. Students should verify deadlines, amounts, and eligibility on official provider pages.",
+      "articleType": "guide"
+    }
+  ]
+}

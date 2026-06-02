@@ -1,0 +1,416 @@
+[
+  {
+    "generatedAt": "2026-05-21T19:42:26.725Z",
+    "source": "runContentJob",
+    "counts": {
+      "ok": 1,
+      "warnings": 0,
+      "below90": 0
+    },
+    "entries": [
+      {
+        "url": "/resources/best-scholarship-websites",
+        "type": "article",
+        "score": 100,
+        "issues": [],
+        "warnings": []
+      }
+    ],
+    "telegramNotification": {
+      "enabled": false,
+      "sent": false,
+      "reason": "all_ok"
+    }
+  },
+  {
+    "generatedAt": "2026-05-21T21:07:10.909Z",
+    "source": "runContentJob",
+    "counts": {
+      "ok": 1,
+      "warnings": 0,
+      "below90": 0
+    },
+    "entries": [
+      {
+        "url": "/resources/best-scholarship-search-engines-international-students",
+        "type": "article",
+        "score": 100,
+        "issues": [],
+        "warnings": []
+      }
+    ],
+    "telegramNotification": {
+      "enabled": false,
+      "sent": false,
+      "reason": "all_ok"
+    }
+  },
+  {
+    "generatedAt": "2026-05-21T21:10:10.972Z",
+    "source": "runContentJob",
+    "counts": {
+      "ok": 1,
+      "warnings": 0,
+      "below90": 0
+    },
+    "entries": [
+      {
+        "url": "/resources/scholarshiptop-vs-fastweb",
+        "type": "article",
+        "score": 100,
+        "issues": [],
+        "warnings": []
+      }
+    ],
+    "telegramNotification": {
+      "enabled": false,
+      "sent": false,
+      "reason": "all_ok"
+    }
+  },
+  {
+    "generatedAt": "2026-05-21T21:13:04.912Z",
+    "source": "runContentJob",
+    "counts": {
+      "ok": 1,
+      "warnings": 0,
+      "below90": 0
+    },
+    "entries": [
+      {
+        "url": "/resources/scholarshiptop-vs-scholarships-com",
+        "type": "article",
+        "score": 100,
+        "issues": [],
+        "warnings": []
+      }
+    ],
+    "telegramNotification": {
+      "enabled": false,
+      "sent": false,
+      "reason": "all_ok"
+    }
+  },
+  {
+    "generatedAt": "2026-05-21T21:16:53.688Z",
+    "source": "runContentJob",
+    "counts": {
+      "ok": 1,
+      "warnings": 0,
+      "below90": 0
+    },
+    "entries": [
+      {
+        "url": "/resources/best-free-scholarship-websites-without-spam",
+        "type": "article",
+        "score": 100,
+        "issues": [],
+        "warnings": []
+      }
+    ],
+    "telegramNotification": {
+      "enabled": false,
+      "sent": false,
+      "reason": "all_ok"
+    }
+  },
+  {
+    "generatedAt": "2026-05-21T21:23:23.078Z",
+    "source": "runContentJob",
+    "counts": {
+      "ok": 1,
+      "warnings": 0,
+      "below90": 0
+    },
+    "entries": [
+      {
+        "url": "/resources/best-scholarship-websites-for-graduate-students",
+        "type": "article",
+        "score": 100,
+        "issues": [],
+        "warnings": []
+      }
+    ],
+    "telegramNotification": {
+      "enabled": false,
+      "sent": false,
+      "reason": "all_ok"
+    }
+  },
+  {
+    "generatedAt": "2026-05-21T22:06:52.875Z",
+    "source": "runContentJob",
+    "counts": {
+      "ok": 1,
+      "warnings": 0,
+      "below90": 0
+    },
+    "entries": [
+      {
+        "url": "/resources/can-chatgpt-help-find-scholarships",
+        "type": "article",
+        "score": 100,
+        "issues": [],
+        "warnings": []
+      }
+    ],
+    "telegramNotification": {
+      "enabled": false,
+      "sent": false,
+      "reason": "all_ok"
+    }
+  },
+  {
+    "generatedAt": "2026-05-21T22:09:20.987Z",
+    "source": "runContentJob",
+    "counts": {
+      "ok": 1,
+      "warnings": 0,
+      "below90": 0
+    },
+    "entries": [
+      {
+        "url": "/resources/how-to-use-chatgpt-to-search-for-scholarships",
+        "type": "article",
+        "score": 100,
+        "issues": [],
+        "warnings": []
+      }
+    ],
+    "telegramNotification": {
+      "enabled": false,
+      "sent": false,
+      "reason": "all_ok"
+    }
+  },
+  {
+    "generatedAt": "2026-05-21T22:11:53.632Z",
+    "source": "runContentJob",
+    "counts": {
+      "ok": 1,
+      "warnings": 0,
+      "below90": 0
+    },
+    "entries": [
+      {
+        "url": "/resources/best-ai-tools-for-finding-scholarships",
+        "type": "article",
+        "score": 100,
+        "issues": [],
+        "warnings": []
+      }
+    ],
+    "telegramNotification": {
+      "enabled": false,
+      "sent": false,
+      "reason": "all_ok"
+    }
+  },
+  {
+    "generatedAt": "2026-05-21T22:15:14.402Z",
+    "source": "runContentJob",
+    "counts": {
+      "ok": 1,
+      "warnings": 0,
+      "below90": 0
+    },
+    "entries": [
+      {
+        "url": "/resources/ai-scholarship-search-vs-traditional-databases",
+        "type": "article",
+        "score": 100,
+        "issues": [],
+        "warnings": []
+      }
+    ],
+    "telegramNotification": {
+      "enabled": false,
+      "sent": false,
+      "reason": "all_ok"
+    }
+  },
+  {
+    "generatedAt": "2026-05-21T22:20:46.391Z",
+    "source": "runContentJob",
+    "counts": {
+      "ok": 1,
+      "warnings": 0,
+      "below90": 0
+    },
+    "entries": [
+      {
+        "url": "/resources/best-sites-to-find-fully-funded-scholarships",
+        "type": "article",
+        "score": 100,
+        "issues": [],
+        "warnings": []
+      }
+    ],
+    "telegramNotification": {
+      "enabled": false,
+      "sent": false,
+      "reason": "all_ok"
+    }
+  },
+  {
+    "generatedAt": "2026-05-21T22:48:31.280Z",
+    "source": "runContentJob",
+    "counts": {
+      "ok": 1,
+      "warnings": 0,
+      "below90": 0
+    },
+    "entries": [
+      {
+        "url": "/resources/how-to-verify-ai-generated-scholarship-lists",
+        "type": "article",
+        "score": 100,
+        "issues": [],
+        "warnings": []
+      }
+    ],
+    "telegramNotification": {
+      "enabled": false,
+      "sent": false,
+      "reason": "all_ok"
+    }
+  },
+  {
+    "generatedAt": "2026-05-21T22:51:02.603Z",
+    "source": "runContentJob",
+    "counts": {
+      "ok": 1,
+      "warnings": 0,
+      "below90": 0
+    },
+    "entries": [
+      {
+        "url": "/resources/chatgpt-prompts-for-scholarship-search",
+        "type": "article",
+        "score": 100,
+        "issues": [],
+        "warnings": []
+      }
+    ],
+    "telegramNotification": {
+      "enabled": false,
+      "sent": false,
+      "reason": "all_ok"
+    }
+  },
+  {
+    "generatedAt": "2026-05-21T22:53:23.272Z",
+    "source": "runContentJob",
+    "counts": {
+      "ok": 1,
+      "warnings": 0,
+      "below90": 0
+    },
+    "entries": [
+      {
+        "url": "/resources/ai-tools-for-international-students-looking-for-scholarships",
+        "type": "article",
+        "score": 100,
+        "issues": [],
+        "warnings": []
+      }
+    ],
+    "telegramNotification": {
+      "enabled": false,
+      "sent": false,
+      "reason": "all_ok"
+    }
+  },
+  {
+    "generatedAt": "2026-05-21T23:01:34.165Z",
+    "source": "runContentJob",
+    "counts": {
+      "ok": 1,
+      "warnings": 0,
+      "below90": 0
+    },
+    "entries": [
+      {
+        "url": "/resources/how-to-use-ai-without-missing-scholarship-deadlines",
+        "type": "article",
+        "score": 100,
+        "issues": [],
+        "warnings": []
+      }
+    ],
+    "telegramNotification": {
+      "enabled": false,
+      "sent": false,
+      "reason": "all_ok"
+    }
+  },
+  {
+    "generatedAt": "2026-05-21T23:04:44.760Z",
+    "source": "runContentJob",
+    "counts": {
+      "ok": 1,
+      "warnings": 0,
+      "below90": 0
+    },
+    "entries": [
+      {
+        "url": "/resources/scholarship-search-checklist-using-ai",
+        "type": "article",
+        "score": 100,
+        "issues": [],
+        "warnings": []
+      }
+    ],
+    "telegramNotification": {
+      "enabled": false,
+      "sent": false,
+      "reason": "all_ok"
+    }
+  },
+  {
+    "generatedAt": "2026-06-02T08:56:23.870Z",
+    "source": "runEssayGenerationJob",
+    "counts": {
+      "ok": 1,
+      "warnings": 0,
+      "below90": 0
+    },
+    "entries": [
+      {
+        "url": "/essays/how-to-write-wilton-wiggins-memorial-scholarship-scholarship-essay",
+        "type": "essay",
+        "score": 100,
+        "issues": [],
+        "warnings": []
+      }
+    ],
+    "telegramNotification": {
+      "enabled": false,
+      "sent": false,
+      "reason": "all_ok"
+    }
+  },
+  {
+    "generatedAt": "2026-06-02T08:58:11.639Z",
+    "source": "runEssayGenerationJob",
+    "counts": {
+      "ok": 1,
+      "warnings": 0,
+      "below90": 0
+    },
+    "entries": [
+      {
+        "url": "/essays/how-to-write-pennsylvania-society-of-public-accountants-scholarships-scholarship-essay",
+        "type": "essay",
+        "score": 100,
+        "issues": [],
+        "warnings": []
+      }
+    ],
+    "telegramNotification": {
+      "enabled": false,
+      "sent": false,
+      "reason": "all_ok"
+    }
+  }
+]
