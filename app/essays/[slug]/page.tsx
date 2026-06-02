@@ -12,8 +12,8 @@ import SafeContentPostBody from '@/components/content-hub/SafeContentPostBody';
 import { EssayGuideCardImage } from '@/components/essays/EssayGuideCardImage';
 import { EssayExternalContextCard } from '@/components/essays/EssayExternalContextCard';
 import { StaticEssayGuidePage } from '@/components/essays/StaticEssayGuidePage';
+import ScholarshipMatchCtaCard from '@/components/scholarships/ScholarshipMatchCtaCard';
 import { SiteFaqAccordion } from '@/components/ui/SiteFaqAccordion';
-import HomePrimaryCtaClient from '@/components/home/HomePrimaryCtaClient';
 import { fetchRelatedPublishedContentPosts } from '@/lib/content-hub/contentPostsServer';
 import { applyAutoInternalLinks } from '@/lib/content-hub/autoInternalLinks';
 import { deduplicateQuickSummaryBlocksInHtml } from '@/lib/content-hub/deduplicateQuickSummaryInHtml';
@@ -629,19 +629,11 @@ function EssayBuilderCta({
 }) {
   if (variant === 'compact') {
     return (
-      <div className="mt-4 rounded-3xl border border-indigo-200 bg-indigo-50 px-5 py-4 text-center shadow-sm sm:mt-5 sm:px-6 sm:py-5">
-        <div className="mx-auto flex items-center justify-center gap-2.5">
-          <span className="text-xl leading-none" aria-hidden>
-            🎯
-          </span>
-          <p className="text-[1.65rem] font-bold leading-[1.08] tracking-tight text-indigo-950">
-            Get matched with scholarships in 2 minutes
-          </p>
-        </div>
-        <HomePrimaryCtaClient className="mt-3 inline-flex items-center justify-center rounded-full bg-black px-7 py-2 text-xl font-bold leading-none text-white shadow-[0_8px_20px_rgba(0,0,0,0.25)] transition hover:bg-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/45">
-          Find My Scholarships
-        </HomePrimaryCtaClient>
-      </div>
+      <ScholarshipMatchCtaCard
+        className="mt-4 sm:mt-5"
+        heading="Get matched with scholarships in 2 minutes"
+        button="Find My Scholarships"
+      />
     );
   }
 

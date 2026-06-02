@@ -32,6 +32,7 @@ import {
 
 import { DarkTooltip, DarkTooltipProvider } from '@/components/ui/DarkTooltip';
 import { toast } from '@/components/ui/Toasts/use-toast';
+import ScholarshipMatchCtaCard from '@/components/scholarships/ScholarshipMatchCtaCard';
 import { ScholarshipsBrandLoading } from '@/components/scholarships/ScholarshipsBrandLoading';
 import ScholarshipCatalogEntryLink from '@/components/scholarships/ScholarshipCatalogEntryLink';
 import { ScholarshipExpiredBadge } from '@/components/scholarships/ScholarshipExpiredBadge';
@@ -40,7 +41,6 @@ import ScholarshipEmailConfirmRequiredModal from '@/components/scholarships/Scho
 import ScholarshipRegistrationWallModal, {
   type ScholarshipRegistrationWallContentMode
 } from '@/components/scholarships/ScholarshipRegistrationWallModal';
-import HomePrimaryCtaClient from '@/components/home/HomePrimaryCtaClient';
 import { breadcrumbCategoryLabel } from '@/app/scholarships/scholarshipCategories';
 import {
   getScholarshipDetailUiCopy,
@@ -190,6 +190,7 @@ import {
   scholarshipDetailCardTrustClass,
   scholarshipDetailHeroSurfaceClass,
   scholarshipDetailPageBgClass,
+  scholarshipDetailSectionHeadingClass,
   scholarshipDetailShellClass,
   scholarshipDetailWhiteOutlineClass
 } from '@/lib/scholarships/scholarshipDetailLayoutClasses';
@@ -1010,22 +1011,20 @@ type SectionLabelVariant = 'primary' | 'support';
 
 function SectionLabel({
   children,
-  variant = 'primary'
+  variant = 'primary',
+  as: Tag = 'h2'
 }: {
   children: React.ReactNode;
   variant?: SectionLabelVariant;
+  as?: 'h2' | 'h3';
 }) {
   if (variant === 'support') {
     return (
-      <h2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-zinc-500">
-        {children}
-      </h2>
+      <Tag className={scholarshipDetailSectionHeadingClass}>{children}</Tag>
     );
   }
   return (
-    <h2 className="mb-3 text-base font-semibold tracking-tight text-zinc-900">
-      {children}
-    </h2>
+    <Tag className={scholarshipDetailSectionHeadingClass}>{children}</Tag>
   );
 }
 
@@ -2433,27 +2432,11 @@ export default function ScholarshipDetailPageClient({
             ) : null}
 
             {hasQuickFacts ? (
-              <div className="mt-8 rounded-lg border border-slate-200 bg-white p-4 shadow-sm ring-1 ring-slate-100/80 sm:p-5">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                  <span
-                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-orange-50 text-orange-700 ring-1 ring-orange-100"
-                    aria-hidden
-                  >
-                    <BrainCircuit className="h-5 w-5" />
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">
-                      Match workspace
-                    </p>
-                    <p className="mt-1 text-base font-bold leading-tight tracking-tight text-slate-950 sm:text-lg">
-                      {detailUi.matchCta.title}
-                    </p>
-                  </div>
-                  <HomePrimaryCtaClient className="inline-flex min-h-10 shrink-0 items-center justify-center rounded-lg bg-slate-950 px-4 py-2 text-sm font-semibold text-white shadow-[0_16px_34px_-24px_rgba(15,23,42,0.85)] transition hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/70">
-                    {detailUi.matchCta.button}
-                  </HomePrimaryCtaClient>
-                </div>
-              </div>
+              <ScholarshipMatchCtaCard
+                className="mt-8"
+                heading={detailUi.matchCta.title}
+                button={detailUi.matchCta.button}
+              />
             ) : null}
 
             {hasQuickFacts ? (
@@ -2545,10 +2528,10 @@ export default function ScholarshipDetailPageClient({
 
             {showSupport ? (
               <div className="mt-10">
-                <SectionLabel>
-                  {detailUi.sections.scholarshipSupport}
-                </SectionLabel>
                 <div className={scholarshipDetailCardPrimaryClass}>
+                  <SectionLabel>
+                    {detailUi.sections.scholarshipSupport}
+                  </SectionLabel>
                   <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-8">
                     {supportEmail ? (
                       <a
@@ -2700,46 +2683,46 @@ export default function ScholarshipDetailPageClient({
                 className={DETAIL_RESEARCH_PANEL_CLASS}
                 aria-labelledby="scholarship-related-resources-heading"
               >
-                <div className="flex flex-wrap items-start gap-3">
-                  <BookOpen
-                    className="mt-0.5 h-5 w-5 shrink-0 text-teal-700/90"
-                    strokeWidth={1.75}
-                    aria-hidden
-                  />
-                  <div className="min-w-0 flex-1 space-y-3">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-center gap-2 sm:justify-start">
+                    <BookOpen
+                      className="h-5 w-5 shrink-0 text-teal-700/90"
+                      strokeWidth={1.75}
+                      aria-hidden
+                    />
                     <h2
                       id="scholarship-related-resources-heading"
-                      className="text-lg font-semibold tracking-tight text-zinc-900"
+                      className="text-center text-lg font-semibold tracking-tight text-zinc-900 sm:text-left"
                     >
                       {detailUi.related.resourcesTitle}
                     </h2>
-                    <p className="text-sm leading-relaxed text-zinc-600">
-                      {detailUi.related.resourcesIntro}
-                    </p>
-                    <ul className="space-y-2.5" role="list">
-                      {initialRelatedArticles.map((post) => {
-                        const slug = post.slug?.trim();
-                        if (!slug) return null;
-                        const label =
-                          post.title?.trim() || slug.replace(/-/g, ' ');
-                        return (
-                          <li key={post.id}>
-                            <Link
-                              href={resourcesArticlePath(slug)}
-                              className="text-sm font-semibold text-teal-800 underline decoration-teal-600/35 underline-offset-2 transition hover:text-teal-950 hover:decoration-teal-700/60"
-                            >
-                              {label}
-                            </Link>
-                            {post.meta_description?.trim() ? (
-                              <p className="mt-1 text-xs leading-relaxed text-zinc-500">
-                                {post.meta_description.trim()}
-                              </p>
-                            ) : null}
-                          </li>
-                        );
-                      })}
-                    </ul>
                   </div>
+                  <p className="text-sm leading-relaxed text-zinc-600">
+                    {detailUi.related.resourcesIntro}
+                  </p>
+                  <ul className="space-y-2.5" role="list">
+                    {initialRelatedArticles.map((post) => {
+                      const slug = post.slug?.trim();
+                      if (!slug) return null;
+                      const label =
+                        post.title?.trim() || slug.replace(/-/g, ' ');
+                      return (
+                        <li key={post.id}>
+                          <Link
+                            href={resourcesArticlePath(slug)}
+                            className="text-sm font-semibold text-teal-800 underline decoration-teal-600/35 underline-offset-2 transition hover:text-teal-950 hover:decoration-teal-700/60"
+                          >
+                            {label}
+                          </Link>
+                          {post.meta_description?.trim() ? (
+                            <p className="mt-1 text-xs leading-relaxed text-zinc-500">
+                              {post.meta_description.trim()}
+                            </p>
+                          ) : null}
+                        </li>
+                      );
+                    })}
+                  </ul>
                 </div>
               </div>
             ) : null}
@@ -2750,20 +2733,21 @@ export default function ScholarshipDetailPageClient({
                 className={DETAIL_RESEARCH_PANEL_CLASS}
                 aria-labelledby="scholarship-related-essays-heading"
               >
-                <div className="flex flex-wrap items-start gap-3">
-                  <BookOpen
-                    className="mt-0.5 h-5 w-5 shrink-0 text-indigo-700/90"
-                    strokeWidth={1.75}
-                    aria-hidden
-                  />
-                  <div className="min-w-0 flex-1 space-y-3">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-center gap-2 sm:justify-start">
+                    <BookOpen
+                      className="h-5 w-5 shrink-0 text-indigo-700/90"
+                      strokeWidth={1.75}
+                      aria-hidden
+                    />
                     <h2
                       id="scholarship-related-essays-heading"
-                      className="text-lg font-semibold tracking-tight text-zinc-900"
+                      className="text-center text-lg font-semibold tracking-tight text-zinc-900 sm:text-left"
                     >
                       {detailUi.related.essaysTitle}
                     </h2>
-                    {initialRelatedEssays.length > 0 ? (
+                  </div>
+                  {initialRelatedEssays.length > 0 ? (
                       <ul className="space-y-2.5" role="list">
                         {initialRelatedEssays.map((ex) => {
                           const slug = ex.slug?.trim();
@@ -2845,7 +2829,6 @@ export default function ScholarshipDetailPageClient({
                         {detailUi.related.aiWriterLink}
                       </Link>
                     </div>
-                  </div>
                 </div>
               </div>
             ) : null}
@@ -2863,19 +2846,19 @@ export default function ScholarshipDetailPageClient({
               docs.length > 0 ||
               showSeoApplication) ? (
               <div className="mt-10">
-                <SectionLabel>
-                  {detailUi.sections.applicationDetails}
-                </SectionLabel>
                 <div
                   className={`${scholarshipDetailCardPrimaryClass} space-y-8`}
                 >
+                  <SectionLabel>
+                    {detailUi.sections.applicationDetails}
+                  </SectionLabel>
                   {hasRequirementsSection ? (
                     <div>
-                      <h3 className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                      <SectionLabel as="h3">
                         {detailUi.sections.keyRequirements(
                           keyRequirementsLabelCount
                         )}
-                      </h3>
+                      </SectionLabel>
                       <p className="mb-4 mt-2 text-xs text-zinc-500">
                         {isSimplerGov
                           ? detailUi.sections.keyRequirementsNoteGov
@@ -2924,9 +2907,9 @@ export default function ScholarshipDetailPageClient({
                   ) : null}
                   {docs.length > 0 ? (
                     <div>
-                      <h3 className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                      <SectionLabel as="h3">
                         {detailUi.sections.requiredDocuments}
-                      </h3>
+                      </SectionLabel>
                       <p className="mb-4 mt-2 text-xs text-zinc-500">
                         {isSimplerGov
                           ? detailUi.sections.requiredDocumentsNoteGov
@@ -2941,9 +2924,9 @@ export default function ScholarshipDetailPageClient({
                   ) : null}
                   {showSeoApplication ? (
                     <div>
-                      <h3 className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                      <SectionLabel as="h3">
                         {detailUi.sections.applying}
-                      </h3>
+                      </SectionLabel>
                       <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-zinc-700">
                         {scholarship.seoApplication!.trim()}
                       </p>
@@ -3011,10 +2994,10 @@ export default function ScholarshipDetailPageClient({
 
                 {docs.length > 0 || officialDocumentLinks.length > 0 ? (
                   <div className="mt-10">
-                    <SectionLabel>
-                      {detailUi.sections.requiredDocuments}
-                    </SectionLabel>
                     <div className={scholarshipDetailCardPrimaryClass}>
+                      <SectionLabel>
+                        {detailUi.sections.requiredDocuments}
+                      </SectionLabel>
                       <p className="mb-4 text-xs text-zinc-500">
                         {isSimplerGov
                           ? 'Document list from the listing; confirm the latest version on the official opportunity page.'
@@ -3064,10 +3047,10 @@ export default function ScholarshipDetailPageClient({
 
             {hasAwardPaymentBlock ? (
               <div className="mt-10">
-                <SectionLabel>{detailUi.sections.awardPayment}</SectionLabel>
                 <div
                   className={`${scholarshipDetailCardPrimaryClass} space-y-4 text-sm text-zinc-700`}
                 >
+                  <SectionLabel>{detailUi.sections.awardPayment}</SectionLabel>
                   {hasAwardStat ? (
                     <p>
                       <span className="font-semibold text-zinc-900">
@@ -3118,12 +3101,12 @@ export default function ScholarshipDetailPageClient({
 
             {hasImportantNotes ? (
               <div className="mt-10">
-                <SectionLabel variant="support">
-                  {detailUi.sections.importantNotes}
-                </SectionLabel>
                 <div
                   className={`${scholarshipDetailCardPrimaryClass} space-y-6 text-sm leading-relaxed text-zinc-700`}
                 >
+                  <SectionLabel variant="support">
+                    {detailUi.sections.importantNotes}
+                  </SectionLabel>
                   {importantChunks.map((chunk) => (
                     <div key={chunk.key}>
                       <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">
@@ -3389,14 +3372,11 @@ export default function ScholarshipDetailPageClient({
 
             {showSourceFallbackBlock && sourceFallbackLabel ? (
               <div className="mt-10">
-                <SectionLabel variant="support">
-                  {detailUi.sections.source}
-                </SectionLabel>
                 <div className={scholarshipDetailCardSupportClass}>
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-zinc-400">
+                  <SectionLabel variant="support">
                     {detailUi.sections.source}
-                  </p>
-                  <p className="mt-1 text-lg font-semibold text-zinc-900">
+                  </SectionLabel>
+                  <p className="text-lg font-semibold text-zinc-900">
                     {sourceFallbackLabel}
                   </p>
                 </div>

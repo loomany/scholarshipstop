@@ -7,7 +7,7 @@ import {
   normalizeScholarshipEntryLinksInHtml
 } from '@/lib/scholarships/resourceGuideRoutes';
 import { stripScholarshipSourceHtmlNoise } from '@/lib/scholarships/stripSourceHtmlNoise';
-import { scholarshipDetailCardPrimaryClass } from '@/lib/scholarships/scholarshipDetailLayoutClasses';
+import { scholarshipDetailCardPrimaryClass, scholarshipDetailSectionHeadingClass } from '@/lib/scholarships/scholarshipDetailLayoutClasses';
 
 /** Full HTML is passed through; only DOMPurify runs — no substring or max-length. */
 
@@ -121,10 +121,8 @@ export function ScholarshipRichSection({
 
   return (
     <div className="mt-10">
-      <h2 className="mb-3 text-base font-semibold tracking-tight text-zinc-900">
-        {label}
-      </h2>
       <div className={scholarshipDetailCardPrimaryClass}>
+        <h2 className={scholarshipDetailSectionHeadingClass}>{label}</h2>
         {h ? (
           <SafeScholarshipHtml html={h} />
         ) : (

@@ -14,7 +14,9 @@ import type {
 } from '@/lib/seo/scholarshipSeoQualityPolicy';
 import {
   scholarshipDetailCardCompactClass,
-  scholarshipDetailCardSupportClass
+  scholarshipDetailCardPrimaryClass,
+  scholarshipDetailCardSupportClass,
+  scholarshipDetailSectionHeadingClass
 } from '@/lib/scholarships/scholarshipDetailLayoutClasses';
 import type { ScholarshipDetailUiCopy } from '@/lib/i18n/scholarshipDetailUiCopy';
 
@@ -221,7 +223,7 @@ export function ScholarshipTrustSignalsBlock({
     >
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-orange-700">
+          <p className="text-center text-xs font-semibold uppercase tracking-wide text-orange-700 sm:text-left">
             {copy.trust.kicker}
           </p>
           <h2
@@ -489,10 +491,10 @@ export function ScholarshipSeoApplicationBlock({
 }) {
   return (
     <div className="mt-10">
-      <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-zinc-500">
-        {copy.sections.applying}
-      </h2>
-      <div className={scholarshipDetailCardSupportClass}>
+      <div className={scholarshipDetailCardPrimaryClass}>
+        <h2 className={scholarshipDetailSectionHeadingClass}>
+          {copy.sections.applying}
+        </h2>
         <p className="whitespace-pre-line text-sm leading-relaxed text-zinc-700">
           {text}
         </p>

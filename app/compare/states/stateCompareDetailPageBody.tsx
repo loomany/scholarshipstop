@@ -4,7 +4,7 @@ import { ArrowRight, BrainCircuit } from 'lucide-react';
 
 import { CompareExternalStateAffordabilitySection } from '@/components/compare/CompareExternalStateAffordabilitySection';
 import CompareExploreRelatedScholarships from '@/components/compare/CompareExploreRelatedScholarships';
-import ScholarshipMatchCtaIcon from '@/components/compare/ScholarshipMatchCtaIcon';
+import ScholarshipMatchCtaCard from '@/components/scholarships/ScholarshipMatchCtaCard';
 import TopScholarshipProvidersColumn from '@/components/compare/TopScholarshipProvidersColumn';
 import CompareTableOfContents from '@/components/compare/CompareTableOfContents';
 import CompareThinVerdictExplanation from '@/components/compare/CompareThinVerdictExplanation';
@@ -12,7 +12,6 @@ import {
   formatCompareNumericText,
   SafeCompareHtml
 } from '@/components/compare/SafeCompareHtml';
-import HomePrimaryCtaClient from '@/components/home/HomePrimaryCtaClient';
 import { SiteFaqAccordion } from '@/components/ui/SiteFaqAccordion';
 import { resourcesArticlePath } from '@/lib/content-hub/resourcesSection';
 import { essayHubArticlePath } from '@/lib/essays/essayHubSection';
@@ -588,28 +587,15 @@ export async function StateCompareDetailPageBody({
           />
         </section>
 
-        <section
-          className="mt-10 rounded-3xl border border-indigo-200 bg-indigo-50 px-5 py-4 text-center shadow-sm sm:px-6 sm:py-5"
-          aria-label={detailUi.scholarshipMatchCta.sectionAriaLabel}
-        >
-          <div className="flex justify-center px-1">
-            <div className="inline-flex max-w-full items-center gap-2">
-              <ScholarshipMatchCtaIcon />
-              <h2
-                id="compare-state-cta-heading"
-                className="scroll-mt-28 whitespace-normal text-left text-base font-bold leading-tight tracking-tight text-indigo-950 sm:scroll-mt-24 sm:whitespace-nowrap sm:text-lg md:text-[1.5rem]"
-              >
-                {detailUi.scholarshipMatchCta.heading}
-              </h2>
-            </div>
-          </div>
-          <HomePrimaryCtaClient
-            locale={locale}
-            className="mt-3 inline-flex items-center justify-center rounded-full bg-black px-7 py-2 text-xl font-bold leading-none text-white shadow-[0_8px_20px_rgba(0,0,0,0.25)] transition hover:bg-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/45"
-          >
-            {detailUi.scholarshipMatchCta.button}
-          </HomePrimaryCtaClient>
-        </section>
+        <ScholarshipMatchCtaCard
+          as="section"
+          className="mt-10 scroll-mt-28 sm:scroll-mt-24"
+          locale={locale}
+          ariaLabel={detailUi.scholarshipMatchCta.sectionAriaLabel}
+          headingId="compare-state-cta-heading"
+          heading={detailUi.scholarshipMatchCta.heading}
+          button={detailUi.scholarshipMatchCta.button}
+        />
 
         {climate?.state_a || climate?.state_b ? (
           <section

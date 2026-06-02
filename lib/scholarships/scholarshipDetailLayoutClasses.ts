@@ -38,3 +38,7 @@ export const scholarshipDetailCardSupportClass =
 /** Official source / trust emphasis (Apply + Save + Not relevant row). */
 export const scholarshipDetailCardTrustClass =
   'rounded-2xl border border-emerald-200/80 bg-white p-5 shadow-[0_18px_48px_-34px_rgba(15,23,42,0.72)] ring-1 ring-emerald-100/70 sm:p-6 md:p-8';
+
+/** In-card section titles on scholarship detail pages. */
+export const scholarshipDetailSectionHeadingClass =
+  'mb-3 text-center text-base font-semibold tracking-tight text-zinc-900 sm:text-left';

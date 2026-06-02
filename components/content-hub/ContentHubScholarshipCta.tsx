@@ -33,23 +33,25 @@ export default function ContentHubScholarshipCta({
       aria-label="Scholarship directory"
     >
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex min-w-0 items-start gap-3">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-orange-50 text-orange-700 ring-1 ring-orange-100">
-            <SearchCheck className="h-5 w-5" aria-hidden />
-          </span>
-          <div className="min-w-0">
-            <p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">
-              Scholarship workspace
-            </p>
-            <p className="mt-1 text-base font-bold tracking-tight text-slate-950 sm:text-lg">
+        <div className="min-w-0 flex-1">
+          <p className="text-center text-xs font-bold uppercase tracking-[0.14em] text-slate-500 sm:text-left">
+            Scholarship workspace
+          </p>
+          <div className="mt-1 flex items-center justify-center gap-2 sm:justify-start">
+            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-orange-50 text-orange-700 ring-1 ring-orange-100 sm:h-10 sm:w-10 sm:rounded-lg">
+              <SearchCheck className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden />
+            </span>
+            <p className="text-center text-base font-bold tracking-tight text-slate-950 sm:text-left sm:text-lg">
               {normalizedTitle}
             </p>
-            <p className="mt-1 max-w-2xl text-sm leading-6 text-slate-600">
-              {description}
-            </p>
           </div>
+          <p className="mt-2 text-center text-sm leading-6 text-slate-600 sm:text-left">
+            {description}
+          </p>
         </div>
-        <ScholarshipCatalogEntryLink className={buttonClass}>
+        <ScholarshipCatalogEntryLink
+          className={`${buttonClass} w-full sm:w-auto`}
+        >
           {buttonText}
           <ArrowRight className="h-4 w-4" aria-hidden />
         </ScholarshipCatalogEntryLink>
