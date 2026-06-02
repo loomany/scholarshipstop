@@ -17,7 +17,7 @@ import {
 import { getScholarshipsHubUiCopy } from '@/lib/i18n/scholarshipsHubUiCopy';
 
 const RELATED_CARD_CLASS =
-  'group flex h-full cursor-pointer flex-col rounded-xl border border-slate-200 bg-white p-4 transition hover:border-orange-300 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/40 sm:p-5';
+  'group flex h-full cursor-pointer flex-col rounded-lg border border-slate-200 bg-white p-4 shadow-sm transition hover:border-orange-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/40 sm:p-5';
 
 type Props = {
   idPrefix?: string;
@@ -31,7 +31,10 @@ type Props = {
   locale?: LocalizedUiLocale;
 };
 
-function linkForLocale(locale: LocalizedUiLocale, canonicalPath: string): string {
+function linkForLocale(
+  locale: LocalizedUiLocale,
+  canonicalPath: string
+): string {
   return hrefForLocalizedUiRequired(locale, canonicalPath);
 }
 
@@ -48,7 +51,7 @@ export default function ContinueScholarshipSearchCardGrid({
     return (
       <section
         className={clsx(
-          'rounded-xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-5 sm:p-6',
+          'rounded-lg border border-slate-200 bg-white p-5 shadow-sm ring-1 ring-slate-100/80 sm:p-6',
           className
         )}
         aria-labelledby={`${idPrefix}-related-heading`}
@@ -67,7 +70,10 @@ export default function ContinueScholarshipSearchCardGrid({
           {c.exploringSubtitle}
         </p>
         <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <Link href={linkForLocale(locale, '/resources')} className={RELATED_CARD_CLASS}>
+          <Link
+            href={linkForLocale(locale, '/resources')}
+            className={RELATED_CARD_CLASS}
+          >
             <div className="flex gap-3">
               <span
                 className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600 transition group-hover:bg-orange-50 group-hover:text-orange-600"
@@ -76,15 +82,22 @@ export default function ContinueScholarshipSearchCardGrid({
                 <BookOpen className="h-4 w-4" strokeWidth={2} />
               </span>
               <div className="min-w-0 flex flex-1 flex-col">
-                <h3 className="font-semibold text-slate-900">{c.resourcesTitle}</h3>
-                <p className="mt-1 flex-1 text-sm text-slate-600">{c.resourcesBody}</p>
+                <h3 className="font-semibold text-slate-900">
+                  {c.resourcesTitle}
+                </h3>
+                <p className="mt-1 flex-1 text-sm text-slate-600">
+                  {c.resourcesBody}
+                </p>
                 <span className="mt-3 inline-block text-sm font-medium text-orange-600 transition group-hover:text-orange-700">
                   {c.explore}
                 </span>
               </div>
             </div>
           </Link>
-          <Link href={linkForLocale(locale, '/essays')} className={RELATED_CARD_CLASS}>
+          <Link
+            href={linkForLocale(locale, '/essays')}
+            className={RELATED_CARD_CLASS}
+          >
             <div className="flex gap-3">
               <span
                 className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600 transition group-hover:bg-orange-50 group-hover:text-orange-600"
@@ -93,8 +106,12 @@ export default function ContinueScholarshipSearchCardGrid({
                 <FileText className="h-4 w-4" strokeWidth={2} />
               </span>
               <div className="min-w-0 flex flex-1 flex-col">
-                <h3 className="font-semibold text-slate-900">{c.essaysTitle}</h3>
-                <p className="mt-1 flex-1 text-sm text-slate-600">{c.essaysBody}</p>
+                <h3 className="font-semibold text-slate-900">
+                  {c.essaysTitle}
+                </h3>
+                <p className="mt-1 flex-1 text-sm text-slate-600">
+                  {c.essaysBody}
+                </p>
                 <span className="mt-3 inline-block text-sm font-medium text-orange-600 transition group-hover:text-orange-700">
                   {c.explore}
                 </span>
@@ -113,8 +130,12 @@ export default function ContinueScholarshipSearchCardGrid({
                 <Zap className="h-4 w-4" strokeWidth={2} />
               </span>
               <div className="min-w-0 flex flex-1 flex-col">
-                <h3 className="font-semibold text-slate-900">{c.easyApplyTitle}</h3>
-                <p className="mt-1 flex-1 text-sm text-slate-600">{c.easyApplyBody}</p>
+                <h3 className="font-semibold text-slate-900">
+                  {c.easyApplyTitle}
+                </h3>
+                <p className="mt-1 flex-1 text-sm text-slate-600">
+                  {c.easyApplyBody}
+                </p>
                 <span className="mt-3 inline-block text-sm font-medium text-orange-600 transition group-hover:text-orange-700">
                   {c.explore}
                 </span>
@@ -122,7 +143,10 @@ export default function ContinueScholarshipSearchCardGrid({
             </div>
           </Link>
           <Link
-            href={localizedScholarshipHubTabHref(locale, 'international-friendly')}
+            href={localizedScholarshipHubTabHref(
+              locale,
+              'international-friendly'
+            )}
             className={RELATED_CARD_CLASS}
           >
             <div className="flex gap-3">
@@ -133,8 +157,12 @@ export default function ContinueScholarshipSearchCardGrid({
                 <Globe2 className="h-4 w-4" strokeWidth={2} />
               </span>
               <div className="min-w-0 flex flex-1 flex-col">
-                <h3 className="font-semibold text-slate-900">{c.internationalTitle}</h3>
-                <p className="mt-1 flex-1 text-sm text-slate-600">{c.internationalBody}</p>
+                <h3 className="font-semibold text-slate-900">
+                  {c.internationalTitle}
+                </h3>
+                <p className="mt-1 flex-1 text-sm text-slate-600">
+                  {c.internationalBody}
+                </p>
                 <span className="mt-3 inline-block text-sm font-medium text-orange-600 transition group-hover:text-orange-700">
                   {c.explore}
                 </span>
@@ -149,7 +177,7 @@ export default function ContinueScholarshipSearchCardGrid({
   return (
     <section
       className={clsx(
-        'rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-6',
+        'rounded-lg border border-slate-200 bg-white p-6 shadow-sm ring-1 ring-slate-100/80',
         className
       )}
       aria-labelledby={`${idPrefix}-related-heading`}
@@ -168,7 +196,10 @@ export default function ContinueScholarshipSearchCardGrid({
         {c.subtitle}
       </p>
       <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
-        <Link href={linkForLocale(locale, '/resources')} className={RELATED_CARD_CLASS}>
+        <Link
+          href={linkForLocale(locale, '/resources')}
+          className={RELATED_CARD_CLASS}
+        >
           <div className="flex gap-3">
             <span
               className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600 transition group-hover:bg-orange-50 group-hover:text-orange-600"
@@ -187,7 +218,10 @@ export default function ContinueScholarshipSearchCardGrid({
             </div>
           </div>
         </Link>
-        <Link href={linkForLocale(locale, '/essays')} className={RELATED_CARD_CLASS}>
+        <Link
+          href={linkForLocale(locale, '/essays')}
+          className={RELATED_CARD_CLASS}
+        >
           <div className="flex gap-3">
             <span
               className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600 transition group-hover:bg-orange-50 group-hover:text-orange-600"
@@ -196,7 +230,9 @@ export default function ContinueScholarshipSearchCardGrid({
               <FileText className="h-5 w-5" strokeWidth={2} />
             </span>
             <div className="min-w-0 flex-1">
-              <h3 className="font-semibold text-lg text-slate-900">{c.essaysTitle}</h3>
+              <h3 className="font-semibold text-lg text-slate-900">
+                {c.essaysTitle}
+              </h3>
               <p className="mt-1 text-sm text-slate-600">{c.essaysBody}</p>
               <span className="mt-3 inline-block font-medium text-orange-500 transition group-hover:text-orange-600">
                 {c.explore}
@@ -204,7 +240,10 @@ export default function ContinueScholarshipSearchCardGrid({
             </div>
           </div>
         </Link>
-          <Link href={linkForLocale(locale, '/providers')} className={RELATED_CARD_CLASS}>
+        <Link
+          href={linkForLocale(locale, '/providers')}
+          className={RELATED_CARD_CLASS}
+        >
           <div className="flex gap-3">
             <span
               className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600 transition group-hover:bg-orange-50 group-hover:text-orange-600"
@@ -223,7 +262,10 @@ export default function ContinueScholarshipSearchCardGrid({
             </div>
           </div>
         </Link>
-          <Link href={linkForLocale(locale, '/compare')} className={RELATED_CARD_CLASS}>
+        <Link
+          href={linkForLocale(locale, '/compare')}
+          className={RELATED_CARD_CLASS}
+        >
           <div className="flex gap-3">
             <span
               className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600 transition group-hover:bg-orange-50 group-hover:text-orange-600"
@@ -265,7 +307,10 @@ export default function ContinueScholarshipSearchCardGrid({
           </div>
         </Link>
         <Link
-          href={localizedScholarshipHubTabHref(locale, 'international-friendly')}
+          href={localizedScholarshipHubTabHref(
+            locale,
+            'international-friendly'
+          )}
           className={RELATED_CARD_CLASS}
         >
           <div className="flex gap-3">
@@ -279,7 +324,9 @@ export default function ContinueScholarshipSearchCardGrid({
               <h3 className="font-semibold text-lg text-slate-900">
                 {c.internationalTitle}
               </h3>
-              <p className="mt-1 text-sm text-slate-600">{c.internationalBody}</p>
+              <p className="mt-1 text-sm text-slate-600">
+                {c.internationalBody}
+              </p>
               <span className="mt-3 inline-block font-medium text-orange-500 transition group-hover:text-orange-600">
                 {c.explore}
               </span>

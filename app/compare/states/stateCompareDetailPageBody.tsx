@@ -61,7 +61,12 @@ function fmtUsd(n: unknown, locale: LocalizedUiLocale, noData: string): string {
   }).format(n);
 }
 
-function fmtNum(n: unknown, locale: LocalizedUiLocale, noData: string, digits = 0): string {
+function fmtNum(
+  n: unknown,
+  locale: LocalizedUiLocale,
+  noData: string,
+  digits = 0
+): string {
   if (typeof n !== 'number' || Number.isNaN(n)) return noData;
   return new Intl.NumberFormat(numberLocale(locale), {
     maximumFractionDigits: digits,
@@ -103,7 +108,10 @@ function StateCompareIqCta({
         <div className="min-w-0">
           <div className="mb-3 flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center gap-2 rounded-full border border-[#FFB875] bg-white/85 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.17em] text-[#B45309] shadow-sm">
-              <BrainCircuit className="h-3.5 w-3.5 text-[#F97316]" aria-hidden />
+              <BrainCircuit
+                className="h-3.5 w-3.5 text-[#F97316]"
+                aria-hidden
+              />
               {copy.featuredTool}
             </span>
             <span className="rounded-full border border-slate-200 bg-slate-950 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white">
@@ -137,13 +145,17 @@ function StateCompareIqCta({
           </p>
           <div className="mt-2 grid grid-cols-2 gap-2">
             <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/80 px-2 py-2">
-              <p className="text-[10px] font-medium text-slate-500">{copy.iqLabel}</p>
+              <p className="text-[10px] font-medium text-slate-500">
+                {copy.iqLabel}
+              </p>
               <p className="mt-1 text-base font-bold leading-none text-slate-950">
                 --
               </p>
             </div>
             <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/80 px-2 py-2">
-              <p className="text-[10px] font-medium text-slate-500">{copy.typeLabel}</p>
+              <p className="text-[10px] font-medium text-slate-500">
+                {copy.typeLabel}
+              </p>
               <p className="mt-1 text-sm font-bold leading-none text-slate-950">
                 {copy.profileLabel}
               </p>
@@ -267,7 +279,9 @@ export async function StateCompareDetailPageBody({
   const compareTocItems = buildStateCompareTocMerged({
     locale,
     bodyToc: bodyTocItems,
-    hasClimateEssay: Boolean(climate?.state_a?.trim() || climate?.state_b?.trim()),
+    hasClimateEssay: Boolean(
+      climate?.state_a?.trim() || climate?.state_b?.trim()
+    ),
     faqCount: faqItems.length,
     sourcesCount: sources.length,
     hasRelated:
@@ -308,11 +322,13 @@ export async function StateCompareDetailPageBody({
   };
 
   const grantCountA =
-    typeof a?.['grant_count'] === 'number' && !Number.isNaN(a['grant_count'] as number)
+    typeof a?.['grant_count'] === 'number' &&
+    !Number.isNaN(a['grant_count'] as number)
       ? (a['grant_count'] as number)
       : null;
   const grantCountB =
-    typeof b?.['grant_count'] === 'number' && !Number.isNaN(b['grant_count'] as number)
+    typeof b?.['grant_count'] === 'number' &&
+    !Number.isNaN(b['grant_count'] as number)
       ? (b['grant_count'] as number)
       : null;
 
@@ -374,7 +390,10 @@ export async function StateCompareDetailPageBody({
           </Link>
         </p>
 
-        <nav className="mt-4 text-sm text-gray-500" aria-label={stateUi.breadcrumbAria}>
+        <nav
+          className="mt-4 text-sm text-gray-500"
+          aria-label={stateUi.breadcrumbAria}
+        >
           <ol className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
             <li>
               <Link
@@ -421,7 +440,9 @@ export async function StateCompareDetailPageBody({
           </h1>
           {page.ai_verdict?.trim() ? (
             <p className="mt-4 text-lg leading-relaxed text-gray-600 sm:text-xl sm:leading-relaxed">
-              <span className="font-semibold text-gray-900">{stateUi.verdictLead}</span>
+              <span className="font-semibold text-gray-900">
+                {stateUi.verdictLead}
+              </span>
               {formatCompareNumericText(page.ai_verdict.trim())}
             </p>
           ) : null}
@@ -439,12 +460,20 @@ export async function StateCompareDetailPageBody({
           </span>
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
             <div className="rounded-2xl border border-gray-200 bg-gray-50/80 px-4 py-4">
-              <p className="text-sm font-medium text-gray-500">{stateUi.institutionA}</p>
-              <p className="mt-2 text-xl font-bold leading-tight text-gray-900">{stateA.name}</p>
+              <p className="text-sm font-medium text-gray-500">
+                {stateUi.institutionA}
+              </p>
+              <p className="mt-2 text-xl font-bold leading-tight text-gray-900">
+                {stateA.name}
+              </p>
             </div>
             <div className="rounded-2xl border border-gray-200 bg-gray-50/80 px-4 py-4">
-              <p className="text-sm font-medium text-gray-500">{stateUi.institutionB}</p>
-              <p className="mt-2 text-xl font-bold leading-tight text-gray-900">{stateB.name}</p>
+              <p className="text-sm font-medium text-gray-500">
+                {stateUi.institutionB}
+              </p>
+              <p className="mt-2 text-xl font-bold leading-tight text-gray-900">
+                {stateB.name}
+              </p>
             </div>
           </div>
         </section>
@@ -595,7 +624,9 @@ export async function StateCompareDetailPageBody({
             </h2>
             <div className="mt-6 grid gap-6 md:grid-cols-2">
               <div className="rounded-xl border border-gray-200 bg-gray-50/70 p-5">
-                <h3 className="text-sm font-semibold text-gray-900">{stateA.name}</h3>
+                <h3 className="text-sm font-semibold text-gray-900">
+                  {stateA.name}
+                </h3>
                 <p className="mt-2 text-sm leading-relaxed text-gray-900">
                   {climate?.state_a?.trim()
                     ? formatCompareNumericText(climate.state_a.trim())
@@ -603,7 +634,9 @@ export async function StateCompareDetailPageBody({
                 </p>
               </div>
               <div className="rounded-xl border border-gray-200 bg-gray-50/70 p-5">
-                <h3 className="text-sm font-semibold text-gray-900">{stateB.name}</h3>
+                <h3 className="text-sm font-semibold text-gray-900">
+                  {stateB.name}
+                </h3>
                 <p className="mt-2 text-sm leading-relaxed text-gray-900">
                   {climate?.state_b?.trim()
                     ? formatCompareNumericText(climate.state_b.trim())
@@ -620,6 +653,7 @@ export async function StateCompareDetailPageBody({
           stateBName={stateB.name}
           stateBCode={stateB.code}
           noDataLabel={stateUi.noData}
+          locale={locale}
         />
 
         {faqItems.length > 0 ? (
@@ -657,7 +691,10 @@ export async function StateCompareDetailPageBody({
             </div>
             <ul className="mt-5 space-y-4">
               {sources.map((source) => (
-                <li key={`${source.url}-${source.label}`} className="text-base leading-relaxed text-gray-700">
+                <li
+                  key={`${source.url}-${source.label}`}
+                  className="text-base leading-relaxed text-gray-700"
+                >
                   <a
                     href={source.url}
                     target="_blank"
@@ -681,7 +718,8 @@ export async function StateCompareDetailPageBody({
           </section>
         ) : null}
 
-        {relatedContent.resources.length > 0 || relatedContent.essays.length > 0 ? (
+        {relatedContent.resources.length > 0 ||
+        relatedContent.essays.length > 0 ? (
           <section
             className="mt-10 rounded-2xl border border-gray-200/90 bg-white p-6 shadow-sm sm:p-8"
             aria-labelledby="state-related-guides-heading"
@@ -712,7 +750,10 @@ export async function StateCompareDetailPageBody({
                       const slugValue = post.slug?.trim();
                       if (!slugValue) return null;
                       return (
-                        <li key={post.id} className="rounded-xl border border-gray-200 bg-gray-50/70 p-4">
+                        <li
+                          key={post.id}
+                          className="rounded-xl border border-gray-200 bg-gray-50/70 p-4"
+                        >
                           <Link
                             href={resourcesArticlePath(slugValue)}
                             className="text-base font-semibold text-gray-900 underline decoration-sky-500/30 underline-offset-4 transition hover:text-sky-800 hover:decoration-sky-700"
@@ -749,7 +790,8 @@ export async function StateCompareDetailPageBody({
                           href={essayHubArticlePath(essayGuide.slug)}
                           className="text-base font-semibold text-gray-900 underline decoration-indigo-500/30 underline-offset-4 transition hover:text-indigo-800 hover:decoration-indigo-700"
                         >
-                          {essayGuide.title?.trim() || essayGuide.slug.replace(/-/g, ' ')}
+                          {essayGuide.title?.trim() ||
+                            essayGuide.slug.replace(/-/g, ' ')}
                         </Link>
                         {essayGuide.meta_description?.trim() ? (
                           <p className="mt-2 text-sm leading-relaxed text-gray-600">

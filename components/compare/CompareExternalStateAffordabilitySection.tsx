@@ -19,6 +19,11 @@ import { InsightCallout } from '@/components/data-viz/InsightCallout';
 import { MetricComparisonBars } from '@/components/data-viz/MetricComparisonBars';
 import { StateSocialContextBlock } from '@/components/data-viz/StateSocialContextBlock';
 import { InternalLinkCluster } from '@/components/internal-links/InternalLinkCluster';
+import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
+import {
+  getPublicDataVizCopy,
+  type PublicDataVizCopy
+} from '@/lib/i18n/publicDataVizCopy';
 import { stateSlugFromCode } from '@/lib/seo/stateCompareSlug';
 
 type CompareExternalStateAffordabilitySectionProps = {
@@ -27,6 +32,7 @@ type CompareExternalStateAffordabilitySectionProps = {
   stateBName: string;
   stateBCode: string;
   noDataLabel?: string;
+  locale?: LocalizedUiLocale;
 };
 
 type StateMetric = {
@@ -36,77 +42,90 @@ type StateMetric = {
   hint?: string;
 };
 
-function stateMetrics(row: StateAffordability | null): StateMetric[] {
+function stateMetrics(
+  row: StateAffordability | null,
+  copy: PublicDataVizCopy
+): StateMetric[] {
   if (!row) return [];
 
-  const income =
-    isPlausibleHouseholdIncome(row.median_household_income) ?
-      fmtEnrichmentUsd(row.median_household_income)
+  const income = isPlausibleHouseholdIncome(row.median_household_income)
+    ? fmtEnrichmentUsd(row.median_household_income)
     : null;
 
   const metrics: StateMetric[] = [
     {
       key: 'income',
-      label: 'Median household income',
+      label: copy.labels.median_household_income,
       value: income,
-      hint: 'Census ACS'
+      hint: copy.hints.census_acs
     },
     {
       key: 'fmr2',
-      label: 'Fair market rent (2BR)',
+      label: copy.labels.fair_market_rent_2br,
       value: fmtEnrichmentUsd(row.hud_fmr_2br),
-      hint: 'HUD monthly estimate'
+      hint: copy.hints.hud_monthly
     },
     {
       key: 'living_wage',
-      label: 'Living wage',
+      label: copy.labels.living_wage,
       value: fmtEnrichmentHourly(row.living_wage_single_adult),
-      hint: 'Single adult, MIT model'
+      hint: copy.hints.single_adult_mit
     },
     {
       key: 'bls',
-      label: 'BLS median wage',
+      label: copy.labels.bls_median_wage,
       value: fmtEnrichmentUsd(row.bls_median_wage),
-      hint: 'State occupational estimate'
+      hint: copy.hints.state_occupational
     }
   ];
 
   return metrics.filter((m) => m.value != null);
 }
 
-function publicSafetyNote(row: StateAffordability | null): string | null {
+function publicSafetyNote(
+  row: StateAffordability | null,
+  copy: PublicDataVizCopy
+): string | null {
   const ctx = row?.public_safety_context;
   const rate = fmtEnrichmentRatePer100k(ctx?.value);
   if (!rate) return null;
-  return `Reported violent crime rate (state aggregate): ${rate}. Public safety context is based on aggregate state-level public data — not a safety rating.`;
+  return copy.stateSafetyNote(rate);
 }
 
 function StateAffordabilityColumn({
   name,
   row,
   social,
-  notAvailable
+  notAvailable,
+  copy,
+  locale
 }: {
   name: string;
   row: StateAffordability | null;
   social: StateSocialContext | null;
   notAvailable: string;
+  copy: PublicDataVizCopy;
+  locale: LocalizedUiLocale;
 }) {
-  const metrics = stateMetrics(row);
-  const safetyNote = publicSafetyNote(row);
+  const metrics = stateMetrics(row, copy);
+  const safetyNote = publicSafetyNote(row, copy);
 
   if (!metrics.length && !safetyNote && !social) {
     return (
       <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50/50 p-5">
         <h3 className="text-sm font-semibold text-gray-900">{name}</h3>
-        <p className="mt-2 text-sm text-gray-600">{notAvailable} for this state.</p>
+        <p className="mt-2 text-sm text-gray-600">
+          {notAvailable} {copy.stateNoDataSuffix}
+        </p>
       </div>
     );
   }
 
   return (
     <div className="rounded-2xl border border-gray-200/90 bg-white p-4 shadow-sm sm:p-5">
-      <h3 className="text-base font-semibold leading-snug text-gray-900">{name}</h3>
+      <h3 className="text-base font-semibold leading-snug text-gray-900">
+        {name}
+      </h3>
 
       {metrics.length ? (
         <div className="mt-4 grid grid-cols-2 gap-2.5 sm:gap-3">
@@ -127,16 +146,27 @@ function StateAffordabilityColumn({
         </p>
       ) : null}
 
-      <StateSocialContextBlock context={social} compact className="mt-4" showSourceFooter={false} />
+      <StateSocialContextBlock
+        context={social}
+        compact
+        locale={locale}
+        className="mt-4"
+        showSourceFooter={false}
+      />
     </div>
   );
 }
 
 function hasAffordabilityContent(
   row: StateAffordability | null,
-  social: StateSocialContext | null
+  social: StateSocialContext | null,
+  copy: PublicDataVizCopy
 ): boolean {
-  return stateMetrics(row).length > 0 || publicSafetyNote(row) != null || social != null;
+  return (
+    stateMetrics(row, copy).length > 0 ||
+    publicSafetyNote(row, copy) != null ||
+    social != null
+  );
 }
 
 export function CompareExternalStateAffordabilitySection({
@@ -144,8 +174,10 @@ export function CompareExternalStateAffordabilitySection({
   stateACode,
   stateBName,
   stateBCode,
-  noDataLabel
+  noDataLabel,
+  locale = 'en'
 }: CompareExternalStateAffordabilitySectionProps) {
+  const copy = getPublicDataVizCopy(locale);
   const notAvailable = enrichmentNotAvailableLabel(noDataLabel);
   const rowA = getStateAffordability(stateACode);
   const rowB = getStateAffordability(stateBCode);
@@ -153,11 +185,37 @@ export function CompareExternalStateAffordabilitySection({
   const socialB = getStateSocialContext(stateBCode);
   const slugA = stateSlugFromCode(stateACode);
   const slugB = stateSlugFromCode(stateBCode);
-  const barMetrics = stateCompareBarMetrics(rowA, rowB);
+  const barMetrics = stateCompareBarMetrics(rowA, rowB).map((metric) => ({
+    ...metric,
+    label:
+      metric.key === 'income'
+        ? copy.labels.median_household_income
+        : metric.key === 'fmr2'
+          ? copy.labels.fair_market_rent_2br
+          : metric.key === 'living_wage'
+            ? copy.labels.living_wage
+            : metric.key === 'bls'
+              ? copy.labels.bls_median_wage
+              : metric.label,
+    hint:
+      metric.key === 'income'
+        ? copy.hints.census_acs
+        : metric.key === 'fmr2'
+          ? copy.hints.hud_monthly
+          : metric.key === 'living_wage'
+            ? copy.hints.single_adult_mit
+            : metric.key === 'bls'
+              ? copy.hints.state_occupational
+              : metric.hint
+  }));
   const showSafetyNote =
-    publicSafetyNote(rowA) != null || publicSafetyNote(rowB) != null;
+    publicSafetyNote(rowA, copy) != null ||
+    publicSafetyNote(rowB, copy) != null;
 
-  if (!hasAffordabilityContent(rowA, socialA) && !hasAffordabilityContent(rowB, socialB)) {
+  if (
+    !hasAffordabilityContent(rowA, socialA, copy) &&
+    !hasAffordabilityContent(rowB, socialB, copy)
+  ) {
     return null;
   }
 
@@ -168,23 +226,24 @@ export function CompareExternalStateAffordabilitySection({
     >
       <div className="mx-auto max-w-2xl text-center">
         <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500">
-          Public reference data
+          {copy.publicReferenceData}
         </p>
         <h2
           id="compare-state-affordability-heading"
           className="scroll-mt-28 mt-2 text-xl font-bold tracking-tight text-gray-900 sm:scroll-mt-24 sm:text-2xl"
         >
-          Cost of living &amp; wages
+          {copy.costLivingWages}
         </h2>
         <p className="mt-2 text-sm leading-relaxed text-gray-600">
-          State-level affordability context to complement scholarship climate above — not
-          ScholarshipTop grant totals.
+          {copy.stateAffordabilityBody}
         </p>
       </div>
 
       {barMetrics.length ? (
         <div className="mx-auto mt-6 max-w-3xl rounded-2xl border border-slate-200/80 bg-white p-4 sm:p-5">
-          <h3 className="text-sm font-semibold text-gray-900">Visual comparison</h3>
+          <h3 className="text-sm font-semibold text-gray-900">
+            {copy.visualComparison}
+          </h3>
           <MetricComparisonBars
             className="mt-4"
             ariaLabel={`Affordability comparison between ${stateAName} and ${stateBName}`}
@@ -208,19 +267,23 @@ export function CompareExternalStateAffordabilitySection({
           row={rowA}
           social={socialA}
           notAvailable={notAvailable}
+          copy={copy}
+          locale={locale}
         />
         <StateAffordabilityColumn
           name={stateBName}
           row={rowB}
           social={socialB}
           notAvailable={notAvailable}
+          copy={copy}
+          locale={locale}
         />
       </div>
 
       <div className="mx-auto mt-6 max-w-3xl">
         <InsightCallout
-          title="Why this matters for scholarship planning"
-          body="Use these numbers to compare scholarship value, relocation costs, and likely out-of-pocket living expenses. A larger award in a higher-cost state may cover less than a smaller award elsewhere."
+          title={copy.statePlanningCalloutTitle}
+          body={copy.statePlanningCalloutBody}
         />
         <InternalLinkCluster
           pageType="compare-state-detail"
@@ -230,6 +293,7 @@ export function CompareExternalStateAffordabilitySection({
         <DataSourceFooter
           variant="state"
           showPublicSafetyNote={showSafetyNote}
+          locale={locale}
           className="mt-5 text-center"
         />
       </div>

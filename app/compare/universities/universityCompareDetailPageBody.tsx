@@ -49,7 +49,10 @@ import {
 } from '@/lib/i18n/localizedHref';
 
 const COMPARE_YEAR = 2026;
-function buildUniversityHubHref(stateCode: string | null | undefined, slug: string | null | undefined) {
+function buildUniversityHubHref(
+  stateCode: string | null | undefined,
+  slug: string | null | undefined
+) {
   const stateSlug = stateCode ? stateSlugFromCode(stateCode) : null;
   const universitySlug = slug?.trim();
   if (!stateSlug || !universitySlug) return null;
@@ -102,7 +105,10 @@ export async function UniversityCompareDetailPageBody({
   const uniUi = getCompareUniversityDetailUiCopy(locale);
   const homeHref = hrefForLocalizedUiRequired(locale, '/');
   const compareHref = hrefForLocalizedUiRequired(locale, '/compare');
-  const universityHubHref = hrefForLocalizedUiRequired(locale, '/compare/universities');
+  const universityHubHref = hrefForLocalizedUiRequired(
+    locale,
+    '/compare/universities'
+  );
   const loaded = await fetchPublishedComparePageBySlug(slug);
   if (!loaded) notFound();
 
@@ -230,9 +236,7 @@ export async function UniversityCompareDetailPageBody({
     locale,
     bodyToc: bodyTocItems,
     hasEssayInsights: Boolean(essay?.inst_a?.trim() || essay?.inst_b?.trim()),
-    hasStateBattle: Boolean(
-      stateBattleSlug && stateLabelA && stateLabelB
-    ),
+    hasStateBattle: Boolean(stateBattleSlug && stateLabelA && stateLabelB),
     faqCount: faqItems.length,
     sourcesCount: sources.length,
     hasRelated:
@@ -294,6 +298,39 @@ export async function UniversityCompareDetailPageBody({
     essay?.inst_b
   );
   const showThinVerdictUni = isCompareArticleThin(compareWordTotal);
+  const quickComparisonRows = [
+    {
+      label: uniUi.tableScholarshipsInCatalog,
+      a: fmtNum(totalA, locale, uniUi.noData, 0),
+      b: fmtNum(totalB, locale, uniUi.noData, 0)
+    },
+    {
+      label: uniUi.tableAvgAward,
+      a: fmtUsd(a?.['avg_amount'], locale, uniUi.noData),
+      b: fmtUsd(b?.['avg_amount'], locale, uniUi.noData)
+    },
+    {
+      label: uniUi.tableMaxAward,
+      a: fmtUsd(a?.['max_amount'], locale, uniUi.noData),
+      b: fmtUsd(b?.['max_amount'], locale, uniUi.noData)
+    },
+    {
+      label: uniUi.tableOpenDeadlinesShare,
+      a: successA != null ? `${successA}%` : uniUi.noData,
+      b: successB != null ? `${successB}%` : uniUi.noData
+    },
+    {
+      label: uniUi.tableMeritVsNeed,
+      a: uniUi.meritNeedCell(
+        fmtPct(a?.['merit_pct'], uniUi.noData),
+        fmtPct(a?.['need_pct'], uniUi.noData)
+      ),
+      b: uniUi.meritNeedCell(
+        fmtPct(b?.['merit_pct'], uniUi.noData),
+        fmtPct(b?.['need_pct'], uniUi.noData)
+      )
+    }
+  ];
 
   return (
     <div className="bg-white text-gray-900 antialiased">
@@ -330,7 +367,10 @@ export async function UniversityCompareDetailPageBody({
           </Link>
         </p>
 
-        <nav className="mt-4 text-sm text-gray-500" aria-label={uniUi.breadcrumbAria}>
+        <nav
+          className="mt-4 text-sm text-gray-500"
+          aria-label={uniUi.breadcrumbAria}
+        >
           <ol className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
             <li>
               <Link
@@ -380,7 +420,9 @@ export async function UniversityCompareDetailPageBody({
           </h1>
           {page.ai_verdict?.trim() ? (
             <p className="mt-4 text-lg leading-relaxed text-gray-600 sm:text-xl sm:leading-relaxed">
-              <span className="font-semibold text-gray-900">{uniUi.whoIsItFor}</span>
+              <span className="font-semibold text-gray-900">
+                {uniUi.whoIsItFor}
+              </span>
               {formatCompareNumericText(page.ai_verdict.trim())}
             </p>
           ) : null}
@@ -399,7 +441,9 @@ export async function UniversityCompareDetailPageBody({
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
             <div className="rounded-2xl border border-gray-200 bg-gray-50/80 px-4 py-4">
               <div className="flex items-center justify-between gap-3">
-                <p className="text-sm font-medium text-gray-500">{uniUi.institutionA}</p>
+                <p className="text-sm font-medium text-gray-500">
+                  {uniUi.institutionA}
+                </p>
                 {compareHeaderStateA ? (
                   <p
                     className="max-w-[min(100%,12rem)] shrink-0 text-right text-sm font-medium text-gray-500 sm:max-w-[14rem]"
@@ -415,7 +459,9 @@ export async function UniversityCompareDetailPageBody({
             </div>
             <div className="rounded-2xl border border-gray-200 bg-gray-50/80 px-4 py-4">
               <div className="flex items-center justify-between gap-3">
-                <p className="text-sm font-medium text-gray-500">{uniUi.institutionB}</p>
+                <p className="text-sm font-medium text-gray-500">
+                  {uniUi.institutionB}
+                </p>
                 {compareHeaderStateB ? (
                   <p
                     className="max-w-[min(100%,12rem)] shrink-0 text-right text-sm font-medium text-gray-500 sm:max-w-[14rem]"
@@ -439,7 +485,43 @@ export async function UniversityCompareDetailPageBody({
           >
             {uniUi.quickComparison}
           </h2>
-          <div className="mt-5">
+          <div className="mt-5 grid gap-3 sm:hidden">
+            {quickComparisonRows.map((row) => (
+              <div
+                key={row.label}
+                className="rounded-2xl border border-gray-200 bg-gray-50/80 p-3.5 shadow-[0_1px_0_rgba(15,23,42,0.04)]"
+              >
+                <p className="text-sm font-semibold leading-snug text-gray-900">
+                  {row.label}
+                </p>
+                <div className="mt-3 grid grid-cols-2 gap-2">
+                  <div className="min-w-0 rounded-xl border border-white bg-white p-3">
+                    <p
+                      className="truncate text-[11px] font-semibold uppercase tracking-[0.12em] text-gray-500"
+                      title={instA.name}
+                    >
+                      {instA.name}
+                    </p>
+                    <p className="mt-1 text-sm font-semibold leading-snug text-gray-900">
+                      {row.a}
+                    </p>
+                  </div>
+                  <div className="min-w-0 rounded-xl border border-white bg-white p-3">
+                    <p
+                      className="truncate text-[11px] font-semibold uppercase tracking-[0.12em] text-gray-500"
+                      title={instB.name}
+                    >
+                      {instB.name}
+                    </p>
+                    <p className="mt-1 text-sm font-semibold leading-snug text-gray-900">
+                      {row.b}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-5 hidden sm:block">
             <table className="w-full table-fixed border-collapse text-left text-sm">
               <colgroup>
                 <col className="w-[36%]" />
@@ -460,67 +542,15 @@ export async function UniversityCompareDetailPageBody({
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                <tr>
-                  <td className="px-3 py-3 font-medium text-gray-700 sm:px-4">
-                    {uniUi.tableScholarshipsInCatalog}
-                  </td>
-                  <td className="px-3 py-3 tabular-nums text-gray-900 sm:px-4">
-                    {fmtNum(totalA, locale, uniUi.noData, 0)}
-                  </td>
-                  <td className="px-3 py-3 tabular-nums text-gray-900 sm:px-4">
-                    {fmtNum(totalB, locale, uniUi.noData, 0)}
-                  </td>
-                </tr>
-                <tr>
-                  <td className="px-3 py-3 font-medium text-gray-700 sm:px-4">
-                    {uniUi.tableAvgAward}
-                  </td>
-                  <td className="px-3 py-3 text-gray-700 sm:px-4">
-                    {fmtUsd(a?.['avg_amount'], locale, uniUi.noData)}
-                  </td>
-                  <td className="px-3 py-3 text-gray-700 sm:px-4">
-                    {fmtUsd(b?.['avg_amount'], locale, uniUi.noData)}
-                  </td>
-                </tr>
-                <tr>
-                  <td className="px-3 py-3 font-medium text-gray-700 sm:px-4">
-                    {uniUi.tableMaxAward}
-                  </td>
-                  <td className="px-3 py-3 text-gray-700 sm:px-4">
-                    {fmtUsd(a?.['max_amount'], locale, uniUi.noData)}
-                  </td>
-                  <td className="px-3 py-3 text-gray-700 sm:px-4">
-                    {fmtUsd(b?.['max_amount'], locale, uniUi.noData)}
-                  </td>
-                </tr>
-                <tr>
-                  <td className="px-3 py-3 font-medium text-gray-700 sm:px-4">
-                    {uniUi.tableOpenDeadlinesShare}
-                  </td>
-                  <td className="px-3 py-3 text-gray-700 sm:px-4">
-                    {successA != null ? `${successA}%` : uniUi.noData}
-                  </td>
-                  <td className="px-3 py-3 text-gray-700 sm:px-4">
-                    {successB != null ? `${successB}%` : uniUi.noData}
-                  </td>
-                </tr>
-                <tr>
-                  <td className="px-3 py-3 font-medium text-gray-700 sm:px-4">
-                    {uniUi.tableMeritVsNeed}
-                  </td>
-                  <td className="px-3 py-3 text-xs leading-snug text-gray-700 sm:px-4">
-                    {uniUi.meritNeedCell(
-                      fmtPct(a?.['merit_pct'], uniUi.noData),
-                      fmtPct(a?.['need_pct'], uniUi.noData)
-                    )}
-                  </td>
-                  <td className="px-3 py-3 text-xs leading-snug text-gray-700 sm:px-4">
-                    {uniUi.meritNeedCell(
-                      fmtPct(b?.['merit_pct'], uniUi.noData),
-                      fmtPct(b?.['need_pct'], uniUi.noData)
-                    )}
-                  </td>
-                </tr>
+                {quickComparisonRows.map((row) => (
+                  <tr key={row.label}>
+                    <td className="px-3 py-3 font-medium text-gray-700 sm:px-4">
+                      {row.label}
+                    </td>
+                    <td className="px-3 py-3 text-gray-700 sm:px-4">{row.a}</td>
+                    <td className="px-3 py-3 text-gray-700 sm:px-4">{row.b}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -530,6 +560,7 @@ export async function UniversityCompareDetailPageBody({
           institutionA={{ name: instA.name, state: instA.state }}
           institutionB={{ name: instB.name, state: instB.state }}
           noDataLabel={uniUi.noData}
+          locale={locale}
         />
 
         <UniversityCompareIqCta
@@ -613,8 +644,16 @@ export async function UniversityCompareDetailPageBody({
 
         <CompareInstitutionScholarshipColumns
           locale={locale}
-          left={{ title: instA.name, href: instAHref, scholarships: topScholarshipsA }}
-          right={{ title: instB.name, href: instBHref, scholarships: topScholarshipsB }}
+          left={{
+            title: instA.name,
+            href: instAHref,
+            scholarships: topScholarshipsA
+          }}
+          right={{
+            title: instB.name,
+            href: instBHref,
+            scholarships: topScholarshipsB
+          }}
         />
 
         <section
@@ -699,7 +738,10 @@ export async function UniversityCompareDetailPageBody({
             </div>
             <ul className="mt-5 space-y-4">
               {sources.map((source) => (
-                <li key={`${source.url}-${source.label}`} className="text-base leading-relaxed text-gray-700">
+                <li
+                  key={`${source.url}-${source.label}`}
+                  className="text-base leading-relaxed text-gray-700"
+                >
                   <a
                     href={source.url}
                     target="_blank"
@@ -723,7 +765,8 @@ export async function UniversityCompareDetailPageBody({
           </section>
         ) : null}
 
-        {relatedContent.resources.length > 0 || relatedContent.essays.length > 0 ? (
+        {relatedContent.resources.length > 0 ||
+        relatedContent.essays.length > 0 ? (
           <section
             className="mt-10 rounded-2xl border border-gray-200/90 bg-white p-6 shadow-sm sm:p-8"
             aria-labelledby="compare-related-guides-heading"
@@ -754,7 +797,10 @@ export async function UniversityCompareDetailPageBody({
                       const slug = post.slug?.trim();
                       if (!slug) return null;
                       return (
-                        <li key={post.id} className="rounded-xl border border-gray-200 bg-gray-50/70 p-4">
+                        <li
+                          key={post.id}
+                          className="rounded-xl border border-gray-200 bg-gray-50/70 p-4"
+                        >
                           <Link
                             href={resourcesArticlePath(slug)}
                             className="text-base font-semibold text-gray-900 underline decoration-sky-500/30 underline-offset-4 transition hover:text-sky-800 hover:decoration-sky-700"
@@ -791,7 +837,8 @@ export async function UniversityCompareDetailPageBody({
                           href={essayHubArticlePath(essayGuide.slug)}
                           className="text-base font-semibold text-gray-900 underline decoration-indigo-500/30 underline-offset-4 transition hover:text-indigo-800 hover:decoration-indigo-700"
                         >
-                          {essayGuide.title?.trim() || essayGuide.slug.replace(/-/g, ' ')}
+                          {essayGuide.title?.trim() ||
+                            essayGuide.slug.replace(/-/g, ' ')}
                         </Link>
                         {essayGuide.meta_description?.trim() ? (
                           <p className="mt-2 text-sm leading-relaxed text-gray-600">
@@ -844,7 +891,10 @@ function UniversityCompareIqCta({
         <div className="min-w-0">
           <div className="mb-3 flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center gap-2 rounded-full border border-[#FFB875] bg-white/85 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.17em] text-[#B45309] shadow-sm">
-              <BrainCircuit className="h-3.5 w-3.5 text-[#F97316]" aria-hidden />
+              <BrainCircuit
+                className="h-3.5 w-3.5 text-[#F97316]"
+                aria-hidden
+              />
               {copy.featuredTool}
             </span>
             <span className="rounded-full border border-slate-200 bg-slate-950 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white">
@@ -878,13 +928,17 @@ function UniversityCompareIqCta({
           </p>
           <div className="mt-2 grid grid-cols-2 gap-2">
             <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/80 px-2 py-2">
-              <p className="text-[10px] font-medium text-slate-500">{copy.iqLabel}</p>
+              <p className="text-[10px] font-medium text-slate-500">
+                {copy.iqLabel}
+              </p>
               <p className="mt-1 text-base font-bold leading-none text-slate-950">
                 --
               </p>
             </div>
             <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/80 px-2 py-2">
-              <p className="text-[10px] font-medium text-slate-500">{copy.typeLabel}</p>
+              <p className="text-[10px] font-medium text-slate-500">
+                {copy.typeLabel}
+              </p>
               <p className="mt-1 text-sm font-bold leading-none text-slate-950">
                 {copy.profileLabel}
               </p>

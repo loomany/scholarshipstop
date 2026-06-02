@@ -1,8 +1,10 @@
 import clsx from 'clsx';
+import { ArrowRight, SearchCheck } from 'lucide-react';
+
 import ScholarshipCatalogEntryLink from '@/components/scholarships/ScholarshipCatalogEntryLink';
 
 const buttonClass =
-  'inline-flex items-center justify-center rounded-full bg-black px-6 py-2.5 text-center text-sm font-semibold text-white shadow-[0_6px_20px_-6px_rgba(0,0,0,0.35)] transition duration-200 ease-out hover:scale-[1.02] hover:bg-zinc-900 hover:shadow-[0_12px_32px_-8px_rgba(0,0,0,0.4)] active:scale-[0.99] sm:px-8 sm:py-3 sm:text-base';
+  'inline-flex min-h-10 items-center justify-center gap-2 rounded-lg bg-slate-950 px-4 py-2 text-center text-sm font-semibold text-white shadow-[0_16px_34px_-24px_rgba(15,23,42,0.85)] transition hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/70';
 
 export type ContentHubScholarshipCtaProps = {
   title: string;
@@ -17,45 +19,39 @@ export default function ContentHubScholarshipCta({
   buttonText,
   className
 }: ContentHubScholarshipCtaProps) {
-  const hadTargetEmoji = /^🎯\s*/.test(title);
-  const normalizedTitle = title.replace(/^🎯\s*/, '').trim();
-  const isMatchesVisual = normalizedTitle === 'Get matched with scholarships in 2 minutes';
+  const normalizedTitle = title
+    .trim()
+    .replace(/^[^A-Za-z0-9]+/, '')
+    .trim();
 
   return (
     <aside
       className={clsx(
-        isMatchesVisual
-          ? 'flex w-full flex-col items-center text-center rounded-2xl border border-gray-200/90 bg-white px-4 py-7 ring-1 ring-gray-100 sm:px-5'
-          : 'flex w-full flex-col items-center text-center rounded-2xl border border-gray-200/90 bg-gradient-to-br from-gray-50 via-white to-gray-50/80 px-4 py-3 ring-1 ring-gray-100 sm:px-5 sm:py-3.5',
+        'rounded-lg border border-slate-200 bg-white p-4 text-left shadow-sm ring-1 ring-slate-100/80 sm:p-5',
         className
       )}
       aria-label="Scholarship directory"
     >
-      {isMatchesVisual ? (
-        <div className="flex w-full items-center justify-center gap-2">
-          <span className="text-3xl leading-none" aria-hidden>
-            🎯
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex min-w-0 items-start gap-3">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-orange-50 text-orange-700 ring-1 ring-orange-100">
+            <SearchCheck className="h-5 w-5" aria-hidden />
           </span>
-          <p className="text-3xl font-bold tracking-tight text-gray-900">{normalizedTitle}</p>
+          <div className="min-w-0">
+            <p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">
+              Scholarship workspace
+            </p>
+            <p className="mt-1 text-base font-bold tracking-tight text-slate-950 sm:text-lg">
+              {normalizedTitle}
+            </p>
+            <p className="mt-1 max-w-2xl text-sm leading-6 text-slate-600">
+              {description}
+            </p>
+          </div>
         </div>
-      ) : (
-        <p className="w-full text-lg font-bold tracking-tight text-gray-900 sm:text-xl">
-          {hadTargetEmoji ? `🎯 ${normalizedTitle}` : normalizedTitle}
-        </p>
-      )}
-      <p
-        className={clsx(
-          'max-w-lg text-gray-600',
-          isMatchesVisual
-            ? 'mx-auto mt-3 max-w-2xl text-lg leading-relaxed text-slate-600'
-            : 'mt-2 text-sm leading-snug sm:text-[0.9375rem] sm:leading-relaxed'
-        )}
-      >
-        {description}
-      </p>
-      <div className={clsx('flex w-full justify-center', isMatchesVisual ? 'mt-6' : 'mt-3 sm:mt-3.5')}>
         <ScholarshipCatalogEntryLink className={buttonClass}>
           {buttonText}
+          <ArrowRight className="h-4 w-4" aria-hidden />
         </ScholarshipCatalogEntryLink>
       </div>
     </aside>

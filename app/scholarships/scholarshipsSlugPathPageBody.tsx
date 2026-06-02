@@ -74,7 +74,10 @@ import { fetchComparePeersForInstitution } from '@/lib/seo/comparePeersServer';
 import type { ProfilesRow } from '@/lib/scholarships/scholarshipMatch';
 import { createPublicClient } from '@/utils/supabase/public';
 import { createClient as createServerSupabase } from '@/utils/supabase/server';
-import { buildScholarshipListingJsonLd, buildStateScholarshipBreadcrumbs } from '@/app/scholarships/scholarshipListingJsonLd';
+import {
+  buildScholarshipListingJsonLd,
+  buildStateScholarshipBreadcrumbs
+} from '@/app/scholarships/scholarshipListingJsonLd';
 import type { Stage2PilotLocale } from '@/lib/i18n/pilotRoutes';
 import { fetchPublishedScholarshipDetail } from '@/lib/i18n/scholarshipPilot/resolveLocalizedScholarshipDetail';
 import {
@@ -121,7 +124,8 @@ function crossCountryFaqItemsFromManifest(
 }
 
 function safeScholarshipReturnToHref(searchParamsString: string): string {
-  const raw = new URLSearchParams(searchParamsString).get('return_to')?.trim() ?? '';
+  const raw =
+    new URLSearchParams(searchParamsString).get('return_to')?.trim() ?? '';
   if (!raw || !raw.startsWith('/') || raw.startsWith('//')) {
     return SCHOLARSHIPS_HUB_ALL_MATCHES_HREF;
   }
@@ -282,17 +286,22 @@ async function HubRootStreamedBridge({
         slug={hubCanonicalSeoSlug}
         locale={locale ?? 'en'}
         introMarginTopClassName={
-          hubCanonicalSeoSlug === 'best-recommendation' ? 'mt-5 sm:mt-6' : undefined
+          hubCanonicalSeoSlug === 'best-recommendation'
+            ? 'mt-5 sm:mt-6'
+            : undefined
         }
       />
     ) : (
-      hubCanonicalIntroBelowTitle ?? null
+      (hubCanonicalIntroBelowTitle ?? null)
     );
   const hubFooter =
     hubCanonicalSeoSlug != null ? (
-      <ScholarshipHubCanonicalListingFooter slug={hubCanonicalSeoSlug} locale={locale ?? 'en'} />
+      <ScholarshipHubCanonicalListingFooter
+        slug={hubCanonicalSeoSlug}
+        locale={locale ?? 'en'}
+      />
     ) : (
-      postListingContent ?? null
+      (postListingContent ?? null)
     );
   const listingJsonLd =
     includeListingJsonLd && listingJsonLdPath && listingJsonLdName
@@ -323,8 +332,11 @@ async function HubRootStreamedBridge({
         )}
         currentPathname={
           locale
-            ? hrefForLocalizedUiRequired(locale, listingJsonLdPath ?? '/scholarships')
-            : listingJsonLdPath ?? '/scholarships'
+            ? hrefForLocalizedUiRequired(
+                locale,
+                listingJsonLdPath ?? '/scholarships'
+              )
+            : (listingJsonLdPath ?? '/scholarships')
         }
         hubCanonicalIntroBelowTitle={hubIntro}
         postListingContent={hubFooter}
@@ -445,7 +457,10 @@ export default async function ScholarshipsSlugPathPageBody({
       notFound();
     }
     if (locale) {
-      const localized = await fetchPublishedScholarshipDetail(segments[0]!, locale);
+      const localized = await fetchPublishedScholarshipDetail(
+        segments[0]!,
+        locale
+      );
       if (!localized || localized.scholarship.id !== scholarship.id) {
         notFound();
       }
@@ -503,7 +518,10 @@ export default async function ScholarshipsSlugPathPageBody({
       notFound();
     }
     if (locale) {
-      const localized = await fetchPublishedScholarshipDetail(segments[0]!, locale);
+      const localized = await fetchPublishedScholarshipDetail(
+        segments[0]!,
+        locale
+      );
       if (!localized || localized.scholarship.id !== scholarship.id) {
         notFound();
       }
@@ -560,7 +578,9 @@ export default async function ScholarshipsSlugPathPageBody({
           />
         ) : null}
         <h1 className="sr-only">{route.h1}</h1>
-        <Suspense fallback={<ScholarshipsHubShellSkeleton pageTitle={route.h1} />}>
+        <Suspense
+          fallback={<ScholarshipsHubShellSkeleton pageTitle={route.h1} />}
+        >
           <ScholarshipsHubPageAuthBridge
             initialPayload={createInitialScholarshipsPayload(
               buildInitialListRequestKey({
@@ -629,7 +649,9 @@ export default async function ScholarshipsSlugPathPageBody({
       result: initialListPayload
     });
 
-    const crossCountryFaq = crossCountryFaqItemsFromManifest(entry.faqQuestions);
+    const crossCountryFaq = crossCountryFaqItemsFromManifest(
+      entry.faqQuestions
+    );
 
     return (
       <>
@@ -640,7 +662,9 @@ export default async function ScholarshipsSlugPathPageBody({
           />
         ) : null}
         <h1 className="sr-only">{entry.h1}</h1>
-        <Suspense fallback={<ScholarshipsHubShellSkeleton pageTitle={entry.h1} />}>
+        <Suspense
+          fallback={<ScholarshipsHubShellSkeleton pageTitle={entry.h1} />}
+        >
           <ScholarshipsHubPageAuthBridge
             initialPayload={createInitialScholarshipsPayload(
               buildInitialListRequestKey({
@@ -737,7 +761,9 @@ export default async function ScholarshipsSlugPathPageBody({
             dangerouslySetInnerHTML={{ __html: JSON.stringify(listingJsonLd) }}
           />
         ) : null}
-        <Suspense fallback={<ScholarshipsHubShellSkeleton pageTitle={pageTitle} />}>
+        <Suspense
+          fallback={<ScholarshipsHubShellSkeleton pageTitle={pageTitle} />}
+        >
           <ScholarshipsHubPageAuthBridge
             initialPayload={createInitialScholarshipsPayload(
               buildInitialListRequestKey({
@@ -850,8 +876,19 @@ export default async function ScholarshipsSlugPathPageBody({
       locationLabels: entry.filters?.includeLocationLabels
     });
     const stateAffordabilitySidebar = stateSlugForSidebar ? (
-      <ScholarshipStateExternalContextSidebar stateSlug={stateSlugForSidebar} />
+      <ScholarshipStateExternalContextSidebar
+        stateSlug={stateSlugForSidebar}
+        locale={locale ?? 'en'}
+      />
     ) : null;
+    const moveStateContextAfterListings =
+      stateHubCtx !== null || tripleHubCtx !== null;
+    const leadStateAffordabilityContext = moveStateContextAfterListings
+      ? null
+      : stateAffordabilitySidebar;
+    const postListingStateAffordabilityContext = moveStateContextAfterListings
+      ? stateAffordabilitySidebar
+      : null;
 
     debugLogListingSeo({
       routeKind: 'manifest_seo',
@@ -879,9 +916,8 @@ export default async function ScholarshipsSlugPathPageBody({
       description: introParagraph,
       path: `/scholarships/${canonicalPath}`,
       result: initialListPayload,
-      breadcrumbs:
-        stateHubCtx ?
-          buildStateScholarshipBreadcrumbs({
+      breadcrumbs: stateHubCtx
+        ? buildStateScholarshipBreadcrumbs({
             stateLabel: stateHubCtx.stateLabel,
             stateSlug: stateHubCtx.stateSlug
           })
@@ -897,7 +933,9 @@ export default async function ScholarshipsSlugPathPageBody({
           />
         ) : null}
         <h1 className="sr-only">{pageTitle}</h1>
-        <Suspense fallback={<ScholarshipsHubShellSkeleton pageTitle={pageTitle} />}>
+        <Suspense
+          fallback={<ScholarshipsHubShellSkeleton pageTitle={pageTitle} />}
+        >
           <ScholarshipsHubPageAuthBridge
             initialPayload={createInitialScholarshipsPayload(
               buildInitialListRequestKey({
@@ -929,16 +967,19 @@ export default async function ScholarshipsSlugPathPageBody({
                     pageData={seo?.page_data ?? null}
                     updatedAt={seo?._meta?.generatedAt ?? null}
                     canonicalTarget={entry.canonicalTarget ?? null}
-                    publicSeoPage={stateHubCtx !== null || tripleHubCtx !== null}
+                    publicSeoPage={
+                      stateHubCtx !== null || tripleHubCtx !== null
+                    }
                   />
-                  {stateAffordabilitySidebar}
+                  {leadStateAffordabilityContext}
                 </>
               ) : (
-                stateAffordabilitySidebar
+                leadStateAffordabilityContext
               )
             }
             postListingContent={
               <>
+                {postListingStateAffordabilityContext}
                 {promotedChrome ? (
                   <SeoScholarshipPostListingSeo
                     heading={pageTitle}

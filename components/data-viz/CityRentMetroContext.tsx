@@ -1,4 +1,9 @@
 import type { CityRentMetroEnrichment } from '@/lib/external-data';
+import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
+import {
+  getPublicDataVizCopy,
+  type PublicDataVizCopy
+} from '@/lib/i18n/publicDataVizCopy';
 
 import { CompareExternalEnrichmentStatCard } from '@/components/compare/CompareExternalEnrichmentStatCard';
 import {
@@ -12,6 +17,7 @@ type CityRentMetroContextProps = {
   className?: string;
   compact?: boolean;
   showSourceFooter?: boolean;
+  locale?: LocalizedUiLocale;
 };
 
 type CityMetricCard = {
@@ -26,12 +32,15 @@ function fmtPct(value: number | null | undefined): string | null {
   return `${value > 0 ? '+' : ''}${value.toFixed(1)}%`;
 }
 
-function cityCards(row: CityRentMetroEnrichment): CityMetricCard[] {
+function cityCards(
+  row: CityRentMetroEnrichment,
+  copy: PublicDataVizCopy
+): CityMetricCard[] {
   const cards: Array<CityMetricCard | null> = [
     row.zillow_latest_rent != null
       ? {
           key: 'zillow_rent',
-          label: 'Latest rent estimate',
+          label: copy.labels.latest_rent_estimate,
           value: fmtEnrichmentUsd(row.zillow_latest_rent) ?? '',
           hint: row.zillow_latest_month ?? 'Zillow ZORI'
         }
@@ -39,7 +48,7 @@ function cityCards(row: CityRentMetroEnrichment): CityMetricCard[] {
     row.zillow_rent_12mo_change_pct != null
       ? {
           key: 'zillow_change',
-          label: '12-mo rent change',
+          label: copy.labels.rent_change_12mo,
           value: fmtPct(row.zillow_rent_12mo_change_pct) ?? '',
           hint: 'Zillow ZORI'
         }
@@ -47,23 +56,23 @@ function cityCards(row: CityRentMetroEnrichment): CityMetricCard[] {
     row.hud_fmr_1br != null
       ? {
           key: 'hud_1br',
-          label: 'HUD 1BR FMR',
+          label: copy.labels.hud_1br_fmr,
           value: fmtEnrichmentUsd(row.hud_fmr_1br) ?? '',
-          hint: 'Planning estimate'
+          hint: copy.hints.planning_estimate
         }
       : null,
     row.hud_fmr_2br != null
       ? {
           key: 'hud_2br',
-          label: 'HUD 2BR FMR',
+          label: copy.labels.hud_2br_fmr,
           value: fmtEnrichmentUsd(row.hud_fmr_2br) ?? '',
-          hint: 'Planning estimate'
+          hint: copy.hints.planning_estimate
         }
       : null,
     row.bls_median_wage != null
       ? {
           key: 'bls_median',
-          label: 'Median wage',
+          label: copy.labels.median_wage,
           value: fmtEnrichmentUsd(row.bls_median_wage) ?? '',
           hint: row.bls_year ? `BLS ${row.bls_year}` : 'BLS OEWS'
         }
@@ -71,7 +80,7 @@ function cityCards(row: CityRentMetroEnrichment): CityMetricCard[] {
     row.bls_mean_wage != null
       ? {
           key: 'bls_mean',
-          label: 'Mean wage',
+          label: copy.labels.mean_wage,
           value: fmtEnrichmentUsd(row.bls_mean_wage) ?? '',
           hint: row.bls_year ? `BLS ${row.bls_year}` : 'BLS OEWS'
         }
@@ -79,25 +88,29 @@ function cityCards(row: CityRentMetroEnrichment): CityMetricCard[] {
     row.bls_employment != null
       ? {
           key: 'bls_employment',
-          label: 'Metro employment',
+          label: copy.labels.metro_employment,
           value: fmtEnrichmentCount(row.bls_employment) ?? '',
-          hint: 'All occupations'
+          hint: copy.hints.all_occupations
         }
       : null
   ];
 
-  return cards.filter((item): item is CityMetricCard => item != null && Boolean(item.value));
+  return cards.filter(
+    (item): item is CityMetricCard => item != null && Boolean(item.value)
+  );
 }
 
 export function CityRentMetroContext({
   context,
   className = '',
   compact = false,
-  showSourceFooter = true
+  showSourceFooter = true,
+  locale = 'en'
 }: CityRentMetroContextProps) {
   if (!context) return null;
 
-  const cards = cityCards(context);
+  const copy = getPublicDataVizCopy(locale);
+  const cards = cityCards(context, copy);
   if (!cards.length) return null;
 
   const locationLine = [
@@ -116,11 +129,10 @@ export function CityRentMetroContext({
       className={`rounded-xl border border-slate-200/80 bg-white p-3.5 ${className}`.trim()}
     >
       <h3 className="text-sm font-semibold text-gray-900">
-        City rent and wage context
+        {copy.cityRentWageContext}
       </h3>
       <p className="mt-2 text-xs leading-relaxed text-gray-600">
-        Public rent and wage estimates can help compare cost of attendance and
-        relocation planning.
+        {copy.cityRentWageBody}
       </p>
       <p className="mt-2 text-xs font-medium text-gray-500">{locationLine}</p>
       <div
@@ -148,7 +160,7 @@ export function CityRentMetroContext({
         </ul>
       ) : null}
       {showSourceFooter ? (
-        <DataSourceFooter variant="city" className="mt-3" />
+        <DataSourceFooter variant="city" locale={locale} className="mt-3" />
       ) : null}
     </div>
   );

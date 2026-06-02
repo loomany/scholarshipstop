@@ -85,8 +85,13 @@ export function buildGrantCategoryHaystack(input: {
 
 function contextMoodFromGrantCategory(grantCategory: string): string {
   let contextMood = 'quiet focus and determination';
-  if (grantCategory.includes('art') || grantCategory.includes('design') || grantCategory.includes('creative')) {
-    contextMood = 'creative energy—sketches, color notes, or layout pads nearby';
+  if (
+    grantCategory.includes('art') ||
+    grantCategory.includes('design') ||
+    grantCategory.includes('creative')
+  ) {
+    contextMood =
+      'creative energy—sketches, color notes, or layout pads nearby';
   } else if (
     grantCategory.includes('science') ||
     grantCategory.includes('stem') ||
@@ -96,7 +101,8 @@ function contextMoodFromGrantCategory(grantCategory: string): string {
     grantCategory.includes('physics') ||
     grantCategory.includes('math')
   ) {
-    contextMood = 'STEM study session—papers, diagrams, or data on screen believably in frame';
+    contextMood =
+      'STEM study session—papers, diagrams, or data on screen believably in frame';
   }
   return contextMood;
 }
@@ -161,29 +167,23 @@ function fitLen(v: string, min: number, max: number, tail: string): string {
   return out;
 }
 
-function enforceEssayTitle(
-  rawTitle: string,
-  scholarshipTitle: string
-): string {
+function enforceEssayTitle(rawTitle: string, scholarshipTitle: string): string {
   const base =
     normalizeText(rawTitle) ||
     `How to Write a Winning Essay for ${scholarshipTitle} USA 2026`;
-  return fitLen(
-    base,
-    30,
-    65,
-    'Apply in USA 2026 with a focused plan.'
-  );
+  return fitLen(base, 30, 65, 'Apply in USA 2026 with a focused plan.');
 }
 
-function enforceEssayMeta(
-  rawMeta: string,
-  scholarshipTitle: string
-): string {
+function enforceEssayMeta(rawMeta: string, scholarshipTitle: string): string {
   const base =
     normalizeText(rawMeta) ||
     `${scholarshipTitle} essay guide for USA 2026 with structure tips, strong examples, and a clear checklist. Start your application draft today.`;
-  return fitLen(base, 120, 160, 'Use this guide to draft, revise, and apply with confidence.');
+  return fitLen(
+    base,
+    120,
+    160,
+    'Use this guide to draft, revise, and apply with confidence.'
+  );
 }
 
 function enforceEssayFaq(
@@ -194,8 +194,10 @@ function enforceEssayFaq(
         .map((item) => {
           if (!item || typeof item !== 'object') return null;
           const rec = item as Record<string, unknown>;
-          const question = typeof rec.question === 'string' ? normalizeText(rec.question) : '';
-          const answer = typeof rec.answer === 'string' ? normalizeText(rec.answer) : '';
+          const question =
+            typeof rec.question === 'string' ? normalizeText(rec.question) : '';
+          const answer =
+            typeof rec.answer === 'string' ? normalizeText(rec.answer) : '';
           if (!question || !answer) return null;
           return { question, answer };
         })
@@ -270,8 +272,13 @@ function isEssayHeroReuseOnly(): boolean {
 }
 
 function shortageAlertCooldownMs(): number {
-  const raw = process.env.ESSAY_HUB_HERO_SHORTAGE_ALERT_COOLDOWN_MINUTES?.trim();
-  const mins = Math.max(1, Number(raw || String(SHORTAGE_ALERT_COOLDOWN_MINUTES)) || SHORTAGE_ALERT_COOLDOWN_MINUTES);
+  const raw =
+    process.env.ESSAY_HUB_HERO_SHORTAGE_ALERT_COOLDOWN_MINUTES?.trim();
+  const mins = Math.max(
+    1,
+    Number(raw || String(SHORTAGE_ALERT_COOLDOWN_MINUTES)) ||
+      SHORTAGE_ALERT_COOLDOWN_MINUTES
+  );
   return mins * 60_000;
 }
 
@@ -397,7 +404,9 @@ export async function tryResolveHeroImageUrlWithMeta(
 /**
  * Same as {@link tryResolveHeroImageUrlWithMeta} but URL only (for scripts/backfill that only need the link).
  */
-export async function tryResolveHeroImageUrl(fullImagePrompt: string): Promise<string | null> {
+export async function tryResolveHeroImageUrl(
+  fullImagePrompt: string
+): Promise<string | null> {
   const { url } = await tryResolveHeroImageUrlWithMeta(fullImagePrompt);
   return url;
 }
@@ -406,7 +415,9 @@ export async function tryResolveHeroImageUrl(fullImagePrompt: string): Promise<s
  * Strict FAL-only URL (throws on missing key or failed generation). Prefer
  * `tryResolveHeroImageUrl` + `ingestEssayHeroFromFalOrFallback` for production pipelines.
  */
-export async function resolveHeroImageUrl(fullImagePrompt: string): Promise<string> {
+export async function resolveHeroImageUrl(
+  fullImagePrompt: string
+): Promise<string> {
   const key = process.env.FAL_KEY?.trim();
   if (!key) {
     throw new Error(
@@ -419,7 +430,9 @@ export async function resolveHeroImageUrl(fullImagePrompt: string): Promise<stri
     return r.url;
   }
 
-  throw new Error(`Hero image generation failed after ${falMaxAttempts()} attempt(s). ${r.detail}`);
+  throw new Error(
+    `Hero image generation failed after ${falMaxAttempts()} attempt(s). ${r.detail}`
+  );
 }
 
 /**
@@ -453,17 +466,22 @@ async function ensureUniqueEssaySlug(
         ? normalizedRoot
         : n < 45
           ? `${normalizedRoot}-${n + 1}`.slice(0, 200)
-          : `${normalizedRoot}-${n + 1}-${randomBytes(3).toString('hex')}`.slice(0, 200);
+          : `${normalizedRoot}-${n + 1}-${randomBytes(3).toString('hex')}`.slice(
+              0,
+              200
+            );
     const taken = await isEssaySlugTakenCi(supabase, trySlug);
     if (!taken) return trySlug;
   }
   throw new Error('Could not allocate unique essay slug');
 }
 
-function isUniqueSlugConstraintError(err: {
-  code?: string;
-  message?: string;
-} | null): boolean {
+function isUniqueSlugConstraintError(
+  err: {
+    code?: string;
+    message?: string;
+  } | null
+): boolean {
   if (!err) return false;
   if (err.code === '23505') return true;
   const m = err.message ?? '';
@@ -646,7 +664,9 @@ export async function promoteOldestCooldownFailedQueueRowToPending(
     .limit(1);
 
   if (retryAfterMin > 0) {
-    const cutoffIso = new Date(Date.now() - retryAfterMin * 60_000).toISOString();
+    const cutoffIso = new Date(
+      Date.now() - retryAfterMin * 60_000
+    ).toISOString();
     sel = sel.lt('updated_at', cutoffIso);
   }
 
@@ -729,7 +749,10 @@ async function processResumeAwaitingHeroJob(
         updated_at: new Date().toISOString()
       })
       .eq('id', queueId);
-    return { outcome: 'failed', error: 'Scholarship not found for hero resume' };
+    return {
+      outcome: 'failed',
+      error: 'Scholarship not found for hero resume'
+    };
   }
 
   const scholarshipTitle = scholarship.title?.trim() || 'Scholarship program';
@@ -740,9 +763,10 @@ async function processResumeAwaitingHeroJob(
   if (cntErr) return { outcome: 'failed', error: cntErr.message };
 
   const existingIndex =
-    typeof essay.hero_variant_index === 'number' && essay.hero_variant_index >= 0
+    typeof essay.hero_variant_index === 'number' &&
+    essay.hero_variant_index >= 0
       ? essay.hero_variant_index
-      : publishedCount ?? 0;
+      : (publishedCount ?? 0);
 
   const grantCategory = buildGrantCategoryHaystack({
     category: scholarship.category ?? null,
@@ -790,7 +814,10 @@ async function processResumeAwaitingHeroJob(
         updated_at: new Date().toISOString()
       })
       .eq('id', queueId);
-    enqueuePublishedEssayIndexingUrl(essay.slug, 'essay-hub:reuse-hero-published');
+    enqueuePublishedEssayIndexingUrl(
+      essay.slug,
+      'essay-hub:reuse-hero-published'
+    );
     return { outcome: 'published', essaySlug: essay.slug, queueId };
   }
 
@@ -806,7 +833,10 @@ async function processResumeAwaitingHeroJob(
       .from('essay_generation_queue')
       .update({
         status: 'awaiting_hero',
-        error_message: `FAL deferred (retry next run): ${falMeta.detail}`.slice(0, 2000),
+        error_message: `FAL deferred (retry next run): ${falMeta.detail}`.slice(
+          0,
+          2000
+        ),
         updated_at: new Date().toISOString()
       })
       .eq('id', queueId);
@@ -841,7 +871,10 @@ async function processResumeAwaitingHeroJob(
       })
       .eq('id', queueId);
 
-    enqueuePublishedEssayIndexingUrl(essay.slug, 'essay-hub:fal-hero-published');
+    enqueuePublishedEssayIndexingUrl(
+      essay.slug,
+      'essay-hub:fal-hero-published'
+    );
 
     return { outcome: 'published', essaySlug: essay.slug, queueId };
   } catch (e) {
@@ -850,7 +883,10 @@ async function processResumeAwaitingHeroJob(
       .from('essay_generation_queue')
       .update({
         status: 'awaiting_hero',
-        error_message: `Ingest deferred (retry next run): ${msg}`.slice(0, 2000),
+        error_message: `Ingest deferred (retry next run): ${msg}`.slice(
+          0,
+          2000
+        ),
         updated_at: new Date().toISOString()
       })
       .eq('id', queueId);
@@ -901,7 +937,11 @@ export async function processOneEssayQueueItem(
         return { ok: false, error: resumed.error };
       }
       if (resumed.outcome === 'deferred') {
-        return { ok: true, skipped: 'hero_retry_deferred', queueId: resumed.queueId };
+        return {
+          ok: true,
+          skipped: 'hero_retry_deferred',
+          queueId: resumed.queueId
+        };
       }
       return {
         ok: true,
@@ -934,9 +974,9 @@ export async function processOneEssayQueueItem(
       throw new Error('Scholarship not found for queue item');
     }
 
-    const scholarshipTitle =
-      scholarship.title?.trim() || 'Scholarship program';
-    const baseSlug = buildDefaultEssaySlugFromScholarshipTitle(scholarshipTitle);
+    const scholarshipTitle = scholarship.title?.trim() || 'Scholarship program';
+    const baseSlug =
+      buildDefaultEssaySlugFromScholarshipTitle(scholarshipTitle);
 
     const apiKey = process.env.OPENAI_API_KEY?.trim();
     if (!apiKey) {
@@ -965,15 +1005,24 @@ Do not promise admission, awards, or outcomes. No placeholder brackets like [ins
 
     const essayModel = process.env.ESSAY_HUB_OPENAI_MODEL?.trim() || '';
     requireGpt54EssayModel(essayModel);
-    const completion = await openai.chat.completions.create({
-      model: essayModel,
-      temperature: 0.45,
-      response_format: { type: 'json_object' },
-      messages: [
-        { role: 'system', content: ESSAY_HUB_MEGA_PROMPT_SYSTEM },
-        { role: 'user', content: user }
-      ]
-    });
+    const completion = await openai.chat.completions.create(
+      {
+        model: essayModel,
+        temperature: 0.45,
+        response_format: { type: 'json_object' },
+        messages: [
+          { role: 'system', content: ESSAY_HUB_MEGA_PROMPT_SYSTEM },
+          { role: 'user', content: user }
+        ]
+      },
+      {
+        timeout: Number(
+          process.env.ESSAY_HUB_OPENAI_TIMEOUT_MS ||
+            process.env.OPENAI_REQUEST_TIMEOUT_MS ||
+            180_000
+        )
+      }
+    );
 
     const raw = completion.choices[0]?.message?.content?.trim();
     if (!raw) throw new Error('Empty OpenAI response');
@@ -995,8 +1044,14 @@ Do not promise admission, awards, or outcomes. No placeholder brackets like [ins
     );
     /** If none pass HEAD/GET checks, publish with `sources: []` — do not block the essay. */
 
-    let normalizedTitle = enforceEssayTitle(parsed.title ?? '', scholarshipTitle);
-    let normalizedMeta = enforceEssayMeta(parsed.meta_description ?? '', scholarshipTitle);
+    let normalizedTitle = enforceEssayTitle(
+      parsed.title ?? '',
+      scholarshipTitle
+    );
+    let normalizedMeta = enforceEssayMeta(
+      parsed.meta_description ?? '',
+      scholarshipTitle
+    );
     const faqJson = enforceEssayFaq(parsed.faq);
 
     const essayGuard = await runSeoPublishGuardWarnOnly({
@@ -1032,16 +1087,18 @@ Do not promise admission, awards, or outcomes. No placeholder brackets like [ins
       grantCategory
     });
     const falMeta: FalHeroResolveMeta = reuseOnly
-      ? { url: null, detail: 'FAL disabled by ESSAY_HUB_HERO_REUSE_ONLY', httpStatus: 0 }
+      ? {
+          url: null,
+          detail: 'FAL disabled by ESSAY_HUB_HERO_REUSE_ONLY',
+          httpStatus: 0
+        }
       : await tryResolveHeroImageUrlWithMeta(heroPrompt);
 
     const insertDraftLinkAndAwaitHero = async (
       reason: string
     ): Promise<{ slug: string }> => {
-      const { id: essayId, slug: insertedSlug } = await insertEssayRowWithSlugRetry(
-        supabase,
-        baseSlug,
-        (s) => ({
+      const { id: essayId, slug: insertedSlug } =
+        await insertEssayRowWithSlugRetry(supabase, baseSlug, (s) => ({
           slug: s,
           title: normalizedTitle,
           meta_description: normalizedMeta,
@@ -1052,8 +1109,7 @@ Do not promise admission, awards, or outcomes. No placeholder brackets like [ins
           sources: verifiedSources as unknown as Json,
           faq: faqJson as unknown as Json,
           is_published: false
-        })
-      );
+        }));
 
       const { error: jErr } = await supabase.from('scholarship_essays').insert({
         scholarship_id: scholarship.id,
@@ -1143,7 +1199,9 @@ Do not promise admission, awards, or outcomes. No placeholder brackets like [ins
     for (let attempt = 0; attempt < 12; attempt += 1) {
       const candidateSlug = await ensureUniqueEssaySlug(
         supabase,
-        attempt === 0 ? baseSlug : `${baseSlug}-${randomBytes(4).toString('hex')}`
+        attempt === 0
+          ? baseSlug
+          : `${baseSlug}-${randomBytes(4).toString('hex')}`
       );
       let publicHeroUrl: string;
       try {
@@ -1152,7 +1210,8 @@ Do not promise admission, awards, or outcomes. No placeholder brackets like [ins
           slug: candidateSlug
         });
       } catch (ingestErr) {
-        const msg = ingestErr instanceof Error ? ingestErr.message : String(ingestErr);
+        const msg =
+          ingestErr instanceof Error ? ingestErr.message : String(ingestErr);
         const { slug: draftSlug } = await insertDraftLinkAndAwaitHero(
           `Awaiting FAL ingest: ${msg}`
         );
@@ -1215,10 +1274,11 @@ Do not promise admission, awards, or outcomes. No placeholder brackets like [ins
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     if (queueId && isOpenAiQuotaBilling429Error(e)) {
-      const note = `${OPENAI_QUOTA_EXCEEDED_LOG_MARK}: OpenAI quota/billing — check plan and billing. ${msg}`.slice(
-        0,
-        2000
-      );
+      const note =
+        `${OPENAI_QUOTA_EXCEEDED_LOG_MARK}: OpenAI quota/billing — check plan and billing. ${msg}`.slice(
+          0,
+          2000
+        );
       const { error: requeueErr, data: requeued } = await supabase
         .from('essay_generation_queue')
         .update({

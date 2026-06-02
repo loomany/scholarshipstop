@@ -11,29 +11,75 @@ import { InsightCallout } from '@/components/data-viz/InsightCallout';
 import { MetricComparisonBars } from '@/components/data-viz/MetricComparisonBars';
 import { StateSocialContextBlock } from '@/components/data-viz/StateSocialContextBlock';
 import { InternalLinkCluster } from '@/components/internal-links/InternalLinkCluster';
+import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
+import {
+  getPublicDataVizCopy,
+  type PublicDataVizCopy
+} from '@/lib/i18n/publicDataVizCopy';
 
 type ScholarshipStateExternalContextSidebarProps = {
   stateSlug: string;
+  locale?: LocalizedUiLocale;
 };
 
-function publicSafetyFootnote(context: ScholarshipStateContext): string | null {
+function publicSafetyFootnote(
+  context: ScholarshipStateContext,
+  copy: PublicDataVizCopy
+): string | null {
   const rate = fmtEnrichmentRatePer100k(
     context.stateRow.public_safety_context?.value
   );
   if (!rate) return null;
-  return `Reported violent crime rate (state aggregate): ${rate}. Public reference context only — not a safety rating.`;
+  return copy.stateSafetyNote(rate);
 }
 
 export function ScholarshipStateExternalContextSidebar({
-  stateSlug
+  stateSlug,
+  locale = 'en'
 }: ScholarshipStateExternalContextSidebarProps) {
   const context = resolveScholarshipStateContext(stateSlug);
   if (!context) return null;
 
-  const safetyNote = publicSafetyFootnote(context);
-  const pairMetrics = statePlanningPairMetrics(context.stateRow);
+  const copy = getPublicDataVizCopy(locale);
+  const safetyNote = publicSafetyFootnote(context, copy);
+  const pairMetrics = statePlanningPairMetrics(context.stateRow).map(
+    (metric) => ({
+      ...metric,
+      label:
+        metric.key === 'income_rent'
+          ? copy.labels.monthly_income_vs_rent
+          : metric.key === 'wage_compare'
+            ? copy.labels.living_wage_vs_bls
+            : metric.label,
+      leftLabel:
+        metric.key === 'income_rent'
+          ? copy.labels.income_est_monthly
+          : metric.key === 'wage_compare'
+            ? copy.labels.living_wage_annual_est
+            : metric.leftLabel,
+      rightLabel:
+        metric.key === 'income_rent'
+          ? copy.labels.hud_2br_fmr
+          : metric.key === 'wage_compare'
+            ? copy.labels.bls_median_wage
+            : metric.rightLabel
+    })
+  );
   const currentPath = `/scholarships/${encodeURIComponent(stateSlug)}`;
   const social = getStateSocialContext(context.stateCode);
+  const localizedHighlights = context.highlights.map((item) => ({
+    ...item,
+    label:
+      item.key === 'income'
+        ? copy.labels.median_household_income
+        : item.key === 'fmr2'
+          ? copy.labels.fair_market_rent_2br
+          : item.key === 'living_wage'
+            ? copy.labels.living_wage
+            : item.key === 'bls'
+              ? copy.labels.bls_median_wage
+              : item.label
+  }));
 
   return (
     <aside
@@ -41,7 +87,7 @@ export function ScholarshipStateExternalContextSidebar({
       aria-labelledby="scholarship-state-context-heading"
     >
       <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500">
-        Planning context
+        {copy.planningContext}
       </p>
       <h2
         id="scholarship-state-context-heading"
@@ -50,23 +96,20 @@ export function ScholarshipStateExternalContextSidebar({
         Cost of living in {context.stateName}
       </h2>
       <p className="mt-2 text-sm leading-relaxed text-gray-600">
-        Scholarship value can feel different depending on rent, wages, and cost
-        of attendance in the state. Use this planning context alongside award
-        amount, eligibility rules, school costs, and application deadlines.
+        {copy.stateAffordabilityBody}
       </p>
       <p className="mt-2 text-sm leading-relaxed text-gray-600">
-        The figures below are state-level estimates. Actual costs vary by city,
-        campus, and household.
+        {copy.dataAvailability}
       </p>
 
       <InsightCallout
-        title="Why this matters for scholarship planning"
-        body={`When comparing awards in ${context.stateName}, look at income, rent, and wage context together — not the award amount alone. A smaller scholarship in a lower-cost area may cover more of your expenses than a larger award elsewhere.`}
+        title={copy.costLivingWages}
+        body={copy.stateAffordabilityBody}
         className="mt-4"
       />
 
       <div className="mt-4 grid grid-cols-2 gap-2.5 sm:gap-3">
-        {context.highlights.map((item) => (
+        {localizedHighlights.map((item) => (
           <CompareExternalEnrichmentStatCard
             key={item.key}
             label={item.label}
@@ -77,7 +120,9 @@ export function ScholarshipStateExternalContextSidebar({
 
       {pairMetrics.length ? (
         <div className="mt-5 rounded-xl border border-slate-200/80 bg-white p-3.5 sm:p-4">
-          <h3 className="text-sm font-semibold text-gray-900">Quick comparisons</h3>
+          <h3 className="text-sm font-semibold text-gray-900">
+            {copy.visualComparison}
+          </h3>
           <MetricComparisonBars
             className="mt-3"
             ariaLabel={`Planning comparisons for ${context.stateName}`}
@@ -97,10 +142,18 @@ export function ScholarshipStateExternalContextSidebar({
       ) : null}
 
       {safetyNote ? (
-        <p className="mt-4 text-xs leading-relaxed text-gray-500">{safetyNote}</p>
+        <p className="mt-4 text-xs leading-relaxed text-gray-500">
+          {safetyNote}
+        </p>
       ) : null}
 
-      <StateSocialContextBlock context={social} compact className="mt-5" showSourceFooter={false} />
+      <StateSocialContextBlock
+        context={social}
+        compact
+        locale={locale}
+        className="mt-5"
+        showSourceFooter={false}
+      />
 
       <InternalLinkCluster
         pageType="scholarship-state"
@@ -113,6 +166,7 @@ export function ScholarshipStateExternalContextSidebar({
       <DataSourceFooter
         variant="state"
         showPublicSafetyNote={Boolean(safetyNote)}
+        locale={locale}
         className="mt-4"
       />
     </aside>

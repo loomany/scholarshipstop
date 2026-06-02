@@ -414,13 +414,13 @@ function similarScholarshipCardClassName(
   deadlinePassed: boolean
 ): string {
   const interactive =
-    'block h-full min-w-0 rounded-xl border p-3 shadow-sm transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 md:p-3.5';
+    'block h-full min-w-0 overflow-hidden rounded-xl border p-3 shadow-[0_12px_30px_-26px_rgba(15,23,42,0.72)] ring-1 ring-slate-100/70 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2 md:p-3.5';
 
   if (deadlinePassed) {
     return `${interactive} border-zinc-200 bg-zinc-100/90 hover:border-zinc-300 hover:shadow-sm`;
   }
 
-  const base = `${interactive} border-zinc-200/90 bg-white hover:border-teal-300/80 hover:shadow-md`;
+  const base = `${interactive} border-slate-200/90 bg-[linear-gradient(180deg,#ffffff_0%,#fbfcff_100%)] hover:border-emerald-300/80 hover:shadow-[0_18px_42px_-32px_rgba(15,23,42,0.76)]`;
   return highlightPrimary
     ? `${base} border-teal-200/90 ring-1 ring-teal-100/80`
     : base;
@@ -892,21 +892,17 @@ function SimilarScholarshipIqPromoCard({
       <Link
         href="/iq/assessment?intent=scholarship_match"
         aria-label={copy.iq.startAria}
-        className="group relative block h-full min-w-0 overflow-hidden rounded-xl border border-[#FFB875]/80 bg-gradient-to-br from-[#FFF7ED] via-white to-[#EEF6FF] p-3 text-left shadow-sm ring-1 ring-[#FFE2C2] transition hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB875] focus-visible:ring-offset-2 md:p-3.5"
+        className="group relative block h-full min-w-0 overflow-hidden rounded-lg border border-slate-200 bg-white p-3 text-left shadow-sm ring-1 ring-slate-100/80 transition hover:border-orange-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/70 focus-visible:ring-offset-2 md:p-3.5"
       >
         <div
-          className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-[#FF7A1A] via-slate-950 to-[#0EA5E9]"
-          aria-hidden
-        />
-        <div
-          className="absolute -right-10 -top-12 h-28 w-28 rounded-full bg-[#FF7A1A]/16 blur-2xl"
+          className="absolute inset-y-0 left-0 w-1 bg-orange-500"
           aria-hidden
         />
         <div className="relative flex h-full min-h-[6.25rem] flex-col justify-between pl-1">
           <div>
             <div className="mb-2 flex flex-wrap items-center gap-1.5">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-[#FFB875] bg-white/80 px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-[0.15em] text-[#B45309] shadow-sm">
-                <BrainCircuit className="h-3 w-3 text-[#F97316]" aria-hidden />
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-orange-200 bg-orange-50 px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-[0.15em] text-orange-800">
+                <BrainCircuit className="h-3 w-3 text-orange-600" aria-hidden />
                 {copy.iq.featuredTool}
               </span>
               <span className="rounded-full bg-slate-950 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.12em] text-white">
@@ -924,7 +920,7 @@ function SimilarScholarshipIqPromoCard({
             <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">
               {copy.iq.assessment}
             </span>
-            <span className="inline-flex items-center gap-1 text-xs font-bold text-slate-950 transition group-hover:text-[#B45309]">
+            <span className="inline-flex items-center gap-1 text-xs font-bold text-slate-950 transition group-hover:text-orange-700">
               {copy.iq.startTest}
               <ArrowRight className="h-3.5 w-3.5" aria-hidden />
             </span>
@@ -946,22 +942,18 @@ function ScholarshipDetailIqDecisionCard({
     <Link
       href="/iq/assessment?intent=scholarship_match"
       aria-label={copy.iq.startAria}
-      className="group relative mt-8 block overflow-hidden rounded-3xl border border-[#FFB875]/80 bg-gradient-to-br from-[#FFF7ED] via-white to-[#EEF6FF] p-5 text-left shadow-[0_18px_45px_-30px_rgba(234,88,12,0.58)] ring-1 ring-[#FFE2C2] transition hover:-translate-y-0.5 hover:shadow-[0_24px_58px_-34px_rgba(234,88,12,0.72)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB875] focus-visible:ring-offset-2 sm:p-6"
+      className="group relative mt-8 block overflow-hidden rounded-lg border border-slate-200 bg-white p-5 text-left shadow-sm ring-1 ring-slate-100/80 transition hover:border-orange-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/70 focus-visible:ring-offset-2 sm:p-6"
     >
       <div
-        className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-[#FF7A1A] via-slate-950 to-[#0EA5E9]"
-        aria-hidden
-      />
-      <div
-        className="absolute -right-16 -top-20 h-44 w-44 rounded-full bg-[#FF7A1A]/16 blur-3xl"
+        className="absolute inset-y-0 left-0 w-1.5 bg-orange-500"
         aria-hidden
       />
       <div className="relative grid gap-5 md:grid-cols-[minmax(0,1fr)_220px] md:items-center">
         <div className="min-w-0">
           <div className="mb-3 flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-2 rounded-full border border-[#FFB875] bg-white/80 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.17em] text-[#B45309] shadow-sm">
+            <span className="inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.17em] text-orange-800">
               <BrainCircuit
-                className="h-3.5 w-3.5 text-[#F97316]"
+                className="h-3.5 w-3.5 text-orange-600"
                 aria-hidden
               />
               {copy.iq.applicantIntelligence}
@@ -980,19 +972,19 @@ function ScholarshipDetailIqDecisionCard({
             {copy.iq.chips.map((item) => (
               <span
                 key={item}
-                className="rounded-full border border-white/80 bg-white/75 px-2.5 py-1 text-xs font-semibold text-slate-700 shadow-sm"
+                className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-semibold text-slate-700"
               >
                 {item}
               </span>
             ))}
           </div>
         </div>
-        <div className="rounded-2xl border border-white/80 bg-white/75 p-4 shadow-sm backdrop-blur">
+        <div className="rounded-lg border border-slate-200 bg-slate-50/80 p-4 shadow-sm">
           <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500">
             {copy.iq.cognitivePreview}
           </p>
           <div className="mt-3 grid grid-cols-2 gap-2">
-            <div className="overflow-hidden rounded-xl border border-dashed border-slate-300 bg-slate-50/80 px-3 py-2">
+            <div className="overflow-hidden rounded-lg border border-dashed border-slate-300 bg-white px-3 py-2">
               <p className="text-[10px] font-medium text-slate-500">
                 {copy.iq.iqLabel}
               </p>
@@ -1000,7 +992,7 @@ function ScholarshipDetailIqDecisionCard({
                 --
               </p>
             </div>
-            <div className="overflow-hidden rounded-xl border border-dashed border-slate-300 bg-slate-50/80 px-3 py-2">
+            <div className="overflow-hidden rounded-lg border border-dashed border-slate-300 bg-white px-3 py-2">
               <p className="text-[10px] font-medium text-slate-500">
                 {copy.iq.typeLabel}
               </p>
@@ -1009,7 +1001,7 @@ function ScholarshipDetailIqDecisionCard({
               </p>
             </div>
           </div>
-          <span className="mt-4 inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-black px-4 py-2.5 text-sm font-bold text-white shadow-[0_12px_28px_-14px_rgba(15,23,42,0.9)] transition group-hover:bg-slate-900">
+          <span className="mt-4 inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-slate-950 px-4 py-2.5 text-sm font-bold text-white shadow-[0_16px_34px_-24px_rgba(15,23,42,0.85)] transition group-hover:bg-slate-800">
             {copy.iq.startTest}
             <ArrowRight className="h-3.5 w-3.5" aria-hidden />
           </span>
@@ -2460,18 +2452,26 @@ export default function ScholarshipDetailPageClient({
             ) : null}
 
             {hasQuickFacts ? (
-              <div className="mt-8 rounded-3xl border border-indigo-200 bg-indigo-50 px-5 py-4 text-center shadow-sm sm:px-6 sm:py-5">
-                <div className="mx-auto flex items-center justify-center gap-2.5">
-                  <span className="text-xl leading-none" aria-hidden>
-                    🎯
+              <div className="mt-8 rounded-lg border border-slate-200 bg-white p-4 shadow-sm ring-1 ring-slate-100/80 sm:p-5">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <span
+                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-orange-50 text-orange-700 ring-1 ring-orange-100"
+                    aria-hidden
+                  >
+                    <BrainCircuit className="h-5 w-5" />
                   </span>
-                  <p className="text-[1.65rem] font-bold leading-[1.08] tracking-tight text-indigo-950">
-                    {detailUi.matchCta.title}
-                  </p>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">
+                      Match workspace
+                    </p>
+                    <p className="mt-1 text-base font-bold leading-tight tracking-tight text-slate-950 sm:text-lg">
+                      {detailUi.matchCta.title}
+                    </p>
+                  </div>
+                  <HomePrimaryCtaClient className="inline-flex min-h-10 shrink-0 items-center justify-center rounded-lg bg-slate-950 px-4 py-2 text-sm font-semibold text-white shadow-[0_16px_34px_-24px_rgba(15,23,42,0.85)] transition hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/70">
+                    {detailUi.matchCta.button}
+                  </HomePrimaryCtaClient>
                 </div>
-                <HomePrimaryCtaClient className="mt-3 inline-flex items-center justify-center rounded-full bg-black px-7 py-2 text-xl font-bold leading-none text-white shadow-[0_8px_20px_rgba(0,0,0,0.25)] transition hover:bg-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/45">
-                  {detailUi.matchCta.button}
-                </HomePrimaryCtaClient>
               </div>
             ) : null}
 
@@ -2812,7 +2812,7 @@ export default function ScholarshipDetailPageClient({
                       </p>
                     )}
                     {scholarship?.essayRequired ? (
-                      <div className="rounded-2xl border border-indigo-100 bg-indigo-50/60 p-4">
+                      <div className="rounded-2xl border border-slate-200/85 bg-slate-50/80 p-4 shadow-sm ring-1 ring-slate-100/70">
                         <p className="text-sm font-semibold text-indigo-950">
                           {detailUi.related.essayRequiredTitle}
                         </p>
@@ -2853,7 +2853,7 @@ export default function ScholarshipDetailPageClient({
                         </div>
                       </div>
                     ) : null}
-                    <div className="rounded-2xl border border-indigo-200 bg-gradient-to-br from-indigo-50 to-white p-4">
+                    <div className="rounded-2xl border border-slate-200/85 bg-white p-4 shadow-sm ring-1 ring-slate-100/70">
                       <p className="text-sm font-semibold text-indigo-950">
                         {detailUi.related.aiWriterTitle}
                       </p>
@@ -3659,17 +3659,20 @@ export default function ScholarshipDetailPageClient({
           ) : null}
 
           {showAggregationBlock ? (
-            <div className="mt-8 border-t border-zinc-200 pt-6">
+            <div className="mt-10 rounded-2xl border border-slate-200/85 bg-white p-4 shadow-[0_18px_48px_-36px_rgba(15,23,42,0.68)] ring-1 ring-slate-100/80 sm:p-5">
               <div className="flex flex-col gap-2">
-                <h2 className="text-lg font-semibold tracking-tight text-zinc-900">
-                  Related scholarship data
+                <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-slate-500">
+                  Research links
+                </p>
+                <h2 className="text-base font-semibold tracking-tight text-slate-950 sm:text-lg">
+                  More ways to compare this scholarship
                 </h2>
                 {aggregationStats.length > 0 ? (
-                  <ul className="grid list-none gap-2 text-sm leading-relaxed text-zinc-700 sm:grid-cols-3">
+                  <ul className="grid list-none gap-2 text-sm leading-relaxed text-slate-700 sm:grid-cols-3">
                     {aggregationStats.map((item) => (
                       <li
                         key={item}
-                        className="rounded-lg border border-zinc-200 bg-white px-3 py-2 shadow-sm"
+                        className="rounded-lg border border-slate-200/90 bg-slate-50/80 px-3 py-2 shadow-sm"
                       >
                         {item}
                       </li>
@@ -3683,14 +3686,14 @@ export default function ScholarshipDetailPageClient({
                   className="mt-5"
                   aria-labelledby="provider-scholarships-heading"
                 >
-                  <div className="flex flex-wrap items-end justify-between gap-2 border-b border-zinc-200 pb-2.5">
+                  <div className="flex flex-wrap items-end justify-between gap-2 border-b border-slate-200 pb-2.5">
                     <h3
                       id="provider-scholarships-heading"
-                      className="text-sm font-semibold tracking-tight text-zinc-800"
+                      className="text-sm font-semibold tracking-tight text-slate-800"
                     >
                       Other {providerAggregationName} scholarships
                     </h3>
-                    <span className="text-xs font-medium tabular-nums text-zinc-500">
+                    <span className="text-xs font-medium tabular-nums text-slate-500">
                       {providerScholarshipsTotal}
                     </span>
                   </div>
@@ -3738,14 +3741,14 @@ export default function ScholarshipDetailPageClient({
                   className="mt-6"
                   aria-labelledby="deadline-month-scholarships-heading"
                 >
-                  <div className="flex flex-wrap items-end justify-between gap-2 border-b border-zinc-200 pb-2.5">
+                  <div className="flex flex-wrap items-end justify-between gap-2 border-b border-slate-200 pb-2.5">
                     <h3
                       id="deadline-month-scholarships-heading"
-                      className="text-sm font-semibold tracking-tight text-zinc-800"
+                      className="text-sm font-semibold tracking-tight text-slate-800"
                     >
                       Scholarships with {deadlineMonthLabel} deadlines
                     </h3>
-                    <span className="text-xs font-medium tabular-nums text-zinc-500">
+                    <span className="text-xs font-medium tabular-nums text-slate-500">
                       {deadlineMonthScholarshipsTotal}
                     </span>
                   </div>

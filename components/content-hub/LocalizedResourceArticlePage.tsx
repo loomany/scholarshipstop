@@ -64,13 +64,19 @@ export default function LocalizedResourceArticlePage({
 }: LocalizedResourceArticlePageProps) {
   const isEnglishFallback = mode === 'englishFallback';
   const ui = getResourceDetailUiCopy(locale);
-  const sectionPath = hrefForLocalizedUiRequired(locale, RESOURCES_SECTION_PATH);
+  const sectionPath = hrefForLocalizedUiRequired(
+    locale,
+    RESOURCES_SECTION_PATH
+  );
   const visibleDateLine = resourceArticleDateLine(
     { publishedAt: post.published_at, updatedAt: post.updated_at },
     ui,
     locale
   );
-  const articlePath = hrefForLocalizedUiRequired(locale, resourcesArticlePath(slug));
+  const articlePath = hrefForLocalizedUiRequired(
+    locale,
+    resourcesArticlePath(slug)
+  );
   const articleUrl = getURL(articlePath.replace(/^\//, ''));
 
   const bodyHtmlDeduped = deduplicateQuickSummaryBlocksInHtml(copy.bodyHtml);
@@ -95,9 +101,7 @@ export default function LocalizedResourceArticlePage({
     ? splitForPrimaryCtaInsertion(bodyHtmlAnchored)
     : null;
   const midSplit =
-    primarySplit != null
-      ? splitForMidCtaInRemainder(primarySplit.after)
-      : null;
+    primarySplit != null ? splitForMidCtaInRemainder(primarySplit.after) : null;
 
   const breadcrumbsSchema = {
     '@context': 'https://schema.org',
@@ -107,7 +111,9 @@ export default function LocalizedResourceArticlePage({
         '@type': 'ListItem',
         position: 1,
         name: copy.homeLabel,
-        item: getURL(hrefForLocalizedUiRequired(locale, '/').replace(/^\//, '') || '/')
+        item: getURL(
+          hrefForLocalizedUiRequired(locale, '/').replace(/^\//, '') || '/'
+        )
       },
       {
         '@type': 'ListItem',
@@ -186,7 +192,10 @@ export default function LocalizedResourceArticlePage({
           </Link>
         </p>
 
-        <nav className="mt-4 text-sm text-gray-500" aria-label={ui.breadcrumbAria}>
+        <nav
+          className="mt-4 text-sm text-gray-500"
+          aria-label={ui.breadcrumbAria}
+        >
           <ol className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
             <li>
               <Link
@@ -238,7 +247,9 @@ export default function LocalizedResourceArticlePage({
             </p>
           ) : null}
           {copy.summary ? (
-            <p className="mt-4 text-lg leading-relaxed text-gray-600">{copy.summary}</p>
+            <p className="mt-4 text-lg leading-relaxed text-gray-600">
+              {copy.summary}
+            </p>
           ) : null}
         </header>
 
@@ -353,23 +364,29 @@ function ResourceArticleIqCta({ locale }: { locale: Stage2PilotLocale }) {
   if (!isIqSitePromoVisible()) return null;
 
   const ui = getResourceDetailUiCopy(locale);
-  const iqHref = hrefForLocalizedUiRequired(locale, '/iq/assessment?intent=scholarship_match');
+  const iqHref = hrefForLocalizedUiRequired(
+    locale,
+    '/iq/assessment?intent=scholarship_match'
+  );
 
   return (
     <Link
       href={iqHref}
-      className="group relative mt-4 block overflow-hidden rounded-3xl border border-[#FFB875]/80 bg-gradient-to-br from-[#FFF7ED] via-white to-[#EEF6FF] p-5 text-left shadow-[0_18px_45px_-30px_rgba(234,88,12,0.65)] ring-1 ring-[#FFE2C2] transition hover:-translate-y-0.5 hover:shadow-[0_24px_58px_-32px_rgba(234,88,12,0.76)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB875] focus-visible:ring-offset-2 sm:mt-5 sm:p-6"
+      className="group relative mt-4 block rounded-lg border border-slate-200 bg-white p-4 text-left shadow-sm ring-1 ring-slate-100/80 transition hover:border-orange-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/70 focus-visible:ring-offset-2 sm:mt-5 sm:p-5"
       aria-labelledby="resource-article-iq-cta-heading"
     >
       <div
-        className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-[#FF7A1A] via-slate-950 to-[#0EA5E9]"
+        className="absolute inset-y-0 left-0 w-1 rounded-l-lg bg-orange-500"
         aria-hidden
       />
       <div className="relative grid gap-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
         <div className="min-w-0">
           <div className="mb-3 flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-2 rounded-full border border-[#FFB875] bg-white/85 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.17em] text-[#B45309] shadow-sm">
-              <BrainCircuit className="h-3.5 w-3.5 text-[#F97316]" aria-hidden />
+            <span className="inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.17em] text-orange-800">
+              <BrainCircuit
+                className="h-3.5 w-3.5 text-orange-600"
+                aria-hidden
+              />
               {ui.iqCta.featuredTool}
             </span>
             <span className="rounded-full border border-slate-200 bg-slate-950 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white">
@@ -378,7 +395,7 @@ function ResourceArticleIqCta({ locale }: { locale: Stage2PilotLocale }) {
           </div>
           <h2
             id="resource-article-iq-cta-heading"
-            className="text-balance text-2xl font-bold leading-tight tracking-tight text-slate-950 sm:text-3xl"
+            className="text-balance text-xl font-bold leading-tight tracking-tight text-slate-950 sm:text-2xl"
           >
             {ui.iqCta.title}
           </h2>
@@ -389,28 +406,36 @@ function ResourceArticleIqCta({ locale }: { locale: Stage2PilotLocale }) {
             {ui.iqCta.chips.map((item) => (
               <span
                 key={item}
-                className="rounded-full border border-white/80 bg-white/75 px-3 py-1 text-xs font-semibold text-slate-700 shadow-sm"
+                className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700"
               >
                 {item}
               </span>
             ))}
           </div>
         </div>
-        <div className="min-w-0 rounded-2xl border border-white/80 bg-white/70 p-3 shadow-sm backdrop-blur sm:w-48">
+        <div className="min-w-0 rounded-lg border border-slate-200 bg-slate-50/80 p-3 shadow-sm sm:w-48">
           <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">
             {ui.iqCta.previewReport}
           </p>
           <div className="mt-2 grid grid-cols-2 gap-2">
-            <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/80 px-2 py-2">
-              <p className="text-[10px] font-medium text-slate-500">{ui.iqCta.iqLabel}</p>
-              <p className="mt-1 text-base font-bold leading-none text-slate-950">--</p>
+            <div className="rounded-lg border border-dashed border-slate-300 bg-white px-2 py-2">
+              <p className="text-[10px] font-medium text-slate-500">
+                {ui.iqCta.iqLabel}
+              </p>
+              <p className="mt-1 text-base font-bold leading-none text-slate-950">
+                --
+              </p>
             </div>
-            <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/80 px-2 py-2">
-              <p className="text-[10px] font-medium text-slate-500">{ui.iqCta.typeLabel}</p>
-              <p className="mt-1 text-sm font-bold leading-none text-slate-950">???</p>
+            <div className="rounded-lg border border-dashed border-slate-300 bg-white px-2 py-2">
+              <p className="text-[10px] font-medium text-slate-500">
+                {ui.iqCta.typeLabel}
+              </p>
+              <p className="mt-1 text-sm font-bold leading-none text-slate-950">
+                ???
+              </p>
             </div>
           </div>
-          <span className="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-black px-3 py-2.5 text-center text-sm font-bold text-white shadow-[0_10px_24px_-14px_rgba(15,23,42,0.9)] transition group-hover:bg-slate-900">
+          <span className="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-slate-950 px-3 py-2.5 text-center text-sm font-bold text-white shadow-[0_16px_34px_-24px_rgba(15,23,42,0.85)] transition group-hover:bg-slate-800">
             {ui.iqCta.startTest}
             <ArrowRight className="h-4 w-4" aria-hidden />
           </span>

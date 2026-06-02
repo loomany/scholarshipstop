@@ -81,8 +81,7 @@ export async function generateMetadata({
   if (!post) {
     return { title: 'Article' };
   }
-  const title =
-    post.meta_title?.trim() || post.title?.trim() || 'Article';
+  const title = post.meta_title?.trim() || post.title?.trim() || 'Article';
   const description = post.meta_description?.trim() || undefined;
   const ogImage = post.cover_image_url?.trim();
   const path = resourcesArticlePath(slug);
@@ -155,10 +154,10 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
       ? inlineFaqSectionHeading
       : ui.faqSectionTitle;
 
-  const {
-    html: bodyHtmlAnchored,
-    toc: tocItems
-  } = injectH2H3IdsAndExtractToc(bodyWithoutInlineFaq, RESOURCE_ARTICLE_TOC_OPTIONS);
+  const { html: bodyHtmlAnchored, toc: tocItems } = injectH2H3IdsAndExtractToc(
+    bodyWithoutInlineFaq,
+    RESOURCE_ARTICLE_TOC_OPTIONS
+  );
 
   /** Local dev-only: remove before shipping — do not rely on prod logs. */
   if (process.env.NODE_ENV === 'development') {
@@ -176,9 +175,7 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
     ? splitForPrimaryCtaInsertion(bodyHtmlAnchored)
     : null;
   const midSplit =
-    primarySplit != null
-      ? splitForMidCtaInRemainder(primarySplit.after)
-      : null;
+    primarySplit != null ? splitForMidCtaInRemainder(primarySplit.after) : null;
 
   const articlePath = resourcesArticlePath(post.slug.trim());
   const articleUrl = getURL(articlePath);
@@ -197,7 +194,9 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
     description: articleDescription,
     datePublished: post.published_at,
     dateModified: post.updated_at || post.published_at,
-    imageUrls: post.cover_image_url?.trim() ? [post.cover_image_url.trim()] : undefined,
+    imageUrls: post.cover_image_url?.trim()
+      ? [post.cover_image_url.trim()]
+      : undefined,
     type: 'BlogPosting'
   });
   const visibleDateLine = resourceArticleDateLine(
@@ -221,7 +220,10 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
           </Link>
         </p>
 
-        <nav className="mt-4 text-sm text-gray-500" aria-label={ui.breadcrumbAria}>
+        <nav
+          className="mt-4 text-sm text-gray-500"
+          aria-label={ui.breadcrumbAria}
+        >
           <ol className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
             <li>
               <Link
@@ -368,33 +370,32 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
   );
 }
 
-function ResourceArticleIqCta({ ui }: { ui: ReturnType<typeof getResourceDetailUiCopy> }) {
+function ResourceArticleIqCta({
+  ui
+}: {
+  ui: ReturnType<typeof getResourceDetailUiCopy>;
+}) {
   if (!isIqSitePromoVisible()) return null;
 
   return (
     <Link
       href="/iq/assessment?intent=scholarship_match"
-      className="group relative mt-4 block overflow-hidden rounded-3xl border border-[#FFB875]/80 bg-gradient-to-br from-[#FFF7ED] via-white to-[#EEF6FF] p-5 text-left shadow-[0_18px_45px_-30px_rgba(234,88,12,0.65)] ring-1 ring-[#FFE2C2] transition hover:-translate-y-0.5 hover:shadow-[0_24px_58px_-32px_rgba(234,88,12,0.76)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB875] focus-visible:ring-offset-2 sm:mt-5 sm:p-6"
+      className="group relative mt-4 block rounded-lg border border-slate-200 bg-white p-4 text-left shadow-sm ring-1 ring-slate-100/80 transition hover:border-orange-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/70 focus-visible:ring-offset-2 sm:mt-5 sm:p-5"
       aria-labelledby="resource-article-iq-cta-heading"
     >
       <div
-        className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-[#FF7A1A] via-slate-950 to-[#0EA5E9]"
-        aria-hidden
-      />
-      <div
-        className="absolute -right-16 -top-20 h-44 w-44 rounded-full bg-[#FF7A1A]/18 blur-3xl"
-        aria-hidden
-      />
-      <div
-        className="absolute bottom-0 right-16 h-28 w-28 rounded-full bg-sky-300/20 blur-2xl"
+        className="absolute inset-y-0 left-0 w-1 rounded-l-lg bg-orange-500"
         aria-hidden
       />
 
       <div className="relative grid gap-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
         <div className="min-w-0">
           <div className="mb-3 flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-2 rounded-full border border-[#FFB875] bg-white/85 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.17em] text-[#B45309] shadow-sm">
-              <BrainCircuit className="h-3.5 w-3.5 text-[#F97316]" aria-hidden />
+            <span className="inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.17em] text-orange-800">
+              <BrainCircuit
+                className="h-3.5 w-3.5 text-orange-600"
+                aria-hidden
+              />
               {ui.iqCta.featuredTool}
             </span>
             <span className="rounded-full border border-slate-200 bg-slate-950 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white">
@@ -403,7 +404,7 @@ function ResourceArticleIqCta({ ui }: { ui: ReturnType<typeof getResourceDetailU
           </div>
           <h2
             id="resource-article-iq-cta-heading"
-            className="text-balance text-2xl font-bold leading-tight tracking-tight text-slate-950 sm:text-3xl"
+            className="text-balance text-xl font-bold leading-tight tracking-tight text-slate-950 sm:text-2xl"
           >
             {ui.iqCta.title}
           </h2>
@@ -422,25 +423,29 @@ function ResourceArticleIqCta({ ui }: { ui: ReturnType<typeof getResourceDetailU
           </div>
         </div>
 
-        <div className="min-w-0 rounded-2xl border border-white/80 bg-white/70 p-3 shadow-sm backdrop-blur sm:w-48">
+        <div className="min-w-0 rounded-lg border border-slate-200 bg-slate-50/80 p-3 shadow-sm sm:w-48">
           <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500">
             {ui.iqCta.previewReport}
           </p>
           <div className="mt-2 grid grid-cols-2 gap-2">
-            <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/80 px-2 py-2">
-              <p className="text-[10px] font-medium text-slate-500">{ui.iqCta.iqLabel}</p>
+            <div className="rounded-lg border border-dashed border-slate-300 bg-white px-2 py-2">
+              <p className="text-[10px] font-medium text-slate-500">
+                {ui.iqCta.iqLabel}
+              </p>
               <p className="mt-1 text-base font-bold leading-none text-slate-950">
                 --
               </p>
             </div>
-            <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50/80 px-2 py-2">
-              <p className="text-[10px] font-medium text-slate-500">{ui.iqCta.typeLabel}</p>
+            <div className="rounded-lg border border-dashed border-slate-300 bg-white px-2 py-2">
+              <p className="text-[10px] font-medium text-slate-500">
+                {ui.iqCta.typeLabel}
+              </p>
               <p className="mt-1 text-sm font-bold leading-none text-slate-950">
                 ???
               </p>
             </div>
           </div>
-          <span className="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-black px-3 py-2.5 text-center text-sm font-bold text-white shadow-[0_10px_24px_-14px_rgba(15,23,42,0.9)] transition group-hover:bg-slate-900">
+          <span className="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-slate-950 px-3 py-2.5 text-center text-sm font-bold text-white shadow-[0_16px_34px_-24px_rgba(15,23,42,0.85)] transition group-hover:bg-slate-800">
             {ui.iqCta.startTest}
             <ArrowRight className="h-4 w-4" aria-hidden />
           </span>

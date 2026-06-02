@@ -100,7 +100,8 @@ export function ScholarshipHubCanonicalIntro({
   locale?: LocalizedUiLocale;
 }) {
   const pack = SCHOLARSHIP_HUB_CANONICAL_SEO[slug];
-  const introText = getScholarshipsHubUiCopy(locale).hubCanonicalIntro[slug] ?? pack.introText;
+  const introText =
+    getScholarshipsHubUiCopy(locale).hubCanonicalIntro[slug] ?? pack.introText;
   const bestHubLayout = slug === 'best-recommendation';
   return (
     <div
@@ -121,7 +122,10 @@ export function ScholarshipHubCanonicalIntro({
 /**
  * FAQ + related links below cards/pagination. FAQ uses visible text matching JSON-LD (`details` SSR).
  */
-function localizeHubFooterHref(locale: LocalizedUiLocale, href: string): string {
+function localizeHubFooterHref(
+  locale: LocalizedUiLocale,
+  href: string
+): string {
   const normalized = href.split(/[?#]/, 1)[0] ?? href;
   const suffix = href.slice(normalized.length);
   const hubTabMatch = normalized.match(/^\/scholarships\/hub\/([^/]+)$/);
@@ -181,7 +185,11 @@ export function ScholarshipHubCanonicalListingFooter({
           {pack.faq.map((item, i) => {
             const openDefault = i === 0;
             return (
-              <details key={`${slug}-faq-${i}`} className="group" open={openDefault}>
+              <details
+                key={`${slug}-faq-${i}`}
+                className="group"
+                open={openDefault}
+              >
                 <summary
                   className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-4 text-left text-sm font-semibold text-gray-900 transition marker:content-none hover:bg-gray-50/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-orange-500/35 sm:px-5 [&::-webkit-details-marker]:hidden"
                   id={`${idPrefix}-q-${i}`}
@@ -216,7 +224,7 @@ export function ScholarshipHubCanonicalListingFooter({
 
       <section
         className={clsx(
-          'mt-10 max-w-5xl rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-6 lg:mx-auto'
+          'mt-10 max-w-5xl rounded-lg border border-slate-200 bg-white p-6 shadow-sm ring-1 ring-slate-100/80 lg:mx-auto'
         )}
         aria-labelledby={`${idPrefix}-related-heading`}
         aria-describedby={`${idPrefix}-related-subtitle`}
@@ -239,8 +247,8 @@ export function ScholarshipHubCanonicalListingFooter({
               key={href}
               href={href}
               className={clsx(
-                'group block cursor-pointer rounded-xl border border-slate-200 bg-white p-5 transition',
-                'hover:border-orange-300 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/40'
+                'group block cursor-pointer rounded-lg border border-slate-200 bg-white p-5 shadow-sm transition',
+                'hover:border-orange-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/40'
               )}
             >
               <div className="flex gap-3">
@@ -251,7 +259,9 @@ export function ScholarshipHubCanonicalListingFooter({
                   <Icon className="h-5 w-5" strokeWidth={2} />
                 </span>
                 <div className="min-w-0 flex-1">
-                  <h3 className="font-semibold text-lg text-slate-900">{title}</h3>
+                  <h3 className="font-semibold text-lg text-slate-900">
+                    {title}
+                  </h3>
                   <p className="mt-1 text-sm text-slate-600">{description}</p>
                   <span className="mt-3 inline-block font-medium text-orange-500 transition group-hover:text-orange-600">
                     {continueSearch.explore}
@@ -265,8 +275,8 @@ export function ScholarshipHubCanonicalListingFooter({
               key={row.href}
               href={row.href}
               className={clsx(
-                'group block cursor-pointer rounded-xl border border-slate-200 bg-white p-5 transition',
-                'hover:border-orange-300 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/40'
+                'group block cursor-pointer rounded-lg border border-slate-200 bg-white p-5 shadow-sm transition',
+                'hover:border-orange-200 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/40'
               )}
             >
               <div className="flex gap-3">
@@ -277,7 +287,9 @@ export function ScholarshipHubCanonicalListingFooter({
                   <Compass className="h-5 w-5" strokeWidth={2} />
                 </span>
                 <div className="min-w-0 flex-1">
-                  <h3 className="font-semibold text-lg text-slate-900">{row.label}</h3>
+                  <h3 className="font-semibold text-lg text-slate-900">
+                    {row.label}
+                  </h3>
                   <p className="mt-1 text-sm text-slate-600">
                     {continueSearch.exploringSubtitle}
                   </p>

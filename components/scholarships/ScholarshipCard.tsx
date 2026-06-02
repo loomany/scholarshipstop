@@ -253,7 +253,10 @@ export default function ScholarshipCard({
     (href: string | null): string | null => {
       if (!href || uiLocale === 'en') return href;
       const [pathPart, ...rest] = href.split(/(?=[?#])/);
-      const localized = localizedHubCatalogBrowserPath(uiLocale, pathPart ?? href);
+      const localized = localizedHubCatalogBrowserPath(
+        uiLocale,
+        pathPart ?? href
+      );
       return `${localized}${rest.join('')}`;
     },
     [uiLocale]
@@ -305,10 +308,9 @@ export default function ScholarshipCard({
       code: primary,
       extraCount: Math.max(0, codes.length - 1),
       text: `Eligible: ${label}`,
-      title:
-        matchesSelectedCountry
-          ? `Matches your country filter — eligibility tied to ${label}`
-          : `Eligibility tied to applicants linked to ${label}`
+      title: matchesSelectedCountry
+        ? `Matches your country filter — eligibility tied to ${label}`
+        : `Eligibility tied to applicants linked to ${label}`
     };
   }, [
     scholarship.applicantCountryCodes,
@@ -351,7 +353,12 @@ export default function ScholarshipCard({
       };
     }
     return null;
-  }, [scholarship.hostCountryCodes, scholarship.stateCodes, cardChrome, countryLabel]);
+  }, [
+    scholarship.hostCountryCodes,
+    scholarship.stateCodes,
+    cardChrome,
+    countryLabel
+  ]);
 
   const grantLocationHubHrefRaw = useMemo(() => {
     if (!grantLocationBadge) return null;
@@ -407,9 +414,7 @@ export default function ScholarshipCard({
   );
 
   const showGeoBadges = Boolean(
-    grantLocationBadge ||
-      hostLocationUnspecifiedBadge ||
-      applicantCountryBadge
+    grantLocationBadge || hostLocationUnspecifiedBadge || applicantCountryBadge
   );
 
   const desktopGeoBadgeCount = [
@@ -426,8 +431,8 @@ export default function ScholarshipCard({
     : 'pointer-events-auto hidden min-w-0 flex-row flex-wrap items-center justify-end gap-2 xl:flex xl:w-auto xl:max-w-[min(100%,28rem)] xl:justify-self-end';
 
   const gridShell = stackedListing
-    ? 'grid min-w-0 flex-1 grid-cols-1 content-start gap-x-5 gap-y-3 px-4 py-4 sm:px-5 sm:py-5'
-    : 'grid min-w-0 flex-1 grid-cols-1 content-start gap-x-5 gap-y-3 px-4 py-4 sm:px-5 sm:py-5 xl:grid-cols-[minmax(0,2.2fr)_minmax(112px,0.48fr)_minmax(164px,0.72fr)] xl:grid-rows-[auto_auto_auto] xl:gap-x-2.5 xl:gap-y-2 xl:items-start';
+    ? 'grid min-w-0 flex-1 grid-cols-1 content-start gap-x-5 gap-y-3.5 px-4 py-4 sm:px-5 sm:py-5'
+    : 'grid min-w-0 flex-1 grid-cols-1 content-start gap-x-5 gap-y-3.5 px-4 py-4 sm:px-5 sm:py-5 xl:grid-cols-[minmax(0,2.2fr)_minmax(112px,0.48fr)_minmax(164px,0.72fr)] xl:grid-rows-[auto_auto_auto] xl:gap-x-2.5 xl:gap-y-2.5 xl:items-start';
 
   /** Title spans rows 1–2 on xl so it aligns with deadline+reqs / award+actions. */
   const titleCell = stackedListing
@@ -435,8 +440,8 @@ export default function ScholarshipCard({
     : 'min-w-0 text-left xl:col-start-1 xl:row-start-1 xl:row-span-2';
 
   /** Stacked/narrow listing only — catalog hub uses a mobile combined row + xl grid columns on inner wrappers. */
-  const deadlineBlockWrap = 'min-w-0 border-t border-gray-200 pt-3';
-  const awardMetricsWrap = 'min-w-0 border-t border-gray-200 pt-3';
+  const deadlineBlockWrap = 'min-w-0 border-t border-slate-200/80 pt-3';
+  const awardMetricsWrap = 'min-w-0 border-t border-slate-200/80 pt-3';
 
   /** Save / Not relevant — under award when stacked; inside award row on catalog mobile. */
   const cardActionsWrap = stackedListing
@@ -444,10 +449,12 @@ export default function ScholarshipCard({
     : 'relative z-10 flex w-full max-w-[148px] shrink-0 flex-col gap-1.5 self-start pointer-events-auto xl:mt-0 xl:w-full xl:max-w-[148px] xl:self-start';
 
   /** Award metrics: left-aligned (reads toward deadline). */
-  const awardMetricAlign = 'text-left';
+  const metricPanelSurface =
+    'rounded-lg border p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.78)]';
+  const awardMetricAlign = `${metricPanelSurface} border-orange-100/90 bg-orange-50/50 text-left`;
   const awardMetricAlignTight = 'text-left';
 
-  const deadlineInner = 'min-w-0';
+  const deadlineInner = `${metricPanelSurface} min-w-0 border-slate-200/90 bg-slate-50/90`;
 
   /** Left-aligned on all breakpoints (matches requirements / award on mobile). */
   const deadlineMetricAlign = 'text-left';
@@ -460,7 +467,10 @@ export default function ScholarshipCard({
     'inline-flex min-h-9 items-center justify-center rounded-full border px-4 py-2 text-center text-xs font-extrabold leading-snug tracking-tight shadow-sm';
   const geoBadgeWidthBlock = 'w-full max-w-full';
   const geoBadgeWidthInline = 'w-auto shrink-0 max-w-[13.5rem]';
-  const geoBadgeClass = (widthClass: string, tone: 'country' | 'location' | 'missing') => {
+  const geoBadgeClass = (
+    widthClass: string,
+    tone: 'country' | 'location' | 'missing'
+  ) => {
     const toneClass =
       tone === 'country'
         ? 'border-orange-200 bg-orange-50 text-orange-700 ring-1 ring-orange-100'
@@ -475,10 +485,7 @@ export default function ScholarshipCard({
   const geoFilterLinkClass =
     'pointer-events-auto relative z-20 cursor-pointer no-underline transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50 focus-visible:ring-offset-1';
 
-  const renderGeoBadgeLinks = (
-    truncateLabels = false,
-    inlineRow = false
-  ) => {
+  const renderGeoBadgeLinks = (truncateLabels = false, inlineRow = false) => {
     const geoLabel = (text: string) =>
       truncateLabels ? <span className="truncate">{text}</span> : text;
     const badgeWidth = inlineRow ? geoBadgeWidthInline : geoBadgeWidthBlock;
@@ -576,14 +583,12 @@ export default function ScholarshipCard({
       : cardChrome.requirementsSummaryListed(reqCount));
 
   const requirementsMetric =
-    reqDisplayCount === 0
-      ? cardChrome.requirementsNone
-      : reqDisplayCount === 1
-        ? cardChrome.requirementsOne
-        : cardChrome.requirementsMany(reqDisplayCount);
+    reqDisplayCount === 0 ? cardChrome.requirementsNone : `${reqDisplayCount}`;
 
   const requirementsMetricInner = (
-    <>
+    <div
+      className={`${metricPanelSurface} min-w-0 border-slate-200/90 bg-white text-left`}
+    >
       <p
         className={`break-words text-sm font-semibold leading-snug sm:text-[0.9375rem] ${
           deadlinePassed ? 'text-gray-600' : 'text-gray-900'
@@ -592,7 +597,7 @@ export default function ScholarshipCard({
         {requirementsMetric}
       </p>
       <p className={METRIC_LABEL}>{cardChrome.requirementsLabel}</p>
-    </>
+    </div>
   );
 
   const requirementsStackedUnderDeadline = (
@@ -679,10 +684,7 @@ export default function ScholarshipCard({
   const detailNavigateBlocked =
     detailClickBudgetMode != null &&
     shouldBlockScholarshipDetailNavigation(detailClickBudgetMode);
-  const LOCKED_CARD_CATEGORY_IDS = new Set([
-    'easy_apply',
-    'quick_apply'
-  ]);
+  const LOCKED_CARD_CATEGORY_IDS = new Set(['easy_apply', 'quick_apply']);
   const easyApplyIds = getScholarshipCatalog(scholarship).easyApplyIds;
   const showHotDeadlinesLockBadge =
     subscriptionLocked && listingTab === 'hot-deadlines';
@@ -694,8 +696,7 @@ export default function ScholarshipCard({
     showHotDeadlinesLockBadge ||
     showEasyApplyLockBadge ||
     targetedCategoryLocked;
-  const showTopRightLockBadge =
-    detailNavigateBlocked && lockRowEligible;
+  const showTopRightLockBadge = detailNavigateBlocked && lockRowEligible;
   const authNoSubPreviewBlur =
     isAuthenticated &&
     !hasSubscription &&
@@ -746,8 +747,7 @@ export default function ScholarshipCard({
   const deadlineTooltipText = formatDeadlineTooltipText(scholarship);
 
   const showBadgeRow =
-    scholarship.recurring ||
-    Boolean(scholarship.credibilityLabel?.trim());
+    scholarship.recurring || Boolean(scholarship.credibilityLabel?.trim());
 
   const applicantsTitle = scholarship.applicantsCountIsEstimated
     ? 'Approximate applicant volume when available.'
@@ -800,7 +800,7 @@ export default function ScholarshipCard({
 
   const cardArticleClass = deadlinePassed
     ? 'group relative flex w-full min-w-0 overflow-hidden rounded-xl border border-zinc-200 bg-zinc-50/95 shadow-sm transition-all duration-200 hover:border-zinc-300 hover:shadow-md focus-within:border-zinc-300 focus-within:shadow-md'
-    : 'group relative flex w-full min-w-0 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:border-gray-300 hover:shadow-lg focus-within:border-gray-300 focus-within:shadow-lg';
+    : 'group relative flex w-full min-w-0 overflow-hidden rounded-xl border border-slate-200 bg-[linear-gradient(180deg,#ffffff_0%,#fbfcff_100%)] shadow-[0_10px_32px_-28px_rgba(15,23,42,0.7)] ring-1 ring-slate-100/70 transition-all duration-200 hover:border-emerald-300/75 hover:shadow-[0_22px_44px_-32px_rgba(15,23,42,0.75)] focus-within:border-emerald-300/75 focus-within:shadow-[0_22px_44px_-32px_rgba(15,23,42,0.75)]';
 
   const handleDetailLinkClick = (e: MouseEvent<HTMLAnchorElement>) => {
     if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
@@ -909,7 +909,11 @@ export default function ScholarshipCard({
         </Link>
       )}
       <div
-        className={`relative z-[1] w-1.5 shrink-0 self-stretch rounded-l-[0.75rem] pointer-events-none ${deadlinePassed ? 'bg-zinc-400' : 'bg-gray-900'}`}
+        className={`relative z-[1] w-1.5 shrink-0 self-stretch rounded-l-[0.75rem] pointer-events-none ${
+          deadlinePassed
+            ? 'bg-zinc-400'
+            : 'bg-gradient-to-b from-emerald-950 via-slate-900 to-orange-500'
+        }`}
         aria-hidden
       />
 
@@ -934,7 +938,10 @@ export default function ScholarshipCard({
                     className="inline-flex min-w-0 max-w-full items-center gap-1.5 text-gray-400"
                     aria-label="Sponsor name hidden until you subscribe."
                   >
-                    <Info className="h-3.5 w-3.5 shrink-0 text-gray-300" aria-hidden />
+                    <Info
+                      className="h-3.5 w-3.5 shrink-0 text-gray-300"
+                      aria-hidden
+                    />
                     <span
                       className={`min-w-0 max-w-[min(100%,18rem)] truncate ${SCHOLARSHIP_PROVIDER_OBSCURE_CLASS}`}
                       aria-hidden
@@ -966,9 +973,7 @@ export default function ScholarshipCard({
                 )
               ) : null}
               {scholarship.verified ? (
-                <span
-                  className="pointer-events-none shrink-0 rounded-md bg-emerald-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-emerald-800 ring-1 ring-emerald-200/70"
-                >
+                <span className="pointer-events-none shrink-0 rounded-md bg-emerald-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-emerald-800 ring-1 ring-emerald-200/70">
                   Verified
                 </span>
               ) : null}
@@ -1001,9 +1006,12 @@ export default function ScholarshipCard({
                     e.stopPropagation();
                     if (targetedCategoryLocked) {
                       if (!isAuthenticated) {
-                        onGuestDetailNavigate?.() ?? onLockedScholarshipNavigate?.();
+                        onGuestDetailNavigate?.() ??
+                          onLockedScholarshipNavigate?.();
                       } else {
-                        (onSubscriptionDetailNavigate ?? onGuestDetailNavigate)?.();
+                        (
+                          onSubscriptionDetailNavigate ?? onGuestDetailNavigate
+                        )?.();
                       }
                       return;
                     }
@@ -1063,7 +1071,7 @@ export default function ScholarshipCard({
           </h2>
           <div className="relative w-full min-w-0">
             <p
-              className="mt-1 min-w-0 overflow-hidden text-[0.8125rem] leading-relaxed text-gray-400 sm:text-sm [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]"
+              className="mt-1.5 min-w-0 overflow-hidden text-[0.8125rem] leading-relaxed text-gray-600 sm:text-sm [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]"
               title={
                 obscureSummaryLine
                   ? 'Summary preview. Some details are hidden until you subscribe.'
@@ -1197,7 +1205,9 @@ export default function ScholarshipCard({
               ) : null}
             </div>
             {showGeoBadges ? (
-              <div className={`${geoBadgesColumnClass} mt-2.5 pointer-events-auto`}>
+              <div
+                className={`${geoBadgesColumnClass} mt-2.5 pointer-events-auto`}
+              >
                 {renderGeoBadgeLinks()}
               </div>
             ) : null}
@@ -1367,7 +1377,9 @@ export default function ScholarshipCard({
               <div className="min-w-0 pointer-events-auto">
                 <ScholarshipCatalogChipRow
                   chips={catalogChips}
-                  getChipHref={(c) => prefixHubHref(scholarshipCatalogChipHubHref(c))}
+                  getChipHref={(c) =>
+                    prefixHubHref(scholarshipCatalogChipHubHref(c))
+                  }
                 />
               </div>
               {!stackedListing && showGeoBadges ? (

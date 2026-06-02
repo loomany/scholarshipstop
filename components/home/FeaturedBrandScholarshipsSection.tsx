@@ -154,7 +154,7 @@ export function FeaturedBrandScholarshipsSection({
   };
 
   return (
-    <section
+    <div
       role="region"
       aria-labelledby="featured-brand-scholarships-heading"
       className={clsx(className)}
@@ -207,6 +207,6 @@ export function FeaturedBrandScholarshipsSection({
           Swipe sideways to see more
         </p>
       </div>
-    </section>
+    </div>
   );
 }

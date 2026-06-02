@@ -1,10 +1,12 @@
 import Link from 'next/link';
+import type { ReactNode } from 'react';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
 
 import type { TrustPageContent } from '@/lib/trust/trustPageContent';
 
 type TrustPageTemplateProps = {
   page: TrustPageContent;
+  featureSlot?: ReactNode;
   copy?: {
     backHome: string;
     methodology: string;
@@ -34,25 +36,44 @@ const DEFAULT_COPY = {
   disclaimer: 'See legal boundaries'
 } as const;
 
+const HERO_TRUST_SIGNALS = [
+  {
+    label: 'Source path',
+    body: 'Provider routes and public references stay visible when available.'
+  },
+  {
+    label: 'Planning facts',
+    body: 'Deadline, eligibility, award, and requirement signals are separated.'
+  },
+  {
+    label: 'Corrections loop',
+    body: 'Students and providers can report outdated or incomplete details.'
+  }
+] as const;
+
 export default function TrustPageTemplate({
   page,
+  featureSlot,
   copy = DEFAULT_COPY,
   hrefForPath = (href) => href
 }: TrustPageTemplateProps) {
-  const primaryCta = page.cta ?? { href: '/scholarships', label: 'Browse scholarships' };
+  const primaryCta = page.cta ?? {
+    href: '/scholarships',
+    label: 'Browse scholarships'
+  };
 
   return (
-    <main className="min-h-[calc(100dvh-5rem)] bg-zinc-50 pb-16 pt-10 text-zinc-900 sm:pb-20 sm:pt-14">
+    <main className="min-h-[calc(100dvh-5rem)] bg-[#f7f8fb] pb-16 pt-10 text-zinc-900 sm:pb-20 sm:pt-14">
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
         <Link
           href={hrefForPath('/')}
-          className="inline-flex items-center rounded-full border border-zinc-200 bg-white px-3 py-1.5 text-sm font-medium text-zinc-600 shadow-sm transition hover:border-zinc-300 hover:text-zinc-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/60 focus-visible:ring-offset-2"
+          className="inline-flex items-center rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-sm font-medium text-zinc-600 shadow-sm transition hover:border-zinc-300 hover:text-zinc-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/60 focus-visible:ring-offset-2"
         >
           {copy.backHome}
         </Link>
 
-        <section className="mt-8 overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
-          <div className="grid gap-0 lg:grid-cols-[minmax(0,1.15fr)_minmax(18rem,0.85fr)]">
+        <section className="mt-8 overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-[0_24px_80px_-56px_rgba(15,23,42,0.5)]">
+          <div className="grid gap-0 lg:grid-cols-[minmax(0,1.12fr)_minmax(18rem,0.88fr)]">
             <div className="p-6 sm:p-8 lg:p-10">
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-orange-600">
                 {page.eyebrow}
@@ -66,21 +87,21 @@ export default function TrustPageTemplate({
               <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                 <Link
                   href={hrefForPath(primaryCta.href)}
-                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-orange-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-orange-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2"
+                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-zinc-950 px-5 py-2.5 text-sm font-semibold text-white shadow-[0_16px_38px_-24px_rgba(15,23,42,0.8)] transition hover:bg-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2"
                 >
                   {primaryCta.label}
                   <ArrowRight className="h-4 w-4" aria-hidden />
                 </Link>
                 <Link
                   href={hrefForPath('/scholarship-verification-methodology')}
-                  className="inline-flex min-h-11 items-center justify-center rounded-xl border border-zinc-200 bg-white px-5 py-2.5 text-sm font-semibold text-zinc-800 shadow-sm transition hover:border-zinc-300 hover:bg-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2"
+                  className="inline-flex min-h-11 items-center justify-center rounded-lg border border-zinc-200 bg-white px-5 py-2.5 text-sm font-semibold text-zinc-800 shadow-sm transition hover:border-zinc-300 hover:bg-zinc-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 focus-visible:ring-offset-2"
                 >
                   {copy.methodology}
                 </Link>
               </div>
             </div>
 
-            <div className="border-t border-zinc-200 bg-zinc-950 p-6 text-white sm:p-8 lg:border-l lg:border-t-0 lg:p-10">
+            <div className="border-t border-zinc-200 bg-[linear-gradient(135deg,#111827,#0f172a_52%,#064e3b)] p-6 text-white sm:p-8 lg:border-l lg:border-t-0 lg:p-10">
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-orange-300">
                 {copy.studentFirstRule}
               </p>
@@ -90,24 +111,46 @@ export default function TrustPageTemplate({
               <p className="mt-4 text-sm leading-6 text-zinc-300">
                 {copy.studentFirstBody}
               </p>
+              <div className="mt-7 grid gap-2.5">
+                {HERO_TRUST_SIGNALS.map((signal) => (
+                  <div
+                    key={signal.label}
+                    className="rounded-lg border border-white/12 bg-white/[0.07] p-3.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
+                  >
+                    <p className="text-xs font-bold uppercase tracking-[0.13em] text-emerald-200">
+                      {signal.label}
+                    </p>
+                    <p className="mt-1.5 text-sm leading-5 text-zinc-200">
+                      {signal.body}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
 
+        {featureSlot ? <div className="mt-6">{featureSlot}</div> : null}
+
         {page.cards?.length ? (
-          <section className="mt-6 grid gap-4 md:grid-cols-3" aria-label="Key points">
+          <section
+            className="mt-6 grid gap-4 md:grid-cols-3"
+            aria-label="Key points"
+          >
             {page.cards.map((card) => (
               <article
                 key={card.title}
-                className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm"
+                className="rounded-lg border border-zinc-200 bg-white p-5 shadow-sm"
               >
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-orange-50 text-orange-600 ring-1 ring-orange-100">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-orange-50 text-orange-600 ring-1 ring-orange-100">
                   <CheckCircle2 className="h-5 w-5" aria-hidden />
                 </div>
                 <h2 className="mt-4 text-lg font-semibold tracking-tight text-zinc-950">
                   {card.title}
                 </h2>
-                <p className="mt-2 text-sm leading-6 text-zinc-600">{card.body}</p>
+                <p className="mt-2 text-sm leading-6 text-zinc-600">
+                  {card.body}
+                </p>
               </article>
             ))}
           </section>
@@ -118,7 +161,7 @@ export default function TrustPageTemplate({
             {page.sections.map((section) => (
               <article
                 key={section.title}
-                className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm sm:p-7"
+                className="rounded-lg border border-zinc-200 bg-white p-6 shadow-sm sm:p-7"
               >
                 <h2 className="text-xl font-bold tracking-tight text-zinc-950">
                   {section.title}
@@ -146,7 +189,7 @@ export default function TrustPageTemplate({
 
             {page.faq?.length ? (
               <section
-                className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm sm:p-7"
+                className="rounded-lg border border-zinc-200 bg-white p-6 shadow-sm sm:p-7"
                 aria-labelledby="trust-page-faq"
               >
                 <h2
@@ -155,9 +198,13 @@ export default function TrustPageTemplate({
                 >
                   FAQ
                 </h2>
-                <div className="mt-4 divide-y divide-zinc-200 rounded-xl border border-zinc-200">
+                <div className="mt-4 divide-y divide-zinc-200 rounded-lg border border-zinc-200">
                   {page.faq.map((item, i) => (
-                    <details key={item.question} className="group" open={i === 0}>
+                    <details
+                      key={item.question}
+                      className="group"
+                      open={i === 0}
+                    >
                       <summary className="cursor-pointer list-none px-4 py-4 text-sm font-semibold text-zinc-900 marker:content-none hover:bg-zinc-50 [&::-webkit-details-marker]:hidden">
                         {item.question}
                       </summary>
@@ -172,7 +219,7 @@ export default function TrustPageTemplate({
           </div>
 
           <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
-            <div className="rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
+            <div className="rounded-lg border border-zinc-200 bg-white p-5 shadow-sm">
               <h2 className="text-base font-semibold tracking-tight text-zinc-950">
                 {copy.relatedTrustPages}
               </h2>
@@ -181,7 +228,7 @@ export default function TrustPageTemplate({
                   <Link
                     key={link.href}
                     href={hrefForPath(link.href)}
-                    className="block rounded-xl border border-zinc-200 bg-zinc-50/70 p-3 transition hover:border-zinc-300 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/60 focus-visible:ring-offset-2"
+                    className="group block rounded-lg border border-zinc-200 bg-zinc-50/70 p-3 transition hover:border-zinc-300 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/60 focus-visible:ring-offset-2"
                   >
                     <span className="text-sm font-semibold text-zinc-950">
                       {link.label}
@@ -194,7 +241,7 @@ export default function TrustPageTemplate({
               </div>
             </div>
 
-            <div className="rounded-2xl border border-orange-200 bg-orange-50/80 p-5 shadow-sm">
+            <div className="rounded-lg border border-orange-200 bg-orange-50/80 p-5 shadow-sm">
               <h2 className="text-base font-semibold tracking-tight text-orange-950">
                 {copy.quickReminder}
               </h2>

@@ -58,7 +58,9 @@ function HomeScholarshipIntelligenceSection({
       className={`border-b border-gray-100 bg-gray-50 ${homeY.block} ${homeSectionPadX}`}
       aria-labelledby="home-intelligence-heading"
     >
-      <div className={`${container} grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] lg:gap-8`}>
+      <div
+        className={`${container} grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.85fr)] lg:gap-8`}
+      >
         <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm sm:p-8">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-orange-600">
             {copy.intelligenceEyebrow}
@@ -95,8 +97,14 @@ function HomeScholarshipIntelligenceSection({
             </h3>
             <ul className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
               {copy.dataStandardItems.map((item) => (
-                <li key={item} className="flex items-start gap-2 text-sm leading-6 text-gray-600">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-orange-500" aria-hidden />
+                <li
+                  key={item}
+                  className="flex items-start gap-2 text-sm leading-6 text-gray-600"
+                >
+                  <Check
+                    className="mt-0.5 h-4 w-4 shrink-0 text-orange-500"
+                    aria-hidden
+                  />
                   <span>{item}</span>
                 </li>
               ))}
@@ -108,8 +116,14 @@ function HomeScholarshipIntelligenceSection({
             </h3>
             <ul className="mt-4 space-y-2">
               {copy.audienceItems.map((item) => (
-                <li key={item} className="flex items-start gap-2 text-sm leading-6 text-gray-600">
-                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-orange-500" aria-hidden />
+                <li
+                  key={item}
+                  className="flex items-start gap-2 text-sm leading-6 text-gray-600"
+                >
+                  <Check
+                    className="mt-0.5 h-4 w-4 shrink-0 text-orange-500"
+                    aria-hidden
+                  />
                   <span>{item}</span>
                 </li>
               ))}
@@ -339,13 +353,16 @@ export function HomePageContent({
                 <ScholarshipPreviewList locale={locale} />
               </div>
               <div className="order-1 flex min-h-0 min-w-0 flex-col items-center text-center opacity-0 group-data-[revealed=true]/works:animate-works-title-in lg:order-2 lg:items-stretch lg:text-left">
-                <h2 className={`text-pretty ${h2Section}`}>{copy.workflowTitle}</h2>
+                <h2 className={`text-pretty ${h2Section}`}>
+                  {copy.workflowTitle}
+                </h2>
                 <p className="mt-4 max-w-lg text-pretty text-lg leading-relaxed text-gray-600 sm:mt-5 sm:text-xl sm:leading-relaxed lg:max-w-none">
                   {copy.workflowSubtext}
                 </p>
                 <ul className="mt-6 w-full max-w-lg space-y-4 text-left text-lg text-gray-600 sm:mt-7 sm:space-y-5 sm:text-xl lg:max-w-none">
                   {copy.workflowBullets.map((bullet, index) => {
-                    const Icon = [Check, Heart, Layers, BookOpen][index] ?? Check;
+                    const Icon =
+                      [Check, Heart, Layers, BookOpen][index] ?? Check;
                     return (
                       <li key={bullet} className="flex gap-4">
                         <Icon
@@ -390,21 +407,6 @@ export function HomePageContent({
           </div>
         </section>
 
-        {/*
-          Brand scholarship cards link to English-only DB detail pages
-          (`/scholarships/<slug>`). On ES/FR we hide this section to avoid
-          surfacing 36 untranslated prominent cards above the fold.
-        */}
-        {locale === 'en' ? (
-          <section
-            className={`border-b border-gray-100 bg-white ${homeY.block} ${homeSectionPadX}`}
-          >
-            <div className={container}>
-              <FeaturedBrandScholarshipsSection copy={copy.featuredBrands} locale={locale} />
-            </div>
-          </section>
-        ) : null}
-
         <HomeGuidedEssaySupport
           sectionPadX={homeSectionPadX}
           sectionY={homeY.essay}
@@ -433,7 +435,28 @@ export function HomePageContent({
           />
         </Suspense>
       ) : null}
-      <HomeFinalCta copy={copy.finalCta} ctaLabel={copy.ctaFind} locale={locale} />
+      {/*
+        Brand scholarship cards link to English-only DB detail pages
+        (`/scholarships/<slug>`). Keep the catalog rail after guidance/resources
+        so it supports discovery without outranking the primary match workflow.
+      */}
+      {locale === 'en' ? (
+        <section
+          className={`border-b border-gray-100 bg-white ${homeY.block} ${homeSectionPadX}`}
+        >
+          <div className={container}>
+            <FeaturedBrandScholarshipsSection
+              copy={copy.featuredBrands}
+              locale={locale}
+            />
+          </div>
+        </section>
+      ) : null}
+      <HomeFinalCta
+        copy={copy.finalCta}
+        ctaLabel={copy.ctaFind}
+        locale={locale}
+      />
     </>
   );
 }

@@ -24,7 +24,7 @@ type ScholarshipsTwoColumnLayoutProps = {
 
 /**
  * Shared scholarships shell: main column + optional My scholarships sidebar.
- * Mobile: when `sidebar` is set, it stacks above main — same as before.
+ * Mobile: when `sidebar` is set, main content stays first so listings remain the priority.
  * Desktop (lg+): main left (~72%+), sidebar right (~28% max), sticky sidebar.
  */
 export default function ScholarshipsTwoColumnLayout({
@@ -42,12 +42,10 @@ export default function ScholarshipsTwoColumnLayout({
       <div
         className={`flex w-full min-w-0 flex-col gap-8 lg:flex-row lg:items-stretch lg:gap-6 xl:gap-8`}
       >
-        <div className="order-2 min-w-0 flex-1 basis-0 lg:order-1">
-          {children}
-        </div>
+        <div className="order-1 min-w-0 flex-1 basis-0">{children}</div>
         {hasSidebar ? (
           <aside
-            className="order-1 w-full shrink-0 lg:order-2 lg:w-[min(100%,280px)] lg:max-w-[30%] xl:w-[300px] 2xl:w-[320px]"
+            className="order-2 w-full shrink-0 lg:w-[min(100%,280px)] lg:max-w-[30%] xl:w-[300px] 2xl:w-[320px]"
             aria-label="My scholarships navigation"
           >
             {/* top-20 = 5rem — matches Navbar h-16 default; md+ uses h-20, sticky still clears bar */}
