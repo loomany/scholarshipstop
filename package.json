@@ -92,6 +92,7 @@
     "provider-outreach:dry-run": "dotenv -e .env.local -- npx tsx scripts/send-provider-outreach-emails.ts --dry-run",
     "provider-outreach:send": "dotenv -e .env.local -- npx tsx scripts/send-provider-outreach-emails.ts",
     "providers:audit": "dotenv -e .env.local -- npx tsx scripts/audit-providers.ts",
+    "providers:official-urls": "dotenv -e .env.local -- npx tsx scripts/enrich-provider-official-urls.ts",
     "audit:scholarship-facets": "dotenv -e .env.local -- npx tsx scripts/audit-scholarship-facets.ts",
     "audit:profile-grant-coverage": "dotenv -e .env.local -- npx tsx scripts/audit-profile-grant-coverage.ts",
     "scholarships:audit-quality": "dotenv -e .env.local -- npx tsx scripts/audit-scholarships-quality.ts",
