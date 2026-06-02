@@ -115,7 +115,7 @@ export function getProviderSeoQualityPolicy(
     sourceStatus === 'missing_official_url' &&
     dataCompleteness === 'weak'
   ) {
-    reasons.push('Missing official URL and not enough unique public value.');
+    reasons.push('Provider link is still being verified.');
   }
 
   const hardFail = reasons.some((reason) =>
@@ -127,7 +127,7 @@ export function getProviderSeoQualityPolicy(
       'Provider appears to be duplicate or unresolved merged data.',
       'No visible public scholarship list is available.',
       'Source/trust context is missing from the public page.',
-      'Missing official URL and not enough unique public value.'
+      'Provider link is still being verified.'
     ].includes(reason)
   );
 
@@ -141,9 +141,9 @@ export function getProviderSeoQualityPolicy(
 }
 
 export function providerSourceStatusLabel(status: ProviderSourceStatus): string {
-  if (status === 'official_source_available') return 'Official source available';
+  if (status === 'official_source_available') return 'Provider link available';
   if (status === 'source_needs_confirmation') return 'Source needs confirmation';
-  return 'Missing official URL';
+  return 'Source under review';
 }
 
 export function providerDataCompletenessLabel(

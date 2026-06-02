@@ -9,6 +9,7 @@
  *  3) Wikidata official website (P856), exact label/alias match
  *  4) optional Google SERP via SerpAPI (`SERPAPI_API_KEY`) for remaining rows
  *  5) Wikipedia fallback (Wikidata sitelink or search), if no official site found
+ *  6) optional parser/source URL fallback from scholarship rows
  *
  * Usage:
  *   dotenv -e .env.local -- npx tsx scripts/enrich-provider-official-urls.ts --dry-run
@@ -18,6 +19,8 @@
  *   dotenv -e .env.local -- npx tsx scripts/enrich-provider-official-urls.ts --concurrency=8 --write
  *   dotenv -e .env.local -- npx tsx scripts/enrich-provider-official-urls.ts --offset=1000 --limit=500 --quiet --write
  *   dotenv -e .env.local -- npx tsx scripts/enrich-provider-official-urls.ts --only-slug=sonora-area-foundation --write
+ *   dotenv -e .env.local -- npx tsx scripts/enrich-provider-official-urls.ts --include-parser-source-fallback --no-web --write
+ *   dotenv -e .env.local -- npx tsx scripts/enrich-provider-official-urls.ts --sync-missing-provider-rows --include-parser-source-fallback --no-web --write
  *
  * Output:
  *   scripts/output/provider-official-url-enrichment-candidates.csv
@@ -42,11 +45,20 @@ type ProviderRow = {
   ai_sources?: unknown;
 };
 
+type ProviderHubListingRow = {
+  slug: string;
+  display_name: string | null;
+  scholarship_count: number | null;
+  state: string | null;
+  ai_description: string | null;
+};
+
 type ScholarshipUrlRow = {
   provider_slug: string | null;
   provider_url: string | null;
   apply_url: string | null;
   url: string | null;
+  source: string | null;
   is_active: boolean | null;
 };
 
@@ -58,7 +70,8 @@ type CandidateSource =
   | 'wikidata_official_website'
   | 'google_serp_result'
   | 'wikidata_wikipedia_fallback'
-  | 'wikipedia_search_fallback';
+  | 'wikipedia_search_fallback'
+  | 'parser_source_url_fallback';
 
 type Candidate = {
   slug: string;
@@ -126,6 +139,21 @@ const CONTEXT_ONLY_HOST_HINTS = [
   'chronicle',
   'patch',
   'radio'
+];
+
+const PARSER_SOURCE_BLOCKED_HOST_SUFFIXES = [
+  'scholarshiptop.com',
+  'google.com',
+  'bing.com',
+  'duckduckgo.com',
+  'facebook.com',
+  'instagram.com',
+  'linkedin.com',
+  'twitter.com',
+  'x.com',
+  'youtube.com',
+  'youtu.be',
+  'vimeo.com'
 ];
 
 const GENERIC_SAVED_SOURCE_TOKENS = new Set([
@@ -303,7 +331,23 @@ const CURATED_PROVIDER_URLS: Record<string, string> = {
     'https://www.impactoneducation.org/',
   'hawaii-education-association': 'https://www.hawaiieducationassociation.org/',
   'jewish-social-service-agency-of-metropolitan-washington': 'https://www.jssa.org/',
-  'ohio-civil-service-employees-association': 'https://www.ocsea.org/'
+  'ohio-civil-service-employees-association': 'https://www.ocsea.org/',
+  iumf: 'https://iumf.org/scholarships/',
+  'hartford-gay-and-lesbian-health-collective': 'https://www.healthcollective.org/',
+  'creative-change-counseling': 'https://www.creativechangeinc.org/scholarships',
+  'lady-legacy': 'https://www.lbgaladylegacy.org/scholarships.html',
+  'disabledperson-inc': 'https://www.disabledperson.com/scholarships/info',
+  'herrman-and-herrman-p-l-l-c': 'https://www.herrmanandherrman.com/scholarship/',
+  arrl: 'https://www.arrl.org/scholarship-program',
+  ndss: 'https://ndss.org/scholarships',
+  'heart-and-purpose': 'https://www.heartandpurpose.org/us-scholarship-learnmore',
+  'greenhouse-scholars': 'https://greenhousescholars.org/',
+  'monk-s-home-improvements': 'https://monkshomeimprovements.com/scholarship/',
+  'pg-and-e':
+    'https://www.pge.com/en/about/educational-resources/grants-and-scholarships.html',
+  'oca-ups': 'https://www.ocanational.org/gold-mountain-scholarship-high-school',
+  'lantos-foundation-for-human-rights-and-justice': 'https://www.lantosfoundation.org/',
+  'baron-and-budd': 'https://baronandbudd.com/mesothelioma/scholarships/'
 };
 
 function parseArg(name: string): string | null {
@@ -422,6 +466,25 @@ function safeHttpUrl(raw: string | null | undefined, allowWikipedia = false): st
   if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return null;
   if (isBlockedHost(parsed.hostname, allowWikipedia)) return null;
   if (/\.(pdf|docx?|xlsx?|pptx?)(?:$|[?#])/i.test(parsed.pathname)) return null;
+  return normalized;
+}
+
+function safeParserSourceUrl(raw: string | null | undefined): string | null {
+  const normalized = normalizeProviderOfficialUrl(raw);
+  if (!normalized) return null;
+  let parsed: URL;
+  try {
+    parsed = new URL(normalized);
+  } catch {
+    return null;
+  }
+  if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return null;
+  const host = parsed.hostname.replace(/^www\./i, '').toLowerCase();
+  const blocked = PARSER_SOURCE_BLOCKED_HOST_SUFFIXES.some((suffix) => {
+    const s = suffix.toLowerCase();
+    return host === s || host.endsWith(`.${s}`);
+  });
+  if (blocked) return null;
   return normalized;
 }
 
@@ -566,7 +629,7 @@ async function fetchScholarshipUrlsBySlug(
     const chunk = unique.slice(i, i + 200);
     const { data, error } = await supabase
       .from('scholarships')
-      .select('provider_slug, provider_url, apply_url, url, is_active')
+      .select('provider_slug, provider_url, apply_url, url, source, is_active')
       .in('provider_slug', chunk)
       .not('provider_slug', 'is', null)
       .order('is_active', { ascending: false });
@@ -580,6 +643,129 @@ async function fetchScholarshipUrlsBySlug(
     }
   }
   return out;
+}
+
+async function fetchProviderHubListingRows(
+  supabase: ReturnType<typeof createClient<Database>>
+): Promise<ProviderHubListingRow[]> {
+  const out: ProviderHubListingRow[] = [];
+  const table = 'provider_hub_listing' as unknown as 'scholarships';
+  for (let from = 0; ; from += 1000) {
+    const { data, error } = await supabase
+      .from(table)
+      .select('slug, display_name, scholarship_count, state, ai_description')
+      .order('scholarship_count', { ascending: false })
+      .range(from, from + 999);
+    if (error) throw error;
+    if (!data?.length) break;
+    out.push(...(data as unknown as ProviderHubListingRow[]));
+    if (data.length < 1000) break;
+  }
+  return out.filter((row) => row.slug?.trim());
+}
+
+async function fetchExistingProviderSlugs(
+  supabase: ReturnType<typeof createClient<Database>>,
+  slugs: string[]
+): Promise<Set<string>> {
+  const out = new Set<string>();
+  const unique = [...new Set(slugs.map((slug) => slug.trim()).filter(Boolean))];
+  for (let i = 0; i < unique.length; i += 200) {
+    const chunk = unique.slice(i, i + 200);
+    const { data, error } = await supabase
+      .from('providers')
+      .select('slug')
+      .in('slug', chunk);
+    if (error) throw error;
+    for (const row of data ?? []) {
+      if (row.slug?.trim()) out.add(row.slug.trim());
+    }
+  }
+  return out;
+}
+
+function providerRowFromHubListing(row: ProviderHubListingRow): ProviderRow {
+  return {
+    id: '',
+    slug: row.slug.trim(),
+    display_name: row.display_name,
+    state: row.state,
+    official_url: null,
+    sources: [],
+    ai_sources: []
+  };
+}
+
+async function syncMissingProviderRowsFromHub(options: {
+  supabase: ReturnType<typeof createClient<Database>>;
+  schoolIndex: Map<string, SchoolRecord[]>;
+  includeParserSourceFallback: boolean;
+  write: boolean;
+}): Promise<{
+  missingInHub: number;
+  candidates: Candidate[];
+  created: number;
+  noCandidate: number;
+}> {
+  const hubRows = await fetchProviderHubListingRows(options.supabase);
+  const existing = await fetchExistingProviderSlugs(
+    options.supabase,
+    hubRows.map((row) => row.slug)
+  );
+  const missingRows = hubRows.filter((row) => !existing.has(row.slug.trim()));
+  if (missingRows.length === 0) {
+    return { missingInHub: 0, candidates: [], created: 0, noCandidate: 0 };
+  }
+
+  const scholarshipUrls = await fetchScholarshipUrlsBySlug(
+    options.supabase,
+    missingRows.map((row) => row.slug)
+  );
+  const candidates: Candidate[] = [];
+  const insertRows: Array<{
+    slug: string;
+    display_name: string | null;
+    state: string | null;
+    official_url: string;
+    sources: string[];
+  }> = [];
+
+  for (const hubRow of missingRows) {
+    const row = providerRowFromHubListing(hubRow);
+    const candidate =
+      fromSchoolIndex(row, options.schoolIndex) ??
+      fromCuratedProviderUrl(row) ??
+      fromScholarshipRows(row, scholarshipUrls.get(row.slug) ?? []) ??
+      (options.includeParserSourceFallback
+        ? fromParserSourceFallback(row, scholarshipUrls.get(row.slug) ?? [])
+        : null);
+    if (!candidate) continue;
+    candidates.push(candidate);
+    insertRows.push({
+      slug: row.slug,
+      display_name: row.display_name,
+      state: row.state,
+      official_url: candidate.url,
+      sources: [candidate.url]
+    });
+  }
+
+  let created = 0;
+  if (options.write && insertRows.length > 0) {
+    const { data, error } = await options.supabase
+      .from('providers')
+      .upsert(insertRows, { onConflict: 'slug', ignoreDuplicates: true })
+      .select('slug');
+    if (error) throw error;
+    created = data?.length ?? 0;
+  }
+
+  return {
+    missingInHub: missingRows.length,
+    candidates,
+    created,
+    noCandidate: missingRows.length - candidates.length
+  };
 }
 
 function fromSchoolIndex(
@@ -723,6 +909,59 @@ function fromScholarshipRows(
         confidence: scholarshipRow.provider_url === raw ? 0.86 : 0.78,
         evidence: `Existing scholarship URL field (${scholarshipRow.provider_url === raw ? 'provider_url' : scholarshipRow.apply_url === raw ? 'apply_url' : 'url'})`,
         fallback: false
+      };
+    }
+  }
+  return null;
+}
+
+function fromParserSourceFallback(
+  row: ProviderRow,
+  rows: ScholarshipUrlRow[]
+): Candidate | null {
+  const displayName = providerDisplayName(row);
+  const seen = new Set<string>();
+  for (const raw of [...urlsFromJson(row.sources), ...urlsFromJson(row.ai_sources)]) {
+    const url = safeParserSourceUrl(raw);
+    if (!url) continue;
+    const key = candidateKey(url);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    return {
+      slug: row.slug,
+      displayName,
+      url,
+      source: 'parser_source_url_fallback',
+      confidence: 0.5,
+      evidence: 'Saved provider parser/source URL',
+      fallback: true
+    };
+  }
+
+  for (const scholarshipRow of rows) {
+    for (const [field, raw] of [
+      ['provider_url', scholarshipRow.provider_url],
+      ['url', scholarshipRow.url],
+      ['apply_url', scholarshipRow.apply_url]
+    ] as const) {
+      const url = safeParserSourceUrl(raw);
+      if (!url) continue;
+      const key = candidateKey(url);
+      if (seen.has(key)) continue;
+      seen.add(key);
+      return {
+        slug: row.slug,
+        displayName,
+        url,
+        source: 'parser_source_url_fallback',
+        confidence:
+          field === 'provider_url' ? 0.56 : field === 'url' ? 0.5 : 0.46,
+        evidence: `Existing scholarship parser source field (${field})${
+          scholarshipRow.source?.trim()
+            ? ` from parser="${scholarshipRow.source.trim()}"`
+            : ''
+        }`,
+        fallback: true
       };
     }
   }
@@ -970,6 +1209,8 @@ async function main() {
   const dryRun = hasFlag('dry-run') || !write;
   const quiet = hasFlag('quiet');
   const officialOnly = hasFlag('official-only');
+  const includeParserSourceFallback = hasFlag('include-parser-source-fallback');
+  const syncMissingProviderRows = hasFlag('sync-missing-provider-rows');
   const noWeb = hasFlag('no-web');
   const minConfidenceRaw = parseArg('min-confidence');
   const minConfidence = minConfidenceRaw
@@ -993,8 +1234,22 @@ async function main() {
   }
 
   const supabase = createClient<Database>(url, key);
-  const rows = await fetchMissingProviders(supabase);
   const schoolIndex = loadSchoolWebsiteIndex();
+  const syncedProviderRows = syncMissingProviderRows
+    ? await syncMissingProviderRowsFromHub({
+        supabase,
+        schoolIndex,
+        includeParserSourceFallback,
+        write: !dryRun
+      })
+    : null;
+  if (syncedProviderRows && !quiet) {
+    console.log(
+      `[sync-missing-provider-rows] missing=${syncedProviderRows.missingInHub}, candidates=${syncedProviderRows.candidates.length}, created=${syncedProviderRows.created}, noCandidate=${syncedProviderRows.noCandidate}`
+    );
+  }
+
+  const rows = await fetchMissingProviders(supabase);
   const scholarshipUrls = await fetchScholarshipUrlsBySlug(
     supabase,
     rows.map((row) => row.slug)
@@ -1021,6 +1276,9 @@ async function main() {
     }
     if (!candidate && !officialOnly && !noWeb) {
       candidate = await fromWikipediaSearch(row);
+    }
+    if (!candidate && includeParserSourceFallback && !officialOnly) {
+      candidate = fromParserSourceFallback(row, scholarshipUrls.get(row.slug) ?? []);
     }
 
     if (
@@ -1096,6 +1354,16 @@ async function main() {
       {
         mode: dryRun ? 'dry-run' : 'write',
         officialOnly,
+        includeParserSourceFallback,
+        syncMissingProviderRows,
+        syncedProviderRows: syncedProviderRows
+          ? {
+              missingInHub: syncedProviderRows.missingInHub,
+              candidates: syncedProviderRows.candidates.length,
+              created: syncedProviderRows.created,
+              noCandidate: syncedProviderRows.noCandidate
+            }
+          : null,
         noWeb,
         minConfidence,
         scanned: rows.length,
@@ -1121,6 +1389,14 @@ async function main() {
         candidates: candidates.length,
         written,
         noCandidate: noCandidate.length,
+        syncedProviderRows: syncedProviderRows
+          ? {
+              missingInHub: syncedProviderRows.missingInHub,
+              candidates: syncedProviderRows.candidates.length,
+              created: syncedProviderRows.created,
+              noCandidate: syncedProviderRows.noCandidate
+            }
+          : null,
         csv: path.relative(ROOT, OUT_CSV),
         summary: path.relative(ROOT, OUT_SUMMARY)
       },

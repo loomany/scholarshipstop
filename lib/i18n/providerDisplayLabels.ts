@@ -55,9 +55,9 @@ const SOURCE_SHORT: Record<
   Record<LocalizedUiLocale, string>
 > = {
   official_source_available: {
-    en: 'Official source available',
-    es: 'Fuente oficial disponible',
-    fr: 'Source officielle disponible'
+    en: 'Provider link available',
+    es: 'Enlace de proveedor disponible',
+    fr: 'Lien fournisseur disponible'
   },
   source_needs_confirmation: {
     en: 'Source needs confirmation',
