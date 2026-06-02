@@ -1433,6 +1433,7 @@ export default function ScholarshipDetailPageClient({
       const sp = new URLSearchParams();
       sp.set('limit', String(DETAIL_AGGREGATION_MAX + 1));
       sp.set('sort', 'closest_deadline');
+      sp.set('tab', 'matches');
       postScholarshipsList({
         searchParams: sp.toString(),
         providerSlug
@@ -1459,6 +1460,7 @@ export default function ScholarshipDetailPageClient({
       const sp = new URLSearchParams();
       sp.set('limit', String(DETAIL_AGGREGATION_MAX + 1));
       sp.set('sort', 'closest_deadline');
+      sp.set('tab', 'matches');
       sp.set('deadline_month', deadlineMonth);
       postScholarshipsList({ searchParams: sp.toString() })
         .then((r) => {
