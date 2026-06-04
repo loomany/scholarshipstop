@@ -857,8 +857,7 @@ export default function ScholarshipCategoryPageClient({
             />
           ) : null
         }
-      >
-        <>
+        listToolbar={
           <ScholarshipsListHeader
             uiLocale={hubLocale}
             uiCopy={hubUi}
@@ -893,7 +892,9 @@ export default function ScholarshipCategoryPageClient({
             }
             catalogListingLocked={false}
           />
-
+        }
+      >
+        <>
           <div className="mb-6 mt-2 space-y-2">
             <h2 className="text-xl font-bold tracking-tight text-gray-900 sm:text-2xl">
               {listingExploreHeading}

@@ -110,18 +110,9 @@ export default function ScholarshipsHubShellSkeleton({
           </div>
         </div>
 
-        <div className="flex w-full min-w-0 flex-col gap-8 lg:flex-row lg:items-stretch lg:gap-6 xl:gap-8">
-          <aside
-            className="order-1 w-full shrink-0 lg:order-2 lg:w-[min(100%,280px)] lg:max-w-[30%] xl:w-[300px] 2xl:w-[320px]"
-            aria-label={sidebarUi.scholarshipCategoriesNavAria}
-          >
-            <div className="lg:sticky lg:top-20 lg:z-10 lg:w-full">
-              <HubSidebarSkeleton sidebar={sidebarUi} />
-            </div>
-          </aside>
-
-          <div className="order-2 min-w-0 flex-1 basis-0 lg:order-1">
-            <div className="relative z-[80] mb-4 space-y-5 sm:mb-5 sm:space-y-6">
+        <div className="flex w-full min-w-0 flex-col gap-5 sm:gap-6 lg:grid lg:grid-cols-[minmax(0,1fr)_min(100%,280px)] lg:items-start lg:gap-6 xl:grid-cols-[minmax(0,1fr)_300px] xl:gap-8 2xl:grid-cols-[minmax(0,1fr)_320px]">
+          <div className="min-w-0 lg:col-start-1 lg:row-start-1">
+            <div className="relative z-[80] space-y-5 sm:space-y-6">
               <div className="rounded-2xl bg-white p-4 shadow-sm">
                 <div className="mb-3 h-4 w-56 rounded bg-gray-200" />
                 <div className="mb-3 h-11 w-full rounded-xl bg-gray-100" />
@@ -132,6 +123,18 @@ export default function ScholarshipsHubShellSkeleton({
                 </div>
               </div>
             </div>
+          </div>
+
+          <aside
+            className="min-w-0 lg:col-start-2 lg:row-start-1 lg:row-span-2"
+            aria-label={sidebarUi.scholarshipCategoriesNavAria}
+          >
+            <div className="lg:sticky lg:top-20 lg:z-10 lg:w-full">
+              <HubSidebarSkeleton sidebar={sidebarUi} />
+            </div>
+          </aside>
+
+          <div className="min-w-0 lg:col-start-1 lg:row-start-2">
             <HubListSkeleton />
           </div>
         </div>

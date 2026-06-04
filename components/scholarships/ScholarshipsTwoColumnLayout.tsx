@@ -17,35 +17,46 @@ type ScholarshipsTwoColumnLayoutProps = {
   maxWidth?: ScholarshipsTwoColumnMaxWidth;
   /**
    * Full-width block above the 2-column row (title, hero, banners).
-   * On `lg+`, the sidebar top aligns with `children` (e.g. filters / list tools).
+   * On `lg+`, the sidebar top aligns with `listToolbar` (filters / list tools).
    */
   lead?: ReactNode;
+  /**
+   * Search, sort, and filter toolbar — always first in the main column.
+   * On mobile, `sidebar` renders directly below this block, then `children` (cards).
+   */
+  listToolbar?: ReactNode | null;
 };
 
 /**
  * Shared scholarships shell: main column + optional My scholarships sidebar.
- * Mobile: when `sidebar` is set, main content stays first so listings remain the priority.
+ * Mobile: filters (`listToolbar`) → sidebar → scholarship cards (`children`).
  * Desktop (lg+): main left (~72%+), sidebar right (~28% max), sticky sidebar.
  */
 export default function ScholarshipsTwoColumnLayout({
   sidebar = null,
   children,
   maxWidth = 'listing',
-  lead = null
+  lead = null,
+  listToolbar = null
 }: ScholarshipsTwoColumnLayoutProps) {
   const mw = MAX_WIDTH[maxWidth];
   const hasSidebar = sidebar != null;
+  const hasListToolbar = listToolbar != null;
 
   return (
     <div className={`mx-auto flex w-full ${mw} flex-col gap-5 sm:gap-6`}>
       {lead != null ? <div className="w-full min-w-0">{lead}</div> : null}
       <div
-        className={`flex w-full min-w-0 flex-col gap-8 lg:flex-row lg:items-stretch lg:gap-6 xl:gap-8`}
+        className={`flex w-full min-w-0 flex-col gap-5 sm:gap-6 lg:grid lg:grid-cols-[minmax(0,1fr)_min(100%,280px)] lg:items-start lg:gap-6 xl:grid-cols-[minmax(0,1fr)_300px] xl:gap-8 2xl:grid-cols-[minmax(0,1fr)_320px]`}
       >
-        <div className="order-1 min-w-0 flex-1 basis-0">{children}</div>
+        {hasListToolbar ? (
+          <div className="min-w-0 lg:col-start-1 lg:row-start-1">{listToolbar}</div>
+        ) : null}
         {hasSidebar ? (
           <aside
-            className="order-2 w-full shrink-0 lg:w-[min(100%,280px)] lg:max-w-[30%] xl:w-[300px] 2xl:w-[320px]"
+            className={`min-w-0 lg:col-start-2 lg:row-start-1 lg:w-full lg:max-w-none ${
+              hasListToolbar ? 'lg:row-span-2' : 'lg:row-span-1'
+            }`}
             aria-label="My scholarships navigation"
           >
             {/* top-20 = 5rem — matches Navbar h-16 default; md+ uses h-20, sticky still clears bar */}
@@ -54,6 +65,13 @@ export default function ScholarshipsTwoColumnLayout({
             </div>
           </aside>
         ) : null}
+        <div
+          className={`min-w-0 flex-1 basis-0 ${
+            hasListToolbar ? 'lg:col-start-1 lg:row-start-2' : 'lg:col-start-1 lg:row-start-1'
+          }`}
+        >
+          {children}
+        </div>
       </div>
     </div>
   );

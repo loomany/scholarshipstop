@@ -3731,74 +3731,76 @@ function ScholarshipsPageInner({
             }}
           />
         }
+        listToolbar={
+          bestTabAuthPending ? null : (
+            <ScholarshipsListHeader
+              uiLocale={uiLocale}
+              uiCopy={hubUi}
+              filterPanelsCopy={filterPanelsUi}
+              query={query}
+              onQueryChange={onQueryChange}
+              categoryCounts={categoryCounts}
+              countryCounts={countryCounts}
+              countryCountsLoading={!sidebarCountsReady}
+              unspecifiedApplicantCountryCount={
+                unspecifiedApplicantCountryCount
+              }
+              hostCountryCounts={hostCountryCounts}
+              hostCountryCountsLoading={!sidebarCountsReady}
+              appliedHostCountryCodes={appliedHostCountryCodes}
+              appliedIncludeUnspecifiedHostCountry={
+                hubListingBodyMoreFilters.includeUnspecifiedHostCountries === true
+              }
+              unspecifiedHostCountryCount={unspecifiedHostCountryCount}
+              onApplyHostCountries={onApplyHostCountries}
+              appliedCountryCodes={
+                hubListingBodyMoreFilters.includeApplicantCountryCodes
+              }
+              appliedIncludeUnspecifiedCountry={
+                hubListingBodyMoreFilters.includeUnspecifiedApplicantCountries
+              }
+              onApplyCountries={onApplyCountries}
+              appliedCategoryIds={appliedCategoryIds}
+              onApplyCategories={onApplyCategories}
+              sortBy={sortBy}
+              onSortChange={onSortChange}
+              resultCount={resultCountForHeader}
+              showingFrom={showingFrom}
+              showingTo={showingTo}
+              onOpenMoreFilters={openMoreFilters}
+              pageTitle={hubListingPageTitle}
+              omitHeadlineBlock
+              loadingCountText={
+                activeTab === 'best-recommendation' && isAuthenticated
+                  ? hubUi.loadingText['best-recommendation']
+                  : hubUi.loadingText[activeTab]
+              }
+              listTab={activeTab}
+              categoriesDisabled={!isLoading && totalCount === 0}
+              moreFiltersActiveCount={moreFiltersActiveCount}
+              isAuthenticated={resolvedAuthenticated}
+              hasSubscription={hasSubscription}
+              onGuestSortBlocked={guestLockedAction}
+              onGuestLockedAction={guestLockedAction}
+              catalogListingLocked={hubTreatAsGuest}
+              savedFilterBarHint={savedFilterBarHint}
+              savedFilterPresetButtons={headerSavedFilterPresetButtons}
+              onSavedFilterPresetSelect={openManageSavedFilterPreset}
+              suppressBottomMargin={
+                (activeTab === 'best-recommendation' &&
+                  shouldShowBestRecommendationWizard) ||
+                (activeTab === 'matches' && shouldPromptScholarshipQuiz)
+              }
+              centerResultSummary={activeTab === 'best-recommendation'}
+            />
+          )
+        }
       >
         <>
           {bestTabAuthPending ? (
             <HubListSkeleton />
           ) : (
             <>
-              <ScholarshipsListHeader
-                uiLocale={uiLocale}
-                uiCopy={hubUi}
-                filterPanelsCopy={filterPanelsUi}
-                query={query}
-                onQueryChange={onQueryChange}
-                categoryCounts={categoryCounts}
-                countryCounts={countryCounts}
-                countryCountsLoading={!sidebarCountsReady}
-                unspecifiedApplicantCountryCount={
-                  unspecifiedApplicantCountryCount
-                }
-                hostCountryCounts={hostCountryCounts}
-                hostCountryCountsLoading={!sidebarCountsReady}
-                appliedHostCountryCodes={appliedHostCountryCodes}
-                appliedIncludeUnspecifiedHostCountry={
-                  hubListingBodyMoreFilters.includeUnspecifiedHostCountries === true
-                }
-                unspecifiedHostCountryCount={unspecifiedHostCountryCount}
-                onApplyHostCountries={onApplyHostCountries}
-                appliedCountryCodes={
-                  hubListingBodyMoreFilters.includeApplicantCountryCodes
-                }
-                appliedIncludeUnspecifiedCountry={
-                  hubListingBodyMoreFilters.includeUnspecifiedApplicantCountries
-                }
-                onApplyCountries={onApplyCountries}
-                appliedCategoryIds={appliedCategoryIds}
-                onApplyCategories={onApplyCategories}
-                sortBy={sortBy}
-                onSortChange={onSortChange}
-                resultCount={resultCountForHeader}
-                showingFrom={showingFrom}
-                showingTo={showingTo}
-                onOpenMoreFilters={openMoreFilters}
-                pageTitle={hubListingPageTitle}
-                omitHeadlineBlock
-                loadingCountText={
-                  activeTab === 'best-recommendation' && isAuthenticated
-                    ? hubUi.loadingText['best-recommendation']
-                    : hubUi.loadingText[activeTab]
-                }
-                listTab={activeTab}
-                categoriesDisabled={!isLoading && totalCount === 0}
-                moreFiltersActiveCount={moreFiltersActiveCount}
-                isAuthenticated={resolvedAuthenticated}
-                hasSubscription={hasSubscription}
-                onGuestSortBlocked={
-                  guestLockedAction
-                }
-                onGuestLockedAction={guestLockedAction}
-                catalogListingLocked={hubTreatAsGuest}
-                savedFilterBarHint={savedFilterBarHint}
-                savedFilterPresetButtons={headerSavedFilterPresetButtons}
-                onSavedFilterPresetSelect={openManageSavedFilterPreset}
-                suppressBottomMargin={
-                  (activeTab === 'best-recommendation' &&
-                    shouldShowBestRecommendationWizard) ||
-                  (activeTab === 'matches' && shouldPromptScholarshipQuiz)
-                }
-                centerResultSummary={activeTab === 'best-recommendation'}
-              />
               {activeTab === 'from-email' ? (
                 <div className="mb-3 rounded-xl border border-orange-200 bg-orange-50 px-3 py-2 text-sm text-orange-900">
                   From email: showing scholarships from your digest link.
