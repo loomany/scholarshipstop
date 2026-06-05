@@ -2,6 +2,7 @@ import { Suspense, type ReactNode } from 'react';
 import { notFound, permanentRedirect } from 'next/navigation';
 import Link from 'next/link';
 
+import { JsonLdScript } from '@/components/seo/JsonLdScript';
 import ScholarshipsHubShellSkeleton from '@/components/scholarships/ScholarshipsHubShellSkeleton';
 import ScholarshipDetailPageAuthBridge from '@/app/scholarships/ScholarshipDetailPageAuthBridge';
 import ScholarshipsHubPageAuthBridge from '@/app/scholarships/ScholarshipsHubPageAuthBridge';
@@ -71,6 +72,7 @@ import { shouldBlockScholarshipListingForDrip } from '@/lib/seo/seoDripFeed';
 import { resolveScholarshipSlugPath } from '@/lib/scholarships/seoScholarshipResolve';
 import { relatedScholarshipHubLinks } from '@/lib/seo/relatedScholarshipHubLinks';
 import { fetchComparePeersForInstitution } from '@/lib/seo/comparePeersServer';
+import { buildScholarshipDetailJsonLd } from '@/lib/scholarships/scholarshipDetailSeo';
 import type { ProfilesRow } from '@/lib/scholarships/scholarshipMatch';
 import { createPublicClient } from '@/utils/supabase/public';
 import { createClient as createServerSupabase } from '@/utils/supabase/server';
@@ -481,6 +483,7 @@ export default async function ScholarshipsSlugPathPageBody({
       await fetchScholarshipDetailServerAuthSnapshot();
     return (
       <>
+        <JsonLdScript data={buildScholarshipDetailJsonLd(scholarship)} />
         <h1 className="sr-only">{scholarship.title}</h1>
         <ScholarshipDetailPageAuthBridge
           initialScholarship={redactPremiumScholarshipFields(scholarship)}
@@ -542,6 +545,7 @@ export default async function ScholarshipsSlugPathPageBody({
       await fetchScholarshipDetailServerAuthSnapshot();
     return (
       <>
+        <JsonLdScript data={buildScholarshipDetailJsonLd(scholarship)} />
         <h1 className="sr-only">{scholarship.title}</h1>
         <ScholarshipDetailPageAuthBridge
           initialScholarship={redactPremiumScholarshipFields(scholarship)}

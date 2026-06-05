@@ -583,8 +583,16 @@ export function getNextStepActions(s: Scholarship): string[] {
   if (!hasTrustworthyAiConfidence(s)) return [];
   const out: string[] = [];
   if (hasNonEmptyArray(s.documentsRequired)) {
+    const docs = s.documentsRequired!
+      .map((item) => item.trim())
+      .filter(Boolean)
+      .slice(0, 3);
+    const docLabel =
+      docs.length > 0
+        ? docs.join(', ')
+        : `${s.documentsRequired!.length} listed document type(s)`;
     out.push(
-      `Prepare the listed materials (${s.documentsRequired!.length} document type(s) detected in the catalog).`
+      `Prepare the required materials shown in this listing: ${docLabel}.`
     );
   }
   if (s.documentRequired || s.essayRequired) {
@@ -601,7 +609,7 @@ export function getNextStepActions(s: Scholarship): string[] {
   }
   if (s.provider?.trim()) {
     out.push(
-      `Verify the final application details on the ${s.provider.trim()} provider page.`
+      `Use the ${s.provider.trim()} application path to confirm eligibility, documents, and any updated deadline before submitting.`
     );
   }
   if (out.length < 2) return [];

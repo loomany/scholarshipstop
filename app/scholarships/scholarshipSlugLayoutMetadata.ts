@@ -27,6 +27,7 @@ import { buildScholarshipDetailAlternates } from '@/lib/i18n/scholarshipPilot/sc
 import { ROOT_LOCALE } from '@/lib/i18n/locales';
 import { getCanonical } from '@/lib/seo/canonical';
 import { buildScholarshipDetailSeoTitle } from '@/lib/seo/scholarshipDetailSeoTitle';
+import { buildScholarshipDetailMetaDescription } from '@/lib/scholarships/scholarshipDetailSeo';
 
 function withExplicitIndexFollowWhenUnset(meta: Metadata): Metadata {
   if (meta.robots !== undefined) return meta;
@@ -375,7 +376,7 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
   }
 
   const title = buildScholarshipDetailSeoTitle(record);
-  const fallbackDescription = metaDescription(record);
+  const fallbackDescription = buildScholarshipDetailMetaDescription(record);
   const path = scholarshipPublicPath(record);
   const canonical = getCanonical(path);
   const description =

@@ -16,13 +16,58 @@ function joinListNatural(items: string[]): string {
 function formatDeadlinePhrase(s: Scholarship): string | null {
   const anchor = parseScholarshipDeadlineAnchor(s.deadlineAt, s.deadline);
   if (anchor) {
-    return `Plan to apply by ${formatScholarshipDeadlineCompactDate(anchor, 'en')}.`;
+    return `The catalog deadline is ${formatScholarshipDeadlineCompactDate(anchor, 'en')}.`;
   }
   const raw = s.deadline?.trim();
   if (raw && raw !== '—') {
-    return `Plan to apply by ${raw}.`;
+    return `The catalog deadline is listed as ${raw}.`;
   }
   return null;
+}
+
+function stableIntroVariant(s: Scholarship): number {
+  const seed = `${s.id}|${s.slug ?? ''}|${s.title}`;
+  let total = 0;
+  for (let i = 0; i < seed.length; i += 1) {
+    total = (total + seed.charCodeAt(i) * (i + 3)) % 9973;
+  }
+  return total % 8;
+}
+
+function buildAudienceFragment(s: Scholarship): string {
+  const it = s.institutionTypes?.filter(Boolean) ?? [];
+  const instText = s.institutionsText?.trim();
+  const st = s.stateTerritoryText?.trim();
+  const scope = s.locationScope?.toLowerCase().trim() ?? '';
+
+  if (it.length > 0) {
+    return ` for students attending ${joinListNatural(it)}`;
+  }
+  if (instText && instText.length <= 160) {
+    return ` for applicants connected to ${instText.replace(/\.\s*$/, '')}`;
+  }
+  if (st && st.length <= 120) {
+    return ` where eligibility references ${st.replace(/\.\s*$/, '')}`;
+  }
+  if (scope === 'national') {
+    return ' for students comparing nationwide U.S. opportunities';
+  }
+  if (scope === 'international') {
+    return ' for applicants who need to confirm international eligibility';
+  }
+  if (scope === 'state' && (s.stateCodes?.length ?? 0) > 0) {
+    return ` for applicants with a connection to ${joinListNatural(s.stateCodes ?? [])}`;
+  }
+
+  const levels = s.catalogUi?.study_levels_display ?? s.studyLevels ?? [];
+  const fields = s.catalogUi?.field_of_study_display ?? s.fieldOfStudy ?? [];
+  if (fields.length > 0) {
+    return ` for ${joinListNatural(fields.slice(0, 2))} students`;
+  }
+  if (levels.length > 0) {
+    return ` for ${joinListNatural(levels.slice(0, 2))} applicants`;
+  }
+  return ' for students checking fit, timing, and required materials';
 }
 
 /** One or two natural sentences under H1: what / who / award / deadline. */
@@ -36,7 +81,7 @@ export function buildScholarshipIntroParagraph(s: Scholarship): string | null {
 
   let audience = '';
   if (it.length > 0) {
-    audience = ` It is geared toward students attending ${joinListNatural(it)}.`;
+    audience = ` It references students attending ${joinListNatural(it)}.`;
   } else if (instText && instText.length <= 160) {
     audience = ` It typically applies to ${instText.replace(/\.\s*$/, '')}.`;
   } else if (st && st.length <= 120) {
@@ -52,10 +97,25 @@ export function buildScholarshipIntroParagraph(s: Scholarship): string | null {
 
   let lead: string;
   if (provider) {
-    lead = `${provider} offers this scholarship to help cover education costs.${audience}`;
+    lead = `${provider} is listed as the scholarship source.${audience}`;
   } else {
-    lead = `This scholarship helps cover education costs for qualified students.${audience}`;
+    lead = `This scholarship listing is organized for student planning.${audience}`;
   }
+
+  const title = s.title?.trim() || 'This scholarship';
+  const detailAudience = buildAudienceFragment(s);
+  const providerPhrase = provider ? ` from ${provider}` : '';
+  const leads = [
+    `${title} is organized on ScholarshipTop as a funding opportunity${providerPhrase}${detailAudience}.`,
+    `For ${title}, start with the source, deadline, award, and eligibility signals${providerPhrase}${detailAudience}.`,
+    `${provider ? `${provider} is the listed source for ${title}` : `${title} is a structured scholarship listing`}${detailAudience}.`,
+    `Use this ${title} profile to compare application fit${providerPhrase}${detailAudience}.`,
+    `${title} gives students one place to review award context, timing, and requirements${providerPhrase}${detailAudience}.`,
+    `This listing turns the available ${title} facts into a planning view${providerPhrase}${detailAudience}.`,
+    `Students shortlisting ${title} can compare provider context, eligibility, and materials${providerPhrase}${detailAudience}.`,
+    `${title} is best reviewed as a source-verified planning record${providerPhrase}${detailAudience}.`
+  ];
+  lead = leads[stableIntroVariant(s)] ?? leads[0]!;
 
   const dl = formatDeadlinePhrase(s);
   const parts: string[] = [];
