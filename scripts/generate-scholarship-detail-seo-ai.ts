@@ -15,17 +15,23 @@ import fs from 'fs';
 import { createClient } from '@supabase/supabase-js';
 
 import type { Database, Json } from '../types_db';
+import { isGenericScholarshipFaqItem } from '../lib/scholarships/scholarshipSeoSanitizers';
 
 type Row = {
   id: string;
   slug: string | null;
   title: string | null;
+  provider_name: string | null;
+  award_amount_text: string | null;
   summary_short: string | null;
   seo_excerpt: string | null;
   seo_faq: Json | null;
   eligibility_text: string | null;
   deadline_text: string | null;
   requirements_text: string | null;
+  documents_required: Json | null;
+  apply_url: string | null;
+  url: string | null;
   is_active: boolean | null;
   updated_at: string | null;
 };
@@ -57,6 +63,13 @@ function argString(name: string): string | null {
 
 function normalizeSpaces(v: string): string {
   return v.replace(/\s+/g, ' ').trim();
+}
+
+function jsonStringArray(value: Json | null | undefined): string[] {
+  if (!value || !Array.isArray(value)) return [];
+  return value.filter(
+    (item): item is string => typeof item === 'string' && item.trim().length > 0
+  );
 }
 
 function clampWithEllipsis(v: string, max: number): string {
@@ -96,30 +109,59 @@ function normalizeFaq(
       question: normalizeSpaces(x.question),
       answer: normalizeSpaces(x.answer)
     }))
-    .filter((x) => x.question.length > 8 && x.answer.length > 20)
+    .filter(
+      (x) =>
+        x.question.length > 8 &&
+        x.answer.length > 20 &&
+        !isGenericScholarshipFaqItem(x.question, x.answer)
+    )
     .slice(0, 5);
-  if (cleaned.length >= 3) return cleaned;
+  if (cleaned.length >= 2) return cleaned;
   return [];
 }
 
-function defaultFaq(title: string): Array<{ question: string; answer: string }> {
-  return [
-    {
-      question: `Who is eligible for ${title}?`,
-      answer:
-        'Review the eligibility section and official listing requirements carefully, then apply only if your profile matches the stated criteria.'
-    },
-    {
-      question: `When is the deadline for ${title}?`,
-      answer:
-        'Use the listed deadline as guidance and always confirm the exact final date and timezone on the official scholarship page before submitting.'
-    },
-    {
-      question: `How should I apply for ${title}?`,
-      answer:
-        'Prepare all required documents in advance, follow the official application steps, and submit through the verified program link after your final checks.'
-    }
-  ];
+function shortFact(value: string, max = 220): string {
+  const clean = normalizeSpaces(value);
+  if (clean.length <= max) return clean;
+  return `${clean.slice(0, max - 1).trimEnd()}…`;
+}
+
+function fallbackFaqFromRow(
+  row: Row,
+  title: string
+): Array<{ question: string; answer: string }> {
+  const out: Array<{ question: string; answer: string }> = [];
+  const eligibility = row.eligibility_text || row.requirements_text;
+  if (eligibility?.trim()) {
+    out.push({
+      question: `What eligibility details are listed for ${title}?`,
+      answer: shortFact(eligibility)
+    });
+  }
+  const deadline = row.deadline_text?.trim();
+  if (deadline) {
+    out.push({
+      question: `What deadline is listed for ${title}?`,
+      answer: `The listed deadline is ${deadline}.`
+    });
+  }
+  const docs = jsonStringArray(row.documents_required).slice(0, 4);
+  if (docs.length > 0) {
+    out.push({
+      question: `What documents are listed for ${title}?`,
+      answer: `The listing names these materials: ${docs.join(', ')}.`
+    });
+  }
+  const award = row.award_amount_text?.trim();
+  if (award) {
+    out.push({
+      question: `What award amount is listed for ${title}?`,
+      answer: `The listed award amount is ${award}.`
+    });
+  }
+  return out
+    .filter((item) => !isGenericScholarshipFaqItem(item.question, item.answer))
+    .slice(0, 5);
 }
 
 function needsUpdate(row: Row): boolean {
@@ -174,14 +216,20 @@ function buildPrompt(row: Row): string {
     '- Model output must be deterministic and practical, not creative fluff.',
     '- title length 30-65 chars, include keyword + intent + USA or 2026.',
     '- metaDescription length 120-160 chars, format: keyword + benefit + CTA.',
-    '- faq: 3-5 short Q/A, MUST cover eligibility, deadline, application process.',
+    '- faq: 0-5 short Q/A. Include an item only when the answer can cite a specific field below.',
+    '- FAQ answers must not say only "check the official site", "prepare documents", or "follow the application steps".',
+    '- Do not create an application-process FAQ unless concrete application steps are present in the input.',
     '- Do not invent unsupported facts.',
     '',
     `Current title: ${row.title ?? ''}`,
+    `Provider: ${row.provider_name ?? ''}`,
+    `Award amount: ${row.award_amount_text ?? ''}`,
     `Current summary: ${row.summary_short ?? ''}`,
     `Eligibility text: ${row.eligibility_text ?? ''}`,
     `Deadline text: ${row.deadline_text ?? ''}`,
-    `Requirements text: ${row.requirements_text ?? ''}`
+    `Requirements text: ${row.requirements_text ?? ''}`,
+    `Documents required: ${jsonStringArray(row.documents_required).join(', ')}`,
+    `Has application destination: ${Boolean(row.apply_url || row.url)}`
   ].join('\n');
 }
 
@@ -220,7 +268,10 @@ async function generateForRow(client: OpenAI, row: Row): Promise<GenPayload> {
   return {
     title: normalizedTitle,
     metaDescription: normalizedMeta,
-    faq: normalizedFaq.length >= 3 ? normalizedFaq : defaultFaq(normalizedTitle)
+    faq:
+      normalizedFaq.length >= 2
+        ? normalizedFaq
+        : fallbackFaqFromRow(row, normalizedTitle)
   };
 }
 
@@ -255,7 +306,7 @@ async function main() {
   const { data, error } = await db
     .from('scholarships')
     .select(
-      'id, slug, title, summary_short, seo_excerpt, seo_faq, eligibility_text, deadline_text, requirements_text, is_active, updated_at'
+      'id, slug, title, provider_name, award_amount_text, summary_short, seo_excerpt, seo_faq, eligibility_text, deadline_text, requirements_text, documents_required, apply_url, url, is_active, updated_at'
     )
     .eq('is_active', true)
     .order('ranking_score', { ascending: false, nullsFirst: false })

@@ -12,13 +12,20 @@ const PLACEHOLDER_PATTERNS: RegExp[] = [
 
 const GENERIC_FAQ_PATTERNS: RegExp[] = [
   /review the eligibility section/i,
+  /review\s+the\s+(official\s+)?listing\s+requirements\s+carefully/i,
   /apply only if your profile matches/i,
   /check the official (website|scholarship page)/i,
   /review the official (website|scholarship page)/i,
   /see the official (website|scholarship page) for full details/i,
   /use the provider application link/i,
-  /prepare (your )?documents/i,
-  /track the deadline/i
+  /locate\s+the\s+official\s+.*\s+application/i,
+  /use\s+the\s+listed\s+deadline\s+as\s+guidance/i,
+  /always\s+confirm\s+.*\s+official\s+scholarship\s+page/i,
+  /prepare (all )?(required )?(your )?documents/i,
+  /follow\s+the\s+official\s+application\s+steps/i,
+  /submit\s+through\s+the\s+verified\s+program\s+link/i,
+  /track the deadline/i,
+  /final checks/i
 ];
 
 const GENERIC_QUESTION_PATTERNS: RegExp[] = [
@@ -26,6 +33,17 @@ const GENERIC_QUESTION_PATTERNS: RegExp[] = [
   /^how do i apply/i,
   /^what should i do next/i,
   /^where can i find more information/i
+];
+
+const GENERIC_APPLICATION_TEXT_PATTERNS: RegExp[] = [
+  /\bto\s+apply,\s*students\s+should\s+locate\s+the\s+official\b/i,
+  /\blocated?\s+the\s+official\s+.*\s+application\b/i,
+  /\bprepare\s+all\s+required\s+documents\s+in\s+advance\b/i,
+  /\bfollow\s+the\s+official\s+application\s+steps\b/i,
+  /\bsubmit\s+through\s+the\s+verified\s+program\s+link\b/i,
+  /\breview\s+the\s+eligibility\s+section\s+and\s+official\s+listing\s+requirements\b/i,
+  /\buse\s+the\s+listed\s+deadline\s+as\s+guidance\b/i,
+  /\balways\s+confirm\s+the\s+exact\s+final\s+date\b/i
 ];
 
 export function isScholarshipPlaceholderText(
@@ -100,6 +118,17 @@ export function isGenericScholarshipFaqItem(
     return true;
   }
   return GENERIC_FAQ_PATTERNS.some((pattern) => pattern.test(normalizedAnswer));
+}
+
+export function isGenericScholarshipApplicationText(
+  value: string | null | undefined
+): boolean {
+  const normalized = value?.replace(/\s+/g, ' ').trim() ?? '';
+  if (!normalized) return true;
+  if (isScholarshipPlaceholderText(normalized)) return true;
+  return GENERIC_APPLICATION_TEXT_PATTERNS.some((pattern) =>
+    pattern.test(normalized)
+  );
 }
 
 export function cleanScholarshipFaqItems(

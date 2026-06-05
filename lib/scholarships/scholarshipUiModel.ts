@@ -7,7 +7,10 @@ import {
   getNormalizedBeforeYouApplySections,
   softenImportantCheckLine
 } from '@/lib/scholarships/scholarshipCheckSectionsNormalize';
-import { isGenericScholarshipFaqItem } from '@/lib/scholarships/scholarshipSeoSanitizers';
+import {
+  isGenericScholarshipApplicationText,
+  isGenericScholarshipFaqItem
+} from '@/lib/scholarships/scholarshipSeoSanitizers';
 import { sanitizeRequirementLines } from '@/lib/scholarships/scholarshipText';
 
 /** Below this, on-page FAQ / rich AI guidance / next steps are suppressed or reduced. */
@@ -278,8 +281,11 @@ export function shouldRenderBeforeYouApply(s: Scholarship): boolean {
 }
 
 const GENERIC_TIP_RE =
-  /\b(check|visit|review|see|read)\s+(the\s+)?(official\s+)?(website|site|page)\b/i;
-const GENERIC_PREP_RE = /\b(prepare|gather)\s+(your\s+)?documents?\b/i;
+  /\b(check|visit|review|see|read|locate)\s+(the\s+)?(official\s+)?(website|site|page|application|listing|source)\b/i;
+const GENERIC_PREP_RE =
+  /\b(prepare|gather)\s+(all\s+)?(required\s+)?(your\s+)?documents?\b/i;
+const GENERIC_SUBMIT_RE =
+  /\bsubmit through (the\s+)?(verified|official)\s+(program\s+)?(link|application)\b/i;
 const GENERIC_VERIFY_RE = /^verify\s+eligibility\.?$/i;
 
 export function filterApplicationTipsForUi(
@@ -291,6 +297,7 @@ export function filterApplicationTipsForUi(
     (t) =>
       !GENERIC_TIP_RE.test(t) &&
       !GENERIC_PREP_RE.test(t) &&
+      !GENERIC_SUBMIT_RE.test(t) &&
       !GENERIC_VERIFY_RE.test(t)
   );
   if (filtered.length === 0) return [];
@@ -308,7 +315,8 @@ export function shouldRenderApplicationTipsUi(
 }
 
 export function shouldRenderSeoApplication(s: Scholarship): boolean {
-  return hasNonEmptyText(s.seoApplication);
+  const text = s.seoApplication?.trim();
+  return Boolean(text) && !isGenericScholarshipApplicationText(text);
 }
 
 function payoutIsOnlyNotStated(label: string | null | undefined): boolean {
@@ -595,11 +603,9 @@ export function getNextStepActions(s: Scholarship): string[] {
       `Prepare the required materials shown in this listing: ${docLabel}.`
     );
   }
-  if (s.documentRequired || s.essayRequired) {
+  if (s.essayRequired) {
     out.push(
-      s.essayRequired
-        ? 'Prioritize the essay draft before opening the provider application.'
-        : 'Confirm each required upload before starting the provider application.'
+      'Prioritize the essay draft before opening the provider application.'
     );
   }
   if (s.deadline?.trim() && s.deadline.trim() !== '—') {
@@ -607,7 +613,12 @@ export function getNextStepActions(s: Scholarship): string[] {
       `Plan submission around the listed deadline: ${s.deadline.trim()}.`
     );
   }
-  if (s.provider?.trim()) {
+  const hasApplicationDestination =
+    Boolean(s.applyLink?.trim()) ||
+    Boolean(s.listingUrl?.trim()) ||
+    Boolean(s.providerUrl?.trim()) ||
+    s.hasOfficialApplicationDestination === true;
+  if (s.provider?.trim() && hasApplicationDestination) {
     out.push(
       `Use the ${s.provider.trim()} application path to confirm eligibility, documents, and any updated deadline before submitting.`
     );

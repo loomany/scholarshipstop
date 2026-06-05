@@ -10,7 +10,11 @@ import {
   buildScholarshipDetailJsonLd,
   buildScholarshipDetailMetaDescription
 } from '@/lib/scholarships/scholarshipDetailSeo';
-import { getNextStepActions } from '@/lib/scholarships/scholarshipUiModel';
+import {
+  filterApplicationTipsForUi,
+  getNextStepActions,
+  shouldRenderSeoApplication
+} from '@/lib/scholarships/scholarshipUiModel';
 
 const sampleScholarship: Scholarship = {
   id: 'detail-seo-test-1',
@@ -24,6 +28,8 @@ const sampleScholarship: Scholarship = {
   benefits: '$2,500',
   howToApply: ['Submit the provider application.'],
   provider: 'Example STEM Foundation',
+  applyLink: 'https://example.org/apply',
+  hasOfficialApplicationDestination: true,
   amount: '2500',
   institutionTypes: ['four-year colleges'],
   categorySlug: 'stem',
@@ -138,6 +144,71 @@ test('scholarship detail JSON-LD emits WebPage, BreadcrumbList, and FAQPage only
 
   const webPage = blocks.find((block) => block['@type'] === 'WebPage');
   assert.equal(webPage?.dateModified, '2026-06-01T00:00:00.000Z');
+});
+
+test('scholarship detail suppresses generic FAQ and application instructions', () => {
+  const genericApply = [
+    'To apply, students should',
+    'locate the official',
+    'Women in STEM Planning Scholarship application,',
+    'prepare all required',
+    'documents in advance,',
+    'follow the official',
+    'application steps,',
+    'and submit through the verified',
+    'program link after final checks.'
+  ].join(' ');
+  const genericDocs = [
+    'Prepare all required',
+    'documents in advance and submit through',
+    'the verified program link after your final checks.'
+  ].join(' ');
+  const genericScholarship: Scholarship = {
+    ...sampleScholarship,
+    seoApplication: genericApply,
+    seoFaq: [
+      {
+        question: 'How do I apply?',
+        answer: [
+          'To apply, students should',
+          'locate the official',
+          'Women in STEM Planning Scholarship application',
+          'and follow the official',
+          'application steps.'
+        ].join(' ')
+      },
+      {
+        question: 'What should I do next?',
+        answer: genericDocs
+      }
+    ]
+  };
+
+  const blocks = buildScholarshipDetailJsonLd(genericScholarship).filter(
+    (block): block is Record<string, unknown> => Boolean(block)
+  );
+  const types = blocks.map((block) => block['@type']);
+
+  assert.equal(types.includes('FAQPage'), false);
+  assert.equal(shouldRenderSeoApplication(genericScholarship), false);
+});
+
+test('application tips keep concrete guidance and drop generic prep copy', () => {
+  const tips = filterApplicationTipsForUi(
+    [
+      [
+        'Prepare all required',
+        'documents in advance and follow the official',
+        'application steps.'
+      ].join(' '),
+      'Draft the 500-word STEM essay before requesting the recommendation letter.'
+    ],
+    { trustworthyAi: true }
+  );
+
+  assert.deepEqual(tips, [
+    'Draft the 500-word STEM essay before requesting the recommendation letter.'
+  ]);
 });
 
 test('next steps prefer concrete required materials over generic document copy', () => {
