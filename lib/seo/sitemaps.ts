@@ -1157,10 +1157,14 @@ async function buildLocalizedResourceArticleSitemapDocuments(
     const slug = slugById.get(row.sourceId);
     if (!slug || !isResourcePilotSlug(slug)) continue;
     const canonicalPath = resourcesArticlePath(slug);
+    const sourceIndexable = !scholarshipIntentCanonicalForContentRoute(
+      'resource',
+      slug
+    );
     const entry = buildLocalizedSitemapEntry({
       locale: row.locale,
       canonicalPath,
-      sourceIndexable: true,
+      sourceIndexable,
       translationStatus: 'published',
       qualityScore: row.qualityScore ?? 90,
       hasLocalizedTitle: Boolean(row.translatedTitle?.trim()),

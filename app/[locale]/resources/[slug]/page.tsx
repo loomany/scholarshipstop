@@ -31,6 +31,8 @@ import {
   type Stage2PilotLocale
 } from '@/lib/i18n/pilotRoutes';
 import { fetchScholarshipsBySlugsOrIdsOrdered } from '@/lib/scholarships/supabase';
+import { getCanonical } from '@/lib/seo/canonical';
+import { scholarshipIntentCanonicalForContentRoute } from '@/lib/seo/contentIntentCanonical';
 
 export const revalidate = 300;
 export const dynamicParams = true;
@@ -50,6 +52,10 @@ export async function generateMetadata({
   const locale = resolveStage2PilotLocaleFromParams(params);
   if (!locale) return METADATA_NOT_FOUND;
   const slug = decodeURIComponent(params?.slug ?? '').trim().toLowerCase();
+  const intentCanonical = scholarshipIntentCanonicalForContentRoute(
+    'resource',
+    slug
+  );
 
   const staticPage = getStaticLocalizedResourcePilotPage(locale, slug);
   if (staticPage) {
@@ -67,7 +73,8 @@ export async function generateMetadata({
   if (resolved.mode === 'englishFallback') {
     const copy = resolved.copy;
     return buildEnglishFallbackPageMetadata({
-      englishCanonicalPath: resourcesArticlePath(slug),
+      englishCanonicalPath:
+        intentCanonical?.canonicalPath ?? resourcesArticlePath(slug),
       title: copy.metaTitle,
       description: copy.metaDescription || copy.summary,
       openGraphLocale: locale === 'es' ? 'es_ES' : 'fr_FR'
@@ -80,7 +87,7 @@ export async function generateMetadata({
   );
   const seo = getContentTranslationSeoDecision({
     translation: resolved.translation,
-    englishIndexable: true,
+    englishIndexable: !intentCanonical,
     hasLocalizedTitle: Boolean(copy.title.trim()),
     hasLocalizedH1: Boolean(copy.title.trim()),
     hasLocalizedBody: Boolean(copy.bodyHtml.trim())
@@ -93,15 +100,18 @@ export async function generateMetadata({
 
   const title = copy.metaTitle;
   const description = copy.metaDescription || copy.summary;
+  const canonicalUrl = intentCanonical
+    ? getCanonical(intentCanonical.canonicalPath)
+    : alternates.canonical;
 
   return {
     title,
     description,
-    alternates,
+    alternates: intentCanonical ? { canonical: canonicalUrl } : alternates,
     openGraph: {
       title,
       description,
-      url: alternates.canonical,
+      url: canonicalUrl,
       locale: locale === 'es' ? 'es_ES' : 'fr_FR'
     },
     twitter: { card: 'summary_large_image', title, description },

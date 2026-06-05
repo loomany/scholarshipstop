@@ -7,6 +7,7 @@ import {
   absolutizeResourceGuideLinksInHtml,
   normalizeScholarshipEntryLinksInHtml
 } from '@/lib/scholarships/resourceGuideRoutes';
+import { canonicalizeContentIntentLinksInHtml } from '@/lib/seo/contentIntentCanonical';
 
 /** Mirrors previous DOMPurify allowlist; avoids jsdom/Turbopack path issues on SSR. */
 const SANITIZE_HTML_OPTIONS: sanitizeHtml.IOptions = {
@@ -67,8 +68,10 @@ type SafeContentPostBodyProps = {
 
 function sanitizeArticleHtml(html: string): string {
   return sanitizeHtml(
-    normalizeScholarshipEntryLinksInHtml(
-      absolutizeResourceGuideLinksInHtml(html)
+    canonicalizeContentIntentLinksInHtml(
+      normalizeScholarshipEntryLinksInHtml(
+        absolutizeResourceGuideLinksInHtml(html)
+      )
     ),
     SANITIZE_HTML_OPTIONS
   );

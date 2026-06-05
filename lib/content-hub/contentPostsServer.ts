@@ -5,6 +5,7 @@ import { unstable_cache } from 'next/cache';
 
 import type { ContentPostRow, ContentPostListFields } from '@/lib/content-hub/contentPostListTypes';
 import { createPublicClient } from '@/utils/supabase/public';
+import { scholarshipIntentCanonicalForContentRoute } from '@/lib/seo/contentIntentCanonical';
 
 export type { ContentPostRow, ContentPostListFields } from '@/lib/content-hub/contentPostListTypes';
 
@@ -20,6 +21,15 @@ function publishedPostsWithSlugQuery() {
     .eq('status', 'published')
     .not('slug', 'is', null)
     .neq('slug', '');
+}
+
+function resourcePostIsIndexableListCandidate(
+  post: Pick<ContentPostListFields, 'slug'>
+): boolean {
+  const slug = post.slug?.trim();
+  return Boolean(
+    slug && !scholarshipIntentCanonicalForContentRoute('resource', slug)
+  );
 }
 
 /** Total published posts that have a non-empty slug (listable on `/resources`). */
@@ -112,7 +122,7 @@ async function fetchAllPublishedContentPostsListFieldsImpl(): Promise<
       page,
       RESOURCES_INDEX_FETCH_BATCH
     );
-    out.push(...batch);
+    out.push(...batch.filter(resourcePostIsIndexableListCandidate));
     if (batch.length < RESOURCES_INDEX_FETCH_BATCH) break;
     page += 1;
   }
@@ -131,7 +141,7 @@ export async function fetchAllPublishedContentPostsListFields(): Promise<
  */
 export const fetchAllPublishedContentPostsForHomeCarouselFallbackCached = unstable_cache(
   fetchAllPublishedContentPostsListFieldsImpl,
-  ['home-resources-carousel-fallback-v1'],
+  ['home-resources-carousel-fallback-v2'],
   { revalidate: 3600 }
 );
 
@@ -211,14 +221,14 @@ export async function fetchRelatedPublishedContentPosts(
     .eq('status', 'published')
     .order('published_at', { ascending: false, nullsFirst: false })
     .order('updated_at', { ascending: false, nullsFirst: false })
-    .limit(limit + 1);
+    .limit(limit + 8);
 
   if (raw) q = q.neq('slug', raw);
 
   const { data, error } = await q;
   if (error) throw new Error(error.message);
   const rows = (data ?? []) as ContentPostListFields[];
-  return rows.slice(0, limit);
+  return rows.filter(resourcePostIsIndexableListCandidate).slice(0, limit);
 }
 
 const RELATED_ARTICLES_FOR_SCHOLARSHIP_MAX = 3;

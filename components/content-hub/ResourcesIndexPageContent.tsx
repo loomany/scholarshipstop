@@ -33,6 +33,7 @@ import {
 } from '@/lib/content-hub/resourcesSection';
 import { getURL } from '@/utils/helpers';
 import { getCanonical } from '@/lib/seo/canonical';
+import { scholarshipIntentCanonicalForContentRoute } from '@/lib/seo/contentIntentCanonical';
 import { STATIC_SCHOLARSHIP_GUIDES } from '@/lib/resources/staticScholarshipGuides';
 import {
   getHubIqPromoUiCopy,
@@ -138,7 +139,9 @@ function StaticScholarshipGuidesSection({
   guideSlugs?: string[];
 }) {
   const featured = STATIC_SCHOLARSHIP_GUIDES.filter(
-    (guide) => !guideSlugs || guideSlugs.includes(guide.slug)
+    (guide) =>
+      !scholarshipIntentCanonicalForContentRoute('resource', guide.slug) &&
+      (!guideSlugs || guideSlugs.includes(guide.slug))
   ).slice(0, 6);
   return (
     <section
@@ -589,7 +592,11 @@ export async function ResourcesIndexPageContent({
     ]
   };
 
-  const staticGuideItemListElements = STATIC_SCHOLARSHIP_GUIDES.map(
+  const indexableStaticGuides = STATIC_SCHOLARSHIP_GUIDES.filter(
+    (guide) => !scholarshipIntentCanonicalForContentRoute('resource', guide.slug)
+  );
+
+  const staticGuideItemListElements = indexableStaticGuides.map(
     (guide, index) => {
       const card = getStaticResourceGuideCardCopy(locale, guide.slug);
       return {
