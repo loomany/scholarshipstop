@@ -1,67 +1,22 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ClipboardCheck } from 'lucide-react';
 
 import {
   carouselCardWidthThreeUp,
   carouselEdgeFadeStoriesClass,
   carouselNavButtonClass
 } from '@/components/home/homeCarouselChrome';
-import {
-  SUCCESS_STORIES,
-  successStoryAvatarSrc,
-  type SuccessStory
-} from '@/lib/home/successStories';
-
-/**
- * Portraits: Fal `fal-ai/nano-banana-2` (see `scripts/generate-success-stories-avatars.ts`), env `FAL_KEY`.
- *
- * Series prompt (abbrev.):
- * "Photo-realistic close-up portrait of a university student, genuine confident smile, soft natural
- * library/campus light, blurred neutral light-grey or cream background, realistic skin texture,
- * Canon R5 50mm f/1.8, premium minimal editorial — Nana Banana 2 Pro aesthetic."
- *
- * Full per-avatar prompts live next to the generator script (regenerate: `npx dotenv-cli -e .env.local
- * -- npx tsx scripts/generate-success-stories-avatars.ts`).
- */
+import { SUCCESS_STORIES, type SuccessStory } from '@/lib/home/successStories';
 
 export type { SuccessStory };
 export { SUCCESS_STORIES };
 
-function initialsAvatarUrl(name: string): string {
-  return `https://ui-avatars.com/api/?name=${encodeURIComponent(
-    name
-  )}&size=112&background=f9fafb&color=111827&rounded=true&bold=true`;
-}
-
-function StoryAvatar({ story }: { story: SuccessStory }) {
-  const [src, setSrc] = useState(() => successStoryAvatarSrc(story.avatarSlug));
-  const fallbackUsed = useRef(false);
-
+function WorkflowIcon() {
   return (
-    <div className="relative shrink-0">
-      <div
-        className="pointer-events-none absolute -inset-[3px] rounded-full bg-gradient-to-br from-amber-50/95 via-white to-orange-100/70 opacity-[0.97] shadow-[0_6px_28px_-10px_rgba(251,146,60,0.38)]"
-        aria-hidden
-      />
-      <div className="relative rounded-full bg-gradient-to-br from-white via-orange-50/35 to-amber-50/55 p-[2px] shadow-[inset_0_1px_0_rgba(255,255,255,0.85)]">
-        {/* eslint-disable-next-line @next/next/no-img-element -- public WebP + ui-avatars fallback */}
-        <img
-          src={src}
-          alt=""
-          width={56}
-          height={56}
-          className="h-14 w-14 rounded-full object-cover ring-[1.5px] ring-white"
-          loading="lazy"
-          decoding="async"
-          onError={() => {
-            if (fallbackUsed.current) return;
-            fallbackUsed.current = true;
-            setSrc(initialsAvatarUrl(story.avatarName));
-          }}
-        />
-      </div>
+    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-orange-100 bg-orange-50 text-orange-700 shadow-sm">
+      <ClipboardCheck className="h-5 w-5" aria-hidden />
     </div>
   );
 }
@@ -69,36 +24,19 @@ function StoryAvatar({ story }: { story: SuccessStory }) {
 const scrollbarHide =
   '[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden';
 
-function StarRow() {
-  return (
-    <div className="flex gap-0.5">
-      <span className="sr-only">5 out of 5 stars</span>
-      {Array.from({ length: 5 }).map((_, i) => (
-        <Star
-          key={i}
-          className="h-4 w-4 fill-orange-500 text-orange-500"
-          strokeWidth={0}
-          aria-hidden
-        />
-      ))}
-    </div>
-  );
-}
-
 function StoryCard({ story }: { story: SuccessStory }) {
   return (
     <article
       className={`${carouselCardWidthThreeUp} rounded-3xl border border-gray-100 bg-white p-6 shadow-sm`}
     >
       <header className="flex gap-3.5">
-        <StoryAvatar story={story} />
+        <WorkflowIcon />
         <div className="min-w-0 flex-1">
           <p className="font-semibold leading-snug text-gray-900">{story.name}</p>
           <p className="text-sm text-gray-500">{story.label}</p>
         </div>
       </header>
       <div className="mt-4 space-y-3">
-        <StarRow />
         <h3 className="text-base font-bold leading-snug tracking-tight text-gray-900">
           {story.headline}
         </h3>
@@ -120,18 +58,18 @@ function getScrollStepPx(scroller: HTMLDivElement): number {
 
 const MANUAL_PAUSE_MS = 2800;
 
-/** px per frame (~60fps). Desktop / tablet — same as before (no hover slowdown). */
+/** px per frame at about 60fps. Desktop and tablet use the same speed. */
 const AUTO_SCROLL_SPEED_WIDE = 0.42;
 /** Narrow viewports: slower drift so touch users can read cards. */
 const AUTO_SCROLL_SPEED_NARROW = 0.22;
 
 type SuccessStoriesCarouselProps = {
-  /** Fewer cards + tighter heading for homepage placement lower on the fold. */
-  shortTestimonials?: boolean;
+  /** Fewer cards plus tighter heading for compact homepage placement. */
+  compact?: boolean;
 };
 
 export default function SuccessStoriesCarousel({
-  shortTestimonials = false
+  compact = false
 }: SuccessStoriesCarouselProps) {
   const scrollerRef = useRef<HTMLDivElement>(null);
   const [manualPause, setManualPause] = useState(false);
@@ -140,7 +78,7 @@ export default function SuccessStoriesCarousel({
   /** Matches Tailwind `sm:` (viewport width under 640px). */
   const narrowViewportRef = useRef(false);
   const manualTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  /** Prevents forward loop reset right after we jump to `half` for “previous” navigation */
+  /** Prevents forward loop reset right after we jump to `half` for previous navigation. */
   const suppressLoopResetRef = useRef(false);
 
   const loopScroll = useCallback(() => {
@@ -232,17 +170,19 @@ export default function SuccessStoriesCarousel({
     };
   }, [manualPause, loopScroll]);
 
-  const stories = shortTestimonials ? SUCCESS_STORIES.slice(0, 3) : SUCCESS_STORIES;
-  /** Duplicate rows so horizontal loop + auto-scroll remain stable. */
+  const stories = compact ? SUCCESS_STORIES.slice(0, 3) : SUCCESS_STORIES;
+  /** Duplicate rows so horizontal loop and auto-scroll remain stable. */
   const loops = [0, 1] as const;
 
   return (
     <div className="w-full">
       <h2 className={`text-center text-pretty ${h2Class}`}>
-        {shortTestimonials ? 'What students say' : 'Stories of Real Students'}
+        {compact
+          ? 'How students use ScholarshipTop'
+          : 'Scholarship planning workflows'}
       </h2>
 
-      <div className={`group relative w-full ${shortTestimonials ? 'mt-6 sm:mt-7' : 'mt-8 sm:mt-10'}`}>
+      <div className={`group relative w-full ${compact ? 'mt-6 sm:mt-7' : 'mt-8 sm:mt-10'}`}>
         <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen">
           <div className={carouselEdgeFadeStoriesClass('left')} aria-hidden />
           <div className={carouselEdgeFadeStoriesClass('right')} aria-hidden />

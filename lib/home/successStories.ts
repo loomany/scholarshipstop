@@ -3,111 +3,81 @@ export type SuccessStory = {
   label: string;
   headline: string;
   body: string;
-  /** ui-avatars fallback initials */
-  avatarName: string;
-  /** File base: `/images/success-stories/avatar-{slug}.webp` */
-  avatarSlug: string;
 };
 
 /**
- * Home success stories — copy + avatar slugs (images generated via
- * `scripts/generate-success-stories-avatars.ts` using FAL Nano Banana 2).
+ * Home workflow examples. Keep these as product-use scenarios, not outcome
+ * or award claims, unless explicit verification is available.
  */
 export const SUCCESS_STORIES: SuccessStory[] = [
   {
-    name: 'Alex R.',
-    label: 'Scholarship Winner',
-    headline: '$10,000 from Google — two weeks earlier than I expected',
+    name: 'STEM applicant',
+    label: 'Shortlist workflow',
+    headline: 'A cleaner way to compare STEM scholarship options',
     body:
-      'Finding that Google grant was like a lottery for me. AI match identified it two weeks early. I used the Essay Mentor to structure my application. Just won $10,000!',
-    avatarName: 'Alex R',
-    avatarSlug: 'alex-r'
+      'Use filters to separate STEM opportunities by deadline, required essays, provider path, and eligibility before deciding which official pages to verify.'
   },
   {
-    name: 'Maria L.',
-    label: 'Tech Grant Recipient',
-    headline: 'Full tuition to U of T after 20 hours of dead-end searching',
+    name: 'International student',
+    label: 'Eligibility workflow',
+    headline: 'Country and visa signals in one planning view',
     body:
-      'I wasted 20 hours on filtering before finding ScholarshipTop. Their AI draft got me a full-tuition scholarship to the University of Toronto. Absolutely changed my life!',
-    avatarName: 'Maria L',
-    avatarSlug: 'maria-l'
+      'Compare applicant-country, study-destination, deadline, and provider-source signals before spending time on programs that may not accept your profile.'
   },
   {
-    name: 'David K.',
-    label: 'STEM Scholar',
-    headline: 'NSF-style research funding — finally a list that matched my lab CV',
+    name: 'Research-focused student',
+    label: 'Essay planning workflow',
+    headline: 'Research goals organized before drafting essays',
     body:
-      'I was drowning in PDFs and eligibility quizzes. The match engine pulled two STEM programs I had missed entirely. Essay Mentor helped me tighten my research statement. Awarded $8,500.',
-    avatarName: 'David K',
-    avatarSlug: 'david-k'
+      'Turn scholarship facts into an essay plan: audience, evidence, research direction, required materials, and what to confirm on the official provider route.'
   },
   {
-    name: 'Sophia N.',
-    label: 'Arts Grant Awardee',
-    headline: 'Portfolio + essay in one workflow — $6k for my MFA path',
+    name: 'Arts applicant',
+    label: 'Materials workflow',
+    headline: 'Portfolio, essay, and deadline checks together',
     body:
-      'Arts scholarships are scattered and vague. This hub cut the noise. I framed my story with the mentor, submitted on time, and landed a $6,000 studio grant.',
-    avatarName: 'Sophia N',
-    avatarSlug: 'sophia-n'
+      'Use requirement signals to see whether a listing asks for a portfolio, essay, transcript, recommendation, or other supporting material before applying.'
   },
   {
-    name: 'James W.',
-    label: 'Community Impact Grant',
-    headline: 'From volunteer burnout to a $5k community scholarship',
+    name: 'Community-service applicant',
+    label: 'Narrative workflow',
+    headline: 'Volunteer impact translated into application evidence',
     body:
-      'I almost quit because I could not prove my impact on paper. The mentor helped me turn messy volunteer hours into a clear narrative. Won $5,000 and a renewable community award.',
-    avatarName: 'James W',
-    avatarSlug: 'james-w'
+      'Plan how to connect service hours, leadership, outcomes, and eligibility rules without inventing claims or skipping provider verification.'
   },
   {
-    name: 'Aisha M.',
-    label: 'Merit Scholarship',
-    headline: '$5k merit award — deadlines I would have missed on my own',
+    name: 'Busy student',
+    label: 'Deadline workflow',
+    headline: 'Urgent deadlines separated from longer-cycle options',
     body:
-      'Notifications saved me. I was working two jobs and still almost missed a merit cycle. One match was a perfect fit for my GPA and major. The essay tools cut rewrite time in half.',
-    avatarName: 'Aisha M',
-    avatarSlug: 'aisha-m'
+      'Sort opportunities by timing, effort, and documents so close deadlines get handled first and uncertain dates are checked on official pages.'
   },
   {
-    name: 'Omar H.',
-    label: 'Full Ride Recipient',
-    headline: 'Full ride + stipend — I stopped applying blind',
+    name: 'High-effort applicant',
+    label: 'Priority workflow',
+    headline: 'Fewer blind applications, more fit checks',
     body:
-      'I used to spray applications everywhere. ScholarshipTop narrowed it to high-fit programs. Mentor feedback on my personal statement was the difference. Full ride with a living stipend.',
-    avatarName: 'Omar H',
-    avatarSlug: 'omar-h'
+      'Use fit, source, urgency, award, and document signals to choose a realistic shortlist before drafting personal statements or collecting references.'
   },
   {
-    name: 'Elena V.',
-    label: 'International STEM',
+    name: 'Cross-border STEM applicant',
+    label: 'Verification workflow',
     headline: 'Cross-border STEM funding without the forum rabbit holes',
     body:
-      'As an international student, forums gave conflicting answers. Verified matches here replaced guesswork. Essay Mentor helped me align my research goals with what reviewers want.',
-    avatarName: 'Elena V',
-    avatarSlug: 'elena-v'
+      'Use structured eligibility and host-country signals to turn forum advice into a list of official sources worth checking directly.'
   },
   {
-    name: 'Jennifer K.',
-    label: 'Parent',
-    headline: 'Five verified matches in minutes — he’s a Coca-Cola Scholar now',
+    name: 'Parent helper',
+    label: 'Family planning workflow',
+    headline: 'A shared view for deadlines and provider paths',
     body:
-      'Finding funding for my son felt impossible. This tool surfaced five verified matches in minutes. He used the mentor for his essays. He is now a Coca-Cola Scholar.',
-    avatarName: 'Jennifer K',
-    avatarSlug: 'jennifer-k'
+      'Families can use saved lists, deadline context, and application-path notes to discuss next steps without relying on scattered browser tabs.'
   },
   {
-    name: 'Tyler B.',
-    label: 'Tech + Internship Award',
-    headline: '$10k + internship — one application kit instead of ten drafts',
+    name: 'Tech applicant',
+    label: 'Reuse workflow',
+    headline: 'One application kit adapted across similar prompts',
     body:
-      'I was recycling weak essays for every portal. The mentor forced structure: hook, proof, outcome. Landed $10,000 plus a summer internship pipeline I did not know existed.',
-    avatarName: 'Tyler B',
-    avatarSlug: 'tyler-b'
+      'Compare prompt themes, required proof, and provider expectations so drafts can be adapted carefully instead of copied blindly across portals.'
   }
 ];
-
-export const SUCCESS_STORY_AVATAR_BASE = '/images/success-stories' as const;
-
-export function successStoryAvatarSrc(slug: string): string {
-  return `${SUCCESS_STORY_AVATAR_BASE}/avatar-${slug}.webp`;
-}
