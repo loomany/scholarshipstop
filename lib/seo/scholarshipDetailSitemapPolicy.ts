@@ -12,6 +12,10 @@ export const SCHOLARSHIP_DETAIL_SITEMAP_SELECT = [
   'source',
   'provider_name',
   'provider_slug',
+  'provider_url',
+  'provider_mission',
+  'apply_url',
+  'url',
   'award_amount_text',
   'award_amount_numeric_sort',
   'currency',
@@ -19,9 +23,15 @@ export const SCHOLARSHIP_DETAIL_SITEMAP_SELECT = [
   'deadline_date',
   'is_recurring',
   'requirements_count',
+  'requirement_signals_count',
   'requirements_text',
   'requirements_text_clean',
+  'requirements_html',
   'eligibility_text',
+  'eligibility_html',
+  'who_can_apply',
+  'documents_required',
+  'document_urls',
   'summary_short',
   'summary_long',
   'official_source_name',
@@ -32,10 +42,30 @@ export const SCHOLARSHIP_DETAIL_SITEMAP_SELECT = [
   'essay_required',
   'transcript_required',
   'recommendation_required',
+  'photo_required',
+  'video_required',
+  'link_required',
+  'survey_required',
+  'question_required',
+  'goal_required',
+  'special_eligibility_required',
   'study_levels',
   'field_of_study',
+  'institution_types',
   'applicant_country_codes',
-  'host_country_codes'
+  'host_country_codes',
+  'state_codes',
+  'location_scope',
+  'number_of_awards',
+  'financial_need_considered',
+  'status_text',
+  'scholarship_status',
+  'payment_details',
+  'winner_payment_text',
+  'ai_student_summary',
+  'seo_excerpt',
+  'seo_overview',
+  'seo_eligibility'
 ].join(', ');
 
 export type ScholarshipDetailSitemapRow = Partial<ScholarshipRow> &
@@ -70,8 +100,9 @@ export function applyScholarshipDetailSitemapCandidateFilters<T extends any>(
     .or(
       'award_amount_text.not.is.null,award_amount_numeric_sort.not.is.null,payout_method.eq.non_monetary'
     )
+    .or('apply_url.not.is.null,url.not.is.null,provider_url.not.is.null')
     .or(
-      'requirements_count.gt.0,requirements_text.not.is.null,eligibility_text.not.is.null'
+      'requirements_text.not.is.null,requirements_text_clean.not.is.null,eligibility_text.not.is.null,who_can_apply.not.is.null,documents_required.not.is.null,document_required.eq.true,essay_required.eq.true,transcript_required.eq.true,recommendation_required.eq.true,provider_mission.not.is.null'
     )
     .or('summary_short.not.is.null,summary_long.not.is.null')
     .or(

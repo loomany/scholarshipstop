@@ -63,6 +63,7 @@ export type ScholarshipDetailIndexPolicy = {
   indexable: boolean;
   reasonCodes: string[];
   meaningfulFactCount: number;
+  hasDistinctiveDetailBlock: boolean;
   sourceStatus: ScholarshipSourceStatus;
   missingDataFlags: ScholarshipMissingDataFlag[];
 };
@@ -77,6 +78,29 @@ function hasAnyText(values: Array<string | null | undefined>): boolean {
 
 function nonEmptyCount(values: Array<unknown[] | null | undefined>): number {
   return values.reduce((count, value) => count + (value?.length ? 1 : 0), 0);
+}
+
+function hasLongText(
+  value: string | null | undefined,
+  minLength = 32
+): boolean {
+  return (value?.replace(/\s+/g, ' ').trim().length ?? 0) >= minLength;
+}
+
+function hasPositiveNumber(value: number | null | undefined): boolean {
+  return typeof value === 'number' && !Number.isNaN(value) && value > 0;
+}
+
+const COUNT_ONLY_REQUIREMENT_LINE_RE =
+  /^\d+\s+requirements?;\s+see the official page for full details\.?$/i;
+
+function hasSpecificDetailLine(lines: string[] | null | undefined): boolean {
+  return Boolean(
+    lines?.some((line) => {
+      const text = line.replace(/\s+/g, ' ').trim();
+      return text.length >= 12 && !COUNT_ONLY_REQUIREMENT_LINE_RE.test(text);
+    })
+  );
 }
 
 export function getScholarshipSourceStatus(
@@ -107,8 +131,7 @@ export function getScholarshipSourceStatus(
       code: 'verified_official_source',
       label: 'Provider link available',
       shortLabel: 'Provider link',
-      description:
-        'ScholarshipTop has a provider-facing destination for this listing, so you can keep the scholarship details and application path together.'
+      description: 'Provider-facing destination is available.'
     };
   }
 
@@ -117,8 +140,7 @@ export function getScholarshipSourceStatus(
       code: 'official_source_available',
       label: 'Application path included',
       shortLabel: 'Application path',
-      description:
-        'A provider application destination is available alongside the organized eligibility, deadline, and award details.'
+      description: 'Application destination is available.'
     };
   }
 
@@ -128,7 +150,7 @@ export function getScholarshipSourceStatus(
       label: 'Structured scholarship details',
       shortLabel: 'Structured details',
       description:
-        'ScholarshipTop has source or sponsor context and organized details to help you compare fit and prepare next steps.'
+        'Named source is present, but no application destination is structured yet.'
     };
   }
 
@@ -136,8 +158,7 @@ export function getScholarshipSourceStatus(
     code: 'source_unclear',
     label: 'Source-quality signal',
     shortLabel: 'Quality signal',
-    description:
-      'ScholarshipTop has limited source context for this listing, so use the structured details to compare fit, materials, and next steps with care.'
+    description: 'Limited source context is available.'
   };
 }
 
@@ -537,38 +558,197 @@ export function meaningfulScholarshipFactCount(
     Scholarship,
     | 'deadline'
     | 'deadlineAt'
+    | 'recurring'
     | 'amount'
     | 'awardAmount'
+    | 'awardAmountNumericSort'
     | 'provider'
+    | 'providerSlug'
+    | 'providerMission'
     | 'providerUrl'
     | 'listingUrl'
     | 'applyLink'
+    | 'hasOfficialApplicationDestination'
+    | 'officialSourceName'
+    | 'source'
     | 'eligibility'
     | 'whoCanApplyText'
     | 'eligibilityText'
+    | 'requirementsTextClean'
+    | 'requirementsHtml'
+    | 'eligibilityHtml'
+    | 'seoEligibility'
     | 'documentsRequired'
+    | 'documentUrls'
+    | 'documentRequired'
+    | 'essayRequired'
+    | 'transcriptRequired'
+    | 'recommendationRequired'
+    | 'photoRequired'
+    | 'videoRequired'
+    | 'linkRequired'
+    | 'surveyRequired'
+    | 'questionRequired'
+    | 'goalRequired'
+    | 'specialEligibilityRequired'
     | 'studyLevels'
     | 'fieldOfStudy'
     | 'hostCountryCodes'
     | 'applicantCountryCodes'
+    | 'institutionTypes'
+    | 'stateCodes'
+    | 'locationScope'
+    | 'requirementTypes'
+    | 'requirementsCount'
+    | 'requirementSignalsCount'
+    | 'summaryShort'
+    | 'summaryLong'
+    | 'aiStudentSummary'
+    | 'seoExcerpt'
+    | 'seoOverview'
+    | 'statusText'
+    | 'scholarshipStatus'
+    | 'payoutMethod'
+    | 'paymentDetails'
+    | 'winnerPayment'
+    | 'numberOfAwards'
+    | 'financialNeedConsidered'
   >
 ): number {
   const scalarFacts = [
-    hasAnyText([s.deadline, s.deadlineAt]),
-    hasAnyText([s.amount, s.awardAmount]),
-    hasAnyText([s.provider, s.providerUrl, s.listingUrl, s.applyLink]),
-    hasAnyText([s.whoCanApplyText, s.eligibilityText])
+    hasAnyText([s.deadline, s.deadlineAt]) || s.recurring === true,
+    hasAnyText([s.amount, s.awardAmount]) ||
+      hasPositiveNumber(s.awardAmountNumericSort),
+    hasAnyText([s.provider, s.providerSlug, s.officialSourceName, s.source]),
+    hasAnyText([s.providerUrl, s.listingUrl, s.applyLink]) ||
+      s.hasOfficialApplicationDestination === true,
+    hasScholarshipEligibilityDetail(s),
+    hasScholarshipDocumentDetail(s),
+    hasScholarshipProviderDescription(s),
+    hasAnyText([
+      s.summaryShort,
+      s.summaryLong,
+      s.aiStudentSummary,
+      s.seoExcerpt,
+      s.seoOverview
+    ]),
+    hasAnyText([s.statusText, s.scholarshipStatus]),
+    hasAnyText([s.payoutMethod, s.paymentDetails, s.winnerPayment]) ||
+      hasPositiveNumber(s.numberOfAwards),
+    hasPositiveNumber(s.requirementsCount) ||
+      hasPositiveNumber(s.requirementSignalsCount),
+    s.financialNeedConsidered === true
   ].filter(Boolean).length;
   return (
     scalarFacts +
     nonEmptyCount([
-      s.eligibility,
-      s.documentsRequired,
       s.studyLevels,
       s.fieldOfStudy,
       s.hostCountryCodes,
-      s.applicantCountryCodes
+      s.applicantCountryCodes,
+      s.institutionTypes,
+      s.stateCodes,
+      s.requirementTypes
     ])
+  );
+}
+
+function hasScholarshipEligibilityDetail(
+  s: Pick<
+    Scholarship,
+    | 'eligibility'
+    | 'whoCanApplyText'
+    | 'eligibilityText'
+    | 'requirementsTextClean'
+    | 'requirementsHtml'
+    | 'eligibilityHtml'
+    | 'seoEligibility'
+  >
+): boolean {
+  return (
+    hasSpecificDetailLine(s.eligibility) ||
+    hasLongText(s.whoCanApplyText) ||
+    hasLongText(s.eligibilityText) ||
+    hasLongText(s.requirementsTextClean) ||
+    hasLongText(s.requirementsHtml) ||
+    hasLongText(s.eligibilityHtml) ||
+    hasLongText(s.seoEligibility, 80)
+  );
+}
+
+function hasScholarshipDocumentDetail(
+  s: Pick<
+    Scholarship,
+    | 'documentsRequired'
+    | 'documentUrls'
+    | 'documentRequired'
+    | 'essayRequired'
+    | 'transcriptRequired'
+    | 'recommendationRequired'
+    | 'photoRequired'
+    | 'videoRequired'
+    | 'linkRequired'
+    | 'surveyRequired'
+    | 'questionRequired'
+    | 'goalRequired'
+    | 'specialEligibilityRequired'
+  >
+): boolean {
+  return (
+    hasSpecificDetailLine(s.documentsRequired) ||
+    (s.documentUrls?.length ?? 0) > 0 ||
+    [
+      s.documentRequired,
+      s.essayRequired,
+      s.transcriptRequired,
+      s.recommendationRequired,
+      s.photoRequired,
+      s.videoRequired,
+      s.linkRequired,
+      s.surveyRequired,
+      s.questionRequired,
+      s.goalRequired,
+      s.specialEligibilityRequired
+    ].some((value) => value === true)
+  );
+}
+
+function hasScholarshipProviderDescription(
+  s: Pick<Scholarship, 'providerMission'>
+): boolean {
+  return hasLongText(s.providerMission, 40);
+}
+
+function hasDistinctiveScholarshipDetailBlock(
+  s: Pick<
+    Scholarship,
+    | 'eligibility'
+    | 'whoCanApplyText'
+    | 'eligibilityText'
+    | 'requirementsTextClean'
+    | 'requirementsHtml'
+    | 'eligibilityHtml'
+    | 'seoEligibility'
+    | 'documentsRequired'
+    | 'documentUrls'
+    | 'documentRequired'
+    | 'essayRequired'
+    | 'transcriptRequired'
+    | 'recommendationRequired'
+    | 'photoRequired'
+    | 'videoRequired'
+    | 'linkRequired'
+    | 'surveyRequired'
+    | 'questionRequired'
+    | 'goalRequired'
+    | 'specialEligibilityRequired'
+    | 'providerMission'
+  >
+): boolean {
+  return (
+    hasScholarshipEligibilityDetail(s) ||
+    hasScholarshipDocumentDetail(s) ||
+    hasScholarshipProviderDescription(s)
   );
 }
 
@@ -578,7 +758,11 @@ export function getScholarshipDetailIndexPolicy(
   const sourceStatus = getScholarshipSourceStatus(s);
   const missingDataFlags = getScholarshipMissingDataFlags(s);
   const meaningfulFactCount = meaningfulScholarshipFactCount(s);
+  const hasDistinctiveDetailBlock = hasDistinctiveScholarshipDetailBlock(s);
   const deadlineUrgency = getScholarshipDeadlineUrgency(s);
+  const sourceIsIndexable =
+    sourceStatus.code === 'verified_official_source' ||
+    sourceStatus.code === 'official_source_available';
   const hasOriginalSummary = hasAnyText([
     s.aiStudentSummary,
     s.summaryShort,
@@ -598,8 +782,7 @@ export function getScholarshipDetailIndexPolicy(
     ) ||
     ['Urgent', 'Soon', 'Open', 'Recurring'].includes(deadlineUrgency.level);
   const hasIndexableEligibility =
-    (s.eligibility?.length ?? 0) > 0 ||
-    hasAnyText([s.whoCanApplyText, s.eligibilityText, s.seoEligibility]);
+    hasScholarshipEligibilityDetail(s);
   const hasIndexableProvider =
     hasAnyText([
       s.provider,
@@ -629,6 +812,9 @@ export function getScholarshipDetailIndexPolicy(
   }
   if (!hasOriginalSummary) reasonCodes.push('missing_original_summary');
   if (meaningfulFactCount < 3) reasonCodes.push('low_fact_count');
+  if (meaningfulFactCount < 6) reasonCodes.push('low_unique_data_field_count');
+  if (!hasDistinctiveDetailBlock)
+    reasonCodes.push('missing_distinctive_detail_block');
   if (missingDataFlags.length >= 5) reasonCodes.push('many_missing_fields');
 
   return {
@@ -640,10 +826,13 @@ export function getScholarshipDetailIndexPolicy(
       hasIndexableEligibility &&
       hasIndexableProvider &&
       hasOriginalSummary &&
-      meaningfulFactCount >= 3 &&
-      sourceStatus.code !== 'source_unclear',
+      meaningfulFactCount >= 6 &&
+      hasDistinctiveDetailBlock &&
+      missingDataFlags.length < 5 &&
+      sourceIsIndexable,
     reasonCodes,
     meaningfulFactCount,
+    hasDistinctiveDetailBlock,
     sourceStatus,
     missingDataFlags
   };

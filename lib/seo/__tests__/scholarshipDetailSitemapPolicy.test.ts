@@ -13,12 +13,23 @@ function row(
     title: 'Indexable Scholarship',
     source: 'Example Catalog',
     provider_name: 'Example Provider',
+    provider_url: 'https://example.org',
+    provider_mission:
+      'Example Provider funds scholarships for students with documented education plans.',
+    apply_url: 'https://example.org/apply',
     award_amount_text: '$1,000',
     award_amount_numeric_sort: 1000,
     deadline_text: 'December 31, 2026',
     deadline_date: '2026-12-31',
     is_recurring: false,
     requirements_count: 2,
+    requirements_text:
+      'Open to students who are enrolled in an accredited program and meet the provider eligibility rules.',
+    requirements_text_clean:
+      'Open to students who are enrolled in an accredited program and meet the provider eligibility rules.',
+    documents_required: ['Transcript', 'Essay'],
+    document_required: true,
+    essay_required: true,
     summary_short:
       'A focused scholarship listing with enough structured public facts for sitemap inclusion.',
     is_indexable: true,
@@ -37,12 +48,25 @@ test('scholarship detail sitemap includes indexable detail rows', () => {
 test('scholarship detail sitemap excludes weak detail rows', () => {
   const result = getScholarshipDetailSitemapDecision(
     row({
-      requirements_count: 0
+      requirements_count: 0,
+      requirements_text: null,
+      requirements_text_clean: null,
+      eligibility_text: null,
+      documents_required: null,
+      document_required: false,
+      essay_required: false,
+      transcript_required: false,
+      recommendation_required: false,
+      provider_mission: null
     })
   );
 
   assert.equal(result.include, false);
   assert.equal(result.reasonCodes.includes('missing_eligibility'), true);
+  assert.equal(
+    result.reasonCodes.includes('missing_distinctive_detail_block'),
+    true
+  );
 });
 
 test('scholarship detail sitemap excludes expired detail rows before policy work', () => {
@@ -66,4 +90,44 @@ test('scholarship detail sitemap surfaces missing policy fields', () => {
 
   assert.equal(result.include, false);
   assert.equal(result.reasonCodes.includes('missing_original_summary'), true);
+});
+
+test('scholarship detail sitemap excludes count-only thin detail pages', () => {
+  const result = getScholarshipDetailSitemapDecision(
+    row({
+      provider_mission: null,
+      requirements_text: null,
+      requirements_text_clean: null,
+      requirements_count: 2,
+      documents_required: null,
+      document_required: false,
+      essay_required: false,
+      transcript_required: false,
+      recommendation_required: false,
+      study_levels: null,
+      field_of_study: null,
+      applicant_country_codes: null,
+      host_country_codes: null
+    })
+  );
+
+  assert.equal(result.include, false);
+  assert.equal(result.reasonCodes.includes('missing_eligibility'), true);
+  assert.equal(
+    result.reasonCodes.includes('missing_distinctive_detail_block'),
+    true
+  );
+});
+
+test('scholarship detail sitemap requires an application destination', () => {
+  const result = getScholarshipDetailSitemapDecision(
+    row({
+      provider_url: null,
+      apply_url: null,
+      url: null
+    })
+  );
+
+  assert.equal(result.include, false);
+  assert.equal(result.reasonCodes.includes('source_needs_confirmation'), true);
 });
