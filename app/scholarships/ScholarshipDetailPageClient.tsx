@@ -3001,7 +3001,7 @@ export default function ScholarshipDetailPageClient({
                       <p className="mb-4 text-xs text-zinc-500">
                         {isSimplerGov
                           ? 'Document list from the listing; confirm the latest version on the official opportunity page.'
-                          : 'Materials you may need to upload or submit; check the official application for the final list.'}
+                          : detailUi.sections.requiredDocumentsNote}
                       </p>
                       {docs.length > 0 ? (
                         <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-zinc-700 md:text-base">

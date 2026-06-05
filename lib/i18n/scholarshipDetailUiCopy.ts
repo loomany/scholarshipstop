@@ -233,7 +233,7 @@ const EN: ScholarshipDetailUiCopy = {
   requirements: 'Requirements',
   whoCanApply: 'Who can apply',
   verifyEligibilityNote:
-    'ScholarshipTop organizes eligibility signals so you can compare fit, prepare materials, and move toward the application path with less guesswork.',
+    'Eligibility lines are shown from available listing data.',
   sponsorAndApplication: 'Sponsor & application',
   applyNow: 'Apply now',
   applyPremiumTitle:
@@ -249,7 +249,7 @@ const EN: ScholarshipDetailUiCopy = {
   restoreAria: 'Restore scholarship to matches',
   lastVerifiedPrefix: 'Information last verified',
   confirmOfficialNote:
-    'ScholarshipTop organizes scholarship details, deadlines, eligibility signals, provider application paths, saved shortlists, and AI help in one workspace so you can move faster from discovery to application.',
+    'Use the provider path for final terms before submitting.',
   showMore: 'Show more',
   showLess: 'Show less',
   studyInPrefix: 'Study in:',
@@ -267,9 +267,9 @@ const EN: ScholarshipDetailUiCopy = {
     keyRequirements: (count) => `Key requirements (${count})`,
     requiredDocuments: 'Required documents',
     requiredDocumentsNote:
-      'Materials you may need to upload or submit; use this list to prepare faster.',
+      'Listed materials from this opportunity.',
     requiredDocumentsNoteGov:
-      'Use this list to prepare the current opportunity materials.',
+      'Listed materials from the opportunity.',
     awardPayment: 'Award & payment',
     importantNotes: 'Important notes',
     aboutProvider: 'About the provider',
@@ -299,7 +299,7 @@ const EN: ScholarshipDetailUiCopy = {
     payoutMethod: 'Payout method'
   },
   matchCta: {
-    title: 'Get matched with scholarships in 2 minutes',
+    title: 'Find scholarships that fit your profile',
     button: 'Find My Scholarships'
   },
   quickDecision: {
@@ -312,41 +312,37 @@ const EN: ScholarshipDetailUiCopy = {
   },
   trust: {
     kicker: 'ScholarshipTop workspace',
-    title: 'Application readiness',
+    title: 'Listing checks',
     intro:
-      'Use these details to understand fit, prepare materials, save the opportunity, and move toward the provider application path when ready.',
+      'Key signals from this listing.',
     methodology: 'Data standards',
     disclaimer: 'View matches',
     officialSourceStatus: 'Application path',
     reviewStatus: 'Review status',
     reviewValueMissing: 'Last reviewed date unavailable',
-    reviewBodyWhenPresent:
-      'ScholarshipTop has a review timestamp for this listing.',
+    reviewBodyWhenPresent: 'Review date is available.',
     reviewBodyWhenMissing:
       'This listing has not exposed a manual review date yet.',
     deadlineUrgency: 'Deadline urgency',
     applicationDifficulty: 'Application difficulty',
     missingDetails: 'Details to complete',
-    completeListingNote:
-      'ScholarshipTop has organized the core listing fields so you can compare fit, prepare materials, track the deadline, and move toward the provider application path when ready.'
+    completeListingNote: 'Core fields are present for this listing.'
   },
   ai: {
     badge: 'AI insights',
     guidanceBadge: 'AI guidance',
     lowConfidenceNote:
-      "I'll surface the key details, eligibility signals, likely next steps, and provider application link when available so you can move from shortlist to application faster.",
+      'Limited listing data; review the visible fields before planning next steps.',
     whyApplyTitle: 'Why this may be worth applying to',
     whyApplySubtitle:
       'Student-friendly angle based on the organized listing details.',
     applicationTipsTitle: 'Application tips',
     applicationTipsSubtitle:
-      'Listing-specific ideas from our AI layer to help you prepare materials and next steps.',
+      'Shown only when the listing has usable AI guidance.',
     nextStepsTitle: 'Next steps',
-    nextStepsSubtitle:
-      'A short checklist so you know what to do after reading the listing.',
+    nextStepsSubtitle: 'Actions generated from visible scholarship fields.',
     beforeApplyTitle: 'Application plan',
-    beforeApplySubtitle:
-      'Use these notes to prepare materials, track timing, and move toward submission.',
+    beforeApplySubtitle: 'Checks from the listing data.',
     importantChecks: 'Application signals',
     detailsToConfirm: 'Details to use',
     redFlags: 'Red flags'
@@ -478,7 +474,7 @@ const ES: ScholarshipDetailUiCopy = {
   requirements: 'Requisitos',
   whoCanApply: 'Quién puede postular',
   verifyEligibilityNote:
-    'ScholarshipTop organiza senales de elegibilidad para comparar encaje, preparar materiales y avanzar hacia la ruta de postulacion con menos dudas.',
+    'Lineas de elegibilidad tomadas de los datos disponibles.',
   sponsorAndApplication: 'Patrocinador y postulación',
   applyNow: 'Postular ahora',
   applyPremiumTitle:
@@ -494,7 +490,7 @@ const ES: ScholarshipDetailUiCopy = {
   restoreAria: 'Restaurar beca en coincidencias',
   lastVerifiedPrefix: 'Información verificada por última vez',
   confirmOfficialNote:
-    'ScholarshipTop organiza detalles, plazos, senales de elegibilidad, rutas de postulacion, listas guardadas y ayuda con IA en un solo workspace para avanzar mas rapido desde la busqueda hasta la postulacion.',
+    'Usa la ruta del proveedor para confirmar los terminos finales antes de enviar.',
   showMore: 'Ver más',
   showLess: 'Ver menos',
   studyInPrefix: 'Estudiar en:',
@@ -512,9 +508,9 @@ const ES: ScholarshipDetailUiCopy = {
     keyRequirements: (count) => `Requisitos clave (${count})`,
     requiredDocuments: 'Documentos requeridos',
     requiredDocumentsNote:
-      'Materiales que podrias subir o enviar; usa esta lista para prepararte mas rapido.',
+      'Materiales indicados en esta oportunidad.',
     requiredDocumentsNoteGov:
-      'Usa esta lista para preparar los materiales de esta oportunidad.',
+      'Materiales indicados en la oportunidad.',
     awardPayment: 'Premio y pago',
     importantNotes: 'Notas importantes',
     aboutProvider: 'Sobre el proveedor',
@@ -544,7 +540,7 @@ const ES: ScholarshipDetailUiCopy = {
     payoutMethod: 'Método de pago'
   },
   matchCta: {
-    title: 'Encuentra becas compatibles en 2 minutos',
+    title: 'Encuentra becas que encajen con tu perfil',
     button: 'Encontrar mis becas'
   },
   quickDecision: {
@@ -557,41 +553,41 @@ const ES: ScholarshipDetailUiCopy = {
   },
   trust: {
     kicker: 'Notas de ScholarshipTop',
-    title: 'Preparacion para postular',
+    title: 'Senales del listado',
     intro:
-      'Usa estos detalles para entender el encaje, preparar materiales, guardar la oportunidad y avanzar hacia la ruta de postulacion cuando estes listo.',
+      'Senales clave de este listado.',
     methodology: 'Estandares de datos',
     disclaimer: 'Ver matches',
     officialSourceStatus: 'Ruta de postulacion',
     reviewStatus: 'Estado de revisión',
     reviewValueMissing: 'Fecha de revisión no disponible',
     reviewBodyWhenPresent:
-      'ScholarshipTop tiene una marca de tiempo de revisión para este listado.',
+      'La fecha de revision esta disponible.',
     reviewBodyWhenMissing:
       'Este listado aún no expone una fecha de revisión manual.',
     deadlineUrgency: 'Urgencia de la fecha límite',
     applicationDifficulty: 'Dificultad de postulación',
     missingDetails: 'Detalles para completar',
     completeListingNote:
-      'ScholarshipTop organizo los campos principales para comparar encaje, preparar materiales, seguir el plazo y avanzar hacia la ruta de postulacion cuando estes listo.'
+      'Los campos principales estan presentes.'
   },
   ai: {
     badge: 'Ideas con IA',
     guidanceBadge: 'Guía con IA',
     lowConfidenceNote:
-      'La IA muestra detalles clave, senales de elegibilidad, posibles proximos pasos y el enlace de postulacion del proveedor cuando este disponible para avanzar mas rapido.',
+      'Datos limitados; revisa los campos visibles antes de planificar.',
     whyApplyTitle: 'Por qué puede valer la pena postular',
     whyApplySubtitle:
       'Angulo orientado al estudiante segun los detalles organizados del listado.',
     applicationTipsTitle: 'Consejos de postulación',
     applicationTipsSubtitle:
-      'Ideas especificas de nuestra capa de IA para preparar materiales y proximos pasos.',
+      'Se muestran solo cuando hay guia IA utilizable.',
     nextStepsTitle: 'Próximos pasos',
     nextStepsSubtitle:
-      'Lista breve para saber qué hacer después de leer el listado.',
+      'Acciones generadas desde los campos visibles.',
     beforeApplyTitle: 'Plan de postulacion',
     beforeApplySubtitle:
-      'Usa estas notas para preparar materiales, seguir tiempos y avanzar hacia el envio.',
+      'Verificaciones de los datos del listado.',
     importantChecks: 'Senales de aplicacion',
     detailsToConfirm: 'Detalles para usar',
     redFlags: 'Señales de alerta'
@@ -724,7 +720,7 @@ const FR: ScholarshipDetailUiCopy = {
   requirements: 'Exigences',
   whoCanApply: 'Qui peut postuler',
   verifyEligibilityNote:
-    'ScholarshipTop organise les signaux d eligibilite pour comparer l adequation, preparer les documents et avancer vers le parcours de candidature avec moins d incertitude.',
+    'Lignes d eligibilite tirees des donnees disponibles.',
   sponsorAndApplication: 'Commanditaire et candidature',
   applyNow: 'Postuler',
   applyPremiumTitle:
@@ -740,7 +736,7 @@ const FR: ScholarshipDetailUiCopy = {
   restoreAria: 'Restaurer la bourse dans les correspondances',
   lastVerifiedPrefix: 'Informations vérifiées pour la dernière fois',
   confirmOfficialNote:
-    'ScholarshipTop organise les details, dates limites, signaux d eligibilite, parcours de candidature, listes enregistrees et aide IA dans un seul workspace pour passer plus vite de la decouverte a la candidature.',
+    'Utilisez le parcours fournisseur pour confirmer les conditions finales avant soumission.',
   showMore: 'Afficher plus',
   showLess: 'Afficher moins',
   studyInPrefix: 'Étudier en :',
@@ -758,9 +754,9 @@ const FR: ScholarshipDetailUiCopy = {
     keyRequirements: (count) => `Exigences clés (${count})`,
     requiredDocuments: 'Documents requis',
     requiredDocumentsNote:
-      'Documents a televerser ou soumettre; utilisez cette liste pour preparer plus vite.',
+      'Documents indiques pour cette opportunite.',
     requiredDocumentsNoteGov:
-      'Utilisez cette liste pour preparer les documents de cette opportunite.',
+      'Documents indiques pour l opportunite.',
     awardPayment: 'Bourse et paiement',
     importantNotes: 'Notes importantes',
     aboutProvider: 'À propos du fournisseur',
@@ -790,7 +786,7 @@ const FR: ScholarshipDetailUiCopy = {
     payoutMethod: 'Mode de versement'
   },
   matchCta: {
-    title: 'Trouvez des bourses adaptées en 2 minutes',
+    title: 'Trouvez des bourses adaptees a votre profil',
     button: 'Trouver mes bourses'
   },
   quickDecision: {
@@ -803,41 +799,41 @@ const FR: ScholarshipDetailUiCopy = {
   },
   trust: {
     kicker: 'Notes ScholarshipTop',
-    title: 'Preparation de candidature',
+    title: 'Signaux de la fiche',
     intro:
-      'Utilisez ces details pour comprendre l adequation, preparer les documents, enregistrer l opportunite et avancer vers le parcours de candidature quand vous etes pret.',
+      'Signaux cles de cette fiche.',
     methodology: 'Standards de donnees',
     disclaimer: 'Voir les matches',
     officialSourceStatus: 'Parcours de candidature',
     reviewStatus: 'Statut de révision',
     reviewValueMissing: 'Date de révision indisponible',
     reviewBodyWhenPresent:
-      'ScholarshipTop dispose d’un horodatage de révision pour cette fiche.',
+      'La date de revision est disponible.',
     reviewBodyWhenMissing:
       'Cette fiche n’expose pas encore de date de révision manuelle.',
     deadlineUrgency: 'Urgence de la date limite',
     applicationDifficulty: 'Difficulté de candidature',
     missingDetails: 'Details a completer',
     completeListingNote:
-      'ScholarshipTop a organise les champs principaux pour comparer l adequation, preparer les documents, suivre la date limite et avancer vers le parcours de candidature quand vous etes pret.'
+      'Les champs principaux sont presents.'
   },
   ai: {
     badge: 'Aperçus IA',
     guidanceBadge: 'Conseils IA',
     lowConfidenceNote:
-      'L IA met en avant les details cles, les signaux d eligibilite, les prochaines etapes probables et le lien de candidature fournisseur quand il est disponible.',
+      'Donnees limitees; examinez les champs visibles avant de planifier.',
     whyApplyTitle: 'Pourquoi cette bourse peut valoir le coup',
     whyApplySubtitle:
       'Angle etudiant base sur les details organises de la fiche.',
     applicationTipsTitle: 'Conseils de candidature',
     applicationTipsSubtitle:
-      'Idees specifiques de notre couche IA pour preparer les documents et les prochaines etapes.',
+      'Affiche seulement une aide IA exploitable.',
     nextStepsTitle: 'Prochaines étapes',
     nextStepsSubtitle:
-      'Liste courte pour savoir quoi faire après la lecture de la fiche.',
+      'Actions generees depuis les champs visibles.',
     beforeApplyTitle: 'Plan de candidature',
     beforeApplySubtitle:
-      'Utilisez ces notes pour preparer les documents, suivre le timing et avancer vers la soumission.',
+      'Verifications issues des donnees de la fiche.',
     importantChecks: 'Signaux de candidature',
     detailsToConfirm: 'Details a utiliser',
     redFlags: 'Signaux d’alerte'

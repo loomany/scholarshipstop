@@ -1,7 +1,10 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import test from 'node:test';
 
 import type { Scholarship } from '@/app/scholarships/scholarshipsData';
+import { getScholarshipDetailUiCopy } from '@/lib/i18n/scholarshipDetailUiCopy';
 import { buildScholarshipIntroParagraph } from '@/lib/scholarships/scholarshipDetailCopy';
 import {
   buildScholarshipDetailJsonLd,
@@ -45,6 +48,44 @@ const sampleScholarship: Scholarship = {
   ]
 };
 
+const detailTemplateFiles = [
+  'lib/i18n/scholarshipDetailUiCopy.ts',
+  'app/scholarships/ScholarshipDetailPageClient.tsx',
+  'components/scholarships/scholarship-detail/ScholarshipDetailSections.tsx'
+];
+
+const auditBoilerplatePhrases = [
+  [
+    'Use these details to understand fit,',
+    'prepare materials, save the opportunity,',
+    'and move toward the provider application path when ready.'
+  ].join(' '),
+  [
+    'ScholarshipTop has a review',
+    'timestamp for this listing.'
+  ].join(' '),
+  [
+    'ScholarshipTop organizes eligibility signals',
+    'so you can compare fit, prepare materials,',
+    'and move toward the application path with less guesswork.'
+  ].join(' '),
+  [
+    'ScholarshipTop organizes scholarship details, deadlines,',
+    'eligibility signals, provider application paths, saved shortlists,',
+    'and AI help in one workspace'
+  ].join(' '),
+  [
+    'Listing-specific ideas from our AI layer',
+    'to help you prepare materials and next steps.'
+  ].join(' '),
+  [
+    'Materials you may need to upload or submit;',
+    'check the official application for the final list.'
+  ].join(' '),
+  'Get matched with scholarships in 2 minutes',
+  'Application readiness'
+];
+
 test('scholarship detail intro avoids audit boilerplate and injects listing facts', () => {
   const intro = buildScholarshipIntroParagraph(sampleScholarship);
 
@@ -57,6 +98,18 @@ test('scholarship detail intro avoids audit boilerplate and injects listing fact
   );
   assert.doesNotMatch(intro!, /review eligibility and application steps/i);
   assert.doesNotMatch(intro!, /prepare required documents early/i);
+});
+
+test('scholarship detail templates omit near-duplicate audit boilerplate', () => {
+  const source = detailTemplateFiles
+    .map((file) => readFileSync(join(process.cwd(), file), 'utf8'))
+    .join('\n');
+  const renderedCopy = JSON.stringify(getScholarshipDetailUiCopy('en'));
+  const corpus = `${source}\n${renderedCopy}`;
+
+  for (const phrase of auditBoilerplatePhrases) {
+    assert.equal(corpus.includes(phrase), false, phrase);
+  }
 });
 
 test('scholarship detail meta description is data-specific and bounded', () => {
