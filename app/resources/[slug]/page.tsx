@@ -122,12 +122,22 @@ export async function generateMetadata({
 }
 
 export default async function ResourcesArticlePage({ params }: PageProps) {
-  const staticGuide = getStaticScholarshipGuide(params.slug);
+  const slug = decodeURIComponent(params.slug).trim();
+  const intentCanonical = scholarshipIntentCanonicalForContentRoute(
+    'resource',
+    slug
+  );
+  const staticGuide = getStaticScholarshipGuide(slug);
   if (staticGuide) {
-    return <StaticScholarshipGuidePage guide={staticGuide} />;
+    return (
+      <StaticScholarshipGuidePage
+        guide={staticGuide}
+        emitFaqSchema={!intentCanonical}
+      />
+    );
   }
 
-  const post = await fetchPublishedContentPostBySlug(params.slug);
+  const post = await fetchPublishedContentPostBySlug(slug);
   if (!post || !post.slug?.trim()) notFound();
 
   const ui = getResourceDetailUiCopy('en');
@@ -224,7 +234,7 @@ export default async function ResourcesArticlePage({ params }: PageProps) {
     'en'
   );
 
-  const faqSchema = buildFaqPageJsonLd(faq, articleUrl);
+  const faqSchema = intentCanonical ? null : buildFaqPageJsonLd(faq, articleUrl);
 
   return (
     <div className="bg-white text-gray-900 antialiased">

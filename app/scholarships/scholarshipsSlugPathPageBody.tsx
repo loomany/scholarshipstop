@@ -484,7 +484,6 @@ export default async function ScholarshipsSlugPathPageBody({
     return (
       <>
         <JsonLdScript data={buildScholarshipDetailJsonLd(scholarship)} />
-        <h1 className="sr-only">{scholarship.title}</h1>
         <ScholarshipDetailPageAuthBridge
           initialScholarship={redactPremiumScholarshipFields(scholarship)}
           routeParam={segments[0]}
@@ -546,7 +545,6 @@ export default async function ScholarshipsSlugPathPageBody({
     return (
       <>
         <JsonLdScript data={buildScholarshipDetailJsonLd(scholarship)} />
-        <h1 className="sr-only">{scholarship.title}</h1>
         <ScholarshipDetailPageAuthBridge
           initialScholarship={redactPremiumScholarshipFields(scholarship)}
           routeParam={segments[0]}
@@ -581,7 +579,6 @@ export default async function ScholarshipsSlugPathPageBody({
             dangerouslySetInnerHTML={{ __html: JSON.stringify(listingJsonLd) }}
           />
         ) : null}
-        <h1 className="sr-only">{route.h1}</h1>
         <Suspense
           fallback={<ScholarshipsHubShellSkeleton pageTitle={route.h1} />}
         >
@@ -596,6 +593,7 @@ export default async function ScholarshipsSlugPathPageBody({
             )}
             routeScope={routeScope}
             currentPathname={route.href}
+            fallbackPageTitle={route.h1}
             leadContent={
               <SeoScholarshipHero
                 heading={route.h1}
@@ -665,7 +663,6 @@ export default async function ScholarshipsSlugPathPageBody({
             dangerouslySetInnerHTML={{ __html: JSON.stringify(listingJsonLd) }}
           />
         ) : null}
-        <h1 className="sr-only">{entry.h1}</h1>
         <Suspense
           fallback={<ScholarshipsHubShellSkeleton pageTitle={entry.h1} />}
         >
@@ -680,6 +677,7 @@ export default async function ScholarshipsSlugPathPageBody({
             )}
             routeScope={routeScope}
             currentPathname={entry.href}
+            fallbackPageTitle={entry.h1}
             leadContent={
               <SeoScholarshipHero
                 heading={entry.h1}
@@ -779,6 +777,7 @@ export default async function ScholarshipsSlugPathPageBody({
             )}
             routeScope={routeScope}
             currentPathname={`/scholarships/${longTail.slug}`}
+            fallbackPageTitle={pageTitle}
             leadContent={null}
             postListingContent={null}
           />
@@ -936,7 +935,6 @@ export default async function ScholarshipsSlugPathPageBody({
             dangerouslySetInnerHTML={{ __html: JSON.stringify(listingJsonLd) }}
           />
         ) : null}
-        <h1 className="sr-only">{pageTitle}</h1>
         <Suspense
           fallback={<ScholarshipsHubShellSkeleton pageTitle={pageTitle} />}
         >
@@ -951,6 +949,7 @@ export default async function ScholarshipsSlugPathPageBody({
             )}
             routeScope={routeScope}
             currentPathname={`/scholarships/${canonicalPath}`}
+            fallbackPageTitle={pageTitle}
             leadContent={
               promotedChrome ? (
                 <>

@@ -15,6 +15,7 @@ import {
   getNextStepActions,
   shouldRenderSeoApplication
 } from '@/lib/scholarships/scholarshipUiModel';
+import { cleanScholarshipGeneratedText } from '@/lib/scholarships/scholarshipSeoSanitizers';
 
 const sampleScholarship: Scholarship = {
   id: 'detail-seo-test-1',
@@ -66,10 +67,7 @@ const auditBoilerplatePhrases = [
     'prepare materials, save the opportunity,',
     'and move toward the provider application path when ready.'
   ].join(' '),
-  [
-    'ScholarshipTop has a review',
-    'timestamp for this listing.'
-  ].join(' '),
+  ['ScholarshipTop has a review', 'timestamp for this listing.'].join(' '),
   [
     'ScholarshipTop organizes eligibility signals',
     'so you can compare fit, prepare materials,',
@@ -146,6 +144,28 @@ test('scholarship detail JSON-LD emits WebPage, BreadcrumbList, and FAQPage only
   assert.equal(webPage?.dateModified, '2026-06-01T00:00:00.000Z');
 });
 
+test('scholarship detail JSON-LD omits FAQPage on noindex records', () => {
+  const blocks = buildScholarshipDetailJsonLd({
+    ...sampleScholarship,
+    isIndexable: false
+  }).filter((block): block is Record<string, unknown> => Boolean(block));
+  const types = blocks.map((block) => block['@type']);
+
+  assert.ok(types.includes('WebPage'));
+  assert.ok(types.includes('BreadcrumbList'));
+  assert.equal(types.includes('FAQPage'), false);
+});
+
+test('scholarship generated text sanitizer removes old serialized audit summaries', () => {
+  const text = [
+    'Example Foundation offers this scholarship to help cover education costs.',
+    'The listed award is $1,000.'
+  ].join(' ');
+
+  assert.equal(cleanScholarshipGeneratedText(text), null);
+  assert.equal(cleanScholarshipGeneratedText('$undefined'), null);
+});
+
 test('scholarship detail suppresses generic FAQ and application instructions', () => {
   const genericApply = [
     'To apply, students should',
@@ -217,7 +237,9 @@ test('next steps prefer concrete required materials over generic document copy',
   assert.ok(actions.some((item) => item.includes('Transcript')));
   assert.ok(actions.some((item) => item.includes('June 30, 2026')));
   assert.ok(
-    actions.some((item) => item.includes('Example STEM Foundation application path'))
+    actions.some((item) =>
+      item.includes('Example STEM Foundation application path')
+    )
   );
   assert.ok(
     actions.every((item) => !/document type\(s\) detected/i.test(item))

@@ -22,8 +22,10 @@ import { SCHOLARSHIP_CATEGORY_ORDER } from '@/app/scholarships/scholarshipCatego
 import { getLongTailSitemapSlugs } from '@/app/scholarships/scholarshipLongTailPresets';
 import {
   applyScholarshipDetailSitemapCandidateFilters,
+  applyScholarshipDetailSafeListingSitemapCandidateFilters,
   getScholarshipDetailSitemapDecision,
   SCHOLARSHIP_DETAIL_SITEMAP_SELECT,
+  SCHOLARSHIP_DETAIL_SAFE_LISTING_SITEMAP_SELECT,
   type ScholarshipDetailSitemapRow
 } from '@/lib/seo/scholarshipDetailSitemapPolicy';
 import { readLongTailSeoBundle } from '@/lib/scholarships/longTailSeoStore';
@@ -302,6 +304,26 @@ function createSitemapReadClient() {
   return createServiceRoleSupabaseClient() ?? createPublicClient();
 }
 
+function createScholarshipDetailSitemapSource() {
+  const serviceClient = createServiceRoleSupabaseClient();
+  if (serviceClient) {
+    return {
+      supabase: serviceClient,
+      table: 'scholarships',
+      select: SCHOLARSHIP_DETAIL_SITEMAP_SELECT,
+      applyFilters: applyScholarshipDetailSitemapCandidateFilters
+    };
+  }
+  const publicClient = createPublicClient();
+  if (!publicClient) return null;
+  return {
+    supabase: publicClient,
+    table: 'scholarships_safe_listing',
+    select: SCHOLARSHIP_DETAIL_SAFE_LISTING_SITEMAP_SELECT,
+    applyFilters: applyScholarshipDetailSafeListingSitemapCandidateFilters
+  };
+}
+
 /** Published `/compare/universities/[slug]` pages. */
 async function fetchCompareSitemapRows(): Promise<CompareSitemapRow[]> {
   const supabase = createSitemapReadClient();
@@ -431,19 +453,32 @@ async function fetchStateGrantSitemapRows(): Promise<StateGrantCountRow[]> {
 async function fetchScholarshipSitemapEntriesUncached(
   base: string
 ): Promise<MetadataRoute.Sitemap> {
-  const supabase = createSitemapReadClient();
-  if (!supabase) return [];
-  const out: MetadataRoute.Sitemap = [];
-  let offset = 0;
+  return fetchScholarshipSitemapEntriesInRange(base);
+}
 
-  for (;;) {
-    const { data, error } = await applyScholarshipDetailSitemapCandidateFilters(
-      supabase
-        .from('scholarships_safe_listing' as unknown as 'scholarships')
-        .select(SCHOLARSHIP_DETAIL_SITEMAP_SELECT)
-    )
+async function fetchScholarshipSitemapEntriesInRange(
+  base: string,
+  options?: { from?: number; to?: number }
+): Promise<MetadataRoute.Sitemap> {
+  const source = createScholarshipDetailSitemapSource();
+  if (!source) return [];
+  const out: MetadataRoute.Sitemap = [];
+  const start = Math.max(0, options?.from ?? 0);
+  const end =
+    options?.to != null && Number.isFinite(options.to)
+      ? Math.max(start, Math.floor(options.to))
+      : Number.POSITIVE_INFINITY;
+
+  for (let offset = start; offset <= end; offset += SITEMAP_DB_PAGE_SIZE) {
+    const rangeEnd = Math.min(offset + SITEMAP_DB_PAGE_SIZE - 1, end);
+    const { data, error } = await source
+      .applyFilters(
+        source.supabase
+          .from(source.table as unknown as 'scholarships')
+          .select(source.select)
+      )
       .order('updated_at', { ascending: false, nullsFirst: false })
-      .range(offset, offset + SITEMAP_DB_PAGE_SIZE - 1);
+      .range(offset, rangeEnd);
 
     if (error) throw new Error(error.message);
     const batch = (data ?? []) as unknown as ScholarshipDetailSitemapRow[];
@@ -458,7 +493,6 @@ async function fetchScholarshipSitemapEntriesUncached(
       });
     }
     if (batch.length < SITEMAP_DB_PAGE_SIZE) break;
-    offset += SITEMAP_DB_PAGE_SIZE;
   }
 
   return out;
@@ -795,7 +829,10 @@ async function buildSeoSitemapEntries(
 async function buildScholarshipsSitemapEntries(
   base: string
 ): Promise<MetadataRoute.Sitemap> {
-  return fetchScholarshipSitemapEntries(base);
+  return fetchScholarshipSitemapEntries(base).catch((err) => {
+    console.error('[sitemap] fetchScholarshipSitemapEntries failed:', err);
+    return [];
+  });
 }
 
 async function buildProvidersSitemapEntries(
@@ -946,12 +983,12 @@ export const buildSitemapDocuments = cache(
 );
 
 async function fetchScholarshipSitemapDocumentCount(): Promise<number> {
-  const supabase = createSitemapReadClient();
-  if (!supabase) return 1;
+  const source = createScholarshipDetailSitemapSource();
+  if (!source) return 1;
 
-  const { count, error } = await applyScholarshipDetailSitemapCandidateFilters(
-    supabase
-      .from('scholarships_safe_listing' as unknown as 'scholarships')
+  const { count, error } = await source.applyFilters(
+    source.supabase
+      .from(source.table as unknown as 'scholarships')
       .select('id', { count: 'exact', head: true })
   );
 
@@ -1529,11 +1566,39 @@ async function buildEssaySitemapDocumentBySlug(
   return makeSitemapDocument('essays', slug, entries);
 }
 
+async function buildScholarshipSitemapDocumentBySlug(
+  slug: string
+): Promise<SitemapDocument | null> {
+  const match = /^scholarships-(\d+)$/.exec(slug);
+  if (!match) return null;
+
+  const index = Number.parseInt(match[1], 10);
+  if (!Number.isSafeInteger(index) || index < 0) return null;
+
+  const from = index * SITEMAP_MAX_URLS_PER_FILE;
+  const to = from + SITEMAP_MAX_URLS_PER_FILE - 1;
+  const entries = await fetchScholarshipSitemapEntriesInRange(
+    sitemapBaseUrl(),
+    {
+      from,
+      to
+    }
+  ).catch((error) => {
+    console.error(`[sitemap] scholarship sitemap shard ${slug} failed:`, error);
+    return [];
+  });
+
+  return makeSitemapDocument('scholarships', slug, entries);
+}
+
 async function buildEnglishSitemapDocumentBySlug(
   slug: string
 ): Promise<SitemapDocument | null> {
   const essayDocument = await buildEssaySitemapDocumentBySlug(slug);
   if (essayDocument) return essayDocument;
+
+  const scholarshipDocument = await buildScholarshipSitemapDocumentBySlug(slug);
+  if (scholarshipDocument) return scholarshipDocument;
 
   const plan = ENGLISH_SITEMAP_DOCUMENT_PLANS.find((candidate) =>
     slugMatchesDocumentPlan(slug, candidate)

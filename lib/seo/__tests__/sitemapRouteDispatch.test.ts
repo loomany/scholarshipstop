@@ -47,11 +47,7 @@ test('sitemap slug normalization and sharding rules match route filenames', () =
     false
   );
   assert.equal(
-    slugMatchesSitemapGroup(
-      'scholarships-0',
-      'scholarships',
-      'always-indexed'
-    ),
+    slugMatchesSitemapGroup('scholarships-0', 'scholarships', 'always-indexed'),
     true
   );
   assert.equal(
@@ -74,6 +70,17 @@ test('getSitemapDocumentBySlug no longer calls the all-document builder', () => 
   );
   assert.ok(implementation, 'expected getSitemapDocumentBySlug implementation');
   assert.equal(implementation![0].includes('buildSitemapDocuments('), false);
+});
+
+test('scholarship child sitemaps use direct shard builder with guarded failures', () => {
+  const source = readFileSync(
+    resolve(process.cwd(), 'lib/seo/sitemaps.ts'),
+    'utf8'
+  );
+
+  assert.match(source, /buildScholarshipSitemapDocumentBySlug/);
+  assert.match(source, /fetchScholarshipSitemapEntriesInRange/);
+  assert.match(source, /scholarship sitemap shard \$\{slug\} failed/);
 });
 
 test('sitemap index route uses the lightweight index builder', () => {

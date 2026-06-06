@@ -54,7 +54,7 @@ const EN: ResourceDetailUiCopy = {
   faqSectionTitle: 'FAQ',
   tocOnThisPage: 'On this page',
   disclaimer:
-    'ScholarshipTop organizes scholarship research and application planning in one place, with eligibility signals, deadlines, shortlisting tools, AI support, and provider application paths when available.',
+    'ScholarshipTop brings scholarship research and application planning into one place, with eligibility signals, deadlines, shortlisting tools, AI support, and provider application paths when available.',
   exploreScholarshipsCta: {
     title: 'See scholarships you may qualify for',
     description:
@@ -63,7 +63,8 @@ const EN: ResourceDetailUiCopy = {
   },
   browseScholarshipsCta: {
     title: 'Browse Scholarships',
-    description: 'Explore structured opportunities in the ScholarshipTop workspace.',
+    description:
+      'Explore structured opportunities in the ScholarshipTop workspace.',
     buttonText: 'Browse Scholarships'
   },
   matchedScholarships: {
@@ -109,7 +110,8 @@ const ES: ResourceDetailUiCopy = {
   },
   browseScholarshipsCta: {
     title: 'Explorar becas',
-    description: 'Consulta oportunidades estructuradas en el workspace de ScholarshipTop.',
+    description:
+      'Consulta oportunidades estructuradas en el workspace de ScholarshipTop.',
     buttonText: 'Ver directorio'
   },
   matchedScholarships: {

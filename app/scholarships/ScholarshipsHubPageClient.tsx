@@ -340,6 +340,7 @@ function ScholarshipsPageInner({
   leadContent = null,
   postListingContent = null,
   hubCanonicalIntroBelowTitle = null,
+  fallbackPageTitle = 'Scholarship matches',
   locale: localeProp
 }: {
   isAuthenticated: boolean;
@@ -354,6 +355,7 @@ function ScholarshipsPageInner({
   postListingContent?: ReactNode;
   /** Canonical `/scholarships/hub/*` SSR intro — rendered under h1 before filters (when `leadContent` omitted). */
   hubCanonicalIntroBelowTitle?: ReactNode;
+  fallbackPageTitle?: string;
   locale?: Stage2PilotLocale;
 }) {
   const router = useRouter();
@@ -455,6 +457,7 @@ function ScholarshipsPageInner({
   const hubTreatAsGuest = !isAuthenticated && Boolean(authResolved);
   /** Hub `/international-friendly` uses `matches` tab but gets its own H1. */
   const hubListingPageTitle = useMemo(() => {
+    if (routeScope) return fallbackPageTitle;
     if (hubRouteResolved?.audience === 'international_friendly') {
       return hubUi.internationalStudentsPageTitle;
     }
@@ -462,6 +465,8 @@ function ScholarshipsPageInner({
       guest: hubTreatAsGuest
     });
   }, [
+    routeScope,
+    fallbackPageTitle,
     hubRouteResolved?.audience,
     activeTab,
     hubTreatAsGuest,
@@ -4281,6 +4286,7 @@ export default function ScholarshipsHubPageClient({
           leadContent={leadContent}
           postListingContent={postListingContent}
           hubCanonicalIntroBelowTitle={hubCanonicalIntroBelowTitle}
+          fallbackPageTitle={fallbackPageTitle}
           locale={locale}
         />
       </Suspense>

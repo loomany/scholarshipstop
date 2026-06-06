@@ -557,11 +557,14 @@ export function mapScholarshipRow(row: ScholarshipRow): Scholarship {
       !Number.isNaN(row.requirement_signals_count)
         ? row.requirement_signals_count
         : undefined,
-    summaryShort: row.summary_short?.trim() || undefined,
-    summaryLong: row.summary_long?.trim() || undefined,
-    whoCanApplyText: row.who_can_apply?.trim() || undefined,
-    notificationDetails: row.notification_details?.trim() || undefined,
-    paymentDetails: row.payment_details?.trim() || undefined,
+    summaryShort: cleanScholarshipGeneratedText(row.summary_short) || undefined,
+    summaryLong: cleanScholarshipGeneratedText(row.summary_long) || undefined,
+    whoCanApplyText:
+      cleanScholarshipGeneratedText(row.who_can_apply) || undefined,
+    notificationDetails:
+      cleanScholarshipGeneratedText(row.notification_details) || undefined,
+    paymentDetails:
+      cleanScholarshipGeneratedText(row.payment_details) || undefined,
     documentsRequired: jsonStringArray(row.documents_required),
     documentUrls: documentLinksFromJson(row.document_urls),
     requirementsTextClean: row.requirements_text_clean?.trim() || undefined,

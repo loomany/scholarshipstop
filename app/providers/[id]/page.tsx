@@ -78,7 +78,9 @@ function providerMetaDescription(
     : `${singleLine.slice(0, 157).trimEnd()}...`;
 }
 
-function formatProviderProfileDate(iso: string | null | undefined): string | null {
+function formatProviderProfileDate(
+  iso: string | null | undefined
+): string | null {
   if (!iso) return null;
   const date = new Date(iso);
   if (!Number.isFinite(date.getTime())) return null;
@@ -89,7 +91,9 @@ function formatProviderProfileDate(iso: string | null | undefined): string | nul
   }).format(date);
 }
 
-function formatProviderAwardPool(amount: number | null | undefined): string | null {
+function formatProviderAwardPool(
+  amount: number | null | undefined
+): string | null {
   if (typeof amount !== 'number' || !Number.isFinite(amount) || amount <= 0) {
     return null;
   }
@@ -176,8 +180,7 @@ function buildProviderTrustFaq(providerName: string): ProviderFaqItem[] {
   return [
     {
       question: `How does ScholarshipTop help with ${providerName} scholarships?`,
-      answer:
-        `ScholarshipTop organizes connected listings, eligibility signals, deadlines, award details, source-quality context, and provider application paths when available so students can compare opportunities tied to ${providerName} in one workspace.`
+      answer: `ScholarshipTop brings connected listings, eligibility signals, deadlines, award details, source-quality context, and provider application paths into one workspace so students can compare opportunities tied to ${providerName}.`
     },
     {
       question: 'What details can I use to plan my application?',
@@ -209,16 +212,12 @@ export async function generateMetadata({
     const canonicalUrl = getCanonical(path);
     const title = `Scholarship providers in ${stateName} | ScholarshipTop`;
     const description = `Browse organizations and foundations offering scholarships with ties to ${stateName}.`;
-    const indexFromQuery = providersHubStatePathIsSeoIndexable(
-      searchParams
-    );
+    const indexFromQuery = providersHubStatePathIsSeoIndexable(searchParams);
     return {
       title,
       description,
       alternates: { canonical: canonicalUrl },
-      ...(indexFromQuery
-        ? {}
-        : { robots: { index: false, follow: true } }),
+      ...(indexFromQuery ? {} : { robots: { index: false, follow: true } }),
       openGraph: {
         title,
         description,
@@ -375,9 +374,8 @@ export default async function ProviderProfilePage({
     displayName: data.displayName,
     hqState: data.hqState
   });
-  const educationalOrganizationSchema =
-    matchedSchool ?
-      buildEducationalOrganizationJsonLd({
+  const educationalOrganizationSchema = matchedSchool
+    ? buildEducationalOrganizationJsonLd({
         name: data.displayName,
         url: providerUrl,
         description: resolvedDescription,
@@ -404,7 +402,10 @@ export default async function ProviderProfilePage({
   tocItems.push(
     { id: 'provider-about', label: detailUi.toc.aboutProvider },
     { id: 'provider-source-status', label: detailUi.toc.sourceStatus },
-    { id: 'provider-explore-scholarships', label: detailUi.toc.exploreScholarships }
+    {
+      id: 'provider-explore-scholarships',
+      label: detailUi.toc.exploreScholarships
+    }
   );
   if (officialHrefNormalized || sourceLinks.length > 0) {
     tocItems.push({
@@ -457,7 +458,11 @@ export default async function ProviderProfilePage({
                 {data.displayName}
               </h1>
               <span className="inline-flex w-fit shrink-0 items-center gap-1.5 self-start rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold uppercase tracking-wide text-emerald-800 ring-1 ring-emerald-200/80 sm:self-center">
-                <Check className="h-3.5 w-3.5 text-emerald-600" strokeWidth={2.5} aria-hidden />
+                <Check
+                  className="h-3.5 w-3.5 text-emerald-600"
+                  strokeWidth={2.5}
+                  aria-hidden
+                />
                 {getLocalizedProviderSourceStatusLabel(
                   providerQuality.sourceStatus,
                   uiLocale
@@ -532,7 +537,9 @@ export default async function ProviderProfilePage({
           id="provider-about"
           className="scroll-mt-24 mt-10 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm sm:p-8"
         >
-          <h2 className="text-lg font-bold text-gray-900">{detailUi.about.heading}</h2>
+          <h2 className="text-lg font-bold text-gray-900">
+            {detailUi.about.heading}
+          </h2>
           {aboutParas.length > 0 ? (
             <div className="mt-4 max-w-3xl space-y-4 text-sm leading-relaxed text-gray-700 sm:text-[0.9375rem]">
               {aboutParas.map((para, i) => (
@@ -540,7 +547,9 @@ export default async function ProviderProfilePage({
               ))}
             </div>
           ) : (
-            <p className="mt-4 text-sm text-gray-500">{detailUi.about.emptyBody}</p>
+            <p className="mt-4 text-sm text-gray-500">
+              {detailUi.about.emptyBody}
+            </p>
           )}
         </section>
 
@@ -563,7 +572,10 @@ export default async function ProviderProfilePage({
           detailUi={detailUi}
         />
 
-        <ProviderProfileIqCta providerName={data.displayName} iqCta={detailUi.iqCta} />
+        <ProviderProfileIqCta
+          providerName={data.displayName}
+          iqCta={detailUi.iqCta}
+        />
 
         <ProviderProfileContextLinks
           copy={detailUi.contextLinks}
@@ -590,11 +602,11 @@ export default async function ProviderProfilePage({
               </div>
             ) : null}
             {sourceLinks.length > 0 ? (
-              <div
-                className={officialHrefNormalized ? 'mt-8' : 'mt-4'}
-              >
+              <div className={officialHrefNormalized ? 'mt-8' : 'mt-4'}>
                 {officialHrefNormalized ? (
-                  <h3 className="text-lg font-bold text-gray-900">{detailUi.toc.sources}</h3>
+                  <h3 className="text-lg font-bold text-gray-900">
+                    {detailUi.toc.sources}
+                  </h3>
                 ) : null}
                 <ul
                   className={
@@ -614,7 +626,10 @@ export default async function ProviderProfilePage({
                         rel="noopener noreferrer"
                         className="block break-words font-semibold text-emerald-900 transition hover:text-emerald-950"
                       >
-                        {detailUi.sourceLinkLabel(index, sourceHostFromHref(href))}
+                        {detailUi.sourceLinkLabel(
+                          index,
+                          sourceHostFromHref(href)
+                        )}
                       </a>
                     </li>
                   ))}
@@ -624,7 +639,10 @@ export default async function ProviderProfilePage({
           </section>
         ) : null}
 
-        <ProviderProfileFaqAccordion items={faqItems} heading={detailUi.toc.faq} />
+        <ProviderProfileFaqAccordion
+          items={faqItems}
+          heading={detailUi.toc.faq}
+        />
 
         <section
           id="provider-scholarships"
@@ -694,7 +712,9 @@ export default async function ProviderProfilePage({
                 )}
               </p>
               <div className="mt-6 flex w-full min-w-0 flex-col gap-4">
-                <ProviderProfilePageAuthBridge scholarships={data.scholarships} />
+                <ProviderProfilePageAuthBridge
+                  scholarships={data.scholarships}
+                />
               </div>
               <ResourcesPagination
                 locale={uiLocale}
@@ -707,7 +727,6 @@ export default async function ProviderProfilePage({
             </>
           )}
         </section>
-
       </div>
     </div>
   );
@@ -770,7 +789,10 @@ function ProviderSourceStatusBlock({
               {detailUi.sourceStatus.completenessLabel}
             </p>
             <p className="mt-1 text-sm font-bold text-gray-950">
-              {getLocalizedProviderDataCompletenessLabel(dataCompleteness, uiLocale)}
+              {getLocalizedProviderDataCompletenessLabel(
+                dataCompleteness,
+                uiLocale
+              )}
             </p>
           </div>
         </div>
@@ -859,7 +881,10 @@ function ProviderProfileIqCta({
         <div className="min-w-0">
           <div className="mb-3 flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center gap-2 rounded-full border border-[#FFB875] bg-white/85 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.17em] text-[#B45309] shadow-sm">
-              <BrainCircuit className="h-3.5 w-3.5 text-[#F97316]" aria-hidden />
+              <BrainCircuit
+                className="h-3.5 w-3.5 text-[#F97316]"
+                aria-hidden
+              />
               {iqCta.featuredTool}
             </span>
             <span className="rounded-full border border-slate-200 bg-slate-950 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white">

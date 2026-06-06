@@ -34,6 +34,18 @@ function withExplicitIndexFollowWhenUnset(meta: Metadata): Metadata {
   return { ...meta, robots: { index: true, follow: true } };
 }
 
+function scholarshipMetadataTitleText(value: string): string {
+  const normalized = value.replace(/\s+/g, ' ').trim() || 'Scholarships';
+  const withoutLeadingBrand = normalized.replace(
+    /^ScholarshipTop\s*\|\s*/i,
+    ''
+  );
+  if (/^ScholarshipTop$/i.test(withoutLeadingBrand)) return 'ScholarshipTop';
+  return /\|\s*ScholarshipTop$/i.test(withoutLeadingBrand)
+    ? withoutLeadingBrand
+    : `${withoutLeadingBrand} | ScholarshipTop`;
+}
+
 function applyScholarshipContentBundleIndexingPolicy(
   meta: Metadata,
   canonicalPath: string
@@ -151,6 +163,7 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
       const canonical = getCanonical(path);
       const seo = readScholarshipSeoContent(resolved.canonicalPath);
       const title = seo?.seo_title ?? entry.h1Fallback;
+      const titleText = scholarshipMetadataTitleText(title);
       const fallbackDescription =
         seo?.seo_description ?? entry.metaDescriptionFallback;
       const description =
@@ -166,17 +179,17 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
           priority: 4
         })) ?? fallbackDescription;
       const meta: Metadata = {
-        title,
+        title: { absolute: titleText },
         description,
         openGraph: {
-          title,
+          title: titleText,
           description,
           url: canonical,
           type: 'website'
         },
         twitter: {
           card: 'summary_large_image',
-          title,
+          title: titleText,
           description
         },
         alternates: {
@@ -203,18 +216,19 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
   if (resolved.kind === 'country_seo') {
     const { route } = resolved;
     const canonical = getCanonical(route.href);
+    const titleText = scholarshipMetadataTitleText(route.metaTitle);
     const meta: Metadata = {
-      title: route.metaTitle,
+      title: { absolute: titleText },
       description: route.metaDescription,
       openGraph: {
-        title: route.metaTitle,
+        title: titleText,
         description: route.metaDescription,
         url: canonical,
         type: 'website'
       },
       twitter: {
         card: 'summary_large_image',
-        title: route.metaTitle,
+        title: titleText,
         description: route.metaDescription
       },
       alternates: {
@@ -228,18 +242,19 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
     const { entry } = resolved;
     const canonical = getCanonical(entry.href);
     const robots = crossCountryListingRobotsFromManifest(entry);
+    const titleText = scholarshipMetadataTitleText(entry.metaTitle);
     const meta: Metadata = {
-      title: entry.metaTitle,
+      title: { absolute: titleText },
       description: entry.metaDescription,
       openGraph: {
-        title: entry.metaTitle,
+        title: titleText,
         description: entry.metaDescription,
         url: canonical,
         type: 'website'
       },
       twitter: {
         card: 'summary_large_image',
-        title: entry.metaTitle,
+        title: titleText,
         description: entry.metaDescription
       },
       alternates: {
@@ -264,6 +279,7 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
     const canonical = getCanonical(path);
     const seo = readLongTailSeoBundle(longTail.slug);
     const title = seo?.seo_title ?? longTail.metaTitle;
+    const titleText = scholarshipMetadataTitleText(title);
     const fallbackDescription =
       seo?.seo_description ?? longTail.metaDescription;
     const description =
@@ -276,17 +292,17 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
         priority: 3
       })) ?? fallbackDescription;
     const meta: Metadata = {
-      title,
+      title: { absolute: titleText },
       description,
       openGraph: {
-        title,
+        title: titleText,
         description,
         url: canonical,
         type: 'website'
       },
       twitter: {
         card: 'summary_large_image',
-        title,
+        title: titleText,
         description
       },
       alternates: {
@@ -319,6 +335,7 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
       seo?.seo_title?.trim() ||
       hubMeta?.title?.trim() ||
       resolved.entry.h1Fallback;
+    const titleText = scholarshipMetadataTitleText(title);
     const fallbackDescription =
       seo?.seo_description?.trim() ||
       hubMeta?.meta_description?.trim() ||
@@ -336,17 +353,17 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
         priority: 5
       })) ?? fallbackDescription;
     const meta: Metadata = {
-      title,
+      title: { absolute: titleText },
       description,
       openGraph: {
-        title,
+        title: titleText,
         description,
         url: canonical,
         type: 'website'
       },
       twitter: {
         card: 'summary_large_image',
-        title,
+        title: titleText,
         description
       },
       alternates: {
@@ -376,6 +393,7 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
   }
 
   const title = buildScholarshipDetailSeoTitle(record);
+  const titleText = scholarshipMetadataTitleText(title);
   const fallbackDescription = buildScholarshipDetailMetaDescription(record);
   const path = scholarshipPublicPath(record);
   const canonical = getCanonical(path);
@@ -401,17 +419,17 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
   });
 
   const meta: Metadata = {
-    title,
+    title: { absolute: titleText },
     description,
     openGraph: {
-      title,
+      title: titleText,
       description,
       url: alternates.canonical ?? canonical,
       type: 'article'
     },
     twitter: {
       card: 'summary_large_image',
-      title,
+      title: titleText,
       description
     },
     alternates

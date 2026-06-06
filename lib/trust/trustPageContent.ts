@@ -192,7 +192,7 @@ export const TRUST_PAGE_CONTENT: Record<TrustPageKey, TrustPageContent> = {
   verificationMethodology: {
     title: 'Scholarship Verification Methodology',
     description:
-      'How ScholarshipTop organizes source-quality signals, deadlines, award values, eligibility, required materials, and application routes.',
+      'How ScholarshipTop reviews source-quality signals, deadlines, award values, eligibility, required materials, and application routes.',
     eyebrow: 'Verification methodology',
     h1: 'How ScholarshipTop verifies scholarship listings',
     intro:
@@ -234,7 +234,7 @@ export const TRUST_PAGE_CONTENT: Record<TrustPageKey, TrustPageContent> = {
         ]
       },
       {
-        title: 'Application readiness',
+        title: 'Application checklist',
         body: 'Use organized deadlines, eligibility signals, award details, required materials, and provider application paths to decide what belongs on your shortlist and what to prepare next.'
       }
     ],
@@ -316,7 +316,7 @@ export const TRUST_PAGE_CONTENT: Record<TrustPageKey, TrustPageContent> = {
         body: 'Students often lose time applying from a title alone. ScholarshipTop encourages the opposite: compare fit first, evaluate effort, prepare the right materials, and keep provider application paths tied to the saved opportunity.'
       },
       {
-        title: 'Application readiness checklist',
+        title: 'Application checklist',
         bullets: [
           'Eligibility rules and whether they match your profile',
           'Deadline, timezone, and whether the cycle is still open',
@@ -539,7 +539,7 @@ export const TRUST_PAGE_CONTENT: Record<TrustPageKey, TrustPageContent> = {
       {
         title: 'What students should know',
         bullets: [
-          'ScholarshipTop organizes scholarship details, deadlines, and application signals.',
+          'ScholarshipTop brings scholarship details, deadlines, and application signals into one workflow.',
           'Provider application paths are included when available.',
           'Paid tools can help organize the search, compare fit, and prepare materials.',
           'Final selection and award disbursement are made by the relevant provider.'

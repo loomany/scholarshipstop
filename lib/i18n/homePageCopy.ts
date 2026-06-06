@@ -97,7 +97,7 @@ export type HomePageCopy = {
 };
 
 const EN: HomePageCopy = {
-  h1: 'Get matched with scholarships in 2 minutes',
+  h1: 'Find scholarships that fit you in 2 minutes',
   heroSubtext:
     'Answer a few quick questions and find scholarships you can apply for today',
   ctaFind: 'Find My Scholarships',
@@ -174,22 +174,19 @@ const EN: HomePageCopy = {
     cards: [
       {
         title: 'Verified listings',
-        body:
-          'We review key scholarship details before surfacing opportunities to students.',
+        body: 'We review key scholarship details before surfacing opportunities to students.',
         cta: 'Read methodology',
         href: '/scholarship-verification-methodology'
       },
       {
         title: 'Updated regularly',
-        body:
-          'We work to keep deadlines, eligibility notes, and award details current as programs change.',
+        body: 'We work to keep deadlines, eligibility notes, and award details current as programs change.',
         cta: 'Report a correction',
         href: '/corrections'
       },
       {
         title: 'Application-path workflow',
-        body:
-          'Provider links and application-path signals are organized with each listing when available.',
+        body: 'Provider links and application-path signals are organized with each listing when available.',
         cta: 'How ScholarshipTop works',
         href: '/how-scholarshiptop-works'
       }
@@ -202,18 +199,15 @@ const EN: HomePageCopy = {
     items: [
       {
         title: 'Eligibility signals',
-        body:
-          'We summarize degree level, residency, field, and other common requirements so you can spot fit faster.'
+        body: 'We summarize degree level, residency, field, and other common requirements so you can spot fit faster.'
       },
       {
         title: 'Deadlines and award details',
-        body:
-          'We track dates and amounts as stated by the provider when the listing was last reviewed — and flag when details look incomplete.'
+        body: 'We track dates and amounts as stated by the provider when the listing was last reviewed — and flag when details look incomplete.'
       },
       {
         title: 'Where to apply next',
-        body:
-          'We prioritize provider-hosted application paths and next-step links when available.'
+        body: 'We prioritize provider-hosted application paths and next-step links when available.'
       }
     ],
     cta: 'See how ScholarshipTop works',
@@ -221,8 +215,7 @@ const EN: HomePageCopy = {
   },
   guidedEssay: {
     title: 'Guided essay support for scholarship applications',
-    body:
-      'Use AI tools to brainstorm, structure, and refine your ideas based on your own experiences and goals.',
+    body: 'Use AI tools to brainstorm, structure, and refine your ideas based on your own experiences and goals.',
     steps: [
       'Understand the prompt',
       'Build your angle',
@@ -247,8 +240,7 @@ const EN: HomePageCopy = {
     badge: 'US & International programs',
     titleLine1: 'Study grants in',
     titleLine2: 'the US & beyond',
-    body:
-      "Find funding in the world's leading colleges and universities. We've combined the largest US grant database with international programs to support your talent anywhere on the globe.",
+    body: "Find funding in the world's leading colleges and universities. We've combined the largest US grant database with international programs to support your talent anywhere on the globe.",
     cta: 'Match me with grants',
     destinationsLabel: 'Top destinations in our catalog',
     destinationsCountTemplate: '{count} destinations',
@@ -335,8 +327,7 @@ const ES: HomePageCopy = {
   ],
   whyStudentsTitle: 'Por qué usan ScholarshipTop',
   whyStudentsP1: 'Miles de listados — la mayoría no encaja con tu perfil.',
-  whyStudentsP2:
-    'Horas de búsqueda y filtros; aún se pierden buenas opciones.',
+  whyStudentsP2: 'Horas de búsqueda y filtros; aún se pierden buenas opciones.',
   whyStudentsP3: 'Las fechas pasan. Desaparecen buenas oportunidades.',
   whyStudentsSimple: 'Lo hacemos simple.',
   workflowTitle: 'Tu flujo de becas',
@@ -361,22 +352,19 @@ const ES: HomePageCopy = {
     cards: [
       {
         title: 'Listados verificados',
-        body:
-          'Revisamos datos clave de becas antes de mostrar oportunidades a estudiantes.',
+        body: 'Revisamos datos clave de becas antes de mostrar oportunidades a estudiantes.',
         cta: 'Leer metodología',
         href: '/scholarship-verification-methodology'
       },
       {
         title: 'Actualizados con frecuencia',
-        body:
-          'Trabajamos para mantener fechas, elegibilidad y montos al día cuando los programas cambian.',
+        body: 'Trabajamos para mantener fechas, elegibilidad y montos al día cuando los programas cambian.',
         cta: 'Reportar una corrección',
         href: '/corrections'
       },
       {
         title: 'Flujo con ruta de solicitud',
-        body:
-          'Los enlaces del proveedor y las senales de ruta de solicitud se organizan con cada listado cuando estan disponibles.',
+        body: 'Los enlaces del proveedor y las senales de ruta de solicitud se organizan con cada listado cuando estan disponibles.',
         cta: 'Como funciona ScholarshipTop',
         href: '/how-scholarshiptop-works'
       }
@@ -389,18 +377,15 @@ const ES: HomePageCopy = {
     items: [
       {
         title: 'Señales de elegibilidad',
-        body:
-          'Resumimos nivel académico, residencia, campo y otros requisitos comunes para ver ajuste más rápido.'
+        body: 'Resumimos nivel académico, residencia, campo y otros requisitos comunes para ver ajuste más rápido.'
       },
       {
         title: 'Fechas y detalles del premio',
-        body:
-          'Seguimos fechas y montos según el proveedor en la última revisión — y marcamos datos incompletos.'
+        body: 'Seguimos fechas y montos según el proveedor en la última revisión — y marcamos datos incompletos.'
       },
       {
         title: 'Dónde aplicar',
-        body:
-          'Priorizamos rutas alojadas por el proveedor y enlaces de siguiente paso cuando estan disponibles.'
+        body: 'Priorizamos rutas alojadas por el proveedor y enlaces de siguiente paso cuando estan disponibles.'
       }
     ],
     cta: 'Ver cómo funciona ScholarshipTop',
@@ -408,8 +393,7 @@ const ES: HomePageCopy = {
   },
   guidedEssay: {
     title: 'Apoyo guiado para ensayos de becas',
-    body:
-      'Usa herramientas de IA para idear, estructurar y refinar ideas basadas en tu experiencia y metas.',
+    body: 'Usa herramientas de IA para idear, estructurar y refinar ideas basadas en tu experiencia y metas.',
     steps: [
       'Entiende el prompt',
       'Define tu enfoque',
@@ -419,8 +403,7 @@ const ES: HomePageCopy = {
     disclaimer:
       'Apoya tu proceso de escritura, no reemplaza tu criterio ni tu voz.',
     tryCta: 'Probar Essay Mentor',
-    playVideoAria:
-      'Reproducir video: apoyo guiado de ensayos para becas',
+    playVideoAria: 'Reproducir video: apoyo guiado de ensayos para becas',
     essayHref: '/essay'
   },
   finalCta: {
@@ -434,8 +417,7 @@ const ES: HomePageCopy = {
     badge: 'Programas en EE. UU. e internacionales',
     titleLine1: 'Becas para estudiar en',
     titleLine2: 'EE. UU. y más allá',
-    body:
-      'Encuentra financiación en universidades líderes. Combinamos el mayor catálogo de becas de EE. UU. con programas internacionales.',
+    body: 'Encuentra financiación en universidades líderes. Combinamos el mayor catálogo de becas de EE. UU. con programas internacionales.',
     cta: 'Encontrar becas para mí',
     destinationsLabel: 'Destinos principales en el catálogo',
     destinationsCountTemplate: '{count} destinos',
@@ -449,8 +431,7 @@ const ES: HomePageCopy = {
   },
   featuredResources: {
     title: 'Centro de recursos',
-    subtitle:
-      'Guías y artículos para navegar solicitudes con más confianza.',
+    subtitle: 'Guías y artículos para navegar solicitudes con más confianza.',
     empty:
       'Añadimos guías con frecuencia — explora los hubs abajo para ver todo lo publicado.',
     browseAll: 'Ver todos los recursos',
@@ -520,7 +501,8 @@ const FR: HomePageCopy = {
     'Candidats qui ont besoin des dates, documents et étapes au même endroit'
   ],
   whyStudentsTitle: 'Pourquoi les étudiants utilisent ScholarshipTop',
-  whyStudentsP1: 'Des milliers de listes — la plupart ne correspondent pas à votre profil.',
+  whyStudentsP1:
+    'Des milliers de listes — la plupart ne correspondent pas à votre profil.',
   whyStudentsP2:
     'Des heures de recherche et de filtres ; de bonnes options passent encore à côté.',
   whyStudentsP3: 'Les dates passent. De bonnes options disparaissent.',
@@ -547,22 +529,19 @@ const FR: HomePageCopy = {
     cards: [
       {
         title: 'Listes vérifiées',
-        body:
-          'Nous examinons les détails clés des bourses avant de les présenter aux étudiants.',
+        body: 'Nous examinons les détails clés des bourses avant de les présenter aux étudiants.',
         cta: 'Lire la méthode',
         href: '/scholarship-verification-methodology'
       },
       {
         title: 'Mises à jour régulièrement',
-        body:
-          'Nous visons à garder dates, critères et montants à jour quand les programmes changent.',
+        body: 'Nous visons à garder dates, critères et montants à jour quand les programmes changent.',
         cta: 'Signaler une correction',
         href: '/corrections'
       },
       {
         title: 'Parcours de candidature',
-        body:
-          'Les liens fournisseur et les signaux de voie de candidature sont organises avec chaque fiche quand ils sont disponibles.',
+        body: 'Les liens fournisseur et les signaux de voie de candidature sont organises avec chaque fiche quand ils sont disponibles.',
         cta: 'Comment fonctionne ScholarshipTop',
         href: '/how-scholarshiptop-works'
       }
@@ -575,18 +554,15 @@ const FR: HomePageCopy = {
     items: [
       {
         title: 'Signaux d’admissibilité',
-        body:
-          'Nous résumons niveau, résidence, domaine et autres critères courants pour repérer l’adéquation plus vite.'
+        body: 'Nous résumons niveau, résidence, domaine et autres critères courants pour repérer l’adéquation plus vite.'
       },
       {
         title: 'Dates et détails du montant',
-        body:
-          'Nous suivons dates et montants selon le fournisseur à la dernière révision — et signalons les lacunes.'
+        body: 'Nous suivons dates et montants selon le fournisseur à la dernière révision — et signalons les lacunes.'
       },
       {
         title: 'Où postuler ensuite',
-        body:
-          'Nous priorisons les voies de candidature hebergees par le fournisseur et les liens de prochaine etape quand ils sont disponibles.'
+        body: 'Nous priorisons les voies de candidature hebergees par le fournisseur et les liens de prochaine etape quand ils sont disponibles.'
       }
     ],
     cta: 'Voir comment fonctionne ScholarshipTop',
@@ -594,8 +570,7 @@ const FR: HomePageCopy = {
   },
   guidedEssay: {
     title: 'Aide guidée à la rédaction pour bourses',
-    body:
-      'Utilisez des outils IA pour structurer et affiner vos idées à partir de votre expérience et de vos objectifs.',
+    body: 'Utilisez des outils IA pour structurer et affiner vos idées à partir de votre expérience et de vos objectifs.',
     steps: [
       'Comprendre la consigne',
       'Définir votre angle',
@@ -605,8 +580,7 @@ const FR: HomePageCopy = {
     disclaimer:
       'Soutient votre processus d’écriture, sans remplacer votre jugement ni votre voix.',
     tryCta: 'Essayer Essay Mentor',
-    playVideoAria:
-      'Lire la vidéo : aide guidée à la rédaction pour bourses',
+    playVideoAria: 'Lire la vidéo : aide guidée à la rédaction pour bourses',
     essayHref: '/essay'
   },
   finalCta: {
@@ -620,8 +594,7 @@ const FR: HomePageCopy = {
     badge: 'Programmes aux États-Unis et internationaux',
     titleLine1: 'Bourses pour étudier aux',
     titleLine2: 'États-Unis et ailleurs',
-    body:
-      'Trouvez un financement dans les universités leaders. Nous combinons le plus grand catalogue américain avec des programmes internationaux.',
+    body: 'Trouvez un financement dans les universités leaders. Nous combinons le plus grand catalogue américain avec des programmes internationaux.',
     cta: 'Trouver des bourses pour moi',
     destinationsLabel: 'Principales destinations du catalogue',
     destinationsCountTemplate: '{count} destinations',
@@ -635,8 +608,7 @@ const FR: HomePageCopy = {
   },
   featuredResources: {
     title: 'Centre de ressources',
-    subtitle:
-      'Guides et articles pour candidater avec plus de confiance.',
+    subtitle: 'Guides et articles pour candidater avec plus de confiance.',
     empty:
       'De nouveaux guides sont ajoutés régulièrement — parcourez les hubs ci-dessous.',
     browseAll: 'Voir toutes les ressources',

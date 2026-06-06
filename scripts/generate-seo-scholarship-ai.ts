@@ -105,7 +105,9 @@ async function loadScholarships(): Promise<Scholarship[]> {
     process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() ||
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim();
   if (supabaseUrl && supabaseKey) {
-    console.log('[seo-ai] Loading scholarships from Supabase (same source as /api/scholarships).');
+    console.log(
+      '[seo-ai] Loading scholarships from Supabase (same source as /api/scholarships).'
+    );
     return fetchActiveScholarshipsForScript();
   }
 
@@ -156,7 +158,11 @@ function ensureSeoTitleLength(raw: string, fallback: string): string {
 }
 
 function ensureSeoDescriptionLength(raw: string, fallback: string): string {
-  let v = normalizeSpaces(raw || fallback || 'Find USA scholarships, compare requirements and deadlines, and apply with confidence using verified listings.');
+  let v = normalizeSpaces(
+    raw ||
+      fallback ||
+      'Find USA scholarships, compare requirements and deadlines, and apply with confidence using verified listings.'
+  );
   const hasCta = /\b(apply|start|explore|find|browse|compare)\b/i.test(v);
   if (!hasCta) v = `${v} Apply now.`;
   if (!/\b(usa|u\.s\.)\b/i.test(v)) v = `USA scholarships: ${v}`;
@@ -188,7 +194,9 @@ function normalizeFaqItems(
   return undefined;
 }
 
-function defaultListingFaq(entry: SeoScholarshipRouteManifestEntry): Array<{ question: string; answer: string }> {
+function defaultListingFaq(
+  entry: SeoScholarshipRouteManifestEntry
+): Array<{ question: string; answer: string }> {
   const label = entry.h1Fallback || 'this scholarship page';
   return [
     {
@@ -204,7 +212,7 @@ function defaultListingFaq(entry: SeoScholarshipRouteManifestEntry): Array<{ que
     {
       question: `What is the best application process for ${label}?`,
       answer:
-        'Shortlist relevant programs, prepare required documents early, and continue through provider application links when you are ready to submit.'
+        'Use only listings with clear provider links, deadlines, award context, and eligibility details; skip this FAQ when those fields are missing.'
     }
   ];
 }
@@ -270,10 +278,7 @@ function parseDebugFor(): string | null {
 }
 
 function pathMatchesDebugFor(canonicalPath: string, debugFor: string): boolean {
-  return (
-    canonicalPath === debugFor ||
-    canonicalPath.endsWith(`/${debugFor}`)
-  );
+  return canonicalPath === debugFor || canonicalPath.endsWith(`/${debugFor}`);
 }
 
 type CliGenerationMode = 'enhance' | 'rewrite' | 'auto';
@@ -286,7 +291,9 @@ function parseCliGenerationMode(): CliGenerationMode {
     .toLowerCase();
   if (!raw || raw === 'auto') return 'auto';
   if (raw === 'enhance' || raw === 'rewrite') return raw;
-  console.error(`Invalid --mode value. Use enhance | rewrite | auto (default). Got: ${raw}`);
+  console.error(
+    `Invalid --mode value. Use enhance | rewrite | auto (default). Got: ${raw}`
+  );
   process.exit(1);
 }
 
@@ -322,12 +329,8 @@ function priorMetaForEnhance(
 ): SeoEnhancePriorMeta {
   return {
     seo_title: b.seo_title?.trim() || entry.metaTitleFallback,
-    seo_description:
-      b.seo_description?.trim() || entry.metaDescriptionFallback,
-    h1:
-      b.h1?.trim() ||
-      b.seo_title?.trim() ||
-      entry.h1Fallback
+    seo_description: b.seo_description?.trim() || entry.metaDescriptionFallback,
+    h1: b.h1?.trim() || b.seo_title?.trim() || entry.h1Fallback
   };
 }
 
@@ -727,8 +730,9 @@ All string fields non-empty except related_intro may be null. who_for and how_to
         how_to_use: bodyFields.how_to_use,
         who_for: bodyFields.who_for,
         faq:
-          normalizeFaqItems(faqFiltered && faqFiltered.length > 0 ? faqFiltered : undefined) ??
-          defaultListingFaq(entry),
+          normalizeFaqItems(
+            faqFiltered && faqFiltered.length > 0 ? faqFiltered : undefined
+          ) ?? defaultListingFaq(entry),
         page_data: buildSeoListingPageData(list, entry),
         _meta: {
           canonicalPath: entry.canonicalPath,
@@ -780,7 +784,9 @@ All string fields non-empty except related_intro may be null. who_for and how_to
   console.log(
     `Modes this run: enhance=${stats.modeEnhance}, rewrite=${stats.modeRewrite} (CLI --mode=${cliMode})`
   );
-  console.log(`Skipped as fresh (same version + stable count): ${stats.skippedFresh}`);
+  console.log(
+    `Skipped as fresh (same version + stable count): ${stats.skippedFresh}`
+  );
   console.log(`Errors: ${stats.errors}`);
   console.log(
     `Coverage after run: ${withStoredContent} with valid SEO JSON, ${withGeneratorMeta} with script _meta, ${fallbackOnly} fallback-only (no valid JSON yet)`

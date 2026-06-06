@@ -32,7 +32,7 @@ const DEFAULT_COPY = {
   relatedTrustPages: 'Related trust pages',
   quickReminder: 'Quick reminder',
   quickReminderBody:
-    'Final scholarship decisions are made by the relevant provider; ScholarshipTop organizes the research and preparation workflow.',
+    'Final scholarship decisions are made by the relevant provider; ScholarshipTop supports the research and preparation workflow.',
   disclaimer: 'See legal boundaries'
 } as const;
 

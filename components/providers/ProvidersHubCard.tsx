@@ -6,14 +6,13 @@ import { useMemo } from 'react';
 
 import type { ProviderHubRow } from '@/lib/providers/providerHubTypes';
 import { formatProviderHqLocationLine } from '@/lib/providers/providerHubRegionLabel';
-import {
-  getProviderSeoQualityPolicy
-} from '@/lib/seo/providerSeoQualityPolicy';
+import { getProviderSeoQualityPolicy } from '@/lib/seo/providerSeoQualityPolicy';
 import { extractLocaleFromPath } from '@/lib/i18n/paths';
 import {
   hrefForLocalizedUiRequired,
   type LocalizedUiLocale
 } from '@/lib/i18n/localizedHref';
+import { cleanScholarshipGeneratedText } from '@/lib/scholarships/scholarshipSeoSanitizers';
 import { isStage2PilotLocale } from '@/lib/i18n/pilotRoutes';
 import {
   getLocalizedProviderDataCompletenessLabel,
@@ -28,9 +27,10 @@ function cardTitle(row: ProviderHubRow): string {
 }
 
 function descriptionSnippet(text: string | null | undefined): string | null {
-  if (!text?.trim()) return null;
-  const t = text.trim().replace(/\s+/g, ' ');
-  return t.length > 280 ? `${t.slice(0, 277)}…` : t;
+  const cleaned = cleanScholarshipGeneratedText(text);
+  if (!cleaned) return null;
+  const t = cleaned.replace(/\s+/g, ' ');
+  return t.length > 280 ? `${t.slice(0, 277)}...` : t;
 }
 
 type Props = {
@@ -122,7 +122,9 @@ export function ProvidersHubCard({ row, locale: localeProp }: Props) {
               )}
             </span>
             <span className="rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-zinc-600">
-              {row.is_enriched ? copy.profileEnriched : copy.notManuallyReviewed}
+              {row.is_enriched
+                ? copy.profileEnriched
+                : copy.notManuallyReviewed}
             </span>
           </div>
           <span className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-white py-2.5 text-sm font-semibold text-orange-600 transition group-hover:border-zinc-300 group-hover:bg-zinc-50 group-hover:text-orange-700">

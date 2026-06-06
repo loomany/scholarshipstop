@@ -74,14 +74,19 @@ function ensureLengthRange(input: {
   while (out.length < input.min) {
     const candidate = normalizeWhitespace(`${out} ${input.padSuffix}`);
     if (candidate.length === out.length) break;
-    out = candidate.length <= input.max ? candidate : cutToMax(candidate, input.max);
+    out =
+      candidate.length <= input.max
+        ? candidate
+        : cutToMax(candidate, input.max);
     if (out.length >= input.min) break;
   }
   return out;
 }
 
 function enforceSeoTitle(base: string, fallback: string): string {
-  const seeded = normalizeWhitespace(base || fallback || 'Scholarships in USA 2026');
+  const seeded = normalizeWhitespace(
+    base || fallback || 'Scholarships in USA 2026'
+  );
   const withIntent = /\b(compare|apply|find|explore|guide)\b/i.test(seeded)
     ? seeded
     : `${seeded} Compare Guide`;
@@ -106,7 +111,8 @@ function enforceSeoMeta(base: string, fallback: string): string {
     value: seeded,
     min: 120,
     max: 160,
-    padSuffix: 'Review eligibility, compare deadlines, and continue through provider pages.'
+    padSuffix:
+      'Review eligibility, compare deadlines, and continue through provider pages.'
   });
 }
 
@@ -140,7 +146,9 @@ function loadAdmin() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
   if (!url || !key) {
-    throw new Error('Need NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY');
+    throw new Error(
+      'Need NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY'
+    );
   }
   return createClient<Database>(url, key);
 }
@@ -238,7 +246,12 @@ async function queueGeneratedSeoPageForPostPublishChecks(input: {
     immediatePing: !input.deferIndexingToQueueOnly
   });
 
-  return submission.results[0]?.ping ?? { ok: false as const, error: 'missing_ping_result' };
+  return (
+    submission.results[0]?.ping ?? {
+      ok: false as const,
+      error: 'missing_ping_result'
+    }
+  );
 }
 
 async function runUniversityCompareFlow(args: {
@@ -321,8 +334,13 @@ async function runUniversityCompareFlow(args: {
 
   const sorted = [...insts].sort((a, b) => a.slug.localeCompare(b.slug, 'en'));
   const [left, right] = sorted;
-  if (!looksLikeUniversityInstitution(left) || !looksLikeUniversityInstitution(right)) {
-    console.warn(`[skip] compare pair is not university-like: ${left.slug} vs ${right.slug}`);
+  if (
+    !looksLikeUniversityInstitution(left) ||
+    !looksLikeUniversityInstitution(right)
+  ) {
+    console.warn(
+      `[skip] compare pair is not university-like: ${left.slug} vs ${right.slug}`
+    );
     if (!dryRun) {
       await admin
         .from('seo_generation_queue')
@@ -394,7 +412,8 @@ async function runUniversityCompareFlow(args: {
   const refreshExistingCompare = argFlag('refresh-existing-compare');
   const shouldRefreshExistingCompare =
     Boolean(existingPage?.ai_verdict?.trim()) &&
-    (refreshExistingCompare || !contentJsonHasSources(existingPage?.content_json));
+    (refreshExistingCompare ||
+      !contentJsonHasSources(existingPage?.content_json));
 
   if (existingPage?.ai_verdict?.trim() && !shouldRefreshExistingCompare) {
     console.log(`[skip] compare page already generated: ${canon}`);
@@ -423,8 +442,9 @@ async function runUniversityCompareFlow(args: {
     .eq('id', row.id);
 
   let lastErr: string | null = null;
-  let generated: Awaited<ReturnType<typeof generateUniversityCompareWithOpenAi>> =
-    null;
+  let generated: Awaited<
+    ReturnType<typeof generateUniversityCompareWithOpenAi>
+  > = null;
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
     generated = await generateUniversityCompareWithOpenAi({
       factsJson: JSON.stringify(rpcData),
@@ -440,8 +460,7 @@ async function runUniversityCompareFlow(args: {
     generated = {
       ai_verdict: `${left.name} and ${right.name} fit different applicant profiles. Compare scholarship volume, award patterns, and deadlines before deciding where to apply.`,
       meta_title: `${left.name} vs ${right.name} Scholarships 2026`,
-      meta_description:
-        `Compare ${left.name} and ${right.name} scholarships, review funding context, and choose the campus that fits your academic and financial goals.`,
+      meta_description: `Compare ${left.name} and ${right.name} scholarships, review funding context, and choose the campus that fits your academic and financial goals.`,
       content_json: {
         body_html: `<article><h2>Financial Aid Overview for ${year}</h2><p>Compare ${left.name} and ${right.name} by scholarship volume, award patterns, eligibility expectations, deadlines, and provider application paths before applying.</p></article>`,
         essay_insights: {
@@ -459,13 +478,15 @@ async function runUniversityCompareFlow(args: {
           },
           {
             q: 'What is the best application process for this comparison?',
-            a: 'Shortlist your best-fit programs, prepare required documents early, and continue through provider or university application channels.'
+            a: 'Compare programs with clear source links, current deadlines, and stated eligibility details before choosing where to continue.'
           }
         ],
         sources: sourceCandidates.slice(0, 5)
       }
     };
-    console.warn(`[fallback] compare ${canon}: ${lastErr ?? 'generation_failed'}`);
+    console.warn(
+      `[fallback] compare ${canon}: ${lastErr ?? 'generation_failed'}`
+    );
   }
 
   generated.meta_title = enforceSeoTitle(
@@ -476,20 +497,23 @@ async function runUniversityCompareFlow(args: {
     generated.meta_description,
     `Compare ${left.name} and ${right.name} scholarships, review funding context, and apply with confidence.`
   );
-  generated.content_json.faq = ensureFaqAtLeastThree(generated.content_json.faq, [
-    {
-      q: `Who is eligible for scholarships at ${left.name} and ${right.name}?`,
-      a: 'Eligibility differs by scholarship. Check each official listing for academic, residency, and program requirements.'
-    },
-    {
-      q: `When are scholarship deadlines for ${left.name} and ${right.name}?`,
-      a: 'Deadlines vary by scholarship and term. Confirm exact dates on each official scholarship page before applying.'
-    },
-    {
-      q: 'How should I apply after comparing these universities?',
-      a: 'Choose your top programs, gather required materials, and submit applications through official admissions and scholarship portals.'
-    }
-  ]);
+  generated.content_json.faq = ensureFaqAtLeastThree(
+    generated.content_json.faq,
+    [
+      {
+        q: `Who is eligible for scholarships at ${left.name} and ${right.name}?`,
+        a: 'Eligibility differs by scholarship. Check each official listing for academic, residency, and program requirements.'
+      },
+      {
+        q: `When are scholarship deadlines for ${left.name} and ${right.name}?`,
+        a: 'Deadlines vary by scholarship and term. Confirm exact dates on each official scholarship page before applying.'
+      },
+      {
+        q: 'How should I apply after comparing these universities?',
+        a: 'Choose your top programs, gather required materials, and submit applications through official admissions and scholarship portals.'
+      }
+    ]
+  );
   if (!generated.content_json.body_html?.trim()) {
     generated.content_json.body_html = `<article><h2>Financial Aid Overview for ${year}</h2><p>Compare ${left.name} and ${right.name} using scholarship volume, eligibility fit, and official deadline requirements before you apply.</p></article>`;
   }
@@ -539,7 +563,9 @@ async function runUniversityCompareFlow(args: {
     '/compare/universities'
   ]);
   const skipLabel =
-    ping.ok || !('skipped' in ping) || ping.skipped == null ? 'n/a' : ping.skipped;
+    ping.ok || !('skipped' in ping) || ping.skipped == null
+      ? 'n/a'
+      : ping.skipped;
   console.log(`[ok] compare ${canon} indexed=${ping.ok} skipped=${skipLabel}`);
 }
 
@@ -577,7 +603,8 @@ async function runStateCompareFlow(args: {
         .from('seo_generation_queue')
         .update({
           status: 'failed',
-          error_message: 'state compare slug not in canonical alphabetical order'
+          error_message:
+            'state compare slug not in canonical alphabetical order'
         })
         .eq('id', row.id);
     }
@@ -682,7 +709,8 @@ async function runStateCompareFlow(args: {
   const refreshExistingStateCompare = argFlag('refresh-existing-state-compare');
   const shouldRefreshExistingStateCompare =
     Boolean(existingPage?.ai_verdict?.trim()) &&
-    (refreshExistingStateCompare || !contentJsonHasSources(existingPage?.content_json));
+    (refreshExistingStateCompare ||
+      !contentJsonHasSources(existingPage?.content_json));
 
   if (existingPage?.ai_verdict?.trim() && !shouldRefreshExistingStateCompare) {
     if (!dryRun) {
@@ -714,7 +742,8 @@ async function runStateCompareFlow(args: {
     .eq('id', row.id);
 
   let lastErr: string | null = null;
-  let generated: Awaited<ReturnType<typeof generateStateCompareWithOpenAi>> = null;
+  let generated: Awaited<ReturnType<typeof generateStateCompareWithOpenAi>> =
+    null;
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
     generated = await generateStateCompareWithOpenAi({
       factsJson: JSON.stringify(rpcData),
@@ -729,8 +758,7 @@ async function runStateCompareFlow(args: {
     generated = {
       ai_verdict: `${left.name} and ${right.name} serve different applicant goals. Compare scholarship volume, award profiles, eligibility signals, and provider-path context before applying.`,
       meta_title: `${left.name} vs ${right.name} Scholarships 2026`,
-      meta_description:
-        `Compare ${left.name} and ${right.name} scholarship climate, review opportunity volume, and plan applications using state-level provider context.`,
+      meta_description: `Compare ${left.name} and ${right.name} scholarship climate, review opportunity volume, and plan applications using state-level provider context.`,
       content_json: {
         body_html: `<article><h2>Financial Aid Overview for ${year}</h2><p>Compare scholarship climate in ${left.name} and ${right.name} by opportunity volume, funding context, eligibility patterns, and provider application paths.</p></article>`,
         climate_summary: {
@@ -748,13 +776,15 @@ async function runStateCompareFlow(args: {
           },
           {
             q: 'What is the best application process after state comparison?',
-            a: 'Build a shortlist, prepare required documents early, and continue through provider channels for your selected state programs.'
+            a: 'Prioritize state programs with clear provider links, current deadlines, and stated eligibility details before continuing.'
           }
         ],
         sources: sourceCandidates.slice(0, 5)
       }
     };
-    console.warn(`[fallback] state compare ${canon}: ${lastErr ?? 'generation_failed'}`);
+    console.warn(
+      `[fallback] state compare ${canon}: ${lastErr ?? 'generation_failed'}`
+    );
   }
 
   generated.meta_title = enforceSeoTitle(
@@ -765,20 +795,23 @@ async function runStateCompareFlow(args: {
     generated.meta_description,
     `Compare ${left.name} and ${right.name} scholarship climate, evaluate opportunities, and continue through provider application paths.`
   );
-  generated.content_json.faq = ensureFaqAtLeastThree(generated.content_json.faq, [
-    {
-      q: `Who is eligible for scholarships in ${left.name} and ${right.name}?`,
-      a: 'Eligibility varies by program and provider. Use provider-path context to compare academic and residency requirements.'
-    },
-    {
-      q: `When are scholarship deadlines in ${left.name} and ${right.name}?`,
-      a: 'Deadlines depend on each scholarship. Confirm final dates and terms on official pages before you apply.'
-    },
-    {
-      q: 'How should I apply after comparing both states?',
-      a: 'Choose programs that match your profile, prepare documents in advance, and apply through official scholarship portals.'
-    }
-  ]);
+  generated.content_json.faq = ensureFaqAtLeastThree(
+    generated.content_json.faq,
+    [
+      {
+        q: `Who is eligible for scholarships in ${left.name} and ${right.name}?`,
+        a: 'Eligibility varies by program and provider. Use provider-path context to compare academic and residency requirements.'
+      },
+      {
+        q: `When are scholarship deadlines in ${left.name} and ${right.name}?`,
+        a: 'Deadlines depend on each scholarship. Confirm final dates and terms on official pages before you apply.'
+      },
+      {
+        q: 'How should I apply after comparing both states?',
+        a: 'Choose programs that match your profile, prepare documents in advance, and apply through official scholarship portals.'
+      }
+    ]
+  );
   if (!generated.content_json.body_html?.trim()) {
     generated.content_json.body_html = `<article><h2>Financial Aid Overview for ${year}</h2><p>Compare ${left.name} and ${right.name} by scholarship volume, fit, and application requirements using verified sources.</p></article>`;
   }
@@ -827,8 +860,12 @@ async function runStateCompareFlow(args: {
     '/compare/states'
   ]);
   const skipLabel =
-    ping.ok || !('skipped' in ping) || ping.skipped == null ? 'n/a' : ping.skipped;
-  console.log(`[ok] state compare ${canon} indexed=${ping.ok} skipped=${skipLabel}`);
+    ping.ok || !('skipped' in ping) || ping.skipped == null
+      ? 'n/a'
+      : ping.skipped;
+  console.log(
+    `[ok] state compare ${canon} indexed=${ping.ok} skipped=${skipLabel}`
+  );
 }
 
 export type SeoWorkerGenerateOptions = {
@@ -933,7 +970,9 @@ export async function runSeoWorkerGenerate(
       console.log(
         `[DRY RUN] would generate ${pathKey} (priority=${row.priority}, grants=${row.grant_count ?? '?'})`
       );
-      console.log(`           → OpenAI + upsert seo_hub_content + ping indexing`);
+      console.log(
+        `           → OpenAI + upsert seo_hub_content + ping indexing`
+      );
       continue;
     }
 
@@ -959,14 +998,14 @@ export async function runSeoWorkerGenerate(
       generated = {
         title: `${ctx.stateLabel} Scholarships`,
         h1: `${ctx.stateLabel}${ctx.topicLabel ? ` ${ctx.topicLabel}` : ''} Scholarships`,
-        meta_description:
-          `Explore ${ctx.stateLabel}${ctx.topicLabel ? ` ${ctx.topicLabel}` : ''} scholarships, compare eligibility and deadlines, and continue through provider listings.`,
+        meta_description: `Explore ${ctx.stateLabel}${ctx.topicLabel ? ` ${ctx.topicLabel}` : ''} scholarships, compare eligibility and deadlines, and continue through provider listings.`,
         content_html: `<article><h2>Scholarship Guide</h2><p>Use this page to compare scholarship opportunities${ctx.topicLabel ? ` in ${ctx.topicLabel}` : ''} for ${ctx.stateLabel}. Review eligibility signals, deadlines, and provider application paths.</p></article>`,
         cost_of_living: {
           average_room_rent_usd_monthly: null,
           typical_lunch_usd: null,
           monthly_transport_usd: null,
-          notes: 'No reliable cost-of-living numeric data available for deterministic fallback.'
+          notes:
+            'No reliable cost-of-living numeric data available for deterministic fallback.'
         }
       };
       console.warn(`[fallback] ${pathKey}: ${lastErr ?? 'generation_failed'}`);
@@ -1046,7 +1085,10 @@ async function main() {
 
 const isDirectRun = (() => {
   const entry = process.argv[1] || '';
-  return entry.endsWith('seo-worker-generate.ts') || entry.endsWith('seo-worker-generate.js');
+  return (
+    entry.endsWith('seo-worker-generate.ts') ||
+    entry.endsWith('seo-worker-generate.js')
+  );
 })();
 
 if (isDirectRun) {

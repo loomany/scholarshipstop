@@ -92,7 +92,7 @@ const faqItems: { question: string; answer: string }[] = [
   {
     question: 'Are the scholarships on ScholarshipTop real and verified?',
     answer:
-      'ScholarshipTop organizes provider-facing scholarship information into structured listings with eligibility, deadline, award, source-quality, and application-path signals. When details are incomplete, the product flags what context is available so you can prioritize stronger opportunities.'
+      'ScholarshipTop turns provider-facing scholarship information into structured listings with eligibility, deadline, award, source-quality, and application-path signals. When details are incomplete, the product flags what context is available so you can prioritize stronger opportunities.'
   },
   {
     question: 'Can I apply for scholarships directly on the platform?',

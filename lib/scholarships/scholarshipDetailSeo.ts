@@ -12,6 +12,7 @@ import {
   type JsonLdBreadcrumbItem
 } from '@/lib/seo/jsonLd';
 import { buildScholarshipDetailSeoTitle } from '@/lib/seo/scholarshipDetailSeoTitle';
+import { getScholarshipDetailIndexPolicy } from '@/lib/seo/scholarshipSeoQualityPolicy';
 import {
   getHeroSummary,
   getUsefulFaqForOnPageDisplay
@@ -83,6 +84,7 @@ export function buildScholarshipDetailJsonLd(
     awardLine,
     deadlinePrimary
   });
+  const detailIndexPolicy = getScholarshipDetailIndexPolicy(scholarship);
 
   return [
     buildBreadcrumbListJsonLd(scholarshipDetailBreadcrumbs(scholarship)),
@@ -96,6 +98,6 @@ export function buildScholarshipDetailJsonLd(
         scholarship.createdAt ||
         null
     }),
-    buildFaqPageJsonLd(faqItems, path)
+    detailIndexPolicy.indexable ? buildFaqPageJsonLd(faqItems, path) : null
   ];
 }

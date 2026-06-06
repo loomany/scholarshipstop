@@ -283,9 +283,18 @@ export async function generateMetadata({
 
 export default async function EssayGuidePage({ params }: PageProps) {
   const slug = decodeURIComponent(params.slug).trim();
+  const intentCanonical = scholarshipIntentCanonicalForContentRoute(
+    'essay',
+    slug
+  );
   const staticGuide = getStaticEssayGuide(slug);
   if (staticGuide) {
-    return <StaticEssayGuidePage guide={staticGuide} />;
+    return (
+      <StaticEssayGuidePage
+        guide={staticGuide}
+        emitFaqSchema={!intentCanonical}
+      />
+    );
   }
 
   const essay = await fetchPublishedEssayBySlug(slug);
@@ -383,7 +392,7 @@ export default async function EssayGuidePage({ params }: PageProps) {
     about: parentScholarshipAbout ?? undefined
   });
 
-  const faqSchema = buildFaqPageJsonLd(faq, articleUrl);
+  const faqSchema = intentCanonical ? null : buildFaqPageJsonLd(faq, articleUrl);
 
   const sourcesInset =
     sources.length > 0 ? <EssaySourcesInset sources={sources} /> : undefined;
@@ -631,7 +640,7 @@ function EssayBuilderCta({
     return (
       <ScholarshipMatchCtaCard
         className="mt-4 sm:mt-5"
-        heading="Get matched with scholarships in 2 minutes"
+        heading="Find scholarships that fit your profile"
         button="Find My Scholarships"
       />
     );

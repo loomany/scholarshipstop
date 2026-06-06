@@ -15,6 +15,7 @@ import {
   formatCategoryPageH1,
   normalizeCategoryId
 } from '@/app/scholarships/scholarshipCategories';
+import { isLongTailSlug } from '@/app/scholarships/scholarshipLongTailPresets';
 import { categoryIsPromotedSeo } from '@/lib/scholarships/categorySeoAllowlist';
 import {
   evaluateCategorySeoListingThin,
@@ -63,6 +64,9 @@ function resolveCategorySlugParam(slug: string): {
   if (!raw) notFound();
   const lower = raw.toLowerCase();
   const canonical = normalizeCategoryId(lower);
+  if (!canonical && isLongTailSlug(lower)) {
+    redirect(`/scholarships/${lower}`);
+  }
   const canonicalSlug = canonical ?? lower;
   if (raw !== canonicalSlug) {
     redirect(`/scholarships/category/${canonicalSlug}`);

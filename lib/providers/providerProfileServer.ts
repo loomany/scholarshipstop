@@ -14,6 +14,10 @@ import {
   mapScholarshipRow,
   type ScholarshipRow
 } from '@/lib/scholarships/supabase';
+import {
+  cleanScholarshipFaqItems,
+  cleanScholarshipGeneratedText
+} from '@/lib/scholarships/scholarshipSeoSanitizers';
 import { compareScholarshipsByDeadlineState } from '@/lib/scholarships/scholarshipDeadlineState';
 import { filterOutCompetitorAggregatorUrls } from '@/lib/providers/enrichProviderDataCore';
 import type { Database, Json } from '@/types_db';
@@ -27,16 +31,19 @@ export type { ProviderFaqItem, ProviderProfilePayload, SimilarProviderSummary };
 function normalizeProviderAiDescription(
   value: string | null | undefined
 ): string | null {
-  const trimmed = value?.trim();
-  return trimmed ? trimmed : null;
+  return cleanScholarshipGeneratedText(value);
 }
 
-function normalizeProviderText(value: string | null | undefined): string | null {
+function normalizeProviderText(
+  value: string | null | undefined
+): string | null {
   const normalized = value?.trim().replace(/\s+/g, ' ');
   return normalized ? normalized : null;
 }
 
-function isLikelyProviderDisplayName(value: string | null | undefined): value is string {
+function isLikelyProviderDisplayName(
+  value: string | null | undefined
+): value is string {
   const normalized = normalizeProviderText(value);
   if (!normalized) return false;
   if (normalized.length > 120) return false;
@@ -65,12 +72,17 @@ function titleCaseSlug(value: string): string {
     .replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
 
-function providerDisplayNameFallback(slug: string, officialUrl: string | null): string {
+function providerDisplayNameFallback(
+  slug: string,
+  officialUrl: string | null
+): string {
   const host = hostLabelFromUrl(officialUrl);
   if (isLikelyProviderDisplayName(host)) return host;
 
   const fromSlug = titleCaseSlug(slug);
-  return isLikelyProviderDisplayName(fromSlug) ? fromSlug : 'Scholarship provider';
+  return isLikelyProviderDisplayName(fromSlug)
+    ? fromSlug
+    : 'Scholarship provider';
 }
 
 function resolveProviderDisplayName({
@@ -122,7 +134,7 @@ function faqFromJson(value: Json | null | undefined): ProviderFaqItem[] {
       '';
     if (q && a) out.push({ question: q, answer: a });
   }
-  return out;
+  return cleanScholarshipFaqItems(out);
 }
 
 /** Shared parser for `providers.ai_faq` (e.g. university hub + profile). */
@@ -134,7 +146,9 @@ export function parseProviderAiFaqJson(
 
 function sourcesFromJson(value: Json | null | undefined): string[] {
   if (!value || !Array.isArray(value)) return [];
-  return value.filter((v): v is string => typeof v === 'string' && v.trim().length > 0);
+  return value.filter(
+    (v): v is string => typeof v === 'string' && v.trim().length > 0
+  );
 }
 
 type ProviderRow = Database['public']['Tables']['providers']['Row'];
@@ -146,7 +160,9 @@ type ProviderRowWithCanonicalFields = ProviderRow & {
 };
 
 /** Prefer canonical `description`, then legacy `ai_description`. */
-function effectiveProviderDescription(row: ProviderRow | null | undefined): string | null {
+function effectiveProviderDescription(
+  row: ProviderRow | null | undefined
+): string | null {
   if (!row) return null;
   const extended = row as ProviderRowWithCanonicalFields;
   const primary = normalizeProviderAiDescription(extended.description);
@@ -155,7 +171,9 @@ function effectiveProviderDescription(row: ProviderRow | null | undefined): stri
 }
 
 /** Prefer non-empty canonical `sources`, then legacy `ai_sources`. */
-function effectiveProviderSources(row: ProviderRow | null | undefined): string[] {
+function effectiveProviderSources(
+  row: ProviderRow | null | undefined
+): string[] {
   if (!row) return [];
   const extended = row as ProviderRowWithCanonicalFields;
   const fromCanonical = sourcesFromJson(extended.sources ?? undefined);
@@ -192,11 +210,14 @@ type ProviderProfileAggregateRpcRow = {
   last_scholarship_updated_at: string | null;
 };
 
-const PROVIDER_STATS = 'provider_scholarship_stats' as unknown as 'scholarships';
+const PROVIDER_STATS =
+  'provider_scholarship_stats' as unknown as 'scholarships';
 const PROVIDER_HUB_LISTING =
   'provider_hub_listing' as unknown as 'scholarships';
 
-function numberFromDb(value: number | string | null | undefined): number | null {
+function numberFromDb(
+  value: number | string | null | undefined
+): number | null {
   if (value == null) return null;
   const n = Number(value);
   return Number.isFinite(n) ? n : null;
@@ -213,7 +234,8 @@ async function fetchProviderProfileAggregateFallback(
     .eq('is_active', true)
     .range(0, 9999);
 
-  const aggregateRows = (aggregateRowsRaw ?? []) as ProviderScholarshipAggregateRow[];
+  const aggregateRows = (aggregateRowsRaw ??
+    []) as ProviderScholarshipAggregateRow[];
   let totalAwardAmount = 0;
   let knownAwardAmountCount = 0;
   let lastScholarshipUpdatedAt: string | null = null;
@@ -229,7 +251,8 @@ async function fetchProviderProfileAggregateFallback(
     if (
       updated &&
       (!lastScholarshipUpdatedAt ||
-        new Date(updated).getTime() > new Date(lastScholarshipUpdatedAt).getTime())
+        new Date(updated).getTime() >
+          new Date(lastScholarshipUpdatedAt).getTime())
     ) {
       lastScholarshipUpdatedAt = updated;
     }
@@ -252,7 +275,10 @@ async function fetchProviderProfileAggregate(
         fn: 'provider_profile_scholarship_aggregate',
         args: { p_provider_slug: string }
       ) => Promise<{
-        data: ProviderProfileAggregateRpcRow[] | ProviderProfileAggregateRpcRow | null;
+        data:
+          | ProviderProfileAggregateRpcRow[]
+          | ProviderProfileAggregateRpcRow
+          | null;
         error: { message?: string } | null;
       }>;
     }
@@ -376,7 +402,10 @@ export async function loadProviderProfilePage(
   });
   const aiDescription =
     effectiveProviderDescription(providerRow) ??
-    displayNameDescriptionFallback(providerRow?.display_name, statRow.display_name);
+    displayNameDescriptionFallback(
+      providerRow?.display_name,
+      statRow.display_name
+    );
   /** Display-only — omit competitor aggregators even if legacy rows still store them in JSON. */
   const aiSources = filterOutCompetitorAggregatorUrls(
     effectiveProviderSources(providerRow)
@@ -417,7 +446,7 @@ export async function loadProviderProfilePage(
       new Date(aggregate.lastScholarshipUpdatedAt).getTime() >
         new Date(providerRow.updated_at).getTime())
       ? aggregate.lastScholarshipUpdatedAt
-      : providerRow?.updated_at ?? null;
+      : (providerRow?.updated_at ?? null);
 
   const { data: similarRowsRaw } = await supabase
     .from(PROVIDER_STATS)
@@ -426,7 +455,8 @@ export async function loadProviderProfilePage(
     .order('scholarship_count', { ascending: false })
     .limit(12);
 
-  const similarRows = (similarRowsRaw ?? []) as unknown as ProviderScholarshipStatRow[];
+  const similarRows = (similarRowsRaw ??
+    []) as unknown as ProviderScholarshipStatRow[];
 
   const similarProviders: SimilarProviderSummary[] = similarRows
     .filter((r) => r.slug && r.slug !== slugForScholarships)

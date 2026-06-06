@@ -5,6 +5,7 @@ import { unstable_cache } from 'next/cache';
 import { US_STATE_CODE_TO_NAME } from '@/lib/constants/usStates';
 import type { ProviderHubRow } from '@/lib/providers/providerHubTypes';
 import type { ProvidersHubCountryBucket } from '@/lib/providers/providersHubCountryFilter';
+import { cleanScholarshipGeneratedText } from '@/lib/scholarships/scholarshipSeoSanitizers';
 import { createPublicClient } from '@/utils/supabase/public';
 
 export type { ProviderHubRow } from '@/lib/providers/providerHubTypes';
@@ -13,10 +14,7 @@ const PROVIDER_HUB_LISTING =
   'provider_hub_listing' as unknown as 'scholarships';
 
 function sanitizeSearchToken(raw: string): string {
-  return raw
-    .replace(/[,*%]/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
+  return raw.replace(/[,*%]/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
 function normalizeStateFilter(raw: string | undefined): string | undefined {
@@ -79,11 +77,17 @@ const fetchProviderHubListingCached = unstable_cache(
       return { rows: [], total: 0 };
     }
 
-    const rows = ((data ?? []) as unknown as ProviderHubRow[]).filter((r) =>
-      Boolean(r.slug?.trim())
-    );
+    const rows = ((data ?? []) as unknown as ProviderHubRow[])
+      .filter((r) => Boolean(r.slug?.trim()))
+      .map((row) => ({
+        ...row,
+        ai_description:
+          cleanScholarshipGeneratedText(row.ai_description) ?? null
+      }));
 
-    const slugs = [...new Set(rows.map((row) => row.slug.trim()).filter(Boolean))];
+    const slugs = [
+      ...new Set(rows.map((row) => row.slug.trim()).filter(Boolean))
+    ];
     if (slugs.length === 0) return { rows, total: count ?? 0 };
 
     const { data: providerRows } = await supabase

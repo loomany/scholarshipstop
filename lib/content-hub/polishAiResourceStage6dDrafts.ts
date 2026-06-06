@@ -43,7 +43,7 @@ const TLDR_BULLETS: Record<AiResourceStage6dReviewSlug, string[]> = {
     '<strong>Compare visa and enrollment signals</strong> with university, government, and provider-path context.'
   ],
   'how-to-use-ai-without-missing-scholarship-deadlines': [
-    '<strong>AI helps you plan</strong>; ScholarshipTop organizes deadline and provider-path context.',
+    '<strong>AI helps you plan</strong>; ScholarshipTop shows deadline and provider-path context.',
     '<strong>Build a tracker</strong> with deadline, documents, application path, and shortlist status per award.',
     '<strong>Review dates weekly</strong> during application season so your shortlist stays usable.',
     '<strong>ScholarshipTop is a scholarship workspace</strong> for deadlines, award details, shortlists, and application planning.'
@@ -206,15 +206,20 @@ function repairMangledPathLinks(md: string): string {
 function linkifyBacktickAndBarePaths(md: string): string {
   const anchors: Record<string, string> = {
     '/scholarships': '[scholarships](/scholarships)',
-    '/scholarships/hub/matches': '[scholarship matching](/scholarships/hub/matches)',
-    '/scholarships/category/stem': '[STEM scholarships](/scholarships/category/stem)',
+    '/scholarships/hub/matches':
+      '[scholarship matching](/scholarships/hub/matches)',
+    '/scholarships/category/stem':
+      '[STEM scholarships](/scholarships/category/stem)',
     '/scholarships/category/education':
       '[education scholarships](/scholarships/category/education)',
     '/resources': '[resources](/resources)'
   };
-  let out = md.replace(/`(\/(?:scholarships|resources)(?:\/[a-z0-9/-]+)?)`/gi, (_, p: string) => {
-    return anchors[p] ?? `[${p.replace(/^\//, '')}](${p})`;
-  });
+  let out = md.replace(
+    /`(\/(?:scholarships|resources)(?:\/[a-z0-9/-]+)?)`/gi,
+    (_, p: string) => {
+      return anchors[p] ?? `[${p.replace(/^\//, '')}](${p})`;
+    }
+  );
   out = out.replace(
     /through `\/scholarships`, refine matches through `\/scholarships\/hub\/matches`/gi,
     'through [scholarships](/scholarships), refine matches through [scholarship matching](/scholarships/hub/matches)'
@@ -266,7 +271,10 @@ function humanizePathLikeLinkAnchors(md: string): string {
     );
 }
 
-function expandFaqSection(md: string, slug: AiResourceStage6dReviewSlug): string {
+function expandFaqSection(
+  md: string,
+  slug: AiResourceStage6dReviewSlug
+): string {
   const rules = FAQ_EXPANSIONS[slug] ?? [];
   let out = md;
   for (const { questionIncludes, answer } of rules) {
@@ -285,11 +293,15 @@ function expandFaqSection(md: string, slug: AiResourceStage6dReviewSlug): string
   return out;
 }
 
-function ensureStrengthsBlock(md: string, slug: AiResourceStage6dReviewSlug): string {
+function ensureStrengthsBlock(
+  md: string,
+  slug: AiResourceStage6dReviewSlug
+): string {
   if (/##\s*Strengths and limitations/i.test(md)) return md;
   const block = STRENGTHS_BLOCK[slug];
   if (!block) return md;
-  const anchor = /##\s*(?:How We Evaluated|Questions|FAQ|Common Questions|Frequently Asked)/i;
+  const anchor =
+    /##\s*(?:How We Evaluated|Questions|FAQ|Common Questions|Frequently Asked)/i;
   if (anchor.test(md)) return md.replace(anchor, `${block}$&`);
   const tldr = md.search(/<div class="article-tldr-block"/i);
   if (tldr > 0) {
@@ -298,7 +310,10 @@ function ensureStrengthsBlock(md: string, slug: AiResourceStage6dReviewSlug): st
   return `${md}\n\n${block}`;
 }
 
-function insertRelatedReading(md: string, slug: AiResourceStage6dReviewSlug): string {
+function insertRelatedReading(
+  md: string,
+  slug: AiResourceStage6dReviewSlug
+): string {
   const block = RELATED_READING[slug];
   if (!block || md.includes('## Related reading')) return md;
   const tldrIdx = md.search(/<div class="article-tldr-block"/i);
@@ -338,11 +353,14 @@ export function polishAiResourceStage6dDraftMarkdown(
 
 export function analyzeStage6dDraft(md: string, html: string) {
   const blob = `${md}\n${html}`.toLowerCase();
-  const faqIdx = md.search(/##\s*(?:questions|faq|common questions|frequently asked)/i);
-  const faqSection = faqIdx >= 0 ? md.slice(faqIdx) : md;
-  const thinFaq = /\*\*[^*]+\*\*\s*\n\s*[^\n]{1,100}\n\n(?=\*\*|###|##|<div)/i.test(
-    faqSection
+  const faqIdx = md.search(
+    /##\s*(?:questions|faq|common questions|frequently asked)/i
   );
+  const faqSection = faqIdx >= 0 ? md.slice(faqIdx) : md;
+  const thinFaq =
+    /\*\*[^*]+\*\*\s*\n\s*[^\n]{1,100}\n\n(?=\*\*|###|##|<div)/i.test(
+      faqSection
+    );
   const internalLinkCount = [
     ...`${md}${html}`.matchAll(
       /\[([^\]]+)\]\(\/(?:scholarships|resources)[^)]+\)/gi

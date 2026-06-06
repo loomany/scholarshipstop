@@ -9,6 +9,11 @@ import {
 } from '@/lib/scholarships/longTailSeoPaths';
 import type { LongTailSeoBundle } from '@/lib/scholarships/longTailSeoTypes';
 import { sanitizeSeoBundleNumericClaims } from '@/lib/scholarships/seoAiNumericSanitizer';
+import {
+  cleanScholarshipFaqItems,
+  cleanScholarshipGeneratedText,
+  cleanScholarshipStringArray
+} from '@/lib/scholarships/scholarshipSeoSanitizers';
 
 function readStringOrBulletField(
   raw: Record<string, unknown>,
@@ -25,6 +30,22 @@ function readStringOrBulletField(
   }
   if (typeof v === 'string' && v.trim()) return v.trim();
   return undefined;
+}
+
+function cleanOptionalSeoText(value: unknown): string | undefined {
+  return typeof value === 'string'
+    ? cleanScholarshipGeneratedText(value) || undefined
+    : undefined;
+}
+
+function cleanOptionalStringOrBulletField(
+  value: string | string[] | undefined
+): string | string[] | undefined {
+  if (Array.isArray(value)) {
+    const cleaned = cleanScholarshipStringArray(value);
+    return cleaned.length > 0 ? cleaned : undefined;
+  }
+  return cleanScholarshipGeneratedText(value) || undefined;
 }
 
 function isValidBundle(x: unknown): x is LongTailSeoBundle {
@@ -53,7 +74,7 @@ function readLongTailSeoBundleImpl(slug: string): LongTailSeoBundle | null {
     const faqRaw = j.faq;
     const faq =
       Array.isArray(faqRaw) && faqRaw.length > 0
-        ? faqRaw
+        ? (faqRaw
             .map((item) => {
               if (!item || typeof item !== 'object') return null;
               const q = (item as Record<string, unknown>).question;
@@ -64,21 +85,41 @@ function readLongTailSeoBundleImpl(slug: string): LongTailSeoBundle | null {
               if (!qq || !aa) return null;
               return { question: qq, answer: aa };
             })
-            .filter(Boolean) as { question: string; answer: string }[]
+            .filter(Boolean) as { question: string; answer: string }[])
         : undefined;
+    const seoTitle = cleanScholarshipGeneratedText(j.seo_title);
+    const seoDescription = cleanScholarshipGeneratedText(j.seo_description);
+    const intro = cleanScholarshipGeneratedText(j.intro);
+    if (!seoTitle || !seoDescription || !intro) return null;
+
     const parsedBundle: LongTailSeoBundle = {
-      seo_title: j.seo_title.trim(),
-      seo_description: j.seo_description.trim(),
-      intro: j.intro.trim(),
-      h1: typeof j.h1 === 'string' ? j.h1.trim() || undefined : undefined,
+      seo_title: seoTitle,
+      seo_description: seoDescription,
+      intro,
+      h1: typeof j.h1 === 'string' ? cleanOptionalSeoText(j.h1) : undefined,
       supporting:
         typeof j.supporting === 'string'
-          ? j.supporting.trim() || undefined
+          ? cleanOptionalSeoText(j.supporting)
           : undefined,
-      how_to_use: readStringOrBulletField(j as Record<string, unknown>, 'how_to_use', 'howToUse'),
-      who_for: readStringOrBulletField(j as Record<string, unknown>, 'who_for', 'whoFor'),
-      faq: faq && faq.length > 0 ? faq : undefined
+      how_to_use: cleanOptionalStringOrBulletField(
+        readStringOrBulletField(
+          j as Record<string, unknown>,
+          'how_to_use',
+          'howToUse'
+        )
+      ),
+      who_for: cleanOptionalStringOrBulletField(
+        readStringOrBulletField(
+          j as Record<string, unknown>,
+          'who_for',
+          'whoFor'
+        )
+      ),
+      faq: cleanScholarshipFaqItems(faq)
     };
+    if (parsedBundle.faq?.length === 0) {
+      parsedBundle.faq = undefined;
+    }
     const meta = (j as LongTailSeoBundle)._meta;
     return sanitizeSeoBundleNumericClaims({
       ...parsedBundle,

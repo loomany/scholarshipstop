@@ -13,6 +13,7 @@ import {
   getScholarshipDetailServer,
   redactPremiumScholarshipFields
 } from '@/lib/scholarships/scholarshipDetailServer';
+import { getScholarshipDetailIndexPolicy } from '@/lib/seo/scholarshipSeoQualityPolicy';
 import { resolveScholarshipCategorySlug } from '@/lib/scholarships/similarScholarships';
 import {
   getUsefulFaqForOnPageDisplay,
@@ -102,6 +103,7 @@ function jsonLdDocument(s: Scholarship) {
   const graph: Record<string, unknown>[] = [];
   const scholarshipDescription = scholarshipSchemaDescription(s);
   const deadlineIso = scholarshipDeadlineIso(s);
+  const indexPolicy = getScholarshipDetailIndexPolicy(s);
 
   graph.push({
     '@id': publisherId,
@@ -207,7 +209,7 @@ function jsonLdDocument(s: Scholarship) {
    * with Question (name + acceptedAnswer.Answer.text). We also set url/name/@id per WebPage.
    * Keep in sync with visible FAQ block (≥2 Q&As) on the detail page.
    */
-  if (faqs.length >= 2) {
+  if (indexPolicy.indexable && faqs.length >= 2) {
     graph.push({
       '@id': faqPageId,
       '@type': 'FAQPage',

@@ -42,7 +42,7 @@ const EN: CompareDetailUiCopy = {
   },
   scholarshipMatchCta: {
     sectionAriaLabel: 'Scholarship matches call to action',
-    heading: 'Get matched with scholarships in 2 minutes',
+    heading: 'Find scholarships that fit your profile',
     button: 'Find My Scholarships'
   }
 };
@@ -95,7 +95,9 @@ const FR: CompareDetailUiCopy = {
   }
 };
 
-export function getCompareDetailUiCopy(locale: LocalizedUiLocale): CompareDetailUiCopy {
+export function getCompareDetailUiCopy(
+  locale: LocalizedUiLocale
+): CompareDetailUiCopy {
   if (locale === 'es') return ES;
   if (locale === 'fr') return FR;
   return EN;
@@ -106,5 +108,7 @@ export function formatCompareGrantBadge(
   locale: LocalizedUiLocale
 ): string {
   if (typeof raw !== 'number' || Number.isNaN(raw)) return '—';
-  return getCompareDetailUiCopy(locale).topProviders.grantBadge(Math.round(raw));
+  return getCompareDetailUiCopy(locale).topProviders.grantBadge(
+    Math.round(raw)
+  );
 }

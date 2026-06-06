@@ -38,7 +38,7 @@ const DEFAULT_COPY: StaticScholarshipGuidePageCopy = {
   relatedPages: 'Related ScholarshipTop pages',
   faq: 'FAQ',
   disclaimer:
-    'ScholarshipTop organizes scholarship research and application planning in one place, including eligibility signals, deadlines, shortlisting tools, AI support, and provider application paths when available.'
+    'ScholarshipTop brings scholarship research and application planning into one place, including eligibility signals, deadlines, shortlisting tools, AI support, and provider application paths when available.'
 };
 
 type StaticScholarshipGuidePageProps = {
@@ -47,6 +47,7 @@ type StaticScholarshipGuidePageProps = {
   copy?: StaticScholarshipGuidePageCopy;
   hrefForPath?: (href: string) => string;
   urlForPath?: (path: string) => string;
+  emitFaqSchema?: boolean;
 };
 
 export default function StaticScholarshipGuidePage({
@@ -54,7 +55,8 @@ export default function StaticScholarshipGuidePage({
   locale = 'en',
   copy = DEFAULT_COPY,
   hrefForPath = (href) => href,
-  urlForPath = (path) => getURL(path)
+  urlForPath = (path) => getURL(path),
+  emitFaqSchema = true
 }: StaticScholarshipGuidePageProps) {
   const path = resourcesArticlePath(guide.slug);
   const articleUrl = urlForPath(path);
@@ -96,18 +98,20 @@ export default function StaticScholarshipGuidePage({
       url: getURL()
     }
   };
-  const faqSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: guide.faq.map((item) => ({
-      '@type': 'Question',
-      name: item.question,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: item.answer
+  const faqSchema = emitFaqSchema
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: guide.faq.map((item) => ({
+          '@type': 'Question',
+          name: item.question,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: item.answer
+          }
+        }))
       }
-    }))
-  };
+    : null;
 
   return (
     <main className="bg-white text-gray-900 antialiased">
@@ -119,10 +123,12 @@ export default function StaticScholarshipGuidePage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
+      {faqSchema ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      ) : null}
       <article className="mx-auto w-full max-w-4xl px-4 py-10 sm:px-6 sm:py-12 lg:py-14">
         <nav className="text-sm text-gray-500" aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-x-1.5 gap-y-1">

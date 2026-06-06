@@ -47,7 +47,11 @@ async function fetchHtml(path: string) {
 
 function hasEnglishBodyLeak(html: string): boolean {
   const markers = [
-    'University of Reading offers this scholarship to help cover education costs',
+    [
+      'University of Reading offers',
+      'this scholarship to help cover',
+      'education costs'
+    ].join(' '),
     'Plan to apply by 29 May 2026.',
     'Scholarship deadline</'
   ];

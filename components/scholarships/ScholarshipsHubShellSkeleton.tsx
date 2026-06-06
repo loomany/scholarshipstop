@@ -93,9 +93,9 @@ export default function ScholarshipsHubShellSkeleton({
         <div className="w-full min-w-0">
           <div className="space-y-5 sm:space-y-6">
             <div className="space-y-0">
-              <h1 className="min-w-0 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl lg:text-[2rem] lg:leading-tight">
+              <div className="min-w-0 text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl lg:text-[2rem] lg:leading-tight">
                 {pageTitle}
-              </h1>
+              </div>
               <div
                 className="mt-5 max-w-5xl rounded-2xl border border-slate-200/90 bg-gradient-to-b from-white to-slate-50/90 p-5 shadow-sm sm:mt-6 sm:p-6 lg:mx-auto"
                 aria-hidden

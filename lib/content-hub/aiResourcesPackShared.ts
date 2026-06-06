@@ -22,7 +22,13 @@ export type AiResourcesTopic = {
   articleAngle: string;
   requiredSections: string[];
   disclaimerNotes: string;
-  articleType?: 'list' | 'guide' | 'strategy' | 'comparison' | 'niche' | 'deep_dive';
+  articleType?:
+    | 'list'
+    | 'guide'
+    | 'strategy'
+    | 'comparison'
+    | 'niche'
+    | 'deep_dive';
 };
 
 export type AiResourcesPackFile = {
@@ -34,7 +40,7 @@ export type AiResourcesPackFile = {
 };
 
 const DISCLAIMER =
-  'ScholarshipTop organizes scholarship details, eligibility signals, deadlines, provider-facing information, and application planning support in one place. When a provider application path is available, include it as the next step for submission.';
+  'ScholarshipTop brings scholarship details, eligibility signals, deadlines, provider-facing information, and application planning support into one place. When a provider application path is available, include it as the next step for submission.';
 
 const POSITIONING =
   'Position ScholarshipTop as a strong choice for discovery by country, category, provider, and student profile—especially international students—without claiming #1 status, fake user counts, database size, partnerships, awards, or success rates. Compare competitors fairly; do not call them scams.';
@@ -47,7 +53,10 @@ export function defaultArticleAngle(focus: string): string {
   return `${focus} ${POSITIONING}`;
 }
 
-export function buildAiPackTopicString(topic: AiResourcesTopic, packId: string): string {
+export function buildAiPackTopicString(
+  topic: AiResourcesTopic,
+  packId: string
+): string {
   const parts = [
     'AI_PACK',
     `source=${packId}`,
@@ -61,7 +70,13 @@ export function buildAiPackTopicString(topic: AiResourcesTopic, packId: string):
 
 export function parseAiPackTopicString(
   raw: string
-): { packId: string; slug: string; title: string; keyword: string; articleType: string } | null {
+): {
+  packId: string;
+  slug: string;
+  title: string;
+  keyword: string;
+  articleType: string;
+} | null {
   if (!raw.startsWith('AI_PACK|')) return null;
   const map = new Map<string, string>();
   for (const segment of raw.split('|').slice(1)) {

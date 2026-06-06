@@ -15,8 +15,18 @@ import { createClient } from '@supabase/supabase-js';
 import type { Database } from '../types_db';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const REPORT_ROOT = path.join(__dirname, '..', 'reports', 'customer-value-audit');
-const QUALITY_DIR = path.join(__dirname, '..', 'reports', 'scholarships-quality');
+const REPORT_ROOT = path.join(
+  __dirname,
+  '..',
+  'reports',
+  'customer-value-audit'
+);
+const QUALITY_DIR = path.join(
+  __dirname,
+  '..',
+  'reports',
+  'scholarships-quality'
+);
 
 const TARGET_SAMPLE = 2500;
 const FETCH_CHUNK = 180;
@@ -34,7 +44,11 @@ type StratFlags = {
 type ScoredRow = {
   row: Row;
   score: number;
-  bucket: 'ready_to_apply' | 'usable_but_needs_check' | 'weak_paid_value' | 'not_subscription_worthy';
+  bucket:
+    | 'ready_to_apply'
+    | 'usable_but_needs_check'
+    | 'weak_paid_value'
+    | 'not_subscription_worthy';
   flags: StratFlags;
   reasons: string[];
 };
@@ -63,7 +77,9 @@ function csvEscape(s: string): string {
   return t;
 }
 
-function csvRow(cols: (string | number | boolean | null | undefined)[]): string {
+function csvRow(
+  cols: (string | number | boolean | null | undefined)[]
+): string {
   return cols.map((c) => csvEscape(c == null ? '' : String(c))).join(',');
 }
 
@@ -156,7 +172,7 @@ function loadStratification(): {
       const cols = parseCsvLine(lines[i]);
       const id = cols[idI]?.trim();
       if (!id || !/^[0-9a-f-]{36}$/i.test(id)) continue;
-      const reason = reasonI >= 0 ? cols[reasonI]?.trim() ?? '' : '';
+      const reason = reasonI >= 0 ? (cols[reasonI]?.trim() ?? '') : '';
       touch(id, { weakCsv: true });
       if (/garbage|trash|spam/i.test(reason)) {
         touch(id, { likelyTrashCsv: true });
@@ -174,8 +190,12 @@ function loadStratification(): {
   const dupN = parseCsvIds(path.join(QUALITY_DIR, 'duplicates-near.csv'), 600);
   for (const id of dupN.ids) touch(id, { duplicateCsv: true });
 
-  const susp = parseCsvIds(path.join(QUALITY_DIR, 'suspicious-non-scholarships.csv'), 500);
-  for (const id of susp.ids) touch(id, { suspiciousCsv: true, likelyTrashCsv: true });
+  const susp = parseCsvIds(
+    path.join(QUALITY_DIR, 'suspicious-non-scholarships.csv'),
+    500
+  );
+  for (const id of susp.ids)
+    touch(id, { suspiciousCsv: true, likelyTrashCsv: true });
 
   return { idFlags, weakReasons };
 }
@@ -204,7 +224,7 @@ function combinedDescriptionLength(r: Row): number {
 function hasDeadline(r: Row): boolean {
   return Boolean(
     (r.deadline_date && String(r.deadline_date).trim()) ||
-      (r.deadline_text && r.deadline_text.trim().length > 0)
+    (r.deadline_text && r.deadline_text.trim().length > 0)
   );
 }
 
@@ -273,7 +293,8 @@ function scoreAndBucket(r: Row, flags: StratFlags, now: Date): ScoredRow {
     reasons.push('expired');
   }
 
-  if ((r.provider_name ?? '').trim() || (r.official_source_name ?? '').trim()) s += 10;
+  if ((r.provider_name ?? '').trim() || (r.official_source_name ?? '').trim())
+    s += 10;
   else reasons.push('missing provider name');
 
   const tit = (r.title ?? '').trim();
@@ -329,7 +350,10 @@ function scoreAndBucket(r: Row, flags: StratFlags, now: Date): ScoredRow {
     reasons.push('no official/provider program URL');
   }
   if (!hasDeadline(r)) s -= 20;
-  if (!(r.provider_name ?? '').trim() && !(r.official_source_name ?? '').trim()) {
+  if (
+    !(r.provider_name ?? '').trim() &&
+    !(r.official_source_name ?? '').trim()
+  ) {
     s -= 15;
   }
   if (descLen < 100) {
@@ -390,7 +414,7 @@ async function main() {
 
   const candidateIds = new Set<string>();
 
-  const shuffle = <T,>(arr: T[]): T[] => {
+  const shuffle = <T>(arr: T[]): T[] => {
     const a = [...arr];
     for (let i = a.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -481,7 +505,8 @@ async function main() {
   const finalSample = scored.slice(0, TARGET_SAMPLE);
 
   const n = finalSample.length;
-  const count = (b: ScoredRow['bucket']) => finalSample.filter((x) => x.bucket === b).length;
+  const count = (b: ScoredRow['bucket']) =>
+    finalSample.filter((x) => x.bucket === b).length;
   const cReady = count('ready_to_apply');
   const cUsable = count('usable_but_needs_check');
   const cWeak = count('weak_paid_value');
@@ -492,7 +517,9 @@ async function main() {
   const missingApply = finalSample.filter(
     (x) => !(x.row.apply_url ?? '').trim() && !(x.row.url ?? '').trim()
   ).length;
-  const missingOfficial = finalSample.filter((x) => !hasOfficialishLink(x.row)).length;
+  const missingOfficial = finalSample.filter(
+    (x) => !hasOfficialishLink(x.row)
+  ).length;
   const missingDeadline = finalSample.filter((x) => !hasDeadline(x.row)).length;
   const missingAmount = finalSample.filter(
     (x) => !(x.row.award_amount_text ?? '').trim()
@@ -510,8 +537,12 @@ async function main() {
       !jsonHasData(x.row.country_eligibility_notes)
   ).length;
   const expiredC = finalSample.filter((x) => isExpired(x.row, now)).length;
-  const expired12 = finalSample.filter((x) => isExpiredOver12Months(x.row, now)).length;
-  const weakDesc = finalSample.filter((x) => combinedDescriptionLength(x.row) < 100).length;
+  const expired12 = finalSample.filter((x) =>
+    isExpiredOver12Months(x.row, now)
+  ).length;
+  const weakDesc = finalSample.filter(
+    (x) => combinedDescriptionLength(x.row) < 100
+  ).length;
   const dupFlag = finalSample.filter((x) => x.flags.duplicateCsv).length;
   const trashFlag = finalSample.filter(
     (x) => x.flags.likelyTrashCsv || x.flags.suspiciousCsv
@@ -523,11 +554,20 @@ async function main() {
   >();
   for (const x of finalSample) {
     const src = (x.row.source ?? 'unknown').trim() || 'unknown';
-    const cur = bySource.get(src) ?? { sum: 0, n: 0, ready: 0, weak: 0, notw: 0 };
+    const cur = bySource.get(src) ?? {
+      sum: 0,
+      n: 0,
+      ready: 0,
+      weak: 0,
+      notw: 0
+    };
     cur.sum += x.score;
     cur.n += 1;
     if (x.bucket === 'ready_to_apply') cur.ready += 1;
-    if (x.bucket === 'weak_paid_value' || x.bucket === 'not_subscription_worthy') {
+    if (
+      x.bucket === 'weak_paid_value' ||
+      x.bucket === 'not_subscription_worthy'
+    ) {
       cur.weak += 1;
     }
     if (x.bucket === 'not_subscription_worthy') cur.notw += 1;
@@ -559,7 +599,10 @@ async function main() {
     weakPaidValue: { count: cWeak, pct: pct(cWeak) },
     notSubscriptionWorthy: { count: cNot, pct: pct(cNot) },
     missingApplyUrl: { count: missingApply, pct: pct(missingApply) },
-    missingOfficialOrProviderUrl: { count: missingOfficial, pct: pct(missingOfficial) },
+    missingOfficialOrProviderUrl: {
+      count: missingOfficial,
+      pct: pct(missingOfficial)
+    },
     missingDeadline: { count: missingDeadline, pct: pct(missingDeadline) },
     missingAmount: { count: missingAmount, pct: pct(missingAmount) },
     missingEligibility: { count: missingElig, pct: pct(missingElig) },
@@ -600,9 +643,10 @@ async function main() {
       })),
     verdict,
     pctReadyPlusUsable: pctGood,
-    avgScore: Math.round(
-      (finalSample.reduce((a, x) => a + x.score, 0) / Math.max(1, n)) * 10
-    ) / 10
+    avgScore:
+      Math.round(
+        (finalSample.reduce((a, x) => a + x.score, 0) / Math.max(1, n)) * 10
+      ) / 10
   };
 
   fs.writeFileSync(
@@ -676,7 +720,16 @@ async function main() {
     pred: (x: ScoredRow) => boolean,
     limit: number
   ) {
-    const h = ['id', 'title', 'source', 'score', 'bucket', 'url', 'apply_url', 'provider_url'];
+    const h = [
+      'id',
+      'title',
+      'source',
+      'score',
+      'bucket',
+      'url',
+      'apply_url',
+      'provider_url'
+    ];
     const lines = [csvRow(h)];
     for (const x of finalSample.filter(pred).slice(0, limit)) {
       lines.push(
@@ -695,13 +748,21 @@ async function main() {
     fs.writeFileSync(path.join(REPORT_ROOT, name), lines.join('\n'), 'utf8');
   }
 
-  examplesCsv('ready-to-apply-examples.csv', (x) => x.bucket === 'ready_to_apply', 40);
+  examplesCsv(
+    'ready-to-apply-examples.csv',
+    (x) => x.bucket === 'ready_to_apply',
+    40
+  );
   examplesCsv(
     'usable-but-needs-check-examples.csv',
     (x) => x.bucket === 'usable_but_needs_check',
     40
   );
-  examplesCsv('weak-paid-value-examples.csv', (x) => x.bucket === 'weak_paid_value', 40);
+  examplesCsv(
+    'weak-paid-value-examples.csv',
+    (x) => x.bucket === 'weak_paid_value',
+    40
+  );
   examplesCsv(
     'not-subscription-worthy.csv',
     (x) => x.bucket === 'not_subscription_worthy',
@@ -709,7 +770,13 @@ async function main() {
   );
 
   const bySrcLines = [
-    csvRow(['source', 'sample_count', 'avg_score', 'ready_pct', 'weak_or_worse_pct'])
+    csvRow([
+      'source',
+      'sample_count',
+      'avg_score',
+      'ready_pct',
+      'weak_or_worse_pct'
+    ])
   ];
   for (const r of sourceRows) {
     bySrcLines.push(
@@ -723,11 +790,13 @@ async function main() {
   );
 
   const md: string[] = [];
-  md.push('# Application readiness audit (Stage 5)');
+  md.push('# Scholarship application checklist audit (Stage 5)');
   md.push('');
   md.push(`- **Generated:** ${summary.generatedAt}`);
   md.push(`- **Sample size:** ${n}`);
-  md.push(`- **Verdict:** **${verdict}** (ready+usable = ${pctGood}% of sample)`);
+  md.push(
+    `- **Verdict:** **${verdict}** (ready+usable = ${pctGood}% of sample)`
+  );
   md.push(`- **Mean readiness score:** ${summary.avgScore}`);
   md.push('');
   md.push('## Distribution');
@@ -742,7 +811,9 @@ async function main() {
   md.push('## Data gaps (sample)');
   md.push('');
   md.push(`- Missing apply_url **and** url: **${pct(missingApply)}%**`);
-  md.push(`- Missing official/provider-style URL (heuristic): **${pct(missingOfficial)}%**`);
+  md.push(
+    `- Missing official/provider-style URL (heuristic): **${pct(missingOfficial)}%**`
+  );
   md.push(`- Missing deadline: **${pct(missingDeadline)}%**`);
   md.push(`- Missing award text: **${pct(missingAmount)}%**`);
   md.push(`- Thin eligibility signals: **${pct(missingElig)}%**`);
@@ -774,7 +845,9 @@ async function main() {
   md.push('');
   md.push('7. **Слабые источники (низкий avg score, n≥5):**');
   for (const r of topWeak) {
-    md.push(`   - ${r.source}: avg ${r.avgScore}, weak+worse ${r.weakOrWorsePct}%`);
+    md.push(
+      `   - ${r.source}: avg ${r.avgScore}, weak+worse ${r.weakOrWorsePct}%`
+    );
   }
   md.push('');
   md.push(
@@ -802,7 +875,9 @@ async function main() {
   md.push('');
   md.push('---');
   md.push('');
-  md.push('См. также: `application-readiness-summary.json`, `application-readiness-records.csv`.');
+  md.push(
+    'См. также: `application-readiness-summary.json`, `application-readiness-records.csv`.'
+  );
 
   fs.writeFileSync(
     path.join(REPORT_ROOT, 'application-readiness-report.md'),
@@ -811,7 +886,9 @@ async function main() {
   );
 
   console.log(`[application-readiness] Sampled ${n} rows → ${REPORT_ROOT}`);
-  console.log(`[application-readiness] Verdict: ${verdict} (ready+usable ${pctGood}%)`);
+  console.log(
+    `[application-readiness] Verdict: ${verdict} (ready+usable ${pctGood}%)`
+  );
 }
 
 main().catch((e) => {

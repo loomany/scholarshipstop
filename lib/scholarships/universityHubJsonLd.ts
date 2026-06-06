@@ -38,7 +38,7 @@ function buildFallbackFaqItems(opts: {
     {
       question: `Does ${universityDisplayName} give scholarships to international students?`,
       answer: anyIntl
-        ? `This hub lists awards associated with ${universityDisplayName} in ${stateName}. Several current listings reference international eligibility, and ScholarshipTop organizes eligibility signals, deadlines, award context, and provider application paths when available.`
+        ? `This hub lists awards associated with ${universityDisplayName} in ${stateName}. Several current listings reference international eligibility, and ScholarshipTop shows eligibility signals, deadlines, award context, and provider application paths when available.`
         : `Many U.S. colleges offer aid that may include international students, but eligibility is program-specific. Use the listings below to compare citizenship, visa, residency, deadline, and provider-path signals.`
     },
     {
@@ -143,5 +143,7 @@ export function buildUniversityHubJsonLdBlocks(
     buildFaqPageJsonLd(input.faqItems, pageUrl)
   ];
 
-  return blocks.filter((block): block is Record<string, unknown> => block != null);
+  return blocks.filter(
+    (block): block is Record<string, unknown> => block != null
+  );
 }

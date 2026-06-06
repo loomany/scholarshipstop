@@ -20,7 +20,11 @@ export type ProviderDetailUiCopy = {
     onboardingHint: string;
     getNotified: string;
   };
-  showingScholarships: (from: number, to: number, totalFormatted: string) => string;
+  showingScholarships: (
+    from: number,
+    to: number,
+    totalFormatted: string
+  ) => string;
   trust: {
     verifyBeforeApply: string;
     verifyItems: [string, string, string];
@@ -102,7 +106,7 @@ const EN: ProviderDetailUiCopy = {
   },
   tocOnThisPage: 'On this page',
   scholarshipMatchCta: {
-    heading: 'Get matched with scholarships in 2 minutes',
+    heading: 'Find scholarships that fit your profile',
     button: 'Find My Scholarships'
   },
   scholarshipsEmpty: {
@@ -113,7 +117,7 @@ const EN: ProviderDetailUiCopy = {
   showingScholarships: (from, to, total) =>
     `Showing ${from}-${to} of ${total} scholarships`,
   trust: {
-    verifyBeforeApply: 'Application readiness',
+    verifyBeforeApply: 'Application checklist',
     verifyItems: [
       'Eligibility signals and student profile requirements.',
       'Deadline context, timezone notes, and application route.',
@@ -153,7 +157,8 @@ const EN: ProviderDetailUiCopy = {
   scholarships: {
     heading: 'Scholarships from this provider',
     viewScholarship: 'View scholarship',
-    noScholarships: 'No active scholarships are listed for this provider right now.'
+    noScholarships:
+      'No active scholarships are listed for this provider right now.'
   },
   similar: {
     heading: 'Similar organizations',
@@ -179,8 +184,7 @@ const EN: ProviderDetailUiCopy = {
   },
   contextLinks: {
     heading: 'Explore scholarships and guides',
-    body:
-      'Continue from this provider profile into matching scholarships, easy applications, international-friendly options, and practical scholarship guides.',
+    body: 'Continue from this provider profile into matching scholarships, easy applications, international-friendly options, and practical scholarship guides.',
     itemTitles: {
       matches: 'Browse matching scholarships',
       easyApply: 'Easy apply scholarships',
@@ -277,8 +281,7 @@ const ES: ProviderDetailUiCopy = {
   },
   contextLinks: {
     heading: 'Explorar becas y guías',
-    body:
-      'Continúa desde este perfil de proveedor hacia becas coincidentes, solicitudes fáciles, opciones para estudiantes internacionales y guías prácticas sobre becas.',
+    body: 'Continúa desde este perfil de proveedor hacia becas coincidentes, solicitudes fáciles, opciones para estudiantes internacionales y guías prácticas sobre becas.',
     itemTitles: {
       matches: 'Explorar becas coincidentes',
       easyApply: 'Becas de solicitud fácil',
@@ -349,7 +352,8 @@ const FR: ProviderDetailUiCopy = {
   scholarships: {
     heading: 'Bourses de ce fournisseur',
     viewScholarship: 'Voir la bourse',
-    noScholarships: 'Aucune bourse active n’est listée pour ce fournisseur pour l’instant.'
+    noScholarships:
+      'Aucune bourse active n’est listée pour ce fournisseur pour l’instant.'
   },
   similar: {
     heading: 'Organisations similaires',
@@ -359,7 +363,8 @@ const FR: ProviderDetailUiCopy = {
   iqCta: {
     featuredTool: 'Outil en vedette',
     providerFit: 'Adéquation fournisseur',
-    prioritizeTitle: (name) => `Prioriser ${name} avec votre archétype cérébral`,
+    prioritizeTitle: (name) =>
+      `Prioriser ${name} avec votre archétype cérébral`,
     body: 'Passez une évaluation cognitive pour voir si vos forces conviennent aux bourses recherche, essais, délais serrés ou candidatures rapides.',
     chips: ['Logique', 'Vitesse', 'Recherche', 'Essais'],
     previewReport: 'Aperçu du rapport',
@@ -375,8 +380,7 @@ const FR: ProviderDetailUiCopy = {
   },
   contextLinks: {
     heading: 'Explorer bourses et guides',
-    body:
-      'Poursuivez depuis ce profil fournisseur vers les bourses correspondantes, les candidatures faciles, les options favorables aux étudiants internationaux et les guides pratiques.',
+    body: 'Poursuivez depuis ce profil fournisseur vers les bourses correspondantes, les candidatures faciles, les options favorables aux étudiants internationaux et les guides pratiques.',
     itemTitles: {
       matches: 'Parcourir les bourses correspondantes',
       easyApply: 'Bourses à candidature facile',

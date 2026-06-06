@@ -45,7 +45,7 @@ const SHARED_RULES = `Hard rules:
 - Mention USA context where relevant for clarity.
 - It is allowed to mention the year 2026 when it helps search intent.
 - Facts: use ONLY what appears in the CONTEXT block for themes (filters, topics, sample titles). Never invent GPA rules, sponsor names, approval odds, or calendar dates not present in context.
-- Dollar amounts: do not invent award numbers. If needed, say amounts vary by listing and ScholarshipTop organizes the available award context for comparison.
+- Dollar amounts: do not invent award numbers. If needed, say amounts vary by listing and ScholarshipTop shows the available award context for comparison.
 - Deadlines: never fabricate a single deadline for the whole page; speak in generalities (“deadlines differ by program”) unless CONTEXT explicitly includes a dated fact you are quoting verbatim (still without adding new digits—prefer “vary by row”).
 - Tone: clear, practical, human, confident but not salesy. No keyword stuffing. Not robotic.
 - Avoid generic landing-page filler and “AI obvious” transitions.

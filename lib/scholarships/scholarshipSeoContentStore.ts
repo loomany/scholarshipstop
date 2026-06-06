@@ -6,10 +6,20 @@ import { cache } from 'react';
 
 import type { LongTailSeoBundle } from '@/lib/scholarships/longTailSeoTypes';
 import { sanitizeSeoBundleNumericClaims } from '@/lib/scholarships/seoAiNumericSanitizer';
+import {
+  cleanScholarshipFaqItems,
+  cleanScholarshipGeneratedText,
+  cleanScholarshipStringArray
+} from '@/lib/scholarships/scholarshipSeoSanitizers';
 
 function contentFilePath(canonicalPath: string): string {
   const safe = canonicalPath.replace(/\//g, '__');
-  return path.join(process.cwd(), 'data', 'seo-scholarship-content', `${safe}.json`);
+  return path.join(
+    process.cwd(),
+    'data',
+    'seo-scholarship-content',
+    `${safe}.json`
+  );
 }
 
 function readStringOrBulletField(
@@ -27,6 +37,22 @@ function readStringOrBulletField(
   }
   if (typeof v === 'string' && v.trim()) return v.trim();
   return undefined;
+}
+
+function cleanOptionalSeoText(value: unknown): string | undefined {
+  return typeof value === 'string'
+    ? cleanScholarshipGeneratedText(value) || undefined
+    : undefined;
+}
+
+function cleanOptionalStringOrBulletField(
+  value: string | string[] | undefined
+): string | string[] | undefined {
+  if (Array.isArray(value)) {
+    const cleaned = cleanScholarshipStringArray(value);
+    return cleaned.length > 0 ? cleaned : undefined;
+  }
+  return cleanScholarshipGeneratedText(value) || undefined;
 }
 
 function isValidBundle(x: unknown): x is LongTailSeoBundle {
@@ -54,7 +80,7 @@ function readScholarshipSeoContentImpl(
     const faqRaw = (j as LongTailSeoBundle).faq;
     const faq =
       Array.isArray(faqRaw) && faqRaw.length > 0
-        ? faqRaw
+        ? (faqRaw
             .map((item) => {
               if (!item || typeof item !== 'object') return null;
               const q = (item as Record<string, unknown>).question;
@@ -65,15 +91,21 @@ function readScholarshipSeoContentImpl(
               if (!qq || !aa) return null;
               return { question: qq, answer: aa };
             })
-            .filter(Boolean) as { question: string; answer: string }[]
+            .filter(Boolean) as { question: string; answer: string }[])
         : undefined;
+    const seoTitle = cleanScholarshipGeneratedText(j.seo_title);
+    const seoDescription = cleanScholarshipGeneratedText(j.seo_description);
+    const intro = cleanScholarshipGeneratedText(j.intro);
+    if (!seoTitle || !seoDescription || !intro) return null;
+
     const rawBundle: LongTailSeoBundle = {
-      seo_title: j.seo_title.trim(),
-      seo_description: j.seo_description.trim(),
-      intro: j.intro.trim(),
-      h1: typeof (j as Record<string, unknown>).h1 === 'string'
-        ? String((j as Record<string, unknown>).h1).trim() || undefined
-        : undefined,
+      seo_title: seoTitle,
+      seo_description: seoDescription,
+      intro,
+      h1:
+        typeof (j as Record<string, unknown>).h1 === 'string'
+          ? cleanOptionalSeoText((j as Record<string, unknown>).h1)
+          : undefined,
       supporting: (() => {
         const raw = j as Record<string, unknown>;
         const s =
@@ -84,26 +116,40 @@ function readScholarshipSeoContentImpl(
               : typeof raw.supportingText === 'string'
                 ? raw.supportingText
                 : '';
-        const t = String(s).trim();
-        return t || undefined;
+        return cleanOptionalSeoText(s);
       })(),
       related_intro:
         typeof (j as Record<string, unknown>).related_intro === 'string'
-          ? String((j as Record<string, unknown>).related_intro).trim() ||
-            undefined
+          ? cleanOptionalSeoText((j as Record<string, unknown>).related_intro)
           : typeof (j as Record<string, unknown>).relatedIntro === 'string'
-            ? String((j as Record<string, unknown>).relatedIntro).trim() ||
-              undefined
+            ? cleanOptionalSeoText((j as Record<string, unknown>).relatedIntro)
             : undefined,
-      how_to_use: readStringOrBulletField(j as Record<string, unknown>, 'how_to_use', 'howToUse'),
-      who_for: readStringOrBulletField(j as Record<string, unknown>, 'who_for', 'whoFor'),
-      faq: faq && faq.length > 0 ? faq : undefined,
+      how_to_use: cleanOptionalStringOrBulletField(
+        readStringOrBulletField(
+          j as Record<string, unknown>,
+          'how_to_use',
+          'howToUse'
+        )
+      ),
+      who_for: cleanOptionalStringOrBulletField(
+        readStringOrBulletField(
+          j as Record<string, unknown>,
+          'who_for',
+          'whoFor'
+        )
+      ),
+      faq: cleanScholarshipFaqItems(faq),
       page_data:
         (j as Record<string, unknown>).page_data &&
         typeof (j as Record<string, unknown>).page_data === 'object'
-          ? ((j as Record<string, unknown>).page_data as LongTailSeoBundle['page_data'])
+          ? ((j as Record<string, unknown>)
+              .page_data as LongTailSeoBundle['page_data'])
           : undefined
     };
+    if (rawBundle.faq?.length === 0) {
+      rawBundle.faq = undefined;
+    }
+
     const meta = (j as LongTailSeoBundle)._meta;
     return sanitizeSeoBundleNumericClaims({
       ...rawBundle,

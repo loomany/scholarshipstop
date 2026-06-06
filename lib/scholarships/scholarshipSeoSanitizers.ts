@@ -7,7 +7,23 @@ type FaqLike = {
 
 const PLACEHOLDER_PATTERNS: RegExp[] = [
   /scholarshiptop could not structure this detail from current listing data/i,
-  /\bcould not structure this detail\b/i
+  /\bcould not structure this detail\b/i,
+  /\$undefined\b/i,
+  /\bundefined\b/i
+];
+
+const NEAR_DUPLICATE_AUDIT_PATTERNS: RegExp[] = [
+  /offers\s+this\s+scholarship\s+to\s+help\s+cover\s+education\s+costs/i,
+  /review\s+eligibility\s+and\s+application\s+steps/i,
+  /prepare\s+required\s+documents\s+early/i,
+  /use\s+these\s+details\s+to\s+understand\s+fit/i,
+  /scholarshiptop\s+has\s+a\s+review\s+timestamp/i,
+  /scholarshiptop\s+organizes\s+eligibility\s+signals/i,
+  /scholarshiptop\s+organizes\s+scholarship\s+details/i,
+  /listing-specific\s+ideas\s+from\s+our\s+ai\s+layer/i,
+  /materials\s+you\s+may\s+need\s+to\s+upload\s+or\s+submit/i,
+  /get\s+matched\s+with\s+scholarships\s+in\s+2\s+minutes/i,
+  /application\s+readiness/i
 ];
 
 const GENERIC_FAQ_PATTERNS: RegExp[] = [
@@ -56,7 +72,10 @@ export function isScholarshipPlaceholderText(
   if (!normalized) {
     return false;
   }
-  return PLACEHOLDER_PATTERNS.some((pattern) => pattern.test(normalized));
+  return (
+    PLACEHOLDER_PATTERNS.some((pattern) => pattern.test(normalized)) ||
+    NEAR_DUPLICATE_AUDIT_PATTERNS.some((pattern) => pattern.test(normalized))
+  );
 }
 
 export function cleanScholarshipGeneratedText<

@@ -62,6 +62,7 @@ type StaticEssayGuidePageProps = {
   copy?: StaticEssayGuidePageCopy;
   hrefForPath?: (href: string) => string;
   urlForPath?: (path: string) => string;
+  emitFaqSchema?: boolean;
 };
 
 function shouldShowHealthcareEssayContext(guide: StaticEssayGuide): boolean {
@@ -89,7 +90,8 @@ export function StaticEssayGuidePage({
   locale = 'en',
   copy = DEFAULT_COPY,
   hrefForPath = (href) => href,
-  urlForPath = (path) => getURL(path)
+  urlForPath = (path) => getURL(path),
+  emitFaqSchema = true
 }: StaticEssayGuidePageProps) {
   const path = essayHubArticlePath(guide.slug);
   const articleUrl = urlForPath(path);
@@ -139,19 +141,21 @@ export function StaticEssayGuidePage({
       url: getURL()
     }
   };
-  const faqSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    inLanguage: locale,
-    mainEntity: guide.faq.map((item) => ({
-      '@type': 'Question',
-      name: item.question,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: item.answer
+  const faqSchema = emitFaqSchema
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        inLanguage: locale,
+        mainEntity: guide.faq.map((item) => ({
+          '@type': 'Question',
+          name: item.question,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: item.answer
+          }
+        }))
       }
-    }))
-  };
+    : null;
 
   return (
     <main className="bg-white text-gray-900 antialiased">
@@ -163,10 +167,12 @@ export function StaticEssayGuidePage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
+      {faqSchema ? (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      ) : null}
 
       <article className="mx-auto w-full max-w-4xl px-4 py-10 sm:px-6 sm:py-12 lg:py-14">
         <nav className="text-sm text-gray-500" aria-label="Breadcrumb">

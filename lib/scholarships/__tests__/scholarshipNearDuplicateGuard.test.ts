@@ -7,15 +7,24 @@ import type { Scholarship } from '@/app/scholarships/scholarshipsData';
 import { getScholarshipDetailIndexPolicy } from '@/lib/seo/scholarshipSeoQualityPolicy';
 
 const auditedSourceFiles = [
+  'app/scholarships/scholarshipSlugLayoutMetadata.ts',
+  'app/scholarships/scholarshipsSlugPathPageBody.tsx',
   'app/scholarships/ScholarshipDetailPageClient.tsx',
   'app/scholarships/[[...slugPath]]/layout.tsx',
+  'components/scholarships/ScholarshipsHubShellSkeleton.tsx',
+  'components/scholarships/SeoScholarshipListingChrome.tsx',
   'components/scholarships/scholarship-detail/ScholarshipDetailSections.tsx',
   'lib/i18n/scholarshipDetailUiCopy.ts',
+  'lib/scholarships/longTailSeoStore.ts',
   'lib/scholarships/scholarshipDetailCopy.ts',
   'lib/scholarships/scholarshipDetailSeo.ts',
+  'lib/scholarships/scholarshipSeoContentStore.ts',
   'lib/scholarships/scholarshipSeoSanitizers.ts',
   'lib/scholarships/scholarshipUiModel.ts',
-  'scripts/generate-scholarship-detail-seo-ai.ts'
+  'lib/scholarships/supabase.ts',
+  'scripts/generate-scholarship-detail-seo-ai.ts',
+  'scripts/generate-seo-scholarship-ai.ts',
+  'scripts/seo-worker-generate.ts'
 ];
 
 const nearDuplicateAuditPhrases = [
@@ -24,10 +33,7 @@ const nearDuplicateAuditPhrases = [
     'prepare materials, save the opportunity,',
     'and move toward the provider application path when ready.'
   ].join(' '),
-  [
-    'ScholarshipTop has a review',
-    'timestamp for this listing.'
-  ].join(' '),
+  ['ScholarshipTop has a review', 'timestamp for this listing.'].join(' '),
   [
     'ScholarshipTop organizes eligibility signals',
     'so you can compare fit, prepare materials,',
@@ -51,10 +57,7 @@ const nearDuplicateAuditPhrases = [
     'follow the official application steps,',
     'and submit through the verified program link after your final checks.'
   ].join(' '),
-  [
-    'To apply, students should locate',
-    'the official'
-  ].join(' '),
+  ['To apply, students should locate', 'the official'].join(' '),
   'Get matched with scholarships in 2 minutes',
   'Application readiness'
 ];
@@ -67,6 +70,23 @@ test('scholarship detail sources stay clear of audited boilerplate phrases', () 
   for (const phrase of nearDuplicateAuditPhrases) {
     assert.equal(corpus.includes(phrase), false, phrase);
   }
+});
+
+test('scholarship catch-all routes avoid hidden duplicate h1 markup', () => {
+  const pageBody = readFileSync(
+    join(process.cwd(), 'app/scholarships/scholarshipsSlugPathPageBody.tsx'),
+    'utf8'
+  );
+  const skeleton = readFileSync(
+    join(
+      process.cwd(),
+      'components/scholarships/ScholarshipsHubShellSkeleton.tsx'
+    ),
+    'utf8'
+  );
+
+  assert.doesNotMatch(pageBody, /<h1 className="sr-only">/);
+  assert.doesNotMatch(skeleton, /<h1\b/);
 });
 
 test('count-only scholarship detail records are not indexable', () => {

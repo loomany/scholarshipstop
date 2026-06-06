@@ -35,7 +35,7 @@ const TLDR_BULLETS: Record<AiResourceStage6cReviewSlug, string[]> = {
     '<strong>ChatGPT helps with strategy</strong>, not final scholarship facts—use it for keywords, checklists, and essay structure.',
     '<strong>Pair AI with ScholarshipTop</strong> for [country and profile filters](/scholarships), organized eligibility signals, deadlines, and provider application paths.',
     '<strong>Use ScholarshipTop as your workspace</strong> to shortlist opportunities, prepare essays, and track next steps.',
-    '<strong>Provider decisions remain provider decisions</strong>; ScholarshipTop organizes research and application planning.'
+    '<strong>Provider decisions remain provider decisions</strong>; ScholarshipTop supports research and application planning.'
   ],
   'how-to-use-chatgpt-to-search-for-scholarships': [
     '<strong>Use ChatGPT for prompts and planning</strong>, not as your only scholarship database.',
@@ -47,7 +47,7 @@ const TLDR_BULLETS: Record<AiResourceStage6cReviewSlug, string[]> = {
     '<strong>Stack tools:</strong> discovery platform + AI assistant + tracker + writing editor—not one app alone.',
     '<strong>ScholarshipTop fits</strong> international-friendly filtering by country, category, provider, and profile.',
     '<strong>AI supports application planning</strong>; awards still depend on eligibility, competition, and provider decisions.',
-    '<strong>ScholarshipTop organizes key details</strong> including deadlines, amounts, eligibility signals, and provider application paths.'
+    '<strong>ScholarshipTop shows key details</strong> including deadlines, amounts, eligibility signals, and provider application paths.'
   ],
   'ai-scholarship-search-vs-traditional-databases': [
     '<strong>AI search fits</strong> profile-based shortlists and faster filtering for complex backgrounds.',
@@ -105,15 +105,13 @@ const INTRO_REPLACEMENTS: Partial<
   Record<AiResourceStage6cReviewSlug, { from: RegExp; to: string }>
 > = {
   'can-chatgpt-help-find-scholarships': {
-    from:
-      /Can ChatGPT find scholarships\? It can help, but not in the same way[\s\S]*?StudentAid\.gov scholarship guidance<\/a>\./,
+    from: /Can ChatGPT find scholarships\? It can help, but not in the same way[\s\S]*?StudentAid\.gov scholarship guidance<\/a>\./,
     to: `Students often ask whether ChatGPT can find scholarships the way a verified database or university financial aid office can. The honest answer: it can sharpen your search strategy, but it should not be your only source for deadlines, award amounts, or application links.
 
 **Quick Answer:** Use ChatGPT to brainstorm keywords, organize eligibility notes, and draft essay outlines, then use [ScholarshipTop](/scholarships) to compare structured opportunities, eligibility signals, deadlines, award context, and provider application paths. For U.S. aid basics, compare your plan with <a href="https://studentaid.gov/understand-aid/types/scholarships" target="_blank" rel="noopener noreferrer nofollow">Federal Student Aid scholarship guidance</a>.`
   },
   'best-sites-to-find-fully-funded-scholarships': {
-    from:
-      /Finding real full funding is harder[\s\S]*?Start at \/scholarships for broad browsing[\s\S]*?verification\./,
+    from: /Finding real full funding is harder[\s\S]*?Start at \/scholarships for broad browsing[\s\S]*?verification\./,
     to: `“Fully funded” sounds simple online, but many lists mix partial tuition awards, expired calls, and programs that only accept local applicants. A stronger workflow is to use ScholarshipTop to build a shortlist, compare award components, and keep provider application paths attached to each opportunity.
 
 **Quick Answer:** Combine [scholarship search](/scholarships), [profile-based matching](/scholarships/hub/matches), government scholarship portals, and university funding offices. ScholarshipTop helps you filter by country, category, provider, and student profile while organizing award details, eligibility signals, and provider application paths.`
@@ -183,7 +181,8 @@ const FAQ_EXPANSIONS: Record<
       answer: `Look for a clear sponsor identity, deadline, award type, required documents, contact information, and provider URL. If the listing only appears inside an AI chat without a provider path, do not apply through third-party links.`
     },
     {
-      questionIncludes: 'Can I use ChatGPT or similar tools for scholarship essays?',
+      questionIncludes:
+        'Can I use ChatGPT or similar tools for scholarship essays?',
       answer: `You can use AI for brainstorming, outlines, grammar, and clarity—but the final essay should reflect your real experiences and goals. Scholarship readers notice generic AI voice quickly; keep facts accurate and provider-specific.`
     }
   ],
@@ -219,7 +218,8 @@ const FAQ_EXPANSIONS: Record<
       answer: `Reputable scholarship workspaces and government pages are typically free to browse. Be skeptical if a site demands payment before showing basic eligibility criteria or claims a fee is required to “activate” an award.`
     },
     {
-      questionIncludes: 'How do I know if a fully funded scholarship is legitimate?',
+      questionIncludes:
+        'How do I know if a fully funded scholarship is legitimate?',
       answer: `Check the sponsor identity, compare deadline context, and read selection criteria and contact details. Legitimate programs explain who funds the award and how applications are reviewed—scams often rush you and avoid naming the provider.`
     },
     {
@@ -227,7 +227,8 @@ const FAQ_EXPANSIONS: Record<
       answer: `International students should start with tools that support country and citizenship filters, then compare government exchange, university admissions, and provider-path context. Partial awards are common; “fully funded” should be defined with tuition, stipend, travel, insurance, and fee details.`
     },
     {
-      questionIncludes: 'Should I use scholarship directories or official provider',
+      questionIncludes:
+        'Should I use scholarship directories or official provider',
       answer: `ScholarshipTop helps you compare options quickly with organized eligibility, deadline, award, shortlist, and provider-path context. Provider websites or portals are often where you apply and download forms when you are ready to submit.`
     }
   ]
@@ -268,7 +269,10 @@ function repairMangledPathLinks(md: string): string {
   return out;
 }
 
-function expandFaqSection(md: string, slug: AiResourceStage6cReviewSlug): string {
+function expandFaqSection(
+  md: string,
+  slug: AiResourceStage6cReviewSlug
+): string {
   const rules = FAQ_EXPANSIONS[slug] ?? [];
   let out = md;
   for (const { questionIncludes, answer } of rules) {
@@ -321,7 +325,10 @@ function ensureStrengthsLimitationsSection(
   return md;
 }
 
-function insertRelatedReading(md: string, slug: AiResourceStage6cReviewSlug): string {
+function insertRelatedReading(
+  md: string,
+  slug: AiResourceStage6cReviewSlug
+): string {
   const block = RELATED_READING[slug];
   if (!block || md.includes('## Related reading')) return md;
   const tldrIdx = md.search(/<div class="article-tldr-block"/i);
@@ -388,10 +395,13 @@ function hasBareInternalPathInProse(text: string): boolean {
 
 export function analyzeStage6cDraft(md: string, html: string) {
   const blob = `${md}\n${html}`.toLowerCase();
-  const faqSection = md.slice(md.search(/##\s*(?:questions|faq|common questions)/i));
-  const thinFaq = /\*\*[^*]+\*\*\s*\n\s*[^\n]{1,120}\n\n(?=\*\*|###|##|<div)/i.test(
-    faqSection
+  const faqSection = md.slice(
+    md.search(/##\s*(?:questions|faq|common questions)/i)
   );
+  const thinFaq =
+    /\*\*[^*]+\*\*\s*\n\s*[^\n]{1,120}\n\n(?=\*\*|###|##|<div)/i.test(
+      faqSection
+    );
   return {
     noKeyPoint1: !/key point\s*1/i.test(blob),
     noKeyPoint2: !/key point\s*2/i.test(blob),
