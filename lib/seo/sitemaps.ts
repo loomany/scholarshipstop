@@ -114,6 +114,9 @@ export const SITEMAP_REVALIDATE_SECONDS = 3600;
 /** Google allows at most 50,000 URLs per sitemap file. */
 export const SITEMAP_MAX_URLS_PER_FILE = 50_000;
 
+/** Row-range shard size for the large scholarship detail sitemap surface. */
+export const SCHOLARSHIP_SITEMAP_ROWS_PER_DOCUMENT = 1000;
+
 /** Page size for Supabase `.range()` pagination (not a cap on total rows). */
 export const SITEMAP_DB_PAGE_SIZE = 1000;
 
@@ -997,7 +1000,10 @@ async function fetchScholarshipSitemapDocumentCount(): Promise<number> {
     return 1;
   }
 
-  return Math.max(1, Math.ceil((count ?? 0) / SITEMAP_MAX_URLS_PER_FILE));
+  return Math.max(
+    1,
+    Math.ceil((count ?? 0) / SCHOLARSHIP_SITEMAP_ROWS_PER_DOCUMENT)
+  );
 }
 
 async function buildScholarshipSitemapIndexDocuments(): Promise<
@@ -1575,8 +1581,8 @@ async function buildScholarshipSitemapDocumentBySlug(
   const index = Number.parseInt(match[1], 10);
   if (!Number.isSafeInteger(index) || index < 0) return null;
 
-  const from = index * SITEMAP_MAX_URLS_PER_FILE;
-  const to = from + SITEMAP_MAX_URLS_PER_FILE - 1;
+  const from = index * SCHOLARSHIP_SITEMAP_ROWS_PER_DOCUMENT;
+  const to = from + SCHOLARSHIP_SITEMAP_ROWS_PER_DOCUMENT - 1;
   const entries = await fetchScholarshipSitemapEntriesInRange(
     sitemapBaseUrl(),
     {

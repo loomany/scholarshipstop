@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
-import { notFound, redirect } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 
 import ScholarshipCategoryPostListingSeo from '@/components/scholarships/ScholarshipCategoryPostListingSeo';
 import {
@@ -65,11 +65,11 @@ function resolveCategorySlugParam(slug: string): {
   const lower = raw.toLowerCase();
   const canonical = normalizeCategoryId(lower);
   if (!canonical && isLongTailSlug(lower)) {
-    redirect(`/scholarships/${lower}`);
+    permanentRedirect(`/scholarships/${lower}`);
   }
   const canonicalSlug = canonical ?? lower;
   if (raw !== canonicalSlug) {
-    redirect(`/scholarships/category/${canonicalSlug}`);
+    permanentRedirect(`/scholarships/category/${canonicalSlug}`);
   }
   return {
     canonicalSlug,

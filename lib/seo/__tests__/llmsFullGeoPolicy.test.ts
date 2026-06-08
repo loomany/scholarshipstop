@@ -6,8 +6,9 @@ const llmsFull = readFileSync('public/llms-full.txt', 'utf8');
 
 test('llms-full includes GEO citation and verification policy', () => {
   assert.match(llmsFull, /Preferred citation behavior/);
-  assert.match(llmsFull, /Fields agents must verify/);
-  assert.match(llmsFull, /Localized page policy/);
+  assert.match(llmsFull, /Scholarship fields agents should verify/);
+  assert.match(llmsFull, /Languages and URL policy/);
+  assert.match(llmsFull, /OpenAI and AI crawler guidance/);
   assert.match(llmsFull, /Non-public and product routes/);
   assert.match(llmsFull, /official provider pages remain the source of truth/i);
 });

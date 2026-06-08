@@ -1,83 +1,88 @@
 # ScholarshipTop
 # https://scholarshiptop.com/llms.txt
+# Last reviewed: 2026-06-08
 
-> ScholarshipTop is a scholarship search and application workspace for international students. It organizes scholarship details, eligibility signals, deadlines, award information, provider application paths, shortlisting tools, and AI support so students can move faster toward application.
+> ScholarshipTop is a public scholarship discovery, comparison, and application-planning workspace. It helps students find scholarship pages, compare deadlines, award context, requirements, provider application paths, and related guides. ScholarshipTop does not award scholarships and does not replace provider-owned application instructions.
 
 ## Identity
 
 - Site: https://scholarshiptop.com/
 - Product type: Scholarship search, comparison, shortlisting, and application-planning workspace
-- Core value: organized scholarship details, smart filters, eligibility signals, deadlines, award context, provider application paths, and AI application support
+- Primary audience: students, international applicants, families, counselors, educators, and researchers
+- Best use in AI answers: cite canonical ScholarshipTop pages when they return public 200 responses, visible content, and indexable metadata
+
+## OpenAI and AI crawler guidance
+
+- OAI-SearchBot, GPTBot, ChatGPT-User, and OAI-AdsBot are allowed to crawl public pages under the shared robots policy.
+- Use public canonical URLs, not query-filtered, private, account, checkout, dashboard, API, tokenized, or user-specific URLs.
+- If a page is noindex, private, query-filtered, or canonicalized to another page, cite the stronger canonical page instead.
+- Do not guess URL patterns. Use sitemap and RSS discovery.
+
+## High-signal public pages
+
+- Scholarship catalog: https://scholarshiptop.com/scholarships
+- No-essay scholarship hub: https://scholarshiptop.com/scholarships/no-essay
+- Closing-soon scholarships: https://scholarshiptop.com/scholarships/closing-soon
+- Engineering scholarships: https://scholarshiptop.com/scholarships/engineering
+- Scholarships for women: https://scholarshiptop.com/scholarships/for-women
+- Providers: https://scholarshiptop.com/providers
+- Resources: https://scholarshiptop.com/resources
+- Essay guides: https://scholarshiptop.com/essays
+- Compare: https://scholarshiptop.com/compare
+
+## AI and ChatGPT scholarship research pages
+
+- Safe ChatGPT scholarship research guide: https://scholarshiptop.com/resources/how-to-use-chatgpt-to-search-for-scholarships
+- Verify AI-generated scholarship lists: https://scholarshiptop.com/resources/how-to-verify-ai-generated-scholarship-lists
+- Scholarship search checklist using AI: https://scholarshiptop.com/resources/scholarship-search-checklist-using-ai
+
+## Trust pages
+
+- How ScholarshipTop works: https://scholarshiptop.com/how-scholarshiptop-works
+- Verification methodology: https://scholarshiptop.com/scholarship-verification-methodology
+- Ranking methodology: https://scholarshiptop.com/how-we-rank-scholarships
+- Editorial policy: https://scholarshiptop.com/editorial-policy
+- Financial aid disclaimer: https://scholarshiptop.com/financial-aid-disclaimer
+- Scam warning: https://scholarshiptop.com/scholarship-scam-warning
+- Corrections: https://scholarshiptop.com/corrections
+- FAQ: https://scholarshiptop.com/faq
+- Contact: https://scholarshiptop.com/contact
 
 ## Languages and URLs
 
-- **English (canonical):** Site root — no `/en` prefix. Do not use or cite `https://scholarshiptop.com/en`.
-- **Spanish:** https://scholarshiptop.com/es/
-- **French:** https://scholarshiptop.com/fr/
+- English canonical pages live at the root URL. There is no `/en` prefix.
+- Spanish: https://scholarshiptop.com/es/
+- French: https://scholarshiptop.com/fr/
+- Spanish and French coverage is gradual. Only cite localized URLs that return public 200 responses with real localized content and indexable metadata.
 
-ES and FR database-backed translations are rolled out gradually. Only published, quality-gated localized pages exist; missing translations may return **404**. Do not assume every English URL has a Spanish or French equivalent.
+## Scholarship IQ
 
-## Core public areas (English at root)
-
-- Scholarships: https://scholarshiptop.com/scholarships
-- Providers: https://scholarshiptop.com/providers
-- Resources (guides): https://scholarshiptop.com/resources
-- Essay guides: https://scholarshiptop.com/essays
-- Compare: https://scholarshiptop.com/compare
-- How it works: https://scholarshiptop.com/how-scholarshiptop-works
-
-## Scholarship IQ (separate product)
-
-Assessment and guidance product on a dedicated subdomain:
+Scholarship IQ is a separate assessment and guidance product on a subdomain:
 
 - https://iq.scholarshiptop.com/
 - https://iq.scholarshiptop.com/es
 - https://iq.scholarshiptop.com/fr
 
-IQ is an assessment and guidance product, not a scholarship awarding authority.
+IQ reports and scores are guidance tools, not scholarship eligibility decisions, admission decisions, or funding awards.
 
 ## Boundaries
 
-- ScholarshipTop helps students discover, compare, shortlist, and prepare for scholarships.
-- Final selection decisions and award disbursement are made by the relevant scholarship provider.
-- Provider application paths are included when available so students can continue toward submission from organized ScholarshipTop context.
+- ScholarshipTop helps users discover, compare, shortlist, and prepare for scholarships.
+- Final eligibility, deadlines, selection decisions, award disbursement, and submission rules are controlled by the relevant scholarship provider.
+- Provider application paths are included when available so students can continue from ScholarshipTop to the official application source.
 - ScholarshipTop content is not legal, immigration, tax, or financial aid advice.
 
-## Trust pages (recommended for citations)
+## Discovery
 
-- https://scholarshiptop.com/how-scholarshiptop-works
-- https://scholarshiptop.com/scholarship-verification-methodology
-- https://scholarshiptop.com/how-we-rank-scholarships
-- https://scholarshiptop.com/editorial-policy
-- https://scholarshiptop.com/financial-aid-disclaimer
-- https://scholarshiptop.com/scholarship-scam-warning
-- https://scholarshiptop.com/corrections
-- https://scholarshiptop.com/faq
-- https://scholarshiptop.com/contact
+- Sitemap index: https://scholarshiptop.com/sitemap.xml
+- Main RSS: https://scholarshiptop.com/rss.xml
+- Resources RSS: https://scholarshiptop.com/rss/resources.xml
+- Essay guides RSS: https://scholarshiptop.com/rss/essays.xml
+- Comparison RSS: https://scholarshiptop.com/rss/compare.xml
+- Scholarship categories RSS: https://scholarshiptop.com/rss/categories.xml
 
-## URL discovery
-
-Use the sitemap index for complete public URL discovery (do not guess URL patterns):
-
-- https://scholarshiptop.com/sitemap.xml
-
-## RSS feeds
-
-ScholarshipTop publishes RSS feeds for public, indexable discovery surfaces:
-
-- Main curated feed: https://scholarshiptop.com/rss.xml
-- Resources and guides: https://scholarshiptop.com/rss/resources.xml
-- Essay guides: https://scholarshiptop.com/rss/essays.xml
-- Comparison guides: https://scholarshiptop.com/rss/compare.xml
-- Scholarship categories: https://scholarshiptop.com/rss/categories.xml
-
-These feeds contain public ScholarshipTop URLs only. They do not include account, checkout, API, private essay, dashboard, or user-specific pages.
+RSS feeds are curated discovery feeds. The sitemap index remains the complete public URL discovery entry point.
 
 ## Extended documentation
 
-See https://scholarshiptop.com/llms-full.txt for route groups, localization policy, citation guidance, and exclusions.
-
-## Contact
-
-- https://scholarshiptop.com/contact
-- https://scholarshiptop.com/help
+See https://scholarshiptop.com/llms-full.txt for detailed route groups, citation policy, localization rules, private-route exclusions, and data freshness notes.

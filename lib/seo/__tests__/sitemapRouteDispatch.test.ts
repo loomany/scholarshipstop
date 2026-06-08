@@ -80,6 +80,7 @@ test('scholarship child sitemaps use direct shard builder with guarded failures'
 
   assert.match(source, /buildScholarshipSitemapDocumentBySlug/);
   assert.match(source, /fetchScholarshipSitemapEntriesInRange/);
+  assert.match(source, /SCHOLARSHIP_SITEMAP_ROWS_PER_DOCUMENT/);
   assert.match(source, /scholarship sitemap shard \$\{slug\} failed/);
 });
 
