@@ -3791,11 +3791,7 @@ function ScholarshipsPageInner({
               savedFilterBarHint={savedFilterBarHint}
               savedFilterPresetButtons={headerSavedFilterPresetButtons}
               onSavedFilterPresetSelect={openManageSavedFilterPreset}
-              suppressBottomMargin={
-                (activeTab === 'best-recommendation' &&
-                  shouldShowBestRecommendationWizard) ||
-                (activeTab === 'matches' && shouldPromptScholarshipQuiz)
-              }
+              suppressBottomMargin
               centerResultSummary={activeTab === 'best-recommendation'}
             />
           )
@@ -4119,7 +4115,7 @@ function ScholarshipsPageInner({
                   </div>
                 </div>
               ) : null}
-              <div className="relative z-0 mt-4 flex flex-col gap-4">
+              <div className="relative z-0 flex flex-col gap-4">
                 {scholarshipsForCards.map((s, index) => (
                   <div key={s.id} className="contents">
                     <ScholarshipCard

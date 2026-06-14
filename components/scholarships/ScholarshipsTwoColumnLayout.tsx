@@ -47,7 +47,7 @@ export default function ScholarshipsTwoColumnLayout({
     <div className={`mx-auto flex w-full ${mw} flex-col gap-5 sm:gap-6`}>
       {lead != null ? <div className="w-full min-w-0">{lead}</div> : null}
       <div
-        className={`flex w-full min-w-0 flex-col gap-5 sm:gap-6 lg:grid lg:grid-cols-[minmax(0,1fr)_min(100%,280px)] lg:items-start lg:gap-6 xl:grid-cols-[minmax(0,1fr)_300px] xl:gap-8 2xl:grid-cols-[minmax(0,1fr)_320px]`}
+        className={`flex w-full min-w-0 flex-col gap-5 sm:gap-6 lg:grid lg:grid-cols-[minmax(0,1fr)_min(100%,280px)] lg:items-start lg:gap-6 xl:grid-cols-[minmax(0,1fr)_300px] xl:gap-x-8 2xl:grid-cols-[minmax(0,1fr)_320px]`}
       >
         {hasListToolbar ? (
           <div className="min-w-0 lg:col-start-1 lg:row-start-1">{listToolbar}</div>
