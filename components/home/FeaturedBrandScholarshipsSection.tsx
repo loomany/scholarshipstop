@@ -30,6 +30,7 @@ const h2Class =
   'text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl lg:text-[2.35rem] lg:leading-[1.15] xl:text-[2.5rem]';
 
 const SCROLL_STEP_PX = 340;
+const DEFAULT_HOME_BRAND_CARD_LIMIT = 12;
 
 type FeaturedBrandScholarshipsSectionProps = {
   className?: string;
@@ -45,7 +46,10 @@ type FeaturedBrandScholarshipsSectionProps = {
 
 export function FeaturedBrandScholarshipsSection({
   className,
-  items = FEATURED_BRAND_SCHOLARSHIPS_HOME,
+  items = FEATURED_BRAND_SCHOLARSHIPS_HOME.slice(
+    0,
+    DEFAULT_HOME_BRAND_CARD_LIMIT
+  ),
   locale = 'en',
   copy = {
     title: 'Examples from our scholarship catalog',
@@ -106,7 +110,7 @@ export function FeaturedBrandScholarshipsSection({
                 height={96}
                 className="h-full w-full min-h-0 min-w-0 origin-center object-contain"
                 style={{ transform: `scale(${logoUiScale})` }}
-                loading={index < 4 ? 'eager' : 'lazy'}
+                loading="lazy"
                 decoding="async"
                 onError={() => {
                   if (!useUnavatar) markLogoFallback(fileKey);

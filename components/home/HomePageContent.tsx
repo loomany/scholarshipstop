@@ -193,16 +193,16 @@ export function HomePageContent({
           className={`border-b border-gray-100 bg-white ${homeY.hero} ${homeSectionPadX}`}
         >
           <div className={`${container} max-w-4xl text-center`}>
-            <h1 className="text-pretty text-[clamp(1.8125rem,5.25vw+0.8rem,2.25rem)] font-bold leading-[1.08] tracking-tight text-gray-900 opacity-0 animate-home-fade-up sm:text-5xl sm:leading-[1.06] lg:text-[3rem] lg:leading-[1.05]">
+            <h1 className="text-pretty text-[clamp(1.8125rem,5.25vw+0.8rem,2.25rem)] font-bold leading-[1.08] tracking-tight text-gray-900 sm:text-5xl sm:leading-[1.06] lg:text-[3rem] lg:leading-[1.05]">
               {copy.h1}
             </h1>
             <p
-              className={`mx-auto mt-5 max-w-2xl text-pretty opacity-0 animate-home-fade-up-delay-1 sm:mt-6 ${ledeMuted}`}
+              className={`mx-auto mt-5 max-w-2xl text-pretty sm:mt-6 ${ledeMuted}`}
             >
               {copy.heroSubtext}
             </p>
 
-            <div className="mx-auto mt-8 flex w-full max-w-lg justify-center opacity-0 animate-home-fade-up-delay-2 sm:mt-9 sm:max-w-2xl">
+            <div className="mx-auto mt-8 flex w-full max-w-lg justify-center sm:mt-9 sm:max-w-2xl">
               <HomePrimaryCtaClient
                 id="onboarding-cta"
                 locale={locale}
@@ -212,7 +212,7 @@ export function HomePageContent({
               </HomePrimaryCtaClient>
             </div>
             <p
-              className={`mx-auto mt-5 max-w-2xl text-pretty text-sm leading-relaxed text-gray-500 opacity-0 animate-home-fade-up-delay-2 sm:mt-6 sm:text-[0.9375rem]`}
+              className={`mx-auto mt-5 max-w-2xl text-pretty text-sm leading-relaxed text-gray-500 sm:mt-6 sm:text-[0.9375rem]`}
             >
               {copy.heroTrustLine}
             </p>
@@ -442,7 +442,7 @@ export function HomePageContent({
       */}
       {locale === 'en' ? (
         <section
-          className={`border-b border-gray-100 bg-white ${homeY.block} ${homeSectionPadX}`}
+          className={`border-b border-gray-100 bg-white [content-visibility:auto] [contain-intrinsic-size:auto_520px] ${homeY.block} ${homeSectionPadX}`}
         >
           <div className={container}>
             <FeaturedBrandScholarshipsSection

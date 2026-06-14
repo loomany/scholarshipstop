@@ -23,6 +23,8 @@ export function ScholarshipOnboardingDraftPostAuthSync() {
   const inFlight = useRef(false);
 
   useEffect(() => {
+    if (!loadStoredOnboardingDraft()) return;
+
     const supabase = createClient();
 
     const trySync = async () => {

@@ -43,5 +43,5 @@ export function homepageSupabaseFetchTimeoutMs(): number {
   if (process.env.NEXT_PHASE === 'phase-production-build') {
     return 12_000;
   }
-  return 25_000;
+  return 2_000;
 }

@@ -1,5 +1,6 @@
 import 'server-only';
 
+import { unstable_cache } from 'next/cache';
 import { cache } from 'react';
 
 import type { ContentPostListFields } from '@/lib/content-hub/contentPostListTypes';
@@ -160,7 +161,7 @@ async function pickTopEssayGuides(): Promise<EssayListFields[]> {
  * 10 prioritized resource articles + 10 essay hub guides (curated + SEO scoring fallback),
  * merged and sorted by recency (resource: `published_at`, essay: `created_at`).
  */
-export const fetchHomeResourcesCarouselItems = cache(
+const fetchHomeResourcesCarouselItemsCached = unstable_cache(
   async (): Promise<HomeResourcesCarouselItem[]> => {
     const [resources, essays] = await Promise.all([
       pickTopResourcePosts(),
@@ -221,6 +222,12 @@ export const fetchHomeResourcesCarouselItems = cache(
       j += 1;
     }
 
-    return merged.map(({ _t: _drop, ...rest }) => rest);
-  }
+    return merged.slice(0, TARGET_EACH).map(({ _t: _drop, ...rest }) => rest);
+  },
+  ['home-resources-carousel-v2'],
+  { revalidate: 3_600 }
+);
+
+export const fetchHomeResourcesCarouselItems = cache(
+  fetchHomeResourcesCarouselItemsCached
 );

@@ -19,7 +19,7 @@ import {
 import { GOOGLE_ADS_AW_ID } from '@/lib/analytics/googleAdsSignupConversion';
 import WebVitalsClient from '@/components/analytics/WebVitalsClient';
 import { ScholarshipOnboardingDraftPostAuthSync } from '@/components/onboarding/ScholarshipOnboardingDraftPostAuthSync';
-import HomeAiNavigatorWidget from '@/components/home/HomeAiNavigatorWidget';
+import DeferredGlobalRuntime from '@/components/performance/DeferredGlobalRuntime';
 import SiteFooter from '@/components/ui/Footer/SiteFooter';
 import dynamic from 'next/dynamic';
 import { getLocaleDirection, ROOT_LOCALE } from '@/lib/i18n/locales';
@@ -49,24 +49,12 @@ function requestLocaleFromHeaders(
   return isStage2PilotLocale(locale) ? locale : ROOT_LOCALE;
 }
 
-/** Client-only: `usePathname` / `useSearchParams` can throw with Turbopack SSR (`useContext` null). */
-const AnalyticsTracker = dynamic(
-  () => import('@/components/AnalyticsTracker'),
-  { ssr: false }
-);
-
 /** `nextjs-toploader` listens to the pathname; same Turbopack SSR pitfall as AnalyticsTracker. */
 const NavigationProgress = dynamic(
   () =>
     import('@/components/ui/NavigationProgress').then((m) => ({
       default: m.NavigationProgress
     })),
-  { ssr: false }
-);
-
-/** Same Turbopack pitfall as AnalyticsTracker — `usePathname` needs client-only mount. */
-const GptTrafficTracker = dynamic(
-  () => import('@/components/analytics/GptTrafficTracker'),
   { ssr: false }
 );
 
@@ -244,9 +232,9 @@ export default async function RootLayout({ children }: PropsWithChildren) {
         <GoogleTagManager />
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_AW_ID}`}
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
-        <Script id="google-ads-gtag" strategy="afterInteractive">
+        <Script id="google-ads-gtag" strategy="lazyOnload">
           {`
 window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
@@ -257,7 +245,7 @@ gtag('config', '${GOOGLE_ADS_AW_ID}');
         <Script
           id="lemonsqueezy-js"
           src="https://app.lemonsqueezy.com/js/lemon.js"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
         <script
           type="application/ld+json"
@@ -281,15 +269,11 @@ gtag('config', '${GOOGLE_ADS_AW_ID}');
           </main>
           <SiteFooter locale={requestLocale} />
         </div>
-        {showAiNavigator ? <HomeAiNavigatorWidget /> : null}
+        <DeferredGlobalRuntime showAiNavigator={showAiNavigator} />
         <Suspense fallback={null}>
           <Toaster />
         </Suspense>
-        <Suspense fallback={null}>
-          <GptTrafficTracker />
-        </Suspense>
         <WebVitalsClient />
-        <AnalyticsTracker />
       </body>
     </html>
   );

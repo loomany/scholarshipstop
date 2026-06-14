@@ -1,30 +1,20 @@
-import dynamic from 'next/dynamic';
 import { headers } from 'next/headers';
 
 import { getIqLocaleFromRequestHeaders } from '@/lib/iq/i18n/getIqLocaleFromRequest';
 import { IQ_SUBDOMAIN_HOST } from '@/lib/iq/i18n/iqLocales';
-import { getNavbarInitialAuth } from '@/lib/nav/getNavbarInitialAuth';
 import type { SupportedLocale } from '@/lib/i18n/types';
+import Navlinks from './Navlinks';
 import s from './Navbar.module.css';
 
 function normalizeRequestHost(value: string | null): string {
   return (value ?? '').split(',')[0]?.trim().toLowerCase().replace(/:\d+$/, '') ?? '';
 }
 
-/**
- * `usePathname()` in `Navlinks` can throw under Next dev + Turbopack SSR.
- * Keep the auth preload on the server, but render the interactive nav client-only.
- */
-const Navlinks = dynamic(() => import('./Navlinks'), {
-  ssr: false
-});
-
-export default async function Navbar({
+export default function Navbar({
   locale = 'en'
 }: {
   locale?: SupportedLocale;
 }) {
-  const initialNavbarAuth = await getNavbarInitialAuth();
   const requestHeaders = headers();
   const requestHost = normalizeRequestHost(
     requestHeaders.get('x-forwarded-host') ?? requestHeaders.get('host')
@@ -41,7 +31,7 @@ export default async function Navbar({
       </a>
       <div className="mx-auto max-w-6xl pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] sm:pl-6 sm:pr-6">
         <Navlinks
-          initialNavbarAuth={initialNavbarAuth}
+          initialNavbarAuth={null}
           initialLocale={locale}
           isIqSubdomainHost={isIqSubdomainHost}
           iqLocale={iqLocale}

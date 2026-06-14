@@ -21,7 +21,7 @@ export default function FeaturedResources({
 }: FeaturedResourcesProps) {
   return (
     <section
-      className="border-b border-gray-100 bg-gray-50 pt-8 pb-[max(2.75rem,calc(env(safe-area-inset-bottom,0px)+1.25rem))] sm:pt-9 sm:pb-11 lg:pt-10 lg:pb-12"
+      className="border-b border-gray-100 bg-gray-50 pt-8 pb-[max(2.75rem,calc(env(safe-area-inset-bottom,0px)+1.25rem))] [content-visibility:auto] [contain-intrinsic-size:auto_460px] sm:pt-9 sm:pb-11 lg:pt-10 lg:pb-12"
       aria-labelledby="featured-resources-heading"
     >
       <div className={pageContent}>

@@ -69,6 +69,20 @@ export async function middleware(request: NextRequest) {
     return handleIqSubdomainMiddleware(request);
   }
 
+  /**
+   * The public homepage is identical for signed-in and signed-out visitors; auth-aware
+   * controls resolve after hydration. Avoid a Supabase refresh on the critical request
+   * and let the CDN reuse the marketing response while it revalidates in the background.
+   */
+  if (pathname === '/' || pathname === '') {
+    const response = NextResponse.next();
+    const cacheControl =
+      'public, s-maxage=300, stale-while-revalidate=86400';
+    response.headers.set('Cache-Control', cacheControl);
+    response.headers.set('CDN-Cache-Control', cacheControl);
+    return response;
+  }
+
   /** Canonical alphabetically sorted `-vs-` pairs for university comparison URLs. */
   const compareSeg = pathname.match(/^\/compare\/universities\/([^/]+)\/?$/i);
   if (compareSeg?.[1]) {
