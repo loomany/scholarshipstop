@@ -10,20 +10,6 @@ export const ROBOTS_PRIVATE_ROUTE_DISALLOW = [
   '/subscription/success'
 ] as const;
 
-export const ROBOTS_QUERY_DUPLICATE_DISALLOW = [
-  '/*?*return_to=',
-  '/*?*sort=',
-  '/*?*page=',
-  '/*?*limit=',
-  '/*?*tab=',
-  '/*?*scope=',
-  '/*?*listScope=',
-  '/*?*utm_',
-  '/*?*gclid=',
-  '/*?*fbclid=',
-  '/*?*msclkid='
-] as const;
-
 export const ROBOTS_AI_CRAWLER_USER_AGENTS = [
   'OAI-SearchBot',
   'GPTBot',
@@ -31,10 +17,7 @@ export const ROBOTS_AI_CRAWLER_USER_AGENTS = [
   'OAI-AdsBot'
 ] as const;
 
-const ROBOTS_PUBLIC_DISALLOW = [
-  ...ROBOTS_PRIVATE_ROUTE_DISALLOW,
-  ...ROBOTS_QUERY_DUPLICATE_DISALLOW
-] as const;
+const ROBOTS_PUBLIC_DISALLOW = [...ROBOTS_PRIVATE_ROUTE_DISALLOW] as const;
 
 export default function robots(): MetadataRoute.Robots {
   const base = getURL().replace(/\/$/, '');

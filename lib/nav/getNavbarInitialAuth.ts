@@ -1,7 +1,10 @@
+import { cookies } from 'next/headers';
+
 import {
   profileDisplayNameFromRow,
   profileFirstNameFromRow
 } from '@/lib/nav/accountDisplayName';
+import { hasSupabaseAuthCookie } from '@/utils/supabase/authCookie';
 import { createClient } from '@/utils/supabase/server';
 
 export type NavbarInitialAuth = {
@@ -13,6 +16,8 @@ export type NavbarInitialAuth = {
 
 /** Session + profile names for the navbar so the client does not flash email before `profiles` loads. */
 export async function getNavbarInitialAuth(): Promise<NavbarInitialAuth> {
+  if (!hasSupabaseAuthCookie(cookies().getAll())) return null;
+
   const supabase = createClient();
   const {
     data: { user }

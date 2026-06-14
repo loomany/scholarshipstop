@@ -129,10 +129,16 @@ async function fetchAllPublishedContentPostsListFieldsImpl(): Promise<
   return out;
 }
 
+const fetchAllPublishedContentPostsListFieldsCached = unstable_cache(
+  fetchAllPublishedContentPostsListFieldsImpl,
+  ['resources-index-published-posts-v1'],
+  { revalidate: 300 }
+);
+
 export async function fetchAllPublishedContentPostsListFields(): Promise<
   ContentPostListFields[]
 > {
-  return fetchAllPublishedContentPostsListFieldsImpl();
+  return fetchAllPublishedContentPostsListFieldsCached();
 }
 
 /**

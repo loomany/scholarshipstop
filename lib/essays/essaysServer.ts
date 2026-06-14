@@ -65,6 +65,13 @@ export type EssaysHubIndexRequest = {
   page: number;
 };
 
+type EssaysHubIndexPage = {
+  rows: EssayIndexRow[];
+  total: number;
+  categoryOptions: EssaysHubCategoryOption[];
+  anyPublished: boolean;
+};
+
 type RpcEssaysHubRow = {
   id: string;
   slug: string;
@@ -102,57 +109,73 @@ function mapRpcEssayIndexRow(r: RpcEssaysHubRow): EssayIndexRow {
 }
 
 /** Single RPC: paginated rows, totals, category facets — replaces full-table fetch + in-memory filter. */
+async function fetchEssaysHubIndexPageImpl(
+  state: EssaysHubIndexRequest,
+  pageSize = ESSAYS_INDEX_PAGE_SIZE
+): Promise<EssaysHubIndexPage> {
+  const supabase = createPublicClient();
+  if (!supabase) {
+    return {
+      rows: [],
+      total: 0,
+      categoryOptions: [],
+      anyPublished: false
+    };
+  }
+  const { data, error } = await supabase.rpc('essays_hub_index_page', {
+    p_q: state.q,
+    p_category: state.categoryKey,
+    p_sort: state.sort,
+    p_page: state.page,
+    p_page_size: pageSize
+  });
+
+  if (error) throw new Error(error.message);
+
+  const payload = data as {
+    any_published?: boolean;
+    total?: number;
+    rows?: RpcEssaysHubRow[] | null;
+    category_options?: { key: string; label: string; count: number }[] | null;
+  };
+
+  const rowsRaw = Array.isArray(payload.rows) ? payload.rows : [];
+  const categoryRaw = Array.isArray(payload.category_options)
+    ? payload.category_options
+    : [];
+
+  return {
+    rows: rowsRaw.map(mapRpcEssayIndexRow),
+    total: Number(payload.total ?? 0),
+    categoryOptions: categoryRaw.map((o) => ({
+      key: o.key,
+      label: o.label,
+      count: o.count
+    })),
+    anyPublished: Boolean(payload.any_published)
+  };
+}
+
+const fetchCleanEssaysHubIndexPageCached = unstable_cache(
+  fetchEssaysHubIndexPageImpl,
+  ['clean-essays-hub-index-page-v1'],
+  { revalidate: 300 }
+);
+
 export const fetchEssaysHubIndexPage = cache(
   async (
     state: EssaysHubIndexRequest,
     pageSize = ESSAYS_INDEX_PAGE_SIZE
-  ): Promise<{
-    rows: EssayIndexRow[];
-    total: number;
-    categoryOptions: EssaysHubCategoryOption[];
-    anyPublished: boolean;
-  }> => {
-    const supabase = createPublicClient();
-    if (!supabase) {
-      return {
-        rows: [],
-        total: 0,
-        categoryOptions: [],
-        anyPublished: false
-      };
-    }
-    const { data, error } = await supabase.rpc('essays_hub_index_page', {
-      p_q: state.q,
-      p_category: state.categoryKey,
-      p_sort: state.sort,
-      p_page: state.page,
-      p_page_size: pageSize
-    });
+  ): Promise<EssaysHubIndexPage> => {
+    const isCleanFirstPage =
+      state.q === '' &&
+      state.categoryKey == null &&
+      state.sort === 'latest' &&
+      state.page === 1;
 
-    if (error) throw new Error(error.message);
-
-    const payload = data as {
-      any_published?: boolean;
-      total?: number;
-      rows?: RpcEssaysHubRow[] | null;
-      category_options?: { key: string; label: string; count: number }[] | null;
-    };
-
-    const rowsRaw = Array.isArray(payload.rows) ? payload.rows : [];
-    const categoryRaw = Array.isArray(payload.category_options)
-      ? payload.category_options
-      : [];
-
-    return {
-      rows: rowsRaw.map(mapRpcEssayIndexRow),
-      total: Number(payload.total ?? 0),
-      categoryOptions: categoryRaw.map((o) => ({
-        key: o.key,
-        label: o.label,
-        count: o.count
-      })),
-      anyPublished: Boolean(payload.any_published)
-    };
+    return isCleanFirstPage
+      ? fetchCleanEssaysHubIndexPageCached(state, pageSize)
+      : fetchEssaysHubIndexPageImpl(state, pageSize);
   }
 );
 
@@ -169,7 +192,7 @@ export async function countPublishedEssays(): Promise<number> {
 }
 
 /** Latest published essay hub guides (same table/fields as `/essays` index cards). */
-export async function fetchLatestPublishedEssayHubList(
+async function fetchLatestPublishedEssayHubListImpl(
   limit: number
 ): Promise<EssayListFields[]> {
   const size = Math.max(1, Math.min(200, Math.floor(limit)));
@@ -186,6 +209,19 @@ export async function fetchLatestPublishedEssayHubList(
 
   if (error) throw new Error(error.message);
   return (data ?? []) as EssayListFields[];
+}
+
+const fetchLatestPublishedEssayHubListCached = unstable_cache(
+  fetchLatestPublishedEssayHubListImpl,
+  ['latest-published-essay-hub-list-v1'],
+  { revalidate: 300 }
+);
+
+export async function fetchLatestPublishedEssayHubList(
+  limit: number
+): Promise<EssayListFields[]> {
+  const size = Math.max(1, Math.min(200, Math.floor(limit)));
+  return fetchLatestPublishedEssayHubListCached(size);
 }
 
 /**

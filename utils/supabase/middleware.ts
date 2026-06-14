@@ -1,6 +1,8 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { type NextRequest, NextResponse } from 'next/server';
 
+import { hasSupabaseAuthCookie } from '@/utils/supabase/authCookie';
+
 /** GoTrue rejects refresh; cookies must be cleared or every request will retry and spam logs. */
 function isStaleRefreshAuthError(err: unknown): boolean {
   if (!err || typeof err !== 'object') return false;
@@ -74,6 +76,14 @@ export const createClient = (request: NextRequest) => {
 };
 
 export const updateSession = async (request: NextRequest) => {
+  if (!hasSupabaseAuthCookie(request.cookies.getAll())) {
+    return NextResponse.next({
+      request: {
+        headers: request.headers
+      }
+    });
+  }
+
   try {
     const { supabase, response } = createClient(request);
 

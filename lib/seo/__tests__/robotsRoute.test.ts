@@ -3,8 +3,7 @@ import test from 'node:test';
 
 import robots, {
   ROBOTS_AI_CRAWLER_USER_AGENTS,
-  ROBOTS_PRIVATE_ROUTE_DISALLOW,
-  ROBOTS_QUERY_DUPLICATE_DISALLOW
+  ROBOTS_PRIVATE_ROUTE_DISALLOW
 } from '@/app/robots';
 
 function asArray<T>(value: T | T[] | undefined): T[] {
@@ -12,7 +11,7 @@ function asArray<T>(value: T | T[] | undefined): T[] {
   return Array.isArray(value) ? value : [value];
 }
 
-test('robots keeps sitemap index discoverable and blocks duplicate query crawl traps', () => {
+test('robots keeps public query variants crawlable so canonical and noindex can be seen', () => {
   const result = robots();
   const rules = asArray(result.rules);
   const wildcardRule = rules.find((rule) => rule.userAgent === '*');
@@ -36,11 +35,12 @@ test('robots keeps sitemap index discoverable and blocks duplicate query crawl t
       `missing AI private route ${pattern}`
     );
   }
-  for (const pattern of ROBOTS_QUERY_DUPLICATE_DISALLOW) {
-    assert.ok(disallow.includes(pattern), `missing query pattern ${pattern}`);
-    assert.ok(
-      asArray(aiRule?.disallow).includes(pattern),
-      `missing AI query pattern ${pattern}`
-    );
-  }
+  assert.equal(
+    disallow.some((pattern) => pattern.includes('?')),
+    false
+  );
+  assert.equal(
+    asArray(aiRule?.disallow).some((pattern) => pattern.includes('?')),
+    false
+  );
 });
