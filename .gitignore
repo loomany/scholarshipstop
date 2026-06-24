@@ -93,6 +93,14 @@ certificates
 
 # supabase
 .supabase
+*супабейз*
+.supabase-db-url
+*.dump
+*.dump.sha256
+
+# VPS DB migration secrets (never commit)
+/root/.supabase-db-url
+/root/.scholarshiptop-db-init
 
 # logs
 *.log
