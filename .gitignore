@@ -50,12 +50,22 @@ yarn-error.log*
 
 # local env files
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*
+!.env.example
+!*.env.example
 .env.local.bak-*
 .env.local.prod-backup
+# VPS private env (never commit)
+ops/vps/runtime/env/*.env
+/opt/scholarshiptop/env/*.env
+
+# private VPS access files (never commit)
+vps.txt
+.vps-env-staging/
+*vps*login*
+*vps*password*
+*vps*access*
+*vps*credentials*
 
 # cursor IDE (local only)
 .cursor/
@@ -69,6 +79,15 @@ yarn-error.log*
 # certificates
 certificates
 .env*.local
+
+# private Cloudflare origin cert/key files
+*cloudflare*origin*
+*origin*cert*
+*origin*key*
+*Key Cloud*
+*key-cloud*
+*cloudflare*cert*
+*cloudflare*key*
 # railway
 .railway
 

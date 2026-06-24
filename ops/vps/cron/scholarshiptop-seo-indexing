@@ -1,0 +1,4 @@
+# ScholarshipTop SEO Indexing — every 4 hours UTC (matches Railway)
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+0 */4 * * * root /opt/scholarshiptop/scripts/run-seo-indexing-once.sh >> /opt/scholarshiptop/logs/seo-indexing-cron.log 2>&1

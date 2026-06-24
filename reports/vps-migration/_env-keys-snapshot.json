@@ -1,0 +1,1100 @@
+{
+  "site": [
+    {
+      "key": "CACHE_BUST",
+      "category": "unknown / legacy",
+      "required": "optional",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "CONTENT_ARTICLE_MATCH_SECRET",
+      "category": "worker flags",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "GOOGLE_INDEXING_CLIENT_EMAIL",
+      "category": "GSC / indexing",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "GOOGLE_INDEXING_IMMEDIATE_SHARE_PERCENT",
+      "category": "GSC / indexing",
+      "required": "optional",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "GOOGLE_INDEXING_MAX_PUBLISH_PER_DAY",
+      "category": "GSC / indexing",
+      "required": "optional",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "GOOGLE_INDEXING_PRIVATE_KEY",
+      "category": "GSC / indexing",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "GOOGLE_INDEXING_SCHOLARSHIP_SHARE_PERCENT",
+      "category": "GSC / indexing",
+      "required": "optional",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "GOOGLE_INDEXING_SECRET",
+      "category": "GSC / indexing",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "GOOGLE_SEARCH_CONSOLE_SITE_URL",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "GPTZERO_API_KEY",
+      "category": "OpenAI / AI",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "GPTZERO_MODEL_VERSION",
+      "category": "OpenAI / AI",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "GPT_SEARCH_API_TOKEN",
+      "category": "OpenAI / AI",
+      "required": "optional",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "GRANT_NOTIFICATION_CRON_SECRET",
+      "category": "mailing / email provider",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "GRANT_NOTIFICATION_TEST_SAMPLE_CRON",
+      "category": "mailing / email provider",
+      "required": "optional",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "GRANT_NOTIFICATION_TEST_SAMPLE_EMAIL",
+      "category": "mailing / email provider",
+      "required": "optional",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "GRANT_NOTIFICATION_TEST_SAMPLE_TELEGRAM_CHAT_ID",
+      "category": "mailing / email provider",
+      "required": "optional",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "INDEXNOW_SECRET",
+      "category": "GSC / indexing",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "LEMONSQUEEZY_API_KEY",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "LEMONSQUEEZY_IQ_REPORT_VARIANT_ID",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "LEMONSQUEEZY_MONTHLY_VARIANT_ID",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "LEMONSQUEEZY_QUARTERLY_VARIANT_ID",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "LEMONSQUEEZY_STORE_ID",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "LEMONSQUEEZY_SUCCESS_URL",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "LEMONSQUEEZY_YEARLY_VARIANT_ID",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "LEMON_SQUEEZY_SECRET",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "NEXT_PUBLIC_GTM_ID",
+      "category": "public NEXT_PUBLIC_*",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "NEXT_PUBLIC_LS_IQ_REPORT_VARIANT_ID",
+      "category": "public NEXT_PUBLIC_*",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "NEXT_PUBLIC_LS_MONTHLY_VARIANT_ID",
+      "category": "public NEXT_PUBLIC_*",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "NEXT_PUBLIC_LS_QUARTERLY_VARIANT_ID",
+      "category": "public NEXT_PUBLIC_*",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "NEXT_PUBLIC_LS_YEARLY_VARIANT_ID",
+      "category": "public NEXT_PUBLIC_*",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "NEXT_PUBLIC_SCHOLARSHIPS_HUB_SIDEBAR_DEBUG",
+      "category": "public NEXT_PUBLIC_*",
+      "required": "optional",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "NEXT_PUBLIC_SCHOLARSHIPTOP_NAVIGATOR_URL",
+      "category": "public NEXT_PUBLIC_*",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "NEXT_PUBLIC_SITE_URL",
+      "category": "public NEXT_PUBLIC_*",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+      "category": "public NEXT_PUBLIC_*",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "NEXT_PUBLIC_SUPABASE_URL",
+      "category": "public NEXT_PUBLIC_*",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "OPENAI_API_KEY",
+      "category": "OpenAI / AI",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "OPENAI_ESSAY_MODEL",
+      "category": "OpenAI / AI",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "OPENAI_HUMANIZE_MODEL",
+      "category": "OpenAI / AI",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "OPENAI_INTERVIEWER_MODEL",
+      "category": "OpenAI / AI",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "OPENAI_SEO_MODEL",
+      "category": "OpenAI / AI",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "OPENAI_VOICE_CLEANUP_MODEL",
+      "category": "OpenAI / AI",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "OPENAI_WHISPER_MODEL",
+      "category": "OpenAI / AI",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "PROVIDERS_REVALIDATE_SECRET",
+      "category": "worker flags",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "RESEND_API_KEY",
+      "category": "mailing / email provider",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "RESEND_FROM",
+      "category": "mailing / email provider",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "SCHOLARSHIPS_HUB_SIDEBAR_DEBUG",
+      "category": "unknown / legacy",
+      "required": "optional",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "SCHOLARSHIPS_V2_READ_PATH",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "SCHOLARSHIP_NEW_ADMIN_NOTIFY_SECRET",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "SEO_DRIP_ENABLED",
+      "category": "SEO / sitemap / canonical",
+      "required": "optional",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "SEO_DRIP_START_DATE",
+      "category": "SEO / sitemap / canonical",
+      "required": "optional",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "SEO_PAGES_PER_HOUR",
+      "category": "SEO / sitemap / canonical",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "SITE_URL",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "SUPABASE_SERVICE_ROLE_KEY",
+      "category": "Supabase service role",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "TELEGRAM_ADMIN_IDS",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "TELEGRAM_BOT_TOKEN",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "TELEGRAM_LINK_CODE_SECRET",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "TELEGRAM_RESOURCES_BROADCAST_ALL",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "TELEGRAM_RESOURCES_CHAT_ID",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "TELEGRAM_RESOURCE_PUBLISH_NOTIFY_ENABLED",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "TELEGRAM_WEBHOOK_SECRET",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "UNDETECTABLE_API_KEY",
+      "category": "OpenAI / AI",
+      "required": "required",
+      "usedBy": "Сайт"
+    },
+    {
+      "key": "UNDETECTABLE_MODEL",
+      "category": "OpenAI / AI",
+      "required": "required",
+      "usedBy": "Сайт"
+    }
+  ],
+  "scripts": [
+    {
+      "key": "ESSAY_HUB_HERO_FAL_BACKEND",
+      "category": "OpenAI / AI",
+      "required": "required",
+      "usedBy": "Скрипты"
+    },
+    {
+      "key": "ESSAY_HUB_HERO_REUSE_ONLY",
+      "category": "worker flags",
+      "required": "required",
+      "usedBy": "Скрипты"
+    },
+    {
+      "key": "ESSAY_HUB_OPENAI_MODEL",
+      "category": "OpenAI / AI",
+      "required": "required",
+      "usedBy": "Скрипты"
+    },
+    {
+      "key": "FAL_KEY",
+      "category": "OpenAI / AI",
+      "required": "optional",
+      "usedBy": "Скрипты"
+    },
+    {
+      "key": "GRANT_NOTIFICATION_CRON_SECRET",
+      "category": "mailing / email provider",
+      "required": "required",
+      "usedBy": "Скрипты"
+    },
+    {
+      "key": "NEXT_PUBLIC_SITE_URL",
+      "category": "public NEXT_PUBLIC_*",
+      "required": "required",
+      "usedBy": "Скрипты"
+    },
+    {
+      "key": "NEXT_PUBLIC_SUPABASE_URL",
+      "category": "public NEXT_PUBLIC_*",
+      "required": "required",
+      "usedBy": "Скрипты"
+    },
+    {
+      "key": "OPENAI_API_KEY",
+      "category": "OpenAI / AI",
+      "required": "required",
+      "usedBy": "Скрипты"
+    },
+    {
+      "key": "OPENAI_PROVIDER_ENRICH_MODEL",
+      "category": "OpenAI / AI",
+      "required": "required",
+      "usedBy": "Скрипты"
+    },
+    {
+      "key": "PROVIDERS_REVALIDATE_SECRET",
+      "category": "worker flags",
+      "required": "required",
+      "usedBy": "Скрипты"
+    },
+    {
+      "key": "PUBLIC_URL",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Скрипты"
+    },
+    {
+      "key": "SITE_URL",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Скрипты"
+    },
+    {
+      "key": "SUPABASE_SERVICE_ROLE_KEY",
+      "category": "Supabase service role",
+      "required": "required",
+      "usedBy": "Скрипты"
+    },
+    {
+      "key": "TELEGRAM_ADMIN_IDS",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Скрипты"
+    },
+    {
+      "key": "TELEGRAM_BOT_TOKEN",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Скрипты"
+    }
+  ],
+  "seo-generation": [
+    {
+      "key": "GOOGLE_INDEXING_CLIENT_EMAIL",
+      "category": "GSC / indexing",
+      "required": "required",
+      "usedBy": "Сео генерация"
+    },
+    {
+      "key": "GOOGLE_INDEXING_PRIVATE_KEY",
+      "category": "GSC / indexing",
+      "required": "required",
+      "usedBy": "Сео генерация"
+    },
+    {
+      "key": "GOOGLE_INDEXING_SECRET",
+      "category": "GSC / indexing",
+      "required": "required",
+      "usedBy": "Сео генерация"
+    },
+    {
+      "key": "GOOGLE_SEARCH_CONSOLE_SITE_URL",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Сео генерация"
+    },
+    {
+      "key": "NEXT_PUBLIC_SITE_URL",
+      "category": "public NEXT_PUBLIC_*",
+      "required": "required",
+      "usedBy": "Сео генерация"
+    },
+    {
+      "key": "NEXT_PUBLIC_SUPABASE_URL",
+      "category": "public NEXT_PUBLIC_*",
+      "required": "required",
+      "usedBy": "Сео генерация"
+    },
+    {
+      "key": "OPENAI_API_KEY",
+      "category": "OpenAI / AI",
+      "required": "required",
+      "usedBy": "Сео генерация"
+    },
+    {
+      "key": "OPENAI_SEO_MODEL",
+      "category": "OpenAI / AI",
+      "required": "required",
+      "usedBy": "Сео генерация"
+    },
+    {
+      "key": "SEO_AI_META_BATCH",
+      "category": "SEO / sitemap / canonical",
+      "required": "optional",
+      "usedBy": "Сео генерация"
+    },
+    {
+      "key": "SEO_AI_META_ENABLED",
+      "category": "SEO / sitemap / canonical",
+      "required": "optional",
+      "usedBy": "Сео генерация"
+    },
+    {
+      "key": "SUPABASE_SERVICE_ROLE_KEY",
+      "category": "Supabase service role",
+      "required": "required",
+      "usedBy": "Сео генерация"
+    }
+  ],
+  "seo-indexing": [
+    {
+      "key": "GOOGLE_INDEXING_CLIENT_EMAIL",
+      "category": "GSC / indexing",
+      "required": "required",
+      "usedBy": "Сео индексация"
+    },
+    {
+      "key": "GOOGLE_INDEXING_FLUSH_LIMIT",
+      "category": "GSC / indexing",
+      "required": "optional",
+      "usedBy": "Сео индексация"
+    },
+    {
+      "key": "GOOGLE_INDEXING_IMMEDIATE_SHARE_PERCENT",
+      "category": "GSC / indexing",
+      "required": "optional",
+      "usedBy": "Сео индексация"
+    },
+    {
+      "key": "GOOGLE_INDEXING_MAX_PUBLISH_PER_DAY",
+      "category": "GSC / indexing",
+      "required": "optional",
+      "usedBy": "Сео индексация"
+    },
+    {
+      "key": "GOOGLE_INDEXING_PRIVATE_KEY",
+      "category": "GSC / indexing",
+      "required": "required",
+      "usedBy": "Сео индексация"
+    },
+    {
+      "key": "GOOGLE_INDEXING_SCHOLARSHIP_SHARE_PERCENT",
+      "category": "GSC / indexing",
+      "required": "optional",
+      "usedBy": "Сео индексация"
+    },
+    {
+      "key": "GOOGLE_INDEXING_SECRET",
+      "category": "GSC / indexing",
+      "required": "required",
+      "usedBy": "Сео индексация"
+    },
+    {
+      "key": "GOOGLE_SEARCH_CONSOLE_SITE_URL",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Сео индексация"
+    },
+    {
+      "key": "NEXT_PUBLIC_SITE_URL",
+      "category": "public NEXT_PUBLIC_*",
+      "required": "required",
+      "usedBy": "Сео индексация"
+    },
+    {
+      "key": "NEXT_PUBLIC_SUPABASE_URL",
+      "category": "public NEXT_PUBLIC_*",
+      "required": "required",
+      "usedBy": "Сео индексация"
+    },
+    {
+      "key": "PUBLIC_URL",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Сео индексация"
+    },
+    {
+      "key": "SITE_URL",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Сео индексация"
+    },
+    {
+      "key": "SUPABASE_SERVICE_ROLE_KEY",
+      "category": "Supabase service role",
+      "required": "required",
+      "usedBy": "Сео индексация"
+    },
+    {
+      "key": "TELEGRAM_ADMIN_IDS",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Сео индексация"
+    },
+    {
+      "key": "TELEGRAM_BOT_TOKEN",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Сео индексация"
+    },
+    {
+      "key": "URL_INSPECTION_MAX_PER_RUN",
+      "category": "GSC / indexing",
+      "required": "optional",
+      "usedBy": "Сео индексация"
+    },
+    {
+      "key": "URL_INSPECTION_PENDING_BATCH",
+      "category": "GSC / indexing",
+      "required": "optional",
+      "usedBy": "Сео индексация"
+    },
+    {
+      "key": "URL_INSPECTION_SUBMITTED_BATCH",
+      "category": "GSC / indexing",
+      "required": "optional",
+      "usedBy": "Сео индексация"
+    }
+  ],
+  "seo-audit": [
+    {
+      "key": "JSONLD_AUDIT_BASE_URL",
+      "category": "GSC / indexing",
+      "required": "required",
+      "usedBy": "Сео Аудит"
+    },
+    {
+      "key": "JSONLD_AUDIT_EXIT_NONZERO",
+      "category": "GSC / indexing",
+      "required": "optional",
+      "usedBy": "Сео Аудит"
+    },
+    {
+      "key": "JSONLD_AUDIT_SCHOLARSHIP_SAMPLE",
+      "category": "GSC / indexing",
+      "required": "optional",
+      "usedBy": "Сео Аудит"
+    },
+    {
+      "key": "TELEGRAM_ADMIN_IDS",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Сео Аудит"
+    },
+    {
+      "key": "TELEGRAM_BOT_TOKEN",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Сео Аудит"
+    }
+  ],
+  "mailing": [
+    {
+      "key": "GRANT_DIGEST_EMAIL_MAX_ITEMS",
+      "category": "mailing / email provider",
+      "required": "required",
+      "usedBy": "Рассылка"
+    },
+    {
+      "key": "GRANT_NOTIFICATION_CRON_SECRET",
+      "category": "mailing / email provider",
+      "required": "required",
+      "usedBy": "Рассылка"
+    },
+    {
+      "key": "GRANT_NOTIFICATION_EMAIL_COOLDOWN_HOURS",
+      "category": "mailing / email provider",
+      "required": "required",
+      "usedBy": "Рассылка"
+    },
+    {
+      "key": "GRANT_NOTIFICATION_LOOKBACK_HOURS",
+      "category": "mailing / email provider",
+      "required": "required",
+      "usedBy": "Рассылка"
+    },
+    {
+      "key": "GRANT_NOTIFICATION_MAX_OPS",
+      "category": "mailing / email provider",
+      "required": "required",
+      "usedBy": "Рассылка"
+    },
+    {
+      "key": "GRANT_NOTIFICATION_MAX_PROFILES",
+      "category": "mailing / email provider",
+      "required": "required",
+      "usedBy": "Рассылка"
+    },
+    {
+      "key": "GRANT_NOTIFICATION_MAX_SCHOLARSHIPS",
+      "category": "mailing / email provider",
+      "required": "required",
+      "usedBy": "Рассылка"
+    },
+    {
+      "key": "NEXT_PUBLIC_SITE_URL",
+      "category": "public NEXT_PUBLIC_*",
+      "required": "required",
+      "usedBy": "Рассылка"
+    },
+    {
+      "key": "NEXT_PUBLIC_SUPABASE_URL",
+      "category": "public NEXT_PUBLIC_*",
+      "required": "required",
+      "usedBy": "Рассылка"
+    },
+    {
+      "key": "RESEND_API_KEY",
+      "category": "mailing / email provider",
+      "required": "required",
+      "usedBy": "Рассылка"
+    },
+    {
+      "key": "RESEND_FROM",
+      "category": "mailing / email provider",
+      "required": "required",
+      "usedBy": "Рассылка"
+    },
+    {
+      "key": "SUPABASE_SERVICE_ROLE_KEY",
+      "category": "Supabase service role",
+      "required": "required",
+      "usedBy": "Рассылка"
+    }
+  ],
+  "mailing-providers": [
+    {
+      "key": "NEXT_PUBLIC_SUPABASE_URL",
+      "category": "public NEXT_PUBLIC_*",
+      "required": "required",
+      "usedBy": "Рассылка провайдеры"
+    },
+    {
+      "key": "PROVIDER_OUTREACH_MS_BETWEEN",
+      "category": "mailing / email provider",
+      "required": "optional",
+      "usedBy": "Рассылка провайдеры"
+    },
+    {
+      "key": "PROVIDER_OUTREACH_PUBLIC_SITE",
+      "category": "mailing / email provider",
+      "required": "required",
+      "usedBy": "Рассылка провайдеры"
+    },
+    {
+      "key": "PROVIDER_OUTREACH_TELEGRAM_NOTIFY",
+      "category": "mailing / email provider",
+      "required": "optional",
+      "usedBy": "Рассылка провайдеры"
+    },
+    {
+      "key": "RESEND_API_KEY",
+      "category": "mailing / email provider",
+      "required": "required",
+      "usedBy": "Рассылка провайдеры"
+    },
+    {
+      "key": "SUPABASE_SERVICE_ROLE_KEY",
+      "category": "Supabase service role",
+      "required": "required",
+      "usedBy": "Рассылка провайдеры"
+    },
+    {
+      "key": "TELEGRAM_ADMIN_IDS",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Рассылка провайдеры"
+    },
+    {
+      "key": "TELEGRAM_BOT_TOKEN",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Рассылка провайдеры"
+    }
+  ],
+  "content-hub": [
+    {
+      "key": "CONTENT_ARTICLE_MATCH_SECRET",
+      "category": "worker flags",
+      "required": "required",
+      "usedBy": "Контент Хаб"
+    },
+    {
+      "key": "CONTENT_HUB_AUTO_PUBLISH",
+      "category": "worker flags",
+      "required": "required",
+      "usedBy": "Контент Хаб"
+    },
+    {
+      "key": "CONTENT_HUB_COVER_SOURCE",
+      "category": "worker flags",
+      "required": "required",
+      "usedBy": "Контент Хаб"
+    },
+    {
+      "key": "CONTENT_HUB_ENABLE_EXTERNAL_LINKS",
+      "category": "worker flags",
+      "required": "required",
+      "usedBy": "Контент Хаб"
+    },
+    {
+      "key": "CONTENT_HUB_ENABLE_FAQ_LINKS",
+      "category": "worker flags",
+      "required": "required",
+      "usedBy": "Контент Хаб"
+    },
+    {
+      "key": "CONTENT_HUB_ENABLE_RELATED_ARTICLES",
+      "category": "worker flags",
+      "required": "required",
+      "usedBy": "Контент Хаб"
+    },
+    {
+      "key": "CONTENT_HUB_ENABLE_SCHOLARSHIP_LINKING",
+      "category": "worker flags",
+      "required": "required",
+      "usedBy": "Контент Хаб"
+    },
+    {
+      "key": "CONTENT_HUB_FAL_FALLBACK",
+      "category": "OpenAI / AI",
+      "required": "optional",
+      "usedBy": "Контент Хаб"
+    },
+    {
+      "key": "CONTENT_HUB_LENGTH_MULTIPLIER",
+      "category": "worker flags",
+      "required": "required",
+      "usedBy": "Контент Хаб"
+    },
+    {
+      "key": "CONTENT_HUB_MAX_FAQ_LINKS",
+      "category": "worker flags",
+      "required": "required",
+      "usedBy": "Контент Хаб"
+    },
+    {
+      "key": "CONTENT_HUB_MAX_RELATED_ARTICLES",
+      "category": "worker flags",
+      "required": "required",
+      "usedBy": "Контент Хаб"
+    },
+    {
+      "key": "CONTENT_HUB_MAX_SCHOLARSHIP_LINKS",
+      "category": "worker flags",
+      "required": "required",
+      "usedBy": "Контент Хаб"
+    },
+    {
+      "key": "CONTENT_HUB_MAX_TOPIC_ATTEMPTS",
+      "category": "worker flags",
+      "required": "required",
+      "usedBy": "Контент Хаб"
+    },
+    {
+      "key": "CONTENT_HUB_MIN_CHARS_NO_SPACES",
+      "category": "worker flags",
+      "required": "required",
+      "usedBy": "Контент Хаб"
+    },
+    {
+      "key": "CONTENT_HUB_MIN_RELATED_ARTICLES",
+      "category": "worker flags",
+      "required": "required",
+      "usedBy": "Контент Хаб"
+    },
+    {
+      "key": "CONTENT_HUB_MIN_WORDS",
+      "category": "worker flags",
+      "required": "required",
+      "usedBy": "Контент Хаб"
+    },
+    {
+      "key": "CONTENT_HUB_POSTS_PER_RUN",
+      "category": "worker flags",
+      "required": "required",
+      "usedBy": "Контент Хаб"
+    },
+    {
+      "key": "CONTENT_HUB_REQUIRE_COVER_FOR_PUBLISH",
+      "category": "worker flags",
+      "required": "required",
+      "usedBy": "Контент Хаб"
+    },
+    {
+      "key": "CONTENT_HUB_STALE_PROCESSING_HOURS",
+      "category": "worker flags",
+      "required": "required",
+      "usedBy": "Контент Хаб"
+    },
+    {
+      "key": "CONTINUOUS_MODE",
+      "category": "unknown / legacy",
+      "required": "optional",
+      "usedBy": "Контент Хаб"
+    },
+    {
+      "key": "FAL_KEY",
+      "category": "OpenAI / AI",
+      "required": "optional",
+      "usedBy": "Контент Хаб"
+    },
+    {
+      "key": "FAL_REQUEST_TIMEOUT_MS",
+      "category": "OpenAI / AI",
+      "required": "optional",
+      "usedBy": "Контент Хаб"
+    },
+    {
+      "key": "METRICS_STRICTNESS",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Контент Хаб"
+    },
+    {
+      "key": "NPM_CONFIG_REGISTRY",
+      "category": "unknown / legacy",
+      "required": "optional",
+      "usedBy": "Контент Хаб"
+    },
+    {
+      "key": "OPENAI_API_KEY",
+      "category": "OpenAI / AI",
+      "required": "required",
+      "usedBy": "Контент Хаб"
+    },
+    {
+      "key": "OPENAI_MODEL_SMART",
+      "category": "OpenAI / AI",
+      "required": "required",
+      "usedBy": "Контент Хаб"
+    },
+    {
+      "key": "OPENAI_MODEL_STANDARD",
+      "category": "OpenAI / AI",
+      "required": "required",
+      "usedBy": "Контент Хаб"
+    },
+    {
+      "key": "OPENAI_REQUEST_TIMEOUT_MS",
+      "category": "OpenAI / AI",
+      "required": "required",
+      "usedBy": "Контент Хаб"
+    },
+    {
+      "key": "PROCESS_EXTERNAL_LINKS",
+      "category": "unknown / legacy",
+      "required": "optional",
+      "usedBy": "Контент Хаб"
+    },
+    {
+      "key": "PROCESS_FORCE_UPDATE",
+      "category": "unknown / legacy",
+      "required": "optional",
+      "usedBy": "Контент Хаб"
+    },
+    {
+      "key": "PROCESS_INTERNAL_LINKS",
+      "category": "unknown / legacy",
+      "required": "optional",
+      "usedBy": "Контент Хаб"
+    },
+    {
+      "key": "PUBLICATION_INTERVAL_MINUTES",
+      "category": "unknown / legacy",
+      "required": "optional",
+      "usedBy": "Контент Хаб"
+    },
+    {
+      "key": "RUN_REPROCESS_ON_START",
+      "category": "unknown / legacy",
+      "required": "optional",
+      "usedBy": "Контент Хаб"
+    },
+    {
+      "key": "SITE_URL",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Контент Хаб"
+    },
+    {
+      "key": "SUPABASE_SERVICE_ROLE_KEY",
+      "category": "Supabase service role",
+      "required": "required",
+      "usedBy": "Контент Хаб"
+    },
+    {
+      "key": "SUPABASE_URL",
+      "category": "Supabase anon",
+      "required": "required",
+      "usedBy": "Контент Хаб"
+    }
+  ],
+  "translation": [
+    {
+      "key": "I18N_PILOT_ALLOW_DB_WRITES",
+      "category": "worker flags",
+      "required": "required",
+      "usedBy": "Перевод"
+    },
+    {
+      "key": "I18N_PILOT_ALLOW_PRODUCTION",
+      "category": "worker flags",
+      "required": "required",
+      "usedBy": "Перевод"
+    },
+    {
+      "key": "I18N_SCHOLARSHIP_AUTOPILOT",
+      "category": "worker flags",
+      "required": "required",
+      "usedBy": "Перевод"
+    },
+    {
+      "key": "I18N_WORKER_MAX_RUNTIME_MINUTES",
+      "category": "worker flags",
+      "required": "required",
+      "usedBy": "Перевод"
+    },
+    {
+      "key": "I18N_WORKER_REQUIRE_LOCK",
+      "category": "worker flags",
+      "required": "required",
+      "usedBy": "Перевод"
+    },
+    {
+      "key": "I18N_WORKER_START_WAVE",
+      "category": "worker flags",
+      "required": "required",
+      "usedBy": "Перевод"
+    },
+    {
+      "key": "I18N_WORKER_TARGET",
+      "category": "worker flags",
+      "required": "required",
+      "usedBy": "Перевод"
+    },
+    {
+      "key": "I18N_WORKER_WAVE_SIZE",
+      "category": "worker flags",
+      "required": "required",
+      "usedBy": "Перевод"
+    },
+    {
+      "key": "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+      "category": "public NEXT_PUBLIC_*",
+      "required": "required",
+      "usedBy": "Перевод"
+    },
+    {
+      "key": "NEXT_PUBLIC_SUPABASE_URL",
+      "category": "public NEXT_PUBLIC_*",
+      "required": "required",
+      "usedBy": "Перевод"
+    },
+    {
+      "key": "SITE_URL",
+      "category": "unknown / legacy",
+      "required": "required",
+      "usedBy": "Перевод"
+    },
+    {
+      "key": "SMOKE_BASE_URL",
+      "category": "unknown / legacy",
+      "required": "optional",
+      "usedBy": "Перевод"
+    },
+    {
+      "key": "SUPABASE_SERVICE_ROLE_KEY",
+      "category": "Supabase service role",
+      "required": "required",
+      "usedBy": "Перевод"
+    }
+  ]
+}

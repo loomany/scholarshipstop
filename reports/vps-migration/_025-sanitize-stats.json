@@ -1,0 +1,11 @@
+{
+  "file": ".env.example",
+  "replacedCount": 4,
+  "replacedKeys": [
+    "LEMONSQUEEZY_CHECKOUT_URL_MONTHLY",
+    "LEMONSQUEEZY_CHECKOUT_URL_QUARTERLY",
+    "LEMONSQUEEZY_CHECKOUT_URL_YEARLY",
+    "UNDETECTABLE_API_KEY"
+  ],
+  "rotationRecommended": true
+}

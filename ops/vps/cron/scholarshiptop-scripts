@@ -1,0 +1,4 @@
+# ScholarshipTop Scripts — every 2 hours UTC (matches Railway)
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+0 */2 * * * root /opt/scholarshiptop/scripts/run-scripts-once.sh >> /opt/scholarshiptop/logs/scripts-cron.log 2>&1

@@ -12,6 +12,7 @@ const JOB_NAME = 'seo-generation-http';
 const RUN_ID = createRunId();
 const STARTED_AT_MS = Date.now();
 const runCounters: JobCounters = { processed: 0, success: 0, failed: 0, skipped: 0 };
+const DRY_RUN = process.argv.includes('--dry-run');
 
 function resolveBaseUrl(): string {
   const raw =
@@ -60,21 +61,31 @@ async function main(): Promise<void> {
     throw new Error('Set GOOGLE_INDEXING_SECRET for seo-generation-http');
   }
 
-  const generateLimit = toBoundedInt(process.env.SEO_WORKER_GENERATE_LIMIT, 175, 1, 5000);
+  const generateLimit = DRY_RUN
+    ? toBoundedInt(process.env.SEO_WORKER_GENERATE_DRY_RUN_LIMIT, 5, 1, 50)
+    : toBoundedInt(process.env.SEO_WORKER_GENERATE_LIMIT, 175, 1, 5000);
   const metaLimit = toBoundedInt(process.env.SEO_AI_META_BATCH, 20, 1, 5000);
 
-  const jobs = [
-    {
-      name: 'seo-worker-generate',
-      path: '/api/internal/seo/worker-generate',
-      payload: { limit: generateLimit }
-    },
-    {
-      name: 'seo-meta-generate',
-      path: '/api/internal/seo/meta-generate',
-      payload: { limit: metaLimit }
-    }
-  ] as const;
+  const jobs = DRY_RUN
+    ? ([
+        {
+          name: 'seo-worker-generate',
+          path: '/api/internal/seo/worker-generate',
+          payload: { limit: generateLimit, dryRun: true }
+        }
+      ] as const)
+    : ([
+        {
+          name: 'seo-worker-generate',
+          path: '/api/internal/seo/worker-generate',
+          payload: { limit: generateLimit }
+        },
+        {
+          name: 'seo-meta-generate',
+          path: '/api/internal/seo/meta-generate',
+          payload: { limit: metaLimit }
+        }
+      ] as const);
 
   const failures: string[] = [];
 

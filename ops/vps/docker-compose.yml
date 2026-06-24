@@ -1,0 +1,110 @@
+# ScholarshipTop VPS — site only. Jobs intentionally disabled.
+# Copy/symlink to /opt/scholarshiptop/docker-compose.yml on the VPS.
+#
+# Usage (on VPS):
+#   docker compose --profile site up -d --build
+#
+# Jobs profile exists but must NOT be enabled until per-job migration.
+
+name: scholarshiptop
+
+services:
+  site:
+    profiles: ["site"]
+    image: scholarshiptop-site:staging
+    build:
+      context: .
+      dockerfile: Dockerfile.prebuilt
+    container_name: scholarshiptop-site
+    env_file:
+      - ./env/site.env
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      HOSTNAME: "0.0.0.0"
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:3000"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "5"
+
+  nginx:
+    profiles: ["site"]
+    image: nginx:1.27-alpine
+    container_name: scholarshiptop-nginx
+    depends_on:
+      site:
+        condition: service_healthy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/includes:/etc/nginx/includes:ro
+      - ./secrets:/etc/nginx/secrets:ro
+      - ./logs/nginx:/var/log/nginx
+    restart: unless-stopped
+
+  # --- Jobs disabled intentionally (do not `docker compose --profile jobs up`) ---
+
+  scripts:
+    profiles: ["jobs-disabled"]
+    image: alpine:3.20
+    command: ["sh", "-c", "echo scripts job disabled on VPS stage 3 && exit 1"]
+
+  seo-generation:
+    profiles: ["jobs-disabled"]
+    image: alpine:3.20
+    command: ["sh", "-c", "echo seo-generation disabled on VPS stage 3 && exit 1"]
+
+  seo-indexing:
+    profiles: ["jobs-disabled"]
+    image: alpine:3.20
+    command: ["sh", "-c", "echo seo-indexing disabled on VPS stage 3 && exit 1"]
+
+  seo-audit:
+    profiles: ["jobs-disabled", "seo-audit"]
+    image: node:22-bookworm-slim
+    container_name: scholarshiptop-seo-audit
+    working_dir: /app
+    env_file:
+      - ./env/seo-audit.env
+    volumes:
+      - ./app:/app:ro
+      - ./logs:/opt/scholarshiptop/logs
+    command: ["node", "./node_modules/tsx/dist/cli.mjs", "scripts/audit-jsonld-sitemap.ts"]
+    restart: "no"
+    logging:
+      driver: json-file
+      options:
+        max-size: "20m"
+        max-file: "3"
+
+  mailing:
+    profiles: ["jobs-disabled"]
+    image: alpine:3.20
+    command: ["sh", "-c", "echo mailing disabled on VPS stage 3 && exit 1"]
+
+  mailing-providers:
+    profiles: ["jobs-disabled"]
+    image: alpine:3.20
+    command: ["sh", "-c", "echo mailing-providers disabled on VPS stage 3 && exit 1"]
+
+  content-hub:
+    profiles: ["jobs-disabled"]
+    image: alpine:3.20
+    command: ["sh", "-c", "echo content-hub disabled on VPS stage 3 && exit 1"]
+
+  translation:
+    profiles: ["jobs-disabled"]
+    image: alpine:3.20
+    command: ["sh", "-c", "echo translation disabled on VPS stage 3 && exit 1"]

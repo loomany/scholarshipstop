@@ -1,0 +1,4 @@
+# ScholarshipTop SEO Generation — every 3 hours UTC (matches Railway)
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+0 */3 * * * root /opt/scholarshiptop/scripts/run-seo-generation-once.sh >> /opt/scholarshiptop/logs/seo-generation-cron.log 2>&1
