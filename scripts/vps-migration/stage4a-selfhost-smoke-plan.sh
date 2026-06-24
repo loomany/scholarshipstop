@@ -95,9 +95,9 @@ smoke_internal() {
   body="$(curl -sS --max-time 15 \
     -H "apikey: ${SUPABASE_ANON_KEY}" \
     -H "Authorization: Bearer ${SUPABASE_ANON_KEY}" \
-    "${BASE}/rest/v1/scholarships?select=id,slug&limit=1" 2>/dev/null || true)"
+    "${BASE}/rest/v1/scholarships_safe_listing?select=id,slug&limit=1" 2>/dev/null || true)"
   if echo "${body}" | grep -q '"slug"'; then
-    pass "scholarships select"
+    pass "scholarships_safe_listing select"
   else
     fail "scholarships select (empty or error)"
   fi
