@@ -165,8 +165,31 @@ Option 1 is recommended because it keeps the site up during build and removes OO
 
 ## Remaining warning before re-GO
 
-- **RAM headroom**: add ~4 GiB swap (or stop the old site container during host build). All other
-  blockers resolved.
+- ~~**RAM headroom**: add ~4 GiB swap (or stop the old site container during host build).~~
+  **RESOLVED** — see swap remediation below. All blockers resolved.
+
+---
+
+## RAM remediation applied (2026-06-25, non-destructive)
+
+Added a second persistent 4 GiB swapfile `/swapfile2` (`mkswap` + `swapon` + fstab entry).
+No production/site.env/parser/hosted-Supabase change; no dump/restore.
+
+| Metric | Before | After |
+|--------|--------|-------|
+| Swap total | 4.0 GiB | **8.0 GiB** (`/swapfile` 4G + `/swapfile2` 4G) |
+| Swap free | ~1.2 GiB | **~5.1 GiB** |
+| Mem available | ~349 MiB | ~337 MiB |
+| Disk free `/` | 57 GiB | 53 GiB |
+| Load (1/5/15m) | 0.63/0.65/0.75 | 0.36/0.41/0.60 |
+| fstab persistence | `/swapfile` | `/swapfile` + **`/swapfile2`** |
+
+Free swap (~5.1 GiB) now exceeds the 1536 MiB build heap → OOM risk removed.
+
+Post-remediation confirmation: production `/`=200, `/sitemap.xml`=200; `site.env`=HOSTED_SUPABASE
+(unchanged); all 3 parsers `active`; hosted Supabase untouched.
+
+**Verdict after remediation:** `SWAP_READY_FOR_CUTOVER`.
 
 ## What the real cutover (re-GO) will run
 
