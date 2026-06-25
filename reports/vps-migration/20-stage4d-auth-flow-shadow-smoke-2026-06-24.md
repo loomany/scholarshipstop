@@ -155,4 +155,4 @@ sudo bash /opt/scholarshiptop/app/scripts/vps-migration/stage4d-auth-flow-shadow
 
 ## Commit
 
-`COMMIT_HASH` — Stage 4D auth flow shadow smoke scripts and GoTrue search_path fix.
+`e8748c1` — Stage 4D auth flow shadow smoke scripts and GoTrue search_path fix (safe files only).
