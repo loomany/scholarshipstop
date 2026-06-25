@@ -196,4 +196,4 @@ from origin 'http://127.0.0.1:3101' has been blocked by CORS policy
 
 ## Commit hash
 
-`PLACEHOLDER`
+`ee80c33` — `feat(vps): Stage 4F production-like frontend rehearsal against self-host API`
