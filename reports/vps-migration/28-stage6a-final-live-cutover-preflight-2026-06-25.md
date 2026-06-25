@@ -224,7 +224,7 @@ GO STAGE 6B REAL CUTOVER — APPROVED
 (Owner must additionally confirm: freeze window approved, rollback owner online, hosted Supabase
 retained ≥ 7 days, parser freeze approved.)
 
-- **Commit hash:** _(filled after commit)_
+- **Commit hash:** `abc1b41`
 
 ---
 
