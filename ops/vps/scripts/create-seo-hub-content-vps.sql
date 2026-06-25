@@ -4,7 +4,8 @@
 -- If schema "extensions" or uuid-ossp is missing at pg_restore time, the table
 -- is skipped entirely. restore-postgres-pre.sh creates schema extensions + uuid-ossp;
 -- this file is the post-restore safety net (gen_random_uuid() default).
--- Applied automatically by restore-postgres-post.sh when the table is missing or empty.CREATE TABLE IF NOT EXISTS public.seo_hub_content (
+-- Applied automatically by restore-postgres-post.sh when the table is missing or empty.
+CREATE TABLE IF NOT EXISTS public.seo_hub_content (
     id uuid DEFAULT gen_random_uuid() NOT NULL PRIMARY KEY,
     canonical_path text NOT NULL,
     title text,
