@@ -109,7 +109,7 @@ POSTGREST_DB_URL="postgresql://authenticator:${AUTH_PASS}@${POSTGRES_HOST:-host.
 PG_SUPER_PASS_FILE="/root/.postgres-superuser-pass"
 if [[ -f "${PG_SUPER_PASS_FILE}" ]]; then
   PG_SUPER_PASS="$(tr -d '\r\n' < "${PG_SUPER_PASS_FILE}")"
-  GOTRUE_DB_URL="postgresql://postgres:${PG_SUPER_PASS}@${POSTGRES_HOST:-host.docker.internal}:5432/${POSTGRES_DB}"
+  GOTRUE_DB_URL="postgresql://postgres:${PG_SUPER_PASS}@${POSTGRES_HOST:-host.docker.internal}:5432/${POSTGRES_DB}?options=-c%20search_path%3Dauth"
 else
   # Try trust via host — set postgres password for docker access
   echo "[setup-supabase-api-env] Setting postgres password for Docker access (stored ${PG_SUPER_PASS_FILE})"
@@ -118,7 +118,7 @@ else
   umask 077
   printf '%s\n' "${PG_SUPER_PASS}" > "${PG_SUPER_PASS_FILE}"
   chmod 600 "${PG_SUPER_PASS_FILE}"
-  GOTRUE_DB_URL="postgresql://postgres:${PG_SUPER_PASS}@${POSTGRES_HOST:-host.docker.internal}:5432/${POSTGRES_DB}"
+  GOTRUE_DB_URL="postgresql://postgres:${PG_SUPER_PASS}@${POSTGRES_HOST:-host.docker.internal}:5432/${POSTGRES_DB}?options=-c%20search_path%3Dauth"
 fi
 
 # Ensure pg_hba allows password auth from Docker bridge
