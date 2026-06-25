@@ -168,4 +168,4 @@ Production site, production `site.env`, parsers, and hosted Supabase were **not 
 
 ## Commit hash
 
-`PLACEHOLDER`
+`463e788`
