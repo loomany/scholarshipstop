@@ -26,6 +26,9 @@ services:
     image: supabase/gotrue:v2.171.0
     container_name: scholarshiptop-gotrue-test
     restart: unless-stopped
+    # Restored Supabase auth schema is already migrated — skip Pop migrate on startup.
+    # Default image CMD runs migrate+serve; migrate fails on PG17 uuid=text backfill.
+    command: ["gotrue", "serve"]
     ports:
       - "127.0.0.1:9999:9999"
     env_file:
