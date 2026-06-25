@@ -23,7 +23,7 @@ networks:
 services:
   gotrue:
     profiles: ["supabase-api-test"]
-    image: supabase/gotrue:v2.171.0
+    image: supabase/gotrue:v2.184.0
     container_name: scholarshiptop-gotrue-test
     restart: unless-stopped
     # Restored Supabase auth schema is already migrated — skip Pop migrate on startup.
