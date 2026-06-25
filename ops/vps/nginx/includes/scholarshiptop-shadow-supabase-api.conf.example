@@ -1,0 +1,37 @@
+# Stage 4C — Public shadow Supabase-compatible API (NOT production cutover).
+# Included BEFORE scholarshiptop-proxy-locations.conf in scholarshiptop-site.conf.
+#
+# Protection: HTTP basic auth + non-obvious path prefix.
+# Proxies to supabase-api-gateway-test on Docker network (NOT 127.0.0.1:54321 on host).
+#
+# PostgREST expects JWT in Authorization: Bearer. Clients use curl -u for basic auth,
+# so JWT must travel in apikey; this block forwards apikey → Bearer for /rest/v1 only.
+
+location ~ ^/vps-shadow-supabase-4c/rest/v1/ {
+  auth_basic "ScholarshipTop shadow API";
+  auth_basic_user_file /etc/nginx/includes/shadow-api.htpasswd;
+
+  rewrite ^/vps-shadow-supabase-4c/(.*)$ /$1 break;
+  proxy_pass http://scholarshiptop-supabase-api-gateway-test:8080;
+  proxy_http_version 1.1;
+  proxy_set_header Host $host;
+  proxy_set_header X-Real-IP $remote_addr;
+  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header X-Forwarded-Proto $scheme;
+  proxy_set_header Authorization "Bearer $http_apikey";
+  proxy_read_timeout 60s;
+}
+
+location /vps-shadow-supabase-4c/ {
+  auth_basic "ScholarshipTop shadow API";
+  auth_basic_user_file /etc/nginx/includes/shadow-api.htpasswd;
+
+  rewrite ^/vps-shadow-supabase-4c/(.*)$ /$1 break;
+  proxy_pass http://scholarshiptop-supabase-api-gateway-test:8080;
+  proxy_http_version 1.1;
+  proxy_set_header Host $host;
+  proxy_set_header X-Real-IP $remote_addr;
+  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header X-Forwarded-Proto $scheme;
+  proxy_read_timeout 60s;
+}

@@ -8,6 +8,11 @@
 
 name: scholarshiptop
 
+networks:
+  supabase_api_test:
+    external: true
+    name: scholarshiptop-supabase-api_supabase_api_test
+
 services:
   site:
     profiles: ["site"]
@@ -52,6 +57,9 @@ services:
       - ./nginx/includes:/etc/nginx/includes:ro
       - ./secrets:/etc/nginx/secrets:ro
       - ./logs/nginx:/var/log/nginx
+    networks:
+      - default
+      - supabase_api_test
     restart: unless-stopped
 
   # --- Jobs disabled intentionally (do not `docker compose --profile jobs up`) ---
