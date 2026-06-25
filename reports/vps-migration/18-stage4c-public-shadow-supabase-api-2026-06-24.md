@@ -180,4 +180,4 @@ sudo bash -c 'cd /opt/scholarshiptop/app && node scripts/vps-migration/stage4c-s
 
 ## Commit
 
-Safe scaffold + smokes + this report — see git log after Stage 4C commit.
+`dab6cb5` — Stage 4C: public shadow Supabase API route, smokes, and report (safe files only; no VPS secrets).
