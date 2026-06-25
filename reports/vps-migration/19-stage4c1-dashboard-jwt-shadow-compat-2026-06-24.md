@@ -146,4 +146,4 @@ GoTrue logs after restart: no fatal errors observed.
 
 ## Commit
 
-`COMMIT_HASH` — Stage 4C.1 Dashboard JWT compatibility scripts and report.
+`f869cd5` — Stage 4C.1 Dashboard JWT compatibility scripts and report (safe files only).
