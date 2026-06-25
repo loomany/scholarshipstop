@@ -185,4 +185,4 @@ See git commit hash in section below (scripts + example env + this report only; 
 
 ## Commit hash
 
-`b350c2a` — `feat(vps): Stage 4E frontend staging smoke against self-host API`
+`347fbe3` — `feat(vps): Stage 4E frontend staging smoke against self-host API`
