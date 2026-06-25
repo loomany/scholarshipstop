@@ -420,4 +420,4 @@ sudo systemctl restart '<parser timers/services that were active before freeze>'
 
 ## Commit hash
 
-`PLACEHOLDER`
+`21627e4` — `docs(vps): add Stage 5A final cutover runbook`
