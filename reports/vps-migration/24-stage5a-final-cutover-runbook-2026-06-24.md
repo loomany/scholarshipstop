@@ -245,8 +245,8 @@ Create new `site.env` manually from the approved staging template:
 | Key | Target |
 |-----|--------|
 | `NEXT_PUBLIC_SUPABASE_URL` | `https://scholarshiptop.com/supabase` (Stage 5C route) |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | legacy anon JWT |
-| `SUPABASE_SERVICE_ROLE_KEY` | legacy service_role JWT |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | legacy anon JWT (`/root/.supabase-legacy-anon-jwt`) |
+| `SUPABASE_SERVICE_ROLE_KEY` | legacy service_role JWT (`/root/.supabase-legacy-service-jwt`) |
 | Storage keys | unchanged hosted/hybrid |
 
 Do not paste secrets into shell history. Prefer root-only env files and `install -m 600`.
@@ -387,7 +387,7 @@ sudo systemctl restart '<parser timers/services that were active before freeze>'
 | Exact parser systemd/cron service names frozen in runbook | **Required from precheck output** |
 | Final hosted Supabase dump during freeze | **Not run** |
 | Public production API route without Basic Auth | **READY** (Stage 5C: `https://scholarshiptop.com/supabase`) |
-| JWT secret / anon-service key alignment | **Prerequisite** — decide Option A (re-key site) vs B (re-key gateway) before cutover |
+| JWT secret / anon-service key alignment | **READY** (Stage 5C.1 — gateway aligned; cutover swaps `sb_publishable` → legacy JWT in `site.env`) |
 | Production magic link/OAuth callbacks | **Risk accepted or tested** |
 | VPS RAM/swap decision | **Recommend swap or larger VPS before window** |
 
