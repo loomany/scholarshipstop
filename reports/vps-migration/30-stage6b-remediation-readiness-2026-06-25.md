@@ -159,7 +159,7 @@ Option 1 is recommended because it keeps the site up during build and removes OO
 | **Actual host-build-site.sh path** | `/opt/scholarshiptop/scripts/host-build-site.sh` (identical to repo; copy also at `app/scripts/vps-migration/`) |
 | **RAM/swap status** | 3.8 GiB RAM (~349 MiB free), 4 GiB swap (~1.2 GiB free), load 0.63 — **add swap before build** |
 | **Production / site.env / parsers / hosted Supabase** | **unchanged** |
-| **Commit hash** | _(filled after commit)_ |
+| **Commit hash** | `d311947` |
 
 ---
 
