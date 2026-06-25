@@ -226,7 +226,7 @@ sudo docker compose -f /opt/scholarshiptop/app/ops/vps/docker-compose.supabase-a
   --profile supabase-api-test up -d
 ```
 
-Production public route must be added only inside approved maintenance window. Do not reuse the old Basic Auth shadow route as the primary frontend API.
+Production public route is **prepared** at `https://scholarshiptop.com/supabase` (Stage 5C). Do not flip `NEXT_PUBLIC_SUPABASE_URL` until JWT secret/keys are aligned (see Stage 5C report §7). Do not reuse the old Basic Auth shadow route as the primary frontend API.
 
 ---
 
@@ -244,7 +244,7 @@ Create new `site.env` manually from the approved staging template:
 
 | Key | Target |
 |-----|--------|
-| `NEXT_PUBLIC_SUPABASE_URL` | VPS self-host production API URL |
+| `NEXT_PUBLIC_SUPABASE_URL` | `https://scholarshiptop.com/supabase` (Stage 5C route) |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | legacy anon JWT |
 | `SUPABASE_SERVICE_ROLE_KEY` | legacy service_role JWT |
 | Storage keys | unchanged hosted/hybrid |
@@ -386,7 +386,8 @@ sudo systemctl restart '<parser timers/services that were active before freeze>'
 | Owner approval / freeze window | **Required** |
 | Exact parser systemd/cron service names frozen in runbook | **Required from precheck output** |
 | Final hosted Supabase dump during freeze | **Not run** |
-| Public production API route without Basic Auth | **Must be created in window** |
+| Public production API route without Basic Auth | **READY** (Stage 5C: `https://scholarshiptop.com/supabase`) |
+| JWT secret / anon-service key alignment | **Prerequisite** — decide Option A (re-key site) vs B (re-key gateway) before cutover |
 | Production magic link/OAuth callbacks | **Risk accepted or tested** |
 | VPS RAM/swap decision | **Recommend swap or larger VPS before window** |
 
@@ -410,7 +411,8 @@ sudo systemctl restart '<parser timers/services that were active before freeze>'
 - [ ] Hosted Supabase retained >= 7 days.
 - [ ] Parser services/timers identified and stoppable.
 - [ ] Fresh dump command tested in tmux/screen.
-- [ ] API production route reviewed (no Basic Auth conflict).
+- [ ] API production route reviewed (no Basic Auth conflict). **DONE Stage 5C** — `https://scholarshiptop.com/supabase`
+- [ ] JWT secret / anon-service key alignment decided (Option A vs B, Stage 5C §7).
 - [ ] `site.env` backup created and restorable.
 - [ ] Parser env backup created and restorable.
 - [ ] Post-cutover smoke owner assigned.
