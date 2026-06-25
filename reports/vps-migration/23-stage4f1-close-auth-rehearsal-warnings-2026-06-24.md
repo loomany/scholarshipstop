@@ -155,4 +155,4 @@ Production logs: no `127.0.0.1:54321`, no `/vps-shadow-supabase-4c/`.
 
 ## Commit hash
 
-`PLACEHOLDER`
+`9875c79` — `feat(vps): Stage 4F.1 close rehearsal CORS and refreshSession blockers`
