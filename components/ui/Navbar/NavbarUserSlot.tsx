@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import type { User } from '@supabase/supabase-js';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import clsx from 'clsx';
@@ -17,6 +16,7 @@ import {
 import type { NavbarInitialAuth } from '@/lib/nav/getNavbarInitialAuth';
 import { siteNavLink as nav } from '@/components/ui/nav/siteNavLink';
 import { createClient } from '@/utils/supabase/client';
+import { signOutAndRedirect } from '@/utils/auth-helpers/client';
 import { resolveNavLocaleFromPathname } from '@/lib/i18n/resolveNavLocale';
 import type { Stage2PilotLocale } from '@/lib/i18n/pilotRoutes';
 import type { SupportedLocale } from '@/lib/i18n/types';
@@ -54,7 +54,6 @@ export default function NavbarUserSlot({
   initialNavbarAuth = null,
   initialLocale = 'en'
 }: NavbarUserSlotProps) {
-  const router = useRouter();
   const locale = resolveNavLocaleFromPathname(pathname);
   const canonicalPathname = stripLocalePrefix(pathname);
   const authCopy = AUTH_COPY[locale];
@@ -161,15 +160,14 @@ export default function NavbarUserSlot({
   );
 
   const signOut = useCallback(async () => {
-    const supabase = createClient();
-    await supabase.auth.signOut();
+    // Optimistic UI clear before the hard redirect performed by signOutAndRedirect.
     setClientUser(null);
     setAuthSyncDone(true);
     setProfileDisplayName(null);
     setProfileFirstName(null);
     setProfileQueryIdle(false);
-    router.refresh();
-  }, [router]);
+    await signOutAndRedirect('/');
+  }, []);
 
   const signInHref = locale === 'en' ? '/signin' : `/${locale}/signin`;
   const accountHref = localizedAccountHref(locale);

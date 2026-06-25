@@ -10,8 +10,62 @@ import {
   getStatusRedirect
 } from '@/utils/helpers';
 import { SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF } from '@/app/scholarships/scholarshipListUrl';
+import { isSupabaseAuthCookieName } from '@/utils/supabase/authCookie';
 import { redirectToPath } from './server';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+
+/**
+ * Expire every Supabase auth cookie visible to the browser — including chunked
+ * variants (`sb-...-auth-token.0`) and STALE cookies left by a previous Supabase
+ * project. After the hosted → self-host migration the cookie name changes
+ * (`sb-<oldRef>-auth-token` → `sb-<newRef>-auth-token`), so `supabase.auth.signOut()`
+ * only clears the current client's cookie while the orphaned one lingers and keeps
+ * the middleware's `hasSupabaseAuthCookie` matching on every request.
+ */
+export function clearAllSupabaseAuthCookies(): void {
+  if (typeof document === 'undefined') return;
+  const cookieNames = document.cookie
+    .split(';')
+    .map((part) => part.split('=')[0]?.trim() ?? '')
+    .filter((name) => name.length > 0 && isSupabaseAuthCookieName(name));
+  if (cookieNames.length === 0) return;
+
+  const host = typeof window !== 'undefined' ? window.location.hostname : '';
+  const labels = host.split('.');
+  const apex = labels.length > 2 ? labels.slice(-2).join('.') : host;
+  const domains = Array.from(
+    new Set([host, `.${host}`, apex, `.${apex}`].filter((d) => d && d !== '.'))
+  );
+
+  for (const name of cookieNames) {
+    // Host-only cookie (no Domain attribute) — how @supabase/ssr sets them by default.
+    document.cookie = `${name}=; Path=/; Max-Age=0; SameSite=Lax`;
+    // Domain-scoped fallbacks in case a cookie was set with an explicit Domain.
+    for (const domain of domains) {
+      document.cookie = `${name}=; Path=/; Max-Age=0; SameSite=Lax; Domain=${domain}`;
+    }
+  }
+}
+
+/**
+ * Robust client sign-out for the navbar and account page. Clears the session both
+ * locally and on the server, removes any stale/foreign Supabase auth cookies left
+ * by the migration, then performs a hard navigation so server components re-read the
+ * cleared cookies (a soft `router.refresh()` can race with cookie removal and leave
+ * the user appearing logged in).
+ */
+export async function signOutAndRedirect(redirectTo = '/'): Promise<void> {
+  const supabase = createClient();
+  try {
+    await supabase.auth.signOut();
+  } catch {
+    // A throwing signOut (network/lock) must not block local cleanup + redirect.
+  }
+  clearAllSupabaseAuthCookies();
+  if (typeof window !== 'undefined') {
+    window.location.assign(redirectTo);
+  }
+}
 
 export async function handleRequest(
   e: React.FormEvent<HTMLFormElement>,

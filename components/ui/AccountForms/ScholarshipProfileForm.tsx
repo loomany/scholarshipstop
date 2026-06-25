@@ -54,6 +54,7 @@ import {
 } from '@/lib/payments/subscriptionEntitlements';
 import type { Database, Tables } from '@/types_db';
 import { updateEmail } from '@/utils/auth-helpers/server';
+import { signOutAndRedirect } from '@/utils/auth-helpers/client';
 import { createClient } from '@/utils/supabase/client';
 import {
   countryLabelFromCode,
@@ -716,10 +717,8 @@ export default function ScholarshipProfileForm({
   }, [formValues, performProfilePatch, profile]);
 
   const handleLogOut = useCallback(async () => {
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    router.refresh();
-  }, [router]);
+    await signOutAndRedirect('/');
+  }, []);
 
   const handleResendConfirmation = useCallback(async () => {
     if (!resendConfirmationMode || resendConfirmationInFlightRef.current) return;
