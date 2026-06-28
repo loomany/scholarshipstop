@@ -25,7 +25,8 @@ Secrets exposed: **NO**
 - Shell syntax for snapshot/hardening scripts: **PASS**.
 - Next redirect/powered-header contract: **PASS**.
 - Docker `COPY --chown` contract: **PASS**.
-- Auth host contract/full TypeScript: pending final regression.
+- Auth host contract: **PASS**.
+- Full TypeScript and production build: **PASS**.
 
 ## GO runbook
 
