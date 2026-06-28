@@ -20,6 +20,36 @@ GRANT ALL ON ALL TABLES IN SCHEMA public TO service_role;
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO anon, authenticated, service_role;
 GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO anon, authenticated, service_role;
 
+-- Never expose migration ledgers through PostgREST, including timestamped repair backups.
+DO $$
+DECLARE
+  migration_table record;
+BEGIN
+  FOR migration_table IN
+    SELECT n.nspname AS schema_name, c.relname AS table_name
+    FROM pg_class c
+    JOIN pg_namespace n ON n.oid = c.relnamespace
+    WHERE c.relkind IN ('r', 'p')
+      AND n.nspname = 'public'
+      AND (
+        c.relname = 'schema_migrations'
+        OR c.relname LIKE 'schema_migrations_gotrue_backup\_%' ESCAPE '\'
+      )
+  LOOP
+    EXECUTE format(
+      'REVOKE ALL PRIVILEGES ON TABLE %I.%I FROM anon, authenticated',
+      migration_table.schema_name,
+      migration_table.table_name
+    );
+    EXECUTE format(
+      'ALTER TABLE %I.%I ENABLE ROW LEVEL SECURITY',
+      migration_table.schema_name,
+      migration_table.table_name
+    );
+  END LOOP;
+END
+$$;
+
 -- Scholarships lockdown (20260625124500): anon reads safe listing only
 REVOKE SELECT ON TABLE public.scholarships FROM anon, authenticated;
 GRANT SELECT ON public.scholarships_safe_listing TO anon, authenticated;
