@@ -1,10 +1,12 @@
 import { revalidatePath } from 'next/cache';
 import { NextResponse } from 'next/server';
 
+import type { BillingPlanKey } from '@/lib/payments/lemonVariantIds';
 import {
-  resolveLemonVariantIdForBillingPlan,
-  type BillingPlanKey
-} from '@/lib/payments/lemonVariantIds';
+  resolveLemonCheckoutConfig,
+  SECURE_CHECKOUT_UNAVAILABLE_MESSAGE,
+  validateLemonVariantMode
+} from '@/lib/payments/lemonRuntimeConfig';
 import { pickCanonicalSubscription } from '@/lib/payments/subscriptionAccess';
 import { syncSubscriptionFromLemonAfterRestChange } from '@/lib/payments/syncSupabaseSubscriptionFromLemonApi';
 import type { Tables } from '@/types_db';
@@ -68,16 +70,25 @@ export async function POST(req: Request) {
     .limit(20);
 
   if (queryError) {
-    console.error('[billing/update-subscription] subscription query failed', queryError.message);
-    return NextResponse.json({ error: 'Could not load subscription.' }, { status: 500 });
+    console.error(
+      '[billing/update-subscription] subscription query failed',
+      queryError.message
+    );
+    return NextResponse.json(
+      { error: 'Could not load subscription.' },
+      { status: 500 }
+    );
   }
 
-  const canonical = pickCanonicalSubscription(subscriptionRows ?? []) as Tables<'subscriptions'> | null;
+  const canonical = pickCanonicalSubscription(
+    subscriptionRows ?? []
+  ) as Tables<'subscriptions'> | null;
 
   if (!canonical || canonical.provider !== 'lemon_squeezy') {
     return NextResponse.json(
       {
-        error: 'No Lemon Squeezy subscription found. Use checkout to subscribe first.'
+        error:
+          'No Lemon Squeezy subscription found. Use checkout to subscribe first.'
       },
       { status: 400 }
     );
@@ -85,27 +96,28 @@ export async function POST(req: Request) {
 
   const subscriptionId = canonical.id.trim();
   if (!subscriptionId) {
-    return NextResponse.json({ error: 'Invalid subscription id.' }, { status: 400 });
-  }
-
-  const lemonTestMode = canonical.test_mode === true;
-  const variantIdStr = resolveLemonVariantIdForBillingPlan(planKey, {
-    lemonTestMode
-  });
-  if (!variantIdStr) {
     return NextResponse.json(
-      {
-        error: lemonTestMode
-          ? 'Variant ID for Test mode is missing. Add LEMONSQUEEZY_QUARTERLY_VARIANT_ID_TEST (and monthly/yearly) from Lemon → enable Test mode → Product → Variant ID, or set the same numeric ids if Test matches Live.'
-          : 'Variant ID for this plan is not configured (env).'
-      },
-      { status: 500 }
+      { error: 'Invalid subscription id.' },
+      { status: 400 }
     );
   }
 
+  const lemonTestMode = canonical.test_mode === true;
+  const resolved = resolveLemonCheckoutConfig(planKey);
+  if (!resolved.ok || (resolved.config.mode === 'test') !== lemonTestMode) {
+    return NextResponse.json(
+      { error: SECURE_CHECKOUT_UNAVAILABLE_MESSAGE },
+      { status: 503 }
+    );
+  }
+  const variantIdStr = resolved.config.variantId;
+
   const variantNum = Number.parseInt(variantIdStr, 10);
   if (!Number.isFinite(variantNum)) {
-    return NextResponse.json({ error: 'Invalid variant id in environment.' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Invalid variant id in environment.' },
+      { status: 500 }
+    );
   }
 
   console.info('[billing/update-subscription]', {
@@ -116,23 +128,17 @@ export async function POST(req: Request) {
 
   const currentVid = canonical.provider_variant_id?.trim() ?? '';
   if (currentVid === String(variantNum)) {
-    return NextResponse.json({ error: 'You are already on this plan.' }, { status: 400 });
+    return NextResponse.json(
+      { error: 'You are already on this plan.' },
+      { status: 400 }
+    );
   }
 
   const url = `${LEMON_API_BASE}/subscriptions/${encodeURIComponent(subscriptionId)}`;
 
-  /** Wrong env (Product ID instead of Variant ID) is the usual cause of "Entity not found" on variant_id. */
-  let variantCheck: Response;
+  let variantCheck: Awaited<ReturnType<typeof validateLemonVariantMode>>;
   try {
-    variantCheck = await fetch(
-      `${LEMON_API_BASE}/variants/${encodeURIComponent(String(variantNum))}`,
-      {
-        headers: {
-          Accept: 'application/vnd.api+json',
-          Authorization: `Bearer ${apiKey}`
-        }
-      }
-    );
+    variantCheck = await validateLemonVariantMode(resolved.config);
   } catch (e) {
     console.error('[billing/update-subscription] variant prefetch failed', e);
     return NextResponse.json(
@@ -142,18 +148,15 @@ export async function POST(req: Request) {
   }
 
   if (!variantCheck.ok) {
-    const snippet = (await variantCheck.text()).slice(0, 800);
-    console.error('[billing/update-subscription] variant not found in Lemon API', {
-      variantId: variantNum,
-      status: variantCheck.status,
-      body: snippet
-    });
-    return NextResponse.json(
+    console.error(
+      '[billing/update-subscription] variant rejected by mode/store guard',
       {
-        error:
-          'This plan’s variant id is not valid for your Lemon API key. Open Lemon → Product → Variant and copy the numeric Variant ID (not Product ID) into LEMONSQUEEZY_*_VARIANT_ID.',
-        detail: snippet
-      },
+        variantId: variantNum,
+        reason: variantCheck.reason
+      }
+    );
+    return NextResponse.json(
+      { error: SECURE_CHECKOUT_UNAVAILABLE_MESSAGE },
       { status: 400 }
     );
   }
@@ -218,7 +221,8 @@ export async function POST(req: Request) {
           : 502;
     return NextResponse.json(
       {
-        error: 'Payment provider rejected the plan change. Your subscription was not changed.',
+        error:
+          'Payment provider rejected the plan change. Your subscription was not changed.',
         detail: lemonJson ?? rawText.slice(0, 500)
       },
       { status }
@@ -231,10 +235,13 @@ export async function POST(req: Request) {
     userId: user.id
   });
   if (!syncResult.ok) {
-    console.warn('[billing/update-subscription] post-PATCH Supabase sync skipped or failed', {
-      reason: syncResult.reason,
-      subscriptionId
-    });
+    console.warn(
+      '[billing/update-subscription] post-PATCH Supabase sync skipped or failed',
+      {
+        reason: syncResult.reason,
+        subscriptionId
+      }
+    );
   }
 
   revalidatePath('/account');

@@ -6,56 +6,16 @@ import {
   type SubscriptionWithPriceAndProduct
 } from '@/lib/payments/subscriptionEntitlements';
 import {
-  resolveLemonVariantIdForBillingPlan,
-  type BillingPlanKey
-} from '@/lib/payments/lemonVariantIds';
+  parseBillingPlanKey,
+  resolveLemonCheckoutConfig,
+  SECURE_CHECKOUT_UNAVAILABLE_MESSAGE,
+  validateLemonVariantMode
+} from '@/lib/payments/lemonRuntimeConfig';
+import type { BillingPlanKey } from '@/lib/payments/lemonVariantIds';
 import type { Tables } from '@/types_db';
 import { createClient } from '@/utils/supabase/server';
 
 export type { BillingPlanKey };
-
-/**
- * Hosted checkout URLs (custom domain). Prefer env so Live/Test buy UUIDs stay in sync with Lemon
- * without code changes — stale hardcoded `/checkout/buy/...` links keep showing Test mode.
- */
-function baseCheckoutUrlFromPlan(plan: BillingPlanKey): string {
-  const fromEnv =
-    plan === 'monthly'
-      ? process.env.LEMONSQUEEZY_CHECKOUT_URL_MONTHLY?.trim()
-      : plan === 'quarterly'
-        ? process.env.LEMONSQUEEZY_CHECKOUT_URL_QUARTERLY?.trim()
-        : process.env.LEMONSQUEEZY_CHECKOUT_URL_YEARLY?.trim();
-
-  if (fromEnv) return fromEnv;
-
-  const url =
-    plan === 'monthly'
-      ? 'https://pay.scholarshiptop.com/checkout/buy/88e78199-f190-43a0-bb33-5e52fa96a67f?logo=0&discount=0'
-      : plan === 'quarterly'
-        ? 'https://pay.scholarshiptop.com/checkout/buy/3faf88f4-d2d6-437f-808f-f641bcb955a1?logo=0&discount=0'
-        : 'https://pay.scholarshiptop.com/checkout/buy/152da89c-f707-4417-9cd8-3be69938a677?logo=0&discount=0';
-
-  if (!url.trim()) {
-    throw new Error(`Checkout URL for the ${plan} plan is not configured.`);
-  }
-
-  return url;
-}
-
-function checkoutUrlFromPlan({
-  plan,
-  email,
-  userId
-}: {
-  plan: BillingPlanKey;
-  email: string;
-  userId: string;
-}) {
-  const url = new URL(baseCheckoutUrlFromPlan(plan));
-  url.searchParams.set('checkout[email]', email);
-  url.searchParams.set('checkout[custom][user_id]', userId);
-  return url.toString();
-}
 
 function planProductTitle(plan: BillingPlanKey): string {
   switch (plan) {
@@ -90,7 +50,11 @@ function lemonSkipTrialCheckoutDescriptionHtml(plan: BillingPlanKey): string {
 
 type LemonCheckoutApiResult =
   | { ok: true; url: string }
-  | { ok: false; reason: 'missing_env' | 'http' | 'bad_response'; detail?: string };
+  | {
+      ok: false;
+      reason: 'invalid_config' | 'variant_rejected' | 'http' | 'bad_response';
+      detail?: string;
+    };
 
 type LemonCheckoutMode = 'with_trial' | 'skip_trial';
 
@@ -108,16 +72,43 @@ async function createLemonCheckoutForPlan(
   userId: string,
   mode: LemonCheckoutMode
 ): Promise<LemonCheckoutApiResult> {
-  const apiKey = process.env.LEMONSQUEEZY_API_KEY?.trim();
-  const storeId = process.env.LEMONSQUEEZY_STORE_ID?.trim();
-  const variantId = resolveLemonVariantIdForBillingPlan(plan);
-  if (!apiKey || !storeId || !variantId) {
-    return { ok: false, reason: 'missing_env' };
+  const resolved = resolveLemonCheckoutConfig(plan);
+  if (!resolved.ok) {
+    console.warn('[billing] checkout disabled by config guard', {
+      plan,
+      checkoutMode: mode,
+      reason: resolved.reason
+    });
+    return { ok: false, reason: 'invalid_config', detail: resolved.reason };
   }
+  const { apiKey, storeId, variantId } = resolved.config;
 
   const variantNum = Number.parseInt(variantId, 10);
   if (!Number.isFinite(variantNum)) {
-    return { ok: false, reason: 'missing_env', detail: 'invalid variant id' };
+    return { ok: false, reason: 'invalid_config', detail: 'invalid_variant' };
+  }
+
+  let variantValidation: Awaited<ReturnType<typeof validateLemonVariantMode>>;
+  try {
+    variantValidation = await validateLemonVariantMode(resolved.config);
+  } catch {
+    return {
+      ok: false,
+      reason: 'variant_rejected',
+      detail: 'provider_unreachable'
+    };
+  }
+  if (!variantValidation.ok) {
+    console.warn('[billing] checkout variant rejected by live/test guard', {
+      plan,
+      mode: resolved.config.mode,
+      reason: variantValidation.reason
+    });
+    return {
+      ok: false,
+      reason: 'variant_rejected',
+      detail: variantValidation.reason
+    };
   }
 
   const productOptions: {
@@ -204,7 +195,10 @@ async function createLemonCheckoutForPlan(
     return { ok: true, url: url.trim() };
   }
 
-  console.error('[billing] Lemon checkout response missing url', raw.slice(0, 800));
+  console.error(
+    '[billing] Lemon checkout response missing url',
+    raw.slice(0, 800)
+  );
   return { ok: false, reason: 'bad_response', detail: 'no url in response' };
 }
 
@@ -235,30 +229,6 @@ async function tryCreateLemonCheckoutSkipTrial(
   return tryCreateLemonCheckoutSkipTrialForPlan('monthly', email, userId);
 }
 
-function checkoutUrlSkipTrialFallbackForPlan(
-  plan: BillingPlanKey,
-  email: string,
-  userId: string
-): string {
-  const fromEnv =
-    plan === 'monthly'
-      ? process.env.LEMONSQUEEZY_CHECKOUT_URL_MONTHLY_SKIP_TRIAL?.trim()
-      : '';
-  const base =
-    fromEnv && fromEnv.length > 0 ? fromEnv : baseCheckoutUrlFromPlan(plan);
-  const url = new URL(base);
-  url.searchParams.set('checkout[email]', email);
-  url.searchParams.set('checkout[custom][user_id]', userId);
-  if (!fromEnv) {
-    url.searchParams.set('checkout[skip_trial]', '1');
-  }
-  return url.toString();
-}
-
-function checkoutUrlSkipTrialFallback(email: string, userId: string): string {
-  return checkoutUrlSkipTrialFallbackForPlan('monthly', email, userId);
-}
-
 /** Monthly paid plan: skip Lemon trial and charge on checkout (API checkout preferred). */
 export async function getCheckoutURLSkipTrialMonthly(): Promise<string> {
   const supabase = createClient();
@@ -277,11 +247,12 @@ export async function getCheckoutURLSkipTrialMonthly(): Promise<string> {
 
   const apiUrl = await tryCreateLemonCheckoutSkipTrial(user.email, user.id);
   if (apiUrl) return apiUrl;
-
-  return checkoutUrlSkipTrialFallback(user.email, user.id);
+  throw new Error(SECURE_CHECKOUT_UNAVAILABLE_MESSAGE);
 }
 
 export async function getCheckoutURL(plan: BillingPlanKey): Promise<string> {
+  const parsedPlan = parseBillingPlanKey(plan);
+  if (!parsedPlan) throw new Error('Choose a valid subscription plan.');
   const supabase = createClient();
   const {
     data: { user },
@@ -297,7 +268,7 @@ export async function getCheckoutURL(plan: BillingPlanKey): Promise<string> {
   }
 
   const apiCheckout = await createLemonCheckoutForPlan(
-    plan,
+    parsedPlan,
     user.email,
     user.id,
     'with_trial'
@@ -306,16 +277,13 @@ export async function getCheckoutURL(plan: BillingPlanKey): Promise<string> {
     return apiCheckout.url;
   }
 
-  console.warn(
-    '[billing] getCheckoutURL: Lemon API checkout failed; using hosted checkout URL — multi-variant products may show the wrong default plan',
-    { plan, reason: apiCheckout }
-  );
-
-  return checkoutUrlFromPlan({
-    plan,
-    email: user.email,
-    userId: user.id
+  console.warn('[billing] secure checkout unavailable', {
+    plan: parsedPlan,
+    reason: apiCheckout.reason,
+    detail: apiCheckout.detail
   });
+
+  throw new Error(SECURE_CHECKOUT_UNAVAILABLE_MESSAGE);
 }
 
 export type PreferredPlanCheckoutResult =
@@ -323,8 +291,7 @@ export type PreferredPlanCheckoutResult =
   | { ok: false; error: string };
 
 /**
- * **Pay now — no free trial** on this checkout path: uses Lemon `skip_trial` (API checkout) or hosted
- * fallback with `checkout[skip_trial]=1`. Same plan heuristic as `/subscription` (infer tier, else monthly).
+ * **Pay now — no free trial** on this checkout path. Hosted URL fallbacks are intentionally disabled.
  *
  * Used by AI Mentor “Start” (inline card + modal), *not* by the main `/subscription` “Start free trial” buttons
  * (`getCheckoutURL` uses `with_trial`).
@@ -366,26 +333,29 @@ export async function getCheckoutURLForPreferredPlan(): Promise<PreferredPlanChe
       profile as Tables<'profiles'> | null
     );
     const plan: BillingPlanKey =
-      tier === 'yearly' ? 'yearly' : tier === 'quarterly' ? 'quarterly' : 'quarterly';
+      tier === 'yearly'
+        ? 'yearly'
+        : tier === 'quarterly'
+          ? 'quarterly'
+          : 'monthly';
 
     const r = await createLemonSkipTrialCheckout(plan, user.email, user.id);
     if (r.ok) return { ok: true, url: r.url };
 
-    if (r.reason === 'missing_env') {
+    if (r.reason === 'invalid_config') {
       return {
         ok: false,
-        error:
-          'Checkout is not configured on the server. Add LEMONSQUEEZY_API_KEY, LEMONSQUEEZY_STORE_ID, and LEMONSQUEEZY_MONTHLY_VARIANT_ID (and quarterly/yearly IDs) in Vercel → Environment Variables, then redeploy.'
+        error: SECURE_CHECKOUT_UNAVAILABLE_MESSAGE
       };
     }
 
     console.warn(
-      '[billing] getCheckoutURLForPreferredPlan: Lemon API skip-trial checkout failed; using hosted skip_trial URL',
+      '[billing] getCheckoutURLForPreferredPlan: secure checkout unavailable',
       { plan, reason: r.reason, detail: r.detail?.slice?.(0, 200) }
     );
     return {
-      ok: true,
-      url: checkoutUrlSkipTrialFallbackForPlan(plan, user.email, user.id)
+      ok: false,
+      error: SECURE_CHECKOUT_UNAVAILABLE_MESSAGE
     };
   } catch (e) {
     console.error('[billing] getCheckoutURLForPreferredPlan', e);

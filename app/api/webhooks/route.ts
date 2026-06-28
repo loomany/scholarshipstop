@@ -32,6 +32,7 @@ import {
   shouldSendLemonAdminPaymentEmail
 } from '@/lib/email/sendLemonAdminPaymentEmail';
 import { getIqReportAdminClient, getIqReportUrl } from '@/lib/iqReportOrders';
+import { resolveLemonWebhookConfig } from '@/lib/payments/lemonRuntimeConfig';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -62,12 +63,19 @@ function parseIsoDate(value: string | null | undefined) {
 }
 
 function getPayloadUpdatedAt(payload: LemonWebhookPayload): string | null {
-  const value = payload.data?.attributes?.updated_at ?? payload.attributes?.updated_at ?? null;
+  const value =
+    payload.data?.attributes?.updated_at ??
+    payload.attributes?.updated_at ??
+    null;
   return typeof value === 'string' && value.trim() ? value : null;
 }
 
 function getStoredPayloadUpdatedAt(rawPayload: Json | null): string | null {
-  if (!rawPayload || typeof rawPayload !== 'object' || Array.isArray(rawPayload)) {
+  if (
+    !rawPayload ||
+    typeof rawPayload !== 'object' ||
+    Array.isArray(rawPayload)
+  ) {
     return null;
   }
 
@@ -76,7 +84,10 @@ function getStoredPayloadUpdatedAt(rawPayload: Json | null): string | null {
 }
 
 function shouldSkipSignatureValidation() {
-  return process.env.NODE_ENV !== 'production' && process.env.LEMON_WEBHOOK_SKIP_SIGNATURE === '1';
+  return (
+    process.env.NODE_ENV !== 'production' &&
+    process.env.LEMON_WEBHOOK_SKIP_SIGNATURE === '1'
+  );
 }
 
 function getLemonAttributes(payload: LemonWebhookPayload) {
@@ -92,7 +103,9 @@ function getIqReportIdFromPayload(payload: LemonWebhookPayload): string | null {
   return typeof value === 'string' && value.trim() ? value.trim() : null;
 }
 
-function getCheckoutEmailFromPayload(payload: LemonWebhookPayload): string | null {
+function getCheckoutEmailFromPayload(
+  payload: LemonWebhookPayload
+): string | null {
   const attrs = getLemonAttributes(payload) as
     | (NonNullable<LemonWebhookPayload['data']>['attributes'] & {
         user_email?: string | null;
@@ -100,8 +113,14 @@ function getCheckoutEmailFromPayload(payload: LemonWebhookPayload): string | nul
         customer_email?: string | null;
       })
     | undefined;
-  const value = attrs?.user_email ?? attrs?.user_email_address ?? attrs?.customer_email ?? null;
-  return typeof value === 'string' && value.trim() ? value.trim().toLowerCase() : null;
+  const value =
+    attrs?.user_email ??
+    attrs?.user_email_address ??
+    attrs?.customer_email ??
+    null;
+  return typeof value === 'string' && value.trim()
+    ? value.trim().toLowerCase()
+    : null;
 }
 
 async function notifyAdminLemonPaymentEmail(options: {
@@ -137,7 +156,10 @@ async function handleIqReportOrderCreated(payload: LemonWebhookPayload) {
   if (!reportId) {
     console.warn('[lemon:webhook] order_created without iq_report_id', {
       dataId: payload.data?.id ?? null,
-      customData: payload.meta?.custom_data ?? payload.data?.attributes?.custom_data ?? null
+      customData:
+        payload.meta?.custom_data ??
+        payload.data?.attributes?.custom_data ??
+        null
     });
     return null;
   }
@@ -201,7 +223,10 @@ async function handleIqReportOrderCreated(payload: LemonWebhookPayload) {
     toEmail: order.email,
     reportUrl,
     iqScore: typeof result.iqScore === 'number' ? result.iqScore : 0,
-    archetype: typeof result.archetype === 'string' ? result.archetype : 'Cognitive Profile'
+    archetype:
+      typeof result.archetype === 'string'
+        ? result.archetype
+        : 'Cognitive Profile'
   });
 
   if (emailResult.ok) {
@@ -239,22 +264,9 @@ async function handleIqReportOrderCreated(payload: LemonWebhookPayload) {
   );
 }
 
-/** Signing secret from the webhook in Lemon (6–40 chars), not the REST API key. Try all distinct env values. */
 function lemonWebhookSecretCandidates(): string[] {
-  const raw = [
-    process.env.LEMON_SQUEEZY_WEBHOOK_SECRET,
-    process.env.LEMON_SQUEEZY_SECRET
-  ];
-  const out: string[] = [];
-  const seen = new Set<string>();
-  for (const s of raw) {
-    const t = s?.trim();
-    if (t && !seen.has(t)) {
-      seen.add(t);
-      out.push(t);
-    }
-  }
-  return out;
+  const config = resolveLemonWebhookConfig();
+  return config.ok ? [config.secret] : [];
 }
 
 export async function POST(req: Request) {
@@ -286,12 +298,18 @@ export async function POST(req: Request) {
     });
     if (!signatureValid) {
       if (shouldSkipSignatureValidation()) {
-        console.warn('[lemon:webhook] skipping invalid signature in local development', signatureDebug);
+        console.warn(
+          '[lemon:webhook] skipping invalid signature in local development',
+          signatureDebug
+        );
       } else {
-        console.warn('[lemon:webhook] invalid signature (check LEMON_SQUEEZY_WEBHOOK_SECRET matches Lemon webhook signing secret)', {
-          ...signatureDebug,
-          candidateCount: secretCandidates.length
-        });
+        console.warn(
+          '[lemon:webhook] invalid signature for configured Lemon mode',
+          {
+            ...signatureDebug,
+            candidateCount: secretCandidates.length
+          }
+        );
         return new Response('Invalid signature', { status: 400 });
       }
     }
@@ -300,16 +318,22 @@ export async function POST(req: Request) {
     if (error instanceof SyntaxError) {
       return new Response('Invalid webhook payload.', { status: 400 });
     }
-    return new Response('Webhook signature validation failed.', { status: 500 });
+    return new Response('Webhook signature validation failed.', {
+      status: 500
+    });
   }
 
   try {
     const originalEventName = normalizeLemonEventName(payload.meta?.event_name);
-    const enriched = await enrichInvoicePaymentSuccessWithSubscriptionFetch(payload);
+    const enriched =
+      await enrichInvoicePaymentSuccessWithSubscriptionFetch(payload);
     if (enriched) {
-      console.info('[lemon:webhook] enriched invoice webhook via Lemon API GET /subscriptions', {
-        subscriptionId: enriched.data?.id
-      });
+      console.info(
+        '[lemon:webhook] enriched invoice webhook via Lemon API GET /subscriptions',
+        {
+          subscriptionId: enriched.data?.id
+        }
+      );
       payload = enriched;
     }
 
@@ -318,7 +342,10 @@ export async function POST(req: Request) {
 
     const decision = decideSubscriptionUpdate(payload);
     if (decision.kind === 'ignored') {
-      const invoiceFx = await runInvoicePaymentFailedWebhookEffects(getSupabaseAdmin(), payload);
+      const invoiceFx = await runInvoicePaymentFailedWebhookEffects(
+        getSupabaseAdmin(),
+        payload
+      );
       await notifyAdminLemonPaymentEmail({
         payload,
         eventName: originalEventName,
@@ -368,13 +395,18 @@ export async function POST(req: Request) {
       typeof nextMetadata?.lemon_event_fingerprint === 'string'
         ? nextMetadata.lemon_event_fingerprint
         : null;
-    const existingUpdatedAt = getStoredPayloadUpdatedAt(existingSubscription?.raw_payload ?? null);
+    const existingUpdatedAt = getStoredPayloadUpdatedAt(
+      existingSubscription?.raw_payload ?? null
+    );
     const incomingUpdatedAt = getPayloadUpdatedAt(payload);
 
     if (
-      (existingEventFingerprint && nextEventFingerprint && existingEventFingerprint === nextEventFingerprint) ||
+      (existingEventFingerprint &&
+        nextEventFingerprint &&
+        existingEventFingerprint === nextEventFingerprint) ||
       (existingSubscription?.raw_payload &&
-        JSON.stringify(existingSubscription.raw_payload) === JSON.stringify(payload))
+        JSON.stringify(existingSubscription.raw_payload) ===
+          JSON.stringify(payload))
     ) {
       console.info('[lemon:webhook] duplicate payload ignored', {
         subscriptionId: decision.subscription.id,
@@ -390,7 +422,11 @@ export async function POST(req: Request) {
       decision.eventName === 'subscription_payment_failed' &&
       isSubscriptionInvoicePayload(payload);
 
-    if (!skipStaleForInvoicePaymentFailed && existingUpdatedAt && incomingUpdatedAt) {
+    if (
+      !skipStaleForInvoicePaymentFailed &&
+      existingUpdatedAt &&
+      incomingUpdatedAt
+    ) {
       const existingUpdatedAtDate = parseIsoDate(existingUpdatedAt);
       const incomingUpdatedAtDate = parseIsoDate(incomingUpdatedAt);
       if (
@@ -447,7 +483,9 @@ export async function POST(req: Request) {
         subscriptionId: decision.subscription.id,
         userId: decision.userId
       });
-      return new Response('Error syncing subscription record.', { status: 500 });
+      return new Response('Error syncing subscription record.', {
+        status: 500
+      });
     }
     console.info('[lemon:webhook] subscription upserted', {
       subscriptionId: decision.subscription.id,
@@ -479,7 +517,9 @@ export async function POST(req: Request) {
         hint: error.hint,
         userId: decision.userId
       });
-      return new Response('Error updating subscription status.', { status: 500 });
+      return new Response('Error updating subscription status.', {
+        status: 500
+      });
     }
     console.info('[lemon:webhook] profile entitlements updated', {
       userId: decision.userId
@@ -491,7 +531,10 @@ export async function POST(req: Request) {
         const { data: authUserData, error: authErr } =
           await getSupabaseAdmin().auth.admin.getUserById(decision.userId);
         if (authErr) {
-          console.warn('[lemon:webhook] auth admin getUserById', authErr.message);
+          console.warn(
+            '[lemon:webhook] auth admin getUserById',
+            authErr.message
+          );
         }
         userEmail = authUserData?.user?.email ?? null;
       } catch (authLookupError) {
@@ -512,7 +555,9 @@ export async function POST(req: Request) {
         eventName: decision.eventName
       });
 
-      const adminPaymentEventName = shouldSendLemonAdminPaymentEmail(originalEventName)
+      const adminPaymentEventName = shouldSendLemonAdminPaymentEmail(
+        originalEventName
+      )
         ? originalEventName
         : decision.eventName;
       await notifyAdminLemonPaymentEmail({
@@ -524,13 +569,20 @@ export async function POST(req: Request) {
       });
 
       if (!userEmail?.trim()) {
-        console.warn('[lemon:webhook] skip subscription emails — no auth email for user', {
-          userId: decision.userId
-        });
+        console.warn(
+          '[lemon:webhook] skip subscription emails — no auth email for user',
+          {
+            userId: decision.userId
+          }
+        );
       } else {
         const eventName = decision.eventName;
         if (
-          lemonWebhookShouldSendSubscriptionWelcomeEmail(eventName, payload, decision.isSubscribed)
+          lemonWebhookShouldSendSubscriptionWelcomeEmail(
+            eventName,
+            payload,
+            decision.isSubscribed
+          )
         ) {
           const r = await sendLemonSubscriptionActiveEmail({
             toEmail: userEmail.trim(),
@@ -543,34 +595,46 @@ export async function POST(req: Request) {
               skipped: r.skipped
             });
           }
-        } else if (lemonWebhookShouldSendSubscriptionCancelledEmail(eventName)) {
+        } else if (
+          lemonWebhookShouldSendSubscriptionCancelledEmail(eventName)
+        ) {
           const r = await sendLemonSubscriptionCancelledEmail({
             toEmail: userEmail.trim(),
             payload
           });
           if (!r.ok) {
-            console.warn('[lemon:webhook] subscription cancelled email not sent', {
-              userId: decision.userId,
-              skipped: r.skipped
-            });
+            console.warn(
+              '[lemon:webhook] subscription cancelled email not sent',
+              {
+                userId: decision.userId,
+                skipped: r.skipped
+              }
+            );
           }
-        } else if (lemonWebhookShouldSendSubscriptionPaymentFailedEmail(eventName)) {
+        } else if (
+          lemonWebhookShouldSendSubscriptionPaymentFailedEmail(eventName)
+        ) {
           const r = await sendLemonSubscriptionPaymentFailedEmail({
             toEmail: userEmail.trim(),
             payload
           });
           if (!r.ok) {
-            console.warn('[lemon:webhook] subscription payment failed email not sent', {
-              userId: decision.userId,
-              skipped: r.skipped
-            });
+            console.warn(
+              '[lemon:webhook] subscription payment failed email not sent',
+              {
+                userId: decision.userId,
+                skipped: r.skipped
+              }
+            );
           }
         }
       }
     } catch (sideEffectError) {
       console.error('[lemon:webhook] post-update notification failed', {
         message:
-          sideEffectError instanceof Error ? sideEffectError.message : String(sideEffectError),
+          sideEffectError instanceof Error
+            ? sideEffectError.message
+            : String(sideEffectError),
         userId: decision.userId
       });
     }

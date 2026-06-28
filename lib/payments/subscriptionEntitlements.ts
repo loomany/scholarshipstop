@@ -35,16 +35,24 @@ function getEmbeddedPriceRow(
 
 function envVariantIdList(value: string | undefined): string[] {
   if (!value?.trim()) return [];
-  return value.split(/[,\s]+/).map((s) => s.trim()).filter(Boolean);
+  return value
+    .split(/[,\s]+/)
+    .map((s) => s.trim())
+    .filter(Boolean);
 }
 
-function envVariantIds(primaryName: string, legacyName: string): string[] {
+function envVariantIds(plan: SubscriptionBillingTier): string[] {
+  const upper = plan.toUpperCase();
+  const legacyPlan = upper;
   return Array.from(
     new Set([
-      ...envVariantIdList(process.env[primaryName]),
-      ...envVariantIdList(process.env[legacyName]),
-      ...envVariantIdList(process.env[`${primaryName}_TEST`]),
-      ...envVariantIdList(process.env[`${legacyName}_TEST`])
+      ...envVariantIdList(process.env[`LEMON_VARIANT_${upper}_LIVE`]),
+      ...envVariantIdList(process.env[`LEMON_VARIANT_${upper}_TEST`]),
+      // Read-only compatibility for historical subscription rows during config migration.
+      ...envVariantIdList(process.env[`LEMONSQUEEZY_${legacyPlan}_VARIANT_ID`]),
+      ...envVariantIdList(
+        process.env[`LEMONSQUEEZY_${legacyPlan}_VARIANT_ID_TEST`]
+      )
     ])
   );
 }
@@ -55,12 +63,9 @@ function inferTierFromLemonVariantId(
 ): SubscriptionBillingTier | null {
   if (providerVariantId == null || providerVariantId === '') return null;
   const vid = String(providerVariantId).trim();
-  const monthly = envVariantIds('NEXT_PUBLIC_LS_MONTHLY_VARIANT_ID', 'LEMONSQUEEZY_MONTHLY_VARIANT_ID');
-  const quarterly = envVariantIds(
-    'NEXT_PUBLIC_LS_QUARTERLY_VARIANT_ID',
-    'LEMONSQUEEZY_QUARTERLY_VARIANT_ID'
-  );
-  const yearly = envVariantIds('NEXT_PUBLIC_LS_YEARLY_VARIANT_ID', 'LEMONSQUEEZY_YEARLY_VARIANT_ID');
+  const monthly = envVariantIds('monthly');
+  const quarterly = envVariantIds('quarterly');
+  const yearly = envVariantIds('yearly');
   if (monthly.includes(vid)) return 'monthly';
   if (quarterly.includes(vid)) return 'quarterly';
   if (yearly.includes(vid)) return 'yearly';
@@ -68,11 +73,15 @@ function inferTierFromLemonVariantId(
 }
 
 /** Last-resort tier from stored Lemon webhook JSON (same fields as live webhook). */
-function inferBillingTierFromRawPayload(raw: Json | null): SubscriptionBillingTier | null {
+function inferBillingTierFromRawPayload(
+  raw: Json | null
+): SubscriptionBillingTier | null {
   if (raw == null || typeof raw !== 'object' || Array.isArray(raw)) return null;
   const root = raw as Record<string, unknown>;
   const data = root.data as Record<string, unknown> | undefined;
-  const attrs = (data?.attributes ?? root.attributes) as Record<string, unknown> | undefined;
+  const attrs = (data?.attributes ?? root.attributes) as
+    | Record<string, unknown>
+    | undefined;
   if (!attrs || typeof attrs !== 'object') return null;
   const variantIdRaw = attrs.variant_id;
   if (variantIdRaw != null && variantIdRaw !== '') {
@@ -105,7 +114,9 @@ export function inferSubscriptionBillingTier(
 
   if (subscription) {
     /** Lemon `plan_code` can lag behind a variant change until webhooks settle — trust variant id first. */
-    const fromProviderVariant = inferTierFromLemonVariantId(subscription.provider_variant_id);
+    const fromProviderVariant = inferTierFromLemonVariantId(
+      subscription.provider_variant_id
+    );
     if (fromProviderVariant) return fromProviderVariant;
 
     if (subscription.plan_code === 'monthly_pro') return 'monthly';
@@ -120,7 +131,8 @@ export function inferSubscriptionBillingTier(
     if (interval === 'month') return 'monthly';
 
     const productName = priceRow?.products?.name ?? '';
-    const planText = `${subscription.provider_product_name ?? ''} ${subscription.provider_variant_name ?? ''} ${productName}`.toLowerCase();
+    const planText =
+      `${subscription.provider_product_name ?? ''} ${subscription.provider_variant_name ?? ''} ${productName}`.toLowerCase();
     if (planText.includes('year')) return 'yearly';
     if (planText.includes('quarter')) return 'quarterly';
     if (planText.includes('month')) return 'monthly';
@@ -209,7 +221,11 @@ function labelForTrialingSubscription(
   const tier = inferSubscriptionBillingTier(subscription, profile);
   if (!tier) return DISPLAY_LABELS.trial;
   const tierWord =
-    tier === 'yearly' ? 'Yearly' : tier === 'quarterly' ? 'Quarterly' : 'Monthly';
+    tier === 'yearly'
+      ? 'Yearly'
+      : tier === 'quarterly'
+        ? 'Quarterly'
+        : 'Monthly';
   return `3-Day Trial · ${tierWord}`;
 }
 
@@ -217,7 +233,9 @@ function labelForTrialingSubscription(
  * Short English label for the disabled CTA on /subscription for the user’s current plan
  * (replaces static “Active Plan”).
  */
-export function subscriptionPricingCurrentPlanButtonLabel(status: string): string {
+export function subscriptionPricingCurrentPlanButtonLabel(
+  status: string
+): string {
   const s = status.trim().toLowerCase();
   switch (s) {
     case 'active':
@@ -242,7 +260,9 @@ export function subscriptionPricingCurrentPlanButtonLabel(status: string): strin
       if (!s) return 'Active Plan';
       return s
         .split('_')
-        .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+        .map(
+          (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+        )
         .join(' ');
   }
 }
@@ -282,11 +302,19 @@ export function subscriptionPricingPlanStatusLabel(
   const withTier = (prefix: string) =>
     tierWord ? `${prefix} · ${tierWord}` : prefix;
 
-  if (status === 'trialing' || status === 'on_trial' || presentation.plan === 'trial') {
+  if (
+    status === 'trialing' ||
+    status === 'on_trial' ||
+    presentation.plan === 'trial'
+  ) {
     return withTier('Trialing');
   }
 
-  if (status === 'active' && presentation.isSubscribed && presentation.plan !== 'free') {
+  if (
+    status === 'active' &&
+    presentation.isSubscribed &&
+    presentation.plan !== 'free'
+  ) {
     return withTier('Active');
   }
 
@@ -323,7 +351,10 @@ function formatDate(value: string | null | undefined) {
   }).format(date);
 }
 
-function getRemainingTime(targetValue: string | null | undefined, nowValue?: string | null) {
+function getRemainingTime(
+  targetValue: string | null | undefined,
+  nowValue?: string | null
+) {
   const target = parseDate(targetValue);
   const now = parseDate(nowValue ?? null) ?? new Date();
   if (!target) {
@@ -342,8 +373,14 @@ function getRemainingTime(targetValue: string | null | undefined, nowValue?: str
   };
 }
 
-function getCountdownLabel(targetValue: string | null | undefined, nowValue?: string | null) {
-  const { remainingMs, remainingDays, remainingHours } = getRemainingTime(targetValue, nowValue);
+function getCountdownLabel(
+  targetValue: string | null | undefined,
+  nowValue?: string | null
+) {
+  const { remainingMs, remainingDays, remainingHours } = getRemainingTime(
+    targetValue,
+    nowValue
+  );
   if (remainingMs == null) return null;
   if (remainingMs < 1000 * 60 * 60) return 'Expires soon';
   if (remainingMs < 1000 * 60 * 60 * 48) {
@@ -366,7 +403,10 @@ function getProgressPercent(
   return Math.max(6, Math.min(100, (remaining / total) * 100));
 }
 
-function isWithinGracePeriod(subscription: SubscriptionWithPriceAndProduct | null, nowValue?: string | null) {
+function isWithinGracePeriod(
+  subscription: SubscriptionWithPriceAndProduct | null,
+  nowValue?: string | null
+) {
   return isGracePeriodActive(
     {
       status: subscription?.status,
@@ -407,10 +447,14 @@ function derivePlanFromSubscription(
   const trialEndsAt = subscription.trial_end;
   const trialStillRunning = Boolean(
     parseDate(trialEndsAt) &&
-      (parseDate(nowValue ?? null) ?? new Date()).getTime() < (parseDate(trialEndsAt)?.getTime() ?? 0)
+    (parseDate(nowValue ?? null) ?? new Date()).getTime() <
+      (parseDate(trialEndsAt)?.getTime() ?? 0)
   );
 
-  if ((debugStatus === 'trialing' || debugStatus === 'on_trial') && trialStillRunning) {
+  if (
+    (debugStatus === 'trialing' || debugStatus === 'on_trial') &&
+    trialStillRunning
+  ) {
     return 'trial';
   }
 
@@ -426,7 +470,9 @@ function derivePlanFromSubscription(
   if (subscription.plan_code === 'trial') return 'trial';
 
   if (subscription.provider === 'lemon_squeezy') {
-    const fromVid = inferTierFromLemonVariantId(subscription.provider_variant_id);
+    const fromVid = inferTierFromLemonVariantId(
+      subscription.provider_variant_id
+    );
     if (fromVid === 'yearly') return 'yearly_pro';
     if (fromVid === 'quarterly') return 'quarterly_pro';
     if (fromVid === 'monthly') return 'monthly_pro';
@@ -490,17 +536,18 @@ function derivePresentationFromProfileDebug(
 
   const nowValue = null;
   const trialEndsAt =
-    plan === 'trial' ? profile?.subscription_debug_trial_ends_at ?? null : null;
-  const { remainingDays, remainingHours } = getRemainingTime(trialEndsAt, nowValue);
+    plan === 'trial'
+      ? (profile?.subscription_debug_trial_ends_at ?? null)
+      : null;
+  const { remainingDays, remainingHours } = getRemainingTime(
+    trialEndsAt,
+    nowValue
+  );
   const countdownLabel =
     plan === 'trial' ? getCountdownLabel(trialEndsAt, nowValue) : null;
   const progressPercent =
     plan === 'trial'
-      ? getProgressPercent(
-          profile?.created_at ?? null,
-          trialEndsAt,
-          nowValue
-        )
+      ? getProgressPercent(profile?.created_at ?? null, trialEndsAt, nowValue)
       : null;
 
   const dbgStatus = profile?.subscription_debug_status;
@@ -516,9 +563,7 @@ function derivePresentationFromProfileDebug(
   const isSubscribed = plan !== 'free';
 
   const nextBillingDate =
-    plan === 'monthly_pro' ||
-    plan === 'quarterly_pro' ||
-    plan === 'yearly_pro'
+    plan === 'monthly_pro' || plan === 'quarterly_pro' || plan === 'yearly_pro'
       ? formatDate(profile?.subscription_debug_renews_at)
       : null;
 
@@ -560,10 +605,18 @@ export function deriveSubscriptionPresentation(
   const nowValue = null;
   const effectiveSubscription = subscription;
   const fallbackPlan = getFallbackPlan(profile);
-  const plan = derivePlanFromSubscription(effectiveSubscription, fallbackPlan, nowValue);
+  const plan = derivePlanFromSubscription(
+    effectiveSubscription,
+    fallbackPlan,
+    nowValue
+  );
   const trialEndsAt = effectiveSubscription?.trial_end ?? null;
-  const { remainingDays, remainingHours } = getRemainingTime(trialEndsAt, nowValue);
-  const countdownLabel = plan === 'trial' ? getCountdownLabel(trialEndsAt, nowValue) : null;
+  const { remainingDays, remainingHours } = getRemainingTime(
+    trialEndsAt,
+    nowValue
+  );
+  const countdownLabel =
+    plan === 'trial' ? getCountdownLabel(trialEndsAt, nowValue) : null;
   const progressPercent =
     plan === 'trial'
       ? getProgressPercent(
@@ -573,10 +626,15 @@ export function deriveSubscriptionPresentation(
         )
       : null;
   const nextBillingDate = formatDate(
-    effectiveSubscription?.renews_at ?? effectiveSubscription?.current_period_end
+    effectiveSubscription?.renews_at ??
+      effectiveSubscription?.current_period_end
   );
-  const endsAt = formatDate(effectiveSubscription?.ended_at ?? effectiveSubscription?.cancel_at);
-  const providerStatus = normalizeSubscriptionStatus(effectiveSubscription?.status);
+  const endsAt = formatDate(
+    effectiveSubscription?.ended_at ?? effectiveSubscription?.cancel_at
+  );
+  const providerStatus = normalizeSubscriptionStatus(
+    effectiveSubscription?.status
+  );
   const cancelledButStillActive =
     (providerStatus === 'cancelled' || providerStatus === 'canceled') &&
     isWithinGracePeriod(effectiveSubscription, nowValue);
