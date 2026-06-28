@@ -370,7 +370,7 @@ export async function POST(req: Request) {
 
   try {
     if (secretCandidates.length === 0) {
-      return new Response('Webhook secret is not configured.', { status: 500 });
+      return new Response('Webhook is disabled.', { status: 503 });
     }
     if (!signature) {
       return new Response('Invalid signature', { status: 400 });

@@ -25,4 +25,9 @@ test('webhook selects only the secret for the explicit Lemon mode', () => {
     webhook,
     /process\.env\.LEMON_SQUEEZY_(WEBHOOK_SECRET|SECRET)/
   );
+  assert.match(
+    webhook,
+    /new Response\('Webhook is disabled\.', \{ status: 503 \}\)/
+  );
+  assert.doesNotMatch(webhook, /Webhook secret is not configured/);
 });
