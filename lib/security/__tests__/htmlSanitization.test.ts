@@ -2,7 +2,6 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 
 import { sanitizeArticleHtml } from '@/lib/content-hub/sanitizeArticleHtml';
-import { markdownToHtml } from '@/services/content-hub/src/lib/html';
 
 const malicious = [
   '<xmp><img src=x onerror=alert(1)></xmp>',
@@ -16,8 +15,4 @@ function assertSafe(html: string) {
 
 test('application article sanitizer rejects raw-text and attribute XSS', () => {
   assertSafe(sanitizeArticleHtml(malicious));
-});
-
-test('content-hub markdown sanitizer rejects raw-text and attribute XSS', async () => {
-  assertSafe(await markdownToHtml(malicious));
 });

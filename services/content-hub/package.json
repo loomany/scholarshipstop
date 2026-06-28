@@ -10,6 +10,7 @@
     "audit:health": "tsx src/scripts/auditContentHubHealth.ts",
     "topics:requeue-problems": "tsx src/scripts/requeueProblemContentTopics.ts",
     "build": "tsc",
+    "test:security": "tsx --test src/lib/html.test.ts",
     "lint": "eslint .",
     "content:publish-next": "node dist/jobs/publishNextPost.js"
   },
