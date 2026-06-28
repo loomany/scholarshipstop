@@ -1,62 +1,8 @@
 import clsx from 'clsx';
-import sanitizeHtml from 'sanitize-html';
 import type { ReactNode } from 'react';
 
 import { contentHubProseClassName } from '@/lib/content-hub/contentHubProseClassName';
-import {
-  absolutizeResourceGuideLinksInHtml,
-  normalizeScholarshipEntryLinksInHtml
-} from '@/lib/scholarships/resourceGuideRoutes';
-import { canonicalizeContentIntentLinksInHtml } from '@/lib/seo/contentIntentCanonical';
-
-/** Mirrors previous DOMPurify allowlist; avoids jsdom/Turbopack path issues on SSR. */
-const SANITIZE_HTML_OPTIONS: sanitizeHtml.IOptions = {
-  allowedTags: [
-    'p',
-    'br',
-    'hr',
-    'strong',
-    'em',
-    'b',
-    'i',
-    'u',
-    'sub',
-    'sup',
-    'ul',
-    'ol',
-    'li',
-    'a',
-    'h2',
-    'h3',
-    'h4',
-    'h5',
-    'blockquote',
-    'div',
-    'span',
-    'table',
-    'thead',
-    'tbody',
-    'tr',
-    'th',
-    'td',
-    'caption'
-  ],
-  allowedAttributes: {
-    '*': [
-      'id',
-      'href',
-      'target',
-      'rel',
-      'colspan',
-      'rowspan',
-      'class',
-      'style',
-      'title',
-      'aria-label'
-    ]
-  },
-  allowProtocolRelative: true
-};
+import { sanitizeArticleHtml } from '@/lib/content-hub/sanitizeArticleHtml';
 
 type SafeContentPostBodyProps = {
   html: string;
@@ -65,17 +11,6 @@ type SafeContentPostBodyProps = {
   /** Rendered inside the same bordered card, below the article body (e.g. Sources). */
   footer?: ReactNode;
 };
-
-function sanitizeArticleHtml(html: string): string {
-  return sanitizeHtml(
-    canonicalizeContentIntentLinksInHtml(
-      normalizeScholarshipEntryLinksInHtml(
-        absolutizeResourceGuideLinksInHtml(html)
-      )
-    ),
-    SANITIZE_HTML_OPTIONS
-  );
-}
 
 export default function SafeContentPostBody({
   html,
