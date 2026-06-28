@@ -33,7 +33,7 @@ type StrategyPreview = {
   essays: string[];
 };
 
-const IQ_SEO_BASE_URL = 'https://iq.scholarshiptop.com';
+const IQ_SEO_BASE_URL = 'https://scholarshiptop.com/iq';
 
 const iqSeoLandings: Record<string, IqSeoLanding> = {
   'scholarship-match': {

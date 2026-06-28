@@ -16,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: meta.title,
     description: meta.description,
     alternates: {
-      canonical: 'https://iq.scholarshiptop.com/assessment'
+      canonical: 'https://scholarshiptop.com/iq/assessment'
     }
   };
 }

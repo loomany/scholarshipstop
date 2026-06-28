@@ -123,7 +123,6 @@ export const SITEMAP_DB_PAGE_SIZE = 1000;
 /** Row-range shard size for the large essay sitemap surface. */
 export const ESSAY_SITEMAP_ROWS_PER_DOCUMENT = 250;
 
-const IQ_SEO_BASE_URL = 'https://iq.scholarshiptop.com';
 const IQ_SEO_SITEMAP_PATHS = [
   '/',
   '/scholarship-match',
@@ -565,7 +564,7 @@ function buildCoreSitemapEntries(base: string): MetadataRoute.Sitemap {
   return dedupeSitemapEntries([
     { url: `${base}/`, lastModified: new Date() },
     ...IQ_SEO_SITEMAP_PATHS.map((path) => ({
-      url: `${IQ_SEO_BASE_URL}${path === '/' ? '' : path}`,
+      url: `${base}/iq${path === '/' ? '' : path}`,
       lastModified: new Date()
     })),
     ...TRUST_SEO_CORE_PATHS.map((path) => ({
@@ -1036,8 +1035,7 @@ function buildLocalizedDbSitemapIndexDocuments(): SitemapDocument[] {
   const dbShards: Array<{ bucket: SitemapBucket; suffix: string }> = [
     { bucket: 'categories', suffix: 'categories' },
     { bucket: 'resources', suffix: 'resources-db' },
-    { bucket: 'providers', suffix: 'providers-db' },
-    { bucket: 'scholarships', suffix: 'scholarships-detail-db' }
+    { bucket: 'providers', suffix: 'providers-db' }
   ];
 
   for (const locale of ['es', 'fr'] as const) {
