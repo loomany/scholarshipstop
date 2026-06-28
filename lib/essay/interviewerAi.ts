@@ -64,7 +64,9 @@ ready_to_generate: true ONLY when all four progress values reflect genuinely str
 /** Alias for backwards compatibility. */
 export const INTERVIEWER_SYSTEM = INTERVIEWER_SYSTEM_BASE;
 
-export function buildInterviewerSystemPrompt(contextAppendix?: string | null): string {
+export function buildInterviewerSystemPrompt(
+  contextAppendix?: string | null
+): string {
   const extra = contextAppendix?.trim();
   if (!extra) return INTERVIEWER_SYSTEM_BASE;
   return `${INTERVIEWER_SYSTEM_BASE}\n${extra}`;
@@ -72,7 +74,10 @@ export function buildInterviewerSystemPrompt(contextAppendix?: string | null): s
 
 export function clampProgress(p: Partial<ThemeProgress>): ThemeProgress {
   const c = (n: unknown) =>
-    Math.min(100, Math.max(0, typeof n === 'number' && !Number.isNaN(n) ? n : 0));
+    Math.min(
+      100,
+      Math.max(0, typeof n === 'number' && !Number.isNaN(n) ? n : 0)
+    );
   return {
     background: c(p.background),
     achievements: c(p.achievements),
@@ -199,7 +204,8 @@ export async function reassessProgressFromConversation(
           content: t.content
         }))
       ]
-    })
+    }),
+    signal: AbortSignal.timeout(75_000)
   });
   const raw = await res.text();
   if (!res.ok) {
@@ -235,11 +241,9 @@ export async function openAiInterviewerTurn(
       model,
       temperature: 0.7,
       response_format: { type: 'json_object' },
-      messages: [
-        { role: 'system', content: systemContent },
-        ...conversation
-      ]
-    })
+      messages: [{ role: 'system', content: systemContent }, ...conversation]
+    }),
+    signal: AbortSignal.timeout(75_000)
   });
   const raw = await res.text();
   if (!res.ok) {

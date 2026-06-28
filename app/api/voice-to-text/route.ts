@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 
 import { resolveOpenAiModel } from '@/lib/ai/resolveOpenAiModel';
+import { withExpensiveApiGuard } from '@/lib/security/expensiveApiGuard';
 
 export const maxDuration = 60;
 export const dynamic = 'force-dynamic';
@@ -22,7 +23,8 @@ async function transcribeWhisper(apiKey: string, file: File): Promise<string> {
   const res = await fetch('https://api.openai.com/v1/audio/transcriptions', {
     method: 'POST',
     headers: { Authorization: `Bearer ${apiKey}` },
-    body: form
+    body: form,
+    signal: AbortSignal.timeout(55_000)
   });
 
   const raw = await res.text();
@@ -60,7 +62,8 @@ async function cleanupTranscript(apiKey: string, raw: string): Promise<string> {
         { role: 'system', content: CLEANUP_SYSTEM },
         { role: 'user', content: raw }
       ]
-    })
+    }),
+    signal: AbortSignal.timeout(55_000)
   });
 
   const rawBody = await res.text();
@@ -84,44 +87,53 @@ async function cleanupTranscript(apiKey: string, raw: string): Promise<string> {
  * Ответ при успехе: JSON `{ text: string }`.
  */
 export async function POST(request: Request) {
-  const apiKey = process.env.OPENAI_API_KEY?.trim();
-  if (!apiKey) {
-    return NextResponse.json(
-      { error: 'OPENAI_API_KEY is not configured' },
-      { status: 503 }
-    );
-  }
+  return withExpensiveApiGuard(
+    request,
+    { scope: 'voice-to-text', maxBodyBytes: MAX_AUDIO_BYTES + 1024 * 1024 },
+    async () => {
+      const apiKey = process.env.OPENAI_API_KEY?.trim();
+      if (!apiKey) {
+        return NextResponse.json(
+          { error: 'OPENAI_API_KEY is not configured' },
+          { status: 503 }
+        );
+      }
 
-  let formData: FormData;
-  try {
-    formData = await request.formData();
-  } catch {
-    return NextResponse.json({ error: 'Invalid form data' }, { status: 400 });
-  }
+      let formData: FormData;
+      try {
+        formData = await request.formData();
+      } catch {
+        return NextResponse.json(
+          { error: 'Invalid form data' },
+          { status: 400 }
+        );
+      }
 
-  const file = formData.get('audio');
-  if (!file || !(file instanceof File) || file.size === 0) {
-    return NextResponse.json({ error: 'No audio file' }, { status: 400 });
-  }
-  if (file.size > MAX_AUDIO_BYTES) {
-    return NextResponse.json(
-      { error: 'Audio file is too large (max 25 MB)' },
-      { status: 400 }
-    );
-  }
+      const file = formData.get('audio');
+      if (!file || !(file instanceof File) || file.size === 0) {
+        return NextResponse.json({ error: 'No audio file' }, { status: 400 });
+      }
+      if (file.size > MAX_AUDIO_BYTES) {
+        return NextResponse.json(
+          { error: 'Audio file is too large (max 25 MB)' },
+          { status: 400 }
+        );
+      }
 
-  try {
-    const whisperText = await transcribeWhisper(apiKey, file);
-    if (!whisperText) {
-      return NextResponse.json(
-        { error: 'Could not transcribe audio' },
-        { status: 422 }
-      );
+      try {
+        const whisperText = await transcribeWhisper(apiKey, file);
+        if (!whisperText) {
+          return NextResponse.json(
+            { error: 'Could not transcribe audio' },
+            { status: 422 }
+          );
+        }
+        const text = await cleanupTranscript(apiKey, whisperText);
+        return NextResponse.json({ text });
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : 'Transcription failed';
+        return NextResponse.json({ error: msg }, { status: 502 });
+      }
     }
-    const text = await cleanupTranscript(apiKey, whisperText);
-    return NextResponse.json({ text });
-  } catch (e) {
-    const msg = e instanceof Error ? e.message : 'Transcription failed';
-    return NextResponse.json({ error: msg }, { status: 502 });
-  }
+  );
 }
