@@ -117,8 +117,7 @@ export function ScholarshipOnboardingWizard({
   const searchParams = useSearchParams();
   const requested =
     mode === 'standalone' ? parseStepParam(searchParams.get('step')) : null;
-  const nextQueryRaw =
-    mode === 'standalone' ? searchParams.get('next') : null;
+  const nextQueryRaw = mode === 'standalone' ? searchParams.get('next') : null;
   const safeNext = useMemo(
     () => parseSafeNextPath(nextQueryRaw),
     [nextQueryRaw]
@@ -171,18 +170,14 @@ export function ScholarshipOnboardingWizard({
   const step: OnboardingStep = useMemo(() => {
     if (!draft) return 1;
     if (mode === 'embedded') {
-      return embeddedStepReady ? embeddedStep : defaultResumeOnboardingStep(draft);
+      return embeddedStepReady
+        ? embeddedStep
+        : defaultResumeOnboardingStep(draft);
     }
     return requested == null
       ? defaultResumeOnboardingStep(draft)
       : clampOnboardingStepToProgress(draft, requested);
-  }, [
-    draft,
-    mode,
-    embeddedStep,
-    embeddedStepReady,
-    requested
-  ]);
+  }, [draft, mode, embeddedStep, embeddedStepReady, requested]);
 
   const persistFull = useCallback((next: StoredOnboardingDraft) => {
     saveFullOnboardingDraft(next);
@@ -309,7 +304,10 @@ export function ScholarshipOnboardingWizard({
           userId: existingSession?.user?.id ?? null
         });
 
-        const notifyTelegramRegistration = async (userId: string, userEmail: string) => {
+        const notifyTelegramRegistration = async (
+          userId: string,
+          userEmail: string
+        ) => {
           try {
             await fetch('/api/internal/telegram/registration', {
               method: 'POST',
@@ -324,12 +322,17 @@ export function ScholarshipOnboardingWizard({
               })
             });
           } catch (error) {
-            console.warn('[onboarding:telegram] registration notify failed', error);
+            console.warn(
+              '[onboarding:telegram] registration notify failed',
+              error
+            );
           }
         };
 
         const syncProfileViaCountrySignup = async () => {
-          const profileCountryCode = normalizeCountryCode(built.profile.countryCode);
+          const profileCountryCode = normalizeCountryCode(
+            built.profile.countryCode
+          );
           if (!profileCountryCode) return false;
           const res = await fetch('/api/onboarding/country-signup', {
             method: 'POST',
@@ -338,13 +341,18 @@ export function ScholarshipOnboardingWizard({
             body: JSON.stringify({
               email,
               countryCode: profileCountryCode,
-              source: mode === 'embedded' ? 'embedded-onboarding' : 'onboarding',
+              source:
+                mode === 'embedded' ? 'embedded-onboarding' : 'onboarding',
               profile: built.profile
             })
           });
           if (!res.ok) {
-            const payload = (await res.json().catch(() => null)) as { error?: string } | null;
-            throw new Error(payload?.error ?? 'Could not save your scholarship profile.');
+            const payload = (await res.json().catch(() => null)) as {
+              error?: string;
+            } | null;
+            throw new Error(
+              payload?.error ?? 'Could not save your scholarship profile.'
+            );
           }
           return true;
         };
@@ -355,7 +363,11 @@ export function ScholarshipOnboardingWizard({
           if (!session?.user) return false;
           const userId = session.user.id;
           const addr = session.user.email?.trim() ?? null;
-          const sync = await syncOnboardingToProfiles(supabase, userId, built.profile);
+          const sync = await syncOnboardingToProfiles(
+            supabase,
+            userId,
+            built.profile
+          );
           if (!sync.ok) {
             setLoading(false);
             finalizeInFlight.current = false;
@@ -398,7 +410,8 @@ export function ScholarshipOnboardingWizard({
          * email” message — not Supabase’s default magic-link template.
          */
         if (!ACCOUNT_SHOW_DATE_OF_BIRTH_AND_PASSWORD_FIELDS) {
-          const unspecifiedApplicant = base.includeUnspecifiedApplicantCountries === true;
+          const unspecifiedApplicant =
+            base.includeUnspecifiedApplicantCountries === true;
           const profileCountryCode = unspecifiedApplicant
             ? null
             : normalizeCountryCode(built.profile.countryCode);
@@ -415,7 +428,8 @@ export function ScholarshipOnboardingWizard({
           type CountrySignupJson = {
             ok?: boolean;
             error?: string;
-            sessionPassword?: string | null;
+            code?: string;
+            signupPath?: string;
             createdNewUser?: boolean;
           };
 
@@ -428,7 +442,8 @@ export function ScholarshipOnboardingWizard({
               body: JSON.stringify({
                 email,
                 countryCode: profileCountryCode,
-                source: mode === 'embedded' ? 'embedded-onboarding' : 'onboarding',
+                source:
+                  mode === 'embedded' ? 'embedded-onboarding' : 'onboarding',
                 profile: {
                   ...built.profile,
                   ...(unspecifiedApplicant
@@ -437,10 +452,19 @@ export function ScholarshipOnboardingWizard({
                 }
               })
             });
-            signupJson = (await res.json().catch(() => null)) as CountrySignupJson | null;
+            signupJson = (await res
+              .json()
+              .catch(() => null)) as CountrySignupJson | null;
             if (!res.ok || !signupJson?.ok) {
               setLoading(false);
               finalizeInFlight.current = false;
+              if (
+                signupJson?.code === 'COUNTRY_SIGNUP_DISABLED' &&
+                signupJson.signupPath
+              ) {
+                router.push(signupJson.signupPath);
+                return;
+              }
               notifyDestructive(
                 'Could not create your account',
                 signupJson?.error ?? 'Try again in a moment.'
@@ -457,25 +481,10 @@ export function ScholarshipOnboardingWizard({
             return;
           }
 
-          const sessionPassword = signupJson.sessionPassword ?? null;
-          if (sessionPassword) {
-            const { error: pwErr } = await supabase.auth.signInWithPassword({
-              email: email.trim().toLowerCase(),
-              password: sessionPassword
-            });
-            if (!pwErr) {
-              const {
-                data: { session: nextSession }
-              } = await supabase.auth.getSession();
-              session = nextSession;
-            } else {
-              console.warn('[onboarding:auth] country-signup auto sign-in failed', pwErr.message);
-            }
-          }
-
           if (session?.user) {
             const ok = await finishWithSession({
-              skipRegistrationVerificationEmail: signupJson.createdNewUser === true
+              skipRegistrationVerificationEmail:
+                signupJson.createdNewUser === true
             });
             if (!ok) return;
             return;
@@ -495,8 +504,12 @@ export function ScholarshipOnboardingWizard({
           return;
         }
 
-        let signUpData: Awaited<ReturnType<typeof supabase.auth.signUp>>['data'];
-        let signUpError: Awaited<ReturnType<typeof supabase.auth.signUp>>['error'];
+        let signUpData: Awaited<
+          ReturnType<typeof supabase.auth.signUp>
+        >['data'];
+        let signUpError: Awaited<
+          ReturnType<typeof supabase.auth.signUp>
+        >['error'];
         try {
           const result = await supabase.auth.signUp({
             email,
@@ -651,7 +664,7 @@ export function ScholarshipOnboardingWizard({
                   includeUnspecifiedApplicantCountries: next,
                   step4: {
                     ...draft.step4,
-                    countryCode: next ? '' : draft.step4.countryCode ?? '',
+                    countryCode: next ? '' : (draft.step4.countryCode ?? ''),
                     state: next ? '' : draft.step4.state
                   }
                 });
@@ -673,7 +686,9 @@ export function ScholarshipOnboardingWizard({
                   }
                 });
               }}
-              onContinue={() => handleCountryContinue(draft.step4.countryCode ?? '')}
+              onContinue={() =>
+                handleCountryContinue(draft.step4.countryCode ?? '')
+              }
             />
           ) : null}
           {step === 2 ? (

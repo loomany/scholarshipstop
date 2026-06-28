@@ -1,8 +1,13 @@
 import { randomUUID } from 'crypto';
+import { NextResponse } from 'next/server';
 
 import { sendRegistrationVerificationEmail } from '@/lib/email/sendRegistrationVerificationEmail';
 import { gpaForProfileDb } from '@/lib/constants/scholarshipGpaOptions';
 import { normalizeCountryCode } from '@/lib/scholarships/countryEligibility/countries';
+import {
+  consumeCountrySignupRateLimit,
+  getCountrySignupClientIp
+} from '@/lib/security/countrySignupRateLimit';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
 import type { Database, Json } from '@/types_db';
 import { createClient as createServerSupabaseClient } from '@/utils/supabase/server';
@@ -48,8 +53,13 @@ function nonEmptyString(value: unknown): string | undefined {
 
 const EXISTING_EMAIL_MESSAGE =
   'This email already has an account. Please sign in with that email to continue.';
+const COUNTRY_SIGNUP_SESSION_COOKIE = 'st_country_signup_session';
+const COUNTRY_SIGNUP_DISABLED_MESSAGE =
+  'For your security, continue with the standard sign-up form.';
 
-function isCreateUserDuplicateEmailError(error: { message?: string; code?: string } | null): boolean {
+function isCreateUserDuplicateEmailError(
+  error: { message?: string; code?: string } | null
+): boolean {
   const message = error?.message?.toLowerCase() ?? '';
   return (
     message.includes('already') ||
@@ -64,6 +74,15 @@ function maskEmail(email: string): string {
   if (!local || !domain) return '[invalid-email]';
   const prefix = local.slice(0, 2);
   return `${prefix}***@${domain}`;
+}
+
+function readCookie(request: Request, name: string): string | null {
+  const cookies = request.headers.get('cookie') ?? '';
+  for (const part of cookies.split(';')) {
+    const [rawName, ...rawValue] = part.trim().split('=');
+    if (rawName === name) return decodeURIComponent(rawValue.join('='));
+  }
+  return null;
 }
 
 function normalizeStudyDestinationCodes(raw: unknown): string[] | undefined {
@@ -86,7 +105,9 @@ function buildScholarshipProfileMetadata(
     typeof profile.gpa === 'number'
       ? profile.gpa
       : gpaForProfileDb(profile.gpa == null ? null : String(profile.gpa));
-  const pref = normalizeStudyDestinationCodes(profile.preferredHostCountryCodes);
+  const pref = normalizeStudyDestinationCodes(
+    profile.preferredHostCountryCodes
+  );
   return {
     firstName: nonEmptyString(profile.firstName) ?? null,
     lastName: nonEmptyString(profile.lastName) ?? null,
@@ -99,7 +120,8 @@ function buildScholarshipProfileMetadata(
     fieldOfStudy: nonEmptyString(profile.fieldOfStudy) ?? null,
     fieldOfStudyLabel: nonEmptyString(profile.fieldOfStudyLabel) ?? null,
     citizenshipStatus: nonEmptyString(profile.citizenshipStatus) ?? null,
-    citizenshipStatusLabel: nonEmptyString(profile.citizenshipStatusLabel) ?? null,
+    citizenshipStatusLabel:
+      nonEmptyString(profile.citizenshipStatusLabel) ?? null,
     countryCode: countryCode ?? null,
     stateRegion: nonEmptyString(profile.stateRegion) ?? null,
     city: null,
@@ -136,7 +158,8 @@ function buildProfilesUpsert(
   if (firstName) row.first_name = firstName;
   const lastName = nonEmptyString(profile.lastName);
   if (lastName) row.last_name = lastName;
-  const birthMonth = profile.birthMonth != null ? String(profile.birthMonth).trim() : '';
+  const birthMonth =
+    profile.birthMonth != null ? String(profile.birthMonth).trim() : '';
   if (birthMonth) row.birth_month = birthMonth;
   if (typeof profile.birthDay === 'number') row.birth_day = profile.birthDay;
   if (typeof profile.birthYear === 'number') row.birth_year = profile.birthYear;
@@ -153,7 +176,8 @@ function buildProfilesUpsert(
   const citizenshipStatus = nonEmptyString(profile.citizenshipStatus);
   if (citizenshipStatus) row.citizenship_status = citizenshipStatus;
   const citizenshipStatusLabel = nonEmptyString(profile.citizenshipStatusLabel);
-  if (citizenshipStatusLabel) row.citizenship_status_label = citizenshipStatusLabel;
+  if (citizenshipStatusLabel)
+    row.citizenship_status_label = citizenshipStatusLabel;
   const stateRegion = nonEmptyString(profile.stateRegion);
   if (stateRegion) row.state_region = stateRegion;
   const gpa =
@@ -166,7 +190,10 @@ function buildProfilesUpsert(
   }
 
   if (
-    Object.prototype.hasOwnProperty.call(profile, 'preferredHostCountryCodes') &&
+    Object.prototype.hasOwnProperty.call(
+      profile,
+      'preferredHostCountryCodes'
+    ) &&
     profile.preferredHostCountryCodes !== undefined &&
     profile.preferredHostCountryCodes !== null
   ) {
@@ -178,7 +205,9 @@ function buildProfilesUpsert(
   return row;
 }
 
-function isMissingProfileCountryCode(error: { message?: string; code?: string } | null): boolean {
+function isMissingProfileCountryCode(
+  error: { message?: string; code?: string } | null
+): boolean {
   const message = error?.message?.toLowerCase() ?? '';
   return (
     error?.code === 'PGRST204' &&
@@ -231,7 +260,10 @@ export async function POST(request: Request) {
     phaseMs[name] = Date.now() - phaseStart[name];
   };
 
-  const logResponseEnd = (status: number, details?: Record<string, unknown>) => {
+  const logResponseEnd = (
+    status: number,
+    details?: Record<string, unknown>
+  ) => {
     const country_signup_total_ms = Date.now() - requestStart;
     console.info('[country-signup] response_end', {
       reqId,
@@ -242,9 +274,37 @@ export async function POST(request: Request) {
     });
   };
 
-  const payload = (await request.json().catch(() => null)) as CountrySignupPayload | null;
+  const payload = (await request
+    .json()
+    .catch(() => null)) as CountrySignupPayload | null;
   const email = payload?.email?.trim().toLowerCase() ?? '';
   const maskedEmail = maskEmail(email);
+  const existingAnonymousSession = readCookie(
+    request,
+    COUNTRY_SIGNUP_SESSION_COOKIE
+  );
+  const anonymousSession = existingAnonymousSession || randomUUID();
+  const respond = (
+    body: Record<string, unknown>,
+    status: number,
+    retryAfter?: number
+  ) => {
+    const response = NextResponse.json(body, { status });
+    response.headers.set('Cache-Control', 'private, no-store');
+    if (retryAfter) response.headers.set('Retry-After', String(retryAfter));
+    if (!existingAnonymousSession) {
+      response.cookies.set({
+        name: COUNTRY_SIGNUP_SESSION_COOKIE,
+        value: anonymousSession,
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: process.env.NODE_ENV === 'production',
+        path: '/',
+        maxAge: 24 * 60 * 60
+      });
+    }
+    return response;
+  };
   const source = payload?.source?.trim() || 'country-signup';
   const profile = payload?.profile ?? {};
   const unspecifiedApplicant =
@@ -252,39 +312,83 @@ export async function POST(request: Request) {
     (profile.savedFiltersSnapshot &&
       typeof profile.savedFiltersSnapshot === 'object' &&
       !Array.isArray(profile.savedFiltersSnapshot) &&
-      (profile.savedFiltersSnapshot as Record<string, unknown>).includeUnspecifiedApplicantCountries ===
-        true);
+      (profile.savedFiltersSnapshot as Record<string, unknown>)
+        .includeUnspecifiedApplicantCountries === true);
   const countryCode = unspecifiedApplicant
     ? null
     : normalizeCountryCode(
         typeof payload?.countryCode === 'string' ? payload.countryCode : ''
       );
 
+  const rateLimit = consumeCountrySignupRateLimit({
+    ip: getCountrySignupClientIp(request.headers),
+    email: email || '[invalid-email]',
+    sessionId: anonymousSession
+  });
+  if (!rateLimit.allowed) {
+    console.warn('[country-signup] rate_limited', {
+      reqId,
+      emailHash: rateLimit.emailHash,
+      retryAfterSeconds: rateLimit.retryAfterSeconds
+    });
+    logResponseEnd(429, {
+      reason: 'rate_limited',
+      emailHash: rateLimit.emailHash
+    });
+    return respond(
+      { ok: false, error: 'Too many sign-up attempts. Try again later.' },
+      429,
+      rateLimit.retryAfterSeconds
+    );
+  }
+
   if (!isValidEmail(email)) {
     logResponseEnd(400, { reason: 'invalid_email' });
-    return Response.json({ ok: false, error: 'Enter a valid email address.' }, { status: 400 });
+    return respond({ ok: false, error: 'Enter a valid email address.' }, 400);
   }
   if (!countryCode && !unspecifiedApplicant) {
     logResponseEnd(400, { reason: 'invalid_country', email: maskedEmail });
-    return Response.json({ ok: false, error: 'Choose a valid country.' }, { status: 400 });
+    return respond({ ok: false, error: 'Choose a valid country.' }, 400);
+  }
+
+  const {
+    data: { user: sessionUser }
+  } = await createServerSupabaseClient().auth.getUser();
+  const isAuthenticatedOwner =
+    Boolean(sessionUser?.id) &&
+    sessionUser?.email?.trim().toLowerCase() === email;
+
+  if (
+    !isAuthenticatedOwner &&
+    process.env.COUNTRY_SIGNUP_MODE?.trim() !== 'email_verification'
+  ) {
+    logResponseEnd(503, {
+      reason: 'secure_signup_disabled',
+      emailHash: rateLimit.emailHash
+    });
+    return respond(
+      {
+        ok: false,
+        code: 'COUNTRY_SIGNUP_DISABLED',
+        error: COUNTRY_SIGNUP_DISABLED_MESSAGE,
+        signupPath: '/signin/signup'
+      },
+      503
+    );
   }
 
   const admin = createServiceRoleSupabaseClient();
   if (!admin) {
     logResponseEnd(500, { reason: 'missing_admin_client', email: maskedEmail });
-    return Response.json(
+    return respond(
       { ok: false, error: 'Server signup is not configured.' },
-      { status: 500 }
+      500
     );
   }
 
   const metadata = buildScholarshipProfileMetadata(profile, countryCode);
-  // Keep under GoTrue/bcrypt's 72-byte password ceiling; longer passwords can
-  // surface as a vague Supabase "Internal Server Error".
-  const generatedPassword = `${randomUUID()}A1!`;
   let createdNewUser = false;
   let userId: string | null = null;
-  let canUsePasswordForSession = false;
 
   console.info('[country-signup] request_start', { reqId, email: maskedEmail });
   console.info('[country-signup] before_find_user', {
@@ -300,74 +404,77 @@ export async function POST(request: Request) {
     scanned: false
   });
 
-  console.info('[country-signup] before_create_user', { reqId, email: maskedEmail });
-  beginPhase('create');
-  const { data: created, error: createError } = await admin.auth.admin.createUser({
-    email,
-    password: generatedPassword,
-    email_confirm: true,
-    user_metadata: {
-      signup_source: source,
-      scholarship_profile: JSON.stringify(metadata)
-    }
-  });
-  endPhase('create');
-  console.info('[country-signup] after_create_user', {
-    reqId,
-    created: Boolean(created.user?.id),
-    error: createError?.message ?? null
-  });
-
-  if (created.user?.id) {
-    createdNewUser = true;
-    canUsePasswordForSession = true;
-    userId = created.user.id;
-  } else if (createError) {
-    if (!isCreateUserDuplicateEmailError(createError)) {
-      console.error('[country-signup] createUser failed', {
-        reqId,
-        message: createError.message,
-        code: createError.code ?? null
+  if (isAuthenticatedOwner && sessionUser?.id) {
+    userId = sessionUser.id;
+  } else {
+    console.info('[country-signup] before_create_user', {
+      reqId,
+      email: maskedEmail
+    });
+    beginPhase('create');
+    const { data: created, error: createError } =
+      await admin.auth.admin.createUser({
+        email,
+        email_confirm: false,
+        user_metadata: {
+          signup_source: source,
+          scholarship_profile: JSON.stringify(metadata)
+        }
       });
-      const status = createError.message === 'Internal Server Error' ? 409 : 400;
-      logResponseEnd(status, { reason: 'create_user_failed', email: maskedEmail });
-      return Response.json(
-        {
-          ok: false,
-          error:
-            createError.message === 'Internal Server Error'
-              ? 'This email may already have an account. Please sign in with that email or try another email.'
-              : createError.message || 'Could not create account.'
-        },
-        { status }
-      );
-    }
-    const {
-      data: { user: sessionUser }
-    } = await createServerSupabaseClient().auth.getUser();
-    if (
-      sessionUser?.id &&
-      sessionUser.email?.trim().toLowerCase() === email
-    ) {
-      userId = sessionUser.id;
-    } else {
+    endPhase('create');
+    console.info('[country-signup] after_create_user', {
+      reqId,
+      created: Boolean(created.user?.id),
+      error: createError?.message ?? null
+    });
+
+    if (created.user?.id) {
+      createdNewUser = true;
+      userId = created.user.id;
+    } else if (createError) {
+      if (!isCreateUserDuplicateEmailError(createError)) {
+        console.error('[country-signup] createUser failed', {
+          reqId,
+          message: createError.message,
+          code: createError.code ?? null
+        });
+        const status =
+          createError.message === 'Internal Server Error' ? 409 : 400;
+        logResponseEnd(status, {
+          reason: 'create_user_failed',
+          email: maskedEmail
+        });
+        return respond(
+          {
+            ok: false,
+            error:
+              createError.message === 'Internal Server Error'
+                ? 'This email may already have an account. Please sign in with that email or try another email.'
+                : createError.message || 'Could not create account.'
+          },
+          status
+        );
+      }
       logResponseEnd(409, { reason: 'duplicate_email', email: maskedEmail });
-      return Response.json(
-        { ok: false, error: EXISTING_EMAIL_MESSAGE },
-        { status: 409 }
-      );
+      return respond({ ok: false, error: EXISTING_EMAIL_MESSAGE }, 409);
     }
   }
 
   if (!userId) {
     logResponseEnd(500, { reason: 'missing_user_id', email: maskedEmail });
-    return Response.json({ ok: false, error: 'Could not create account.' }, { status: 500 });
+    return respond({ ok: false, error: 'Could not create account.' }, 500);
   }
 
   const row = buildProfilesUpsert(userId, profile, countryCode, createdNewUser);
-  console.info('[country-signup] before_profile_upsert', { reqId, createdNewUser });
+  console.info('[country-signup] before_profile_upsert', {
+    reqId,
+    createdNewUser
+  });
   beginPhase('upsert');
-  const { error: profileError } = await upsertProfileWithSchemaFallback(admin, row);
+  const { error: profileError } = await upsertProfileWithSchemaFallback(
+    admin,
+    row
+  );
   endPhase('upsert');
   console.info('[country-signup] after_profile_upsert', {
     reqId,
@@ -380,34 +487,45 @@ export async function POST(request: Request) {
       reqId,
       message: profileError.message
     });
-    logResponseEnd(500, { reason: 'profile_upsert_failed', email: maskedEmail });
-    return Response.json(
+    logResponseEnd(500, {
+      reason: 'profile_upsert_failed',
+      email: maskedEmail
+    });
+    return respond(
       { ok: false, error: profileError.message || 'Could not save profile.' },
-      { status: 500 }
+      500
     );
   }
 
   if (createdNewUser) {
     void sendRegistrationVerificationEmail(email, userId, {
       displayName: nonEmptyString(profile.firstName) ?? null
-    }).then((emailResult) => {
-      if (!emailResult.ok) {
-        console.warn('[country-signup] verification email skipped', emailResult.skipped);
-      }
-    }).catch((error) => {
-      console.warn('[country-signup] verification email failed', error);
-    });
+    })
+      .then((emailResult) => {
+        if (!emailResult.ok) {
+          console.warn(
+            '[country-signup] verification email skipped',
+            emailResult.skipped
+          );
+        }
+      })
+      .catch((error) => {
+        console.warn('[country-signup] verification email failed', error);
+      });
   }
 
   logResponseEnd(200, {
     email: maskedEmail,
     createdNewUser
   });
-  return Response.json({
-    ok: true,
-    userId,
-    createdNewUser,
-    emailSent: createdNewUser,
-    sessionPassword: canUsePasswordForSession ? generatedPassword : null
-  });
+  return respond(
+    {
+      ok: true,
+      userId,
+      createdNewUser,
+      emailSent: createdNewUser,
+      requiresEmailVerification: createdNewUser
+    },
+    200
+  );
 }

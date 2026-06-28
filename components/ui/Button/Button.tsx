@@ -29,13 +29,14 @@ const Button = forwardRef<HTMLButtonElement, Props>((props, buttonRef) => {
     Component = 'button',
     ...rest
   } = props;
+  const isDisabled = disabled || loading;
   const ref = useRef(null);
   const rootClassName = cn(
     styles.root,
     {
       [styles.slim]: variant === 'slim',
       [styles.loading]: loading,
-      [styles.disabled]: disabled
+      [styles.disabled]: isDisabled
     },
     className
   );
@@ -45,7 +46,8 @@ const Button = forwardRef<HTMLButtonElement, Props>((props, buttonRef) => {
       data-variant={variant}
       ref={mergeRefs([ref, buttonRef])}
       className={rootClassName}
-      disabled={disabled}
+      disabled={isDisabled}
+      aria-busy={loading || undefined}
       style={{
         width,
         ...style

@@ -1,5 +1,3 @@
-import { createClient } from '@/utils/supabase/client';
-
 export type CountrySignupProfileInput = {
   firstName?: string | null;
   lastName?: string | null;
@@ -29,10 +27,13 @@ export type CountrySignupResult =
       createdNewUser: boolean;
       emailSent: boolean;
       signedIn: boolean;
+      requiresEmailVerification: boolean;
     }
   | {
       ok: false;
       error: string;
+      code?: string;
+      signupPath?: string;
     };
 
 export async function createCountryFirstScholarshipAccount(options: {
@@ -47,54 +48,35 @@ export async function createCountryFirstScholarshipAccount(options: {
     credentials: 'same-origin',
     body: JSON.stringify(options)
   });
-  const json = (await res.json().catch(() => null)) as Partial<CountrySignupResult> | null;
+  const json = (await res
+    .json()
+    .catch(() => null)) as Partial<CountrySignupResult> | null;
   if (!res.ok || !json?.ok) {
+    const failure = json as {
+      error?: string;
+      code?: string;
+      signupPath?: string;
+    } | null;
     return {
       ok: false,
       error:
-        json && 'error' in json && typeof json.error === 'string'
-          ? json.error
-          : 'Could not create your account. Try again in a moment.'
+        typeof failure?.error === 'string'
+          ? failure.error
+          : 'Could not create your account. Try again in a moment.',
+      ...(typeof failure?.code === 'string' ? { code: failure.code } : {}),
+      ...(typeof failure?.signupPath === 'string'
+        ? { signupPath: failure.signupPath }
+        : {})
     };
   }
-  const success = json as Extract<
-    CountrySignupResult,
-    { ok: true }
-  > & { sessionPassword?: string | null };
-
-  let signedIn = false;
-  if (success.sessionPassword) {
-    const supabase = createClient();
-    const { error } = await supabase.auth.signInWithPassword({
-      email: options.email.trim().toLowerCase(),
-      password: success.sessionPassword
-    });
-    if (!error) {
-      signedIn = true;
-    } else {
-      console.warn('[country-signup] automatic sign-in failed', error.message);
-    }
-  } else if (!success.createdNewUser) {
-    const supabase = createClient();
-    const {
-      data: { session }
-    } = await supabase.auth.getSession();
-    if (session?.user.id === success.userId) {
-      signedIn = true;
-    } else {
-      return {
-        ok: false,
-        error:
-          'This email already has an account. Please sign in with that email to continue.'
-      };
-    }
-  }
+  const success = json as Extract<CountrySignupResult, { ok: true }>;
 
   return {
     ok: true,
     userId: success.userId,
     createdNewUser: success.createdNewUser,
     emailSent: success.emailSent,
-    signedIn
+    signedIn: false,
+    requiresEmailVerification: success.requiresEmailVerification === true
   };
 }
