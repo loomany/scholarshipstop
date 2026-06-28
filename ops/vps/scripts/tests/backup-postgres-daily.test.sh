@@ -13,18 +13,11 @@ make_fake_tools() {
   cat > "${dir}/pg_dump" <<'SH'
 #!/usr/bin/env bash
 set -euo pipefail
-out=''
-for arg in "$@"; do
-  case "${arg}" in
-    --file=*) out="${arg#--file=}" ;;
-  esac
-done
-[[ -n "${out}" ]]
 case "${FAKE_DUMP_MODE:-ok}" in
   fail) exit 23 ;;
-  empty) : > "${out}" ;;
-  invalid) printf 'invalid-dump\n' > "${out}" ;;
-  ok) printf 'valid-custom-dump-fixture\n' > "${out}" ;;
+  empty) : ;;
+  invalid) printf 'invalid-dump\n' ;;
+  ok) printf 'valid-custom-dump-fixture\n' ;;
   *) exit 24 ;;
 esac
 SH

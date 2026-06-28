@@ -59,8 +59,8 @@ run_pg_dump \
   --format=custom \
   --no-owner \
   --no-acl \
-  --file="${TMP}" \
-  --dbname="${POSTGRES_DB}"
+  --dbname="${POSTGRES_DB}" \
+  > "${TMP}"
 
 if [[ ! -s "${TMP}" ]]; then
   echo "[pg-backup] ERROR: pg_dump produced an empty artifact" >&2
