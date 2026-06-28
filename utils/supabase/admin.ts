@@ -88,7 +88,8 @@ const deletePriceRecord = async (price: Stripe.Price) => {
     .from('prices')
     .delete()
     .eq('id', price.id);
-  if (deletionError) throw new Error(`Price deletion failed: ${deletionError.message}`);
+  if (deletionError)
+    throw new Error(`Price deletion failed: ${deletionError.message}`);
   console.log(`Price deleted: ${price.id}`);
 };
 
@@ -98,7 +99,9 @@ const upsertCustomerToSupabase = async (uuid: string, customerId: string) => {
     .upsert([{ id: uuid, stripe_customer_id: customerId }]);
 
   if (upsertError)
-    throw new Error(`Supabase customer record creation failed: ${upsertError.message}`);
+    throw new Error(
+      `Supabase customer record creation failed: ${upsertError.message}`
+    );
 
   return customerId;
 };
@@ -189,7 +192,6 @@ const createOrRetrieveCustomer = async ({
  * Copies the billing details from the payment method to the customer object.
  */
 const copyBillingDetailsToCustomer = async (
-  uuid: string,
   payment_method: Stripe.PaymentMethod
 ) => {
   //Todo: check this assertion
@@ -198,14 +200,6 @@ const copyBillingDetailsToCustomer = async (
   if (!name || !phone || !address) return;
   //@ts-ignore
   await stripe.customers.update(customer, { name, phone, address });
-  const { error: updateError } = await supabaseAdmin
-    .from('users')
-    .update({
-      billing_address: { ...address },
-      payment_method: { ...payment_method[payment_method.type] }
-    })
-    .eq('id', uuid);
-  if (updateError) throw new Error(`Customer update failed: ${updateError.message}`);
 };
 
 const manageSubscriptionStatusChange = async (
@@ -271,8 +265,7 @@ const manageSubscriptionStatusChange = async (
       : null,
     trial_end: subscription.trial_end
       ? toDateTime(subscription.trial_end).toISOString()
-      : null
-    ,
+      : null,
     renews_at: toDateTime(subscription.current_period_end).toISOString(),
     test_mode: false
   };
@@ -281,7 +274,9 @@ const manageSubscriptionStatusChange = async (
     .from('subscriptions')
     .upsert([subscriptionData]);
   if (upsertError)
-    throw new Error(`Subscription insert/update failed: ${upsertError.message}`);
+    throw new Error(
+      `Subscription insert/update failed: ${upsertError.message}`
+    );
   console.log(
     `Inserted/updated subscription [${subscription.id}] for user [${uuid}]`
   );
@@ -300,7 +295,13 @@ const manageSubscriptionStatusChange = async (
   const { error: profileUpsertError } = await supabaseAdmin
     .from('profiles')
     .upsert(
-      [{ id: uuid, is_subscribed: isSubscribed, subscription_plan: subscriptionPlan }],
+      [
+        {
+          id: uuid,
+          is_subscribed: isSubscribed,
+          subscription_plan: subscriptionPlan
+        }
+      ],
       { onConflict: 'id' }
     );
   if (profileUpsertError) {
@@ -308,14 +309,15 @@ const manageSubscriptionStatusChange = async (
       `Profile subscription status update failed: ${profileUpsertError.message}`
     );
   }
-  console.log(`Updated profile subscription status for user [${uuid}]: ${isSubscribed}`);
+  console.log(
+    `Updated profile subscription status for user [${uuid}]: ${isSubscribed}`
+  );
 
   // For a new subscription copy the billing details to the customer object.
   // NOTE: This is a costly operation and should happen at the very end.
   if (createAction && subscription.default_payment_method && uuid)
     //@ts-ignore
     await copyBillingDetailsToCustomer(
-      uuid,
       subscription.default_payment_method as Stripe.PaymentMethod
     );
 };
