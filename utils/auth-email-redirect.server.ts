@@ -10,6 +10,16 @@ const SITE_ORIGIN_FALLBACK = 'https://scholarshiptop.com';
  * here if the request is localhost.
  */
 export function getServerAuthSiteOrigin(): string {
+  if (process.env.NODE_ENV === 'production') {
+    const configured =
+      process.env.NEXT_PUBLIC_SITE_URL?.trim() || process.env.SITE_URL?.trim();
+    if (configured) {
+      const origin = normalizeSiteOrigin(configured);
+      if (!isLocalDevelopmentOrigin(origin)) return origin;
+    }
+    return SITE_ORIGIN_FALLBACK;
+  }
+
   const h = headers();
   const rawHost = (h.get('x-forwarded-host') ?? h.get('host') ?? '')
     .split(',')[0]
@@ -42,12 +52,6 @@ export function getServerAuthSiteOrigin(): string {
   if (site) {
     const s = site.replace(/\/+$/, '');
     const normalized = s.startsWith('http') ? s : `https://${s}`;
-    if (
-      process.env.NODE_ENV === 'production' &&
-      /localhost|127\.0\.0\.1|\[::1\]/i.test(normalized)
-    ) {
-      return SITE_ORIGIN_FALLBACK;
-    }
     return normalized;
   }
 

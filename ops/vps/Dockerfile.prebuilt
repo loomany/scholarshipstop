@@ -4,14 +4,14 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=3000
 RUN addgroup --system --gid 1001 nodejs && adduser --system --uid 1001 nextjs
-COPY app/package.json app/package-lock.json ./
-COPY app/node_modules ./node_modules
-COPY app/public ./public
-COPY app/.next ./.next
+COPY --chown=nextjs:nodejs app/package.json app/package-lock.json ./
+COPY --chown=nextjs:nodejs app/node_modules ./node_modules
+COPY --chown=nextjs:nodejs app/public ./public
+COPY --chown=nextjs:nodejs app/.next ./.next
 # Runtime SEO bundles (read via fs at request time — not bundled into .next)
-COPY app/data/long-tail-seo ./data/long-tail-seo
-COPY app/data/seo-scholarship-content ./data/seo-scholarship-content
-COPY app/data/seo-pending-queue.json ./data/seo-pending-queue.json
+COPY --chown=nextjs:nodejs app/data/long-tail-seo ./data/long-tail-seo
+COPY --chown=nextjs:nodejs app/data/seo-scholarship-content ./data/seo-scholarship-content
+COPY --chown=nextjs:nodejs app/data/seo-pending-queue.json ./data/seo-pending-queue.json
 USER nextjs
 EXPOSE 3000
 CMD ["npm", "start"]

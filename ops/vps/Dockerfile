@@ -23,14 +23,14 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=3000
 RUN addgroup --system --gid 1001 nodejs && adduser --system --uid 1001 nextjs
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/.next ./.next
+COPY --chown=nextjs:nodejs --from=builder /app/public ./public
+COPY --chown=nextjs:nodejs --from=builder /app/package.json ./package.json
+COPY --chown=nextjs:nodejs --from=builder /app/node_modules ./node_modules
+COPY --chown=nextjs:nodejs --from=builder /app/.next ./.next
 # Runtime SEO bundles (read via fs at request time — not bundled into .next)
-COPY --from=builder /app/data/long-tail-seo ./data/long-tail-seo
-COPY --from=builder /app/data/seo-scholarship-content ./data/seo-scholarship-content
-COPY --from=builder /app/data/seo-pending-queue.json ./data/seo-pending-queue.json
+COPY --chown=nextjs:nodejs --from=builder /app/data/long-tail-seo ./data/long-tail-seo
+COPY --chown=nextjs:nodejs --from=builder /app/data/seo-scholarship-content ./data/seo-scholarship-content
+COPY --chown=nextjs:nodejs --from=builder /app/data/seo-pending-queue.json ./data/seo-pending-queue.json
 USER nextjs
 EXPOSE 3000
 CMD ["npm", "start"]

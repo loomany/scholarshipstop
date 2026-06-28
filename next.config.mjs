@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  poweredByHeader: false,
   experimental: {
     instrumentationHook: true
   },
@@ -37,6 +38,8 @@ const nextConfig = {
   },
   async redirects() {
     return [
+      { source: '/login', destination: '/signin', permanent: true },
+      { source: '/register', destination: '/signin/signup', permanent: true },
       { source: '/home', destination: '/', permanent: true },
       { source: '/home/', destination: '/', permanent: true },
 
