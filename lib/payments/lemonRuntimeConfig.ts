@@ -11,6 +11,11 @@ export type LemonCheckoutConfig = {
   webhookSecret: string;
 };
 
+export type LemonIqCheckoutConfig = LemonCheckoutConfig & {
+  expectedTotal: number;
+  currency: string;
+};
+
 export type LemonConfigResult =
   | { ok: true; config: LemonCheckoutConfig }
   | {
@@ -116,6 +121,74 @@ export function resolveLemonWebhookConfig(
       ? env.LEMON_WEBHOOK_SECRET_LIVE?.trim()
       : env.LEMON_WEBHOOK_SECRET_TEST?.trim();
   return secret ? { ok: true, mode, secret } : { ok: false };
+}
+
+export function resolveLemonIqCheckoutConfig(
+  env: LemonEnv = process.env,
+  nodeEnv = process.env.NODE_ENV
+):
+  | { ok: true; config: LemonIqCheckoutConfig }
+  | {
+      ok: false;
+      reason:
+        | 'disabled'
+        | 'test_mode_in_production'
+        | 'missing_api_config'
+        | 'missing_iq_variant'
+        | 'invalid_iq_variant'
+        | 'live_test_collision'
+        | 'missing_webhook_secret'
+        | 'invalid_expected_total'
+        | 'invalid_currency';
+    } {
+  const mode = readMode(env);
+  if (!mode) return { ok: false, reason: 'disabled' };
+  if (nodeEnv === 'production' && mode !== 'live') {
+    return { ok: false, reason: 'test_mode_in_production' };
+  }
+
+  const apiKey = env.LEMONSQUEEZY_API_KEY?.trim() ?? '';
+  const storeId = env.LEMONSQUEEZY_STORE_ID?.trim() ?? '';
+  if (!apiKey || !storeId) return { ok: false, reason: 'missing_api_config' };
+
+  const liveVariant = env.LEMON_IQ_VARIANT_LIVE?.trim() ?? '';
+  const testVariant = env.LEMON_IQ_VARIANT_TEST?.trim() ?? '';
+  const variantId = mode === 'live' ? liveVariant : testVariant;
+  if (!variantId) return { ok: false, reason: 'missing_iq_variant' };
+  if (!/^\d+$/.test(variantId))
+    return { ok: false, reason: 'invalid_iq_variant' };
+  if (liveVariant && testVariant && liveVariant === testVariant) {
+    return { ok: false, reason: 'live_test_collision' };
+  }
+
+  const webhook = resolveLemonWebhookConfig(env, nodeEnv);
+  if (!webhook.ok) return { ok: false, reason: 'missing_webhook_secret' };
+
+  const expectedTotalRaw = env.LEMON_IQ_EXPECTED_TOTAL_MINOR?.trim() ?? '';
+  if (!/^\d+$/.test(expectedTotalRaw)) {
+    return { ok: false, reason: 'invalid_expected_total' };
+  }
+  const expectedTotal = Number(expectedTotalRaw);
+  if (!Number.isSafeInteger(expectedTotal) || expectedTotal <= 0) {
+    return { ok: false, reason: 'invalid_expected_total' };
+  }
+  const currency = env.LEMON_IQ_CURRENCY?.trim().toUpperCase() ?? '';
+  if (!/^[A-Z]{3}$/.test(currency)) {
+    return { ok: false, reason: 'invalid_currency' };
+  }
+
+  return {
+    ok: true,
+    config: {
+      mode,
+      apiKey,
+      storeId,
+      variantId,
+      webhookSecret: webhook.secret,
+      expectedTotal,
+      currency
+    }
+  };
 }
 
 export async function validateLemonVariantMode(

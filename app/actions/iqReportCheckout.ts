@@ -8,15 +8,15 @@ import {
   normalizeIqReportEmail
 } from '@/lib/iqReportOrders';
 import { notifyTelegramStandaloneIqEmailCaptured } from '@/lib/telegram/bot';
+import {
+  resolveLemonIqCheckoutConfig,
+  SECURE_CHECKOUT_UNAVAILABLE_MESSAGE,
+  validateLemonVariantMode
+} from '@/lib/payments/lemonRuntimeConfig';
 
 type IqReportCheckoutResult =
   | { ok: true; url: string }
   | { ok: false; error: string };
-
-const IQ_REPORT_VARIANT_ID =
-  process.env.LEMONSQUEEZY_IQ_REPORT_VARIANT_ID?.trim() ||
-  process.env.NEXT_PUBLIC_LS_IQ_REPORT_VARIANT_ID?.trim() ||
-  '1566269';
 
 export async function notifyIqReportEmailCaptured({
   email,
@@ -60,35 +60,48 @@ export async function getIqReportCheckoutURL({
     return { ok: false, error: 'Enter a valid email address.' };
   }
 
+  const resolved = resolveLemonIqCheckoutConfig();
+  if (!resolved.ok) {
+    console.warn('[iq-report-checkout] disabled by config guard', {
+      reason: resolved.reason
+    });
+    return { ok: false, error: SECURE_CHECKOUT_UNAVAILABLE_MESSAGE };
+  }
+  try {
+    const providerVariant = await validateLemonVariantMode(resolved.config);
+    if (!providerVariant.ok) {
+      console.warn('[iq-report-checkout] variant rejected', {
+        reason: providerVariant.reason
+      });
+      return { ok: false, error: SECURE_CHECKOUT_UNAVAILABLE_MESSAGE };
+    }
+  } catch {
+    return { ok: false, error: SECURE_CHECKOUT_UNAVAILABLE_MESSAGE };
+  }
+
+  const { apiKey, storeId, variantId } = resolved.config;
+
   const accessToken = createIqReportAccessToken();
-  const { data: reportOrder, error: insertError } = await getIqReportAdminClient()
-    .from('iq_report_orders')
-    .insert({
-      access_token: accessToken,
-      email: normalizedEmail,
-      assessment_result: result,
-      status: 'pending'
-    })
-    .select('id')
-    .single();
+  const { data: reportOrder, error: insertError } =
+    await getIqReportAdminClient()
+      .from('iq_report_orders')
+      .insert({
+        access_token: accessToken,
+        email: normalizedEmail,
+        assessment_result: result,
+        status: 'pending'
+      })
+      .select('id')
+      .single();
 
   if (insertError || !reportOrder?.id) {
-    console.error('[iq-report-checkout] failed to save report order', insertError);
+    console.error(
+      '[iq-report-checkout] failed to save report order',
+      insertError
+    );
     return {
       ok: false,
       error: 'Could not prepare your report checkout. Please try again.'
-    };
-  }
-
-  const apiKey = process.env.LEMONSQUEEZY_API_KEY?.trim();
-  const storeId = process.env.LEMONSQUEEZY_STORE_ID?.trim();
-  const variantId = IQ_REPORT_VARIANT_ID;
-
-  if (!apiKey || !storeId || !variantId) {
-    return {
-      ok: false,
-      error:
-        'IQ report checkout is not configured. Add LEMONSQUEEZY_API_KEY, LEMONSQUEEZY_STORE_ID, and LEMONSQUEEZY_IQ_REPORT_VARIANT_ID.'
     };
   }
 

@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from '@/types_db';
 import {
@@ -32,7 +33,11 @@ import {
   shouldSendLemonAdminPaymentEmail
 } from '@/lib/email/sendLemonAdminPaymentEmail';
 import { getIqReportAdminClient, getIqReportUrl } from '@/lib/iqReportOrders';
-import { resolveLemonWebhookConfig } from '@/lib/payments/lemonRuntimeConfig';
+import {
+  resolveLemonIqCheckoutConfig,
+  resolveLemonWebhookConfig
+} from '@/lib/payments/lemonRuntimeConfig';
+import { validateIqOrderCreatedPayload } from '@/lib/payments/lemonIqOrderValidation';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -94,15 +99,6 @@ function getLemonAttributes(payload: LemonWebhookPayload) {
   return payload.data?.attributes ?? payload.attributes;
 }
 
-function getIqReportIdFromPayload(payload: LemonWebhookPayload): string | null {
-  const value =
-    payload.meta?.custom_data?.iq_report_id ??
-    payload.data?.attributes?.custom_data?.iq_report_id ??
-    payload.attributes?.custom_data?.iq_report_id ??
-    null;
-  return typeof value === 'string' && value.trim() ? value.trim() : null;
-}
-
 function getCheckoutEmailFromPayload(
   payload: LemonWebhookPayload
 ): string | null {
@@ -149,28 +145,86 @@ async function notifyAdminLemonPaymentEmail(options: {
   }
 }
 
-async function handleIqReportOrderCreated(payload: LemonWebhookPayload) {
+type ProviderWebhookRpcClient = {
+  rpc(
+    name: string,
+    params: Record<string, string | null>
+  ): Promise<{ data: unknown; error: { message?: string } | null }>;
+};
+
+function getProviderWebhookRpcClient(): ProviderWebhookRpcClient {
+  return getIqReportAdminClient() as unknown as ProviderWebhookRpcClient;
+}
+
+async function completeProviderWebhookEvent(options: {
+  eventKey: string;
+  status: 'processed' | 'failed';
+  error?: string;
+}) {
+  const { error } = await getProviderWebhookRpcClient().rpc(
+    'complete_provider_webhook_event',
+    {
+      p_provider: 'lemon_squeezy',
+      p_event_key: options.eventKey,
+      p_status: options.status,
+      p_last_error: options.error ?? null
+    }
+  );
+  if (error) {
+    console.error('[lemon:webhook] provider event completion failed', {
+      eventKey: options.eventKey,
+      status: options.status,
+      message: error.message
+    });
+    return false;
+  }
+  return true;
+}
+
+async function handleIqReportOrderCreated(
+  payload: LemonWebhookPayload,
+  payloadHash: string
+) {
   if (payload.meta?.event_name !== 'order_created') return null;
 
-  const reportId = getIqReportIdFromPayload(payload);
-  if (!reportId) {
-    console.warn('[lemon:webhook] order_created without iq_report_id', {
-      dataId: payload.data?.id ?? null,
-      customData:
-        payload.meta?.custom_data ??
-        payload.data?.attributes?.custom_data ??
-        null
+  const resolved = resolveLemonIqCheckoutConfig();
+  if (!resolved.ok) {
+    console.error('[lemon:webhook] IQ order validation is not configured', {
+      reason: resolved.reason
     });
-    return null;
+    return new Response('IQ order validation is unavailable.', { status: 503 });
   }
 
-  const attrs = getLemonAttributes(payload);
-  const orderId =
-    attrs?.order_id != null
-      ? String(attrs.order_id)
-      : payload.data?.id != null
-        ? String(payload.data.id)
-        : null;
+  const validated = validateIqOrderCreatedPayload(payload, resolved.config);
+  if (!validated.ok) {
+    console.warn('[lemon:webhook] IQ order payload rejected', {
+      reason: validated.reason
+    });
+    return new Response('Invalid IQ order payload.', { status: 400 });
+  }
+
+  const { orderId, reportId } = validated.order;
+  const eventKey = `order_created:${orderId}`;
+  const { data: claimed, error: claimError } =
+    await getProviderWebhookRpcClient().rpc('claim_provider_webhook_event', {
+      p_provider: 'lemon_squeezy',
+      p_event_key: eventKey,
+      p_event_name: 'order_created',
+      p_payload_hash: payloadHash
+    });
+
+  if (claimError) {
+    console.error('[lemon:webhook] IQ order claim failed', {
+      eventKey,
+      message: claimError.message
+    });
+    return new Response('Could not claim IQ order event.', { status: 500 });
+  }
+  if (claimed !== true) {
+    return new Response(JSON.stringify({ received: true, duplicate: true }), {
+      status: 200
+    });
+  }
 
   const paidAt = new Date().toISOString();
   const { data: order, error } = await getIqReportAdminClient()
@@ -184,13 +238,41 @@ async function handleIqReportOrderCreated(payload: LemonWebhookPayload) {
       updated_at: paidAt
     })
     .eq('id', reportId)
+    .eq('status', 'pending')
     .select('*')
     .maybeSingle();
 
   if (error || !order) {
+    if (!error) {
+      const { data: existingOrder } = await getIqReportAdminClient()
+        .from('iq_report_orders')
+        .select('status, lemon_order_id')
+        .eq('id', reportId)
+        .maybeSingle();
+      if (
+        existingOrder &&
+        existingOrder.lemon_order_id === orderId &&
+        (existingOrder.status === 'paid' ||
+          existingOrder.status === 'email_sent')
+      ) {
+        const completed = await completeProviderWebhookEvent({
+          eventKey,
+          status: 'processed'
+        });
+        return new Response(
+          JSON.stringify({ received: true, duplicate: true }),
+          { status: completed ? 200 : 500 }
+        );
+      }
+    }
     console.error('[lemon:webhook] iq report order update failed', {
       reportId,
       message: error?.message
+    });
+    await completeProviderWebhookEvent({
+      eventKey,
+      status: 'failed',
+      error: error ? 'database_update_failed' : 'order_not_pending'
     });
     return new Response('Error updating IQ report order.', { status: 500 });
   }
@@ -253,6 +335,14 @@ async function handleIqReportOrderCreated(payload: LemonWebhookPayload) {
     skipped: emailResult.skipped
   });
 
+  const completed = await completeProviderWebhookEvent({
+    eventKey,
+    status: 'processed'
+  });
+  if (!completed) {
+    return new Response('Could not complete IQ order event.', { status: 500 });
+  }
+
   return new Response(
     JSON.stringify({
       received: true,
@@ -273,6 +363,7 @@ export async function POST(req: Request) {
   const rawBodyBuffer = await req.arrayBuffer();
   const rawBodyBytes = new Uint8Array(rawBodyBuffer);
   const bodyText = new TextDecoder().decode(rawBodyBytes);
+  const payloadHash = createHash('sha256').update(rawBodyBytes).digest('hex');
   const signature = req.headers.get('x-signature');
   const secretCandidates = lemonWebhookSecretCandidates();
   let payload: LemonWebhookPayload;
@@ -337,7 +428,10 @@ export async function POST(req: Request) {
       payload = enriched;
     }
 
-    const iqReportResponse = await handleIqReportOrderCreated(payload);
+    const iqReportResponse = await handleIqReportOrderCreated(
+      payload,
+      payloadHash
+    );
     if (iqReportResponse) return iqReportResponse;
 
     const decision = decideSubscriptionUpdate(payload);

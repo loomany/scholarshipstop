@@ -4,6 +4,7 @@ import test from 'node:test';
 import {
   parseBillingPlanKey,
   resolveLemonCheckoutConfig,
+  resolveLemonIqCheckoutConfig,
   resolveLemonWebhookConfig,
   validateLemonVariantMode
 } from '@/lib/payments/lemonRuntimeConfig';
@@ -20,7 +21,11 @@ function liveEnv(): Record<string, string> {
     LEMON_VARIANT_QUARTERLY_TEST: '202',
     LEMON_VARIANT_YEARLY_TEST: '203',
     LEMON_WEBHOOK_SECRET_LIVE: 'live-secret',
-    LEMON_WEBHOOK_SECRET_TEST: 'test-secret'
+    LEMON_WEBHOOK_SECRET_TEST: 'test-secret',
+    LEMON_IQ_VARIANT_LIVE: '301',
+    LEMON_IQ_VARIANT_TEST: '401',
+    LEMON_IQ_EXPECTED_TOTAL_MINOR: '2500',
+    LEMON_IQ_CURRENCY: 'usd'
   };
 }
 
@@ -69,6 +74,39 @@ test('webhook config rejects test mode in production', () => {
     ),
     { ok: false }
   );
+});
+
+test('IQ checkout requires an explicit variant, amount and currency', () => {
+  const resolved = resolveLemonIqCheckoutConfig(liveEnv(), 'production');
+  assert.equal(resolved.ok, true);
+  if (resolved.ok) {
+    assert.equal(resolved.config.variantId, '301');
+    assert.equal(resolved.config.expectedTotal, 2500);
+    assert.equal(resolved.config.currency, 'USD');
+  }
+
+  const missingVariant = liveEnv();
+  delete missingVariant.LEMON_IQ_VARIANT_LIVE;
+  assert.deepEqual(resolveLemonIqCheckoutConfig(missingVariant, 'production'), {
+    ok: false,
+    reason: 'missing_iq_variant'
+  });
+});
+
+test('IQ checkout rejects ambiguous totals and live/test collisions', () => {
+  const ambiguousTotal = liveEnv();
+  ambiguousTotal.LEMON_IQ_EXPECTED_TOTAL_MINOR = '2500usd';
+  assert.deepEqual(resolveLemonIqCheckoutConfig(ambiguousTotal, 'production'), {
+    ok: false,
+    reason: 'invalid_expected_total'
+  });
+
+  const collision = liveEnv();
+  collision.LEMON_IQ_VARIANT_TEST = collision.LEMON_IQ_VARIANT_LIVE;
+  assert.deepEqual(resolveLemonIqCheckoutConfig(collision, 'production'), {
+    ok: false,
+    reason: 'live_test_collision'
+  });
 });
 
 test('provider variant validation rejects a test-mode live variant', async () => {

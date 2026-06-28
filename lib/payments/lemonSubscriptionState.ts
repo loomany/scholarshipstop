@@ -37,6 +37,9 @@ export type LemonWebhookPayload = {
       created_at?: string | null;
       updated_at?: string | null;
       test_mode?: boolean;
+      total?: number;
+      currency?: string;
+      first_order_item?: { variant_id?: number } | null;
       first_subscription_item?: {
         id?: number;
         price_id?: number;
@@ -76,6 +79,9 @@ export type LemonWebhookPayload = {
     created_at?: string | null;
     updated_at?: string | null;
     test_mode?: boolean;
+    total?: number;
+    currency?: string;
+    first_order_item?: { variant_id?: number } | null;
     first_subscription_item?: {
       id?: number;
       price_id?: number;
@@ -158,8 +164,13 @@ function isOrderPayload(payload: LemonWebhookPayload): boolean {
   return (payload.data as { type?: string } | undefined)?.type === 'orders';
 }
 
-export function isSubscriptionInvoicePayload(payload: LemonWebhookPayload): boolean {
-  return (payload.data as { type?: string } | undefined)?.type === 'subscription-invoices';
+export function isSubscriptionInvoicePayload(
+  payload: LemonWebhookPayload
+): boolean {
+  return (
+    (payload.data as { type?: string } | undefined)?.type ===
+    'subscription-invoices'
+  );
 }
 
 export function toSubscribedFromLemonStatus(status?: string): boolean {
@@ -177,7 +188,7 @@ function toSubscribedFromLemonAttributes(
   const status = normalizedStatus ?? normalizeLemonStatus(attributes?.status);
   const accessEnd =
     status === 'cancelled' || status === 'canceled'
-      ? attributes?.renews_at ?? attributes?.ends_at
+      ? (attributes?.renews_at ?? attributes?.ends_at)
       : attributes?.ends_at;
 
   return hasSubscriptionAccess({
@@ -229,9 +240,9 @@ export function normalizeLemonEventName(eventName?: string) {
 
 function normalizeLemonStatus(status?: string) {
   const normalized = normalizeSubscriptionStatus(status);
-  return (normalized === 'inactive'
-    ? 'expired'
-    : normalized) as Database['public']['Enums']['subscription_status'];
+  return (
+    normalized === 'inactive' ? 'expired' : normalized
+  ) as Database['public']['Enums']['subscription_status'];
 }
 
 function eventOverrideStatus(
@@ -258,7 +269,10 @@ function eventOverrideStatus(
       return 'past_due';
     case 'subscription_created': {
       const payloadNormalized = normalizeLemonStatus(payloadStatus);
-      if (payloadNormalized === 'trialing' || payloadNormalized === 'on_trial') {
+      if (
+        payloadNormalized === 'trialing' ||
+        payloadNormalized === 'on_trial'
+      ) {
         return 'trialing';
       }
       return 'active';
@@ -272,7 +286,10 @@ function resolveEffectiveStatus(
   eventName: string,
   attributes: LemonAttributes
 ): Database['public']['Enums']['subscription_status'] {
-  return eventOverrideStatus(eventName, attributes?.status) ?? normalizeLemonStatus(attributes?.status);
+  return (
+    eventOverrideStatus(eventName, attributes?.status) ??
+    normalizeLemonStatus(attributes?.status)
+  );
 }
 
 function derivePlanCode(
@@ -287,7 +304,8 @@ function derivePlanCode(
     return 'free';
   }
 
-  const planText = `${attributes?.product_name ?? ''} ${attributes?.variant_name ?? ''}`.toLowerCase();
+  const planText =
+    `${attributes?.product_name ?? ''} ${attributes?.variant_name ?? ''}`.toLowerCase();
   if (planText.includes('year')) return 'yearly_pro';
   if (planText.includes('quarter')) return 'quarterly_pro';
   if (planText.includes('month')) return 'monthly_pro';
@@ -317,7 +335,11 @@ export function resolveLemonSubscriptionRecordId(
       return String(sid);
     }
   }
-  return String(payload.data?.id ?? (payload as { id?: string }).id ?? `${userId}:${eventName}`);
+  return String(
+    payload.data?.id ??
+      (payload as { id?: string }).id ??
+      `${userId}:${eventName}`
+  );
 }
 
 /**
@@ -331,18 +353,24 @@ export function mergeSubscriptionPaymentFailedInvoiceUpsert(
   return {
     ...existing,
     ...incoming,
-    provider_customer_id: incoming.provider_customer_id ?? existing.provider_customer_id,
+    provider_customer_id:
+      incoming.provider_customer_id ?? existing.provider_customer_id,
     provider_order_id: incoming.provider_order_id ?? existing.provider_order_id,
-    provider_product_id: incoming.provider_product_id ?? existing.provider_product_id,
-    provider_variant_id: incoming.provider_variant_id ?? existing.provider_variant_id,
-    provider_product_name: incoming.provider_product_name ?? existing.provider_product_name,
-    provider_variant_name: incoming.provider_variant_name ?? existing.provider_variant_name,
+    provider_product_id:
+      incoming.provider_product_id ?? existing.provider_product_id,
+    provider_variant_id:
+      incoming.provider_variant_id ?? existing.provider_variant_id,
+    provider_product_name:
+      incoming.provider_product_name ?? existing.provider_product_name,
+    provider_variant_name:
+      incoming.provider_variant_name ?? existing.provider_variant_name,
     price_id: incoming.price_id ?? existing.price_id,
     quantity: incoming.quantity ?? existing.quantity,
     plan_code: incoming.plan_code ?? existing.plan_code,
     created: existing.created,
     current_period_start: existing.current_period_start,
-    current_period_end: existing.current_period_end ?? incoming.current_period_end,
+    current_period_end:
+      existing.current_period_end ?? incoming.current_period_end,
     trial_start: existing.trial_start,
     trial_end: existing.trial_end ?? incoming.trial_end,
     renews_at: existing.renews_at ?? incoming.renews_at,
@@ -368,7 +396,11 @@ function buildSubscriptionUpsert(
   const attributes = getLemonAttributes(payload);
   const normalizedStatus = resolveEffectiveStatus(eventName, attributes);
   const nowIso = new Date().toISOString();
-  const subscriptionId = resolveLemonSubscriptionRecordId(payload, userId, eventName);
+  const subscriptionId = resolveLemonSubscriptionRecordId(
+    payload,
+    userId,
+    eventName
+  );
   const planCode = derivePlanCode(attributes, normalizedStatus);
   const lemonPriceId =
     attributes?.first_subscription_item?.price_id != null
@@ -390,13 +422,17 @@ function buildSubscriptionUpsert(
     orderId: attributes?.order_id
   });
   const currentPeriodEnd =
-    attributes?.renews_at ?? attributes?.trial_ends_at ?? attributes?.ends_at ?? nowIso;
-  const cancelledAccessEnd = attributes?.renews_at ?? attributes?.ends_at ?? currentPeriodEnd;
+    attributes?.renews_at ??
+    attributes?.trial_ends_at ??
+    attributes?.ends_at ??
+    nowIso;
+  const cancelledAccessEnd =
+    attributes?.renews_at ?? attributes?.ends_at ?? currentPeriodEnd;
   const endedAt =
     normalizedStatus === 'cancelled' || normalizedStatus === 'canceled'
       ? cancelledAccessEnd
       : normalizedStatus === 'expired'
-        ? attributes?.ends_at ?? attributes?.renews_at ?? nowIso
+        ? (attributes?.ends_at ?? attributes?.renews_at ?? nowIso)
         : null;
   const cancelAt =
     normalizedStatus === 'cancelled' || normalizedStatus === 'canceled'
@@ -404,12 +440,10 @@ function buildSubscriptionUpsert(
       : null;
   const canceledAt =
     normalizedStatus === 'cancelled' || normalizedStatus === 'canceled'
-      ? attributes?.updated_at ?? nowIso
+      ? (attributes?.updated_at ?? nowIso)
       : null;
   const trialStart =
-    normalizedStatus === 'trialing'
-      ? attributes?.created_at ?? nowIso
-      : null;
+    normalizedStatus === 'trialing' ? (attributes?.created_at ?? nowIso) : null;
 
   return {
     id: subscriptionId,
@@ -417,7 +451,8 @@ function buildSubscriptionUpsert(
     provider: 'lemon_squeezy',
     provider_customer_id:
       attributes?.customer_id != null ? String(attributes.customer_id) : null,
-    provider_order_id: attributes?.order_id != null ? String(attributes.order_id) : null,
+    provider_order_id:
+      attributes?.order_id != null ? String(attributes.order_id) : null,
     provider_product_id:
       attributes?.product_id != null ? String(attributes.product_id) : null,
     provider_variant_id:
@@ -442,7 +477,8 @@ function buildSubscriptionUpsert(
         ? true
         : Boolean(attributes?.cancelled),
     created: attributes?.created_at ?? nowIso,
-    current_period_start: attributes?.updated_at ?? attributes?.created_at ?? nowIso,
+    current_period_start:
+      attributes?.updated_at ?? attributes?.created_at ?? nowIso,
     current_period_end: currentPeriodEnd,
     ended_at: endedAt,
     cancel_at: cancelAt,
@@ -478,7 +514,10 @@ export function decideSubscriptionUpdate(
   const userId = resolveUserId(payload);
   const attributes = getLemonAttributes(payload);
   const normalizedStatus = resolveEffectiveStatus(eventName, attributes);
-  const isSubscribed = toSubscribedFromLemonAttributes(attributes, normalizedStatus);
+  const isSubscribed = toSubscribedFromLemonAttributes(
+    attributes,
+    normalizedStatus
+  );
   const subscriptionPlan = derivePlanCode(attributes, normalizedStatus);
 
   if (
