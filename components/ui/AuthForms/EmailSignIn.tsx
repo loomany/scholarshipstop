@@ -32,12 +32,15 @@ export default function EmailSignIn({
   passwordSignInHref,
   signUpHref
 }: EmailSignInProps) {
-  const router = redirectMethod === 'client' ? useRouter() : null;
+  const clientRouter = useRouter();
+  const router = redirectMethod === 'client' ? clientRouter : null;
   const [isSubmitting, setIsSubmitting] = useState(false);
   const ui = getAuthUiCopy(locale);
   const localePasswordHref =
     passwordSignInHref ??
-    (locale === 'en' ? '/signin/password_signin' : `/${locale}/signin/password_signin`);
+    (locale === 'en'
+      ? '/signin/password_signin'
+      : `/${locale}/signin/password_signin`);
   const localeSignUpHref =
     signUpHref ?? localizedScholarshipOnboardingSignupEntryHref(locale);
 

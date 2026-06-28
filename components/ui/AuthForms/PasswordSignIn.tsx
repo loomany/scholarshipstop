@@ -33,14 +33,17 @@ export default function PasswordSignIn({
   forgotPasswordHref,
   signUpHref
 }: PasswordSignInProps) {
-  const router = redirectMethod === 'client' ? useRouter() : null;
+  const clientRouter = useRouter();
+  const router = redirectMethod === 'client' ? clientRouter : null;
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [oauthPending, setOauthPending] = useState(false);
   const { allowOauth } = getAuthTypes();
   const ui = getAuthUiCopy(locale);
   const localeForgotPasswordHref =
     forgotPasswordHref ??
-    (locale === 'en' ? '/signin/forgot_password' : `/${locale}/signin/forgot_password`);
+    (locale === 'en'
+      ? '/signin/forgot_password'
+      : `/${locale}/signin/forgot_password`);
   const localeSignUpHref =
     signUpHref ?? localizedScholarshipOnboardingSignupEntryHref(locale);
 

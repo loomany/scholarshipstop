@@ -16,7 +16,8 @@ interface UpdatePasswordProps {
 export default function UpdatePassword({
   redirectMethod
 }: UpdatePasswordProps) {
-  const router = redirectMethod === 'client' ? useRouter() : null;
+  const clientRouter = useRouter();
+  const router = redirectMethod === 'client' ? clientRouter : null;
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const fieldClass = `w-full rounded-xl border border-zinc-200/90 bg-white px-4 py-3.5 text-[15px] text-zinc-900 shadow-[0_1px_2px_rgba(15,23,42,0.04)] outline-none transition-[border-color,box-shadow] placeholder:text-zinc-400/80 ${SITE_INPUT_FOCUS_CLASS}`;

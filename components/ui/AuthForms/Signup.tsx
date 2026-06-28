@@ -27,15 +27,20 @@ export default function SignUp({
   passwordSignInHref,
   emailSignInHref
 }: SignUpProps) {
-  const router = redirectMethod === 'client' ? useRouter() : null;
+  const clientRouter = useRouter();
+  const router = redirectMethod === 'client' ? clientRouter : null;
   const [isSubmitting, setIsSubmitting] = useState(false);
   const ui = getAuthUiCopy(locale);
   const localePasswordSignInHref =
     passwordSignInHref ??
-    (locale === 'en' ? '/signin/password_signin' : `/${locale}/signin/password_signin`);
+    (locale === 'en'
+      ? '/signin/password_signin'
+      : `/${locale}/signin/password_signin`);
   const localeEmailSignInHref =
     emailSignInHref ??
-    (locale === 'en' ? '/signin/email_signin' : `/${locale}/signin/email_signin`);
+    (locale === 'en'
+      ? '/signin/email_signin'
+      : `/${locale}/signin/email_signin`);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setIsSubmitting(true);
