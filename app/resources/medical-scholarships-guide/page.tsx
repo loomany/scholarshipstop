@@ -8,6 +8,7 @@ import { resourceGuideLinkClassName } from '@/lib/content-hub/resourceGuidePages
 import { getPremedTopicContext } from '@/lib/external-data';
 import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
 import { getCanonical } from '@/lib/seo/canonical';
+import { DEFAULT_OPEN_GRAPH_IMAGES } from '@/lib/seo/socialImage';
 
 const hrefMedicalCategory = '/scholarships/category/medical';
 const hrefMatches = '/scholarships/hub/matches';
@@ -20,12 +21,15 @@ export const metadata: Metadata = {
   title: 'Medical Scholarships Guide for Healthcare Students',
   description:
     'A practical guide to medical and healthcare scholarships: where to look, how to qualify, what materials to prepare, and how to choose stronger applications.',
-  alternates: buildStage2EnglishPilotAlternates('/resources/medical-scholarships-guide'),
+  alternates: buildStage2EnglishPilotAlternates(
+    '/resources/medical-scholarships-guide'
+  ),
   openGraph: {
     title: 'Medical Scholarships Guide for Healthcare Students',
     description:
       'A practical guide to medical and healthcare scholarships: where to look, how to qualify, what materials to prepare, and how to choose stronger applications.',
-    url: canonical
+    url: canonical,
+    images: DEFAULT_OPEN_GRAPH_IMAGES
   }
 };
 
@@ -38,7 +42,8 @@ export default function MedicalScholarshipsGuidePage() {
       subtitle="Healthcare students have more scholarship angles than most people realize: major, service, location, identity, career goal, and the kind of care they hope to provide. This guide helps you sort those options without turning the search into another full-time class."
       faq={[
         {
-          question: 'Are medical scholarships only for students already in medical school?',
+          question:
+            'Are medical scholarships only for students already in medical school?',
           answer:
             'No. Some awards are for medical students, but many healthcare scholarships support pre-med, nursing, public health, pharmacy, allied health, therapy, biomedical science, and other health-related paths. The key is to read the eligibility language carefully. A scholarship may say medical but include several healthcare majors, or it may be limited to students enrolled in a specific professional program.'
         },
@@ -48,7 +53,8 @@ export default function MedicalScholarshipsGuidePage() {
             'Start with an updated resume, transcript, proof of enrollment, and a short list of clinical, service, research, or volunteer experiences. Many medical scholarships also ask for an essay about career goals, a recommendation letter, or proof that you are enrolled in an accredited program. Save clean PDFs early so you are not collecting documents right before a deadline.'
         },
         {
-          question: 'How do I avoid wasting time on medical scholarships that are not a fit?',
+          question:
+            'How do I avoid wasting time on medical scholarships that are not a fit?',
           answer:
             'Check field of study, school level, location, GPA, citizenship, enrollment status, and required materials before you begin the essay. If you meet the main requirements and can explain why healthcare work matters to you, keep it on your list. If a scholarship requires a credential or program you do not have, move on quickly.'
         }
@@ -86,7 +92,10 @@ export default function MedicalScholarshipsGuidePage() {
         </p>
         <p>
           Use this guide as the planning layer, then use the{' '}
-          <Link href={hrefMedicalCategory} className={resourceGuideLinkClassName}>
+          <Link
+            href={hrefMedicalCategory}
+            className={resourceGuideLinkClassName}
+          >
             medicine scholarships listing
           </Link>{' '}
           when you are ready to compare actual opportunities. The listing helps
@@ -122,10 +131,22 @@ export default function MedicalScholarshipsGuidePage() {
           have.
         </p>
         <ul>
-          <li>Pre-med students can look for science, service, and health career awards.</li>
-          <li>Nursing students should check hospitals, state nursing groups, and local foundations.</li>
-          <li>Public health students can search by prevention, community health, and policy interests.</li>
-          <li>Allied health students should include certification and workforce shortage terms.</li>
+          <li>
+            Pre-med students can look for science, service, and health career
+            awards.
+          </li>
+          <li>
+            Nursing students should check hospitals, state nursing groups, and
+            local foundations.
+          </li>
+          <li>
+            Public health students can search by prevention, community health,
+            and policy interests.
+          </li>
+          <li>
+            Allied health students should include certification and workforce
+            shortage terms.
+          </li>
         </ul>
 
         <h2>Where medical scholarships usually come from</h2>
@@ -134,16 +155,16 @@ export default function MedicalScholarshipsGuidePage() {
           systems, professional associations, local foundations, civic groups,
           nonprofits, employers, and donors with a personal connection to a
           condition or field. Do not assume the largest national award is your
-          best shot. A smaller local scholarship for future nurses in your county
-          may be a better match than a national healthcare essay contest.
+          best shot. A smaller local scholarship for future nurses in your
+          county may be a better match than a national healthcare essay contest.
         </p>
         <p>
           School financial aid offices are useful, but they are not the whole
-          map. Check your department, clinical program office, state professional
-          associations, and local hospitals. If you volunteer or work in a
-          healthcare setting, ask whether the organization has an education fund
-          or employee family scholarship. Many students miss these because they
-          only search public databases.
+          map. Check your department, clinical program office, state
+          professional associations, and local hospitals. If you volunteer or
+          work in a healthcare setting, ask whether the organization has an
+          education fund or employee family scholarship. Many students miss
+          these because they only search public databases.
         </p>
 
         <h2>Match your story to the provider's reason for funding students</h2>
@@ -174,13 +195,12 @@ export default function MedicalScholarshipsGuidePage() {
           provider page as the source of truth.
         </p>
         <p>
-          Before starting an essay, make a quick pass through the basics:
-          school level, major or program, GPA, location, citizenship or
-          residency, financial need, enrollment status, and required documents.
-          If you pass those checks, then read the mission. A provider supporting
-          rural healthcare, disability care, public health, or underserved
-          communities will expect a different story than a provider focused on
-          lab research.
+          Before starting an essay, make a quick pass through the basics: school
+          level, major or program, GPA, location, citizenship or residency,
+          financial need, enrollment status, and required documents. If you pass
+          those checks, then read the mission. A provider supporting rural
+          healthcare, disability care, public health, or underserved communities
+          will expect a different story than a provider focused on lab research.
         </p>
 
         <h2>Build a healthcare application packet</h2>
@@ -234,8 +254,8 @@ export default function MedicalScholarshipsGuidePage() {
         <p>
           Mix deeper applications with simpler ones. If a scholarship requires a
           transcript, recommendation, and polished essay, give it real calendar
-          space. If you want a lighter list for low-effort opportunities, compare
-          options in the{' '}
+          space. If you want a lighter list for low-effort opportunities,
+          compare options in the{' '}
           <Link href={hrefEasyApply} className={resourceGuideLinkClassName}>
             easy apply scholarships hub
           </Link>
@@ -279,15 +299,18 @@ export default function MedicalScholarshipsGuidePage() {
         <h2>What to do after you find a promising award</h2>
         <p>
           Open the provider page and confirm the rules. Save the URL, deadline,
-          award amount, eligibility language, and required materials. Then decide
-          whether the application is a high-fit, medium-fit, or low-fit
+          award amount, eligibility language, and required materials. Then
+          decide whether the application is a high-fit, medium-fit, or low-fit
           opportunity. High-fit applications get your strongest essay and early
           recommendation requests. Low-fit applications should not crowd out
           better matches.
         </p>
         <p>
           When you are ready to compare current listings, start with{' '}
-          <Link href={hrefMedicalCategory} className={resourceGuideLinkClassName}>
+          <Link
+            href={hrefMedicalCategory}
+            className={resourceGuideLinkClassName}
+          >
             medicine scholarships
           </Link>{' '}
           and broaden to{' '}
@@ -297,7 +320,6 @@ export default function MedicalScholarshipsGuidePage() {
           if your profile includes other signals such as first-generation
           status, community service, location, GPA, or financial need.
         </p>
-
       </>
     </ResourceGuideShell>
   );

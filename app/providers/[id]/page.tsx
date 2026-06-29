@@ -15,6 +15,7 @@ import { ProviderProfileScholarshipsScroll } from '@/components/providers/Provid
 import { ProvidersHubPageContent } from '@/components/providers/ProvidersHubPageContent';
 import ProviderScholarshipMatchCta from '@/components/providers/ProviderScholarshipMatchCta';
 import { US_STATE_CODE_TO_NAME } from '@/lib/constants/usStates';
+import { DEFAULT_OPEN_GRAPH_IMAGES } from '@/lib/seo/socialImage';
 import {
   getCachedProviderProfilePage,
   resolveProviderProfileSlug
@@ -222,7 +223,8 @@ export async function generateMetadata({
         title,
         description,
         url: canonicalUrl,
-        type: 'website'
+        type: 'website',
+        images: DEFAULT_OPEN_GRAPH_IMAGES
       }
     };
   }
@@ -262,7 +264,8 @@ export async function generateMetadata({
       title: pageTitleMeta,
       description,
       url: canonicalUrl,
-      type: 'website'
+      type: 'website',
+      images: DEFAULT_OPEN_GRAPH_IMAGES
     }
   };
 }

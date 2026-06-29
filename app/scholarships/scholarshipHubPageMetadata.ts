@@ -2,6 +2,10 @@ import type { Metadata } from 'next';
 
 import { isSeoNoiseQuery } from '@/app/scholarships/scholarshipSeoNoiseQuery';
 import { getCanonical } from '@/lib/seo/canonical';
+import {
+  DEFAULT_OPEN_GRAPH_IMAGES,
+  DEFAULT_TWITTER_IMAGES
+} from '@/lib/seo/socialImage';
 
 type HubSeoCopy = { title: string; description: string };
 
@@ -84,12 +88,14 @@ export function buildScholarshipHubRouteMetadata(opts: {
       title: copy.title,
       description: copy.description,
       url: canonicalUrl,
-      type: 'website'
+      type: 'website',
+      images: DEFAULT_OPEN_GRAPH_IMAGES
     },
     twitter: {
       card: 'summary_large_image',
       title: copy.title,
-      description: copy.description
+      description: copy.description,
+      images: DEFAULT_TWITTER_IMAGES
     }
   };
 }

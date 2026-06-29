@@ -9,6 +9,7 @@ import { isSeoNoiseQuery } from '@/app/scholarships/scholarshipSeoNoiseQuery';
 import { getCanonical } from '@/lib/seo/canonical';
 import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
 import { generateScholarshipSlugLayoutMetadata } from '@/app/scholarships/scholarshipSlugLayoutMetadata';
+import { DEFAULT_OPEN_GRAPH_IMAGES } from '@/lib/seo/socialImage';
 
 export const revalidate = 300;
 
@@ -61,7 +62,8 @@ export async function generateMetadata({
       title: 'Find Scholarships',
       description: SCHOLARSHIPS_ROOT_DESCRIPTION,
       url: canonical,
-      type: 'website'
+      type: 'website',
+      images: DEFAULT_OPEN_GRAPH_IMAGES
     },
     ...(hasNonCanonicalQuery
       ? {

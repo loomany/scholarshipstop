@@ -6,6 +6,7 @@ import { resourceGuideLinkClassName } from '@/lib/content-hub/resourceGuidePages
 import { resourceGuideHref } from '@/lib/scholarships/resourceGuideRoutes';
 import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
 import { getCanonical } from '@/lib/seo/canonical';
+import { DEFAULT_OPEN_GRAPH_IMAGES } from '@/lib/seo/socialImage';
 
 const hrefApply = resourceGuideHref('how-to-apply-for-scholarships');
 const hrefCombine = resourceGuideHref('combine-multiple-scholarships');
@@ -15,12 +16,15 @@ export const metadata: Metadata = {
   title: "Scholarship Deadlines Explained: Don't Miss Your Chance",
   description:
     'Learn how scholarship deadlines really work—fixed vs rolling dates, when to start, how to track them, and habits so you do not miss important scholarship opportunities.',
-  alternates: buildStage2EnglishPilotAlternates('/resources/scholarship-deadlines-explained'),
+  alternates: buildStage2EnglishPilotAlternates(
+    '/resources/scholarship-deadlines-explained'
+  ),
   openGraph: {
     title: "Scholarship Deadlines Explained: Don't Miss Your Chance",
     description:
       'Learn how scholarship deadlines really work—fixed vs rolling dates, when to start, how to track them, and habits so you do not miss important scholarship opportunities.',
-    url: canonical
+    url: canonical,
+    images: DEFAULT_OPEN_GRAPH_IMAGES
   }
 };
 
@@ -45,14 +49,12 @@ export default function ScholarshipDeadlinesExplainedPage() {
         {
           href: hrefApply,
           title: 'How to Apply for Scholarships',
-          blurb:
-            'practical steps to organize your application process'
+          blurb: 'practical steps to organize your application process'
         },
         {
           href: hrefCombine,
           title: 'Can You Combine Multiple Scholarships?',
-          blurb:
-            'understand how stacking scholarships works in real life'
+          blurb: 'understand how stacking scholarships works in real life'
         }
       ]}
     >
@@ -70,21 +72,23 @@ export default function ScholarshipDeadlinesExplainedPage() {
           them and you are out until the next cycle. <strong>Rolling</strong>{' '}
           deadlines reward early birds—waiting can mean fewer funds left.{' '}
           <strong>Priority deadlines</strong> (common for institutional aid)
-          give better consideration if you apply by a first date, even if a later
-          date still exists.
+          give better consideration if you apply by a first date, even if a
+          later date still exists.
         </p>
         <ul>
           <li>Confirm the time zone on the official rules page.</li>
-          <li>Check whether “received by” means submitted online or postmarked.</li>
+          <li>
+            Check whether “received by” means submitted online or postmarked.
+          </li>
           <li>Note if recommendations must arrive by the same cutoff.</li>
         </ul>
 
         <h2>When to Start Applying</h2>
         <p>
-          Start earlier than feels comfortable—especially for essays and letters.
-          A practical rhythm: map deadlines at least six weeks out, then work
-          backward for drafts and recommenders. If you are also applying to
-          college, align scholarship tasks with your{' '}
+          Start earlier than feels comfortable—especially for essays and
+          letters. A practical rhythm: map deadlines at least six weeks out,
+          then work backward for drafts and recommenders. If you are also
+          applying to college, align scholarship tasks with your{' '}
           <Link href={hrefApply} className={resourceGuideLinkClassName}>
             main application plan
           </Link>{' '}
@@ -106,8 +110,8 @@ export default function ScholarshipDeadlinesExplainedPage() {
         <h2>What Happens If You Miss a Deadline</h2>
         <p>
           Do not panic-spam the committee. For a true fixed deadline, shift your
-          energy to the next open program. If the portal glitched, screenshot the
-          error and email support the same night—polite, specific, with a
+          energy to the next open program. If the portal glitched, screenshot
+          the error and email support the same night—polite, specific, with a
           timestamp. Some rolling awards may still accept you if funding
           remains; fixed awards usually will not.
         </p>

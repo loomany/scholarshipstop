@@ -2,12 +2,11 @@ import type { Metadata } from 'next';
 
 import IqLegalPage from '@/components/iq/IqLegalPage';
 import { getIqLocaleFromRequest } from '@/lib/iq/i18n/getIqLocaleFromRequest';
-import { getIqLegalMetadata } from '@/lib/iq/i18n/iqLegalShellCopy';
+import { buildIqLegalPageMetadata } from '@/lib/iq/i18n/iqLegalShellCopy';
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = getIqLocaleFromRequest();
-  const meta = getIqLegalMetadata('help', locale);
-  return { title: meta.title, description: meta.description };
+  return buildIqLegalPageMetadata('help', locale);
 }
 
 export default function IqHelpPage() {
@@ -22,8 +21,8 @@ export default function IqHelpPage() {
             <p>
               Use a stable internet connection and avoid refreshing the browser
               during the test. The assessment is timed because speed is part of
-              the cognitive profile, but the report should be read as educational
-              guidance rather than a clinical score.
+              the cognitive profile, but the report should be read as
+              educational guidance rather than a clinical score.
             </p>
           )
         },
@@ -31,9 +30,9 @@ export default function IqHelpPage() {
           title: 'Unlocking the report',
           body: (
             <p>
-              After completing the assessment, you can unlock the full report for
-              a one-time $9.99 payment. Checkout is handled by LemonSqueezy. We
-              do not store your card details.
+              After completing the assessment, you can unlock the full report
+              for a one-time $9.99 payment. Checkout is handled by LemonSqueezy.
+              We do not store your card details.
             </p>
           )
         },

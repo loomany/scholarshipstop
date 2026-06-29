@@ -1,4 +1,8 @@
 import type { Metadata } from 'next';
+import {
+  DEFAULT_OPEN_GRAPH_IMAGES,
+  DEFAULT_TWITTER_IMAGES
+} from '@/lib/seo/socialImage';
 import { hubPathToTab } from '@/app/scholarships/scholarshipHubPath';
 import {
   getLongTailPreset,
@@ -185,12 +189,14 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
           title: titleText,
           description,
           url: canonical,
-          type: 'website'
+          type: 'website',
+          images: DEFAULT_OPEN_GRAPH_IMAGES
         },
         twitter: {
           card: 'summary_large_image',
           title: titleText,
-          description
+          description,
+          images: DEFAULT_TWITTER_IMAGES
         },
         alternates: {
           canonical
@@ -224,12 +230,14 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
         title: titleText,
         description: route.metaDescription,
         url: canonical,
-        type: 'website'
+        type: 'website',
+        images: DEFAULT_OPEN_GRAPH_IMAGES
       },
       twitter: {
         card: 'summary_large_image',
         title: titleText,
-        description: route.metaDescription
+        description: route.metaDescription,
+        images: DEFAULT_TWITTER_IMAGES
       },
       alternates: {
         canonical
@@ -250,12 +258,14 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
         title: titleText,
         description: entry.metaDescription,
         url: canonical,
-        type: 'website'
+        type: 'website',
+        images: DEFAULT_OPEN_GRAPH_IMAGES
       },
       twitter: {
         card: 'summary_large_image',
         title: titleText,
-        description: entry.metaDescription
+        description: entry.metaDescription,
+        images: DEFAULT_TWITTER_IMAGES
       },
       alternates: {
         canonical
@@ -298,12 +308,14 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
         title: titleText,
         description,
         url: canonical,
-        type: 'website'
+        type: 'website',
+        images: DEFAULT_OPEN_GRAPH_IMAGES
       },
       twitter: {
         card: 'summary_large_image',
         title: titleText,
-        description
+        description,
+        images: DEFAULT_TWITTER_IMAGES
       },
       alternates: {
         canonical
@@ -359,12 +371,14 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
         title: titleText,
         description,
         url: canonical,
-        type: 'website'
+        type: 'website',
+        images: DEFAULT_OPEN_GRAPH_IMAGES
       },
       twitter: {
         card: 'summary_large_image',
         title: titleText,
-        description
+        description,
+        images: DEFAULT_TWITTER_IMAGES
       },
       alternates: {
         canonical
@@ -425,12 +439,14 @@ export async function generateScholarshipSlugLayoutMetadata(params: {
       title: titleText,
       description,
       url: alternates.canonical ?? canonical,
-      type: 'article'
+      type: 'article',
+      images: DEFAULT_OPEN_GRAPH_IMAGES
     },
     twitter: {
       card: 'summary_large_image',
       title: titleText,
-      description
+      description,
+      images: DEFAULT_TWITTER_IMAGES
     },
     alternates
   };

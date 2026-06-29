@@ -4,6 +4,7 @@ import { CompareIndexPageContent } from '@/components/compare/CompareIndexPageCo
 import { compareIndexHasNonCanonicalView } from '@/lib/seo/compareIndexFilters';
 import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
 import { getCanonical } from '@/lib/seo/canonical';
+import { DEFAULT_OPEN_GRAPH_IMAGES } from '@/lib/seo/socialImage';
 
 export const revalidate = 3600;
 
@@ -24,7 +25,8 @@ export function generateMetadata({
     openGraph: {
       title: 'Compare Scholarships, Grants, and Award Types | ScholarshipTop',
       description: baseDescription,
-      url: canonical
+      url: canonical,
+      images: DEFAULT_OPEN_GRAPH_IMAGES
     },
     alternates: buildStage2EnglishPilotAlternates('/compare'),
     ...(hasNonCanonicalView

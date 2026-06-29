@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { getCanonical } from '@/lib/seo/canonical';
 import { parseCompareIndexSearchParams } from '@/lib/seo/compareIndexFilters';
 import { StateCompareHubPageBody } from '@/app/compare/states/stateCompareHubPageBody';
+import { DEFAULT_OPEN_GRAPH_IMAGES } from '@/lib/seo/socialImage';
 
 export const revalidate = 3600;
 
@@ -18,7 +19,9 @@ export function generateMetadata({
 }): Metadata {
   const queryState = parseCompareIndexSearchParams(searchParams);
   const hasNonCanonicalView =
-    queryState.page > 1 || queryState.q.length > 0 || queryState.sort !== 'latest';
+    queryState.page > 1 ||
+    queryState.q.length > 0 ||
+    queryState.sort !== 'latest';
   const canonical = getCanonical(EN_BASE_PATH);
 
   return {
@@ -27,7 +30,8 @@ export function generateMetadata({
     openGraph: {
       title: `${baseTitle} | ScholarshipTop`,
       description: baseDescription,
-      url: canonical
+      url: canonical,
+      images: DEFAULT_OPEN_GRAPH_IMAGES
     },
     alternates: { canonical },
     ...(hasNonCanonicalView

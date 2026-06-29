@@ -7,6 +7,7 @@ import { resourceGuideLinkClassName } from '@/lib/content-hub/resourceGuidePages
 import { resourceGuideHref } from '@/lib/scholarships/resourceGuideRoutes';
 import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
 import { getCanonical } from '@/lib/seo/canonical';
+import { DEFAULT_OPEN_GRAPH_IMAGES } from '@/lib/seo/socialImage';
 
 const hrefDeadlines = resourceGuideHref('scholarship-deadlines-explained');
 const hrefCombine = resourceGuideHref('combine-multiple-scholarships');
@@ -16,12 +17,15 @@ export const metadata: Metadata = {
   title: 'How to Apply for Scholarships in 2026',
   description:
     'Step-by-step guide on how to apply for scholarships: where to look, what to prepare, mistakes to skip, and tips to submit stronger applications and improve your odds of funding.',
-  alternates: buildStage2EnglishPilotAlternates('/resources/how-to-apply-for-scholarships'),
+  alternates: buildStage2EnglishPilotAlternates(
+    '/resources/how-to-apply-for-scholarships'
+  ),
   openGraph: {
     title: 'How to Apply for Scholarships in 2026',
     description:
       'Step-by-step guide on how to apply for scholarships: where to look, what to prepare, mistakes to skip, and tips to submit stronger applications and improve your odds of funding.',
-    url: canonical
+    url: canonical,
+    images: DEFAULT_OPEN_GRAPH_IMAGES
   }
 };
 
@@ -52,8 +56,7 @@ export default function HowToApplyForScholarshipsPage() {
         {
           href: hrefCombine,
           title: 'Can You Combine Multiple Scholarships?',
-          blurb:
-            'understand how stacking scholarships works in real life'
+          blurb: 'understand how stacking scholarships works in real life'
         }
       ]}
     >
@@ -78,9 +81,12 @@ export default function HowToApplyForScholarshipsPage() {
         </p>
         <ul>
           <li>Check eligibility before you spend time on the essay.</li>
-          <li>Save links and deadlines in one place—you’ll thank yourself later.</li>
           <li>
-            Mix “reach,” “match,” and “safety” awards so you are not all-or-nothing.
+            Save links and deadlines in one place—you’ll thank yourself later.
+          </li>
+          <li>
+            Mix “reach,” “match,” and “safety” awards so you are not
+            all-or-nothing.
           </li>
         </ul>
 
@@ -126,7 +132,10 @@ export default function HowToApplyForScholarshipsPage() {
             </Link>{' '}
             breaks down the difference.
           </li>
-          <li>Ghosting your recommender—send a polite reminder, not panic at midnight.</li>
+          <li>
+            Ghosting your recommender—send a polite reminder, not panic at
+            midnight.
+          </li>
         </ul>
 
         <h2>Tips to Increase Your Chances</h2>
@@ -146,8 +155,8 @@ export default function HowToApplyForScholarshipsPage() {
           <Link href={hrefCombine} className={resourceGuideLinkClassName}>
             combining multiple scholarships
           </Link>{' '}
-          explains what to ask the financial aid office so you do not accidentally
-          over-award.
+          explains what to ask the financial aid office so you do not
+          accidentally over-award.
         </p>
       </>
     </ResourceGuideShell>

@@ -1,3 +1,5 @@
+import type { Metadata } from 'next';
+
 import type { IqLocale } from '@/lib/iq/i18n/iqLocales';
 
 export type IqLegalShellCopy = {
@@ -15,11 +17,29 @@ export function getIqLegalShellCopy(locale: IqLocale): IqLegalShellCopy {
   return COPY[locale];
 }
 
-export type IqLegalPageKey = 'faq' | 'help' | 'about' | 'terms' | 'privacy' | 'refund';
+export type IqLegalPageKey =
+  | 'faq'
+  | 'help'
+  | 'about'
+  | 'terms'
+  | 'privacy'
+  | 'refund';
 
 export type IqLegalMetadataEntry = { title: string; description: string };
 
-const LEGAL_META: Record<IqLegalPageKey, Record<IqLocale, IqLegalMetadataEntry>> = {
+const LEGAL_PATHS: Record<IqLegalPageKey, string> = {
+  faq: '/iq/faq',
+  help: '/iq/help',
+  about: '/iq/about',
+  terms: '/iq/terms',
+  privacy: '/iq/privacy-policy',
+  refund: '/iq/refund-policy'
+};
+
+const LEGAL_META: Record<
+  IqLegalPageKey,
+  Record<IqLocale, IqLegalMetadataEntry>
+> = {
   faq: {
     en: {
       title: 'IQ Profile FAQ',
@@ -45,7 +65,8 @@ const LEGAL_META: Record<IqLegalPageKey, Record<IqLocale, IqLegalMetadataEntry>>
     },
     fr: {
       title: 'Aide — Profil de QI',
-      description: 'Aide pour utiliser le profil de QI et votre rapport cognitif.'
+      description:
+        'Aide pour utiliser le profil de QI et votre rapport cognitif.'
     }
   },
   about: {
@@ -59,7 +80,8 @@ const LEGAL_META: Record<IqLegalPageKey, Record<IqLocale, IqLegalMetadataEntry>>
     },
     fr: {
       title: 'À propos du profil de QI',
-      description: 'Ce que mesure le profil de QI et comment interpréter les résultats.'
+      description:
+        'Ce que mesure le profil de QI et comment interpréter les résultats.'
     }
   },
   terms: {
@@ -111,4 +133,40 @@ export function getIqLegalMetadata(
   locale: IqLocale
 ): IqLegalMetadataEntry {
   return LEGAL_META[page][locale];
+}
+
+export function buildIqLegalPageMetadata(
+  page: IqLegalPageKey,
+  locale: IqLocale
+): Metadata {
+  const entry = getIqLegalMetadata(page, locale);
+  const canonical = `https://scholarshiptop.com${LEGAL_PATHS[page]}`;
+  const imageAlt = `${entry.title} - ScholarshipTop`;
+  return {
+    title: entry.title,
+    description: entry.description,
+    alternates: { canonical },
+    openGraph: {
+      title: entry.title,
+      description: entry.description,
+      url: canonical,
+      type: 'website',
+      siteName: 'ScholarshipTop',
+      locale: locale === 'es' ? 'es_ES' : locale === 'fr' ? 'fr_FR' : 'en_US',
+      images: [
+        {
+          url: '/logo-preview.png',
+          width: 1200,
+          height: 630,
+          alt: imageAlt
+        }
+      ]
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: entry.title,
+      description: entry.description,
+      images: ['/logo-preview.png']
+    }
+  };
 }

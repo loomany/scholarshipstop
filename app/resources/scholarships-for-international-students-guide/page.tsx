@@ -5,6 +5,7 @@ import ResourceGuideShell from '@/components/content-hub/resourceGuides/Resource
 import { resourceGuideLinkClassName } from '@/lib/content-hub/resourceGuidePages';
 import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
 import { getCanonical } from '@/lib/seo/canonical';
+import { DEFAULT_OPEN_GRAPH_IMAGES } from '@/lib/seo/socialImage';
 
 const hrefInternationalHub = '/scholarships/hub/international-friendly';
 const hrefMatches = '/scholarships/hub/matches';
@@ -12,7 +13,9 @@ const hrefEasyApply = '/scholarships/hub/easy-apply';
 const hrefEssays = '/essays';
 const hrefApplyGuide = '/resources/how-to-apply-for-scholarships';
 const hrefDeadlines = '/resources/scholarship-deadlines-explained';
-const canonical = getCanonical('/resources/scholarships-for-international-students-guide');
+const canonical = getCanonical(
+  '/resources/scholarships-for-international-students-guide'
+);
 
 export const metadata: Metadata = {
   title: 'Scholarships for International Students: Practical Guide',
@@ -25,7 +28,8 @@ export const metadata: Metadata = {
     title: 'Scholarships for International Students: Practical Guide',
     description:
       'A practical guide for international students looking for scholarships: eligibility checks, documents, essays, deadlines, and how to use international-friendly listings.',
-    url: canonical
+    url: canonical,
+    images: DEFAULT_OPEN_GRAPH_IMAGES
   }
 };
 
@@ -46,7 +50,8 @@ export default function ScholarshipsForInternationalStudentsGuidePage() {
             'Start with citizenship or residency rules, visa or enrollment requirements, eligible schools, field of study, school level, location, GPA, and whether funds can be paid to your institution. Also check whether the provider requires FAFSA information, a Social Security number, or U.S. tax documents. Those requirements can affect whether an otherwise promising scholarship is realistic.'
         },
         {
-          question: 'Do international scholarship applications require different essays?',
+          question:
+            'Do international scholarship applications require different essays?',
           answer:
             'The essay should still answer the prompt, but international students often need to explain context clearly: educational background, goals, why the program fits, and how funding changes what is possible. Avoid turning every essay into a visa story unless the prompt asks for it. Focus on fit, preparation, and the contribution you hope to make.'
         }
@@ -76,15 +81,18 @@ export default function ScholarshipsForInternationalStudentsGuidePage() {
         <p>
           Searching for scholarships as an international student can feel like
           reading fine print for a living. A scholarship title may sound open,
-          but the rules may limit applicants by citizenship, permanent residency,
-          school location, visa status, state, major, or financial aid form. The
-          goal is not to apply everywhere. The goal is to identify the awards
-          where your status and profile actually fit, then spend your writing
-          time on those instead of chasing every open-looking form.
+          but the rules may limit applicants by citizenship, permanent
+          residency, school location, visa status, state, major, or financial
+          aid form. The goal is not to apply everywhere. The goal is to identify
+          the awards where your status and profile actually fit, then spend your
+          writing time on those instead of chasing every open-looking form.
         </p>
         <p>
           Use this guide to understand the decision points, then browse the{' '}
-          <Link href={hrefInternationalHub} className={resourceGuideLinkClassName}>
+          <Link
+            href={hrefInternationalHub}
+            className={resourceGuideLinkClassName}
+          >
             international-friendly scholarships hub
           </Link>{' '}
           when you want current listings to review. ScholarshipTop can help you
@@ -103,11 +111,11 @@ export default function ScholarshipsForInternationalStudentsGuidePage() {
         </p>
         <p>
           Watch for phrases such as U.S. citizens only, permanent residents
-          only, eligible noncitizens, open to all enrolled students, visa holders
-          may apply, or must be eligible for federal aid. These details matter
-          more than the title. A broad scholarship for college students may still
-          exclude you if it requires FAFSA eligibility or a U.S. Social Security
-          number.
+          only, eligible noncitizens, open to all enrolled students, visa
+          holders may apply, or must be eligible for federal aid. These details
+          matter more than the title. A broad scholarship for college students
+          may still exclude you if it requires FAFSA eligibility or a U.S.
+          Social Security number.
         </p>
 
         <h2>Start with school-based funding</h2>
@@ -131,11 +139,11 @@ export default function ScholarshipsForInternationalStudentsGuidePage() {
         <h2>Separate admission aid from outside scholarships</h2>
         <p>
           International students often hear the word scholarship used for very
-          different kinds of money. Admission merit aid is usually decided by the
-          school. Department awards may depend on your major or academic record.
-          Graduate assistantships may involve work. Outside scholarships may
-          come from a foundation, employer, government, nonprofit, or private
-          sponsor. Each type has different timing and rules.
+          different kinds of money. Admission merit aid is usually decided by
+          the school. Department awards may depend on your major or academic
+          record. Graduate assistantships may involve work. Outside scholarships
+          may come from a foundation, employer, government, nonprofit, or
+          private sponsor. Each type has different timing and rules.
         </p>
         <p>
           Keep these categories separate in your notes. If a school says you
@@ -148,8 +156,8 @@ export default function ScholarshipsForInternationalStudentsGuidePage() {
 
         <h2>Use outside scholarships carefully</h2>
         <p>
-          Outside scholarships can still be useful, especially those connected to
-          your field, country, region, employer, foundation, professional
+          Outside scholarships can still be useful, especially those connected
+          to your field, country, region, employer, foundation, professional
           association, or community. The challenge is that many outside awards
           are written for domestic applicants by default. Before writing an
           essay, confirm that the scholarship accepts your citizenship or visa
@@ -169,8 +177,8 @@ export default function ScholarshipsForInternationalStudentsGuidePage() {
           A scholarship can look perfect and still be hard to use if the payment
           rules do not match your situation. Some providers pay only U.S.
           institutions. Some require domestic tax forms, a mailing address, a
-          school certification, or proof of enrollment before funds are released.
-          Others reimburse expenses after you pay them yourself.
+          school certification, or proof of enrollment before funds are
+          released. Others reimburse expenses after you pay them yourself.
         </p>
         <p>
           Before treating an award as part of your budget, find out how the
@@ -192,8 +200,8 @@ export default function ScholarshipsForInternationalStudentsGuidePage() {
         <p>
           Save clean copies in one folder and track which documents are official
           versus unofficial. If a provider asks for official transcripts, do not
-          assume a screenshot or student portal download is enough. If a document
-          must come from your school, request it early. The{' '}
+          assume a screenshot or student portal download is enough. If a
+          document must come from your school, request it early. The{' '}
           <Link href={hrefDeadlines} className={resourceGuideLinkClassName}>
             scholarship deadlines guide
           </Link>{' '}
@@ -205,8 +213,8 @@ export default function ScholarshipsForInternationalStudentsGuidePage() {
           Scholarship readers may not know your school system, grading scale,
           country context, or the path that brought you to your program. Your
           essay can explain that context without becoming a biography. Choose
-          details that help the reviewer understand your preparation, your goals,
-          and why the scholarship fits.
+          details that help the reviewer understand your preparation, your
+          goals, and why the scholarship fits.
         </p>
         <p>
           Avoid generic lines about wanting to study abroad or needing financial
@@ -232,7 +240,10 @@ export default function ScholarshipsForInternationalStudentsGuidePage() {
         </p>
         <p>
           Start with{' '}
-          <Link href={hrefInternationalHub} className={resourceGuideLinkClassName}>
+          <Link
+            href={hrefInternationalHub}
+            className={resourceGuideLinkClassName}
+          >
             international-friendly listings
           </Link>
           , then broaden to{' '}
@@ -302,7 +313,10 @@ export default function ScholarshipsForInternationalStudentsGuidePage() {
         <ul>
           <li>
             Browse{' '}
-            <Link href={hrefInternationalHub} className={resourceGuideLinkClassName}>
+            <Link
+              href={hrefInternationalHub}
+              className={resourceGuideLinkClassName}
+            >
               international-friendly scholarships
             </Link>{' '}
             when you are ready to compare listings.
@@ -326,7 +340,8 @@ export default function ScholarshipsForInternationalStudentsGuidePage() {
             <Link href={hrefMatches} className={resourceGuideLinkClassName}>
               scholarship matches
             </Link>{' '}
-            if your field, school level, or location gives you additional angles.
+            if your field, school level, or location gives you additional
+            angles.
           </li>
         </ul>
       </>

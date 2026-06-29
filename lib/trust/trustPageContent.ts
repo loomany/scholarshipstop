@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 
 import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
 import { getCanonical } from '@/lib/seo/canonical';
+import { DEFAULT_OPEN_GRAPH_IMAGES } from '@/lib/seo/socialImage';
 
 export type TrustPageKey =
   | 'about'
@@ -564,7 +565,8 @@ export function trustPageMetadata(key: TrustPageKey): Metadata {
       title: page.title,
       description: page.description,
       url: canonical,
-      type: 'website'
+      type: 'website',
+      images: DEFAULT_OPEN_GRAPH_IMAGES
     }
   };
 }

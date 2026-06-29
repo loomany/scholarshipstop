@@ -5,6 +5,7 @@ import { ESSAYS_SECTION_PATH } from '@/lib/essays/essayHubSection';
 import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
 import { parseEssaysIndexSearchParams } from '@/lib/essays/essaysIndexFilters';
 import { getCanonical } from '@/lib/seo/canonical';
+import { DEFAULT_OPEN_GRAPH_IMAGES } from '@/lib/seo/socialImage';
 
 export const revalidate = 300;
 
@@ -28,7 +29,12 @@ export function generateMetadata({
   return {
     title: baseTitle,
     description: baseDescription,
-    openGraph: { title: baseTitle, description: baseDescription, url: canonical },
+    openGraph: {
+      title: baseTitle,
+      description: baseDescription,
+      url: canonical,
+      images: DEFAULT_OPEN_GRAPH_IMAGES
+    },
     alternates: buildStage2EnglishPilotAlternates(ESSAYS_SECTION_PATH),
     ...(hasNonCanonicalView
       ? {

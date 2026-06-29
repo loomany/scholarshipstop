@@ -2,12 +2,11 @@ import type { Metadata } from 'next';
 
 import IqLegalPage from '@/components/iq/IqLegalPage';
 import { getIqLocaleFromRequest } from '@/lib/iq/i18n/getIqLocaleFromRequest';
-import { getIqLegalMetadata } from '@/lib/iq/i18n/iqLegalShellCopy';
+import { buildIqLegalPageMetadata } from '@/lib/iq/i18n/iqLegalShellCopy';
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = getIqLocaleFromRequest();
-  const meta = getIqLegalMetadata('privacy', locale);
-  return { title: meta.title, description: meta.description };
+  return buildIqLegalPageMetadata('privacy', locale);
 }
 
 export default function IqPrivacyPolicyPage() {
@@ -27,9 +26,9 @@ export default function IqPrivacyPolicyPage() {
               </p>
               <p>
                 The assessment also processes your test responses, timing data,
-                score output, domain breakdown, and generated report profile.
-                We may collect technical information such as browser type,
-                device type, IP address, pages visited, and usage events.
+                score output, domain breakdown, and generated report profile. We
+                may collect technical information such as browser type, device
+                type, IP address, pages visited, and usage events.
               </p>
             </>
           )
@@ -38,10 +37,14 @@ export default function IqPrivacyPolicyPage() {
           title: 'How we use information',
           body: (
             <ul className="list-disc space-y-2 pl-6">
-              <li>to provide the assessment and generate the IQ-style report</li>
+              <li>
+                to provide the assessment and generate the IQ-style report
+              </li>
               <li>to process purchases and support report access</li>
               <li>to prevent abuse, debug errors, and secure the service</li>
-              <li>to improve the product, page performance, and user experience</li>
+              <li>
+                to improve the product, page performance, and user experience
+              </li>
               <li>to respond to support requests</li>
             </ul>
           )
@@ -50,8 +53,8 @@ export default function IqPrivacyPolicyPage() {
           title: 'Payments and LemonSqueezy',
           body: (
             <p>
-              Payments are processed by LemonSqueezy, our Merchant of Record.
-              We do not store your full card number or card security code.
+              Payments are processed by LemonSqueezy, our Merchant of Record. We
+              do not store your full card number or card security code.
               LemonSqueezy may process payment, tax, fraud prevention, and
               checkout information according to its own policies.
             </p>

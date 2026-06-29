@@ -2,12 +2,11 @@ import type { Metadata } from 'next';
 
 import IqLegalPage from '@/components/iq/IqLegalPage';
 import { getIqLocaleFromRequest } from '@/lib/iq/i18n/getIqLocaleFromRequest';
-import { getIqLegalMetadata } from '@/lib/iq/i18n/iqLegalShellCopy';
+import { buildIqLegalPageMetadata } from '@/lib/iq/i18n/iqLegalShellCopy';
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = getIqLocaleFromRequest();
-  const meta = getIqLegalMetadata('about', locale);
-  return { title: meta.title, description: meta.description };
+  return buildIqLegalPageMetadata('about', locale);
 }
 
 export default function IqAboutPage() {
@@ -38,10 +37,10 @@ export default function IqAboutPage() {
           body: (
             <p>
               The landing page references established psychometric traditions,
-              including online cognitive batteries, matrix reasoning, multi-index
-              intelligence profiles, and fluid reasoning research. Those
-              references explain the product inspiration. They do not mean IQ
-              Profile is affiliated with, endorsed by, or equivalent to any
+              including online cognitive batteries, matrix reasoning,
+              multi-index intelligence profiles, and fluid reasoning research.
+              Those references explain the product inspiration. They do not mean
+              IQ Profile is affiliated with, endorsed by, or equivalent to any
               clinical assessment.
             </p>
           )

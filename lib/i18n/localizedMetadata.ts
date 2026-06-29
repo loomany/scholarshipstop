@@ -7,6 +7,10 @@ import {
   type LocalizedPilotPage
 } from '@/lib/i18n/staticTranslations';
 import { getLocalizedCanonical } from '@/lib/seo/canonical';
+import {
+  DEFAULT_OPEN_GRAPH_IMAGES,
+  DEFAULT_TWITTER_IMAGES
+} from '@/lib/seo/socialImage';
 
 export function hasSearchParams(
   searchParams?: Record<string, string | string[] | undefined>
@@ -61,12 +65,14 @@ export function buildLocalizedPilotMetadata({
           ? 'article'
           : 'website',
       siteName: 'ScholarshipTop',
-      locale: page.locale === 'es' ? 'es_ES' : 'fr_FR'
+      locale: page.locale === 'es' ? 'es_ES' : 'fr_FR',
+      images: DEFAULT_OPEN_GRAPH_IMAGES
     },
     twitter: {
       card: 'summary_large_image',
       title: page.title,
-      description: page.metaDescription
+      description: page.metaDescription,
+      images: DEFAULT_TWITTER_IMAGES
     }
   };
 }

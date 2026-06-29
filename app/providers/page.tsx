@@ -16,6 +16,7 @@ import {
 import { SEO_ROUTE_STATE_SLUG_TO_CODE } from '@/lib/scholarships/seoTags/routeSegmentMaps';
 import { getCanonical } from '@/lib/seo/canonical';
 import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
+import { DEFAULT_OPEN_GRAPH_IMAGES } from '@/lib/seo/socialImage';
 
 export type { ProvidersHubSearchParams };
 
@@ -36,14 +37,13 @@ export async function generateMetadata({
     title: baseTitle,
     description: baseDescription,
     alternates: buildStage2EnglishPilotAlternates('/providers'),
-    ...(isCanonicalListing
-      ? {}
-      : { robots: { index: false, follow: true } }),
+    ...(isCanonicalListing ? {} : { robots: { index: false, follow: true } }),
     openGraph: {
       title: baseTitle,
       description: baseDescription,
       url: canonicalUrl,
-      type: 'website'
+      type: 'website',
+      images: DEFAULT_OPEN_GRAPH_IMAGES
     }
   };
 }
@@ -56,7 +56,8 @@ export default async function ProvidersHubPage({ searchParams }: PageProps) {
   const countryBucket = parseProvidersHubCountryParam(searchParams.country);
   const currentPage = parseProvidersHubPageParam(searchParams.page);
   const q = searchQueryFromParams(searchParams.q);
-  let stateFromQuery = parseProvidersHubStateQueryParam(searchParams.state) ?? '';
+  let stateFromQuery =
+    parseProvidersHubStateQueryParam(searchParams.state) ?? '';
   if (countryBucket === 'other') {
     stateFromQuery = '';
   }

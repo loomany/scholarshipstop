@@ -6,6 +6,7 @@ import { resourceGuideLinkClassName } from '@/lib/content-hub/resourceGuidePages
 import { resourceGuideHref } from '@/lib/scholarships/resourceGuideRoutes';
 import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
 import { getCanonical } from '@/lib/seo/canonical';
+import { DEFAULT_OPEN_GRAPH_IMAGES } from '@/lib/seo/socialImage';
 
 const hrefApply = resourceGuideHref('how-to-apply-for-scholarships');
 const hrefDeadlines = resourceGuideHref('scholarship-deadlines-explained');
@@ -15,12 +16,15 @@ export const metadata: Metadata = {
   title: 'Can You Combine Multiple Scholarships?',
   description:
     'Find out whether you can combine multiple scholarships, how stacking works with school policy, what limitations apply, and which questions to ask before accepting several awards.',
-  alternates: buildStage2EnglishPilotAlternates('/resources/combine-multiple-scholarships'),
+  alternates: buildStage2EnglishPilotAlternates(
+    '/resources/combine-multiple-scholarships'
+  ),
   openGraph: {
     title: 'Can You Combine Multiple Scholarships?',
     description:
       'Find out whether you can combine multiple scholarships, how stacking works with school policy, what limitations apply, and which questions to ask before accepting several awards.',
-    url: canonical
+    url: canonical,
+    images: DEFAULT_OPEN_GRAPH_IMAGES
   }
 };
 
@@ -45,8 +49,7 @@ export default function CombineMultipleScholarshipsPage() {
         {
           href: hrefApply,
           title: 'How to Apply for Scholarships',
-          blurb:
-            'practical steps to organize your application process'
+          blurb: 'practical steps to organize your application process'
         },
         {
           href: hrefDeadlines,
@@ -75,18 +78,25 @@ export default function CombineMultipleScholarshipsPage() {
           aid.
         </p>
         <ul>
-          <li>Ask: Is this scholarship sent to the school or to me directly?</li>
-          <li>Ask: Does it renew automatically or require a new application yearly?</li>
-          <li>Ask: Is it restricted to tuition, or can it cover other costs?</li>
+          <li>
+            Ask: Is this scholarship sent to the school or to me directly?
+          </li>
+          <li>
+            Ask: Does it renew automatically or require a new application
+            yearly?
+          </li>
+          <li>
+            Ask: Is it restricted to tuition, or can it cover other costs?
+          </li>
         </ul>
 
         <h2>Rules and Limitations</h2>
         <p>
-          Read each award letter for phrases like “not stackable,” “last dollar,”
-          or “may adjust other aid.” Federal rules and school policy both cap
-          total aid relative to your cost of attendance. If you are close to
-          the cap, a new scholarship might replace part of an existing grant
-          rather than add on top—frustrating but normal.
+          Read each award letter for phrases like “not stackable,” “last
+          dollar,” or “may adjust other aid.” Federal rules and school policy
+          both cap total aid relative to your cost of attendance. If you are
+          close to the cap, a new scholarship might replace part of an existing
+          grant rather than add on top—frustrating but normal.
         </p>
         <p>
           Keep a simple table: scholarship name, amount, restrictions, and who

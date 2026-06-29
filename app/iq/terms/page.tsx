@@ -3,12 +3,11 @@ import Link from 'next/link';
 
 import IqLegalPage from '@/components/iq/IqLegalPage';
 import { getIqLocaleFromRequest } from '@/lib/iq/i18n/getIqLocaleFromRequest';
-import { getIqLegalMetadata } from '@/lib/iq/i18n/iqLegalShellCopy';
+import { buildIqLegalPageMetadata } from '@/lib/iq/i18n/iqLegalShellCopy';
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = getIqLocaleFromRequest();
-  const meta = getIqLegalMetadata('terms', locale);
-  return { title: meta.title, description: meta.description };
+  return buildIqLegalPageMetadata('terms', locale);
 }
 
 export default function IqTermsPage() {

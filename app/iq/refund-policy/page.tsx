@@ -2,12 +2,11 @@ import type { Metadata } from 'next';
 
 import IqLegalPage from '@/components/iq/IqLegalPage';
 import { getIqLocaleFromRequest } from '@/lib/iq/i18n/getIqLocaleFromRequest';
-import { getIqLegalMetadata } from '@/lib/iq/i18n/iqLegalShellCopy';
+import { buildIqLegalPageMetadata } from '@/lib/iq/i18n/iqLegalShellCopy';
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = getIqLocaleFromRequest();
-  const meta = getIqLegalMetadata('refund', locale);
-  return { title: meta.title, description: meta.description };
+  return buildIqLegalPageMetadata('refund', locale);
 }
 
 export default function IqRefundPolicyPage() {
@@ -33,7 +32,10 @@ export default function IqRefundPolicyPage() {
             <ul className="list-disc space-y-2 pl-6">
               <li>duplicate charges for the same report</li>
               <li>payment succeeded but the report could not be accessed</li>
-              <li>clear technical failure that prevented delivery of the paid report</li>
+              <li>
+                clear technical failure that prevented delivery of the paid
+                report
+              </li>
               <li>other cases required by applicable consumer law</li>
             </ul>
           )

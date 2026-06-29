@@ -55,11 +55,11 @@ Account-specific features exist, but this file covers public surfaces only.
 
 ### IQ assessment
 
-Scholarship IQ is a separate assessment and guidance product on a subdomain:
+Scholarship IQ is a separate assessment and guidance area on ScholarshipTop:
 
-- https://iq.scholarshiptop.com/
-- https://iq.scholarshiptop.com/es
-- https://iq.scholarshiptop.com/fr
+- https://scholarshiptop.com/iq
+- https://scholarshiptop.com/iq/about
+- https://scholarshiptop.com/iq/faq
 
 IQ reports and scores are guidance tools, not scholarship eligibility decisions, admission decisions, or funding awards.
 
