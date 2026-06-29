@@ -55,6 +55,9 @@ yarn-error.log*
 !*.env.example
 .env.local.bak-*
 .env.local.prod-backup
+*.secret.env
+go4-live.env
+lemon-live.env
 # VPS private env (never commit)
 ops/vps/runtime/env/*.env
 /opt/scholarshiptop/env/*.env
