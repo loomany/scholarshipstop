@@ -64,7 +64,7 @@
     "content:audit-related": "node scripts/audit-content-posts-related-scholarships.mjs",
     "content:audit-grant-cards": "node scripts/audit-grant-cards-anon-vs-service.mjs",
     "content:backfill-related-from-links": "npx dotenv-cli -e .env.local -- npx tsx scripts/backfill-related-scholarships-from-links.ts",
-    "test:webhooks": "npx tsx --test lib/payments/__tests__/lemonWebhookSignature.test.ts lib/payments/__tests__/lemonSubscriptionState.test.ts lib/payments/__tests__/subscriptionAccess.test.ts",
+    "test:webhooks": "npx tsx --test lib/payments/__tests__/lemonWebhookSignature.test.ts lib/payments/__tests__/lemonSubscriptionState.test.ts lib/payments/__tests__/subscriptionAccess.test.ts lib/payments/__tests__/lemonInvoiceWebhookEnrichment.test.ts lib/payments/__tests__/lemonSubscriptionEventValidation.test.ts lib/payments/__tests__/providerWebhookLedger.test.ts",
     "test:seo-lib": "npx tsx --test lib/seo/__tests__/*.test.ts",
     "test:essays-lib": "npx tsx --test lib/essays/__tests__/*.test.ts",
     "seo:measure-urls": "npx tsx scripts/seo-measure-urls.ts",

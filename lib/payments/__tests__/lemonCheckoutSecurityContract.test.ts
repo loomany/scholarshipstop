@@ -31,3 +31,12 @@ test('webhook selects only the secret for the explicit Lemon mode', () => {
   );
   assert.doesNotMatch(webhook, /Webhook secret is not configured/);
 });
+
+test('subscription webhooks validate and claim the durable ledger before processing', () => {
+  assert.match(webhook, /validateLemonSubscriptionEvent/);
+  assert.match(webhook, /processWebhookWithLedger/);
+  assert.match(
+    webhook,
+    /process: async \(\) => \{\s+const decision = decideSubscriptionUpdate/
+  );
+});

@@ -5,6 +5,7 @@ import {
   parseBillingPlanKey,
   resolveLemonCheckoutConfig,
   resolveLemonIqCheckoutConfig,
+  resolveLemonSubscriptionWebhookConfig,
   resolveLemonWebhookConfig,
   validateLemonVariantMode
 } from '@/lib/payments/lemonRuntimeConfig';
@@ -25,7 +26,11 @@ function liveEnv(): Record<string, string> {
     LEMON_IQ_VARIANT_LIVE: '301',
     LEMON_IQ_VARIANT_TEST: '401',
     LEMON_IQ_EXPECTED_TOTAL_MINOR: '2500',
-    LEMON_IQ_CURRENCY: 'usd'
+    LEMON_IQ_CURRENCY: 'usd',
+    LEMON_PRICE_MONTHLY_MINOR: '1200',
+    LEMON_PRICE_QUARTERLY_MINOR: '3000',
+    LEMON_PRICE_YEARLY_MINOR: '9900',
+    LEMON_SUBSCRIPTION_CURRENCY: 'usd'
   };
 }
 
@@ -130,6 +135,26 @@ test('provider variant validation rejects a test-mode live variant', async () =>
   assert.deepEqual(
     await validateLemonVariantMode(resolved.config, fakeFetch as typeof fetch),
     { ok: false, reason: 'mode_mismatch' }
+  );
+});
+
+test('subscription webhook config requires exact plan prices and currency', () => {
+  const result = resolveLemonSubscriptionWebhookConfig(liveEnv(), 'production');
+  assert.equal(result.ok, true);
+  if (result.ok) {
+    assert.deepEqual(result.config.expectedTotals, {
+      monthly: 1200,
+      quarterly: 3000,
+      yearly: 9900
+    });
+    assert.equal(result.config.currency, 'USD');
+  }
+
+  const invalid = liveEnv();
+  invalid.LEMON_PRICE_MONTHLY_MINOR = '12usd';
+  assert.deepEqual(
+    resolveLemonSubscriptionWebhookConfig(invalid, 'production'),
+    { ok: false, reason: 'invalid_price' }
   );
 });
 

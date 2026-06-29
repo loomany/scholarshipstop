@@ -35,9 +35,18 @@ import {
 import { getIqReportAdminClient, getIqReportUrl } from '@/lib/iqReportOrders';
 import {
   resolveLemonIqCheckoutConfig,
+  resolveLemonSubscriptionWebhookConfig,
   resolveLemonWebhookConfig
 } from '@/lib/payments/lemonRuntimeConfig';
 import { validateIqOrderCreatedPayload } from '@/lib/payments/lemonIqOrderValidation';
+import {
+  isCoveredLemonSubscriptionEvent,
+  validateLemonSubscriptionEvent
+} from '@/lib/payments/lemonSubscriptionEventValidation';
+import {
+  processWebhookWithLedger,
+  type ProviderWebhookRpcClient
+} from '@/lib/payments/providerWebhookLedger';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -145,19 +154,12 @@ async function notifyAdminLemonPaymentEmail(options: {
   }
 }
 
-type ProviderWebhookRpcClient = {
-  rpc(
-    name: string,
-    params: Record<string, string | null>
-  ): Promise<{ data: unknown; error: { message?: string } | null }>;
-};
-
 function getProviderWebhookRpcClient(): ProviderWebhookRpcClient {
   return getIqReportAdminClient() as unknown as ProviderWebhookRpcClient;
 }
 
 async function completeProviderWebhookEvent(options: {
-  eventKey: string;
+  eventId: string;
   status: 'processed' | 'failed';
   error?: string;
 }) {
@@ -165,14 +167,14 @@ async function completeProviderWebhookEvent(options: {
     'complete_provider_webhook_event',
     {
       p_provider: 'lemon_squeezy',
-      p_event_key: options.eventKey,
+      p_event_id: options.eventId,
       p_status: options.status,
       p_last_error: options.error ?? null
     }
   );
   if (error) {
     console.error('[lemon:webhook] provider event completion failed', {
-      eventKey: options.eventKey,
+      eventId: options.eventId,
       status: options.status,
       message: error.message
     });
@@ -186,6 +188,11 @@ async function handleIqReportOrderCreated(
   payloadHash: string
 ) {
   if (payload.meta?.event_name !== 'order_created') return null;
+  const iqReportId =
+    payload.meta?.custom_data?.iq_report_id ??
+    payload.data?.attributes?.custom_data?.iq_report_id ??
+    payload.attributes?.custom_data?.iq_report_id;
+  if (typeof iqReportId !== 'string' || !iqReportId.trim()) return null;
 
   const resolved = resolveLemonIqCheckoutConfig();
   if (!resolved.ok) {
@@ -204,18 +211,20 @@ async function handleIqReportOrderCreated(
   }
 
   const { orderId, reportId } = validated.order;
-  const eventKey = `order_created:${orderId}`;
+  const eventId = `iq:order_created:${orderId}`;
   const { data: claimed, error: claimError } =
     await getProviderWebhookRpcClient().rpc('claim_provider_webhook_event', {
       p_provider: 'lemon_squeezy',
-      p_event_key: eventKey,
-      p_event_name: 'order_created',
-      p_payload_hash: payloadHash
+      p_event_id: eventId,
+      p_event_type: 'order_created',
+      p_payload_hash: payloadHash,
+      p_provider_order_id: orderId,
+      p_provider_subscription_id: null
     });
 
   if (claimError) {
     console.error('[lemon:webhook] IQ order claim failed', {
-      eventKey,
+      eventId,
       message: claimError.message
     });
     return new Response('Could not claim IQ order event.', { status: 500 });
@@ -256,7 +265,7 @@ async function handleIqReportOrderCreated(
           existingOrder.status === 'email_sent')
       ) {
         const completed = await completeProviderWebhookEvent({
-          eventKey,
+          eventId,
           status: 'processed'
         });
         return new Response(
@@ -270,7 +279,7 @@ async function handleIqReportOrderCreated(
       message: error?.message
     });
     await completeProviderWebhookEvent({
-      eventKey,
+      eventId,
       status: 'failed',
       error: error ? 'database_update_failed' : 'order_not_pending'
     });
@@ -336,7 +345,7 @@ async function handleIqReportOrderCreated(
   });
 
   const completed = await completeProviderWebhookEvent({
-    eventKey,
+    eventId,
     status: 'processed'
   });
   if (!completed) {
@@ -415,7 +424,22 @@ export async function POST(req: Request) {
   }
 
   try {
-    const originalEventName = normalizeLemonEventName(payload.meta?.event_name);
+    const originalPayload = payload;
+    const originalEventName = normalizeLemonEventName(
+      originalPayload.meta?.event_name
+    );
+    const iqReportResponse = await handleIqReportOrderCreated(
+      originalPayload,
+      payloadHash
+    );
+    if (iqReportResponse) return iqReportResponse;
+
+    if (!isCoveredLemonSubscriptionEvent(originalEventName)) {
+      return new Response(JSON.stringify({ received: true, ignored: true }), {
+        status: 200
+      });
+    }
+
     const enriched =
       await enrichInvoicePaymentSuccessWithSubscriptionFetch(payload);
     if (enriched) {
@@ -428,313 +452,351 @@ export async function POST(req: Request) {
       payload = enriched;
     }
 
-    const iqReportResponse = await handleIqReportOrderCreated(
+    const subscriptionConfig = resolveLemonSubscriptionWebhookConfig();
+    if (!subscriptionConfig.ok) {
+      console.error('[lemon:webhook] subscription validation unavailable', {
+        reason: subscriptionConfig.reason
+      });
+      return new Response('Subscription validation is unavailable.', {
+        status: 503
+      });
+    }
+
+    const validation = validateLemonSubscriptionEvent({
       payload,
-      payloadHash
-    );
-    if (iqReportResponse) return iqReportResponse;
-
-    const decision = decideSubscriptionUpdate(payload);
-    if (decision.kind === 'ignored') {
-      const invoiceFx = await runInvoicePaymentFailedWebhookEffects(
-        getSupabaseAdmin(),
-        payload
-      );
-      await notifyAdminLemonPaymentEmail({
-        payload,
-        eventName: originalEventName,
-        userEmail: getCheckoutEmailFromPayload(payload),
-        context: 'ignored_order_or_invoice'
-      });
-      return new Response(
-        JSON.stringify({
-          received: true,
-          ignored: true,
-          invoicePaymentFailed: invoiceFx
-        }),
-        { status: 200 }
-      );
-    }
-
-    console.info('[lemon:webhook] processing entitlement event', {
-      eventName: decision.eventName,
-      subscriptionId: decision.subscription.id,
-      userId: decision.userId,
-      status: decision.subscription.status,
-      plan: decision.subscriptionPlan
+      originalPayload,
+      payloadHash,
+      providerEventId:
+        req.headers.get('x-event-id') ??
+        req.headers.get('x-lemon-squeezy-event-id'),
+      config: subscriptionConfig.config
     });
-
-    const { data: existingSubscription } = await getSupabaseAdmin()
-      .from('subscriptions')
-      .select('id, metadata, raw_payload')
-      .eq('id', decision.subscription.id)
-      .maybeSingle();
-    const existingMetadata =
-      existingSubscription?.metadata &&
-      typeof existingSubscription.metadata === 'object' &&
-      !Array.isArray(existingSubscription.metadata)
-        ? (existingSubscription.metadata as Record<string, Json>)
-        : null;
-    const nextMetadata =
-      decision.subscription.metadata &&
-      typeof decision.subscription.metadata === 'object' &&
-      !Array.isArray(decision.subscription.metadata)
-        ? (decision.subscription.metadata as Record<string, Json>)
-        : null;
-    const existingEventFingerprint =
-      typeof existingMetadata?.lemon_event_fingerprint === 'string'
-        ? existingMetadata.lemon_event_fingerprint
-        : null;
-    const nextEventFingerprint =
-      typeof nextMetadata?.lemon_event_fingerprint === 'string'
-        ? nextMetadata.lemon_event_fingerprint
-        : null;
-    const existingUpdatedAt = getStoredPayloadUpdatedAt(
-      existingSubscription?.raw_payload ?? null
-    );
-    const incomingUpdatedAt = getPayloadUpdatedAt(payload);
-
-    if (
-      (existingEventFingerprint &&
-        nextEventFingerprint &&
-        existingEventFingerprint === nextEventFingerprint) ||
-      (existingSubscription?.raw_payload &&
-        JSON.stringify(existingSubscription.raw_payload) ===
-          JSON.stringify(payload))
-    ) {
-      console.info('[lemon:webhook] duplicate payload ignored', {
-        subscriptionId: decision.subscription.id,
-        userId: decision.userId,
-        eventFingerprint: nextEventFingerprint
+    if (!validation.ok) {
+      console.warn('[lemon:webhook] subscription payload rejected', {
+        eventName: originalEventName,
+        reason: validation.reason
       });
-      return new Response(JSON.stringify({ received: true, duplicate: true }), {
-        status: 200
+      return new Response('Invalid subscription webhook payload.', {
+        status: 400
       });
     }
 
-    const skipStaleForInvoicePaymentFailed =
-      decision.eventName === 'subscription_payment_failed' &&
-      isSubscriptionInvoicePayload(payload);
+    return processWebhookWithLedger({
+      client: getProviderWebhookRpcClient(),
+      event: validation.event,
+      process: async () => {
+        const decision = decideSubscriptionUpdate(payload, validation.plan);
+        if (decision.kind === 'ignored') {
+          const invoiceFx = await runInvoicePaymentFailedWebhookEffects(
+            getSupabaseAdmin(),
+            payload
+          );
+          await notifyAdminLemonPaymentEmail({
+            payload,
+            eventName: originalEventName,
+            userEmail: getCheckoutEmailFromPayload(payload),
+            context: 'ignored_order_or_invoice'
+          });
+          return new Response(
+            JSON.stringify({
+              received: true,
+              ignored: true,
+              invoicePaymentFailed: invoiceFx
+            }),
+            { status: 200 }
+          );
+        }
 
-    if (
-      !skipStaleForInvoicePaymentFailed &&
-      existingUpdatedAt &&
-      incomingUpdatedAt
-    ) {
-      const existingUpdatedAtDate = parseIsoDate(existingUpdatedAt);
-      const incomingUpdatedAtDate = parseIsoDate(incomingUpdatedAt);
-      if (
-        existingUpdatedAtDate &&
-        incomingUpdatedAtDate &&
-        incomingUpdatedAtDate.getTime() < existingUpdatedAtDate.getTime()
-      ) {
-        console.info('[lemon:webhook] stale payload ignored', {
+        console.info('[lemon:webhook] processing entitlement event', {
+          eventName: decision.eventName,
           subscriptionId: decision.subscription.id,
           userId: decision.userId,
-          existingUpdatedAt,
-          incomingUpdatedAt,
-          eventName: decision.eventName
+          status: decision.subscription.status,
+          plan: decision.subscriptionPlan
         });
-        return new Response(JSON.stringify({ received: true, stale: true }), {
+
+        const { data: existingSubscription } = await getSupabaseAdmin()
+          .from('subscriptions')
+          .select('id, metadata, raw_payload')
+          .eq('id', decision.subscription.id)
+          .maybeSingle();
+        const existingMetadata =
+          existingSubscription?.metadata &&
+          typeof existingSubscription.metadata === 'object' &&
+          !Array.isArray(existingSubscription.metadata)
+            ? (existingSubscription.metadata as Record<string, Json>)
+            : null;
+        const nextMetadata =
+          decision.subscription.metadata &&
+          typeof decision.subscription.metadata === 'object' &&
+          !Array.isArray(decision.subscription.metadata)
+            ? (decision.subscription.metadata as Record<string, Json>)
+            : null;
+        const existingEventFingerprint =
+          typeof existingMetadata?.lemon_event_fingerprint === 'string'
+            ? existingMetadata.lemon_event_fingerprint
+            : null;
+        const nextEventFingerprint =
+          typeof nextMetadata?.lemon_event_fingerprint === 'string'
+            ? nextMetadata.lemon_event_fingerprint
+            : null;
+        const existingUpdatedAt = getStoredPayloadUpdatedAt(
+          existingSubscription?.raw_payload ?? null
+        );
+        const incomingUpdatedAt = getPayloadUpdatedAt(payload);
+
+        if (
+          (existingEventFingerprint &&
+            nextEventFingerprint &&
+            existingEventFingerprint === nextEventFingerprint) ||
+          (existingSubscription?.raw_payload &&
+            JSON.stringify(existingSubscription.raw_payload) ===
+              JSON.stringify(payload))
+        ) {
+          console.info('[lemon:webhook] duplicate payload ignored', {
+            subscriptionId: decision.subscription.id,
+            userId: decision.userId,
+            eventFingerprint: nextEventFingerprint
+          });
+          return new Response(
+            JSON.stringify({ received: true, duplicate: true }),
+            {
+              status: 200
+            }
+          );
+        }
+
+        const skipStaleForInvoicePaymentFailed =
+          decision.eventName === 'subscription_payment_failed' &&
+          isSubscriptionInvoicePayload(payload);
+
+        if (
+          !skipStaleForInvoicePaymentFailed &&
+          existingUpdatedAt &&
+          incomingUpdatedAt
+        ) {
+          const existingUpdatedAtDate = parseIsoDate(existingUpdatedAt);
+          const incomingUpdatedAtDate = parseIsoDate(incomingUpdatedAt);
+          if (
+            existingUpdatedAtDate &&
+            incomingUpdatedAtDate &&
+            incomingUpdatedAtDate.getTime() < existingUpdatedAtDate.getTime()
+          ) {
+            console.info('[lemon:webhook] stale payload ignored', {
+              subscriptionId: decision.subscription.id,
+              userId: decision.userId,
+              existingUpdatedAt,
+              incomingUpdatedAt,
+              eventName: decision.eventName
+            });
+            return new Response(
+              JSON.stringify({ received: true, stale: true }),
+              {
+                status: 200
+              }
+            );
+          }
+        }
+
+        let subscriptionRow = decision.subscription;
+        if (
+          decision.eventName === 'subscription_payment_failed' &&
+          isSubscriptionInvoicePayload(payload)
+        ) {
+          const { data: existingFull } = await getSupabaseAdmin()
+            .from('subscriptions')
+            .select('*')
+            .eq('id', decision.subscription.id)
+            .maybeSingle();
+          if (existingFull) {
+            subscriptionRow = mergeSubscriptionPaymentFailedInvoiceUpsert(
+              decision.subscription,
+              existingFull
+            );
+          }
+        }
+
+        console.info('[lemon:webhook] upserting subscription', {
+          subscriptionId: subscriptionRow.id,
+          userId: decision.userId
+        });
+        const { error: subscriptionError } = await getSupabaseAdmin()
+          .from('subscriptions')
+          .upsert([subscriptionRow], { onConflict: 'id' });
+        if (subscriptionError) {
+          console.error('[lemon:webhook] subscription upsert failed', {
+            message: subscriptionError.message,
+            code: subscriptionError.code,
+            details: subscriptionError.details,
+            hint: subscriptionError.hint,
+            incomingStatus: decision.subscription.status,
+            incomingUpdatedAt,
+            subscriptionId: decision.subscription.id,
+            userId: decision.userId
+          });
+          return new Response('Error syncing subscription record.', {
+            status: 500
+          });
+        }
+        console.info('[lemon:webhook] subscription upserted', {
+          subscriptionId: decision.subscription.id,
+          userId: decision.userId
+        });
+
+        console.info('[lemon:webhook] updating profile entitlements', {
+          userId: decision.userId,
+          isSubscribed: decision.isSubscribed,
+          plan: decision.subscriptionPlan
+        });
+        const { error } = await getSupabaseAdmin()
+          .from('profiles')
+          .upsert(
+            [
+              {
+                id: decision.userId,
+                is_subscribed: decision.isSubscribed,
+                subscription_plan: decision.subscriptionPlan
+              }
+            ],
+            { onConflict: 'id' }
+          );
+        if (error) {
+          console.error('[lemon:webhook] profile entitlement update failed', {
+            message: error.message,
+            code: error.code,
+            details: error.details,
+            hint: error.hint,
+            userId: decision.userId
+          });
+          return new Response('Error updating subscription status.', {
+            status: 500
+          });
+        }
+        console.info('[lemon:webhook] profile entitlements updated', {
+          userId: decision.userId
+        });
+
+        try {
+          let userEmail: string | null = null;
+          try {
+            const { data: authUserData, error: authErr } =
+              await getSupabaseAdmin().auth.admin.getUserById(decision.userId);
+            if (authErr) {
+              console.warn(
+                '[lemon:webhook] auth admin getUserById',
+                authErr.message
+              );
+            }
+            userEmail = authUserData?.user?.email ?? null;
+          } catch (authLookupError) {
+            console.error('[lemon:webhook] auth admin getUserById threw', {
+              message:
+                authLookupError instanceof Error
+                  ? authLookupError.message
+                  : String(authLookupError),
+              userId: decision.userId
+            });
+          }
+
+          await notifyTelegramPayment({
+            userId: decision.userId,
+            email: userEmail,
+            plan: decision.subscriptionPlan,
+            status: decision.subscription.status ?? 'unknown',
+            eventName: decision.eventName
+          });
+
+          const adminPaymentEventName = shouldSendLemonAdminPaymentEmail(
+            originalEventName
+          )
+            ? originalEventName
+            : decision.eventName;
+          await notifyAdminLemonPaymentEmail({
+            payload,
+            eventName: adminPaymentEventName,
+            userEmail,
+            context: 'subscription',
+            subscriptionId: decision.subscription.id
+          });
+
+          if (!userEmail?.trim()) {
+            console.warn(
+              '[lemon:webhook] skip subscription emails — no auth email for user',
+              {
+                userId: decision.userId
+              }
+            );
+          } else {
+            const eventName = decision.eventName;
+            if (
+              lemonWebhookShouldSendSubscriptionWelcomeEmail(
+                eventName,
+                payload,
+                decision.isSubscribed
+              )
+            ) {
+              const r = await sendLemonSubscriptionActiveEmail({
+                toEmail: userEmail.trim(),
+                payload,
+                subscriptionPlan: decision.subscriptionPlan
+              });
+              if (!r.ok) {
+                console.warn(
+                  '[lemon:webhook] subscription active email not sent',
+                  {
+                    userId: decision.userId,
+                    skipped: r.skipped
+                  }
+                );
+              }
+            } else if (
+              lemonWebhookShouldSendSubscriptionCancelledEmail(eventName)
+            ) {
+              const r = await sendLemonSubscriptionCancelledEmail({
+                toEmail: userEmail.trim(),
+                payload
+              });
+              if (!r.ok) {
+                console.warn(
+                  '[lemon:webhook] subscription cancelled email not sent',
+                  {
+                    userId: decision.userId,
+                    skipped: r.skipped
+                  }
+                );
+              }
+            } else if (
+              lemonWebhookShouldSendSubscriptionPaymentFailedEmail(eventName)
+            ) {
+              const r = await sendLemonSubscriptionPaymentFailedEmail({
+                toEmail: userEmail.trim(),
+                payload
+              });
+              if (!r.ok) {
+                console.warn(
+                  '[lemon:webhook] subscription payment failed email not sent',
+                  {
+                    userId: decision.userId,
+                    skipped: r.skipped
+                  }
+                );
+              }
+            }
+          }
+        } catch (sideEffectError) {
+          console.error('[lemon:webhook] post-update notification failed', {
+            message:
+              sideEffectError instanceof Error
+                ? sideEffectError.message
+                : String(sideEffectError),
+            userId: decision.userId
+          });
+        }
+
+        return new Response(JSON.stringify({ received: true, updated: true }), {
           status: 200
         });
       }
-    }
-
-    let subscriptionRow = decision.subscription;
-    if (
-      decision.eventName === 'subscription_payment_failed' &&
-      isSubscriptionInvoicePayload(payload)
-    ) {
-      const { data: existingFull } = await getSupabaseAdmin()
-        .from('subscriptions')
-        .select('*')
-        .eq('id', decision.subscription.id)
-        .maybeSingle();
-      if (existingFull) {
-        subscriptionRow = mergeSubscriptionPaymentFailedInvoiceUpsert(
-          decision.subscription,
-          existingFull
-        );
-      }
-    }
-
-    console.info('[lemon:webhook] upserting subscription', {
-      subscriptionId: subscriptionRow.id,
-      userId: decision.userId
-    });
-    const { error: subscriptionError } = await getSupabaseAdmin()
-      .from('subscriptions')
-      .upsert([subscriptionRow], { onConflict: 'id' });
-    if (subscriptionError) {
-      console.error('[lemon:webhook] subscription upsert failed', {
-        message: subscriptionError.message,
-        code: subscriptionError.code,
-        details: subscriptionError.details,
-        hint: subscriptionError.hint,
-        incomingStatus: decision.subscription.status,
-        incomingUpdatedAt,
-        subscriptionId: decision.subscription.id,
-        userId: decision.userId
-      });
-      return new Response('Error syncing subscription record.', {
-        status: 500
-      });
-    }
-    console.info('[lemon:webhook] subscription upserted', {
-      subscriptionId: decision.subscription.id,
-      userId: decision.userId
-    });
-
-    console.info('[lemon:webhook] updating profile entitlements', {
-      userId: decision.userId,
-      isSubscribed: decision.isSubscribed,
-      plan: decision.subscriptionPlan
-    });
-    const { error } = await getSupabaseAdmin()
-      .from('profiles')
-      .upsert(
-        [
-          {
-            id: decision.userId,
-            is_subscribed: decision.isSubscribed,
-            subscription_plan: decision.subscriptionPlan
-          }
-        ],
-        { onConflict: 'id' }
-      );
-    if (error) {
-      console.error('[lemon:webhook] profile entitlement update failed', {
-        message: error.message,
-        code: error.code,
-        details: error.details,
-        hint: error.hint,
-        userId: decision.userId
-      });
-      return new Response('Error updating subscription status.', {
-        status: 500
-      });
-    }
-    console.info('[lemon:webhook] profile entitlements updated', {
-      userId: decision.userId
-    });
-
-    try {
-      let userEmail: string | null = null;
-      try {
-        const { data: authUserData, error: authErr } =
-          await getSupabaseAdmin().auth.admin.getUserById(decision.userId);
-        if (authErr) {
-          console.warn(
-            '[lemon:webhook] auth admin getUserById',
-            authErr.message
-          );
-        }
-        userEmail = authUserData?.user?.email ?? null;
-      } catch (authLookupError) {
-        console.error('[lemon:webhook] auth admin getUserById threw', {
-          message:
-            authLookupError instanceof Error
-              ? authLookupError.message
-              : String(authLookupError),
-          userId: decision.userId
-        });
-      }
-
-      await notifyTelegramPayment({
-        userId: decision.userId,
-        email: userEmail,
-        plan: decision.subscriptionPlan,
-        status: decision.subscription.status ?? 'unknown',
-        eventName: decision.eventName
-      });
-
-      const adminPaymentEventName = shouldSendLemonAdminPaymentEmail(
-        originalEventName
-      )
-        ? originalEventName
-        : decision.eventName;
-      await notifyAdminLemonPaymentEmail({
-        payload,
-        eventName: adminPaymentEventName,
-        userEmail,
-        context: 'subscription',
-        subscriptionId: decision.subscription.id
-      });
-
-      if (!userEmail?.trim()) {
-        console.warn(
-          '[lemon:webhook] skip subscription emails — no auth email for user',
-          {
-            userId: decision.userId
-          }
-        );
-      } else {
-        const eventName = decision.eventName;
-        if (
-          lemonWebhookShouldSendSubscriptionWelcomeEmail(
-            eventName,
-            payload,
-            decision.isSubscribed
-          )
-        ) {
-          const r = await sendLemonSubscriptionActiveEmail({
-            toEmail: userEmail.trim(),
-            payload,
-            subscriptionPlan: decision.subscriptionPlan
-          });
-          if (!r.ok) {
-            console.warn('[lemon:webhook] subscription active email not sent', {
-              userId: decision.userId,
-              skipped: r.skipped
-            });
-          }
-        } else if (
-          lemonWebhookShouldSendSubscriptionCancelledEmail(eventName)
-        ) {
-          const r = await sendLemonSubscriptionCancelledEmail({
-            toEmail: userEmail.trim(),
-            payload
-          });
-          if (!r.ok) {
-            console.warn(
-              '[lemon:webhook] subscription cancelled email not sent',
-              {
-                userId: decision.userId,
-                skipped: r.skipped
-              }
-            );
-          }
-        } else if (
-          lemonWebhookShouldSendSubscriptionPaymentFailedEmail(eventName)
-        ) {
-          const r = await sendLemonSubscriptionPaymentFailedEmail({
-            toEmail: userEmail.trim(),
-            payload
-          });
-          if (!r.ok) {
-            console.warn(
-              '[lemon:webhook] subscription payment failed email not sent',
-              {
-                userId: decision.userId,
-                skipped: r.skipped
-              }
-            );
-          }
-        }
-      }
-    } catch (sideEffectError) {
-      console.error('[lemon:webhook] post-update notification failed', {
-        message:
-          sideEffectError instanceof Error
-            ? sideEffectError.message
-            : String(sideEffectError),
-        userId: decision.userId
-      });
-    }
-
-    return new Response(JSON.stringify({ received: true, updated: true }), {
-      status: 200
     });
   } catch (error) {
     if (error instanceof Error && error.message.includes('Missing user id')) {

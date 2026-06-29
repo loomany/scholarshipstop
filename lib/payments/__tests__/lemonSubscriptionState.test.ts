@@ -73,6 +73,30 @@ test('maps subscription_plan_changed to active and updates variant fields', () =
   assert.equal(decision.subscriptionPlan, 'yearly_pro');
 });
 
+test('validated variant plan overrides an inconsistent provider label', () => {
+  const decision = decideSubscriptionUpdate(
+    {
+      meta: {
+        event_name: 'subscription_created',
+        custom_data: { user_id: 'user-validated-plan' }
+      },
+      data: {
+        id: 'sub-validated-plan',
+        attributes: {
+          status: 'active',
+          variant_id: 101,
+          variant_name: 'Yearly Pro'
+        }
+      }
+    },
+    'monthly'
+  );
+  assert.equal(decision.kind, 'upsert');
+  if (decision.kind !== 'upsert') return;
+  assert.equal(decision.subscriptionPlan, 'monthly_pro');
+  assert.equal(decision.subscription.plan_code, 'monthly_pro');
+});
+
 test('forces cancelled semantics from event even when payload status is stale expired', () => {
   const payload = {
     meta: { event_name: 'subscription.cancelled' },
@@ -320,8 +344,7 @@ test('does not persist Lemon price ids into Stripe price_id foreign key', () => 
   assert.deepEqual(decision.subscription.metadata, {
     source: 'lemon_squeezy',
     event_name: 'subscription_updated',
-    lemon_event_fingerprint:
-      'subscription_updated:2047507:trialing:::::0:',
+    lemon_event_fingerprint: 'subscription_updated:2047507:trialing:::::0:',
     lemon_price_id: '2516368',
     lemon_subscription_item_id: '7674432'
   });

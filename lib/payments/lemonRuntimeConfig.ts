@@ -16,6 +16,14 @@ export type LemonIqCheckoutConfig = LemonCheckoutConfig & {
   currency: string;
 };
 
+export type LemonSubscriptionWebhookConfig = {
+  mode: LemonMode;
+  storeId: string;
+  variantIds: Record<BillingPlanKey, string>;
+  expectedTotals: Record<BillingPlanKey, number>;
+  currency: string;
+};
+
 export type LemonConfigResult =
   | { ok: true; config: LemonCheckoutConfig }
   | {
@@ -30,6 +38,11 @@ export type LemonConfigResult =
         | 'live_test_collision'
         | 'missing_webhook_secret';
     };
+
+type LemonConfigFailureReason = Extract<
+  LemonConfigResult,
+  { ok: false }
+>['reason'];
 
 const PLANS: BillingPlanKey[] = ['monthly', 'quarterly', 'yearly'];
 
@@ -121,6 +134,60 @@ export function resolveLemonWebhookConfig(
       ? env.LEMON_WEBHOOK_SECRET_LIVE?.trim()
       : env.LEMON_WEBHOOK_SECRET_TEST?.trim();
   return secret ? { ok: true, mode, secret } : { ok: false };
+}
+
+export function resolveLemonSubscriptionWebhookConfig(
+  env: LemonEnv = process.env,
+  nodeEnv = process.env.NODE_ENV
+):
+  | { ok: true; config: LemonSubscriptionWebhookConfig }
+  | {
+      ok: false;
+      reason:
+        | LemonConfigFailureReason
+        | 'missing_prices'
+        | 'invalid_price'
+        | 'invalid_currency';
+    } {
+  const base = resolveLemonCheckoutConfig('monthly', env, nodeEnv);
+  if (!base.ok) return base;
+
+  const prices = PLANS.map((plan) =>
+    env[`LEMON_PRICE_${plan.toUpperCase()}_MINOR`]?.trim()
+  );
+  if (prices.some((value) => !value)) {
+    return { ok: false, reason: 'missing_prices' };
+  }
+  if (prices.some((value) => !/^\d+$/.test(value ?? ''))) {
+    return { ok: false, reason: 'invalid_price' };
+  }
+  const parsedPrices = prices.map(Number);
+  if (
+    parsedPrices.some((value) => !Number.isSafeInteger(value) || value <= 0)
+  ) {
+    return { ok: false, reason: 'invalid_price' };
+  }
+
+  const currency = env.LEMON_SUBSCRIPTION_CURRENCY?.trim().toUpperCase() ?? '';
+  if (!/^[A-Z]{3}$/.test(currency)) {
+    return { ok: false, reason: 'invalid_currency' };
+  }
+
+  const variantIds = valuesForMode(env, base.config.mode);
+  return {
+    ok: true,
+    config: {
+      mode: base.config.mode,
+      storeId: base.config.storeId,
+      variantIds,
+      expectedTotals: {
+        monthly: parsedPrices[0]!,
+        quarterly: parsedPrices[1]!,
+        yearly: parsedPrices[2]!
+      },
+      currency
+    }
+  };
 }
 
 export function resolveLemonIqCheckoutConfig(

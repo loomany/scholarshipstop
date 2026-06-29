@@ -9,80 +9,86 @@ import {
 const LEMON_API_BASE = 'https://api.lemonsqueezy.com/v1';
 
 /**
- * Lemon often emits `subscription_payment_success` / `subscription_payment_recovered` with a
- * **subscription-invoices** body only. Our DB sync expects a **subscriptions** resource
- * (variant, status, renews_at, etc.). Those invoice webhooks were previously ignored, so plan
- * upgrades could leave the app stale if `subscription_updated` / `subscription_plan_changed`
- * did not arrive or failed.
- *
- * When `LEMONSQUEEZY_API_KEY` is set, we GET the subscription document and rewrite the payload
- * to a synthetic `subscription_updated` event so `decideSubscriptionUpdate` + upsert run as usual.
- * `meta.custom_data` from the invoice (e.g. `user_id`) is preserved.
+ * Invoice webhooks omit subscription variant and lifecycle fields. Fetch the
+ * subscription resource while preserving the signed event type, amount and currency.
+ * Failures throw so Lemon retries instead of receiving a false acknowledgement.
  */
 export async function enrichInvoicePaymentSuccessWithSubscriptionFetch(
-  payload: LemonWebhookPayload
+  payload: LemonWebhookPayload,
+  fetchImpl: typeof fetch = fetch
 ): Promise<LemonWebhookPayload | null> {
   const eventName = normalizeLemonEventName(payload.meta?.event_name);
-  if (eventName !== 'subscription_payment_success' && eventName !== 'subscription_payment_recovered') {
+  if (
+    eventName !== 'subscription_payment_success' &&
+    eventName !== 'subscription_payment_failed' &&
+    eventName !== 'subscription_payment_recovered' &&
+    eventName !== 'subscription_payment_refunded'
+  ) {
     return null;
   }
   if (!isSubscriptionInvoicePayload(payload)) return null;
 
-  const subscriptionId = payload.data?.attributes?.subscription_id;
-  if (subscriptionId == null || String(subscriptionId).trim() === '') return null;
+  const invoiceAttributes = payload.data?.attributes ?? payload.attributes;
+  const subscriptionId = invoiceAttributes?.subscription_id;
+  if (subscriptionId == null || String(subscriptionId).trim() === '') {
+    throw new Error('Subscription invoice webhook has no subscription id.');
+  }
 
   const apiKey = process.env.LEMONSQUEEZY_API_KEY?.trim();
   if (!apiKey) {
-    console.warn(
-      '[lemon:webhook] LEMONSQUEEZY_API_KEY missing; cannot enrich invoice webhook — ensure subscription_updated is delivered or set API key'
+    throw new Error(
+      'LEMONSQUEEZY_API_KEY is required to enrich subscription invoice webhooks.'
     );
-    return null;
   }
 
-  let res: Response;
+  let response: Response;
   try {
-    res = await fetch(
+    response = await fetchImpl(
       `${LEMON_API_BASE}/subscriptions/${encodeURIComponent(String(subscriptionId))}`,
       {
         headers: {
           Accept: 'application/vnd.api+json',
           Authorization: `Bearer ${apiKey}`
-        }
+        },
+        cache: 'no-store'
       }
     );
-  } catch (e) {
-    console.warn('[lemon:webhook] subscription fetch failed', {
-      subscriptionId,
-      message: e instanceof Error ? e.message : String(e)
-    });
-    return null;
+  } catch (error) {
+    throw new Error(
+      `Subscription enrichment fetch failed: ${
+        error instanceof Error ? error.message : String(error)
+      }`
+    );
   }
 
-  if (!res.ok) {
-    const snippet = (await res.text()).slice(0, 500);
-    console.warn('[lemon:webhook] subscription fetch not ok', {
-      subscriptionId,
-      status: res.status,
-      body: snippet
-    });
-    return null;
+  if (!response.ok) {
+    throw new Error(
+      `Subscription enrichment returned HTTP ${response.status}.`
+    );
   }
 
   let json: unknown;
   try {
-    json = await res.json();
+    json = await response.json();
   } catch {
-    return null;
+    throw new Error('Subscription enrichment returned invalid JSON.');
   }
 
-  const data = json as { data?: LemonWebhookPayload['data'] };
-  if (!data.data || typeof data.data !== 'object') return null;
+  const document = json as { data?: LemonWebhookPayload['data'] };
+  if (!document.data || typeof document.data !== 'object') {
+    throw new Error('Subscription enrichment response has no data resource.');
+  }
 
   return {
-    meta: {
-      ...payload.meta,
-      event_name: 'subscription_updated'
-    },
-    data: data.data
+    meta: payload.meta,
+    data: {
+      ...document.data,
+      attributes: {
+        ...document.data.attributes,
+        total: invoiceAttributes?.total,
+        currency: invoiceAttributes?.currency,
+        subscription_id: invoiceAttributes?.subscription_id
+      }
+    }
   };
 }

@@ -1,5 +1,6 @@
 import type { Json, Tables, TablesInsert } from '@/types_db';
 import type { AppSubscriptionPlan } from '@/lib/payments/subscriptionEntitlements';
+import type { BillingPlanKey } from '@/lib/payments/lemonVariantIds';
 import type { Database } from '@/types_db';
 import {
   createSubscriptionEventFingerprint,
@@ -19,6 +20,7 @@ export type LemonWebhookPayload = {
   };
   data?: {
     id?: string;
+    type?: string;
     attributes?: {
       store_id?: number;
       customer_id?: number;
@@ -294,7 +296,8 @@ function resolveEffectiveStatus(
 
 function derivePlanCode(
   attributes: LemonAttributes,
-  normalizedStatus: Database['public']['Enums']['subscription_status']
+  normalizedStatus: Database['public']['Enums']['subscription_status'],
+  validatedBillingPlan?: BillingPlanKey
 ): AppSubscriptionPlan {
   if (normalizedStatus === 'trialing') {
     return 'trial';
@@ -303,6 +306,10 @@ function derivePlanCode(
   if (normalizedStatus === 'expired') {
     return 'free';
   }
+
+  if (validatedBillingPlan === 'monthly') return 'monthly_pro';
+  if (validatedBillingPlan === 'quarterly') return 'quarterly_pro';
+  if (validatedBillingPlan === 'yearly') return 'yearly_pro';
 
   const planText =
     `${attributes?.product_name ?? ''} ${attributes?.variant_name ?? ''}`.toLowerCase();
@@ -391,7 +398,8 @@ export function mergeSubscriptionPaymentFailedInvoiceUpsert(
 function buildSubscriptionUpsert(
   payload: LemonWebhookPayload,
   userId: string,
-  eventName: string
+  eventName: string,
+  validatedBillingPlan?: BillingPlanKey
 ): TablesInsert<'subscriptions'> {
   const attributes = getLemonAttributes(payload);
   const normalizedStatus = resolveEffectiveStatus(eventName, attributes);
@@ -401,7 +409,11 @@ function buildSubscriptionUpsert(
     userId,
     eventName
   );
-  const planCode = derivePlanCode(attributes, normalizedStatus);
+  const planCode = derivePlanCode(
+    attributes,
+    normalizedStatus,
+    validatedBillingPlan
+  );
   const lemonPriceId =
     attributes?.first_subscription_item?.price_id != null
       ? String(attributes.first_subscription_item.price_id)
@@ -492,7 +504,8 @@ function buildSubscriptionUpsert(
 }
 
 export function decideSubscriptionUpdate(
-  payload: LemonWebhookPayload
+  payload: LemonWebhookPayload,
+  validatedBillingPlan?: BillingPlanKey
 ): LemonSubscriptionDecision {
   const eventName = normalizeLemonEventName(payload.meta?.event_name);
   if (isIgnoredOrderEvent(eventName, payload)) {
@@ -518,7 +531,11 @@ export function decideSubscriptionUpdate(
     attributes,
     normalizedStatus
   );
-  const subscriptionPlan = derivePlanCode(attributes, normalizedStatus);
+  const subscriptionPlan = derivePlanCode(
+    attributes,
+    normalizedStatus,
+    validatedBillingPlan
+  );
 
   if (
     eventName === 'subscription_created' ||
@@ -542,7 +559,12 @@ export function decideSubscriptionUpdate(
       userId,
       isSubscribed,
       eventName,
-      subscription: buildSubscriptionUpsert(payload, userId, eventName),
+      subscription: buildSubscriptionUpsert(
+        payload,
+        userId,
+        eventName,
+        validatedBillingPlan
+      ),
       subscriptionPlan
     };
   }
