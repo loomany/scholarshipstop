@@ -7,6 +7,7 @@ import {
   fetchPublishedComparePageBySlug
 } from '@/lib/seo/universityCompareServer';
 import { getCanonical } from '@/lib/seo/canonical';
+import { DEFAULT_OPEN_GRAPH_IMAGES } from '@/lib/seo/socialImage';
 import {
   getCompareSeoQualityPolicy,
   MIN_DYNAMIC_COMPARE_VISIBLE_WORDS
@@ -75,7 +76,12 @@ export async function generateMetadata({
     robots: quality.indexable
       ? { index: true, follow: true }
       : { index: false, follow: true },
-    openGraph: { title, description, url: canonical }
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+      images: DEFAULT_OPEN_GRAPH_IMAGES
+    }
   };
 }
 

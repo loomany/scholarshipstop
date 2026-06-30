@@ -8,6 +8,10 @@ import {
 import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
 import type { SupportedLocale } from '@/lib/i18n/types';
 import { getLocalizedCanonical } from '@/lib/seo/canonical';
+import {
+  DEFAULT_OPEN_GRAPH_IMAGES,
+  DEFAULT_TWITTER_IMAGES
+} from '@/lib/seo/socialImage';
 
 const SUBSCRIPTION_LOCALES: SupportedLocale[] = ['en', 'es', 'fr'];
 
@@ -33,12 +37,14 @@ export function buildSubscriptionPageMetadata(
       url: alternates.canonical,
       type: 'website',
       siteName: 'ScholarshipTop',
-      locale: locale === 'es' ? 'es_ES' : locale === 'fr' ? 'fr_FR' : 'en_US'
+      locale: locale === 'es' ? 'es_ES' : locale === 'fr' ? 'fr_FR' : 'en_US',
+      images: DEFAULT_OPEN_GRAPH_IMAGES
     },
     twitter: {
       card: 'summary_large_image',
       title: copy.metaTitle,
-      description: copy.metaDescription
+      description: copy.metaDescription,
+      images: DEFAULT_TWITTER_IMAGES
     }
   };
 }

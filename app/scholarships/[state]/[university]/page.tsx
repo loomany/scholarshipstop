@@ -2,7 +2,10 @@ import type { Metadata } from 'next';
 
 import ScholarshipsSlugPathPageBody from '@/app/scholarships/scholarshipsSlugPathPageBody';
 import { buildScholarshipHubRouteMetadata } from '@/app/scholarships/scholarshipHubPageMetadata';
-import { HUB_PATH_PREFIX, hubPathToTab } from '@/app/scholarships/scholarshipHubPath';
+import {
+  HUB_PATH_PREFIX,
+  hubPathToTab
+} from '@/app/scholarships/scholarshipHubPath';
 import { normalizeScholarshipDynamicParam } from '@/app/scholarships/scholarshipLongTailPresets';
 import { generateScholarshipSlugLayoutMetadata } from '@/app/scholarships/scholarshipSlugLayoutMetadata';
 import UniversityHubPageContent from '@/components/scholarships/UniversityHubPageContent';
@@ -11,7 +14,10 @@ import {
   resolveUniversityHubFaqItems
 } from '@/lib/scholarships/universityHubJsonLd';
 import { JsonLdScript } from '@/components/seo/JsonLdScript';
-import { createInitialScholarshipsPayload, fetchInitialUniversityHubScholarshipsPayload } from '@/app/scholarships/scholarshipListServerPayload';
+import {
+  createInitialScholarshipsPayload,
+  fetchInitialUniversityHubScholarshipsPayload
+} from '@/app/scholarships/scholarshipListServerPayload';
 import {
   fetchProviderAiFaqBySlug,
   fetchUniversityHubRow
@@ -19,6 +25,10 @@ import {
 import { createPublicClient } from '@/utils/supabase/public';
 import { scholarshipHubQueryStringFromNextSearchParamsRecord } from '@/app/scholarships/scholarshipHubCanonicalQueryString';
 import { getCanonical } from '@/lib/seo/canonical';
+import {
+  DEFAULT_OPEN_GRAPH_IMAGES,
+  DEFAULT_TWITTER_IMAGES
+} from '@/lib/seo/socialImage';
 
 export const revalidate = 300;
 
@@ -26,10 +36,15 @@ const SEO_YEAR = 2026;
 
 type PageParams = { state: string; university: string };
 
-function normalizeParams(raw: PageParams): { state: string; university: string } {
+function normalizeParams(raw: PageParams): {
+  state: string;
+  university: string;
+} {
   return {
     state: normalizeScholarshipDynamicParam(decodeURIComponent(raw.state)),
-    university: normalizeScholarshipDynamicParam(decodeURIComponent(raw.university))
+    university: normalizeScholarshipDynamicParam(
+      decodeURIComponent(raw.university)
+    )
   };
 }
 
@@ -68,12 +83,14 @@ export async function generateMetadata({
       title,
       description,
       url: canonical,
-      type: 'website'
+      type: 'website',
+      images: DEFAULT_OPEN_GRAPH_IMAGES
     },
     twitter: {
       card: 'summary_large_image',
       title,
-      description
+      description,
+      images: DEFAULT_TWITTER_IMAGES
     },
     robots: { index: true, follow: true }
   };
@@ -100,16 +117,15 @@ export default async function UniversityScholarshipsPage({
   const hub = await fetchUniversityHubRow(state, university);
 
   if (!hub) {
-    return (
-      <ScholarshipsSlugPathPageBody segments={[state, university]} />
-    );
+    return <ScholarshipsSlugPathPageBody segments={[state, university]} />;
   }
 
   const supabase = createPublicClient();
-  const [{ result: initialListResult, routeScope }, providerFaq] = await Promise.all([
-    fetchInitialUniversityHubScholarshipsPayload(supabase, hub.slug),
-    fetchProviderAiFaqBySlug(hub.slug)
-  ]);
+  const [{ result: initialListResult, routeScope }, providerFaq] =
+    await Promise.all([
+      fetchInitialUniversityHubScholarshipsPayload(supabase, hub.slug),
+      fetchProviderAiFaqBySlug(hub.slug)
+    ]);
   const scholarships = initialListResult.scholarships;
   const initialPayload = createInitialScholarshipsPayload(
     `university-hub:${hub.slug}`,

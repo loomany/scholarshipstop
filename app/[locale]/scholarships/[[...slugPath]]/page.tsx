@@ -1,5 +1,9 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import {
+  DEFAULT_OPEN_GRAPH_IMAGES,
+  DEFAULT_TWITTER_IMAGES
+} from '@/lib/seo/socialImage';
 
 import ScholarshipsSlugPathPageBody from '@/app/scholarships/scholarshipsSlugPathPageBody';
 import { resolveScholarshipSlugPath } from '@/lib/scholarships/seoScholarshipResolve';
@@ -105,9 +109,15 @@ export async function generateMetadata({
           title,
           description,
           url: alternates.canonical,
-          locale: locale === 'es' ? 'es_ES' : 'fr_FR'
+          locale: locale === 'es' ? 'es_ES' : 'fr_FR',
+          images: DEFAULT_OPEN_GRAPH_IMAGES
         },
-        twitter: { card: 'summary_large_image', title, description },
+        twitter: {
+          card: 'summary_large_image',
+          title,
+          description,
+          images: DEFAULT_TWITTER_IMAGES
+        },
         robots: hasNonCanonicalQuery
           ? { index: false, follow: true }
           : seo.indexable

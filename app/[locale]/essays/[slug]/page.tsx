@@ -1,4 +1,8 @@
 import type { Metadata } from 'next';
+import {
+  DEFAULT_OPEN_GRAPH_IMAGES,
+  DEFAULT_TWITTER_IMAGES
+} from '@/lib/seo/socialImage';
 import { notFound } from 'next/navigation';
 
 import { LocalizedProductionPage } from '@/components/i18n/LocalizedProductionPage';
@@ -25,7 +29,10 @@ import {
   getEssaySeoQualityPolicy,
   MIN_LOCALIZED_ESSAY_VISIBLE_WORDS
 } from '@/lib/seo/essaySeoQualityPolicy';
-import { countVisibleWords, hasRawPlaceholderText } from '@/lib/seo/visibleText';
+import {
+  countVisibleWords,
+  hasRawPlaceholderText
+} from '@/lib/seo/visibleText';
 
 export const revalidate = 300;
 export const dynamicParams = true;
@@ -39,7 +46,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const locale = resolveStage2PilotLocaleFromParams(params);
   if (!locale) return METADATA_NOT_FOUND;
-  const slug = decodeURIComponent(params?.slug ?? '').trim().toLowerCase();
+  const slug = decodeURIComponent(params?.slug ?? '')
+    .trim()
+    .toLowerCase();
   if (!slug) {
     return localizedNotFoundMetadata(locale);
   }
@@ -117,19 +126,28 @@ export async function generateMetadata({
       title,
       description,
       url: alternates.canonical,
-      locale: locale === 'es' ? 'es_ES' : 'fr_FR'
+      locale: locale === 'es' ? 'es_ES' : 'fr_FR',
+      images: DEFAULT_OPEN_GRAPH_IMAGES
     },
-    twitter: { card: 'summary_large_image', title, description },
-    robots: seo.indexable && quality.indexable
-      ? { index: true, follow: true }
-      : { index: false, follow: true }
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: DEFAULT_TWITTER_IMAGES
+    },
+    robots:
+      seo.indexable && quality.indexable
+        ? { index: true, follow: true }
+        : { index: false, follow: true }
   };
 }
 
 export default async function LocalizedEssayGuideRoute({ params }: PageProps) {
   if (!isStage2PilotLocale(params.locale)) notFound();
   const locale = params.locale as Stage2PilotLocale;
-  const slug = decodeURIComponent(params.slug ?? '').trim().toLowerCase();
+  const slug = decodeURIComponent(params.slug ?? '')
+    .trim()
+    .toLowerCase();
   if (!slug) notFound();
 
   const staticPage = getStaticEssayGuide(slug)

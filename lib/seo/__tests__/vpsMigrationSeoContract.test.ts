@@ -40,6 +40,9 @@ test('global social fallback and IQ legal canonicals are present', () => {
 
   for (const file of [
     'app/providers/[id]/page.tsx',
+    'app/scholarships/[state]/[university]/page.tsx',
+    'app/scholarships/category/[slug]/page.tsx',
+    'app/[locale]/scholarships/category/[slug]/page.tsx',
     'app/scholarships/scholarshipSlugLayoutMetadata.ts',
     'app/scholarships/scholarshipHubPageMetadata.ts',
     'lib/trust/trustPageContent.ts',

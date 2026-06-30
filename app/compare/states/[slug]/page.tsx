@@ -7,6 +7,7 @@ import {
   stateContentJsonAsRecord
 } from '@/lib/seo/stateCompareServer';
 import { getCanonical } from '@/lib/seo/canonical';
+import { DEFAULT_OPEN_GRAPH_IMAGES } from '@/lib/seo/socialImage';
 import {
   getCompareSeoQualityPolicy,
   MIN_DYNAMIC_COMPARE_VISIBLE_WORDS
@@ -22,7 +23,9 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const row = await fetchPublishedStateComparePageBySlug(slug.trim().toLowerCase());
+  const row = await fetchPublishedStateComparePageBySlug(
+    slug.trim().toLowerCase()
+  );
   const path = `/compare/states/${encodeURIComponent(slug.trim().toLowerCase())}`;
   const canonical = getCanonical(path);
   if (!row) {
@@ -75,7 +78,12 @@ export async function generateMetadata({
     robots: quality.indexable
       ? { index: true, follow: true }
       : { index: false, follow: true },
-    openGraph: { title, description, url: canonical }
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+      images: DEFAULT_OPEN_GRAPH_IMAGES
+    }
   };
 }
 

@@ -1,6 +1,11 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
+import {
+  DEFAULT_OPEN_GRAPH_IMAGES,
+  DEFAULT_TWITTER_IMAGES
+} from '@/lib/seo/socialImage';
+
 import { StateCompareDetailPageBody } from '@/app/compare/states/stateCompareDetailPageBody';
 import LocalizedCompareDetailPage from '@/components/compare/LocalizedCompareDetailPage';
 import { getContentTranslationSeoDecision } from '@/lib/i18n/contentTranslationsServer';
@@ -34,7 +39,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const locale = resolveStage2PilotLocaleFromParams(params);
   if (!locale) return METADATA_NOT_FOUND;
-  const slug = decodeURIComponent(params?.slug ?? '').trim().toLowerCase();
+  const slug = decodeURIComponent(params?.slug ?? '')
+    .trim()
+    .toLowerCase();
   if (!slug) {
     return { title: 'Page not found', robots: { index: false, follow: false } };
   }
@@ -88,19 +95,30 @@ export async function generateMetadata({
       title,
       description,
       url: alternates.canonical,
-      locale: locale === 'es' ? 'es_ES' : 'fr_FR'
+      locale: locale === 'es' ? 'es_ES' : 'fr_FR',
+      images: DEFAULT_OPEN_GRAPH_IMAGES
     },
-    twitter: { card: 'summary_large_image', title, description },
-    robots: seo.indexable && quality.indexable
-      ? { index: true, follow: true }
-      : { index: false, follow: true }
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: DEFAULT_TWITTER_IMAGES
+    },
+    robots:
+      seo.indexable && quality.indexable
+        ? { index: true, follow: true }
+        : { index: false, follow: true }
   };
 }
 
-export default async function LocalizedStateCompareRoute({ params }: PageProps) {
+export default async function LocalizedStateCompareRoute({
+  params
+}: PageProps) {
   if (!isStage2PilotLocale(params.locale)) notFound();
   const locale = params.locale as Stage2PilotLocale;
-  const slug = decodeURIComponent(params.slug ?? '').trim().toLowerCase();
+  const slug = decodeURIComponent(params.slug ?? '')
+    .trim()
+    .toLowerCase();
   if (!slug) notFound();
 
   const resolved = await fetchPublishedCompareState(
@@ -111,7 +129,9 @@ export default async function LocalizedStateCompareRoute({ params }: PageProps) 
   if (resolved) {
     const canonicalPath = `/compare/states/${slug}`;
     const hubLabel =
-      locale === 'es' ? 'Ver comparaciones por estado' : 'Voir comparaisons par État';
+      locale === 'es'
+        ? 'Ver comparaciones por estado'
+        : 'Voir comparaisons par État';
 
     return (
       <LocalizedCompareDetailPage

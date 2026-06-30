@@ -32,6 +32,10 @@ import type { ContentTranslationLocale } from '@/lib/i18n/contentTranslationsTyp
 import { createPublicClient } from '@/utils/supabase/public';
 import { getURL } from '@/utils/helpers';
 import { getLocalizedCanonical } from '@/lib/seo/canonical';
+import {
+  DEFAULT_OPEN_GRAPH_IMAGES,
+  DEFAULT_TWITTER_IMAGES
+} from '@/lib/seo/socialImage';
 
 export const revalidate = 300;
 
@@ -100,8 +104,7 @@ export async function generateMetadata({
     currentLocale: locale
   });
 
-  const title =
-    translation.translated_meta_title?.trim() || copy.pageTitle;
+  const title = translation.translated_meta_title?.trim() || copy.pageTitle;
   const description =
     translation.translated_meta_description?.trim() || copy.introParagraph;
 
@@ -113,9 +116,15 @@ export async function generateMetadata({
       title,
       description,
       url: alternates.canonical,
-      locale: locale === 'es' ? 'es_ES' : 'fr_FR'
+      locale: locale === 'es' ? 'es_ES' : 'fr_FR',
+      images: DEFAULT_OPEN_GRAPH_IMAGES
     },
-    twitter: { card: 'summary_large_image', title, description },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: DEFAULT_TWITTER_IMAGES
+    },
     robots: seo.indexable
       ? { index: true, follow: true }
       : { index: false, follow: true }
@@ -136,7 +145,10 @@ export default async function LocalizedScholarshipCategoryPage({
   if (!promoted) notFound();
   if (raw !== canonicalSlug) {
     permanentRedirect(
-      hrefForLocalizedUiRequired(locale, `/scholarships/category/${canonicalSlug}`)
+      hrefForLocalizedUiRequired(
+        locale,
+        `/scholarships/category/${canonicalSlug}`
+      )
     );
   }
 
@@ -209,7 +221,9 @@ export default async function LocalizedScholarshipCategoryPage({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(listingJsonLd) }}
         />
       ) : null}
-      <Suspense fallback={<ScholarshipsHubShellSkeleton pageTitle={copy.pageTitle} />}>
+      <Suspense
+        fallback={<ScholarshipsHubShellSkeleton pageTitle={copy.pageTitle} />}
+      >
         <ScholarshipCategoryPageAuthBridge
           categorySlug={canonicalSlug}
           pageTitle={copy.pageTitle}

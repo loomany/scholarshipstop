@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { StaticCompareGuidePage } from '@/components/compare/StaticCompareGuidePage';
 import { getStaticCompareGuide } from '@/lib/compare/staticCompareGuides';
 import { getCanonical } from '@/lib/seo/canonical';
+import { DEFAULT_OPEN_GRAPH_IMAGES } from '@/lib/seo/socialImage';
 import { buildStage2EnglishPilotAlternates } from '@/lib/i18n/englishAlternates';
 
 type PageProps = {
@@ -30,7 +31,8 @@ export function generateMetadata({ params }: PageProps): Metadata {
       title: guide.title,
       description: guide.description,
       url: canonical,
-      type: 'article'
+      type: 'article',
+      images: DEFAULT_OPEN_GRAPH_IMAGES
     }
   };
 }

@@ -35,6 +35,10 @@ import { buildScholarshipListingJsonLd } from '@/app/scholarships/scholarshipLis
 import { buildCategoryPilotAlternates } from '@/lib/i18n/categoryPilot/categoryTranslationAlternates';
 import { fetchPublishedCategoryTranslation } from '@/lib/i18n/categoryPilot/resolveLocalizedCategoryPage';
 import { getCanonical } from '@/lib/seo/canonical';
+import {
+  DEFAULT_OPEN_GRAPH_IMAGES,
+  DEFAULT_TWITTER_IMAGES
+} from '@/lib/seo/socialImage';
 
 export const revalidate = 300;
 
@@ -107,8 +111,18 @@ export async function generateMetadata({
   const meta: Metadata = {
     title,
     description,
-    openGraph: { title, description, url: canonical },
-    twitter: { card: 'summary_large_image', title, description },
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+      images: DEFAULT_OPEN_GRAPH_IMAGES
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: DEFAULT_TWITTER_IMAGES
+    },
     alternates
   };
   if (isSeoNoiseQuery(searchParams)) {
@@ -132,7 +146,12 @@ export async function generateMetadata({
       meta.alternates = {
         canonical: thinCanonical
       };
-      meta.openGraph = { title, description, url: thinCanonical };
+      meta.openGraph = {
+        title,
+        description,
+        url: thinCanonical,
+        images: DEFAULT_OPEN_GRAPH_IMAGES
+      };
     }
   } catch {
     /* ignore */
@@ -150,7 +169,8 @@ export default async function ScholarshipCategoryPage({
   const categoryId = normalizeCategoryId(canonicalSlug.toLowerCase());
   const expertContent = resolveCategoryExpertContent(categoryId);
   const introParagraph =
-    expertContent?.intro ?? categoryListingIntroParagraph(canonicalSlug, categoryId);
+    expertContent?.intro ??
+    categoryListingIntroParagraph(canonicalSlug, categoryId);
   const listingExploreHeading = categoryListingAvailableHeading(
     categoryId,
     canonicalSlug
@@ -212,7 +232,9 @@ export default async function ScholarshipCategoryPage({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(listingJsonLd) }}
         />
       ) : null}
-      <Suspense fallback={<ScholarshipsHubShellSkeleton pageTitle={pageTitle} />}>
+      <Suspense
+        fallback={<ScholarshipsHubShellSkeleton pageTitle={pageTitle} />}
+      >
         <ScholarshipCategoryPageAuthBridge
           categorySlug={canonicalSlug}
           pageTitle={pageTitle}

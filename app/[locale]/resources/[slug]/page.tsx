@@ -1,4 +1,8 @@
 import type { Metadata } from 'next';
+import {
+  DEFAULT_OPEN_GRAPH_IMAGES,
+  DEFAULT_TWITTER_IMAGES
+} from '@/lib/seo/socialImage';
 import { notFound } from 'next/navigation';
 
 import { LocalizedProductionPage } from '@/components/i18n/LocalizedProductionPage';
@@ -51,7 +55,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const locale = resolveStage2PilotLocaleFromParams(params);
   if (!locale) return METADATA_NOT_FOUND;
-  const slug = decodeURIComponent(params?.slug ?? '').trim().toLowerCase();
+  const slug = decodeURIComponent(params?.slug ?? '')
+    .trim()
+    .toLowerCase();
   const intentCanonical = scholarshipIntentCanonicalForContentRoute(
     'resource',
     slug
@@ -112,16 +118,24 @@ export async function generateMetadata({
       title,
       description,
       url: canonicalUrl,
-      locale: locale === 'es' ? 'es_ES' : 'fr_FR'
+      locale: locale === 'es' ? 'es_ES' : 'fr_FR',
+      images: DEFAULT_OPEN_GRAPH_IMAGES
     },
-    twitter: { card: 'summary_large_image', title, description },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: DEFAULT_TWITTER_IMAGES
+    },
     robots: seo.indexable
       ? { index: true, follow: true }
       : { index: false, follow: true }
   };
 }
 
-export default async function LocalizedResourceArticleRoute({ params }: PageProps) {
+export default async function LocalizedResourceArticleRoute({
+  params
+}: PageProps) {
   if (!isStage2PilotLocale(params.locale)) {
     notFound();
   }
@@ -151,7 +165,9 @@ export default async function LocalizedResourceArticleRoute({ params }: PageProp
   const matchedRelatedScholarships = filterActiveRelatedScholarshipItems(
     await getRelatedScholarshipsForResourceArticle(resolved.post)
   );
-  const hubScholarshipKeys = matchedRelatedScholarships.map((r) => r.slug.trim());
+  const hubScholarshipKeys = matchedRelatedScholarships.map((r) =>
+    r.slug.trim()
+  );
   const hubScholarships = filterActiveHubScholarships(
     hubScholarshipKeys.length > 0
       ? await fetchScholarshipsBySlugsOrIdsOrdered(hubScholarshipKeys)

@@ -1,4 +1,8 @@
 import type { Metadata } from 'next';
+import {
+  DEFAULT_OPEN_GRAPH_IMAGES,
+  DEFAULT_TWITTER_IMAGES
+} from '@/lib/seo/socialImage';
 import { notFound, permanentRedirect, redirect } from 'next/navigation';
 
 import LocalizedProviderProfilePage from '@/components/providers/LocalizedProviderProfilePage';
@@ -37,9 +41,7 @@ type PageProps = {
   searchParams?: { page?: string | string[] };
 };
 
-function aboutParagraphsFromEnglish(
-  text: string | null | undefined
-): string[] {
+function aboutParagraphsFromEnglish(text: string | null | undefined): string[] {
   const t = text?.trim();
   if (!t) return [];
   return t
@@ -74,7 +76,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const locale = resolveStage2PilotLocaleFromParams(params);
   if (!locale) return METADATA_NOT_FOUND;
-  const slug = decodeURIComponent(params?.slug ?? '').trim().toLowerCase();
+  const slug = decodeURIComponent(params?.slug ?? '')
+    .trim()
+    .toLowerCase();
   if (!slug) {
     return { title: 'Page not found', robots: { index: false, follow: false } };
   }
@@ -109,9 +113,15 @@ export async function generateMetadata({
       title,
       description,
       url: alternates.canonical,
-      locale: locale === 'es' ? 'es_ES' : 'fr_FR'
+      locale: locale === 'es' ? 'es_ES' : 'fr_FR',
+      images: DEFAULT_OPEN_GRAPH_IMAGES
     },
-    twitter: { card: 'summary_large_image', title, description },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: DEFAULT_TWITTER_IMAGES
+    },
     robots: seo.indexable
       ? { index: true, follow: true }
       : { index: false, follow: true }
@@ -136,7 +146,10 @@ export default async function LocalizedProviderProfileRoute({
   }
 
   const resolved: PublishedProviderProfileContext | null =
-    await fetchPublishedProviderProfile(canonicalSlug, locale as ContentTranslationLocale);
+    await fetchPublishedProviderProfile(
+      canonicalSlug,
+      locale as ContentTranslationLocale
+    );
   if (!resolved) notFound();
 
   const currentPage = parseProviderProfilePageParam(searchParams?.page);
@@ -152,7 +165,11 @@ export default async function LocalizedProviderProfileRoute({
 
   if (data.totalScholarshipCount > 0 && currentPage > totalPages) {
     redirect(
-      buildLocalizedProviderProfileScholarshipsHref(locale, canonicalSlug, totalPages)
+      buildLocalizedProviderProfileScholarshipsHref(
+        locale,
+        canonicalSlug,
+        totalPages
+      )
     );
   }
 
