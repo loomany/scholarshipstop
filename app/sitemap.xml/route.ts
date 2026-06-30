@@ -7,6 +7,7 @@ import {
 } from '@/lib/seo/sitemaps';
 
 export const revalidate = SITEMAP_REVALIDATE_SECONDS;
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
   const documents = await buildSitemapIndexDocuments();

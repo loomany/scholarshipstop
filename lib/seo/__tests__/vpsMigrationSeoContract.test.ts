@@ -19,6 +19,9 @@ test('root index does not publish empty localized scholarship detail shards', ()
   );
   assert.ok(indexBuilder);
   assert.doesNotMatch(indexBuilder![0], /scholarships-detail-db/);
+
+  const route = readFileSync('app/sitemap.xml/route.ts', 'utf8');
+  assert.match(route, /dynamic = 'force-dynamic'/);
 });
 
 test('essay corrective migration calls the installed public unaccent function', () => {
