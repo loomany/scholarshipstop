@@ -25,9 +25,13 @@ services:
       - ./env/site.env
     environment:
       NODE_ENV: production
+      NODE_OPTIONS: "--max-old-space-size=1024"
       PORT: "3000"
       HOSTNAME: "0.0.0.0"
     restart: unless-stopped
+    mem_limit: "1536m"
+    memswap_limit: "2048m"
+    pids_limit: 256
     ports:
       - "127.0.0.1:3000:3000"
     healthcheck:
