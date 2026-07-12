@@ -161,6 +161,10 @@ if [[ -f "${SITE_ENV}" ]]; then
   GOOGLE_ID="$(grep -E '^GOOGLE_CLIENT_ID=' "${SITE_ENV}" 2>/dev/null | head -1 | cut -d= -f2- | tr -d '\r"'"'"'' || true)"
   GOOGLE_SECRET="$(grep -E '^GOOGLE_CLIENT_SECRET=' "${SITE_ENV}" 2>/dev/null | head -1 | cut -d= -f2- | tr -d '\r"'"'"'' || true)"
 fi
+GOOGLE_ENABLED=false
+if [[ -n "${GOOGLE_ID}" && -n "${GOOGLE_SECRET}" ]]; then
+  GOOGLE_ENABLED=true
+fi
 
 if [[ -z "${ANON_KEY}" ]]; then
   echo "[setup-supabase-api-env] WARN: NEXT_PUBLIC_SUPABASE_ANON_KEY not found in site.env" >&2
@@ -175,19 +179,22 @@ GOTRUE_DB_AUTOMIGRATE=false
 GOTRUE_API_HOST=0.0.0.0
 GOTRUE_API_PORT=9999
 PORT=9999
-API_EXTERNAL_URL=http://127.0.0.1:54321
+API_EXTERNAL_URL=https://scholarshiptop.com/supabase/auth/v1
 PGRST_DB_URI=${POSTGREST_DB_URL}
 JWT_SECRET=${JWT_SECRET}
 GOTRUE_JWT_SECRET=${JWT_SECRET}
 PGRST_JWT_SECRET=${JWT_SECRET}
 GOTRUE_SITE_URL=https://scholarshiptop.com
-GOTRUE_URI_ALLOW_LIST=https://scholarshiptop.com,http://127.0.0.1:54321,http://127.0.0.1:3100,http://127.0.0.1:3101
+GOTRUE_URI_ALLOW_LIST=https://scholarshiptop.com,https://www.scholarshiptop.com,http://127.0.0.1:54321,http://127.0.0.1:3100,http://127.0.0.1:3101
 GOTRUE_DISABLE_SIGNUP=false
 GOTRUE_JWT_EXP=3600
 GOTRUE_JWT_DEFAULT_GROUP_NAME=authenticated
 GOTRUE_EXTERNAL_EMAIL_ENABLED=true
 GOTRUE_MAILER_AUTOCONFIRM=true
-GOTRUE_EXTERNAL_GOOGLE_ENABLED=false
+GOTRUE_EXTERNAL_GOOGLE_ENABLED=${GOOGLE_ENABLED}
+GOTRUE_EXTERNAL_GOOGLE_CLIENT_ID=${GOOGLE_ID}
+GOTRUE_EXTERNAL_GOOGLE_SECRET=${GOOGLE_SECRET}
+GOTRUE_EXTERNAL_GOOGLE_REDIRECT_URI=https://scholarshiptop.com/supabase/auth/v1/callback
 POSTGREST_DB_SCHEMAS=public,storage
 PGRST_DB_SCHEMAS=public,storage
 POSTGREST_DB_ANON_ROLE=anon

@@ -36,6 +36,7 @@ import { getOnboardingUiCopy } from '@/lib/i18n/onboardingUiCopy';
 import type { LocalizedUiLocale } from '@/lib/i18n/localizedHref';
 import { getOAuthCallbackUrlWithNext } from '@/utils/helpers';
 import { createClient } from '@/utils/supabase/client';
+import { signInWithGoogleOAuth } from '@/utils/auth-helpers/googleOAuth';
 
 const birthMonthOptions = buildBirthMonthSelectOptions();
 
@@ -215,12 +216,10 @@ export function ScholarshipOnboardingStep2({
       }
 
       const supabase = createClient();
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: getOAuthCallbackUrlWithNext(oauthRedirectAfterAuthPath)
-        }
-      });
+      const { error } = await signInWithGoogleOAuth(
+        supabase,
+        getOAuthCallbackUrlWithNext(oauthRedirectAfterAuthPath)
+      );
       if (error) {
         setOauthPending(false);
         toast({

@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
+import { signInWithGoogleOAuth } from '@/utils/auth-helpers/googleOAuth';
 import { CountryEmailSignupStep } from '@/components/onboarding/CountryEmailSignupStep';
 import { CountryFirstStep } from '@/components/onboarding/CountryFirstStep';
 import {
@@ -366,12 +367,10 @@ export function GetScholarshipsQuizWizard({
     }
 
     const supabase = createClient();
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: getOAuthCallbackUrlWithNext(localizedScholarshipsHubHref)
-      }
-    });
+    const { error } = await signInWithGoogleOAuth(
+      supabase,
+      getOAuthCallbackUrlWithNext(localizedScholarshipsHubHref)
+    );
     if (error) {
       setGoogleSignInPending(false);
       setNavigatingToHub(false);

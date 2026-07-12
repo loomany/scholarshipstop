@@ -59,6 +59,7 @@ import { scholarshipDeadlineHasPassed } from '@/lib/scholarships/scholarshipDead
 import { normalizeCountryCode } from '@/lib/scholarships/countryEligibility/countries';
 import { generateStrategy } from '@/lib/strategyRecommendationEngine';
 import { createClient } from '@/utils/supabase/client';
+import { signInWithGoogleOAuth } from '@/utils/auth-helpers/googleOAuth';
 import { getOAuthCallbackUrlWithNext } from '@/utils/helpers';
 import { useIqLocale } from '@/components/iq/IqLocaleProvider';
 import { getIqContextualFunnelCopy } from '@/lib/iq/i18n/iqContextualFunnelCopy';
@@ -955,12 +956,10 @@ function ContextualIqEmailGate({
     try {
       window.localStorage.setItem(FUNNEL_PHASE_STORAGE_KEY, 'assessment');
       const supabase = createClient();
-      const { error: googleError } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: getOAuthCallbackUrlWithNext('/iq/assessment')
-        }
-      });
+      const { error: googleError } = await signInWithGoogleOAuth(
+        supabase,
+        getOAuthCallbackUrlWithNext('/iq/assessment')
+      );
       if (googleError) {
         setGoogleSubmitting(false);
         setError(googleError.message || gate.errors.googleFailed);

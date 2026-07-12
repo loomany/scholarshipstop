@@ -9,6 +9,7 @@ import IqProductFooter from '@/components/iq/IqProductFooter';
 import type { AssessmentResult } from '@/lib/iqAssessmentTypes';
 import { CountryEmailSignupStep } from '@/components/onboarding/CountryEmailSignupStep';
 import { createClient } from '@/utils/supabase/client';
+import { signInWithGoogleOAuth } from '@/utils/auth-helpers/googleOAuth';
 import { getOAuthCallbackUrlWithNext } from '@/utils/helpers';
 
 import { useIqLocale } from '@/components/iq/IqLocaleProvider';
@@ -135,12 +136,10 @@ export default function GeneralIqFunnelClient() {
     writeTextStorage(GENERAL_FUNNEL_PHASE_STORAGE_KEY, 'assessment');
     try {
       const supabase = createClient();
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: getOAuthCallbackUrlWithNext('/iq')
-        }
-      });
+      const { error } = await signInWithGoogleOAuth(
+        supabase,
+        getOAuthCallbackUrlWithNext('/iq')
+      );
       if (error) {
         setGoogleSignInPending(false);
         setEmailError(error.message || emailCopy.errors.googleFailed);

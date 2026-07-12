@@ -1,6 +1,7 @@
 'use client';
 
 import { createClient } from '@/utils/supabase/client';
+import { signInWithGoogleOAuth } from '@/utils/auth-helpers/googleOAuth';
 import { type Provider } from '@supabase/supabase-js';
 import { getAuthTypes } from '@/utils/auth-helpers/settings';
 import {
@@ -101,8 +102,13 @@ export async function signInWithOAuth(e: React.FormEvent<HTMLFormElement>) {
   const redirectURL = getOAuthCallbackUrlWithNext(
     SCHOLARSHIPS_HUB_BEST_RECOMMENDATION_HREF
   );
+  if (provider === 'google') {
+    await signInWithGoogleOAuth(supabase, redirectURL);
+    return;
+  }
+
   await supabase.auth.signInWithOAuth({
-    provider: provider,
+    provider,
     options: {
       redirectTo: redirectURL
     }

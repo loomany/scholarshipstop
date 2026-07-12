@@ -10,6 +10,7 @@ import {
 } from '@/utils/auth-helpers/client';
 import { getAuthTypes } from '@/utils/auth-helpers/settings';
 import { getOAuthRedirectURL } from '@/utils/helpers';
+import { signInWithGoogleOAuth } from '@/utils/auth-helpers/googleOAuth';
 import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
@@ -37,6 +38,7 @@ export default function PasswordSignIn({
   const router = redirectMethod === 'client' ? clientRouter : null;
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [oauthPending, setOauthPending] = useState(false);
+  const [oauthError, setOauthError] = useState<string | null>(null);
   const { allowOauth } = getAuthTypes();
   const ui = getAuthUiCopy(locale);
   const localeForgotPasswordHref =
@@ -48,16 +50,16 @@ export default function PasswordSignIn({
     signUpHref ?? localizedScholarshipOnboardingSignupEntryHref(locale);
 
   const handleGoogleAuth = async () => {
+    setOauthError(null);
     setOauthPending(true);
     const supabase = createClient();
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: getOAuthRedirectURL('/auth/callback')
-      }
-    });
+    const { error } = await signInWithGoogleOAuth(
+      supabase,
+      getOAuthRedirectURL('/auth/callback')
+    );
     if (error) {
       setOauthPending(false);
+      setOauthError(error.message || ui.signInFailed);
     }
   };
 
@@ -134,6 +136,11 @@ export default function PasswordSignIn({
             </svg>
             {ui.signInWithGoogle}
           </button>
+        ) : null}
+        {oauthError ? (
+          <p className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm leading-5 text-red-700">
+            {oauthError}
+          </p>
         ) : null}
         <button
           type="submit"
