@@ -1,15 +1,17 @@
 import { getScopedScholarshipStorageKey } from '@/app/scholarships/userScopedStorage';
 
 /**
- * @deprecated Guests no longer have a detail-view budget (unlimited catalog detail reads).
- * Kept for any leftover imports / storage keys; not applied by `resolveScholarshipDetailClickBudgetMode`.
+ * Guests: no free scholarship detail opens — first catalog click opens the paywall.
+ * (`0` means `shouldBlock…` is true immediately.)
  */
-export const GUEST_FREE_DETAIL_VIEWS = Number.POSITIVE_INFINITY;
+export const GUEST_FREE_DETAIL_VIEWS = 0;
 
-const GUEST_FREE_DETAIL_NAVIGATIONS = Number.POSITIVE_INFINITY;
+const GUEST_FREE_DETAIL_NAVIGATIONS = GUEST_FREE_DETAIL_VIEWS;
 
-/** Signed-in users without subscription: scholarship detail previews before subscription wall. */
-export const AUTH_NO_SUB_FREE_DETAIL_VIEWS = 10;
+/**
+ * Signed-in users without subscription: same as guests — no free detail previews.
+ */
+export const AUTH_NO_SUB_FREE_DETAIL_VIEWS = 0;
 
 const GUEST_STORAGE_KEY = 'scholarshipGuestDetailFreeClicksUsed';
 
@@ -113,9 +115,7 @@ export function resolveScholarshipDetailClickBudgetMode(options: {
   authResolved?: boolean;
 }): ScholarshipDetailClickBudgetMode | null {
   if (options.authResolved === false) return null;
-  // Guests: no detail-view budget — unlimited scholarship detail pages.
-  // (Apply URLs / provider contacts remain subscription-gated server-side.)
-  if (!options.isAuthenticated) return null;
+  if (!options.isAuthenticated) return 'guest';
   if (!options.hasSubscription) return 'signed-in-no-subscription';
   return null;
 }
@@ -125,7 +125,6 @@ export function getScholarshipDetailFreeClicksUsed(
 ): number {
   if (typeof window === 'undefined') return 0;
   const cap = freeNavigationsForMode(mode);
-  if (!Number.isFinite(cap)) return 0;
   const raw = localStorage.getItem(storageKeyForMode(mode));
   const n = parseInt(raw ?? '0', 10);
   if (!Number.isFinite(n) || n < 0) return 0;
@@ -135,16 +134,14 @@ export function getScholarshipDetailFreeClicksUsed(
 export function shouldBlockScholarshipDetailNavigation(
   mode: ScholarshipDetailClickBudgetMode
 ): boolean {
-  const cap = freeNavigationsForMode(mode);
-  if (!Number.isFinite(cap)) return false;
-  return getScholarshipDetailFreeClicksUsed(mode) >= cap;
+  return getScholarshipDetailFreeClicksUsed(mode) >= freeNavigationsForMode(mode);
 }
 
 export function recordScholarshipDetailFreeNavigation(
   mode: ScholarshipDetailClickBudgetMode
 ): void {
   const cap = freeNavigationsForMode(mode);
-  if (!Number.isFinite(cap)) return;
+  if (cap <= 0) return;
   const next = getScholarshipDetailFreeClicksUsed(mode) + 1;
   localStorage.setItem(storageKeyForMode(mode), String(Math.min(next, cap)));
 }
@@ -159,7 +156,7 @@ export function getGuestScholarshipDetailFreeClicksUsed(): number {
   return getScholarshipDetailFreeClicksUsed('guest');
 }
 
-/** True when the next primary click on a catalog card should open the registration wall instead of navigating. */
+/** True when the next primary click on a catalog card should open the paywall instead of navigating. */
 export function shouldBlockGuestScholarshipDetailNavigation(): boolean {
   return shouldBlockScholarshipDetailNavigation('guest');
 }

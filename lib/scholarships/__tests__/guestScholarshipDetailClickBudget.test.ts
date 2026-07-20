@@ -38,7 +38,7 @@ test('resolveScholarshipDetailClickBudgetMode', async () => {
       isAuthenticated: false,
       hasSubscription: false
     }),
-    null
+    'guest'
   );
   assert.equal(
     resolveScholarshipDetailClickBudgetMode({
@@ -72,48 +72,24 @@ test('resolveScholarshipDetailClickBudgetMode', async () => {
   );
 });
 
-test('guest: detail budget disabled (unlimited detail views)', async () => {
+test('guest and free tier: zero free detail views — block immediately', async () => {
   const {
     AUTH_NO_SUB_FREE_DETAIL_VIEWS,
-    resolveScholarshipDetailClickBudgetMode,
+    GUEST_FREE_DETAIL_VIEWS,
     shouldBlockScholarshipDetailNavigation,
-    recordScholarshipDetailFreeNavigation,
+    getScholarshipDetailFreeClicksUsed,
+    getAuthNoSubScholarshipDetailViewsRemaining,
     shouldBlockGuestScholarshipDetailNavigation
   } = await import('@/lib/scholarships/guestScholarshipDetailClickBudget');
 
-  assert.equal(AUTH_NO_SUB_FREE_DETAIL_VIEWS, 10);
+  assert.equal(GUEST_FREE_DETAIL_VIEWS, 0);
+  assert.equal(AUTH_NO_SUB_FREE_DETAIL_VIEWS, 0);
+  assert.equal(getScholarshipDetailFreeClicksUsed('guest'), 0);
+  assert.equal(shouldBlockScholarshipDetailNavigation('guest'), true);
+  assert.equal(shouldBlockGuestScholarshipDetailNavigation(), true);
   assert.equal(
-    resolveScholarshipDetailClickBudgetMode({
-      isAuthenticated: false,
-      hasSubscription: false
-    }),
-    null
-  );
-  // Legacy direct guest-mode helpers must not block either.
-  for (let i = 0; i < 20; i += 1) {
-    recordScholarshipDetailFreeNavigation('guest');
-  }
-  assert.equal(shouldBlockScholarshipDetailNavigation('guest'), false);
-  assert.equal(shouldBlockGuestScholarshipDetailNavigation(), false);
-});
-
-test('signed-in no sub: allows AUTH_NO_SUB_FREE_DETAIL_VIEWS navigations before block', async () => {
-  const {
-    AUTH_NO_SUB_FREE_DETAIL_VIEWS,
-    shouldBlockScholarshipDetailNavigation,
-    getScholarshipDetailFreeClicksUsed,
-    recordScholarshipDetailFreeNavigation,
-    getAuthNoSubScholarshipDetailViewsRemaining
-  } = await import('@/lib/scholarships/guestScholarshipDetailClickBudget');
-
-  for (let i = 0; i < AUTH_NO_SUB_FREE_DETAIL_VIEWS; i += 1) {
-    assert.equal(shouldBlockScholarshipDetailNavigation('signed-in-no-subscription'), false);
-    recordScholarshipDetailFreeNavigation('signed-in-no-subscription');
-  }
-  assert.equal(
-    getScholarshipDetailFreeClicksUsed('signed-in-no-subscription'),
-    AUTH_NO_SUB_FREE_DETAIL_VIEWS
+    shouldBlockScholarshipDetailNavigation('signed-in-no-subscription'),
+    true
   );
   assert.equal(getAuthNoSubScholarshipDetailViewsRemaining(), 0);
-  assert.equal(shouldBlockScholarshipDetailNavigation('signed-in-no-subscription'), true);
 });

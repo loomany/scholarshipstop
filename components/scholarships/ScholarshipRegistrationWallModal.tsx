@@ -7,7 +7,7 @@ import ScholarshipSubscriptionOfferModal from '@/components/scholarships/Scholar
 export type ScholarshipRegistrationWallContentMode =
   | 'hub'
   | 'card-unlock'
-  /** Guest clicked a grant — emphasize free account, CTA to onboarding (not payment-first). */
+  /** Guest/free user clicked a grant — payment-first (subscribe / trial). */
   | 'grant-guest';
 
 type ScholarshipRegistrationWallModalProps = {
@@ -42,18 +42,19 @@ export default function ScholarshipRegistrationWallModal({
     return <ScholarshipLockedCategoryModal open={open} onClose={onClose} />;
   }
 
+  const isGrantPaywall =
+    contentMode === 'grant-guest' || contentMode === 'card-unlock';
+
   let notice: string | undefined;
   if (noticeOverride?.trim()) {
     notice = noticeOverride.trim();
   } else if (variant === 'essay') {
     notice =
       'AI Essay Mentor is available only on Quarterly and Yearly plans. Monthly unlocks the premium scholarship database only.';
-  } else if (contentMode === 'grant-guest') {
-    notice =
-      "It's free to join. Save grants, see deadlines and eligibility at a glance, and pick up where you left off—no credit card required to get started.";
-  } else if (contentMode === 'card-unlock') {
-    notice =
-      "You've viewed your free scholarship previews. Upgrade to keep browsing every detail—or start a trial from your account.";
+  } else if (isGrantPaywall) {
+    notice = signedInWithoutSubscription
+      ? 'Scholarship details are available on a paid plan. Start a trial or subscribe to unlock the full catalog.'
+      : 'Scholarship details are available on a paid plan. Create your account and choose a plan to unlock the catalog.';
   } else {
     notice =
       'Unlock filters, saved scholarships, personalized matches, every essay guide, and the AI Essay Mentor right after sign-up.';
@@ -61,13 +62,16 @@ export default function ScholarshipRegistrationWallModal({
 
   const primaryHref = signedInWithoutSubscription
     ? '/subscription'
-    : variant === 'essay'
+    : variant === 'essay' || isGrantPaywall
       ? REGISTRATION_THEN_SUBSCRIPTION_HREF
       : REGISTRATION_THEN_SCHOLARSHIPS_HREF;
 
-  const marketingMode = variant === 'essay' ? 'subscription' : 'trial';
+  const marketingMode =
+    variant === 'essay' || isGrantPaywall ? 'subscription' : 'trial';
   const copyVariant =
-    variant === 'essay' ? 'classic-trial' : 'modern-free-account';
+    variant === 'essay' || isGrantPaywall
+      ? 'classic-trial'
+      : 'modern-free-account';
 
   return (
     <ScholarshipSubscriptionOfferModal
@@ -78,7 +82,7 @@ export default function ScholarshipRegistrationWallModal({
       marketingMode={marketingMode}
       copyVariant={copyVariant}
       signedInWithoutSubscription={signedInWithoutSubscription}
-      grantScholarshipPitch={contentMode === 'grant-guest'}
+      grantScholarshipPitch={false}
     />
   );
 }
