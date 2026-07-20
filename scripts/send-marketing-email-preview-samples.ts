@@ -4,7 +4,7 @@
  *
  *   npx dotenv-cli -e .env.local -- npx tsx scripts/send-marketing-email-preview-samples.ts [email]
  *
- * Requires RESEND_API_KEY. Optional SUPABASE_SERVICE_ROLE_KEY: if the address is in
+ * Requires SMTP_HOST / SMTP_USER / SMTP_PASS. Optional SUPABASE_SERVICE_ROLE_KEY: if the address is in
  * `unsubscribed_emails`, that message is skipped.
  */
 import type { Scholarship } from '../app/scholarships/scholarshipsData';
@@ -46,8 +46,12 @@ function fakeScholarship(partial: Partial<Scholarship> & { id: string }): Schola
 
 async function main() {
   const to = (process.argv[2]?.trim() || DEFAULT_TO).toLowerCase();
-  if (!process.env.RESEND_API_KEY?.trim()) {
-    console.error('RESEND_API_KEY required');
+  if (
+    !process.env.SMTP_HOST?.trim() ||
+    !process.env.SMTP_USER?.trim() ||
+    !process.env.SMTP_PASS?.trim()
+  ) {
+    console.error('SMTP_HOST, SMTP_USER, SMTP_PASS required');
     process.exit(1);
   }
 

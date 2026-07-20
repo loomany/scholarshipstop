@@ -2,11 +2,11 @@ import 'server-only';
 
 import { logRegistrationPipeline } from '@/lib/auth/registrationPipelineLog';
 import { createEmailVerificationToken } from '@/lib/auth/emailVerificationToken';
+import { postResend } from '@/lib/email/postResend';
 import {
   buildConfirmSignupEmailHtml,
   EMAIL_SUBJECT_CONFIRM_SIGNUP
 } from '@/lib/email/templates/premiumTemplates';
-import { resendReplyToFields, resolveResendFrom } from '@/lib/email/resendEnvelope';
 import { getServerTransactionalEmailSiteOrigin } from '@/utils/auth-email-redirect.server';
 
 export type SendRegistrationVerificationOptions = {
@@ -15,21 +15,16 @@ export type SendRegistrationVerificationOptions = {
 };
 
 /**
- * Sends “verify when convenient” email via Resend HTTP API.
- * Requires RESEND_API_KEY. From defaults to hello@mail.scholarshiptop.com unless RESEND_FROM is set.
- * Optional REPLY_TO_EMAIL sets Reply-To on the Resend payload.
+ * Sends “verify when convenient” email via SMTP (Brevo).
+ * Requires SMTP_HOST / SMTP_USER / SMTP_PASS.
+ * From: MAIL_FROM or RESEND_FROM (legacy), default hello@mail.scholarshiptop.com.
+ * Optional REPLY_TO_EMAIL sets Reply-To.
  */
 export async function sendRegistrationVerificationEmail(
   toEmail: string,
   userId: string,
   options?: SendRegistrationVerificationOptions
 ): Promise<{ ok: boolean; skipped?: string }> {
-  const apiKey = process.env.RESEND_API_KEY?.trim();
-  const from = resolveResendFrom();
-  if (!apiKey) {
-    return { ok: false, skipped: 'RESEND_API_KEY not set' };
-  }
-
   const token = createEmailVerificationToken(userId);
   const origin = getServerTransactionalEmailSiteOrigin().replace(/\/+$/, '');
   const link = `${origin}/auth/verify-email?token=${encodeURIComponent(token)}`;
@@ -40,28 +35,20 @@ export async function sendRegistrationVerificationEmail(
     siteOrigin: origin
   });
 
-  const res = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      from,
-      to: [toEmail],
-      subject: EMAIL_SUBJECT_CONFIRM_SIGNUP,
-      html,
-      ...resendReplyToFields()
-    })
+  const result = await postResend({
+    to: toEmail,
+    subject: EMAIL_SUBJECT_CONFIRM_SIGNUP,
+    html,
+    category: 'transactional'
   });
 
-  if (!res.ok) {
-    const text = await res.text().catch(() => '');
-    console.error('[email:verify] Resend error', res.status, text);
-    return { ok: false, skipped: `Resend HTTP ${res.status}` };
+  if (!result.ok) {
+    console.error('[email:verify] send failed', result.skipped);
+    return result;
   }
+
   logRegistrationPipeline('EmailSent', {
-    channel: 'resend',
+    channel: 'smtp',
     userId,
     toEmail
   });

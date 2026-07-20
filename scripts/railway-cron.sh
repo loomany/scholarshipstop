@@ -154,7 +154,9 @@ task_grant_notifications() {
   export NEXT_PUBLIC_SITE_URL="${NEXT_PUBLIC_SITE_URL:-$BASE_URL}"
   require_env NEXT_PUBLIC_SUPABASE_URL
   require_env SUPABASE_SERVICE_ROLE_KEY
-  require_env RESEND_API_KEY
+  require_env SMTP_HOST
+  require_env SMTP_USER
+  require_env SMTP_PASS
   require_npm_or_exit || return 0
   run_tsx_cron "cron-grant-notifications" "scripts/cron-grant-notifications.ts"
 }

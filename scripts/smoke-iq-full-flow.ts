@@ -71,7 +71,7 @@ Default mode:
 Webhook mode:
   - also inserts a pending iq_report_orders row
   - posts a signed fake Lemon order_created webhook to /api/webhooks
-  - may send a real email if the local app has RESEND_API_KEY configured
+  - may send a real email if the local app has SMTP_* configured
 `);
 }
 

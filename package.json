@@ -176,6 +176,7 @@
     "lucide-react": "0.330.0",
     "next": "^14.2.35",
     "nextjs-toploader": "^3.9.17",
+    "nodemailer": "^9.0.3",
     "openai": "^4.73.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -190,6 +191,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.14.2",
+    "@types/nodemailer": "^8.0.1",
     "@types/nprogress": "^0.2.3",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",

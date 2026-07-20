@@ -23,8 +23,11 @@ function base64UrlDecode(input: string): string {
 function signingSecret(): string | null {
   const direct = process.env.GRANT_DIGEST_TOKEN_SECRET?.trim();
   if (direct) return direct;
-  const fallback = process.env.RESEND_API_KEY?.trim();
-  if (fallback) return fallback;
+  // Prefer stable secret; SMTP_PASS / legacy RESEND_API_KEY only as last-resort fallbacks.
+  const smtpPass = process.env.SMTP_PASS?.trim();
+  if (smtpPass) return smtpPass;
+  const legacyResend = process.env.RESEND_API_KEY?.trim();
+  if (legacyResend) return legacyResend;
   return null;
 }
 

@@ -1,10 +1,10 @@
 import 'server-only';
 
+import { postResend } from '@/lib/email/postResend';
 import {
   buildResetPasswordEmailHtml,
   EMAIL_SUBJECT_RESET_PASSWORD
 } from '@/lib/email/templates/premiumTemplates';
-import { resendReplyToFields, resolveResendFrom } from '@/lib/email/resendEnvelope';
 import { createServiceRoleSupabaseClient } from '@/lib/supabase/serviceRoleClient';
 import { getServerAuthResetPasswordUrl } from '@/utils/auth-email-redirect.server';
 
@@ -18,12 +18,6 @@ function maskEmail(email: string): string {
 export async function sendPasswordResetEmail(
   toEmail: string
 ): Promise<{ ok: boolean; skipped?: string }> {
-  const apiKey = process.env.RESEND_API_KEY?.trim();
-  const from = resolveResendFrom();
-  if (!apiKey) {
-    return { ok: false, skipped: 'RESEND_API_KEY not set' };
-  }
-
   const admin = createServiceRoleSupabaseClient();
   if (!admin) {
     return { ok: false, skipped: 'SUPABASE_SERVICE_ROLE_KEY not set' };
@@ -69,26 +63,15 @@ export async function sendPasswordResetEmail(
     siteOrigin: origin
   });
 
-  const res = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      from,
-      to: [toEmail],
-      subject: EMAIL_SUBJECT_RESET_PASSWORD,
-      html,
-      ...resendReplyToFields()
-    })
+  const result = await postResend({
+    to: toEmail,
+    subject: EMAIL_SUBJECT_RESET_PASSWORD,
+    html,
+    category: 'transactional'
   });
 
-  if (!res.ok) {
-    const text = await res.text().catch(() => '');
-    console.error('[email:reset-password] Resend error', res.status, text);
-    return { ok: false, skipped: `Resend HTTP ${res.status}` };
+  if (!result.ok) {
+    console.error('[email:reset-password] send failed', result.skipped);
   }
-
-  return { ok: true };
+  return result;
 }

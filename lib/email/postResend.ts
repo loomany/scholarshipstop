@@ -3,7 +3,8 @@ import { createClient } from '@supabase/supabase-js';
 import type { Database } from '@/types_db';
 
 import { normalizeMarketingEmail } from '@/lib/email/normalizeMarketingEmail';
-import { resendReplyToFields, resolveResendFrom } from '@/lib/email/resendEnvelope';
+import { resolveMailFrom } from '@/lib/email/resendEnvelope';
+import { isSmtpConfigured, sendViaSmtp } from '@/lib/email/smtpTransport';
 
 export type PostResendCategory = 'marketing' | 'transactional';
 
@@ -18,9 +19,9 @@ export type PostResendParams = {
    * Required when `category` is `marketing`.
    */
   marketingListUnsubscribeUrl?: string;
-  /** Override default Resend From (e.g. provider outreach). */
+  /** Override default From (e.g. provider outreach). */
   from?: string;
-  /** Single address or list; spread into Resend `reply_to`. */
+  /** Single address or list → SMTP Reply-To. */
   replyTo?: string | string[];
 };
 
@@ -69,16 +70,19 @@ function marketingListUnsubscribeHeaders(
 }
 
 /**
- * Central Resend send: optional marketing guard + RFC 8058 headers for marketing.
+ * Central outbound send (SMTP / Brevo). Keeps marketing unsubscribe guard + RFC 8058 headers.
+ * Name retained for call-site compatibility after Resend → SMTP migration.
  * Safe to import from CLI scripts (no `server-only`).
  */
 export async function postResend(
   params: PostResendParams
 ): Promise<{ ok: boolean; skipped?: string }> {
-  const apiKey = process.env.RESEND_API_KEY?.trim();
-  const from = params.from?.trim() || resolveResendFrom();
-  if (!apiKey) {
-    return { ok: false, skipped: 'RESEND_API_KEY not set' };
+  const from = params.from?.trim() || resolveMailFrom();
+  if (!isSmtpConfigured()) {
+    return {
+      ok: false,
+      skipped: 'SMTP not configured (set SMTP_HOST, SMTP_USER, SMTP_PASS)'
+    };
   }
 
   const toNorm = normalizeMarketingEmail(params.to);
@@ -99,15 +103,6 @@ export async function postResend(
     }
   }
 
-  const replyToFields: Record<string, string | string[]> = {};
-  if (params.replyTo !== undefined) {
-    const rt = Array.isArray(params.replyTo) ? params.replyTo : [params.replyTo];
-    const cleaned = rt.map((s) => s.trim()).filter(Boolean);
-    if (cleaned.length) replyToFields.reply_to = cleaned;
-  } else {
-    Object.assign(replyToFields, resendReplyToFields());
-  }
-
   const headers: Record<string, string> = {};
   if (params.category === 'marketing' && params.marketingListUnsubscribeUrl) {
     Object.assign(
@@ -116,42 +111,23 @@ export async function postResend(
     );
   }
 
-  const body: Record<string, unknown> = {
-    from,
-    to: [params.to.trim()],
-    subject: params.subject,
-    html: params.html,
-    ...replyToFields
-  };
-  if (Object.keys(headers).length) {
-    body.headers = headers;
-  }
-
-  if (params.category === 'marketing' && body.headers) {
-    const h = body.headers as Record<string, string>;
-    const hasList = Boolean(h['List-Unsubscribe']);
-    const hasPost = Boolean(h['List-Unsubscribe-Post']);
+  if (params.category === 'marketing' && Object.keys(headers).length) {
+    const hasList = Boolean(headers['List-Unsubscribe']);
+    const hasPost = Boolean(headers['List-Unsubscribe-Post']);
     console.log(
-      '[email:postResend] Resend JSON body includes unsubscribe headers:',
+      '[email:postResend] SMTP headers include unsubscribe:',
       hasList && hasPost
-        ? 'OK — List-Unsubscribe + List-Unsubscribe-Post on request'
+        ? 'OK — List-Unsubscribe + List-Unsubscribe-Post'
         : `INCOMPLETE (List-Unsubscribe=${hasList}, List-Unsubscribe-Post=${hasPost})`
     );
   }
 
-  const res = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(body)
+  return sendViaSmtp({
+    to: params.to,
+    subject: params.subject,
+    html: params.html,
+    from,
+    replyTo: params.replyTo,
+    headers: Object.keys(headers).length ? headers : undefined
   });
-
-  if (!res.ok) {
-    const text = await res.text().catch(() => '');
-    console.error('[email:postResend] Resend error', res.status, text);
-    return { ok: false, skipped: `Resend HTTP ${res.status}` };
-  }
-  return { ok: true };
 }

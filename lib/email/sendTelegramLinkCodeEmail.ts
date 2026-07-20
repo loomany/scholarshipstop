@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { resendReplyToFields, resolveResendFrom } from '@/lib/email/resendEnvelope';
+import { postResend } from '@/lib/email/postResend';
 import { buildScholarshipTopPremiumEmailHtml } from '@/lib/email/templates/scholarshipTopEmailLayout';
 import { escapeHtml } from '@/lib/email/templates/escapeHtml';
 import { getServerTransactionalEmailSiteOrigin } from '@/utils/auth-email-redirect.server';
@@ -14,13 +14,6 @@ export async function sendTelegramLinkCodeEmail(
     displayName?: string | null;
   }
 ): Promise<{ ok: boolean; skipped?: string }> {
-  const apiKey = process.env.RESEND_API_KEY?.trim();
-  const from = resolveResendFrom();
-
-  if (!apiKey) {
-    return { ok: false, skipped: 'RESEND_API_KEY not set' };
-  }
-
   const origin = getServerTransactionalEmailSiteOrigin().replace(/\/+$/, '');
   const name = options?.displayName?.trim() || 'there';
 
@@ -52,26 +45,15 @@ export async function sendTelegramLinkCodeEmail(
       'Return to the Telegram chat and enter the 6-digit code exactly as shown above.'
   });
 
-  const res = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      from,
-      to: [toEmail],
-      subject: TELEGRAM_LINK_EMAIL_SUBJECT,
-      html,
-      ...resendReplyToFields()
-    })
+  const result = await postResend({
+    to: toEmail,
+    subject: TELEGRAM_LINK_EMAIL_SUBJECT,
+    html,
+    category: 'transactional'
   });
 
-  if (!res.ok) {
-    const text = await res.text().catch(() => '');
-    console.error('[email:telegram-link] Resend error', res.status, text);
-    return { ok: false, skipped: `Resend HTTP ${res.status}` };
+  if (!result.ok) {
+    console.error('[email:telegram-link] send failed', result.skipped);
   }
-
-  return { ok: true };
+  return result;
 }

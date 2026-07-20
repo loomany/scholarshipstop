@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 
-import { resendReplyToFields, resolveResendFrom } from '@/lib/email/resendEnvelope';
+import { postResend } from '@/lib/email/postResend';
+import { isSmtpConfigured } from '@/lib/email/smtpTransport';
 import type { Tables } from '@/types_db';
 import { createClient } from '@/utils/supabase/server';
 
@@ -35,9 +36,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Invalid essay_id' }, { status: 400 });
   }
 
-  const apiKey = process.env.RESEND_API_KEY?.trim();
-  const from = resolveResendFrom();
-  if (!apiKey) {
+  if (!isSmtpConfigured()) {
     return NextResponse.json(
       { error: 'Email delivery is not configured' },
       { status: 503 }
@@ -91,24 +90,15 @@ export async function POST(request: Request) {
 </body>
 </html>`;
 
-  const res = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      from,
-      to: [toEmail],
-      subject,
-      html,
-      ...resendReplyToFields()
-    })
+  const result = await postResend({
+    to: toEmail,
+    subject,
+    html,
+    category: 'transactional'
   });
 
-  if (!res.ok) {
-    const text = await res.text().catch(() => '');
-    console.error('[essay:send-email] Resend error', res.status, text);
+  if (!result.ok) {
+    console.error('[essay:send-email] send failed', result.skipped);
     return NextResponse.json(
       { error: 'Не удалось отправить письмо' },
       { status: 502 }

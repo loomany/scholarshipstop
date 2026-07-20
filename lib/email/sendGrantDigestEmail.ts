@@ -9,6 +9,7 @@ import {
 } from '@/lib/email/buildMarketingUnsubscribeUrl';
 import { postResend } from '@/lib/email/postResend';
 import { resolveResendFrom } from '@/lib/email/resendEnvelope';
+import { isSmtpConfigured } from '@/lib/email/smtpTransport';
 import { buildScholarshipTopPremiumEmailHtml } from '@/lib/email/templates/scholarshipTopEmailLayout';
 import { escapeHtml } from '@/lib/email/templates/escapeHtml';
 import {
@@ -171,8 +172,11 @@ export async function sendGrantDigestBatchEmail(params: {
 }): Promise<{ ok: boolean; skipped?: string }> {
   const from = resolveResendFrom();
 
-  if (!process.env.RESEND_API_KEY?.trim()) {
-    return { ok: false, skipped: 'RESEND_API_KEY not set' };
+  if (!isSmtpConfigured()) {
+    return {
+      ok: false,
+      skipped: 'SMTP not configured (set SMTP_HOST, SMTP_USER, SMTP_PASS)'
+    };
   }
 
   const categories = params.categories.filter((c) => c.totalCount > 0 && c.items.length > 0);

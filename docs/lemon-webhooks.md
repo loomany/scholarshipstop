@@ -17,16 +17,16 @@ This project creates Lemon Squeezy overlay checkouts, verifies webhooks, syncs
 - `SUPABASE_SERVICE_ROLE_KEY`
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SITE_URL` (used for links in transactional emails from the webhook)
-- `RESEND_API_KEY` (if unset, subscription status emails are skipped — DB sync still succeeds). `RESEND_FROM` is optional (defaults to `ScholarshipTop <hello@mail.scholarshiptop.com>`). Optional `REPLY_TO_EMAIL` sets Resend `reply_to` on transactional sends.
+- `SMTP_HOST` / `SMTP_USER` / `SMTP_PASS` (if unset, subscription status emails are skipped — DB sync still succeeds). `MAIL_FROM` (or legacy `RESEND_FROM`) is optional (defaults to `ScholarshipTop <hello@mail.scholarshiptop.com>`). Optional `REPLY_TO_EMAIL` sets Reply-To on transactional sends.
 - `LEMONSQUEEZY_API_KEY` — **recommended in production.** Used when Lemon delivers `subscription_payment_success` / `subscription_payment_recovered` as a **subscription-invoices** body (no variant/status fields). The webhook handler then **GET**s `https://api.lemonsqueezy.com/v1/subscriptions/:id` and runs the same upsert as `subscription_updated`, so plan upgrades and trial conversions update `profiles` even if a full `subscription_updated` event is delayed or missing.
 
 Legacy aliases `LEMONSQUEEZY_MONTHLY_VARIANT_ID`, `LEMONSQUEEZY_QUARTERLY_VARIANT_ID`, and `LEMONSQUEEZY_YEARLY_VARIANT_ID` are also accepted for server-side tier inference, but `NEXT_PUBLIC_LS_*` is the canonical naming used by the current app code.
 
-## Transactional emails (Resend)
+## Transactional emails (SMTP / Brevo)
 
 After a successful entitlement update, the handler may send:
 
-- **Subscription active / welcome** — **off by default.** Lemon Squeezy already sends purchase/receipt email; duplicating it from Resend spams users. Set `SUBSCRIPTION_RESEND_WELCOME_ON_PURCHASE=1` to enable the legacy template on subscribe/resume/unpause/plan change (and the `subscription_updated` “within 5 minutes of `created_at`” fallback when Lemon omits `subscription_created`).
+- **Subscription active / welcome** — **off by default.** Lemon Squeezy already sends purchase/receipt email; duplicating it from our SMTP path spams users. Set `SUBSCRIPTION_RESEND_WELCOME_ON_PURCHASE=1` to enable the legacy template on subscribe/resume/unpause/plan change (and the `subscription_updated` “within 5 minutes of `created_at`” fallback when Lemon omits `subscription_created`).
 - **Subscription cancelled** — on `subscription_cancelled` only (not on every `subscription_updated` or renewal).
 - **Payment failed** — on `subscription_payment_failed` (update card / billing).
 

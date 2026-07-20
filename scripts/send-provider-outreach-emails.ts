@@ -2,7 +2,7 @@
  * Bulk / test sends to addresses from `scripts/output/provider-partnerships-emails-clean.txt` via Resend.
  *
  * Env:
- *   RESEND_API_KEY (required)
+ *   SMTP_HOST / SMTP_USER / SMTP_PASS (required)
  *   NEXT_PUBLIC_SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY — optional but recommended; map each `to` email to `providers` via `scholarships.support_email`
  *   PROVIDER_OUTREACH_FROM — optional; default `Daur <daur@mail.scholarshiptop.com>`
  *   PROVIDER_OUTREACH_REPLY_TO — optional; default `support@scholarshiptop.com` (clients “Reply” go here; same in `--test` as live sends)
@@ -506,7 +506,7 @@ async function sendOne(params: {
     from: outreachFrom(),
     replyTo: replyToAddr
   });
-  if (r.skipped === 'RESEND_API_KEY not set') {
+  if (r.skipped?.includes('SMTP not configured')) {
     return { ok: false, status: 0, body: r.skipped };
   }
   if (r.skipped === 'unsubscribed') {
