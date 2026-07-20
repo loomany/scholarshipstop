@@ -1,12 +1,12 @@
 import { getScopedScholarshipStorageKey } from '@/app/scholarships/userScopedStorage';
 
 /**
- * Guests may fully load this many scholarship detail pages before the next navigation
- * shows the registration modal (6th grant → wall). Count increments once per detail load.
+ * @deprecated Guests no longer have a detail-view budget (unlimited catalog detail reads).
+ * Kept for any leftover imports / storage keys; not applied by `resolveScholarshipDetailClickBudgetMode`.
  */
-export const GUEST_FREE_DETAIL_VIEWS = 5;
+export const GUEST_FREE_DETAIL_VIEWS = Number.POSITIVE_INFINITY;
 
-const GUEST_FREE_DETAIL_NAVIGATIONS = GUEST_FREE_DETAIL_VIEWS;
+const GUEST_FREE_DETAIL_NAVIGATIONS = Number.POSITIVE_INFINITY;
 
 /** Signed-in users without subscription: scholarship detail previews before subscription wall. */
 export const AUTH_NO_SUB_FREE_DETAIL_VIEWS = 10;
@@ -113,7 +113,9 @@ export function resolveScholarshipDetailClickBudgetMode(options: {
   authResolved?: boolean;
 }): ScholarshipDetailClickBudgetMode | null {
   if (options.authResolved === false) return null;
-  if (!options.isAuthenticated) return 'guest';
+  // Guests: no detail-view budget — unlimited scholarship detail pages.
+  // (Apply URLs / provider contacts remain subscription-gated server-side.)
+  if (!options.isAuthenticated) return null;
   if (!options.hasSubscription) return 'signed-in-no-subscription';
   return null;
 }
@@ -122,22 +124,27 @@ export function getScholarshipDetailFreeClicksUsed(
   mode: ScholarshipDetailClickBudgetMode
 ): number {
   if (typeof window === 'undefined') return 0;
+  const cap = freeNavigationsForMode(mode);
+  if (!Number.isFinite(cap)) return 0;
   const raw = localStorage.getItem(storageKeyForMode(mode));
   const n = parseInt(raw ?? '0', 10);
   if (!Number.isFinite(n) || n < 0) return 0;
-  return Math.min(n, freeNavigationsForMode(mode));
+  return Math.min(n, cap);
 }
 
 export function shouldBlockScholarshipDetailNavigation(
   mode: ScholarshipDetailClickBudgetMode
 ): boolean {
-  return getScholarshipDetailFreeClicksUsed(mode) >= freeNavigationsForMode(mode);
+  const cap = freeNavigationsForMode(mode);
+  if (!Number.isFinite(cap)) return false;
+  return getScholarshipDetailFreeClicksUsed(mode) >= cap;
 }
 
 export function recordScholarshipDetailFreeNavigation(
   mode: ScholarshipDetailClickBudgetMode
 ): void {
   const cap = freeNavigationsForMode(mode);
+  if (!Number.isFinite(cap)) return;
   const next = getScholarshipDetailFreeClicksUsed(mode) + 1;
   localStorage.setItem(storageKeyForMode(mode), String(Math.min(next, cap)));
 }

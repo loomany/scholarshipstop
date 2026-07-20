@@ -129,8 +129,8 @@ type ScholarshipCardProps = {
   onLockedScholarshipNavigate?: () => void;
   onSubscriptionDetailNavigate?: () => void;
   /**
-   * Guests: after free detail views are used, the next catalog navigation is blocked and the parent
-   * opens the registration wall (`grant-guest` mode). Budget increments on the detail page load.
+   * Guests: unlimited detail navigation (no detail-view budget). Signed-in free tier may still
+   * hit the subscription wall after their preview budget; budget increments on detail page load.
    */
   onGuestDetailNavigate?: () => void;
   /**
