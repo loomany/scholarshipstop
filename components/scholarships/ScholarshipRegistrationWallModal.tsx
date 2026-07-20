@@ -52,9 +52,8 @@ export default function ScholarshipRegistrationWallModal({
     notice =
       'AI Essay Mentor is available only on Quarterly and Yearly plans. Monthly unlocks the premium scholarship database only.';
   } else if (isGrantPaywall) {
-    notice = signedInWithoutSubscription
-      ? 'Scholarship details are available on a paid plan. Start a trial or subscribe to unlock the full catalog.'
-      : 'Scholarship details are available on a paid plan. Create your account and choose a plan to unlock the catalog.';
+    // Premium deck (signed-in upsell UI) does not render `notice`; keep for overrides only.
+    notice = undefined;
   } else {
     notice =
       'Unlock filters, saved scholarships, personalized matches, every essay guide, and the AI Essay Mentor right after sign-up.';
@@ -66,12 +65,10 @@ export default function ScholarshipRegistrationWallModal({
       ? REGISTRATION_THEN_SUBSCRIPTION_HREF
       : REGISTRATION_THEN_SCHOLARSHIPS_HREF;
 
-  const marketingMode =
-    variant === 'essay' || isGrantPaywall ? 'subscription' : 'trial';
+  // Essay walls → classic essay mentor copy. Grant walls → Premium Access (scholarships) deck.
+  const marketingMode = variant === 'essay' ? 'subscription' : 'trial';
   const copyVariant =
-    variant === 'essay' || isGrantPaywall
-      ? 'classic-trial'
-      : 'modern-free-account';
+    variant === 'essay' ? 'classic-trial' : 'modern-free-account';
 
   return (
     <ScholarshipSubscriptionOfferModal
@@ -81,7 +78,13 @@ export default function ScholarshipRegistrationWallModal({
       primaryHref={primaryHref}
       marketingMode={marketingMode}
       copyVariant={copyVariant}
-      signedInWithoutSubscription={signedInWithoutSubscription}
+      signedInWithoutSubscription={
+        variant === 'essay'
+          ? signedInWithoutSubscription
+          : isGrantPaywall
+            ? true
+            : signedInWithoutSubscription
+      }
       grantScholarshipPitch={false}
     />
   );
